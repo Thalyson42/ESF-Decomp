@@ -13,6 +13,11 @@ enum ADV_MELEE_STATUS {                        // [OK] valores confirmados por S
     MELEE_STRUGGLE_ATTACK = 9, MELEE_BURST_STRUGGLE_ATTACK = 10, MELEE_STRUGGLE_DEFEND = 11,
     MELEE_KNOCK_PRESTRUGGLE_ATTACK = 12, MELEE_KNOCK_PRESTRUGGLE_DEFEND = 13   // [?] nome do 13
 };
+enum MELEE_THROW_STATE {                        // [OK] m_iThrowState (+0x64), despachado por ManageToss
+    THROW_NONE = 0, THROW_TOSS = 1, THROW_ROLL = 2, THROW_WALLSTICK = 3, THROW_LAY = 4, THROW_LANDRECOVER = 5, THROW_RECOVER = 6
+};
+enum MELEE_DIR { DIR_FORWARD = 0, DIR_FWD_LEFT, DIR_LEFT, DIR_BACK_LEFT, DIR_BACK, DIR_BACK_RIGHT, DIR_RIGHT, DIR_FWD_RIGHT,   // 0-7 = golpe, 8-15 = o mesmo com alt, 16 = só ataque, 17 = só alt
+                 DIR_ATTACK_ONLY = 16, DIR_ALT_ONLY = 17 };
 enum MELEE_STRENGTH { MELEE_WEAK = 0, MELEE_MEDIUM = 1, MELEE_STRONG = 2 };    // [OK] GetMeleeStrength
 
 struct melee_move_s {                           // nó de direção/golpe (0x24 bytes) [OK] AddDirection
@@ -262,7 +267,8 @@ public:
     float m_flLandRecoverTime;                  // +0x1c [OK] HandleLandRecover (1 s)
     char  pad_020[8];
     int   m_fTossing;                           // +0x28 [OK] ManageToss
-    char  pad_02c[0x38-0x2c];
+    char  pad_02c[0x34-0x2c];
+    int   f_034;                                // +0x34 [?]
     int   m_fStruggleBar;                       // +0x38 [OK] barra de struggle visível
     int   f_03c;                                // +0x3c [?]
     char  pad_040[0x64-0x40];

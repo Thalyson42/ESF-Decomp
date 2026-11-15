@@ -901,3 +901,76 @@ melee_move_s *CPlayerMelee::RemoveDir(melee_move_s *pMove)    // remove o nó da
     }
     return NULL;
 }
+
+// ======================================================================
+// Lote 5: tabelas (switch) -- conferidas direto nas jump-tables do .so
+// ======================================================================
+int CPlayerMelee::DirectionsToFlags(int iDir)                 // [OK] jump-table em 0x1069f0
+{
+    if (iDir == 16) return 1;
+    if (iDir == 17) return 0x800;
+    int iFlags = (iDir <= 7) ? 1 : 0x800;                     // 0-7: ataque; 8-15: ataque alternativo
+    switch (iDir & 7)
+    {
+    case 0: return iFlags | 0x08;                             // frente
+    case 1: return iFlags | 0x88;                             // frente+esquerda
+    case 2: return iFlags | 0x80;                             // esquerda
+    case 3: return iFlags | 0x90;                             // trás+esquerda
+    case 4: return iFlags | 0x10;                             // trás
+    case 5: return iFlags | 0x110;                            // trás+direita
+    case 6: return iFlags | 0x100;                            // direita
+    case 7: return iFlags | 0x108;                            // frente+direita
+    }
+    return iFlags;                                            // (iDir > 15 e != 16/17)
+}
+
+int CPlayerMelee::FlagsToDirections(int iFlags)               // [OK] inverso do anterior
+{
+    int iBase = (iFlags & 0x800) ? 8 : 0;
+    if (iFlags & 0x08)
+        return (iFlags & 0x80) ? iBase + 1 : iBase + 7;       // [OK] sem esquerda assume direita
+    if (iFlags & 0x10)
+        return (iFlags & 0x80) ? iBase + 3 : !(iFlags & 0x100) ? iBase + 4 : iBase + 5;
+    if (iFlags & 0x80)  return iBase + 2;
+    if (iFlags & 0x100) return iBase + 6;
+    return 16;
+}
+
+void CPlayerMelee::GetThrowAnimDirection(int iUnused, int iDir, char *szOut)   // [OK] jump-table em 0x100c20
+{
+    szOut[0] = 0;
+    switch (iDir)
+    {
+    case 0: strcpy(szOut, "up");    break;
+    case 1: strcpy(szOut, "down");  break;
+    case 2: strcpy(szOut, "left");  break;
+    case 3: strcpy(szOut, "right"); break;
+    case 4:
+        if ((m_iThrowState == THROW_ROLL && (m_pAttacker->pev->flags & FL_DUCKING)) ||
+            (m_iThrowState == THROW_RECOVER && f_034 == 0))      // [OK] +0x64 e +0x34 [?]
+            strcpy(szOut, "forward");
+        else
+            strcpy(szOut, "front");
+        break;
+    case 5: strcpy(szOut, "back");  break;
+    }
+}
+
+void CPlayerMelee::GetThrowAnimDirection(int iDir, char *szOut)
+{
+    GetThrowAnimDirection(0, GetThrowDirection(iDir), szOut);  // [OK]
+}
+
+void CPlayerMelee::ManageToss(void)
+{
+    if (!m_fTossing) return;                                  // [OK] +0x28
+    switch (m_iThrowState)                                    // [OK] jump-table em 0x101240
+    {
+    case THROW_TOSS:         HandleToss();        break;
+    case THROW_ROLL:         HandleRoll();        break;
+    case THROW_WALLSTICK:    HandleWallStick();   break;
+    case THROW_LAY:          HandleLay();         break;
+    case THROW_LANDRECOVER:  HandleLandRecover(); break;
+    case THROW_RECOVER:      HandleRecover();     break;
+    }
+}
