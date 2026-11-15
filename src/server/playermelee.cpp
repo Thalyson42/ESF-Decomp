@@ -2796,3 +2796,173 @@ int CPlayerMelee::StopExeAttack()
     }
     return 0;
 }
+
+// ---------------------------------------------------------------------------
+// lote 23: dano dos golpes exe, tempos/danos por força, bloqueio
+// ---------------------------------------------------------------------------
+
+float CPlayerMelee::GetDamageDelay(melee_move_s *pMove)   // atraso até o dano, por tipo/força [OK]
+{
+    if (pMove->m_iDirection & 1)                          // soco
+    {
+        switch (GetMeleeStrength(pMove)) { case 0: return 0.10f; case 1: return 0.15f; case 2: return 0.25f; }
+    }
+    else if (pMove->m_iDirection & 0x800)                 // alt (chute): byte +5 & 8
+    {
+        switch (GetMeleeStrength(pMove)) { case 0: return 0.15f; case 1: return 0.25f; case 2: return 0.35f; }
+    }
+    return 0.0f;
+}
+
+float CPlayerMelee::GetDamage()                           // dano base do golpe exe atual [OK]
+{
+    if (m_pExeCur->f_20 & 1)
+    {
+        switch (m_pExeCur->m_iStrength) { case 0: return 3.0f; case 1: return 5.0f; case 2: return 7.0f; }
+    }
+    else if (m_pExeCur->f_20 & 0x800)
+    {
+        switch (m_pExeCur->m_iStrength) { case 0: return 4.0f; case 1: return 6.0f; case 2: return 8.0f; }
+    }
+    return 0.0f;
+}
+
+int CPlayerMelee::GetMoveStrength(melee_move_s *pMove)    // força por tempo de segurar
+{
+    if (!pMove) return 0;
+    float t = GetCmbTime(pMove);
+    float *pTbl = (float *)((void *(*)(void *))(*(void ***)m_pSkill)[3])(this);   // [?] vfunc +0xc
+    if (t < pTbl[1]) return 0;
+    pTbl = (float *)((void *(*)(void *))(*(void ***)m_pSkill)[3])(this);
+    return t >= pTbl[2] ? 2 : 1;                          // [OK]
+}
+
+int CPlayerMelee::SetBlock(melee_execution_s *pExe)       // 1 = golpe bloqueado, 2 = não
+{
+    melee_move_s *it = m_pDefenderMelee->m_pDefenderMoves;
+    if (!it || !pExe) return 2;
+    while (it->m_pNext) it = it->m_pNext;                 // primeiro golpe do defensor
+    int n = 2;
+    if (pExe->f_30 > 1 && n <= pExe->f_30)                // avança conforme o nível do golpe
+    {
+        while (it)
+        {
+            it = it->m_pPrev;
+            n++;
+            if (!(n <= pExe->f_30 && it)) break;
+        }
+    }
+    if (it && Block(pExe->f_20, it->m_iDirection))
+    {
+        if (pExe->f_54 == 1) return 1;
+        f_0c0++;                                          // [OK] +0xc0: golpes bloqueados
+        return 1;
+    }
+    return 2;
+}
+
+int CPlayerMelee::SetBlockStun(melee_execution_s *pExe)   // propaga o stun de bloqueio pelos golpes seguintes
+{
+    if (pExe->f_54 != 2 || pExe->f_3c || pExe->f_44) return 0;
+    int iAmt = m_pDefenderMelee->GetBlockStunAmt((MELEE_STRENGTH)pExe->m_iStrength);
+    if (!iAmt) return 0;
+    for (melee_execution_s *p = pExe->m_pNext; p; p = p->m_pNext, iAmt--)
+    {
+        if (iAmt <= 0) return iAmt;
+        if (!ContinueBlockStun(iAmt, (MELEE_STRENGTH)pExe->m_iStrength, (MELEE_STRENGTH)p->m_iStrength)) return 0;
+        p->f_3c = 1;
+    }
+    return iAmt;
+}
+
+int CPlayerMelee::EmitComboDamage(melee_combo_hit_s *pHit)    // pHit aponta para melee_exe_hit_s
+{
+    melee_exe_hit_s *h = (melee_exe_hit_s *)pHit;
+    if (!h || h->f_0c || !h->m_fActive) return 0;
+    h->f_0c = 1;                                          // [OK] hit já disparado
+    if (h->m_flValue != 0.0f)
+    {
+        float dmg = h->m_flValue * GetPowerRatio(m_pDefender);   // [?] o decompilado perde o produto
+        if (dmg < 1.0f) dmg = 1.0f;
+        if (dmg > 6.0f) dmg = 6.0f;
+        m_pDefender->TakeDamage(m_pAttacker->pev, m_pAttacker->pev, dmg, 0x2000000);   // [OK] slot 13
+        EmitExeSound(GetSoundEdict());
+        MeleeText(3, (int)dmg);
+    }
+    if (h->m_pfnCallback) h->m_pfnCallback(m_pAttacker, m_pDefender);
+    return 0;
+}
+
+int CPlayerMelee::EmitDamage()
+{
+    if (m_pExeCur->f_44) return 0;                        // golpes de combo usam EmitComboDamage
+    int bSword = 0;
+    if (!m_pExeCur->f_40)
+    {
+        if (!CanUseTrunksSword(m_pDefender))
+        {
+            if (m_pExeCur->f_54 == 2 || m_pExeCur->f_3c)  // acertou (não bloqueado)
+            {
+                float dmg = GetDamage() * GetPowerRatio(m_pDefender);   // [?]
+                if (dmg < 1.0f) dmg = 1.0f;
+                m_pDefender->TakeDamage(m_pAttacker->pev, m_pAttacker->pev, dmg, 0x2000000);
+                if (m_pExeCur->f_3c && m_pExeCur->f_54 == 1)
+                {
+                    MeleeText(11, 0);
+                    m_pDefenderMelee->MeleeText(11, 0);
+                }
+                MeleeText(3, (int)dmg);
+            }
+            else
+                MeleeText(10, 0);                         // [OK] bloqueado
+            EmitExeSound(GetSoundEdict());
+        }
+        else
+            bSword = 1;                                   // espada do Trunks
+        m_pExeCur->f_40 = 1;
+    }
+    if (!m_pDefender->IsAlive()) return 0;
+    if (m_pExeCur->m_pNext) return 0;                     // só o último golpe arremessa
+    if (m_pExeCur->f_54 != 2 && !m_pExeCur->f_3c) return 0;
+    if (m_pExeCur->m_iStrength != 2) return 0;            // [OK] só golpe forte
+
+    Vector vecDir(m_vecDir[0], m_vecDir[1], m_vecDir[2]);
+    float flLen = vecDir.Length();
+    Vector vecToss = flLen == 0 ? Vector(0, 0, 1) : vecDir * (1.0f / flLen);
+    if (f_140) vecToss = -vecToss;
+    if (m_pExeCur->f_20 & 8)       vecToss = Vector(0, 0, 1);       // [OK] golpe "frente": para cima
+    else if (m_pExeCur->f_20 & 16) vecToss = Vector(0, 0, -1);      // "trás": para baixo
+    else if (m_pExeCur->f_48)      { vecToss.z = 0; vecToss = vecToss.Normalize(); }
+
+    if (m_pAttacker->f_968)                               // atrasa o próximo ataque do item
+    {
+        CBasePlayerItem *pItem = (CBasePlayerItem *)m_pAttacker->f_968;
+        pItem->m_flNextPrimaryAttack = pItem->m_flNextSecondaryAttack = gpGlobals->time + 1.0f;
+    }
+    CBasePlayer *pVictim = m_pDefender;
+    CPlayerMelee *pVictimMelee = m_pDefenderMelee;
+    f_0f4 = 1;
+    StopMelee(0);
+    f_0f4 = 0;
+    if (bSword)                                           // espada do Trunks: dano 999 + corte
+    {
+        pVictim->f_34c = 0;
+        pVictim->f_73c = 0;
+        pVictimMelee->f_10c = 0;
+        pVictim->TakeDamage(m_pAttacker->pev, m_pAttacker->pev, 999.0f, 0x2001000);
+        if (!pVictim->IsAlive())
+        {
+            EMIT_SOUND_DYN(ENT(pVictim->pev), CHAN_WEAPON, "weapons/swordkill.wav", 1.0, 0.8, 0, 100);
+            MeleeText(4, 0);
+            pVictim->pev->solid = SOLID_NOT;
+            CBodySlice::SpawnBodySlices(pVictim->pev, 0);          // [?] 2º arg
+            pVictim->pev->effects |= EF_NODRAW;
+            pVictim->pev->velocity = Vector(0, 0, 0);
+            pVictim->pev->movetype = 5;
+            pVictim->pev->gravity = 0;
+            return 0;
+        }
+    }
+    pVictimMelee->StartToss(m_pAttacker, 1, vecToss, 1200.0f, 600.0f, 275.0f, 1.5f);   // [OK]
+    return 0;
+}
