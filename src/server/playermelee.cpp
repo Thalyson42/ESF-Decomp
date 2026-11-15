@@ -2209,3 +2209,78 @@ void CPlayerMelee::BlowbackStruggle(Vector vecDir, float flA, float flB, CBasePl
     if (pLoser->IsAlive())                                    // o perdedor ainda devolve um golpe menor
         pLoser->m_Melee.Powerhit(0, pWinner, -vecDir, 4, 4.55f, 900.0f, 500.0f, 300.0f, 1.5f);  // [OK]
 }
+
+// ======================================================================
+// Lote 18: Powerhit -- o golpe forte que arremessa o oponente
+// ======================================================================
+void CPlayerMelee::EmitShockwave(void)
+{
+    MESSAGE_BEGIN(MSG_PVS, gmsgMeleeFX, m_pAttacker->pev->origin);   // [OK]
+        WRITE_BYTE(1);                                        // tipo de efeito: onda de choque
+        WRITE_BYTE(ENTINDEX(ENT(m_pAttacker->pev)));
+    MESSAGE_END();
+    EmitClientSound(GetSoundEdict(), 1, 1);                   // [?] argumentos
+}
+
+// (bAnim, vítima, direção, tipo, multiplicador de dano, velocidade, piso, desaceleração, duração) -> 1 se o oponente bloqueou
+int CPlayerMelee::Powerhit(int bAnim, CBasePlayer *pVictim, Vector vecDir, int iType,
+                           float flDmgMult, float flSpeed, float flMin, float flDecel, float flTime)
+{
+    if (!m_pAttacker) return 0;
+    int bBlocked = 0;
+    CBasePlayerItem *pItem = m_pAttacker->m_pActiveItem;      // [OK] +0x3c8
+    if (pItem && pItem->m_iId == 1 && pItem->m_flNextSecondaryAttack > gpGlobals->time)   // [?] +0x88 e +0xa0: arma ainda em recarga
+        return 0;
+
+    float flDmg = (float)(int)(GetPowerRatio(pVictim) * flDmgMult);
+    if (iType != 4) flDmg = (float)((double)(int)(GetPowerRatio(pVictim) * flDmgMult) * 1.4);   // [OK] tipo 4 não ganha o bônus de 40%
+    pVictim->TakeDamage(m_pAttacker->pev, m_pAttacker->pev, flDmg, 0);                         // [?] tipo de dano
+    EmitShockwave();
+    if (bAnim)
+        SetPowerhitAnim(vecDir, iType);
+
+    if (!pVictim->IsAlive())
+        pVictim->pev->velocity = vecDir * flSpeed;            // [OK] morto: só é empurrado
+    else if (!BlocksAttack(pVictim) || !pVictim->UseKi(75))   // [OK] defendendo custa 75 de ki
+        pVictim->m_Melee.StartToss(m_pAttacker, 1, vecDir, flSpeed, flMin, flDecel, flTime);
+    else
+    {
+        bBlocked = 1;                                         // bloqueou: a arma dele só volta em 0,8 s
+        if (pVictim->m_pActiveItem)
+        {
+            float f = gpGlobals->time + 0.8f;
+            pVictim->m_pActiveItem->m_flNextPrimaryAttack = f;
+            pVictim->m_pActiveItem->m_flNextSecondaryAttack = f;
+        }
+    }
+    if (!pItem) return bBlocked;
+    float f = gpGlobals->time + (bBlocked ? 1.0f : 0.65f);    // [OK] recarga do atacante: 1 s se bloqueado, senão 0,65 s
+    pItem->m_flNextPrimaryAttack = f;
+    pItem->m_flNextSecondaryAttack = f;
+    return bBlocked;
+}
+
+int CPlayerMelee::Powerhit(CBasePlayer *pVictim, Vector vecDir, int iType, float flDmgMult, float flSpeed, float flMin, float flDecel, float flTime)
+{
+    Powerhit(1, pVictim, vecDir, iType, flDmgMult, flSpeed, flMin, flDecel, flTime);   // [OK] versão com animação
+    return 0;
+}
+
+int CPlayerMelee::Powerhit(CBasePlayer *pVictim, Vector vecDir, int iType)            // golpe "automático": sem números de balanço
+{
+    entvars_t *pev = m_pAttacker->pev;
+    if (pev->flags & FL_ONGROUND)                             // [OK] atacante no chão: olha 16 u abaixo
+    {
+        TraceResult tr;
+        UTIL_TraceHull(pev->origin, pev->origin + Vector(0, 0, -16), dont_ignore_monsters, head_hull, ENT(pev), &tr);
+        if (tr.flFraction < 1.0f)
+        {
+            CBaseEntity *pHit = CBaseEntity::Instance(tr.pHit);
+            if (pHit && pHit->IsPlayer())                     // [OK] há um jogador debaixo: arremessa mais forte
+                return Powerhit(0, pVictim, vecDir, iType, 0.0f, 2000.0f, 650.0f, 500.0f, 1.2f);   // [?] o 5º float (dano) é 0
+        }
+        vecDir = Vector(0, 0, 1);                             // [OK] senão: para cima
+        iType = 0;
+    }
+    return Powerhit(0, pVictim, vecDir, iType, 0.0f, 800.0f, 400.0f, 250.0f, 1.2f);
+}
