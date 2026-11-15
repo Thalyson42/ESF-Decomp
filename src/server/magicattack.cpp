@@ -1,4 +1,4 @@
-// magicattack.cpp -- CMagicAttack (9/10), CBeamAttack (2), CGuidedAttack (3 pequenas). RECUPERADO À MÃO.
+// magicattack.cpp -- CMagicAttack (10/10), CBeamAttack (2), CGuidedAttack (5/5). RECUPERADO À MÃO.
 // Fonte: decomp_raw/CMagicAttack, CBeamAttack, CGuidedAttack. [OK] conferido; [?] incerto.
 #include "extdll.h"
 #include "util.h"
@@ -158,4 +158,84 @@ void CMagicAttack::SwatAway(CBasePlayer *pPlayer, int iDir)
     pPlayer->m_pBlockAttack_flag = 1;                         // [?] player+0x784 := 1
     pev->velocity = vecDir * m_flSpeed;                       // [OK] m_flSpeed = float em +0x2a8
     pev->angles = UTIL_VecToAngles(pev->velocity);            // [OK]
+}
+
+// ======================================================================
+// CGuidedAttack::ShootGuidedMagic -- cria o feixe guiado. (1182 B)
+// ======================================================================
+CGuidedAttack *CGuidedAttack::ShootGuidedMagic(entvars_t *pevShooter, Vector vecOrigin, Vector vecDir, int iDamage,
+                                               char *szClassname, float flScale, int iExplosionType,
+                                               short s1, short s2, short s3, short s4, short s5,
+                                               int iRadiusMult, float flTurnRate, int iTrail1, int iTrail2)
+{
+    CGuidedAttack *pAttack = GetClassPtr((CGuidedAttack *)NULL);   // [OK]
+    pAttack->Spawn();                                         // [OK] slot 0
+    pAttack->pev->movetype = MOVETYPE_FLY;                    // [OK] 5
+    pAttack->pev->solid = SOLID_TRIGGER;                      // [OK] 1
+    SET_MODEL(ENT(pAttack->pev), "sprites/null.spr");         // [OK]
+
+    if (iDamage > 9999) iDamage = 9999;                       // [OK]
+    pAttack->pev->dmg = (float)iDamage;
+
+    float flSize = 50.0f * flScale * 0.25f;                   // [OK]
+    Vector vecStep = vecDir.Normalize() * flSize;
+    TraceResult tr;
+    UTIL_TraceLine(vecOrigin, vecOrigin + vecStep, ignore_monsters, ENT(pevShooter), &tr);
+    vecOrigin = vecOrigin + vecStep * tr.flFraction;          // [OK] não nasce dentro de parede
+    UTIL_SetOrigin(pAttack->pev, vecOrigin);
+    UTIL_SetSize(pAttack->pev, Vector(-flSize, -flSize, -flSize), Vector(flSize, flSize, flSize));   // [OK]
+
+    pAttack->pev->velocity = vecDir;                          // [OK] vecDir já traz a velocidade
+    pAttack->m_flSpeed = vecDir.Length();                     // [OK] +0x2a8
+    pAttack->pev->angles = UTIL_VecToAngles(vecDir);          // [OK]
+    pAttack->pev->owner = ENT(pevShooter);                    // [OK]
+    pAttack->pev->classname = MAKE_STRING(szClassname);       // [OK] a4 - pStringBase
+    pAttack->m_fVaporized = 0;                                // [OK] +0x2c4
+    pAttack->m_fRemoveOnVaporize = 0;                         // [OK] +0x2c8
+    pAttack->m_fReleased = 0;                                 // [OK] +0x2dc
+    pAttack->m_fStuck = 0;                                    // [OK] +0x2cc
+    pAttack->SetTouch(&CExplodingAttack::ExplodeTouch);       // [OK]
+
+    // trilha entre o atirador e o ataque. Ordem dos argumentos reconstruída da pilha [?]
+    pAttack->AddEntEntTrail(ENTINDEX(ENT(pevShooter)), (int)(50.0f * flScale), s1, s5, s4, s3, s2, iTrail1, iTrail2, vecOrigin);
+    pAttack->SetThink(&CGuidedAttack::FollowThink);           // [OK]
+    pAttack->m_iRadiusMult = iRadiusMult;                     // [OK] +0x2d0
+    pAttack->m_iExplosionType = iExplosionType;               // [OK] +0x2d4
+    pAttack->m_flTurnRate = flTurnRate;                       // [OK] +0x2e0
+    EMIT_SOUND_DYN(ENT(pAttack->pev), CHAN_WEAPON, "weapons/beamhead.wav", 1.0, 0.8, 0, 100);   // [OK]
+    pAttack->pev->nextthink = gpGlobals->time;                // [OK]
+    return pAttack;
+}
+
+// ======================================================================
+// CGuidedAttack::FollowThink -- o feixe curva em direção ao ponto que o dono está mirando. (1240 B)
+// ======================================================================
+void CGuidedAttack::FollowThink(void)
+{
+    if (pev->owner)
+    {
+        CBasePlayer *pPlayer = (CBasePlayer *)CBaseEntity::Instance(pev->owner);   // [OK]
+        UTIL_MakeVectors(pPlayer->pev->v_angle);
+        Vector vecStart = pPlayer->pev->origin + pPlayer->pev->view_ofs;           // [OK] +0x174
+        Vector vecEnd   = vecStart + gpGlobals->v_forward * 8192;                  // [OK]
+        TraceResult tr;
+        UTIL_TraceLine(vecStart, vecEnd, dont_ignore_monsters, pev->owner, &tr);   // [OK] arg=0
+        Vector vecToAim = tr.vecEndPos - pev->origin;                               // [OK]
+
+        if (m_flSpeed * 0.05f < vecToAim.Length())                                  // [OK] já chegou? então não corrige
+        {
+            Vector vecCur = pev->velocity.Normalize() * (1.0f - m_flTurnRate) * m_flSpeed;   // [OK]
+            Vector vecNew = vecToAim.Normalize() * m_flSpeed * m_flTurnRate;                 // [OK]
+            pev->velocity = vecCur + vecNew;
+            pev->angles = UTIL_VecToAngles(pev->velocity);                          // [OK]
+        }
+    }
+    else
+        SetThink(&CMagicAttack::NormalThink);                 // [OK] dono sumiu: vira ataque comum
+
+    DrawBubbles();                                            // [OK]
+    if (IsInWorld())                                          // [OK] slot 37
+        pev->nextthink = gpGlobals->time + 0.05f;             // [OK]
+    else
+        Vaporize();                                           // [OK]
 }
