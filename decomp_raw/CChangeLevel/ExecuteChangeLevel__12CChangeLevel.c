@@ -1,0 +1,22 @@
+// ExecuteChangeLevel__12CChangeLevel @0x12d8c0 size=124
+typedef struct st_52d8c0_0 {
+    unsigned int field_0;
+} st_52d8c0_0;
+
+extern st_52d8c0_0 *g_616878;
+extern st_52d8c0_0 *g_61687c;
+extern st_52d8c0_0 *g_616880;
+
+int ExecuteChangeLevel__12CChangeLevel(void)
+{
+    unsigned int v0;  // [bp-0x1c]
+    unsigned int v1;  // [bp-0x18]
+
+    g_616878(2, 32, 0, 0, v0, v1);
+    g_616880(3);
+    g_616880(3);
+    g_61687c();
+    g_616878(2, 30, 0, 0);
+    return g_61687c();
+}
+

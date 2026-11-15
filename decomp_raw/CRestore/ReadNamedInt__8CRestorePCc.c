@@ -1,0 +1,10 @@
+// ReadNamedInt__8CRestorePCc @0x136a60 size=47
+int ReadNamedInt__8CRestorePCc(int a0)
+{
+    char v0;  // [bp-0xc]
+    unsigned int *v1;  // [bp-0x8]
+
+    sub_489ba0(a0, &v0);
+    return *v1;
+}
+

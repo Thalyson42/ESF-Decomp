@@ -1,0 +1,66 @@
+// ReactOnDanger__22CShootNonChargebleTaskP13danger_info_s @0x178fe0 size=240
+typedef struct st_578fe0_3 {
+    char padding_0[800];
+    unsigned int field_320;
+    char padding_324[1760];
+    struct st_578fe0_2 *field_a04;
+    char padding_a08[8];
+    char field_a10;
+    char padding_a11[3];
+    float field_a14;
+} st_578fe0_3;
+
+typedef struct st_578fe0_0 {
+    char padding_0[24];
+    short field_18;
+} st_578fe0_0;
+
+typedef struct st_578fe0_2 {
+    char padding_0[38];
+    short field_26;
+} st_578fe0_2;
+
+typedef struct st_578fe0_4 {
+    char padding_0[8];
+    struct st_578fe0_3 *field_8;
+} st_578fe0_4;
+
+typedef struct st_578fe0_5 {
+    float field_0;
+} st_578fe0_5;
+
+typedef struct st_578fe0_1 {
+    unsigned int field_0;
+} st_578fe0_1;
+
+extern st_578fe0_1 *g_616928;
+extern st_578fe0_1 *g_61692c;
+extern st_578fe0_5 *gpGlobals;
+
+char ReactOnDanger__22CShootNonChargebleTaskP13danger_info_s(st_578fe0_4 *a0, st_578fe0_0 *a1)
+{
+    int v0;  // eax
+
+    if (a1->field_18 > 59)
+    {
+        v0 = g_616928(1, 100);
+        if (v0 <= a0->field_8->field_a04->field_26)
+        {
+            sub_488180(a0->field_8);
+        }
+        else if (a1->field_18 <= 99 && (char)sub_488bd0(a0->field_8))
+        {
+            if (a0->field_8->field_320)
+                sub_48c5a0(a0->field_8);
+            a0->field_8->field_a10 = 0;
+            g_61692c(0.800000011920929f, 1.2000000476837158f);
+            a0->field_8->field_a14 = (float)(0.800000011920929 + *(float *)gpGlobals);
+        }
+        else
+        {
+            return 1;
+        }
+    }
+    return 0;
+}
+

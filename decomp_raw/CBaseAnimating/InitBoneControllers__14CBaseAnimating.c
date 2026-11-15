@@ -1,0 +1,23 @@
+// InitBoneControllers__14CBaseAnimating @0x8e860 size=128
+typedef struct st_48e860_0 {
+    char padding_0[520];
+    unsigned int field_208;
+} st_48e860_0;
+
+typedef struct st_48e860_1 {
+    unsigned int field_0;
+} st_48e860_1;
+
+extern st_48e860_1 *g_6168e8;
+
+int InitBoneControllers__14CBaseAnimating(double a0, double a1, double a2, double a3, st_48e860_0 **a4)
+{
+    int v0;  // edi
+
+    v0 = g_6168e8(*a4->field_208);
+    sub_48c2f0(v0, *a4, 0, 0);
+    sub_48c2f0(v0, *a4, 1, 0);
+    sub_48c2f0(v0, *a4, 2, 0);
+    return sub_48c2f0(v0, *a4, 3, 0);
+}
+
