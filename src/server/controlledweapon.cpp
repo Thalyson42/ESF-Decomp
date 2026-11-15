@@ -69,7 +69,7 @@ void CControlledBeam::StopBeamJump(void)
 void CControlledBeam::DisableBeamJump(void)
 {
     m_fBeamJumping = 0;
-    if (!f_beam_2cc(m_pBeam))
+    if (!m_pBeam->m_fStuck)
     {
         m_pBeam->SetTouch(&CExplodingAttack::ExplodeTouch);          // [OK]
         UTIL_MakeVectors(m_pBeam->pev->angles);                      // [?] argumento: &pev->angles
@@ -77,7 +77,7 @@ void CControlledBeam::DisableBeamJump(void)
         m_fBeamJumpFlying = 0;
     }
     else
-        m_pBeam->vfunc_200();      // [?] virtual do feixe (vtable+0x200)
+        m_pBeam->Explode();        // [OK] virtual slot 126 (+0x200)
 }
 
 // =====================================================================
@@ -170,11 +170,11 @@ void CControlledBeam::ReleaseAttack(void)
     if (!m_pBeam) return;
     if (!m_pBeam->f_2c4)
     {
-        if (!m_pBeam->f_2dc)
-            m_pBeam->vfunc_200();                               // [?]
+        if (!m_pBeam->m_fReleased)
+            m_pBeam->Explode();                                // [OK] slot 126
     }
     if (m_pBeam->f_2c4)
-        m_pBeam->vfunc_1fc();                                   // [?]
+        m_pBeam->Remove();                                 // [OK] slot 125 (+0x1fc)
     m_pBeam = NULL;                                             // [OK]
 }
 
@@ -250,7 +250,7 @@ void CControlledBeam::UpdateBeamJumpStatus(void)
                 !m_pPlayer->UseKi((int)(m_iKiCost * 0.33)))               // [OK] 33% do ki por tick
                 DisableBeamJump();                                        // sem ki: para
         }
-        else if (m_pBeam->f_2cc_flag)                           // beam+0x2cc(716) [?]
+        else if (m_pBeam->m_fStuck)                           // beam+0x2cc(716) [?]
             StartBeamJump();
     }
     else if (m_fBeamJumping)
@@ -276,7 +276,7 @@ void CControlledBeam::PrimaryAttack(void)
 
     if (m_iAttackState == 2 && m_pBeam)
     {
-        if (!m_pBeam->f_2c4 && !m_pBeam->f_2dc)                            // feixe ainda vivo
+        if (!m_pBeam->f_2c4 && !m_pBeam->m_fReleased)                            // feixe ainda vivo
         {
             if (m_pBeam->m_fInBlockStruggle || m_pBeam->m_fInStruggle)
             {
@@ -306,7 +306,7 @@ void CControlledBeam::PrimaryAttack(void)
         }
         // feixe acabou: encerra a mira e solta a referência
         StopAiming();
-        if (m_pBeam->f_2c4) m_pBeam->vfunc_508();                          // [?] virtual do feixe (slot 125)
+        if (m_pBeam->f_2c4) m_pBeam->Remove();                          // [OK] slot 125
         m_pBeam = NULL;
         return;
     }
@@ -348,10 +348,10 @@ void CControlledBeam::WeaponIdle(void)
     {
         if (!m_pBeam)
             StopAiming();                                                  // [OK] sem feixe
-        else if (m_pBeam->f_2c4 || m_pBeam->f_2dc)
+        else if (m_pBeam->f_2c4 || m_pBeam->m_fReleased)
         {
             StopAiming();                                                  // [OK] feixe acabou
-            if (m_pBeam->f_2c4) m_pBeam->vfunc_508();                      // [?]
+            if (m_pBeam->f_2c4) m_pBeam->Remove();                      // [OK]
             m_pBeam = NULL;
         }
         else if (m_pBeam->m_fInStruggle || m_pBeam->m_fInBlockStruggle)
@@ -374,7 +374,7 @@ void CControlledBeam::WeaponIdle(void)
             m_pPlayer->m_fInBlockStruggle = 0;
             UpdateBeamJumpStatus();                                        // [OK]
             if (m_pPlayer->f_37c)                                          // player+0x37c [?]
-                m_pBeam->vfunc_520();                                      // [?]
+                m_pBeam->Release();                                     // [OK] slot 128 (+0x208)
         }
     }
     if (UTIL_WeaponTimeBase() > m_flTimeWeaponIdle)                        // [OK] reagenda o idle em +0.2 s

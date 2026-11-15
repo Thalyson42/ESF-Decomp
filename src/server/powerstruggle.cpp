@@ -84,7 +84,7 @@ void CPowerStruggle::Remove(void)
             a->m_fInStruggle = 0;
             if (a->m_flStruggleRatio < 0)                 // [OK] perdeu a disputa
                 a->pev->owner = strongest->pev->owner;    // [OK] o vencedor passa a ser o dono
-            a->vfunc_200();                               // [?] virtual (detona/remove)
+            a->Explode();                                 // [OK] slot 126
         }
         PSNode *next = m_pAttacks->pNext;
         delete m_pAttacks;
@@ -133,7 +133,7 @@ void CPowerStruggle::PSThink(void)
             m_flStalemateTime += 0.2f;
             if (m_flStalemateTime > 5.0f)                               // [OK] 5 s de empate
             {
-                Remove();      // [?] virtual (vtable+0x1fc = slot 125); encerra a disputa
+                Remove();      // [OK] (o decompilado chama o virtual slot 125 = Remove) encerra a disputa
                 return;
             }
         }
