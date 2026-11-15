@@ -1713,10 +1713,10 @@ void CPlayerMelee::StopThrow(int bQuiet)
     m_pAttacker->f_37c = 0;
     m_iThrowState = THROW_NONE;
     m_flTossStartSpeed = 0; m_flTossSpeed = 0; m_flTossMinSpeed = 0; m_flTossDecel = 0; m_flTossEndTime = 0;
-    f_020 = 0;
+    m_flWallStickStart = 0;
     f_000 = 0;
     f_024 = gpGlobals->time;                                               // +0x24 [?] hora do fim
-    m_vecTossLast[0] = m_vecTossLast[1] = m_vecTossLast[2] = 0;
+    m_vecWallNormal[0] = m_vecWallNormal[1] = m_vecWallNormal[2] = 0;
     m_pAttacker->m_flSpeedMult = 1.0f;                                     // [OK] devolve a velocidade
     m_pAttacker->pev->friction = 1.0f;
     m_pAttacker->pev->gravity = 1.0f;
@@ -1763,4 +1763,114 @@ void CPlayerMelee::MakeCreater(void)
     CBaseEntity *pHit = CBaseEntity::Instance(tr.pHit);
     if (!pHit || pHit->pev->solid != SOLID_BSP) return;       // [OK] só em parede/chão do mapa
     UTIL_DecalTrace(&tr, 36);                                 // [OK] decal 36 (cratera) [?] índice
+}
+
+// ======================================================================
+// Lote 13: colisão do arremessado (parede / outro jogador) e wall-stick
+// ======================================================================
+int CPlayerMelee::CheckForObsticales(void)                    // 1 = bateu em algo e o estado mudou
+{
+    Vector vecDir(m_vecTossDir[0], m_vecTossDir[1], m_vecTossDir[2]);
+    Vector vecStart = m_pAttacker->pev->origin;
+    TraceResult tr;
+    UTIL_TraceHull(vecStart, vecStart + vecDir * 32.0f, dont_ignore_monsters, head_hull, ENT(m_pAttacker->pev), &tr);   // [OK] 32 u à frente
+    if (tr.flFraction >= 1.0f) return 0;
+
+    CBaseEntity *pHit = CBaseEntity::Instance(tr.pHit);
+    if (pHit && pHit->pev->solid == SOLID_BSP)                // [OK] parede ou chão do mapa
+    {
+        Vector vecAngles = UTIL_VecToAngles(vecDir * 32.0f);
+        float flPitch = vecAngles.x;
+        Vector vecNormal = -tr.vecPlaneNormal;
+        float flDot = DotProduct(vecNormal, vecDir);          // 1 = bateu de frente
+        if (flPitch < -180.0f) flPitch += 360.0f;
+        else if (flPitch > 180.0f) flPitch -= 360.0f;
+
+        if (!m_iTossType)
+        {
+            StopThrow();
+        }
+        else
+        {
+            RemoveStruggleBar();
+            if (flDot > 0.8f && flPitch < 115.0f && flPitch > 65.0f)       // [OK] caiu de cabeça no chão
+            {
+                MakeCreater();
+                EMIT_SOUND_DYN(ENT(m_pAttacker->pev), CHAN_WEAPON, "weapons/wallhit.wav", 1.0, 0.8, 0, 100);
+                if (InflictWallhitDmg(1))
+                {
+                    if ((m_pAttacker->pev->button & IN_JUMP) && m_pAttacker->UseKi(100))   // [OK] pulo + 100 de ki: amortece
+                        StartLandRecover();
+                    else
+                        StartLay();
+                    return 1;
+                }
+            }
+            if (flDot > 0.7f && flPitch < 45.0f && flPitch > -45.0f)       // [OK] bateu de frente na parede
+            {
+                MakeCreater();
+                EMIT_SOUND_DYN(ENT(m_pAttacker->pev), CHAN_WEAPON, "weapons/wallhit.wav", 1.0, 0.8, 0, 100);
+                EmitExplosionRocks(tr.vecEndPos, vecNormal * 125.0f, 50.0f, 20, 20);   // [OK]
+                if (InflictWallhitDmg(1))
+                {
+                    StartWallStick(tr.vecEndPos, vecNormal);          // [OK] gruda na parede
+                    return 1;
+                }
+            }
+            if (InflictWallhitDmg(0))
+                StartRoll();                                          // [OK] bateu de raspão: rola
+        }
+        return 1;
+    }
+    else if (pHit && pHit->IsPlayer() && pHit->IsAlive() && pHit != m_pThrower && !((CBasePlayer *)pHit)->f_3a8 &&
+             m_pThrower->CanMelee((CBasePlayer *)pHit))       // [OK] bateu em outro jogador: ele também é arremessado
+    {
+        EMIT_SOUND_DYN(ENT(m_pAttacker->pev), CHAN_WEAPON, "weapons/wallhit.wav", 1.0, 0.8, 0, 100);
+        ((CBasePlayer *)pHit)->m_Melee.StartToss(m_pThrower, 1, vecDir,
+                                                 1.15f * m_flTossSpeed, m_flTossMinSpeed, 0.85f * m_flTossDecel, 1.5f);   // [OK]
+    }
+    return 0;
+}
+
+void CPlayerMelee::StartWallStick(Vector vecPos, Vector vecNormal)
+{
+    m_pAttacker->pev->movetype = MOVETYPE_NONE;
+    m_pAttacker->pev->gravity = 1.0e-7f;                      // [OK] +0x11c
+    m_pAttacker->m_flSpeedMult = 0;
+    m_iThrowState = THROW_WALLSTICK;
+    m_vecWallNormal[0] = vecNormal.x; m_vecWallNormal[1] = vecNormal.y; m_vecWallNormal[2] = vecNormal.z;
+    m_flWallStickStart = gpGlobals->time;
+    UTIL_SetOrigin(m_pAttacker->pev, vecPos);
+    m_pAttacker->pev->velocity = Vector(0, 0, 0);
+    AddAnimationAFix(vecNormal, true, gpGlobals->time, "wall_collide");
+    AddToCurAnim(true, "wall_idle");
+}
+
+void CPlayerMelee::HandleWallStick(void)
+{
+    m_pAttacker->pev->velocity = Vector(0, 0, 0);
+    m_pAttacker->pev->movetype = MOVETYPE_NONE;
+    if (gpGlobals->time - melee_wallstick_mintime->value < m_flWallStickStart) return;     // [OK] tempo mínimo grudado
+
+    if ((m_pAttacker->pev->button & IN_JUMP) && m_pAttacker->UseKi(100))                   // [OK] pulo + 100 de ki: se solta da parede
+    {
+        Vector vecNormal(m_vecWallNormal[0], m_vecWallNormal[1], m_vecWallNormal[2]);
+        StopThrow();
+        UTIL_MakeVectors(vecNormal);                                                       // [?] o original passa a normal como "ângulos"
+        Vector vecDir = vecNormal * 0.65f + gpGlobals->v_up * 0.35f;                       // [OK] impulso para fora e para cima
+        m_pAttacker->pev->velocity = vecDir * 1200.0f;                                     // [OK]
+        SetAnimPriority(ANIM_LOW, AddAnimationAFix(vecNormal, false, gpGlobals->time, "wall_recover"));   // [OK] prioridade 3
+        EMIT_SOUND_DYN(ENT(m_pAttacker->pev), CHAN_BODY, "weapons/jump.wav", 1.0, 0.8, 0, 100);
+        return;
+    }
+    if (m_flWallStickStart + melee_wallstick_maxtime->value >= gpGlobals->time) return;    // [OK] ainda pode ficar
+
+    StartRoll();                                                                           // [OK] tempo esgotado: despenca rolando
+    m_flTossEndTime = gpGlobals->time - m_flWallStickStart + m_flTossEndTime;
+    m_pAttacker->pev->velocity = Vector(m_vecWallNormal[0], m_vecWallNormal[1], m_vecWallNormal[2]) * 100.0f;
+    m_vecWallNormal[0] = m_vecWallNormal[1] = m_vecWallNormal[2] = 0;
+    m_flWallStickStart = 0;
+    UTIL_Model_RemoveAll(ENTINDEX(ENT(m_pAttacker->pev)));
+    RemoveAllAnims();
+    f_024 = gpGlobals->time;
 }

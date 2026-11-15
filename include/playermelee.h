@@ -265,7 +265,7 @@ public:
     float m_flTossEndTime;                      // +0x14 [OK] StartToss(agora + a7)
     float m_flLayTime;                          // +0x18 [OK] HandleLay (1.25 s)
     float m_flLandRecoverTime;                  // +0x1c [OK] HandleLandRecover (1 s)
-    int   f_020;                                // +0x20 [?]
+    float m_flWallStickStart;                   // +0x20 [OK] hora em que grudou na parede
     float f_024;                                // +0x24 [?] hora do fim do arremesso
     int   m_fTossing;                           // +0x28 [OK] ManageToss
     int   m_iTossType;                          // +0x2c [OK] StartToss(a2)
@@ -274,7 +274,7 @@ public:
     int   m_fStruggleBar;                       // +0x38 [OK] barra de struggle visível
     int   f_03c;                                // +0x3c [?]
     float m_vecTossDir[3];                      // +0x40 [OK] direção normalizada do arremesso
-    float m_vecTossLast[3];                     // +0x4c [?] zerado em StopThrow
+    float m_vecWallNormal[3];                    // +0x4c [OK] normal da parede onde grudou (StartWallStick)
     float m_vecTossAux[3];                      // +0x58 [?] zerado em StartToss
     int   m_iThrowState;                        // +0x64 [OK] InThrow = !=0; 3/4/5 = lasers (SpecialLaserReduction)
     CBasePlayer *m_pThrower;                    // +0x68 [OK] quem arremessou
