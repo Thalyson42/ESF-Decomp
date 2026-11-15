@@ -1536,3 +1536,72 @@ void CPlayerMelee::Throw(CBasePlayer *pTarget, int iSpeed, float flArg, Vector v
     m_pIgnoreDamageFrom = NULL;                               // +0x120 := 0
     f_0b4 = gpGlobals->time + 1.0f;
 }
+
+// ======================================================================
+// Lote 10: o voo do arremessado (toss)
+// ======================================================================
+void CPlayerMelee::ApplyVelocity(void)
+{
+    m_pAttacker->pev->vuser4 = Vector(m_vecTossDir[0], m_vecTossDir[1], m_vecTossDir[2]) * m_flTossSpeed;   // [OK] +0x288
+}
+
+// this = melee de quem é arremessado; pThrower = quem arremessou; flSpeed = velocidade inicial; flMin = piso; flDecel = desaceleração/s; flTime = duração
+void CPlayerMelee::StartToss(CBasePlayer *pThrower, int iType, Vector vecDir, float flSpeed, float flMin, float flDecel, float flTime)
+{
+    if (!pThrower) return;
+    if (!m_pAttacker->IsAlive()) return;                      // [OK] vtable +0x8c
+
+    if (m_fTossing)
+    {
+        StopThrow(1);
+        f_000 = f_000 + 1;                                    // [?] contador de arremessos encadeados
+    }
+    else
+        f_000 = 1;
+
+    // o arremessado perde todos os estados de movimento especiais [OK]
+    if (m_pAttacker->f_508) m_pAttacker->StopSwoop();
+    if (m_pAttacker->f_770) m_pAttacker->Descend(true);
+    if (m_pAttacker->f_330) m_pAttacker->StopPowerUp();
+    if (m_pAttacker->m_fFlying) m_pAttacker->StopFly();
+    if (m_pAttacker->f_324) m_pAttacker->StopTurbo();
+    if (m_pAttacker->f_6c8) m_pAttacker->RemoveWallJump();
+    if (m_pAttacker)
+    {
+        CBasePlayerItem *pItem = m_pAttacker->m_pActiveItem;
+        if (pItem && pItem->vf_158())                         // [?] vtable +0x158: provavelmente "CanHolster"
+        {
+            pItem->vf_104(0);                                 // [?] vtable +0x104
+            pItem->vf_fc();                                   // [?] vtable +0xfc: provavelmente Holster
+        }
+    }
+
+    m_pThrower = pThrower;
+    m_iTossType = iType;
+    m_fTossing = 1;
+    m_iThrowState = THROW_TOSS;
+    m_vecTossAux[0] = m_vecTossAux[1] = m_vecTossAux[2] = 0;
+    m_flGrabLastTick = gpGlobals->time;                       // [?] +0xb0
+    m_flTossStartSpeed = flSpeed;
+    m_flTossSpeed = flSpeed;
+    m_flTossMinSpeed = flMin;
+    m_flTossDecel = flDecel;
+    m_flTossEndTime = flTime + gpGlobals->time;
+    m_pAttacker->f_37c = 1;
+    m_pAttacker->pev->movetype = 2;                           // [OK] valor literal
+    m_pAttacker->pev->gravity = 1.0f;                         // [OK] +0x11c
+    Vector v = vecDir.Normalize();
+    m_vecTossDir[0] = v.x; m_vecTossDir[1] = v.y; m_vecTossDir[2] = v.z;
+    ApplyVelocity();
+    RemoveAllAnims();
+}
+
+void CPlayerMelee::HandleToss(void)
+{
+    if (DeaccelerateToss()) { StopThrow(); return; }          // [OK] velocidade caiu até o piso
+    if (HandleRecover()) return;
+    if (CheckForObsticales()) return;
+    ApplyVelocity();
+    // a barra do HUD mostra o quanto da velocidade já foi perdida (negativo = lado do defensor)
+    UpdateStruggleBar((int)-(((m_flTossSpeed - m_flTossMinSpeed) / (m_flTossStartSpeed - m_flTossMinSpeed)) * 100.0f));   // [OK]
+}

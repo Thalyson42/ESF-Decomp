@@ -258,22 +258,26 @@ public:
 
     // ---- campos (offset do .so) ----
     char  f_000;                                // +0x00
-    int   f_004;
+    float m_flTossStartSpeed;                   // +0x04 [OK] StartToss
     float m_flTossSpeed;                        // +0x08 [OK] DeaccelerateToss
     float m_flTossMinSpeed;                     // +0x0c [OK]
     float m_flTossDecel;                        // +0x10 [OK] desaceleração por segundo
-    char  pad_014[4];
+    float m_flTossEndTime;                      // +0x14 [OK] StartToss(agora + a7)
     float m_flLayTime;                          // +0x18 [OK] HandleLay (1.25 s)
     float m_flLandRecoverTime;                  // +0x1c [OK] HandleLandRecover (1 s)
     char  pad_020[8];
     int   m_fTossing;                           // +0x28 [OK] ManageToss
-    char  pad_02c[0x34-0x2c];
+    int   m_iTossType;                          // +0x2c [OK] StartToss(a2)
+    char  pad_030[4];
     int   f_034;                                // +0x34 [?]
     int   m_fStruggleBar;                       // +0x38 [OK] barra de struggle visível
     int   f_03c;                                // +0x3c [?]
-    char  pad_040[0x64-0x40];
+    float m_vecTossDir[3];                      // +0x40 [OK] direção normalizada do arremesso
+    char  pad_04c[0x58-0x4c];
+    float m_vecTossAux[3];                      // +0x58 [?] zerado em StartToss
     int   m_iThrowState;                        // +0x64 [OK] InThrow = !=0; 3/4/5 = lasers (SpecialLaserReduction)
-    char  pad_068[0x78-0x68];
+    CBasePlayer *m_pThrower;                    // +0x68 [OK] quem arremessou
+    char  pad_06c[0x78-0x6c];
     int   f_078, f_07c;                         // +0x78/+0x7c [?] usados em UseAttackerMoves
     char  pad_080[4];
     plrmelee_anim_s *m_pAnimList;               // +0x84 [OK] lista de animações enfileiradas
