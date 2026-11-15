@@ -974,3 +974,148 @@ void CPlayerMelee::ManageToss(void)
     case THROW_RECOVER:      HandleRecover();     break;
     }
 }
+
+// ======================================================================
+// Lote 6: prepunch (a sequência de socos automáticos antes do combo)
+// ======================================================================
+float CPlayerMelee::GetStunPerPunch(void)
+{
+    float *pSkill = (float *)((void *(*)(void *))(*(void ***)m_pSkill)[3])(this);   // [?] tabela de skill; +0x10 = stun por soco
+    if (m_pDefenderMelee->f_0d8) return pSkill[4] * 1.2f;     // [OK]
+    if (m_pDefenderMelee->f_0d4) return pSkill[4] * 0.65f;    // [OK]
+    return pSkill[4];
+}
+
+float CPlayerMelee::GetDmgPerPunch(void)
+{
+    float f = m_pDefenderMelee->f_0d0 ? 2.0f : 1.0f;          // [OK]
+    if (m_pDefenderMelee->f_0d4)      f *= 0.5f;
+    else if (m_pDefenderMelee->f_0d8) f *= 1.2f;
+    f *= GetPowerRatio(m_pDefender);                          // [?] o decompilado perde o valor retornado: o dano base vem do ratio de poder
+    if (f < 1.0f) f = 1.0f;                                   // [OK] limites 1..5
+    else if (f > 5.0f) f = 5.0f;
+    return f;
+}
+
+void CPlayerMelee::StopPrepunchAttack(void)
+{
+    if (m_Mode == MELEE_PREPUNCH_ATTACK)
+    {
+        m_iPunchCount = 0;
+        m_flStunEnd = 0;
+        m_flTotalStun = 0;                                    // [OK] +0x8c
+        f_090 = 0;
+        m_Mode = MELEE_NONE;
+        RemoveAllAnims();
+        EMIT_SOUND_DYN(ENT(m_pAttacker->pev), CHAN_ITEM, "common/null.wav", 1.0, 0.8, 0, 100);   // [OK] corta o som do prepunch
+        m_vecDir[2] = 0;                                      // [OK] direção só no plano
+        Vector v(m_vecDir[0], m_vecDir[1], 0);
+        v = v.Normalize();
+        m_vecDir[0] = v.x; m_vecDir[1] = v.y; m_vecDir[2] = v.z;
+        for (int i = 0; i < 3; i++) m_pDefenderMelee->m_vecDir[i] = m_vecDir[i];   // [OK]
+        m_pAttacker->pev->vuser4 = Vector(0, 0, 0);           // [OK] zera a deriva
+        // o atacante termina 11 unidades à frente do defensor
+        Vector vecEnd = m_pDefender->pev->origin + Vector(m_vecDir[0], m_vecDir[1], m_vecDir[2]) * 11.0f;
+        m_pAttacker->pev->origin = vecEnd;
+        UTIL_SetOrigin(m_pAttacker->pev, m_pAttacker->pev->origin);
+        m_pDefenderMelee->StopPrepunchAttack();               // [OK] encerra o lado do defensor também
+    }
+    else if (m_Mode == MELEE_PREPUNCH_DEFEND)
+    {
+        m_Mode = MELEE_NONE;
+        RemoveAllAnims();
+        m_pAttacker->pev->vuser4 = Vector(0, 0, 0);
+        if (!m_fStunned && m_flStunEnd != 0)                  // [OK] +0xdc, +0x88
+        {
+            SetActiveStunTime(m_flStunEnd);
+            return;
+        }
+        if (m_fStunned) SetTotalStunTime(m_flStunEnd - gpGlobals->time);   // [OK]
+    }
+}
+
+void CPlayerMelee::HandlePrepunchAttack(void)
+{
+    entvars_t *pevAtk = m_pAttacker->pev;
+    Vector vecDrift;
+    if (!m_pDefenderMelee->f_0d0)                             // [?] defensor "forte" não é arrastado
+        vecDrift = Vector(m_vecDir[0], m_vecDir[1], m_vecDir[2]) * melee_prepunch_driftspeed->value;
+    else
+        vecDrift = Vector(0, 0, 0);
+    pevAtk->vuser4 = vecDrift;                                // [OK] +0x288: deriva aplicada pelo PreThink
+
+    float flCount = (float)m_iPunchCount;
+    if ((pevAtk->button & IN_ATTACK) && flCount >= melee_prepunch_mincombo->value)     // soltou o combo
+    {
+        if (f_100) { StopMelee(1); return; }
+        StopPrepunchAttack();
+        SetMode(MELEE_CHARGE_ATTACK);                         // [OK] 3
+        return;
+    }
+    if ((pevAtk->button & 0x800) && flCount >= melee_prepunch_mincombo->value)         // ataque alternativo
+    {
+        if (f_100) { StopMelee(1); return; }
+        StopPrepunchAttack();
+        if (m_pDefenderMelee->f_0d4 || m_iPunchCount > 6) SetMode(MELEE_CHARGE_ATTACK);
+        else SetMode(MELEE_GRAB_ATTACK);                      // [OK] 5
+        return;
+    }
+
+    float flDelay = f_100 ? melee_prepunch_delaystruggle->value : melee_prepunch_delay->value;
+    if (m_flLastPunch + flDelay < gpGlobals->time)            // [OK] hora de dar mais um soco
+    {
+        m_flLastPunch = gpGlobals->time;
+        m_iPunchCount++;
+        MeleeText(m_iPunchCount, m_iPunchCount == 1 ? 0 : 1);        // [?] argumentos da HUD
+        int iKi;
+        if ((float)m_iPunchCount < melee_prepunch_maxstun->value)
+        {
+            m_pDefenderMelee->m_flStunEnd += GetStunPerPunch();       // [OK] acumula stun
+            if (!m_pDefenderMelee->m_fStunActive) m_pDefenderMelee->m_fStunActive = 1;
+            iKi = f_100 ? 22 : 15;                                    // [OK] custo de ki por soco
+        }
+        else                                                          // passou do limite: o stun começa a decair
+        {
+            CPlayerMelee *d = m_pDefenderMelee;
+            if (!d->m_fStunned)
+            {
+                d->m_fStunned = 1;
+                d->m_flTotalStun = d->m_flStunEnd;
+                d->m_flStunEnd += gpGlobals->time;
+            }
+            d->m_flTotalStun -= GetStunPerPunch() * 0.5f;             // [?]
+            d->m_flStunEnd   -= GetStunPerPunch() * 0.5f;             // [?]
+            iKi = f_100 ? 37 : 25;
+        }
+        if (!m_pAttacker->UseKi(iKi))                                 // [OK] sem ki: o atacante é empurrado de volta
+        {
+            Vector vecBack = -Vector(m_vecDir[0], m_vecDir[1], m_vecDir[2]);
+            StopMelee(0);
+            m_pDefenderMelee->Powerhit(m_pAttacker, vecBack, 4);
+            return;
+        }
+        float flDmg = GetDmgPerPunch();
+        if (m_pDefenderMelee->f_0d4)                                  // [?] defensor em contra-ataque automático
+        {
+            if (!m_pDefender->UseKi(m_pDefenderMelee->f_0d0 ? 30 : 20))
+            {
+                m_pDefenderMelee->f_0d4 = 0;
+                m_pDefender->TakeDamage(m_pAttacker->pev, m_pAttacker->pev, flDmg, DMG_PREVENT_PHYSICS_FORCE /*0x2000000 [?]*/);
+                m_pDefenderMelee->AddAnimation(true, gpGlobals->time, 1, "ref_autopunch_hit");
+            }
+        }
+        else
+            m_pDefender->TakeDamage(m_pAttacker->pev, m_pAttacker->pev, flDmg, 0x2000000);       // [OK]
+
+        if (m_pDefenderMelee->f_0d0)                                  // defensor forte: lança pedras da explosão
+        {
+            UTIL_MakeVectors(-Vector(m_vecDir[0], m_vecDir[1], m_vecDir[2]));
+            float side = ((m_iPunchCount / 2) * 2 == m_iPunchCount) ? 1.0f : -1.0f;   // [?] alterna o lado a cada soco
+            Vector vecPos = m_pDefender->pev->origin + gpGlobals->v_right * 2.5f * side;
+            Vector vecVel = -Vector(m_vecDir[0], m_vecDir[1], m_vecDir[2]) * 75.0f;
+            m_pDefenderMelee->EmitExplosionRocks(vecPos, vecVel, 5.0f, 10, 6);   // [OK] 5.0, 10, 6
+        }
+    }
+    if (melee_prepunch_max->value == (float)m_iPunchCount && m_pAttacker->pev->deadflag == DEAD_NO)   // [OK] limite de socos
+        StopMelee(1);
+}

@@ -279,26 +279,33 @@ public:
     plrmelee_anim_s *m_pAnimList;               // +0x84 [OK] lista de animações enfileiradas
     float m_flStunEnd;                          // +0x88 [OK] GetStunTime/CheckStunTime
     float m_flTotalStun;                        // +0x8c [OK]
-    char  pad_090[0x9c-0x90];
+    char  pad_090[0x94-0x90];
+    float m_flLastPunch;                        // +0x94 [OK] hora do último soco do prepunch
+    char  pad_098[0x9c-0x98];
     float f_09c;                                // +0x9c [?] 0..100 (fração mostrada na barra de struggle)
     char  pad_0a0[0xa8-0xa0];
     float f_0a8;
     float m_flDelayTime;                        // +0xac [OK] HandleDelayedBlock (1 s)
-    char  pad_0b0[0xc4-0xb0];
+    char  pad_0b0[0xb8-0xb0];
+    int   m_iPunchCount;                        // +0xb8 [OK] socos do prepunch
+    char  pad_0bc[0xc4-0xbc];
     int   f_0c4;                                // +0xc4 [?] CanSwitch compara com melee_maxextanges
     int   m_iAttackerMoveCount;                 // +0xc8 [OK] contador de AddDirection (atacante)
     int   m_iDefenderMoveCount;                 // +0xcc [OK]
-    char  pad_0d0[0xdc-0xd0];
+    int   f_0d0;                                // +0xd0 [?] dano x2 (GetDmgPerPunch)
+    int   f_0d4;                                // +0xd4 [?] dano x0.5, stun x0.65 (autopunch/retaliate)
+    int   f_0d8;                                // +0xd8 [?] dano x1.2, stun x1.2
     int   m_fStunned;                           // +0xdc [OK]
     int   m_fStunActive;                        // +0xe0 [OK]
     char  pad_0e4[0xec-0xe4];
     int   f_0ec;                                // +0xec [?]
     int   f_0f0;                                // +0xf0 [?] retaliate flags (HandleExeDefend)
-    char  pad_0f4[0x104-0xf4];
+    char  pad_0f4[0x100-0xf4];
+    int   f_100;                                // +0x100 [?] 1 = prepunch em struggle (delays diferentes)
     int   f_104;                                // +0x104 [?] pula CopyMoveToExe
     int   m_fDelayEndBlock;                     // +0x108 [OK] SetDelayEndBlock
     int   f_10c;                                // +0x10c [?]
-    char  pad_110[0x11c-0x110];
+    float m_vecDir[3];                          // +0x110 [OK] direção atacante->defensor (Reset zera)
     int   m_Mode;                               // +0x11c [OK] ADV_MELEE_STATUS
     CBasePlayer *m_pIgnoreDamageFrom;           // +0x120 [?]
     CBasePlayer *m_pAttacker;                   // +0x124 [OK]
