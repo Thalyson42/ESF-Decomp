@@ -8,3 +8,4 @@
 
 `tools/data/entvars_offsets.txt` = offsets de `entvars_t` (calculados do SDK) para traduzir `*(pev+N)`.
 Descoberto: CKamehameha e CGallitGun::Spawn gravam os mesmos campos da classe-base (+0xdc..+0x1fc).
+| CBasePlayer (ESF) | src/server/player_esf.cpp | 21 (IsPlayer, IsAlive, SetPowerLevel, GetPowerRatio, UseKi, GetMaxSpeed, DrawChargeBar, EmitClassSound, StartFly, StopFly...) | Campos em `include/player_esf.h`. StartFly/StopFly ainda com condições `m_fXXX` sem nome. ki = `pev->fuser4`. |
