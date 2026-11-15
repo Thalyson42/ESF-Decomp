@@ -2409,3 +2409,90 @@ void CPlayerMelee::StopMelee(int bToss)
     SetAttackerOther(NULL);
     SetDefender(NULL);
 }
+
+// ======================================================================
+// Lote 20: laço principal do melee (ManageMelee), empurrões, troca de papéis
+// ======================================================================
+void CPlayerMelee::ManageMelee(void)                          // chamado a cada frame pelo PreThink do jogador
+{
+    ManageInvulnerability();
+    if (m_fIsAttacker && (!m_pDefender->IsAlive() || m_pDefender->pev->takedamage == 0))   // [?] pev+0x16c
+    {
+        if (!m_Mode || !m_fIsAttacker) return;
+        StopMelee(0);                                         // [OK] o defensor morreu ou ficou invulnerável
+        return;
+    }
+    switch (m_Mode)                                           // [OK] um Handle* por fase
+    {
+    case MELEE_PREPUNCH_ATTACK:           HandlePrepunchAttack();       break;
+    case MELEE_PREPUNCH_DEFEND:           HandlePrepunchDefend();       break;
+    case MELEE_CHARGE_ATTACK:             HandleChargeAttack();         break;
+    case MELEE_CHARGE_DEFEND:             HandleChargeDefend();         break;
+    case MELEE_GRAB_ATTACK:               HandleGrabAttack();           break;
+    case MELEE_GRAB_DEFEND:               HandleGrabDefend();           break;
+    case MELEE_EXE_ATTACK:                HandleExeAttack();            break;
+    case MELEE_EXE_DEFEND:                HandleExeDefend();            break;
+    case MELEE_STRUGGLE_ATTACK:           HandleStruggleAttack();       break;
+    case MELEE_BURST_STRUGGLE_ATTACK:     HandleBurstStruggleAttack();  break;
+    case MELEE_STRUGGLE_DEFEND:           HandleStruggleDefend();       break;
+    case MELEE_KNOCK_PRESTRUGGLE_ATTACK:  HandleKnockPreStruggleAttack(); break;
+    }
+}
+
+void CPlayerMelee::PushAfterDeath(void)                       // o defensor morto desliza 400 u/s para longe
+{
+    if (m_pDefender->IsAlive()) return;
+    Vector vecDir(m_vecDir[0], m_vecDir[1], m_vecDir[2]);
+    m_pDefender->pev->velocity = (f_140 ? -vecDir : vecDir) * 400.0f;     // [OK]
+}
+
+void CPlayerMelee::PushAwayOtherPlayers(void)                 // ao terminar a luta, afasta quem estiver por perto
+{
+    CBasePlayer *pCenter = m_pDefender ? m_pDefender : m_pAttacker;
+    Vector vecCenter = pCenter->pev->origin;
+    CBaseEntity *pEnt = NULL;
+    while ((pEnt = UTIL_FindEntityInSphere(pEnt, vecCenter, 350.0f)) != NULL)     // [OK] raio 350
+    {
+        if (!pEnt->IsPlayer() || pEnt == m_pAttacker || pEnt == m_pDefender) continue;
+        CBasePlayer *p = (CBasePlayer *)pEnt;
+        if (p->f_330) p->StopPowerUp();
+        // só empurra quem está "livre" (sem estados especiais, vivo e fora do tempo de proteção)
+        if (!p->f_3e4 && !p->f_354 && !p->f_358 && !p->f_35c && !p->f_770 && !p->f_6bc && !p->f_350 &&
+            p->IsAlive() && !p->f_4c4 && gpGlobals->time - nomeleehittime->value >= p->f_3a4)
+        {
+            if (p->m_fFlying) p->StopFly();
+            if (p->m_fBlocking) p->StopBlock();
+            Vector vecDist = p->pev->origin - vecCenter;
+            if (vecDist.Length() < 87.0f)                     // [OK] colado: é arremessado
+                p->m_Melee.StartToss(m_pAttacker, 0, vecDist.Normalize(), 1500.0f, 800.0f, 250.0f, 2.0f);
+            else                                              // um pouco mais longe: só é empurrado
+                p->pev->velocity = vecDist.Normalize() * 900.0f;
+        }
+    }
+    MESSAGE_BEGIN(MSG_PVS, gmsgMeleeFX, m_pAttacker->pev->origin);
+        WRITE_BYTE(3);                                        // [OK] efeito 3: clarão do fim da luta
+        WRITE_BYTE(ENTINDEX(ENT(m_pAttacker->pev)));
+    MESSAGE_END();
+    EMIT_SOUND_DYN(ENT(m_pAttacker->pev), CHAN_WEAPON, "weapons/meleeflash.wav", 1.0, 0.8, 0, 100);
+}
+
+void CPlayerMelee::SimpleSwitch(CPlayerMelee *pOther) { SimpleSwitch(pOther, -1.0f, (ADV_MELEE_STATUS)0); }   // [OK]
+
+void CPlayerMelee::SimpleSwitch(CPlayerMelee *pOther, float flStun, ADV_MELEE_STATUS iMode)   // troca atacante e defensor
+{
+    if (m_fIsAttacker)
+    {
+        m_iStruggleTies++;
+        pOther->m_iStruggleTies++;
+        f_0f4 = 1;
+        pOther->f_0f4 = 1;                                    // [OK] marca "troca": StopMelee não separa os jogadores
+        StopMelee(0);
+        pOther->InitMelee(m_pAttacker);                       // [OK] o outro passa a atacar
+        if (flStun != -1.0f) SetActiveStunTime(flStun);
+        if (iMode) pOther->SetMode(iMode);
+        f_0f4 = 0;
+        pOther->f_0f4 = 0;
+    }
+    else if (pOther->m_fIsAttacker)
+        pOther->SimpleSwitch(this, flStun, iMode);            // [?] o decompilado chama (this, this); aqui o par é invertido
+}
