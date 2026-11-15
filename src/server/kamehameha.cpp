@@ -26,8 +26,7 @@ void CKamehameha::Spawn(void)
     f_1f4 = 0.1f;
     f_1fc = 0;
     f_1f8 = 1;
-    // o decompilado termina chamando sub_48cf50(this) = CBasePlayerItem::FallInit() [?]
-    FallInit();
+    FallInit();                         // [OK] CBasePlayerItem::FallInit
 }
 
 void CKamehameha::Precache(void)
@@ -49,7 +48,7 @@ void CKamehameha::Precache(void)
     PRECACHE_SOUND("weapons/kamehameha_fire.wav");
 
     m_usTrailSprite = PRECACHE_MODEL("sprites/kamehamehatrail.spr");
-    CControlledBeam::Precache();            // sub_488bb0 [?]
+    CControlledBeam::Precache();            // [OK] (sub_488bb0 = CControlledBeam::Precache: beamhead.wav / beamfire.wav)
 }
 
 int CKamehameha::GetItemInfo(ItemInfo *p)
@@ -83,7 +82,7 @@ void CKamehameha::InitChargeSprite(void)
     m_pChargeSprite->pev->renderfx    = kRenderFxNoDissipation; // +0x15c = 19
     m_pChargeSprite->pev->scale       = 0.1f;                   // +0x144
     m_pChargeSprite->pev->framerate   = 10.0f;                  // +0x138
-    m_pChargeSprite->TurnOff();                                 // sub_48df90 [?] (mesma de Disable)
+    m_pChargeSprite->TurnOff();                                 // [OK] CSprite::TurnOff
 }
 
 void CKamehameha::GrowChargeSprite(void)
@@ -91,20 +90,20 @@ void CKamehameha::GrowChargeSprite(void)
     m_pChargeSprite->pev->scale = m_flCharge * 0.015f;          // [OK] +0xd8 * 0.015
 }
 
-void CKamehameha::EnableChargeSprite(void)  { m_pChargeSprite->TurnOn(); }   // sub_487b90 [?]
-void CKamehameha::DisableChargeSprite(void) { m_pChargeSprite->TurnOff(); }  // sub_48df90 [?]
-void CKamehameha::RemoveChargeSprite(void)  { UTIL_Remove(m_pChargeSprite); } // sub_48cc00 [?]
+void CKamehameha::EnableChargeSprite(void)  { m_pChargeSprite->TurnOn(); }   // [OK]
+void CKamehameha::DisableChargeSprite(void) { m_pChargeSprite->TurnOff(); }  // [OK]
+void CKamehameha::RemoveChargeSprite(void)  { UTIL_Remove(m_pChargeSprite); } // [OK]
 
 void CKamehameha::EmitChargeSound(void)
 {
-    EmitVoiceLine(m_pPlayer, "kamehame.wav");                    // sub_48d4f0 [?] voz depende da classe
+    m_pPlayer->EmitClassSound("kamehame.wav");   // [OK] voz por personagem: goku/, krillin/, gohan/, cell/, cell2/ + nome
     EMIT_SOUND_DYN(ENT(m_pPlayer->pev->pContainingEntity), CHAN_WEAPON,
-                   "weapons/kame_charge.wav", 1.0, 0.8, 0, 100);   // [OK] canal 1, vol 1.0, atten 0.8
+                   "weapons/kame_charge.wav", 1.0, 0.8, 0, 100);
 }
 
 void CKamehameha::EmitShootSound(void)
 {
-    EmitVoiceLine(m_pPlayer, "ha.wav");
+    m_pPlayer->EmitClassSound("ha.wav");         // [OK]
     EMIT_SOUND_DYN(ENT(m_pPlayer->pev->pContainingEntity), CHAN_WEAPON,
                    "weapons/kamehameha_fire.wav", 1.0, 0.8, 0, 100);
 }
