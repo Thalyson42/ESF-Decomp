@@ -279,7 +279,7 @@ public:
     plrmelee_anim_s *m_pAnimList;               // +0x84 [OK] lista de animações enfileiradas
     float m_flStunEnd;                          // +0x88 [OK] GetStunTime/CheckStunTime
     float m_flTotalStun;                        // +0x8c [OK]
-    char  pad_090[0x94-0x90];
+    float m_flPrepunchStart;                    // +0x90 [OK] hora em que o prepunch começou
     float m_flLastPunch;                        // +0x94 [OK] hora do último soco do prepunch
     char  pad_098[0x9c-0x98];
     float f_09c;                                // +0x9c [?] 0..100 (fração mostrada na barra de struggle)

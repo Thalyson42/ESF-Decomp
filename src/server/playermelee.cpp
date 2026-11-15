@@ -1004,10 +1004,10 @@ void CPlayerMelee::StopPrepunchAttack(void)
         m_iPunchCount = 0;
         m_flStunEnd = 0;
         m_flTotalStun = 0;                                    // [OK] +0x8c
-        f_090 = 0;
+        m_flPrepunchStart = 0;
         m_Mode = MELEE_NONE;
         RemoveAllAnims();
-        EMIT_SOUND_DYN(ENT(m_pAttacker->pev), CHAN_ITEM, "common/null.wav", 1.0, 0.8, 0, 100);   // [OK] corta o som do prepunch
+        EMIT_SOUND_DYN(ENT(m_pAttacker->pev), CHAN_BODY, "common/null.wav", 1.0, 0.8, 0, 100);   // [OK] corta o som do prepunch
         m_vecDir[2] = 0;                                      // [OK] direção só no plano
         Vector v(m_vecDir[0], m_vecDir[1], 0);
         v = v.Normalize();
@@ -1118,4 +1118,68 @@ void CPlayerMelee::HandlePrepunchAttack(void)
     }
     if (melee_prepunch_max->value == (float)m_iPunchCount && m_pAttacker->pev->deadflag == DEAD_NO)   // [OK] limite de socos
         StopMelee(1);
+}
+
+void CPlayerMelee::StartPrePunchAttack(void)                  // this = melee do atacante (SetMode(1))
+{
+    UTIL_Model_Connect(ENTINDEX(ENT(m_pAttacker->pev)), ENTINDEX(ENT(m_pDefender->pev)), 9);   // [?] argumentos extras
+    m_pDefenderMelee->SetAtkBehindAndBlocking();
+    AddAnimation(true, gpGlobals->time, 1, "ref_autopunch");                                   // [OK] anim do atacante
+    const char *szDef = m_pDefenderMelee->f_0d8 ? "ref_autopunch_hit_back"
+                      : m_pDefenderMelee->f_0d4 ? "ref_autopunch_block"
+                      :                           "ref_autopunch_hit";                         // [OK] anim do defensor
+    m_pDefenderMelee->AddAnimation(true, gpGlobals->time, 1, szDef);
+
+    m_flPrepunchStart = gpGlobals->time;
+    m_flLastPunch = 0;
+    m_iPunchCount = 0;
+    m_fStunned = 0;
+    m_pDefenderMelee->f_0d0 = 0;
+    m_pDefenderMelee->m_flStunEnd = 0;
+    m_pDefenderMelee->m_flTotalStun = 0;
+    m_pDefenderMelee->m_fStunned = 0;
+
+    if (m_vecDir[0] == 0 && m_vecDir[1] == 0 && m_vecDir[2] == 0)           // sem direção: usa a mira do atacante
+    {
+        UTIL_MakeVectors(m_pAttacker->pev->v_angle);
+        m_vecDir[0] = gpGlobals->v_forward.x; m_vecDir[1] = gpGlobals->v_forward.y; m_vecDir[2] = gpGlobals->v_forward.z;
+    }
+    for (int i = 0; i < 3; i++) m_pDefenderMelee->m_vecDir[i] = m_vecDir[i];   // [OK]
+    Vector vecDir(m_vecDir[0], m_vecDir[1], m_vecDir[2]);
+    Vector vecPos = m_pDefender->pev->origin - vecDir * 11.0f;              // [OK] atacante nasce 11 u atrás do defensor
+    UTIL_SetOrigin(m_pAttacker->pev, vecPos);
+    Vector vecAng = UTIL_VecToAngles(vecDir);                               // [?]
+    UTIL_Model_MeleeStruggle_Anglefix(ENTINDEX(ENT(m_pAttacker->pev)), vecAng);   // [?]
+    EMIT_SOUND_DYN(GetSoundEdict(), CHAN_BODY, "weapons/prepunch1.wav", 1.0, 0.8, 0, 100);   // [OK]
+}
+
+void CPlayerMelee::HandlePrepunchDefend(void)                 // this = melee do defensor
+{
+    entvars_t *pevDef = m_pAttacker->pev;                     // [OK] aqui m_pAttacker é o próprio defensor
+    if (!f_0d0)
+    {
+        Vector vecDir(m_vecDir[0], m_vecDir[1], m_vecDir[2]);
+        Vector vecEnd = pevDef->origin + vecDir * 5.5f;       // [OK]
+        TraceResult tr;
+        UTIL_TraceHull(pevDef->origin, vecEnd, ignore_monsters, head_hull /*1*/, ENT(pevDef), &tr);   // [OK] hull 1
+        if (tr.flFraction < 1.0f)                             // bateu numa parede: o defensor para de ser arrastado
+        {
+            f_0d0 = 1;
+            pevDef->vuser4 = Vector(0, 0, 0);
+            Vector vecAngles = UTIL_VecToAngles(tr.vecPlaneNormal);    // [?] normal da parede
+            if (fabs(vecAngles.x) <= 45)                               // [?]
+            {
+                vecAngles.z = -vecAngles.z;
+                UTIL_VecToAngles(vecAngles);
+                UTIL_Model_MeleeStruggle_Anglefix(ENTINDEX(ENT(m_pAttackerOther->pev)), vecAngles);   // [?]
+            }
+            if (!f_0d4 && !f_0d8)
+                AddAnimation(true, gpGlobals->time, 1, "wall_autopunched");   // [OK]
+        }
+        else
+            pevDef->vuser4 = vecDir.Normalize() * melee_prepunch_driftspeed->value;   // [OK] continua sendo empurrado
+    }
+    else
+        pevDef->vuser4 = Vector(0, 0, 0);
+    CheckStunTime();
 }
