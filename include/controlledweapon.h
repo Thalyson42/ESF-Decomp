@@ -35,7 +35,7 @@ public:
     void EnableBeamJump(void);
     void DisableBeamJump(void);
     void UpdateBeamJumpStatus(void);
-    void CheckWallJump(void);
+    BOOL CheckWallJump(void);
     void SilenceWeaponSounds(void);   // canal 1
     void SilenceVoice(void);          // canal 2
     void SilenceBodySounds(void);     // canal 4

@@ -14,6 +14,9 @@ enum { ESF_KI_OFFSET_IN_PEV = 0x260 };
     /* +0x74c */ int   m_iBaseSpeed;     /* base de GetMaxSpeed                                      [OK] */ \
     /* +0x754 */ float m_flSpeedMult;    /* multiplicador final de GetMaxSpeed (0.5 carregando, 0 disparando) [OK] */ \
     /* +0x764 */ class CBaseClass *m_pClass; /* personagem (Goku, Vegeta...): GetSoundDir, GetKiCostMult... [OK] */ \
+    /* +0x354 */ int   m_fInPowerStruggle; /* PrimaryAttack/WeaponIdle/StopAiming                   [?] nome */ \
+    /* +0x35c */ int   m_fInBlockStruggle; /* idem                                                  [?] nome */ \
+    /* +0x36c */ class CPowerStruggle *m_pPowerStruggle; /* aponta p/ a disputa atual               [?] nome */ \
     /* +0x508 */ int   m_fTurbo;         /* GetMaxSpeed x5                                           [?] nome */
 // pev (entvars_t) usado pelo ESF: fuser4=ki(+0x260), iuser1=spectator(+0x244)
 // Mensagens: gmsgCharge, gmsgMaxHealth, gmsgPowerStruggle

@@ -1,4 +1,4 @@
-// controlledweapon.cpp -- CControlledBeam, RECUPERAÇÃO PARCIAL (26 de 30 funções; ver [?] nas partes incertas).
+// controlledweapon.cpp -- CControlledBeam, RECUPERAÇÃO COMPLETA (30 de 30 funções; ver [?] nas partes incertas).
 // Fonte: decomp_raw/CControlledBeam/*.c. [OK] = conferido; [?] = nome/sentido incerto.
 #include "extdll.h"
 #include "util.h"
@@ -183,7 +183,7 @@ void CControlledBeam::StopAiming(void)
     MESSAGE_BEGIN(MSG_ONE, gmsgPowerStruggle, NULL, m_pPlayer->edict());   // [OK] canal de HUD
         WRITE_CHAR(127);                                        // [OK] valor 127 = "limpar"
     MESSAGE_END();
-    m_pPlayer->f_354 = 0;  m_pPlayer->f_36c = 0;  m_pPlayer->f_35c = 0;    // player+852/876/860: campos de PowerStruggle
+    m_pPlayer->m_fInPowerStruggle = 0;  m_pPlayer->m_pPowerStruggle = 0;  m_pPlayer->m_fInBlockStruggle = 0;    // player+852/876/860: campos de PowerStruggle
     if (!m_pPlayer->f_770 && !m_pPlayer->f_37c)
         m_pPlayer->m_flSpeedMult = 1.0f;                        // [OK]
     else
@@ -206,11 +206,9 @@ void CControlledBeam::StopAiming(void)
         UTIL_Model_RemoveAll(ENTINDEX(m_pPlayer->edict()));
 }
 
-void CControlledBeam::CheckWallJump(void)
+BOOL CControlledBeam::CheckWallJump(void)
 {
-    // [OK] se o jogador estiver em estado especial (player+1736), cancela tudo e devolve TRUE
-    // (retorno: o decompilado devolve 1 nesse caso, 0 caso contrário)
-    // [?] o valor de retorno não aparece como BOOL na assinatura original
+    // [OK] se o jogador entrou em estado especial (player+0x6c8), cancela a carga e devolve TRUE
     if (m_pPlayer->f_6c8_wall)
     {
         m_pPlayer->m_fCharging = 0;
@@ -219,7 +217,9 @@ void CControlledBeam::CheckWallJump(void)
         DisableChargeSprite();
         SilenceWeaponSounds(); SilenceVoice(); SilenceBodySounds();
         m_pPlayer->DrawChargeBar(0);
+        return TRUE;
     }
+    return FALSE;
 }
 
 void CControlledBeam::StartBeamJump(void)
@@ -257,7 +257,126 @@ void CControlledBeam::UpdateBeamJumpStatus(void)
         DisableBeamJump();                                      // [OK] soltou o pulo
 }
 
-// ---------- AINDA PENDENTES (parciais; dependem de campos do jogador/feixe sem nome) ----------
-// PrimaryAttack(735 B)  SecondaryAttack(117)  WeaponIdle(573)  Holster(312)
-// Holster/Idle/Primary usam: m_flNextPrimaryAttack(+0x9c), m_flNextSecondaryAttack(+0xa0), m_flTimeWeaponIdle(+0xa4), +0x1e8 PowerStruggle,
-// gmsgPowerStruggle, CBasePlayer::DrawChargeBar etc. -> decompilado em decomp_raw/CControlledBeam/.
+// =====================================================================
+// Os 4 "ticks" da arma. Campos do feixe (CExplodingAttack): +0x2ac m_fInStruggle, +0x2b0 m_fInBlockStruggle [?],
+// +0x2b8 m_flStruggleRatio, +0x2c0 m_pStruggle, +0x2c4/+0x2dc = flags de "acabou" [?]; pev->dmg = força.
+// Jogador: m_fInPowerStruggle(+0x354), m_fInBlockStruggle(+0x35c), m_pPowerStruggle(+0x36c) [nomes deduzidos].
+// =====================================================================
+static void SendStruggleRatio(CBasePlayer *pPlayer, CExplodingAttack *pBeam)
+{
+    MESSAGE_BEGIN(MSG_ONE, gmsgPowerStruggle, NULL, pPlayer->pev->pContainingEntity);   // [OK]
+        WRITE_CHAR((int)(pBeam->m_flStruggleRatio * 100.0f));    // [OK] -100..100 (%): quem está ganhando
+    MESSAGE_END();
+}
+
+void CControlledBeam::PrimaryAttack(void)
+{
+    float tNext = UTIL_WeaponTimeBase() + 0.2f;
+    m_flNextPrimaryAttack = tNext;                                         // [OK] +0x9c
+
+    if (m_iAttackState == 2 && m_pBeam)
+    {
+        if (!m_pBeam->f_2c4 && !m_pBeam->f_2dc)                            // feixe ainda vivo
+        {
+            if (m_pBeam->m_fInBlockStruggle || m_pBeam->m_fInStruggle)
+            {
+                // [OK] segurando o botão durante uma disputa: gasta 25% do ki e soma força ao feixe
+                if (m_pPlayer->UseKi((int)(m_iKiCost * 0.25)))
+                {
+                    int dmg = (int)(GetPowerRatio() * (float)m_iDmgPerCharge + m_pBeam->pev->dmg);
+                    if (dmg > 9999) dmg = 9999;                            // [OK] teto
+                    m_pBeam->pev->dmg = (float)dmg;
+                }
+                if (m_pBeam->m_fInBlockStruggle)
+                    m_pPlayer->m_fInBlockStruggle = 1;
+                else
+                {
+                    m_pPlayer->m_fInPowerStruggle = 1;
+                    m_pPlayer->m_pPowerStruggle = m_pBeam->m_pStruggle;
+                }
+            }
+            else
+            {
+                WeaponIdle();                                              // [OK] vtable slot 80
+                m_flNextPrimaryAttack = tNext;
+                return;
+            }
+            SendStruggleRatio(m_pPlayer, m_pBeam);                         // [OK]
+            return;
+        }
+        // feixe acabou: encerra a mira e solta a referência
+        StopAiming();
+        if (m_pBeam->f_2c4) m_pBeam->vfunc_508();                          // [?] virtual do feixe (slot 125)
+        m_pBeam = NULL;
+        return;
+    }
+    Charge();                                                              // [OK] estado 0/1: carrega
+    m_flNextSecondaryAttack = m_flNextPrimaryAttack;                       // [OK]
+}
+
+void CControlledBeam::SecondaryAttack(void)
+{
+    // [OK] botão secundário solta o feixe, exceto durante uma disputa
+    if (m_pBeam && m_iAttackState == 2 && !m_pBeam->m_fInStruggle && !m_pBeam->m_fInBlockStruggle)
+        ReleaseAttack();
+    float t = UTIL_WeaponTimeBase() + 0.2f;
+    m_flNextSecondaryAttack = t;
+    m_flNextPrimaryAttack = t;
+}
+
+void CControlledBeam::Holster(int skiplocal)
+{
+    if (m_iAttackState == 2)
+        ReleaseAttack();                                                   // [OK]
+    else if (m_iAttackState == 1)
+    {
+        m_pPlayer->m_flSpeedMult = 1.0f;                                   // [OK]
+        m_pPlayer->m_fCharging = 0;
+        DisableChargeSprite();                                             // slot 91
+        SilenceWeaponSounds(); SilenceVoice(); SilenceBodySounds();        // canais 1, 2, 4
+        m_pPlayer->DrawChargeBar(0);
+    }
+    RemoveChargeSprite();                                                  // [OK] slot 93, sempre
+}
+
+void CControlledBeam::WeaponIdle(void)
+{
+    if (m_iAttackState == 1 && !CheckWallJump())
+        Shoot();                                                           // [OK] soltou o botão carregando -> dispara
+
+    if (m_iAttackState == 2)
+    {
+        if (!m_pBeam)
+            StopAiming();                                                  // [OK] sem feixe
+        else if (m_pBeam->f_2c4 || m_pBeam->f_2dc)
+        {
+            StopAiming();                                                  // [OK] feixe acabou
+            if (m_pBeam->f_2c4) m_pBeam->vfunc_508();                      // [?]
+            m_pBeam = NULL;
+        }
+        else if (m_pBeam->m_fInStruggle || m_pBeam->m_fInBlockStruggle)
+        {
+            if (m_pBeam->m_fInStruggle)
+            {
+                m_pPlayer->m_fInPowerStruggle = 1;
+                m_pPlayer->m_pPowerStruggle = m_pBeam->m_pStruggle;
+            }
+            else
+                m_pPlayer->m_fInBlockStruggle = 1;
+            if (UTIL_WeaponTimeBase() > m_flTimeWeaponIdle)                // [OK] +0xa4
+                SendStruggleRatio(m_pPlayer, m_pBeam);
+        }
+        else
+        {
+            // sem disputa: zera os indicadores e trata o beam jump
+            m_pPlayer->m_fInPowerStruggle = 0;
+            m_pPlayer->m_pPowerStruggle = 0;
+            m_pPlayer->m_fInBlockStruggle = 0;
+            UpdateBeamJumpStatus();                                        // [OK]
+            if (m_pPlayer->f_37c)                                          // player+0x37c [?]
+                m_pBeam->vfunc_520();                                      // [?]
+        }
+    }
+    if (UTIL_WeaponTimeBase() > m_flTimeWeaponIdle)                        // [OK] reagenda o idle em +0.2 s
+        m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + 0.2f;
+}
