@@ -2149,3 +2149,63 @@ void CPlayerMelee::WinStruggle(void)                          // o vencedor ganh
     m_pExeCur = m_pExeHead;
     NewExeMovePost();
 }
+
+// ======================================================================
+// Lote 17: knock pre-struggle e blowback (a "explosão" de um struggle)
+// ======================================================================
+void CPlayerMelee::StartKnockPreStruggle(void)
+{
+    EmitShockwave();
+    int iDmg = (int)(GetPowerRatio(m_pAttacker) * 7.0f);                       // [OK]
+    m_pAttacker->TakeDamage(m_pDefender->pev, m_pDefender->pev, (float)iDmg, 0);   // [?] tipo de dano
+    if (!m_pAttacker->IsAlive()) return;                                        // [OK] vtable +0x8c
+
+    UTIL_Model_Connect(ENTINDEX(ENT(m_pAttacker->pev)), ENTINDEX(ENT(m_pDefender->pev)), 11);   // [?]
+    m_pDefenderMelee->AddAnimation(true, gpGlobals->time, 1, "blow_kick_front");   // [OK] o oponente chuta...
+    AddAnimation(true, gpGlobals->time, 1, "hit_blow_back");                       // ...e este é jogado para trás
+    f_0a8 = gpGlobals->time + 0.75f;                                               // [OK] fim do knock
+    UTIL_MakeVectors(m_pAttacker->pev->v_angle);
+    m_vecDir[0] = gpGlobals->v_forward.x; m_vecDir[1] = gpGlobals->v_forward.y; m_vecDir[2] = gpGlobals->v_forward.z;
+    for (int i = 0; i < 3; i++) m_pDefenderMelee->m_vecDir[i] = m_vecDir[i];
+    f_100 = 1;                                                                     // [?] struggle em andamento
+    Vector vecBack(-m_vecDir[0], -m_vecDir[1], -m_vecDir[2]);
+    Vector vecPos = m_pDefender->pev->origin + vecBack * 9.0f;                     // [OK] 9 u atrás do oponente
+    UTIL_SetOrigin(m_pAttacker->pev, vecPos);
+    Vector vecAng = UTIL_VecToAngles(vecBack);
+    UTIL_Model_MeleeStruggle_Anglefix(ENTINDEX(ENT(m_pAttacker->pev)), vecAng);    // [?]
+    MeleeText(15, 0);
+    MeleeText(16, 0);
+    m_pDefenderMelee->MeleeText(15, 0);
+    m_pDefenderMelee->MeleeText(16, 0);
+}
+
+// Os dois estavam em struggle de poder: quem tem ki (35) empurra o outro; sem ki dos dois, ambos são arremessados.
+void CPlayerMelee::BlowbackStruggle(Vector vecDir, float flA, float flB, CBasePlayer *pOther)
+{
+    CBasePlayer *pWinner, *pLoser;
+    if (flB < flA && m_pAttacker->UseKi(35))                  // [OK] o dono deste melee vence
+    {
+        pWinner = m_pAttacker;
+        pLoser = pOther;
+    }
+    else
+    {
+        if (!pOther->UseKi(35))                               // ninguém tem ki: os dois voam para lados opostos
+        {
+            StartToss(pOther, 0, -vecDir, 700.0f, 400.0f, 200.0f, 1.0f);                 // [OK]
+            pOther->m_Melee.StartToss(m_pAttacker, 0, vecDir, 700.0f, 400.0f, 200.0f, 1.0f);
+            return;
+        }
+        pWinner = pOther;                                     // [OK] o outro vence
+        pLoser = m_pAttacker;
+        vecDir = -vecDir;
+    }
+    if (f_080)                                                // [?] blowback forte
+    {
+        pWinner->m_Melee.Powerhit(0, pLoser, vecDir, 4, 7.7f, 1400.0f, 800.0f, 450.0f, 1.5f);   // [OK]
+        return;
+    }
+    pWinner->m_Melee.Powerhit(0, pLoser, vecDir, 4, 7.7f, 900.0f, 500.0f, 300.0f, 1.5f);        // [OK]
+    if (pLoser->IsAlive())                                    // o perdedor ainda devolve um golpe menor
+        pLoser->m_Melee.Powerhit(0, pWinner, -vecDir, 4, 4.55f, 900.0f, 500.0f, 300.0f, 1.5f);  // [OK]
+}

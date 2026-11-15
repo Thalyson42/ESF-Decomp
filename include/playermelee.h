@@ -282,7 +282,7 @@ public:
     float m_flNextArrow;                        // +0x70 [OK]
     int   m_fStruggleEnding;                    // +0x74 [OK] última seta mostrada: esperando o fim
     int   f_078, f_07c;                         // +0x78/+0x7c [?] usados em UseAttackerMoves
-    char  pad_080[4];
+    int   f_080;                                // +0x80 [?] BlowbackStruggle: golpe mais forte (1400/800/450)
     plrmelee_anim_s *m_pAnimList;               // +0x84 [OK] lista de animações enfileiradas
     float m_flStunEnd;                          // +0x88 [OK] GetStunTime/CheckStunTime
     float m_flTotalStun;                        // +0x8c [OK]
