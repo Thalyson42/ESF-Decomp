@@ -9,3 +9,10 @@
 6. **Fase 5 – Cliente** (`client.dll`) e bot.
 
 Dados do trabalho decompilado são verificados comparando cada função com a mesma no `hl.dll` do Windows.
+
+## Fase 2/3 – status (14/11/2026)
+- `tools/sdk_match.py` compara cada função decompilada com a função de mesmo nome no HL SDK -> `docs/sdk_match.csv`.
+- Resultado: 1.020 funções têm equivalente no SDK: **864 provavelmente idênticas**, 127 parciais, 29 modificadas pelo ESF
+  (ex.: `CBasePlayer::PreThink/Killed/TakeDamage/PostThink/Jump`). 2.910 não têm equivalente (código do ESF, ou funções livres que o script ainda não cobre).
+- Heurística (strings, nomes chamados, constantes): serve para triagem, não prova. Funções triviais/inline podem aparecer como falso positivo.
+- Próximo: usar o código do SDK como base das 864 "prováveis iguais" e reescrever à mão as 156 parciais/modificadas, depois as classes do ESF.
