@@ -24,13 +24,20 @@ struct melee_move_s {                           // nó de lista ligada de um gol
     melee_move_s *m_pNext;                      // +0x1c
 };
 
-struct plrmelee_anim_s {                        // animação enfileirada (644+ bytes)
+struct plrmelee_anim_s {                        // animação enfileirada (0x2a8 bytes), lista ligada em CPlayerMelee+0x84
     char  m_szName[16][32];                     // +0x000 até 16 nomes de sequência [OK] AddToCurAnim
-    char  f_200[0x80];
-    int   m_iPriority;                          // +0x280 [OK] SetAnimPriority
+    int   m_iSeqType[16];                       // +0x200 [?] 107/108/109 alternados por nome (tipo de sequência)
+    char  f_240[0x40];
+    int   m_iPriority;                          // +0x280 [OK] ANIM_PRIORITY (1 med, 2 med+, 3 baixa)
     int   m_iNumNames;                          // +0x284 [OK]
-    int   f_288, f_28c;
+    int   f_288;
+    float m_flEndTime;                          // +0x28c [OK] expira quando < gpGlobals->time
     int   m_iFlag;                              // +0x290 [OK] AddToCurAnim(bool,...)
+    int   m_fExeAnim;                           // +0x294 [OK] animação de combo exe (GetCurrentExeAnim)
+    int   m_fModelAnim;                         // +0x298 [OK] usou UTIL_Model_* (limpar ao remover)
+    int   m_fExpire;                            // +0x29c [OK] remover quando não for a atual
+    int   m_iDuckFlag;                          // +0x2a0 [OK] comparado com pev->flags & FL_DUCKING
+    plrmelee_anim_s *m_pNext;                   // +0x2a4 [OK]
 };
 
 struct melee_execution_s;                       // combo ("exe"): +0x24 id, +0x4c estado, +0x358 next, +0x35c prev
@@ -260,7 +267,8 @@ public:
     int   m_iThrowState;                        // +0x64 [OK] InThrow = !=0; 3/4/5 = lasers (SpecialLaserReduction)
     char  pad_068[0x78-0x68];
     int   f_078, f_07c;                         // +0x78/+0x7c [?] usados em UseAttackerMoves
-    char  pad_080[0x88-0x80];
+    char  pad_080[4];
+    plrmelee_anim_s *m_pAnimList;               // +0x84 [OK] lista de animações enfileiradas
     float m_flStunEnd;                          // +0x88 [OK] GetStunTime/CheckStunTime
     float m_flTotalStun;                        // +0x8c [OK]
     char  pad_090[0x9c-0x90];

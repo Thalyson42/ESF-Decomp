@@ -227,7 +227,14 @@ void CPlayerMelee::AddComboMoves(void)                        // [OK] monta os 9
     }
 }
 
-struct melee_execution_s { char pad[0x358]; melee_execution_s *m_pNext; melee_execution_s *m_pPrev; };   // [OK] lista dupla
+struct melee_execution_s {                       // [OK] combo "exe" (0x360 bytes)
+    char pad0[0x24]; int m_iId;                  // +0x24
+    char pad1[0x0c]; float f_34;                 // +0x34 [?]
+    char pad2[0x18]; int f_4c; int f_50; int f_54;   // +0x4c estado (3 = pronto), +0x54 tipo [?]
+    char pad3[0x358 - 0x58];
+    melee_execution_s *m_pNext;                  // +0x358
+    melee_execution_s *m_pPrev;                  // +0x35c
+};
 
 melee_execution_s *CPlayerMelee::AddExeMove(melee_execution_s *p)
 {
@@ -302,4 +309,238 @@ void CPlayerMelee::HandleKnockPreStruggleAttack(void)
 {
     if (f_0a8 < gpGlobals->time) { SetMode(MELEE_PREPUNCH_ATTACK); MeleeText(0x11, 0); }   // [OK]
     m_pDefenderMelee->MeleeText(0x11, 0);                     // [OK]
+}
+
+// ======================================================================
+// Lote 2: HUD do melee e fila de animações
+// ======================================================================
+void CPlayerMelee::MeleeHud(int iCmd, int iArg)
+{
+    MESSAGE_BEGIN(MSG_ONE, gmsgMeleeAtkHud, NULL, ENT(m_pAttacker->pev));   // [OK]
+        WRITE_BYTE(iCmd);
+        WRITE_BYTE(iArg);
+    MESSAGE_END();
+}
+void CPlayerMelee::MeleeHudRemove(int iCmd)
+{
+    MESSAGE_BEGIN(MSG_ONE, gmsgMeleeAtkHud, NULL, ENT(m_pAttacker->pev));   // [OK]
+        WRITE_BYTE(iCmd);
+    MESSAGE_END();
+}
+void CPlayerMelee::MeleeHudDisable(void)
+{
+    MESSAGE_BEGIN(MSG_ONE, gmsgMeleeAtkHud, NULL, ENT(m_pAttacker->pev));   // [OK]
+        WRITE_BYTE(0);
+    MESSAGE_END();
+}
+void CPlayerMelee::MeleeText(int iText, int iArg)
+{
+    MESSAGE_BEGIN(MSG_ONE, gmsgMeleeTxtHud, NULL, ENT(m_pAttacker->pev));   // [OK]
+        WRITE_BYTE(iText);
+        WRITE_BYTE(iArg);
+    MESSAGE_END();
+}
+
+// a animação "atual" é a de maior prazo ainda válido; durante um combo exe vem do próprio combo
+plrmelee_anim_s *CPlayerMelee::GetCurrentAnim(void)
+{
+    if (m_fInAdvMelee && m_Mode == MELEE_EXE_ATTACK)          // [OK] +0x144 e +0x11c == 7
+        return GetCurrentExeAnim();
+    float flBest = 0;
+    plrmelee_anim_s *pBest = NULL;
+    for (plrmelee_anim_s *p = m_pAnimList; p; p = p->m_pNext)
+        if (p->m_flEndTime > flBest && p->m_flEndTime > gpGlobals->time)   // [?] o decompilado do fcom está ambíguo
+        {
+            flBest = p->m_flEndTime;
+            pBest = p;
+        }
+    return pBest;
+}
+
+int CPlayerMelee::PlayMedPriorityAnim(void)                   // [OK] true se o jogador está "livre" para animação do melee
+{
+    CBasePlayer *p = m_pAttacker;
+    return !p->m_fBlocking && !p->f_334 && !p->f_338 && !p->f_33c && !p->f_340 && !p->f_770 && !p->f_6bc;   // [OK] offsets 0x32c,0x334,0x338,0x33c,0x340,0x770,0x6bc
+}
+
+int CPlayerMelee::PlayLowPriorityAnim(void)
+{
+    plrmelee_anim_s *pAnim = GetCurrentAnim();
+    if (PlayMedPriorityAnim() && !m_pAttacker->f_330 && !m_pAttacker->m_fFlying &&
+        pAnim->m_iDuckFlag == (m_pAttacker->pev->flags & FL_DUCKING))    // [OK] 0x200
+        return 1;
+    return 0;
+}
+
+void CPlayerMelee::ManagePriority(void)
+{
+    if (!CanPlayAnimation()) return;
+    plrmelee_anim_s *p = GetCurrentAnim();
+    if (!p->m_fExpire) return;
+    switch (p->m_iPriority)
+    {
+    case 2:
+        if (PlayMedPriorityAnim()) return;
+        if (m_pAttacker->f_330) return;                       // [OK]
+        break;
+    case 1:
+        if (PlayMedPriorityAnim()) return;
+        break;
+    case 3:
+        if (PlayLowPriorityAnim()) return;
+        break;
+    default:
+        return;
+    }
+    RemoveAnim(p);                                            // [OK] a condição não vale mais
+}
+
+void CPlayerMelee::ManageList(void)
+{
+    if (!m_pAttacker) return;                                 // [OK] +0x124
+    ManagePriority();
+    plrmelee_anim_s *p = m_pAnimList;
+    plrmelee_anim_s *pCur = GetCurrentAnim();
+    if (m_fInAdvMelee) return;                                // [OK] +0x144
+    while (p)
+    {
+        if (p != pCur && (p->m_flEndTime < gpGlobals->time || p->m_fExpire))
+            p = RemoveAnim(p);                                // [OK] devolve o próximo
+        else
+            p = p->m_pNext;
+    }
+}
+
+plrmelee_anim_s *CPlayerMelee::RemoveAnim(plrmelee_anim_s *pAnim)
+{
+    if (!pAnim) return NULL;
+    if (pAnim->m_fModelAnim && m_pAttacker)
+        UTIL_Model_RemoveAll(ENTINDEX(ENT(m_pAttacker->pev)));            // [OK]
+    if (m_pAnimList == pAnim)
+    {
+        m_pAnimList = pAnim->m_pNext;
+        delete pAnim;
+        return m_pAnimList;
+    }
+    for (plrmelee_anim_s *it = m_pAnimList; it->m_pNext; it = it->m_pNext)
+        if (it->m_pNext == pAnim)
+        {
+            plrmelee_anim_s *pDel = it->m_pNext;
+            it->m_pNext = pDel->m_pNext;
+            delete pDel;
+            break;
+        }
+    return NULL;                                              // [OK] (como no original)
+}
+
+void CPlayerMelee::RemoveAnim(char *szName)
+{
+    if (!m_pAnimList) return;
+    if (!strcmp(szName, m_pAnimList->m_szName[0]))
+        RemoveAnim(m_pAnimList);
+    else
+    {
+        plrmelee_anim_s *it = m_pAnimList;
+        while (it->m_pNext && strcmp(it->m_szName[0], szName)) it = it->m_pNext;
+        RemoveAnim(it);                                       // [OK]
+    }
+}
+
+void CPlayerMelee::RemoveAllAnims(void)
+{
+    if (m_pAttacker && m_pAttacker->pev->deadflag == DEAD_DYING) return;   // [OK] +0x170 == 1: mantém a fila de quem está morrendo
+    plrmelee_anim_s *p = m_pAnimList;
+    while (p) p = RemoveAnim(p);
+    m_pAnimList = NULL;
+}
+
+// ======================================================================
+// Lote 2b: criação de animações
+// ======================================================================
+plrmelee_anim_s *CPlayerMelee::GetCurrentExeAnim(void)
+{
+    float flBest = -1.0f;
+    plrmelee_anim_s *pBest = NULL;
+    for (plrmelee_anim_s *p = m_pAnimList; p; p = p->m_pNext)
+        if ((!pBest || flBest < p->m_flEndTime) && p->m_fExeAnim)       // [OK] a mais recente das de combo
+        {
+            flBest = p->m_flEndTime;
+            pBest = p;
+        }
+    return pBest;
+}
+
+// AddAnimation(bool bFlag, float flEnd, int iNames, char *name1, name2, ...) -- enfileira uma animação composta por até 16 sequências
+plrmelee_anim_s *CPlayerMelee::AddAnimation(bool bFlag, float flEndTime, int iNames, ...)
+{
+    plrmelee_anim_s *pCur = GetCurrentAnim();
+    if (pCur && pCur->m_fModelAnim && m_pAttacker)
+        UTIL_Model_RemoveAll(ENTINDEX(ENT(m_pAttacker->pev)));          // [OK]
+
+    plrmelee_anim_s *p = new plrmelee_anim_s;                           // [OK] 680 bytes
+    if (iNames > 16) iNames = 16;
+    p->m_iPriority = 0;
+    p->m_flEndTime = flEndTime;
+    p->m_iFlag = bFlag;
+    p->m_fExpire = 0;
+    p->f_288 = 0;
+    p->m_iNumNames = iNames;
+    p->m_fExeAnim = 0;
+    p->m_fModelAnim = 0;
+    p->m_pNext = NULL;
+
+    va_list ap; va_start(ap, iNames);
+    int iToggle = 1;
+    for (int i = 0; i < iNames; i++)
+    {
+        strcpy(p->m_szName[i], va_arg(ap, char *));
+        if (i)
+        {
+            p->m_iSeqType[i] = iToggle ? 108 : 109;             // [OK] alterna
+            iToggle ^= 1;
+        }
+        else if (*(int *)((char *)m_pAttacker + 0x178) == 107)   // [?] campo do jogador +0x178
+            p->m_iSeqType[0] = 109;
+        else
+            p->m_iSeqType[0] = 107;
+    }
+    va_end(ap);
+
+    if (m_pAttacker->LookupSequence(p->m_szName[0]) == -1 && !m_fInAdvMelee)   // [OK] sequência inexistente: descarta (fora de luta avançada)
+    {
+        delete p;
+        return NULL;
+    }
+    if (m_pAnimList) p->m_pNext = m_pAnimList;                  // [OK] insere na cabeça
+    m_pAnimList = p;
+    ManageList();
+    return p;
+}
+
+plrmelee_anim_s *CPlayerMelee::AddAnimationAFix(Vector vecDir, bool bFlag, float flEnd, const char *szName)
+{
+    plrmelee_anim_s *p = AddAnimation(bFlag, flEnd, 1, szName);         // [OK]
+    if (p)
+    {
+        p->m_fModelAnim = 1;
+        Vector vecAngles = UTIL_VecToAngles(vecDir);
+        UTIL_Model_FixAngles(ENTINDEX(ENT(m_pAttacker->pev)), vecAngles);   // [?] argumentos extras perdidos no decompilado
+    }
+    return p;
+}
+
+plrmelee_anim_s *CPlayerMelee::AddAnimationExe(float flEnd, char *szName)
+{
+    plrmelee_anim_s *pCur = GetCurrentAnim();
+    if (pCur && pCur->m_fExeAnim) RemoveAnim(pCur);                    // [OK] só uma animação de combo por vez
+    plrmelee_anim_s *p = AddAnimation(false, flEnd, 1, szName);
+    p->m_fExeAnim = 1;
+    if (!m_pExeCur) return NULL;
+    m_pExeCur->f_34 = flEnd;                                           // [?] exe+0x34
+    if (!m_pDefenderMelee) return p;
+    char sz[32];
+    strcpy(sz, szName);
+    strcat(sz, m_pExeCur->f_54 == 1 ? "_block" : "_hit");              // [OK] o defensor toca "<anim>_block" ou "<anim>_hit"
+    m_pDefenderMelee->AddAnimation(true, gpGlobals->time, 1, sz);
+    return p;
 }
