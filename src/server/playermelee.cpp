@@ -2284,3 +2284,128 @@ int CPlayerMelee::Powerhit(CBasePlayer *pVictim, Vector vecDir, int iType)      
     }
     return Powerhit(0, pVictim, vecDir, iType, 0.0f, 800.0f, 400.0f, 250.0f, 1.2f);
 }
+
+// ======================================================================
+// Lote 19: StopMelee -- encerra qualquer fase do melee avançado
+// ======================================================================
+void CPlayerMelee::StopMelee(void) { StopMelee(1); }          // [OK]
+
+// bToss: 1 = depois de separar os dois, arremessa um para cada lado (fim "normal"); 0 = só solta
+void CPlayerMelee::StopMelee(int bToss)
+{
+    int iOldMode = m_Mode;
+    switch (iOldMode)                                         // [OK] cada fase tem o seu Stop*
+    {
+    case MELEE_PREPUNCH_ATTACK: StopPrepunchAttack(); break;
+    case MELEE_CHARGE_ATTACK:   StopChargedAttack();  break;
+    case MELEE_GRAB_ATTACK:     StopGrabbedAttack();  break;
+    case MELEE_EXE_ATTACK:      StopExeAttack();      break;
+    case MELEE_STRUGGLE_ATTACK: StopStruggleAttack(); break;
+    case MELEE_BURST_STRUGGLE_ATTACK:
+        m_Mode = MELEE_STRUGGLE_ATTACK;
+        StopStruggleAttack();
+        break;
+    default:
+        if (!m_fInAdvMelee) return;                           // [OK] nada a encerrar
+    }
+    SetMode(MELEE_NONE);
+
+    CPlayerMelee *pO = m_pDefenderMelee;
+    if (!f_0f4 && !f_0ec)
+    {
+        DelAllDirections();
+        MeleeHudDisable();
+        pO->DelAllDirections();
+        pO->MeleeHudDisable();
+        PushAwayOtherPlayers();
+    }
+    else
+    {
+        DelAllDirectionsAttacker();
+        pO->DelAllDirectionsDefender();
+    }
+    m_pAttacker->f_37c = 0;
+    m_fInAdvMelee = 0;
+    m_pDefender->f_37c = 0;
+    pO->m_fInAdvMelee = 0;
+    m_fIsAttacker = 0; m_fIsDefender = 0;
+    pO->m_fIsAttacker = 0; pO->m_fIsDefender = 0;
+    f_0f0 = 0; pO->f_0f0 = 0;
+    f_104 = 0; pO->f_104 = 0;
+    f_100 = 0;
+
+    if (!f_0f4)
+    {
+        m_pAttacker->pev->solid = SOLID_SLIDEBOX;             // [OK] 3: volta a colidir
+        m_pDefender->pev->solid = SOLID_SLIDEBOX;
+        m_pAttacker->pev->movetype = MOVETYPE_WALK;
+        m_pDefender->pev->movetype = MOVETYPE_WALK;
+        f_0ec = 0; pO->f_0ec = 0;
+        f_0d4 = 0; f_0d8 = 0; pO->f_0d4 = 0; pO->f_0d8 = 0;
+        m_pAttacker->m_flSpeedMult = 1.0f;
+        m_pDefender->m_flSpeedMult = 1.0f;
+        m_pAttacker->pev->gravity = 1.0f;
+        m_pDefender->pev->gravity = 1.0f;
+        if (!(m_pAttacker->pev->flags & FL_ONGROUND)) { m_pAttacker->m_fFlying = 0; m_pAttacker->StartFly(); }   // [OK] no ar: volta a voar
+        if (!(m_pDefender->pev->flags & FL_ONGROUND)) { m_pDefender->m_fFlying = 0; m_pDefender->StartFly(); }
+
+        if (iOldMode != MELEE_GRAB_ATTACK || bToss)
+        {
+            // separa os dois jogadores a 68 u um do outro, ao longo do eixo da luta
+            Vector vecBack(-m_vecDir[0], -m_vecDir[1], -m_vecDir[2]);
+            CBasePlayer *pMoved, *pRef;
+            if (f_140) { pMoved = m_pDefender; pRef = m_pAttacker; }       // [?] papéis de cada ponta
+            else       { pMoved = m_pAttacker; pRef = m_pDefender; }
+            Vector vecStart = (f_140 ? m_pDefender : m_pAttacker)->pev->origin;
+            Vector vecEnd = vecStart + vecBack * 68.0f;
+            TraceResult tr;
+            UTIL_TraceHull(vecStart, vecEnd, ignore_monsters, head_hull, ENT(pRef->pev), &tr);
+            UTIL_SetOrigin(pMoved->pev, tr.vecEndPos);
+            if (tr.flFraction != 1.0f)                        // [OK] bateu na parede: empurra o outro para compensar
+            {
+                float flLeft = 1.0f - tr.flFraction;
+                Vector vecComp = pRef->pev->origin - vecBack * (68.0f * flLeft);
+                UTIL_TraceHull(vecStart, vecComp, ignore_monsters, head_hull, ENT(pMoved->pev), &tr);
+                UTIL_SetOrigin(pRef->pev, tr.vecEndPos);
+            }
+        }
+        if (iOldMode == MELEE_EXE_ATTACK)
+            PushAfterDeath();
+
+        Vector vecAxis = Vector(m_vecDir[0], m_vecDir[1], m_vecDir[2]).Normalize();
+        m_vecDir[0] = m_vecDir[1] = m_vecDir[2] = 0;
+        pO->m_vecDir[0] = pO->m_vecDir[1] = pO->m_vecDir[2] = 0;
+        m_iStruggleTies = 0; pO->m_iStruggleTies = 0;
+        m_flTotalStun = 0;   pO->m_flTotalStun = 0;
+        m_flDelayTime = 0;   m_fDelayEndBlock = 0;
+        pO->m_flDelayTime = 0; pO->m_fDelayEndBlock = 0;
+        f_024 = gpGlobals->time;
+        UTIL_Model_RemoveAll(ENTINDEX(ENT(m_pAttacker->pev)));
+        UTIL_Model_RemoveAll(ENTINDEX(ENT(m_pDefender->pev)));
+
+        if (bToss)                                            // [OK] separação final: cada um voa para um lado (600/300/350, 5 s)
+        {
+            f_03c = 1; pO->f_03c = 1;
+            if (f_140)
+            {
+                StartToss(m_pDefender, 0, vecAxis, 600.0f, 300.0f, 350.0f, 5.0f);
+                pO->StartToss(m_pAttacker, 0, -vecAxis, 600.0f, 300.0f, 350.0f, 5.0f);
+            }
+            else
+            {
+                StartToss(m_pDefender, 0, -vecAxis, 600.0f, 300.0f, 350.0f, 5.0f);
+                pO->StartToss(m_pAttacker, 0, vecAxis, 600.0f, 300.0f, 350.0f, 5.0f);
+            }
+        }
+        else
+            m_pAttacker->StartFly();
+        f_140 = 0;
+        pO->f_140 = 0;
+    }
+    if (!m_pDefender->IsAlive())
+        (*(void (**)(CPlayerMelee *))((char *)*(void ***)pO->m_pSkill + 8))(pO);     // [?] callback do skill (vtable +8): defensor morreu
+    pO->SetAttackerOther(NULL);
+    pO->SetDefender(NULL);
+    SetAttackerOther(NULL);
+    SetDefender(NULL);
+}
