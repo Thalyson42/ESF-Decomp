@@ -17819,8 +17819,8 @@
   ]
  },
  "CPlayerMelee": {
-  "base": "bad_typeid",
-  "base_origem": "heuristica",
+  "base": null,
+  "base_origem": null,
   "virtuals": [
    "Reset__12CPlayerMelee",
    "GetSkillValues__12CPlayerMelee",

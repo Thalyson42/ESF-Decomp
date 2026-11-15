@@ -1,10 +1,11 @@
 // CPlayerMelee.h -- reconstruído automaticamente (vtable + offsets). REVISAR.
 #pragma once
 
-class CPlayerMelee : public bad_typeid {  // base: heuristica
+class CPlayerMelee {
 public:
     virtual void Reset();  // vtable[0] Reset__12CPlayerMelee
     virtual void GetSkillValues();  // vtable[1] GetSkillValues__12CPlayerMelee
+    virtual void 0();  // vtable[2] 0
     // campos observados (offset em bytes a partir de `this`; inclui os herdados)
     char f_001;  // +0x1 (1)
     float f_004;  // +0x4 (4)

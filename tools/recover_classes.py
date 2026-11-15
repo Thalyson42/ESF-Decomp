@@ -79,7 +79,7 @@ if SDKDIR:
 ORIGEM = {}
 base['CBaseEntity'] = None
 for c in list(base):
-    if base[c] and base[c] not in VT: base[c] = None
+    if base[c] and (base[c] not in VT or re.match(r'bad_|type_info|exception|__', base[c])): base[c] = None
 for c in list(base):
     if c in SDKBASE: base[c] = SDKBASE[c]; ORIGEM[c] = 'SDK'
     else: ORIGEM[c] = 'heuristica' if base[c] else None
