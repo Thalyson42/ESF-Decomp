@@ -670,3 +670,234 @@ void CPlayerMelee::AddMove(int iIdx, int iType, int iCount, ...)
     }
     m_pMoveList[iIdx] = (melee_move_s *)p;
 }
+
+// ======================================================================
+// Lote 4: entrada de direções (botões -> lista de golpes)
+// ======================================================================
+void CPlayerMelee::SetMovementFlags(int &iFlags)              // [OK] traduz os botões do atacante em flags de direção
+{
+    int btn = m_pAttacker->pev->button;
+    int bLeft  = (btn & (IN_LEFT | IN_MOVELEFT)) != 0;        // 640 = 0x280
+    int bRight = (btn & (IN_RIGHT | IN_MOVERIGHT)) != 0;      // 0x500
+    int bBack  = btn & IN_BACK;
+    int bFwd   = btn & IN_FORWARD;
+    if (bLeft  && bFwd)  { iFlags |= 0x88;  return; }
+    if (bLeft  && bBack) { iFlags |= 0x90;  return; }
+    if (bRight && bFwd)  { iFlags |= 0x108; return; }
+    if (bRight && bBack) { iFlags |= 0x110; return; }
+    if (bLeft)  iFlags |= 0x80;
+    else if (bRight) iFlags |= 0x100;
+    else if (bBack)  iFlags |= 0x10;
+    else if (bFwd)   iFlags |= 0x08;
+}
+
+int CPlayerMelee::SetAttackFlags(int &iFlags)
+{
+    int btn = m_pAttacker->pev->button;
+    if (btn & 0x800) { iFlags |= 0x800; return 1; }           // [OK] IN_ALT1 (ataque secundário)
+    if (btn & IN_ATTACK) { iFlags |= 1; return 1; }
+    return 0;
+}
+
+int CPlayerMelee::CanAddDirection(void)
+{
+    int a, b;
+    if (f_07c)
+    {
+        a = GetMoveCountFinishedOnly(m_pAttackerMoves);
+        b = GetMoveCount(m_pDefenderMoves);
+    }
+    else
+    {
+        CPlayerMelee *pOther;
+        if (!f_0ec && m_fIsDefender)
+        {
+            a = GetMoveCount(m_pDefenderMoves);
+            pOther = m_pAttackerOtherMelee;                   // [OK] +0x134
+        }
+        else if (!m_fIsAttacker) return 1;
+        else if (!m_pDefenderMelee) return 1;
+        else if (m_pDefenderMelee->f_0ec)
+        {
+            a = GetMoveCount(m_pDefenderMoves);
+            pOther = m_pDefenderMelee;
+        }
+        else return 1;
+        b = GetMoveCountFinishedOnly(pOther->m_pAttackerMoves);
+    }
+    return a != b;                                            // [OK] só aceita direção nova quando as contagens divergem
+}
+
+void CPlayerMelee::AddDirection(int iFlags)
+{
+    if (!CanAddDirection()) return;
+    melee_move_s *p = new melee_move_s;                       // [OK] 36 bytes
+    p->m_iDirection = iFlags;
+    p->m_flStart = gpGlobals->time;
+    p->m_flEnd = gpGlobals->time;
+    memset(&p->m_fReleased, 0, 20);                           // [OK]
+    if (UseAttackerMoves())
+    {
+        p->m_iIndex = m_iAttackerMoveCount++;
+        if (m_pAttackerMoves) { m_pAttackerMoves->m_pNext = p; p->m_pPrev = m_pAttackerMoves; }   // [?] ver nota do header
+        m_pAttackerMoves = p;
+    }
+    else
+    {
+        p->m_iIndex = m_iDefenderMoveCount++;
+        if (m_pDefenderMoves) { m_pDefenderMoves->m_pNext = p; p->m_pPrev = m_pDefenderMoves; }
+        m_pDefenderMoves = p;
+    }
+    if (f_078) return;
+    if (!UseAttackerMoves()) UpdateBlockClient(p);
+    else                     MeleeHudFlags(1, iFlags);
+}
+
+int CPlayerMelee::LetGoDirection(melee_move_s *pMove)         // retorna 1 se o golpe foi cortado por falta de tempo
+{
+    int iCut = 0;
+    if (!pMove || pMove->m_fReleased) return iCut;
+    pMove->m_fReleased = 1;
+    pMove->m_flEnd = gpGlobals->time;
+    m_flDelayTime = gpGlobals->time;                          // [OK] +0xac
+    if (!UseAttackerMoves()) return iCut;
+    if (!f_078)
+    {
+        float flTotal = TotalCmbTime();
+        float flStun = m_pDefenderMelee->GetStunTime();
+        if (flTotal > flStun)                                 // [OK] passou do stun do defensor: corta o golpe
+        {
+            pMove->m_flEnd = flStun - TotalCmbTimeNC() + pMove->m_flStart;
+            iCut = 1;
+        }
+        if (!iCut && flStun - flTotal < *(float *)((void *(*)(void *))(*(void ***)m_pSkill)[3])(this))   // [?] tabela de skill +0
+            iCut = 1;
+        MeleeHudFlags(5, pMove->m_iDirection, GetCmbTime(pMove));    // [?] 3º arg float
+    }
+    if (IsDirectionless(pMove->m_iDirection)) return iCut;
+    if (f_0ec)       SendBlockFlash(m_pAttackerOther, pMove);
+    else if (f_078)  SendBlockFlash(m_pAttacker, pMove);
+    else             SendBlockFlash(m_pDefender, pMove);
+    return iCut;
+}
+
+int CPlayerMelee::HoldDirection(melee_move_s *pMove)
+{
+    if (!pMove) return 0;
+    pMove->m_flEnd = gpGlobals->time;                         // [OK]
+    if (UseAttackerMoves())
+    {
+        float flTotal = TotalCmbTime();
+        float flStun = m_pDefenderMelee->GetStunTime();
+        int iFlags = 0;
+        if (flTotal < flStun)                                 // [?] sentido da comparação pelo decompilado
+        {
+            LetGoDirection(pMove);
+            return 1;
+        }
+        float *pSkill = (float *)((void *(*)(void *))(*(void ***)m_pSkill)[3])(this);
+        if (GetCmbTime(pMove) > pSkill[3])                    // [OK] +12: tempo máximo de um golpe segurado
+        {
+            pMove->m_flEnd = pMove->m_flStart + pSkill[3];
+            if (LetGoDirection(pMove)) return 1;
+            SetAttackFlags(iFlags);
+            SetMovementFlags(iFlags);
+            AddDirection(iFlags);                             // [OK] encadeia o próximo golpe
+        }
+    }
+    return 0;
+}
+
+int CPlayerMelee::ResetDirection(int iFlags, melee_move_s *pMove)   // alterna golpe/alt-golpe enquanto o botão ainda não foi solto
+{
+    if (!pMove->m_fReleased)
+    {
+        if (pMove->m_iDirection & 1)
+        {
+            if (iFlags & 0x800)
+            {
+                pMove->m_iDirection &= ~1;
+                pMove->m_iDirection |= 0x800;
+                MeleeHudSwitchAtk(pMove);
+                return 1;
+            }
+        }
+        else if ((pMove->m_iDirection & 0x800) && !(iFlags & 0x800) && (iFlags & 1))
+        {
+            pMove->m_iDirection &= ~0x800;
+            pMove->m_iDirection |= 1;
+            MeleeHudSwitchAtk(pMove);
+            return 1;
+        }
+    }
+    return 0;
+}
+
+void CPlayerMelee::SetBlockingDirections(void)
+{
+    int iFlags = 0;
+    SetMovementFlags(iFlags);
+    melee_move_s *cur = m_pDefenderMoves;
+    if (!cur)
+    {
+        if (iFlags) AddDirection(iFlags);
+    }
+    else
+    {
+        if (!iFlags) LetGoDirection(cur);
+        else if (!cur->m_fReleased && cur->m_iDirection == iFlags) HoldDirection(cur);
+        else { LetGoDirection(cur); AddDirection(iFlags); }
+    }
+}
+
+void CPlayerMelee::DelAllDirectionsAttacker(void)
+{
+    while (m_pAttackerMoves)
+    {
+        melee_move_s *p = m_pAttackerMoves;
+        m_pAttackerMoves = p->m_pNext;
+        delete p;
+    }
+    m_iAttackerMoveCount = 0;
+    m_pAttackerMoves = NULL;
+}
+
+void CPlayerMelee::DelAllDirectionsDefender(void)             // [OK] espelho do atacante (+0x14c / +0xcc)
+{
+    while (m_pDefenderMoves)
+    {
+        melee_move_s *p = m_pDefenderMoves;
+        m_pDefenderMoves = p->m_pNext;
+        delete p;
+    }
+    m_iDefenderMoveCount = 0;
+    m_pDefenderMoves = NULL;
+}
+
+melee_move_s *CPlayerMelee::RemoveDir(melee_move_s *pMove)    // remove o nó das listas do atacante e do defensor
+{
+    if (!pMove) return NULL;
+    for (int i = 0; i <= 1; i++)
+    {
+        melee_move_s *it = i ? m_pAttackerMoves : m_pDefenderMoves;
+        if (it == pMove)
+        {
+            if (i) m_pAttackerMoves = m_pAttackerMoves->m_pNext;
+            else   m_pDefenderMoves = m_pDefenderMoves->m_pNext;
+            delete pMove;
+            return it;                                        // [OK] devolve o nó removido (como no original)
+        }
+        for (; it->m_pNext; it = it->m_pNext)
+        {
+            if (it->m_pNext == pMove)
+            {
+                melee_move_s *pNext = pMove->m_pNext;
+                it->m_pNext = pNext;
+                if (pNext) pNext->m_pPrev = it;
+                delete pMove;
+                return pNext;
+            }
+        }
+    }
+    return NULL;
+}

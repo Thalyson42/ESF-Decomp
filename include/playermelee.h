@@ -15,13 +15,15 @@ enum ADV_MELEE_STATUS {                        // [OK] valores confirmados por S
 };
 enum MELEE_STRENGTH { MELEE_WEAK = 0, MELEE_MEDIUM = 1, MELEE_STRONG = 2 };    // [OK] GetMeleeStrength
 
-struct melee_move_s {                           // nó de lista ligada de um golpe
-    int   f_00;
-    int   m_iDirection;                         // +0x04 flags de direção
+struct melee_move_s {                           // nó de direção/golpe (0x24 bytes) [OK] AddDirection
+    int   m_iIndex;                             // +0x00 contador crescente (m_iAttackerCount/m_iDefenderCount)
+    int   m_iDirection;                         // +0x04 flags: 1 atk, 8 frente, 0x10 trás, 0x80 esq, 0x100 dir, 0x800 alt
     float m_flStart;                            // +0x08
     float m_flEnd;                              // +0x0c   (duração = end - start)
-    int   f_10, f_14, f_18;
+    int   m_fReleased;                          // +0x10   LetGoDirection
+    int   f_14, f_18;
     melee_move_s *m_pNext;                      // +0x1c
+    melee_move_s *m_pPrev;                      // +0x20 [?] (AddDirection grava +0x18, RemoveDir +0x20)
 };
 
 struct plrmelee_anim_s {                        // animação enfileirada (0x2a8 bytes), lista ligada em CPlayerMelee+0x84
@@ -278,7 +280,9 @@ public:
     float m_flDelayTime;                        // +0xac [OK] HandleDelayedBlock (1 s)
     char  pad_0b0[0xc4-0xb0];
     int   f_0c4;                                // +0xc4 [?] CanSwitch compara com melee_maxextanges
-    char  pad_0c8[0xdc-0xc8];
+    int   m_iAttackerMoveCount;                 // +0xc8 [OK] contador de AddDirection (atacante)
+    int   m_iDefenderMoveCount;                 // +0xcc [OK]
+    char  pad_0d0[0xdc-0xd0];
     int   m_fStunned;                           // +0xdc [OK]
     int   m_fStunActive;                        // +0xe0 [OK]
     char  pad_0e4[0xec-0xe4];
