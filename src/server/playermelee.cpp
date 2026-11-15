@@ -1449,3 +1449,90 @@ void CPlayerMelee::HandleGrabAttack(void)
     StopMelee(0);
     Throw(m_pDefender, (int)(flRatio * 500.0f + 1000.0f), 1.5f * flRatio, vecDir);   // [OK] velocidade 1000..1500
 }
+
+// ======================================================================
+// Lote 9: arremesso (CanThrow, Throw, direção e atividade)
+// ======================================================================
+int CPlayerMelee::GetThrowDirection(int bAllowVertical)       // [OK] escolhe a direção do arremesso pela velocidade do atacante
+{
+    UTIL_MakeVectors(m_pAttacker->pev->v_angle);
+    Vector vecTbl[6] = {
+        Vector(0, 0, 1),                                      // 0 cima
+        Vector(0, 0, -1),                                     // 1 baixo
+        -gpGlobals->v_right,                                  // 2 esquerda
+        gpGlobals->v_right,                                   // 3 direita
+        gpGlobals->v_forward,                                 // 4 frente
+        -gpGlobals->v_forward                                 // 5 trás
+    };
+    float flBest = 0;
+    int iBest = 0;                                            // [?] o original devolve lixo se nenhuma passar de 0
+    for (int i = bAllowVertical ? 0 : 2; i <= 5; i++)         // sem vertical: só os 4 horizontais
+    {
+        float d = DotProduct(vecTbl[i], m_pAttacker->pev->velocity);
+        if (d > flBest) { flBest = d; iBest = i; }
+    }
+    return iBest;
+}
+
+int CPlayerMelee::GetThrowActivity(void)                      // [OK] números lidos das jump-tables em 0x100d80 e 0x100e20
+{
+    static const int s_Tbl1[6] = { 110, 111, 114, 115, 112, 113 };   // cima, baixo, esq, dir, frente, trás
+    static const int s_Tbl2[4] = { 118, 119, 116, 117 };             // (agachado/rolando) esq, dir, frente, trás
+    if (m_iThrowState == THROW_TOSS || m_iThrowState == THROW_WALLSTICK ||
+        (m_iThrowState == THROW_ROLL && !(m_pAttacker->pev->flags & FL_DUCKING)))
+    {
+        int d = GetThrowDirection(1);
+        return d <= 5 ? s_Tbl1[d] : 0;
+    }
+    if (m_iThrowState == THROW_ROLL)                          // rolando agachado
+    {
+        int d = GetThrowDirection(0) - 2;
+        return (d >= 0 && d <= 3) ? s_Tbl2[d] : 0;
+    }
+    if (m_iThrowState == THROW_LAY)           return m_flLayTime == 0 ? 122 : 121;   // [OK]
+    if (m_iThrowState == THROW_LANDRECOVER)   return 123;
+    if (m_iThrowState == THROW_RECOVER)       return 120;
+    return 0;
+}
+
+int CPlayerMelee::CanThrow(int iDist, Vector &vecOut)         // [OK] testa se há espaço 'iDist' unidades à frente do atacante
+{
+    UTIL_MakeVectors(m_pAttacker->pev->v_angle);
+    Vector vecStart = m_pAttacker->pev->origin;
+    Vector vecEnd = vecStart + gpGlobals->v_forward * (float)iDist;
+    TraceResult tr;
+    UTIL_TraceHull(vecStart, vecEnd, dont_ignore_monsters, head_hull /*1*/, ENT(m_pAttacker->pev), &tr);
+    vecOut = tr.vecEndPos;
+    if (tr.flFraction >= 1.0f) return 1;
+
+    // bateu em algo: recua o atacante para caber o resto da distância
+    CBaseEntity *pHit = CBaseEntity::Instance(tr.pHit);
+    Vector vecBack;
+    if (pHit && pHit->pev->solid == SOLID_BSP)                // [OK] parede: recua pela normal
+        vecBack = vecStart + tr.vecPlaneNormal * ((float)iDist * (1.0f - tr.flFraction));
+    else                                                      // outro jogador/objeto: recua para trás
+        vecBack = vecStart - gpGlobals->v_forward * ((float)iDist * (1.0f - tr.flFraction));
+    UTIL_TraceHull(vecStart, vecBack, dont_ignore_monsters, head_hull, ENT(m_pAttacker->pev), &tr);
+    if (tr.flFraction < 1.0f) return 0;                       // sem espaço nem recuando
+    m_pAttacker->pev->origin = tr.vecEndPos;
+    UTIL_SetOrigin(m_pAttacker->pev, m_pAttacker->pev->origin);
+    return 1;
+}
+
+void CPlayerMelee::Throw(CBasePlayer *pTarget, int iSpeed, float flArg, Vector vecDir)
+{
+    AddAnimation(false, gpGlobals->time, 1, "ref_swinger_letgo");
+    EMIT_SOUND_DYN(ENT(m_pAttacker->pev), CHAN_WEAPON, "weapons/throw.wav", 1.0, 0.8, 0, 100);
+    EMIT_SOUND_DYN(ENT(pTarget->pev), CHAN_WEAPON, "weapons/swoophit.wav", 1.0, 0.8, 0, 100);
+    if (m_pAttacker->m_pActiveItem)                           // [OK] +0x3c8: trava a arma por 0,9 s
+    {
+        float f = gpGlobals->time + 0.9f;
+        ((CBasePlayerWeapon *)m_pAttacker->m_pActiveItem)->m_flNextPrimaryAttack = f;
+        ((CBasePlayerWeapon *)m_pAttacker->m_pActiveItem)->m_flNextSecondaryAttack = f;
+    }
+    // [OK] a direção usada é v_forward do último MakeVectors (o vecDir recebido é ignorado pelo original)
+    pTarget->m_Melee.StartToss(m_pAttacker, 1, gpGlobals->v_forward, (float)iSpeed, (float)(iSpeed / 2), (float)(iSpeed / 5), flArg);
+    f_10c = 1;
+    m_pIgnoreDamageFrom = NULL;                               // +0x120 := 0
+    f_0b4 = gpGlobals->time + 1.0f;
+}
