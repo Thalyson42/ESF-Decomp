@@ -62,7 +62,7 @@ int _._14CDrainEntsTask(st_552cf0_4 *a0, int a1)
     a0->field_c->field_1c8 = 2;
     *(float *)&a0->field_c->padding_1cc[0] = 255.0f;
     if (!a0->field_1c)
-        return sub_488170(a0, a1);
+        return _._9CBaseTask(a0, a1);
     while (a0->field_1c->field_0)
     {
         v0 = a0->field_1c;
@@ -79,18 +79,18 @@ int _._14CDrainEntsTask(st_552cf0_4 *a0, int a1)
                 if (v3)
                     v3->field_8 = 0;
                 v2->field_4 = NULL;
-                sub_48d4e0(v2);
+                __builtin_delete(v2);
             }
             if (v1)
             {
-                if (!(char)sub_48b140(v1->field_0))
+                if (!(char)IsNull(v1->field_0))
                 {
                     v4 = *(int *)v1->field_0;
                     v4[8] = v1->field_4;
                     v4[9] = v1->field_8;
                     v4[10] = v1->field_c;
                 }
-                sub_48d4e0(v1);
+                __builtin_delete(v1);
             }
         }
     }
@@ -106,13 +106,13 @@ int _._14CDrainEntsTask(st_552cf0_4 *a0, int a1)
                 iter = iter->field_4;
                 v7->field_4 = NULL;
                 v7->field_8 = 0;
-                sub_48d4e0(v7);
+                __builtin_delete(v7);
             } while (iter);
         }
         v5[1] = NULL;
         *v5 = NULL;
-        sub_48d4e0(v5);
+        __builtin_delete(v5);
     }
-    return sub_488170(a0, a1);
+    return _._9CBaseTask(a0, a1);
 }
 

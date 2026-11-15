@@ -40,18 +40,18 @@ unsigned int TraceAttack__11CBasePlayerP9entvars_sfG6VectorP11TraceResulti(st_4f
     float v3;  // [bp-0x1c]
 
     if (*(float *)&a0->field_0->field_16c == 0.0f)
-        return sub_48da60(a1, a0, a2, a5);
+        return AddMultiDamage(a1, a0, a2, a5);
     a0->field_17c = a4->field_34;
     v4 = &a4->field_14;
     v1 = a4->field_14;
     v2 = *(float *)&v4[1];
     v3 = *(float *)&v4[2];
     v0 = a2;
-    sub_489690(&v1, a0->field_60->field_40(a0));
+    SpawnBlood(&v1, a0->field_60->field_40(a0));
     v1 = *a3;
     v2 = a3[1];
     v3 = a3[2];
     a0->field_60->field_44(a0, a2, &v1, a4, a5);
-    return sub_48da60(a1, a0, a2, a5);
+    return AddMultiDamage(a1, a0, a2, a5);
 }
 

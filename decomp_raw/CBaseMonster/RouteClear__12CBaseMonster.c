@@ -10,7 +10,7 @@ typedef struct st_4d46b0_0 {
 
 void RouteClear__12CBaseMonster(st_4d46b0_0 *a0)
 {
-    sub_489a80(a0);
+    CBaseMonster::RouteNew(a0);
     a0->field_214 = 0;
     a0->field_22c = 1;
     a0->field_248 = a0->field_248 & 223;

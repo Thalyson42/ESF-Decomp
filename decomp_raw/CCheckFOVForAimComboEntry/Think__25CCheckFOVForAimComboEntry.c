@@ -23,13 +23,13 @@ unsigned int Think__25CCheckFOVForAimComboEntry(st_55c5c0_1 *a0)
 {
     unsigned int v0;  // eax
 
-    if (a0->field_4->field_b6c && a0->field_4->field_a18 <= 99 && a0->field_14 >= *(float *)gpGlobals && !(char)sub_489330(a0->field_4, a0->field_4->field_b6c))
+    if (a0->field_4->field_b6c && a0->field_4->field_a18 <= 99 && a0->field_14 >= *(float *)gpGlobals && !(char)EntIsInFieldOfView(a0->field_4, a0->field_4->field_b6c))
     {
-        v0 = sub_489330(a0->field_4->field_b6c, a0->field_4);
+        v0 = EntIsInFieldOfView(a0->field_4->field_b6c, a0->field_4);
         if (!(char)v0)
         {
-            sub_48d0d0(a0->field_4);
-            sub_48b720(a0->field_4, a0->field_4->field_b6c);
+            CBot::ResetMoveSpeed(a0->field_4);
+            CBot::AimAtEnemy(a0->field_4, a0->field_4->field_b6c);
             return v0;
         }
     }

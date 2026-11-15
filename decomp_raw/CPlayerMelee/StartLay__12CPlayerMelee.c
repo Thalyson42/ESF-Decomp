@@ -40,7 +40,7 @@ typedef struct st_5027c0_4 {
     unsigned int field_0;
 } st_5027c0_4;
 
-extern st_5027c0_4 *g_6168dc;
+extern st_5027c0_4 *g_engfuncs.pfnIndexOfEdict;
 extern st_5027c0_3 *gpGlobals;
 
 int StartLay__12CPlayerMelee(st_5027c0_2 *a0)
@@ -79,6 +79,6 @@ int StartLay__12CPlayerMelee(st_5027c0_2 *a0)
     *(float *)&v5 = *(float *)&v9[1];
     *(float *)&v6 = *(float *)&v9[2];
     v0 = &v4;
-    return sub_48da70(g_6168dc(v8->field_0->field_208));
+    return UTIL_Model_FixAngles(g_engfuncs.pfnIndexOfEdict(v8->field_0->field_208));
 }
 

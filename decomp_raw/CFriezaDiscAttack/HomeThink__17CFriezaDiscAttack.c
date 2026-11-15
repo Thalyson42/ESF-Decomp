@@ -79,7 +79,7 @@ double HomeThink__17CFriezaDiscAttack(float idx)
         v28 = v25 * v25 + v26 * v26 + v27 * v27;
         v29 = sqrt(v28);
         if (isnan(v29))
-            sub_487dc0(*(unsigned int *)&v28);
+            sqrt(*(unsigned int *)&v28);
         else
             v28 = v29;
         v3 = (float)v28;
@@ -117,7 +117,7 @@ double HomeThink__17CFriezaDiscAttack(float idx)
         *(float *)&v32->padding_0[36] = v1;
         *(float *)&v32->padding_0[40] = v2;
         v36 = *(int *)idx;
-        sub_488860(&v0, &v36->padding_0[32]);
+        UTIL_VecToAngles(&v0, &v36->padding_0[32]);
         *(float *)&v36->padding_0[80] = v0;
         *(float *)&v36->padding_0[84] = v1;
         *(float *)&v36->padding_0[88] = v2;
@@ -127,9 +127,9 @@ double HomeThink__17CFriezaDiscAttack(float idx)
         *(unsigned int *)(*(unsigned int *)&idx + 12) = _INSERT(v21, 0, 0) | 0xffff0000;
         *(char **)(*(unsigned int *)&idx + 16) = &NormalThink__12CMagicAttack;
     }
-    sub_487d50(idx);
+    CMagicAttack::DrawBubbles(idx);
     if (!(*(int *)(*(int *)(*(unsigned int *)&idx + 96) + 156))(idx))
-        sub_48c880(idx);
+        CDiscAttack::Vaporize(idx);
     v38 = 0.3 + *(float *)gpGlobals;
     *(float *)(*(int *)idx + 260) = (float)v38;
     return v38;

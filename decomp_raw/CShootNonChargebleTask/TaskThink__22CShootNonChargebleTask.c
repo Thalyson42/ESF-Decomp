@@ -73,7 +73,7 @@ int TaskThink__22CShootNonChargebleTask(st_54d4e0_4 *a0)
         v11 = _INSERT(gpGlobals, 0, 0);
         if (*(float *)gpGlobals - 2.0 <= a0->field_8->field_b40)
         {
-            sub_48d7b0(a0->field_8);
+            CBot::GoToAnPreviousLocation(a0->field_8);
             return v11;
         }
         a0->field_4 = 2;
@@ -81,7 +81,7 @@ int TaskThink__22CShootNonChargebleTask(st_54d4e0_4 *a0)
     }
     else
     {
-        sub_48bfd0(a0->field_8);
+        CBot::BotCombatMovement(a0->field_8);
         v12 = *(int *)a0->field_10 + 8;
         v8 = *(float *)(*(int *)a0->field_10 + 8);
         v9 = *(float *)&v12[1];
@@ -95,7 +95,7 @@ int TaskThink__22CShootNonChargebleTask(st_54d4e0_4 *a0)
         v7 = v16;
         v17 = v14 * v14 + v15 * v15 + v16 * v16;
         if (isnan(sqrt(v17)))
-            sub_487dc0((unsigned int)(v17 >> 0));
+            sqrt((unsigned int)(v17 >> 0));
         v1 = 1;
         v0 = 0;
         if (a0->field_8->field_b78 <= *(float *)gpGlobals)
@@ -105,7 +105,7 @@ int TaskThink__22CShootNonChargebleTask(st_54d4e0_4 *a0)
         v2 = (int)a0->field_8->field_0->field_260;
         if (v2 > 14)
         {
-            if (!(char)sub_48bf70(a0->field_8, a0->field_10))
+            if (!(char)CBot::CanAttackPlayer(a0->field_8, a0->field_10))
                 v1 = 0;
             if (!v0)
             {
@@ -115,7 +115,7 @@ int TaskThink__22CShootNonChargebleTask(st_54d4e0_4 *a0)
                 return v11;
             }
         }
-        sub_48bf00(a0->field_8);
+        CBot::AddShootDelay(a0->field_8);
         a0->field_4 = 2;
         return v11;
     }

@@ -9,10 +9,10 @@ typedef struct st_4f3b30_0 {
 } st_4f3b30_0;
 
 extern int gmsgStopTransformFX;
-extern st_4f3b30_0 *g_616878;
-extern st_4f3b30_0 *g_61687c;
-extern st_4f3b30_0 *g_616880;
-extern st_4f3b30_0 *g_6168dc;
+extern st_4f3b30_0 *g_engfuncs.pfnMessageBegin;
+extern st_4f3b30_0 *g_engfuncs.pfnMessageEnd;
+extern st_4f3b30_0 *g_engfuncs.pfnWriteByte;
+extern st_4f3b30_0 *g_engfuncs.pfnIndexOfEdict;
 
 unsigned int RemoveSpecialModes__11CBasePlayer(float idx)
 {
@@ -35,51 +35,51 @@ unsigned int RemoveSpecialModes__11CBasePlayer(float idx)
         v4 = 255.0f;
         v5 = 255.0f;
         v1 = 0;
-        sub_48df50(idx, &v2, 0, 0, 0xff, v1);
+        UTIL_ScreenFade(idx, &v2, 0, 0, 0xff, v1);
     }
     if (*(int *)(*(unsigned int *)&idx + 1904))
     {
         *(unsigned short *)&v1 = 1;
-        sub_4886c0(idx, v1);
+        CBasePlayer::Descend(idx, v1);
         v1 = gmsgStopTransformFX;
-        g_616878(2, v1, *(int *)idx + 8, 0);
-        v0 = g_6168dc(*(int *)(*(int *)idx + 520));
-        g_616880(v0);
-        g_61687c(v0);
-        sub_48b090(g_6168dc(*(int *)(*(int *)idx + 520)));
+        g_engfuncs.pfnMessageBegin(2, v1, *(int *)idx + 8, 0);
+        v0 = g_engfuncs.pfnIndexOfEdict(*(int *)(*(int *)idx + 520));
+        g_engfuncs.pfnWriteByte(v0);
+        g_engfuncs.pfnMessageEnd(v0);
+        UTIL_Model_RemoveAll(g_engfuncs.pfnIndexOfEdict(*(int *)(*(int *)idx + 520)));
     }
     if (*(int *)(*(unsigned int *)&idx + 816))
-        sub_48ba60(idx);
+        CBasePlayer::StopPowerUp(idx);
     if (*(int *)(*(unsigned int *)&idx + 812))
-        sub_4895a0(idx);
+        CBasePlayer::StopBlock(idx);
     if (*(int *)(*(unsigned int *)&idx + 800))
-        sub_48c5a0(idx);
+        CBasePlayer::StopFly(idx);
     if (*(int *)(*(unsigned int *)&idx + 804))
-        sub_48dbc0(idx);
+        CBasePlayer::StopTurbo(idx);
     *(unsigned int *)(*(unsigned int *)&idx + 840) = 0;
     if (*(int *)(*(unsigned int *)&idx + 1288))
-        sub_48a7a0(idx);
-    sub_48dd20(*(int *)(*(unsigned int *)&idx + 1900));
+        CBasePlayer::StopSwoop(idx);
+    CAura::Destroy(*(int *)(*(unsigned int *)&idx + 1900));
     *(unsigned int *)(*(unsigned int *)&idx + 1900) = 0;
     while ((*(int *)(*(int *)(*(int *)(*(unsigned int *)&idx + 1892) + 4) + 32))(*(int *)(*(unsigned int *)&idx + 1892)))
     {
         *(unsigned short *)&v1 = 1;
-        sub_4886c0(idx, v1);
+        CBasePlayer::Descend(idx, v1);
     }
     if (*(int *)(*(unsigned int *)&idx + 892))
     {
         if (*(int *)(*(unsigned int *)&idx + 936))
-            sub_48d400(*(unsigned int *)&idx + 896);
+            CPlayerMelee::StopThrow(*(unsigned int *)&idx + 896);
         v8 = *(unsigned int *)&idx + 896;
         if (v8[81] && v8[78])
-            sub_48a700(v8, 0);
+            CPlayerMelee::StopMelee(v8, 0);
         if (*(int *)(*(unsigned int *)&idx + 1736))
-            sub_48daa0(idx);
+            CBasePlayer::RemoveWallJump(idx);
         *(unsigned int *)(*(unsigned int *)&idx + 892) = 0;
     }
     v9 = *(unsigned int *)&idx + 896;
     if (!v9[81])
-        sub_48b000(v9);
+        CPlayerMelee::Reset(v9);
     v10 = *(int *)idx;
     if (v10[1].padding_0[89] & 16)
         v10[1].padding_0[89] = v10[1].padding_0[89] & 239;

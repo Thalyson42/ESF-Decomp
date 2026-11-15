@@ -3,7 +3,7 @@ typedef struct st_581620_0 {
     unsigned int field_0;
 } st_581620_0;
 
-extern st_581620_0 *g_616928;
+extern st_581620_0 *g_engfuncs.pfnRandomLong;
 
 char MakeAvoidSwoopTask__4CBot(int a0)
 {
@@ -12,11 +12,11 @@ char MakeAvoidSwoopTask__4CBot(int a0)
     int v0;  // [bp-0x28], Other Possible Types: unsigned int
 
     v0 = 1;
-    v1 = g_616928(0, v0);
+    v1 = g_engfuncs.pfnRandomLong(0, v0);
     *(unsigned short *)&v0 = _INSERT(v1, 0, v1 != 0);
-    v2 = sub_48a7b0(a0, v0);
+    v2 = CBot::GetBestEscapeSwoopDir(a0, v0);
     if (v2 == 8)
-        return sub_488720(a0, 3);
+        return CBot::MakeCombo(a0, 3);
     if ((short)v2 <= 8)
     {
         if (v2 == 2)
@@ -47,6 +47,6 @@ char MakeAvoidSwoopTask__4CBot(int a0)
             return v2;
         }
     }
-    return sub_488720(a0);
+    return CBot::MakeCombo(a0);
 }
 

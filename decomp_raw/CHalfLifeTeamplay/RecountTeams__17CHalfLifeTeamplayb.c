@@ -43,11 +43,11 @@ typedef struct st_528da0_3 {
 extern unsigned int gmsgTeamInfo;
 extern int num_teams;
 extern char _GLOBAL_OFFSET_TABLE_;
-extern st_528da0_2 *g_616878;
-extern st_528da0_2 *g_61687c;
-extern st_528da0_2 *g_616880;
-extern st_528da0_2 *g_616898;
-extern st_528da0_2 *g_6168dc;
+extern st_528da0_2 *g_engfuncs.pfnMessageBegin;
+extern st_528da0_2 *g_engfuncs.pfnMessageEnd;
+extern st_528da0_2 *g_engfuncs.pfnWriteByte;
+extern st_528da0_2 *g_engfuncs.pfnWriteString;
+extern st_528da0_2 *g_engfuncs.pfnIndexOfEdict;
 extern st_528da0_0 *gpGlobals;
 extern char team_names;
 extern unsigned int team_scores[4];
@@ -69,12 +69,12 @@ st_528da0_0 * RecountTeams__17CHalfLifeTeamplayb(st_528da0_3 *a0, char a1)
     char v5;  // [bp-0x204]
 
     num_teams = 0;
-    sub_48e110(&v5, a0 + 1);
-    for (i = sub_48d6b0(&v5, ";"); i && *i; i = sub_48d6b0(0, ";"))
+    strcpy@GLIBC_2.0(&v5, a0 + 1);
+    for (i = strtok@GLIBC_2.0(&v5, ";"); i && *i; i = strtok@GLIBC_2.0(0, ";"))
     {
         if ((int)a0->field_44->field_cc(a0, i) < 0)
         {
-            sub_48e110(&(&team_names)[16 * num_teams], i);
+            strcpy@GLIBC_2.0(&(&team_names)[16 * num_teams], i);
             num_teams = num_teams + 1;
         }
     }
@@ -83,13 +83,13 @@ st_528da0_0 * RecountTeams__17CHalfLifeTeamplayb(st_528da0_3 *a0, char a1)
         num_teams = 0;
         a0->field_60 = 0;
     }
-    sub_48d0e0(&team_scores[0], 0, 128);
+    memset@GLIBC_2.0(&team_scores[0], 0, 128);
     v1 = 1;
     if (v1 > (int)gpGlobals->field_90)
         return gpGlobals;
     do
     {
-        v7 = sub_48a500(v1);
+        v7 = UTIL_PlayerByIndex(v1);
         if (!v7)
             continue;
         v0 = v7->field_60->field_a8(v7);
@@ -101,7 +101,7 @@ st_528da0_0 * RecountTeams__17CHalfLifeTeamplayb(st_528da0_3 *a0, char a1)
                 v8 = num_teams;
                 num_teams = num_teams + 1;
                 *(unsigned int *)&(&_GLOBAL_OFFSET_TABLE_)[0xffa4 + 4 * v8] = 0;
-                sub_48d360(&(&team_names)[16 * v8], v0, 16);
+                strncpy@GLIBC_2.0(&(&team_names)[16 * v8], v0, 16);
             }
             if (v8 < 0)
                 goto LABEL_528f8a;
@@ -117,12 +117,12 @@ LABEL_528f8a:
             v10 = v7->field_60->field_a8(v7);
             if (a0->field_44->field_d4(a0, v10))
             {
-                g_616878(2, gmsgTeamInfo, 0, 0);
-                v11 = g_6168dc(v7->field_0->field_208);
-                g_616880(v11);
+                g_engfuncs.pfnMessageBegin(2, gmsgTeamInfo, 0, 0);
+                v11 = g_engfuncs.pfnIndexOfEdict(v7->field_0->field_208);
+                g_engfuncs.pfnWriteByte(v11);
                 v12 = v7->field_60->field_a8(v7);
-                g_616898(v12);
-                g_61687c();
+                g_engfuncs.pfnWriteString(v12);
+                g_engfuncs.pfnMessageEnd();
             }
         }
     } while ((v1 += 1, v1 <= (int)gpGlobals->field_90));

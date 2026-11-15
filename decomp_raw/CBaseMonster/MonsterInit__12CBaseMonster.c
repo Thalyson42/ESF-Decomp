@@ -45,15 +45,15 @@ int MonsterInit__12CBaseMonster(float idx)
     v2 = *(int *)idx;
     if ((char)v2[104] & 4)
         *((char *)&v2[105] + 2) = *((char *)&v2[105] + 2) | 128;
-    sub_489f60(idx);
-    sub_48bce0(idx);
-    sub_48a1b0(idx);
+    CBaseMonster::ClearSchedule(idx);
+    CBaseMonster::RouteClear(idx);
+    CBaseAnimating::InitBoneControllers(idx);
     *(unsigned int *)(*(unsigned int *)&idx + 580) = 0xffffffff;
     *(unsigned int *)(*(unsigned int *)&idx + 584) = 0;
-    sub_48d960(*(unsigned int *)&idx + 264, 0);
+    EHANDLE::__as(*(unsigned int *)&idx + 264, 0);
     *(float *)(*(unsigned int *)&idx + 644) = 1024.0f;
     *(float *)(*(unsigned int *)&idx + 648) = 2048.0f;
-    *(unsigned int *)(*(unsigned int *)&idx + 12) = _INSERT(sub_4896e0(idx), 0, 0) | 0xffff0000;
+    *(unsigned int *)(*(unsigned int *)&idx + 12) = _INSERT(CBaseMonster::SetEyePosition(idx), 0, 0) | 0xffff0000;
     *(char **)(*(unsigned int *)&idx + 16) = &MonsterInitThink__12CBaseMonster;
     *(float *)(*(int *)idx + 260) = (float)(0.1 + *(float *)gpGlobals);
     v4 = _INSERT(gpGlobals, 0, 0);

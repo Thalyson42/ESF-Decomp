@@ -112,10 +112,10 @@ typedef struct st_4a5810_2 {
 } st_4a5810_2;
 
 extern unsigned int g_vecAttackDir;
-extern unsigned int g_616784;
-extern unsigned int g_616788;
-extern st_4a5810_1 *g_6168d4;
-extern st_4a5810_1 *g_6168d8;
+extern unsigned int g_vecAttackDir+4;
+extern unsigned int g_vecAttackDir+8;
+extern st_4a5810_1 *g_engfuncs.pfnPEntityOfEntOffset;
+extern st_4a5810_1 *g_engfuncs.pfnEntOffsetOfPEntity;
 extern unsigned int g_pevLastInflictor;
 
 unsigned int TakeDamage__12CBaseMonsterP9entvars_sT1fi(st_4a5810_6 *a0, st_4a5810_7 *a1, st_4a5810_8 *a2, float a3, int a4)
@@ -181,7 +181,7 @@ unsigned int TakeDamage__12CBaseMonsterP9entvars_sT1fi(st_4a5810_6 *a0, st_4a581
     if (*(float *)&a0->field_0->field_16c == 0.0f)
         return 0;
     if (!a0->field_60->field_8c(a0))
-        return sub_48a440(a0, a1, a2, a3, a4);
+        return CBaseMonster::DeadTakeDamage(a0, a1, a2, a3, a4);
     if (!a0->field_0->field_170)
         a0->field_60->field_1f0(a0);
     v31 = a3;
@@ -194,12 +194,12 @@ unsigned int TakeDamage__12CBaseMonsterP9entvars_sT1fi(st_4a5810_6 *a0, st_4a581
     v29 = v23;
     v30 = v24;
     v32 = 0;
-    if (!a1 || !g_6168d8(a1->field_208))
+    if (!a1 || !g_engfuncs.pfnEntOffsetOfPEntity(a1->field_208))
         v32 = 1;
     if (!v32)
     {
         v33 = a1->field_208;
-        if (a1->field_208 || (v33 = g_6168d4(0), v33))
+        if (a1->field_208 || (v33 = g_engfuncs.pfnPEntityOfEntOffset(0), v33))
             v34 = v33->field_7c;
         else
             v34 = NULL;
@@ -222,7 +222,7 @@ unsigned int TakeDamage__12CBaseMonsterP9entvars_sT1fi(st_4a5810_6 *a0, st_4a581
             v38 = v35 * v35 + v36 * v36 + v37 * v37;
             v39 = sqrt(v38);
             if (isnan(v39))
-                sub_487dc0(*(unsigned int *)&v38);
+                sqrt(*(unsigned int *)&v38);
             else
                 v38 = v39;
             v5 = (float)v38;
@@ -245,7 +245,7 @@ unsigned int TakeDamage__12CBaseMonsterP9entvars_sT1fi(st_4a5810_6 *a0, st_4a581
             v41 = v28 * v28 + v29 * v29 + v30 * v30;
             v42 = sqrt(v41);
             if (isnan(v42))
-                sub_487dc0(*(unsigned int *)&v41);
+                sqrt(*(unsigned int *)&v41);
             else
                 v41 = v42;
             v5 = (float)v41;
@@ -265,11 +265,11 @@ unsigned int TakeDamage__12CBaseMonsterP9entvars_sT1fi(st_4a5810_6 *a0, st_4a581
                 v27 = (float)v31;
             }
             *(float *)&g_vecAttackDir = v25;
-            *(float *)&g_616784 = v26;
-            *(float *)&g_616788 = v27;
+            *(float *)&g_vecAttackDir+4 = v26;
+            *(float *)&g_vecAttackDir+8 = v27;
             *(unsigned int *)&v28 = g_vecAttackDir;
-            *(unsigned int *)&v29 = g_616784;
-            *(unsigned int *)&v30 = g_616788;
+            *(unsigned int *)&v29 = g_vecAttackDir+4;
+            *(unsigned int *)&v30 = g_vecAttackDir+8;
         }
     }
     if (a0->field_60->field_a0(a0))
@@ -285,12 +285,12 @@ unsigned int TakeDamage__12CBaseMonsterP9entvars_sT1fi(st_4a5810_6 *a0, st_4a581
     {
 LABEL_4a5b73:
         v44 = 0;
-        if (!a1 || !g_6168d8(a1->field_208))
+        if (!a1 || !g_engfuncs.pfnEntOffsetOfPEntity(a1->field_208))
             v44 = 1;
         if (!v44 && a0->field_0->field_108 == 3 && (!a2 || a2->field_10c != 1) && !(a4 & 0x4000000))
         {
             v45 = a0->field_0;
-            sub_48a570(a0, a3);
+            CBaseMonster::DamageForce(a0, a3);
             v46 = -v31;
             v47 = v46 * v28;
             v5 = (float)v47;
@@ -337,14 +337,14 @@ LABEL_4a5cd0:
             if (!(a0->field_0->field_1a4 & 32))
                 return 1;
             v51 = 0;
-            if (!a2 || !g_6168d8(a2->field_208))
+            if (!a2 || !g_engfuncs.pfnEntOffsetOfPEntity(a2->field_208))
                 v51 = 1;
             if (!v51 && a2->field_1a4 & 40)
             {
                 if (a1)
                 {
                     v52 = &a0->field_108;
-                    if (sub_48d8b0(v52) && a1 != *(int *)sub_489fd0(v52) && a0->field_104 & 16)
+                    if (EHANDLE::__opi(v52) && a1 != *(int *)EHANDLE::__rf(v52) && a0->field_104 & 16)
                         goto LABEL_4a5e32;
                     a0->field_250 = a1->field_8;
                     a0->field_254 = a1->field_c;
@@ -354,9 +354,9 @@ LABEL_4a5cd0:
                 {
                     v54 = 64.0 * *(float *)&g_vecAttackDir;
                     v5 = (float)v54;
-                    v55 = 64.0 * *(float *)&g_616784;
+                    v55 = 64.0 * *(float *)&g_vecAttackDir+4;
                     v6 = (float)v55;
-                    v7 = (float)(64.0 * *(float *)&g_616788);
+                    v7 = (float)(64.0 * *(float *)&g_vecAttackDir+8);
                     v56 = &a0->field_0->field_8;
                     v2 = (float)(v54 + *(float *)&a0->field_0->field_8);
                     v3 = (float)(v55 + *(float *)&v56[1]);
@@ -370,7 +370,7 @@ LABEL_4a5e32:
                 *(float *)&v2 = *(float *)&a0->field_250;
                 *(float *)&v3 = *(float *)&a0->field_254;
                 *(float *)&v4 = *(float *)&a0->field_258;
-                sub_4882f0(a0, &v2);
+                CBaseMonster::MakeIdealYaw(a0, &v2);
                 if (0.0 < a3)
                     a0->field_105 = a0->field_105 | 1;
                 if (a3 >= 20.0f)

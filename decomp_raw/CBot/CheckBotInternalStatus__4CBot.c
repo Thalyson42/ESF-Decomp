@@ -16,8 +16,8 @@ typedef struct st_581b90_1 {
     unsigned int field_0;
 } st_581b90_1;
 
-extern st_581b90_1 *g_616928;
-extern st_581b90_1 *g_61692c;
+extern st_581b90_1 *g_engfuncs.pfnRandomLong;
+extern st_581b90_1 *g_engfuncs.pfnRandomFloat;
 extern st_581b90_0 *gpGlobals;
 
 double CheckBotInternalStatus__4CBot(float idx)
@@ -63,7 +63,7 @@ double CheckBotInternalStatus__4CBot(float idx)
         v2 = (*(int *)(*(int *)(*(int *)(*(unsigned int *)&idx + 4196) + 20) + 16))(*(int *)(*(unsigned int *)&idx + 4196));
     else
         v1 = 1;
-    if (((char)v2 & 4 || v1) && (char)sub_48b430(idx))
+    if (((char)v2 & 4 || v1) && (char)CBot::BotCanPowerUp(idx))
     {
         v19 = *(int *)idx;
         v20 = *(float *)&v19[1].padding_9[71];
@@ -92,7 +92,7 @@ double CheckBotInternalStatus__4CBot(float idx)
                     v27 = v24 * v24 + v25 * v25 + v26 * v26;
                     v28 = sqrt(v27);
                     if (isnan(v28))
-                        sub_487dc0(*(unsigned int *)&v27);
+                        sqrt(*(unsigned int *)&v27);
                     else
                         v27 = v28;
                     v10 = (float)v27;
@@ -135,22 +135,22 @@ double CheckBotInternalStatus__4CBot(float idx)
                     v7 = (int)v20;
                     if (v7 > 225 && *(short *)(*(unsigned int *)&idx + 2584) > 59)
                     {
-                        v30 = g_616928(1, 100);
+                        v30 = g_engfuncs.pfnRandomLong(1, 100);
                         if ((int)v30 <= *(short *)(*(int *)(*(unsigned int *)&idx + 2564) + 38))
                         {
                             v0 = 37;
-                            sub_488720(idx);
+                            CBot::MakeCombo(idx);
                             return v20;
                         }
                     }
-                    if (!(char)sub_488bd0(idx))
+                    if (!(char)CBot::BotShouldFallDown(idx))
                     {
-                        sub_48acb0(idx, 0);
-                        sub_48dd60(idx);
+                        CBot::MakeTask(idx, 0);
+                        CBasePlayer::StartPowerUp(idx);
                         return v20;
                     }
                     v0 = 8;
-                    sub_488720(idx);
+                    CBot::MakeCombo(idx);
                     return v20;
                 }
             }
@@ -161,12 +161,12 @@ double CheckBotInternalStatus__4CBot(float idx)
         v20 = *(float *)(*(unsigned int *)&idx + 2580);
         if (v20 < *(float *)gpGlobals)
         {
-            v31 = g_616928(1, 100);
+            v31 = g_engfuncs.pfnRandomLong(1, 100);
             if ((int)v31 <= *(short *)(*(int *)(*(unsigned int *)&idx + 2564) + 44))
                 *(char *)(*(unsigned int *)&idx + 2576) = 1;
             else
                 *(char *)(*(unsigned int *)&idx + 2576) = 0;
-            g_61692c(15.0f, 30.0f);
+            g_engfuncs.pfnRandomFloat(15.0f, 30.0f);
             v20 = 15.0 + *(float *)gpGlobals;
             *(float *)(*(unsigned int *)&idx + 2580) = (float)v20;
         }
@@ -175,13 +175,13 @@ double CheckBotInternalStatus__4CBot(float idx)
 LABEL_581ef9:
             if (!*(char *)(*(unsigned int *)&idx + 2576))
             {
-                sub_48c5a0(idx);
+                CBasePlayer::StopFly(idx);
 LABEL_581f0b:
             }
         }
         else if (*(char *)(*(unsigned int *)&idx + 2576))
         {
-            sub_488d40(idx);
+            CBasePlayer::StartFly(idx);
             goto LABEL_581f0b;
         }
         else if (!(!*(int *)(*(unsigned int *)&idx + 800)))
@@ -192,7 +192,7 @@ LABEL_581f0b:
     if ((char)v2 & 8 || v1)
     {
         v20 = *(float *)(*(unsigned int *)&idx + 2840);
-        if (v20 <= *(float *)gpGlobals && (char)sub_48c130(idx))
+        if (v20 <= *(float *)gpGlobals && (char)CBot::BotCanAscend(idx))
         {
             v20 = *(float *)gpGlobals + 0.5;
             *(float *)(*(unsigned int *)&idx + 2840) = (float)v20;
@@ -210,15 +210,15 @@ LABEL_581f0b:
                 if ((unsigned short)(*(short *)(*(unsigned int *)&idx + 2584) - 60) <= 39)
                     v32 = 30;
             }
-            if ((int)g_616928(1, 100) <= v32)
+            if ((int)g_engfuncs.pfnRandomLong(1, 100) <= v32)
             {
-                if ((char)sub_488bd0(idx))
+                if ((char)CBot::BotShouldFallDown(idx))
                 {
                     v0 = 9;
-                    sub_488720(idx);
+                    CBot::MakeCombo(idx);
                     return v20;
                 }
-                sub_489400(idx);
+                CBasePlayer::StartAscend(idx);
             }
         }
     }
@@ -244,9 +244,9 @@ LABEL_581f0b:
     v9 = __fnstcw();
     v8 = v9 | 0xc00;
     v7 = (int)__int_as_float(v34);
-    if ((int)g_616928(1, 100) > (short)(v33 - v7))
+    if ((int)g_engfuncs.pfnRandomLong(1, 100) > (short)(v33 - v7))
         return __int_as_float(v34);
-    sub_48acb0(idx, 0x11);
+    CBot::MakeTask(idx, 0x11);
     return __int_as_float(v34);
 }
 

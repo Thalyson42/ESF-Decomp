@@ -31,10 +31,10 @@ typedef struct st_4a7bc0_0 {
 } st_4a7bc0_0;
 
 extern unsigned int gmsgPowerStruggle;
-extern st_4a7bc0_0 *g_616878;
-extern st_4a7bc0_0 *g_61687c;
-extern st_4a7bc0_0 *g_616884;
-extern st_4a7bc0_0 *g_6168dc;
+extern st_4a7bc0_0 *g_engfuncs.pfnMessageBegin;
+extern st_4a7bc0_0 *g_engfuncs.pfnMessageEnd;
+extern st_4a7bc0_0 *g_engfuncs.pfnWriteChar;
+extern st_4a7bc0_0 *g_engfuncs.pfnIndexOfEdict;
 
 int StopAiming__15CControlledBeam(float idx)
 {
@@ -45,10 +45,10 @@ int StopAiming__15CControlledBeam(float idx)
     unsigned int v2;  // [bp-0x18]
     unsigned int v3;  // [bp-0x14]
 
-    g_616878(1, gmsgPowerStruggle, 0, *(int *)(*(int *)*(int *)(*(unsigned int *)&idx + 128) + 520), v1, v2, v3);
+    g_engfuncs.pfnMessageBegin(1, gmsgPowerStruggle, 0, *(int *)(*(int *)*(int *)(*(unsigned int *)&idx + 128) + 520), v1, v2, v3);
     v0 = 127;
-    g_616884(v0);
-    g_61687c(v0);
+    g_engfuncs.pfnWriteChar(v0);
+    g_engfuncs.pfnMessageEnd(v0);
     *(unsigned int *)(*(int *)(*(unsigned int *)&idx + 128) + 852) = 0;
     *(unsigned int *)(*(int *)(*(unsigned int *)&idx + 128) + 876) = 0;
     *(unsigned int *)(*(int *)(*(unsigned int *)&idx + 128) + 860) = 0;
@@ -61,21 +61,21 @@ int StopAiming__15CControlledBeam(float idx)
     {
         *(unsigned int *)(*(int *)*(int *)(*(unsigned int *)&idx + 128) + 296) = 0;
         *(unsigned int *)(*(int *)(*(unsigned int *)&idx + 128) + 1912) = 0;
-        sub_488850(*(int *)(*(unsigned int *)&idx + 128));
+        CBaseAnimating::ResetSequenceInfo(*(int *)(*(unsigned int *)&idx + 128));
     }
     *(unsigned int *)(*(int *)(*(unsigned int *)&idx + 128) + 828) = 0;
     if (*(int *)(*(unsigned int *)&idx + 520))
     {
-        sub_48dea0(idx);
-        sub_48c5a0(*(int *)(*(unsigned int *)&idx + 128));
+        CControlledBeam::StopBeamJump(idx);
+        CBasePlayer::StopFly(*(int *)(*(unsigned int *)&idx + 128));
     }
     if (*(int *)(*(unsigned int *)&idx + 516))
-        sub_48c650(idx);
+        CControlledBeam::DisableBeamJump(idx);
     *(unsigned int *)(*(unsigned int *)&idx + 196) = 0;
-    sub_489390(*(int *)(*(int *)*(int *)(*(unsigned int *)&idx + 128) + 520), 4, "common/null.wav", 0x3f800000, 0.800000011920929f, 0, 100);
+    EMIT_SOUND_DYN(*(int *)(*(int *)*(int *)(*(unsigned int *)&idx + 128) + 520), 4, "common/null.wav", 0x3f800000, 0.800000011920929f, 0, 100);
     v6 = *(int *)(*(unsigned int *)&idx + 128);
     if (v6->field_6c8)
         return v6;
-    return sub_48b090(g_6168dc(*(int *)&v6->field_0[1].padding_0[220]));
+    return UTIL_Model_RemoveAll(g_engfuncs.pfnIndexOfEdict(*(int *)&v6->field_0[1].padding_0[220]));
 }
 

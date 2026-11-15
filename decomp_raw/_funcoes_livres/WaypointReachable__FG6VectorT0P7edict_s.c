@@ -27,13 +27,13 @@ char WaypointReachable__FG6VectorT0P7edict_s(float *a0, float *a1, st_58a3e0_0 *
     v9 = v6 * v6 + v7 * v7 + v8 * v8;
     v10 = sqrt(v9);
     if (isnan(v10))
-        sub_487dc0(*(unsigned int *)&v9);
+        sqrt(*(unsigned int *)&v9);
     else
         v9 = v10;
     v0 = (float)v9;
     if (v0 < 400.0f)
     {
-        sub_487b80(a0, a1, 1, a2->field_288, &v4);
+        UTIL_TraceLine(a0, a1, 1, a2->field_288, &v4);
         if (1.0 <= v5)
             return 1;
     }

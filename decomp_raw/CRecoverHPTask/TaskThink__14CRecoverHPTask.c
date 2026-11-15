@@ -50,9 +50,9 @@ int TaskThink__14CRecoverHPTask(st_584390_4 *a0)
         {
             v4 = a0->field_8;
             if (v4->field_968 && v4->field_968->field_88 != 29)
-                sub_48ce10(v4, "weapon_regeneration");
+                CBasePlayer::SelectItem(v4, "weapon_regeneration");
             a0->field_c->field_200 = a0->field_c->field_200 | 1;
-            return sub_48d0d0(a0->field_8);
+            return CBot::ResetMoveSpeed(a0->field_8);
         }
     }
     a0->field_4 = 2;

@@ -75,7 +75,7 @@ typedef struct st_50b880_7 {
 } st_50b880_7;
 
 extern unsigned int g_400000;
-extern st_50b880_1 *g_6168dc;
+extern st_50b880_1 *g_engfuncs.pfnIndexOfEdict;
 extern st_50b880_7 *gpGlobals;
 
 unsigned int StartKnockPreStruggle__12CPlayerMelee(double a0, float a1)
@@ -112,10 +112,10 @@ unsigned int StartKnockPreStruggle__12CPlayerMelee(double a0, float a1)
     unsigned short v16;  // [bp-0x8]
     unsigned short v17;  // [bp-0x6]
 
-    sub_48dc30(a1);
+    CPlayerMelee::EmitShockwave(a1);
     v19 = (st_50b880_3 *)a1;
     v2 = &g_400000;
-    sub_48c080(v19, v19->field_124);
+    CPlayerMelee::GetPowerRatio(v19, v19->field_124);
     v17 = __fnstcw();
     v16 = v17 | 0xc00;
     v15 = (int)(v20 * 7.0);
@@ -126,16 +126,16 @@ unsigned int StartKnockPreStruggle__12CPlayerMelee(double a0, float a1)
         return v21;
     v5 = 11;
     v22 = (st_50b880_5 *)a1;
-    v4 = g_6168dc(*(int *)(*(int *)v22->field_128 + 520));
+    v4 = g_engfuncs.pfnIndexOfEdict(*(int *)(*(int *)v22->field_128 + 520));
     v3 = *(int *)(*(int *)v22->field_124 + 520);
-    sub_48dc20(g_6168dc(v3));
+    UTIL_Model_Connect(g_engfuncs.pfnIndexOfEdict(v3));
     *(unsigned short *)&v1 = 1;
-    sub_48b670(*(int *)(*(unsigned int *)&a1 + 304), v1, gpGlobals->field_0, 1, "blow_kick_front");
+    CPlayerMelee::AddAnimation(*(int *)(*(unsigned int *)&a1 + 304), v1, gpGlobals->field_0, 1, "blow_kick_front");
     *(unsigned short *)&v3 = 1;
-    sub_48b670(a1, v3, gpGlobals->field_0, 1, "hit_blow_back");
+    CPlayerMelee::AddAnimation(a1, v3, gpGlobals->field_0, 1, "hit_blow_back");
     v24 = (st_50b880_11 *)a1;
     v24->field_a8 = (float)(0.75 + gpGlobals->field_0);
-    sub_48a800(*(int *)v24->field_124 + 116);
+    UTIL_MakeVectors(*(int *)v24->field_124 + 116);
     v25 = gpGlobals->field_28;
     v26 = (st_50b880_9 *)a1;
     v26->field_110 = v25;
@@ -159,14 +159,14 @@ unsigned int StartKnockPreStruggle__12CPlayerMelee(double a0, float a1)
     v9 = (float)(v29 + *(float *)(*(int *)v26->field_128 + 8));
     v10 = (float)(v30 + *(float *)&v31[1]);
     v11 = *(float *)&v31[2] + v8;
-    sub_48db50(*(int *)v26->field_124, &v9);
-    sub_488860(&v6, &v12);
+    UTIL_SetOrigin(*(int *)v26->field_124, &v9);
+    UTIL_VecToAngles(&v6, &v12);
     v0 = &v6;
-    sub_487b20(g_6168dc(*(int *)(*(int *)*(int *)(*(unsigned int *)&a1 + 292) + 520)));
-    sub_488530(a1, 15, 0);
+    UTIL_Model_MeleeStruggle_Anglefix(g_engfuncs.pfnIndexOfEdict(*(int *)(*(int *)*(int *)(*(unsigned int *)&a1 + 292) + 520)));
+    CPlayerMelee::MeleeText(a1, 15, 0);
     v33 = (st_50b880_12 *)a1;
-    sub_488530(v33, 16, 0);
-    sub_488530(v33->field_130, 15, 0);
-    return sub_488530(v33->field_130, 16, 0);
+    CPlayerMelee::MeleeText(v33, 16, 0);
+    CPlayerMelee::MeleeText(v33->field_130, 15, 0);
+    return CPlayerMelee::MeleeText(v33->field_130, 16, 0);
 }
 

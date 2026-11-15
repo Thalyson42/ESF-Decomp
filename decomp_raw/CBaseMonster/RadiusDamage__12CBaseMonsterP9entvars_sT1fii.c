@@ -19,6 +19,6 @@ int RadiusDamage__12CBaseMonsterP9entvars_sT1fii(st_4a6560_0 **a0, int a1, int a
     v2 = *(float *)&v4[1];
     v3 = *(float *)&v4[2];
     v0 = (float)(2.5 * a3);
-    return sub_48ab00(&v1, a1, a2, a3, v0, a4, a5);
+    return RadiusDamage(&v1, a1, a2, a3, v0, a4, a5);
 }
 

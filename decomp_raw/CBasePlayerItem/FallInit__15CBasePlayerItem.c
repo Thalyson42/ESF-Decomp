@@ -37,14 +37,14 @@ short FallInit__15CBasePlayerItem(st_537f00_2 *a0)
 
     a0->field_0->field_108 = 6;
     a0->field_0->field_10c = 2;
-    sub_48db50(a0->field_0, &a0->field_0->field_8);
+    UTIL_SetOrigin(a0->field_0, &a0->field_0->field_8);
     v3 = 0;
     v4 = 0;
     v5 = 0;
     v0 = 0;
     v1 = 0;
     v2 = 0;
-    v7 = _INSERT(sub_48a0d0(a0->field_0, &v0, &v3), 0, 0) | 0xffff0000;
+    v7 = _INSERT(UTIL_SetSize(a0->field_0, &v0, &v3), 0, 0) | 0xffff0000;
     a0->field_14 = v7;
     a0->field_18 = &DefaultTouch__15CBasePlayerItemP11CBaseEntity;
     a0->field_c = _INSERT(v7, 0, 0) | 0xffff0000;

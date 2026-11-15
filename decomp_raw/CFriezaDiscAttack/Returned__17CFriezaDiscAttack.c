@@ -8,7 +8,7 @@ typedef struct st_4bff90_0 {
 } st_4bff90_0;
 
 extern char AuraCheck__11CDiscAttack;
-extern st_4bff90_0 *g_6168dc;
+extern st_4bff90_0 *g_engfuncs.pfnIndexOfEdict;
 extern st_4bff90_1 *gpGlobals;
 
 int Returned__17CFriezaDiscAttack(float idx)
@@ -23,8 +23,8 @@ int Returned__17CFriezaDiscAttack(float idx)
 
     if (*(int *)(*(int *)idx + 408))
     {
-        sub_48db50(*(int *)idx, (!*(int *)(*(int *)idx + 408) ? 0 : *(int *)(*(int *)idx + 408) + 128) + 8);
-        v3 = g_6168dc(*(int *)(*(int *)idx + 408));
+        UTIL_SetOrigin(*(int *)idx, (!*(int *)(*(int *)idx + 408) ? 0 : *(int *)(*(int *)idx + 408) + 128) + 8);
+        v3 = g_engfuncs.pfnIndexOfEdict(*(int *)(*(int *)idx + 408));
         *(float *)(*(int *)idx + 336) = (float)v3;
     }
     *(char *)(*(int *)idx + 280) = *(char *)(*(int *)idx + 280) & 251;
@@ -49,7 +49,7 @@ int Returned__17CFriezaDiscAttack(float idx)
     *(unsigned int *)(*(unsigned int *)&idx + 12) = _INSERT(v7, 0, 0) | 0xffff0000;
     *(char **)(*(unsigned int *)&idx + 16) = &AuraCheck__11CDiscAttack;
     *(float *)(*(int *)idx + 260) = *(float *)gpGlobals;
-    sub_48d9d0(idx);
-    return sub_489390(*(int *)(*(int *)idx + 520), 1, "weapons/rotating.wav", 0, 0, 32, 100);
+    CDiscAttack::AuraCheck(idx);
+    return EMIT_SOUND_DYN(*(int *)(*(int *)idx + 520), 1, "weapons/rotating.wav", 0, 0, 32, 100);
 }
 

@@ -17,7 +17,7 @@ st_505230_0 * AddCombo__12CPlayerMeleeP17melee_execution_si(int a0, st_505230_1 
     st_505230_0 *v0;  // edx
     st_505230_0 *v1;  // eax
 
-    v0 = sub_48d910(a0, a1->field_24);
+    v0 = CPlayerMelee::SetupCombo(a0, a1->field_24);
     if (!v0)
     {
         return v0;

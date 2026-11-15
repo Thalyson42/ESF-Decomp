@@ -21,7 +21,7 @@ typedef struct st_4a10c0_3 {
 extern st_4a10c0_2 *g_pGameRules;
 extern unsigned int g_ulFrameCount;
 extern unsigned int g_fGameOver;
-extern st_4a10c0_1 *g_6168a4;
+extern st_4a10c0_1 *g_engfuncs.pfnCVarGetFloat;
 extern st_4a10c0_3 *gpGlobals;
 extern int BotManager;
 
@@ -32,12 +32,12 @@ double StartFrame__Fv(void)
     unsigned short v0;  // [bp-0x8]
     unsigned short v1;  // [bp-0x6]
 
-    sub_48bc40(&BotManager);
+    CBotManager::Think(&BotManager);
     if (g_pGameRules)
         g_pGameRules->field_44->field_8(g_pGameRules);
     if (g_fGameOver)
         return v4;
-    g_6168a4("mp_gamemode");
+    g_engfuncs.pfnCVarGetFloat("mp_gamemode");
     v1 = __fnstcw();
     v0 = v1 | 0xc00;
     gpGlobals->field_1c = (float)(int)v3;

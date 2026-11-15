@@ -17,6 +17,6 @@ int _._17CChargeAttackTask(st_559d20_1 *a0, int a1)
 {
     a0->field_14 = &__vt_17CChargeAttackTask;
     a0->field_8->field_b80 = 0;
-    return sub_488170(a0, a1);
+    return _._9CBaseTask(a0, a1);
 }
 

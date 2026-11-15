@@ -53,7 +53,7 @@ double PM_CheckParamters(void)
     v5 = pmove->field_45468 * pmove->field_45468 + pmove->field_4546c * pmove->field_4546c + pmove->field_45470 * pmove->field_45470;
     v6 = sqrt(v5);
     if (isnan(v6))
-        sub_487dc0(*(unsigned int *)&v5);
+        sqrt(*(unsigned int *)&v5);
     else
         v5 = v6;
     v0 = (float)v5;
@@ -70,7 +70,7 @@ double PM_CheckParamters(void)
     }
     if (pmove->field_b8 & 0x1001000 || pmove->field_d0)
         memset(&pmove->field_45468, 0, 12);
-    sub_48a260(&pmove->field_a0);
+    PM_DropPunchAngle(&pmove->field_a0);
     if (!pmove->field_d0)
     {
         v1 = pmove->field_4545c;
@@ -79,7 +79,7 @@ double PM_CheckParamters(void)
         v1 += pmove->field_a0;
         v2 += pmove->field_a4;
         v3 += pmove->field_a8;
-        sub_48b350(&v1, &pmove->field_5c, pmove->field_4f4f0->field_64, pmove->field_4f4f0->field_68);
+        PM_CalcRoll(&v1, &pmove->field_5c, pmove->field_4f4f0->field_64, pmove->field_4f4f0->field_68);
         pmove->field_4c = (float)(pmove->field_4f4f0->field_64 * 4.0);
         *(float *)&pmove->field_44 = v1;
         pmove->field_48 = v2;

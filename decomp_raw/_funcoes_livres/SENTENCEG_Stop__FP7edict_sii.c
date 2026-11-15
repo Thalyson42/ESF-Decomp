@@ -18,10 +18,10 @@ unsigned int * SENTENCEG_Stop__FP7edict_sii(int a0, int a1, int a2)
     else if (a2 >= 0)
     {
         v1 = 33;
-        sub_48c150(&v1, &(&rgsentenceg)[52 * a1]);
-        sub_48d990(&v0, "%d", a2);
-        sub_48c150(&v1, &v0);
-        return sub_489390(a0, 2, &v1, 0, 0, 32, 100);
+        strcat@GLIBC_2.0(&v1, &(&rgsentenceg)[52 * a1]);
+        sprintf@GLIBC_2.0(&v0, "%d", a2);
+        strcat@GLIBC_2.0(&v1, &v0);
+        return EMIT_SOUND_DYN(a0, 2, &v1, 0, 0, 32, 100);
     }
     else
     {

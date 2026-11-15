@@ -64,8 +64,8 @@ typedef struct st_547110_10 {
 extern unsigned int KeyWordIsInNodeList__10CChatClassPQ210CChatClass9CChatNodePCc;
 extern unsigned int MakeSentenceChoiceList__10CChatClassPQ210CChatClass13CChatSentencePt12TMultiChoice1ZPQ210CChatClass13CChatSentencePPQ210CChatClass13CChatSentence;
 extern unsigned int FindSelection__t12TMultiChoice1ZPQ210CChatClass13CChatSentencePQ2t12TMultiChoice1ZPQ210CChatClass13CChatSentence12SMultiChoicei;
-extern st_547110_10 *g_616928;
-extern st_547110_10 *g_61692c;
+extern st_547110_10 *g_engfuncs.pfnRandomLong;
+extern st_547110_10 *g_engfuncs.pfnRandomFloat;
 extern st_547110_7 *gpGlobals;
 
 st_547110_0 * LetBotSaySomething__10CChatClassP4CBot(st_547110_9 *a0, st_547110_6 *a1)
@@ -118,21 +118,21 @@ st_547110_0 * LetBotSaySomething__10CChatClassP4CBot(st_547110_9 *a0, st_547110_
     char v19;  // [bp-0x44]
     char v20;  // [bp-0x43]
 
-    v21 = sub_48d6a0(8);
+    v21 = __builtin_new(8);
     v12 = 1;
     v21->field_0 = 0;
-    v22 = sub_48d6a0(8);
+    v22 = __builtin_new(8);
     *v22 = NULL;
     v22[1] = NULL;
     v21->field_4 = v22;
     v12 = 0;
     v13 = v21;
     if (v12)
-        sub_48d4e0(v13);
+        __builtin_delete(v13);
     v14 = NULL;
     v19 = 0;
-    sub_48d0e0(&v20, 0, 32);
-    v10 = _INSERT(sub_48e110(&v19, a1->field_0->field_1d0 + gpGlobals->field_98), 0, 0) | 0xffff0000;
+    memset@GLIBC_2.0(&v20, 0, 32);
+    v10 = _INSERT(strcpy@GLIBC_2.0(&v19, a1->field_0->field_1d0 + gpGlobals->field_98), 0, 0) | 0xffff0000;
     v11 = &KeyWordIsInNodeList__10CChatClassPQ210CChatClass9CChatNodePCc;
     v9 = "All";
     v24 = *(int *)a0->field_34c;
@@ -171,7 +171,7 @@ LABEL_54725c:
         }
     }
     v4 = &v14;
-    v3 = g_616928(0, v13->field_0);
+    v3 = g_engfuncs.pfnRandomLong(0, v13->field_0);
     iter = _INSERT(v3, 0, 0) | 0xffff0000;
     v1 = iter;
     v2 = &FindSelection__t12TMultiChoice1ZPQ210CChatClass13CChatSentencePQ2t12TMultiChoice1ZPQ210CChatClass13CChatSentence12SMultiChoicei;
@@ -215,12 +215,12 @@ LABEL_547363:
                 if (v42)
                     v42->field_8 = 0;
                 v41->field_4 = NULL;
-                sub_48d4e0(v41);
+                __builtin_delete(v41);
             }
             v43 = v40;
             if (!v43)
                 break;
-            sub_48d4e0(v43);
+            __builtin_delete(v43);
         }
         if (v13->field_4)
         {
@@ -234,36 +234,36 @@ LABEL_547363:
                     node = node->field_4;
                     v46->field_4 = NULL;
                     v46->field_8 = 0;
-                    sub_48d4e0(v46);
+                    __builtin_delete(v46);
                 } while (node);
             }
             v44[1] = NULL;
             *v44 = NULL;
-            sub_48d4e0(v44);
+            __builtin_delete(v44);
         }
         v47 = v13;
         v47->field_4 = NULL;
-        iter = sub_48d4e0(v47);
+        iter = __builtin_delete(v47);
     }
     if (!v14)
         return iter;
-    sub_488d20(a0, &a0[1].padding_0[8], v14);
+    CChatClass::StoreRecentUsedSentence(a0, &a0[1].padding_0[8], v14);
     a1->field_c44 = 1;
-    g_61692c(0, 5.0f);
+    g_engfuncs.pfnRandomFloat(0, 5.0f);
     a1->field_c48 = (float)(v48 + 5.0 + gpGlobals->field_0);
     v17 = 0;
-    sub_48d0e0(&v18, 0, 32);
+    memset@GLIBC_2.0(&v18, 0, 32);
     if (v14->field_0)
         v49 = v14;
     else
         v49 = a1->field_0->field_1d0 + gpGlobals->field_98;
-    sub_48e110(&v17, v49);
+    strcpy@GLIBC_2.0(&v17, v49);
     v15 = 0;
-    sub_48d0e0(&v16, 0, 0xff);
+    memset@GLIBC_2.0(&v16, 0, 0xff);
     if (v14->field_28)
-        sub_48c290(a0, a1->field_a04, v14->field_24, &v15);
+        CChatClass::MakeChatSentence(a0, a1->field_a04, v14->field_24, &v15);
     else
-        sub_48e110(&v15, v14->field_24);
-    return sub_48c5d0(a0, a1, &v15, a1 + 1, &v17, &v19);
+        strcpy@GLIBC_2.0(&v15, v14->field_24);
+    return CChatClass::FillInNames(a0, a1, &v15, a1 + 1, &v17, &v19);
 }
 

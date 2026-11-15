@@ -17,8 +17,8 @@ typedef struct st_4c8620_0 {
 
 extern st_4c8620_0 *g_psv_gravity;
 extern float g_vecZero;
-extern float g_616790;
-extern float g_616794;
+extern float g_vecZero+4;
+extern float g_vecZero+8;
 
 st_4c8620_1 * VecCheckThrow__FP9entvars_sRC6VectorG6Vectorff(void)
 {
@@ -70,7 +70,7 @@ st_4c8620_1 * VecCheckThrow__FP9entvars_sRC6VectorG6Vectorff(void)
     v27 = v24 * v24 + v25 * v25 + v26 * v26;
     v28 = sqrt(v27);
     if (isnan(v28))
-        sub_487dc0(*(unsigned int *)&v27);
+        sqrt(*(unsigned int *)&v27);
     else
         v27 = v28;
     v10 = (float)v27;
@@ -96,12 +96,12 @@ st_4c8620_1 * VecCheckThrow__FP9entvars_sRC6VectorG6Vectorff(void)
     v7 = (float)(v32 + *v22);
     v8 = (float)(v33 + v22[1]);
     v9 = (float)(0.5 * v29 * 0.5 * v0 * 0.5 * v29 + v22[2] + v12);
-    sub_487b80(v22, &v7, 0, v17->field_208, &v1);
-    if (v2 != 1.0f || (sub_487b80(v19, &v7, 1, v17->field_208, &v1), v2 != 1.0f))
+    UTIL_TraceLine(v22, &v7, 0, v17->field_208, &v1);
+    if (v2 != 1.0f || (UTIL_TraceLine(v19, &v7, 1, v17->field_208, &v1), v2 != 1.0f))
     {
         *(float *)&idx->field_0 = g_vecZero;
-        *(float *)&idx->field_4 = g_616790;
-        v34 = g_616794;
+        *(float *)&idx->field_4 = g_vecZero+4;
+        v34 = g_vecZero+8;
     }
     else
     {

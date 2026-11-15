@@ -59,7 +59,7 @@ unsigned int SetComboMoves__12CPlayerMelee(st_504290_5 *a0)
     st_504290_6 *v6;  // [bp-0xc]
     int iter1;  // [bp-0x8]
 
-    v5 = sub_48cc50(a0);
+    v5 = CPlayerMelee::GetCurrentDirection(a0);
     if (!v5)
         return 0;
     v5 = v5;
@@ -94,7 +94,7 @@ unsigned int SetComboMoves__12CPlayerMelee(st_504290_5 *a0)
                     v0 = idx + 12;
                     for (node = v2; iter1 < *(int *)idx; iter1 += 1)
                     {
-                        if (node && !node->field_18 && !(v11 = iter1 * 8, *(int *)((char *)v11 + idx + 8) != node->field_4 || (v12 = sub_489cb0(a0, node), *(int *)((char *)v11 + v0) != sub_489cb0(a0, node))))
+                        if (node && !node->field_18 && !(v11 = iter1 * 8, *(int *)((char *)v11 + idx + 8) != node->field_4 || (v12 = CPlayerMelee::GetMoveStrength(a0, node), *(int *)((char *)v11 + v0) != CPlayerMelee::GetMoveStrength(a0, node))))
                         {
                             node = node->field_20;
                         }

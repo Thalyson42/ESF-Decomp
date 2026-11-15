@@ -28,9 +28,9 @@ typedef struct st_4d5f60_2 {
     struct st_4d5f60_0 *field_60;
 } st_4d5f60_2;
 
-extern st_4d5f60_1 *g_6168b4;
+extern st_4d5f60_1 *g_engfuncs.pfnAlertMessage;
 extern int WorldGraph;
-extern unsigned int g_617170;
+extern unsigned int WorldGraph+16;
 
 double AdvanceRoute__12CBaseMonsterf(st_4d5f60_3 *a0, float a1)
 {
@@ -58,11 +58,11 @@ double AdvanceRoute__12CBaseMonsterf(st_4d5f60_3 *a0, float a1)
             v7 = &a0->field_1a0;
             if (*(char *)(v6 + v7) & 32 && v7[16 + 16 * a0->field_218] & 32)
             {
-                v0 = sub_488f40(&WorldGraph, a0 + v6 + 404, a0);
-                sub_48d800(&WorldGraph, v0, sub_488f40(&WorldGraph, &(a0->padding_0)[4 * a0->field_218 + 420], a0), &v1);
-                if (v1 >= 0 && *(int *)(g_617170 + v1 * 24 + 8) && sub_48a1f0(&WorldGraph, v0, *(int *)(g_617170 + v1 * 24 + 8), a0->field_260, 0) && *(int *)(g_617170 + v1 * 24 + 8))
+                v0 = CGraph::FindNearestNode(&WorldGraph, a0 + v6 + 404, a0);
+                CGraph::HashSearch(&WorldGraph, v0, CGraph::FindNearestNode(&WorldGraph, &(a0->padding_0)[4 * a0->field_218 + 420], a0), &v1);
+                if (v1 >= 0 && *(int *)(WorldGraph+16 + v1 * 24 + 8) && CGraph::HandleLinkEnt(&WorldGraph, v0, *(int *)(WorldGraph+16 + v1 * 24 + 8), a0->field_260, 0) && *(int *)(WorldGraph+16 + v1 * 24 + 8))
                 {
-                    sub_48c7b0(a0, *(int *)(g_617170 + v1 * 24 + 8));
+                    CBaseMonster::OpenDoorAndWait(a0, *(int *)(WorldGraph+16 + v1 * 24 + 8));
                     a0->field_170 = (float)v9;
                 }
             }
@@ -74,13 +74,13 @@ double AdvanceRoute__12CBaseMonsterf(st_4d5f60_3 *a0, float a1)
             v11 = 0.2 * *(float *)&a0->field_70;
             if (v11 <= a1)
                 return v11;
-            sub_48c820(a0);
+            CBaseMonster::MovementComplete(a0);
             return v11;
         }
     }
-    else if (!sub_48d390(a0))
+    else if (!CBaseMonster::FRefreshRoute(a0))
     {
-        g_6168b4(2, "Can't Refresh Route!!\n");
+        g_engfuncs.pfnAlertMessage(2, "Can't Refresh Route!!\n");
         return v2;
     }
     else

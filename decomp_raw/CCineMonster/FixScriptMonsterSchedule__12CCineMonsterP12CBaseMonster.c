@@ -8,6 +8,6 @@ int FixScriptMonsterSchedule__12CCineMonsterP12CBaseMonster(unsigned int a0, st_
 {
     if (a1->field_184 != 8)
         a1->field_184 = 1;
-    return sub_489f60(a1);
+    return CBaseMonster::ClearSchedule(a1);
 }
 

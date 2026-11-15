@@ -34,8 +34,8 @@ short Spawn__15CBasePlayerAmmo(st_538d90_1 *a0)
     v0 = -16.0f;
     v1 = -16.0f;
     v2 = 0;
-    sub_48a0d0(a0->field_0, &v0, &v3);
-    v6 = _INSERT(sub_48db50(a0->field_0, &a0->field_0->field_8), 0, 0);
+    UTIL_SetSize(a0->field_0, &v0, &v3);
+    v6 = _INSERT(UTIL_SetOrigin(a0->field_0, &a0->field_0->field_8), 0, 0);
     a0->field_14 = v6 | 0xffff0000;
     a0->field_18 = &DefaultTouch__15CBasePlayerAmmoP11CBaseEntity;
     return v6;

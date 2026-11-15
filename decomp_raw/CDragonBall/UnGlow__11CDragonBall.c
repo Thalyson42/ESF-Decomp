@@ -9,6 +9,6 @@ typedef struct st_4ae450_0 {
 int UnGlow__11CDragonBall(st_4ae450_0 **a0)
 {
     *a0->field_15c = 0;
-    return sub_489390(*a0->field_208, 4, "common/null.wav", 0x3f800000, 0.800000011920929f, 0, 100);
+    return EMIT_SOUND_DYN(*a0->field_208, 4, "common/null.wav", 0x3f800000, 0.800000011920929f, 0, 100);
 }
 

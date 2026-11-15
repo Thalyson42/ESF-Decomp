@@ -18,22 +18,22 @@ typedef struct st_5157b0_3 {
     struct st_5157b0_1 *field_60;
 } st_5157b0_3;
 
-extern st_5157b0_2 *g_6168b4;
+extern st_5157b0_2 *g_engfuncs.pfnAlertMessage;
 
 int FixScriptMonsterSchedule__7CCineAIP12CBaseMonster(st_5157b0_0 *a0, st_5157b0_3 *a1)
 {
     if (!a0->field_2b8)
     {
-        return sub_489f60(a1);
+        return CBaseMonster::ClearSchedule(a1);
     }
     else if (a0->field_2b8 == 1)
     {
-        return sub_48b250(a1, a1->field_60->field_154(a1, 32));
+        return CBaseMonster::ChangeSchedule(a1, a1->field_60->field_154(a1, 32));
     }
     else
     {
-        g_6168b4(2, "FixScriptMonsterSchedule - no case!\n");
-        return sub_489f60(a1);
+        g_engfuncs.pfnAlertMessage(2, "FixScriptMonsterSchedule - no case!\n");
+        return CBaseMonster::ClearSchedule(a1);
     }
 }
 

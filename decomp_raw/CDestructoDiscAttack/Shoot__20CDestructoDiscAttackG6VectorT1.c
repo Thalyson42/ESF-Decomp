@@ -70,7 +70,7 @@ double Shoot__20CDestructoDiscAttackG6VectorT1(st_4a9f30_1 *a0, int a1, float *a
     a0->field_0->field_108 = 8;
     a0->field_0->field_194 = 0;
     a0->field_0->field_118 = a0->field_0->field_118 | 4;
-    sub_48db50(a0->field_0, a1);
+    UTIL_SetOrigin(a0->field_0, a1);
     v12 = a0->field_0;
     v13 = *&v12->field_144;
     v6 = 7.0f;
@@ -86,7 +86,7 @@ double Shoot__20CDestructoDiscAttackG6VectorT1(st_4a9f30_1 *a0, int a1, float *a
     v3 = __int_as_float(v14) * v0;
     v4 = __int_as_float(v14) * v1;
     v5 = __int_as_float(v14) * v2;
-    sub_48a0d0(v12, &v3, &v9);
+    UTIL_SetSize(v12, &v3, &v9);
     v15 = a0->field_0;
     *(float *)&v15->field_20 = *a2;
     *(float *)&v15->field_24 = a2[1];
@@ -94,12 +94,12 @@ double Shoot__20CDestructoDiscAttackG6VectorT1(st_4a9f30_1 *a0, int a1, float *a
     v16 = *a2 * *a2 + a2[1] * a2[1] + a2[2] * a2[2];
     v17 = sqrt(v16);
     if (isnan(v17))
-        sub_487dc0(*(unsigned int *)&v16);
+        sqrt(*(unsigned int *)&v16);
     else
         v16 = v17;
     a0->field_2a8 = (float)v16;
     v18 = a0->field_0;
-    sub_488860(&v0, &v18->field_20);
+    UTIL_VecToAngles(&v0, &v18->field_20);
     v18->field_50 = v0;
     v18->field_54 = v1;
     v18->field_58 = v2;
@@ -111,7 +111,7 @@ double Shoot__20CDestructoDiscAttackG6VectorT1(st_4a9f30_1 *a0, int a1, float *a
     a0->field_18 = &HitTouch__11CDiscAttackP11CBaseEntity;
     a0->field_c = _INSERT(v21, 0, 0) | 0xffff0000;
     a0->field_10 = &RandomRotateThink__20CDestructoDiscAttack;
-    sub_489390(a0->field_0->field_208, 1, "weapons/rotating.wav", 0x3f800000, 0.800000011920929f, 0, 100);
+    EMIT_SOUND_DYN(a0->field_0->field_208, 1, "weapons/rotating.wav", 0x3f800000, 0.800000011920929f, 0, 100);
     v23 = 0.25 + *(float *)gpGlobals;
     a0->field_0->field_104 = (float)v23;
     return v23;

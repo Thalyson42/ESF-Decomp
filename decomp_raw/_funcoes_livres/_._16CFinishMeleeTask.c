@@ -11,8 +11,8 @@ extern char __vt_16CFinishMeleeTask;
 int _._16CFinishMeleeTask(st_54a000_0 *a0, int a1)
 {
     a0->field_14 = &__vt_16CFinishMeleeTask;
-    sub_48bf00(a0->field_8);
-    sub_48c6c0(a0->field_8);
-    return sub_488170(a0, a1);
+    CBot::AddShootDelay(a0->field_8);
+    CBot::ClearMeleeComboList(a0->field_8);
+    return _._9CBaseTask(a0, a1);
 }
 

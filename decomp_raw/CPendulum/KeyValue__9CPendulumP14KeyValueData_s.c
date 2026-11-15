@@ -12,16 +12,16 @@ double KeyValue__9CPendulumP14KeyValueData_s(float *a0, st_492b40_0 *a1)
     double v1;  // mm7
     double v2;  // mm7
 
-    if (!sub_488af0(a1->field_4, "distance"))
+    if (!strcmp@GLIBC_2.0(a1->field_4, "distance"))
     {
-        sub_487fc0(a1->field_8, 0, 0);
+        __strtod_internal@GLIBC_2.0(a1->field_8, 0, 0);
         a0[26] = (float)v0;
         a1->field_c = 1;
         return v0;
     }
-    else if (!sub_488af0(a1->field_4, "damp"))
+    else if (!strcmp@GLIBC_2.0(a1->field_4, "damp"))
     {
-        sub_487fc0(a1->field_8, 0, 0);
+        __strtod_internal@GLIBC_2.0(a1->field_8, 0, 0);
         a0[28] = (float)(v1 * 0.001);
         a1->field_c = 1;
         return v1 * 0.001;

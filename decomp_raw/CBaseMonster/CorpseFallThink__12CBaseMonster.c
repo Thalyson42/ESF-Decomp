@@ -14,7 +14,7 @@ unsigned int * CorpseFallThink__12CBaseMonster(float idx)
     }
     *(unsigned int *)(*(unsigned int *)&idx + 12) = 0;
     *(unsigned int *)(*(unsigned int *)&idx + 16) = 0;
-    sub_488bf0(idx);
-    return sub_48db50(*(int *)idx, *(int *)idx + 8);
+    CBaseAnimating::SetSequenceBox(idx);
+    return UTIL_SetOrigin(*(int *)idx, *(int *)idx + 8);
 }
 

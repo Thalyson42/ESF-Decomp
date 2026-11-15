@@ -25,11 +25,11 @@ int SetGrabbedOrigin__12CPlayerMelee(st_50aaa0_1 *a0)
     v0 = 0;
     v1 = 0;
     v2 = 0;
-    sub_48e020(a0, 80, &v0);
+    CPlayerMelee::CanThrow(a0, 80, &v0);
     v3 = *(int *)a0->field_128;
     v3[2] = v0;
     v3[3] = v1;
     v3[4] = v2;
-    return sub_48db50(*(int *)a0->field_128, &v0);
+    return UTIL_SetOrigin(*(int *)a0->field_128, &v0);
 }
 

@@ -21,7 +21,7 @@ typedef struct st_48e4b0_1 {
     unsigned int field_0;
 } st_48e4b0_1;
 
-extern st_48e4b0_1 *g_6168e8;
+extern st_48e4b0_1 *g_engfuncs.pfnGetModelPtr;
 
 double GetAnimTime__14CBaseAnimatingi(st_48e4b0_0 **a0, unsigned int a1)
 {
@@ -30,7 +30,7 @@ double GetAnimTime__14CBaseAnimatingi(st_48e4b0_0 **a0, unsigned int a1)
     unsigned int v2;  // eax
     st_48e4b0_3 *v3;  // edx
 
-    v0 = g_6168e8(*a0->field_208);
+    v0 = g_engfuncs.pfnGetModelPtr(*a0->field_208);
     if (v0 && (int)a1 < v0->field_a4)
     {
         v1 = &v0->padding_0[v0->field_a8];

@@ -16,7 +16,7 @@ unsigned int SetSwoopAnim__6CSwoopPcR8Activity(unsigned int *a0, st_524790_0 *a1
     a1->field_6 = 0;
     if (*a0 > 5)
     {
-        v0 = sub_48c150(a1, "forward");
+        v0 = strcat@GLIBC_2.0(a1, "forward");
         *a2 = 99;
         return v0;
     }

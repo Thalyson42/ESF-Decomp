@@ -26,10 +26,10 @@ extern st_5268c0_3 *gpGlobals;
 int PlayScriptedSentence__12CTalkMonsterPCcfffiP11CBaseEntity(st_5268c0_2 *a0, unsigned int a1, float a2, float a3, float a4, unsigned int a5, int a6)
 {
     if (!a5)
-        sub_489fa0(a0);
+        CTalkMonster::ShutUpFriends(a0);
     a0->field_107 = a0->field_107 & 239;
     *(float *)&a0->field_2fc = a2 + *(float *)gpGlobals;
     a0->field_60->field_168(a0, a1, a2, a3, a4);
-    return sub_48d960(&a0[1].padding_0[16], a6);
+    return EHANDLE::__as(&a0[1].padding_0[16], a6);
 }
 

@@ -30,12 +30,12 @@ typedef struct st_4e1c60_2 {
     unsigned int field_0;
 } st_4e1c60_2;
 
-extern st_4e1c60_2 *g_616818;
-extern st_4e1c60_2 *g_6168b4;
+extern st_4e1c60_2 *g_engfuncs.pfnRemoveEntity;
+extern st_4e1c60_2 *g_engfuncs.pfnAlertMessage;
 extern st_4e1c60_3 *gpGlobals;
 extern unsigned int WorldGraph[7];
-extern unsigned int g_61716c;
-extern int g_617178;
+extern unsigned int WorldGraph+12;
+extern int WorldGraph+24;
 
 int Spawn__8CNodeEnt(st_4e1c60_1 *a0)
 {
@@ -54,17 +54,17 @@ int Spawn__8CNodeEnt(st_4e1c60_1 *a0)
     v2->field_0->field_108 = 0;
     v2->field_0->field_10c = 0;
     if (WorldGraph)
-        return g_616818(a0->field_0->field_208);
-    if (!g_617178)
+        return g_engfuncs.pfnRemoveEntity(a0->field_0->field_208);
+    if (!WorldGraph+24)
     {
-        v3 = sub_48af00(0);
-        sub_488ff0(v3, a0->field_0);
+        v3 = GetClassPtr__H1Z9CTestHull_PX01_PX01(0);
+        CTestHull::Spawn(v3, a0->field_0);
     }
-    if (g_617178 > 0x3ff)
-        return g_6168b4(2, "cNodes > MAX_NODES\n");
+    if (WorldGraph+24 > 0x3ff)
+        return g_engfuncs.pfnAlertMessage(2, "cNodes > MAX_NODES\n");
     v1 = &WorldGraph[0];
     v4 = v1[3];
-    v5 = g_617178 * 88;
+    v5 = WorldGraph+24 * 88;
     v6 = v4 + v5;
     v0 = v6 + 3;
     v7 = a0->field_0;
@@ -79,11 +79,11 @@ int Spawn__8CNodeEnt(st_4e1c60_1 *a0)
     *(float *)(v1[3] + v1[6] * 88 + 84) = v9->field_0->field_54;
     *(unsigned short *)(v1[3] + v1[6] * 88 + 80) = v9->field_64;
     *(unsigned short *)(v1[3] + v1[6] * 88 + 82) = v9->field_66;
-    if (!sub_488af0(v9->field_0->field_0 + gpGlobals->field_98, "info_node_air"))
+    if (!strcmp@GLIBC_2.0(v9->field_0->field_0 + gpGlobals->field_98, "info_node_air"))
         *(unsigned int *)(v1[3] + v1[6] * 88 + 28) = 2;
     else
-        *(unsigned int *)(g_61716c + g_617178 * 88 + 28) = 0;
-    g_617178 = g_617178 + 1;
-    return g_616818(a0->field_0->field_208);
+        *(unsigned int *)(WorldGraph+12 + WorldGraph+24 * 88 + 28) = 0;
+    WorldGraph+24 = WorldGraph+24 + 1;
+    return g_engfuncs.pfnRemoveEntity(a0->field_0->field_208);
 }
 

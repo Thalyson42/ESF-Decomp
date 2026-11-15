@@ -44,15 +44,15 @@ typedef struct st_56bb20_0 {
 } st_56bb20_0;
 
 extern unsigned int g_teamplay;
-extern st_56bb20_0 *g_6168a4;
-extern st_56bb20_0 *g_6168d4;
-extern st_56bb20_0 *g_61698c;
+extern st_56bb20_0 *g_engfuncs.pfnCVarGetFloat;
+extern st_56bb20_0 *g_engfuncs.pfnPEntityOfEntOffset;
+extern st_56bb20_0 *g_engfuncs.pfnIsDedicatedServer;
 extern unsigned int GatherSpotsForTeamGood;
-extern char g_625c4c[4];
+extern char GatherSpotsForTeamGood+12[4];
 extern unsigned int GatherSpotsForTeamEvil;
-extern char g_625cec[4];
+extern char GatherSpotsForTeamEvil+12[4];
 extern char cout;
-extern st_56bb20_5 *g_625f80;
+extern st_56bb20_5 *cout+512;
 
 double PlaceNewDBGatherSpot__11CBotManager(st_56bb20_4 *a0)
 {
@@ -89,17 +89,17 @@ double PlaceNewDBGatherSpot__11CBotManager(st_56bb20_4 *a0)
 
     if (!g_teamplay)
         return v30;
-    g_6168a4("mp_gamemode");
+    g_engfuncs.pfnCVarGetFloat("mp_gamemode");
     if (v18 != 2.0)
         return 2.0;
-    if (!g_61698c() && !(v19 = a0->field_c, !a0->field_c && !(v19 = g_6168d4(0), v19)))
+    if (!g_engfuncs.pfnIsDedicatedServer() && !(v19 = a0->field_c, !a0->field_c && !(v19 = g_engfuncs.pfnPEntityOfEntOffset(0), v19)))
         v20 = v19->field_7c;
     else
         v20 = NULL;
     v3 = v20;
     *(unsigned short *)&v1 = 0;
     *(unsigned short *)&v0 = 0;
-    if (!(char)sub_489a70(v20, v0, v1))
+    if (!(char)UTIL_IsValidPlayer(v20, v0, v1))
         return 2.0;
     iter = 0;
     if (!*v3->field_1ac)
@@ -107,12 +107,12 @@ double PlaceNewDBGatherSpot__11CBotManager(st_56bb20_4 *a0)
         while (1)
         {
             v21 = iter * 16;
-            if (g_625c4c[v21])
+            if (GatherSpotsForTeamGood+12[v21])
                 break;
             iter += 1;
             if (iter > 9)
             {
-                g_625f80->field_14(&cout, "Cannot create new DragonBall spot for team good, max reached.\n");
+                cout+512->field_14(&cout, "Cannot create new DragonBall spot for team good, max reached.\n");
                 return 2.0;
             }
         }
@@ -123,7 +123,7 @@ double PlaceNewDBGatherSpot__11CBotManager(st_56bb20_4 *a0)
         v10 = *v3->field_8 + v4;
         v11 = *(float *)&v22->field_4 + v5;
         v12 = *(float *)&v22->field_8 + v6;
-        sub_487b80(&*v3->field_8, &v10, 1, *v3->field_208, &v13);
+        UTIL_TraceLine(&*v3->field_8, &v10, 1, *v3->field_208, &v13);
         if (1.0 > v14)
         {
             *(unsigned int *)((char *)&GatherSpotsForTeamGood + v21) = v15;
@@ -148,7 +148,7 @@ double PlaceNewDBGatherSpot__11CBotManager(st_56bb20_4 *a0)
             do
             {
                 v26 = iter * 16;
-                if (g_625cec[v26])
+                if (GatherSpotsForTeamEvil+12[v26])
                 {
                     v7 = 0;
                     v8 = 0;
@@ -157,7 +157,7 @@ double PlaceNewDBGatherSpot__11CBotManager(st_56bb20_4 *a0)
                     v4 = *v3->field_8 + v7;
                     v5 = *(float *)&v27->field_4 + v8;
                     v6 = *(float *)&v27->field_8 + v9;
-                    sub_487b80(&*v3->field_8, &v4, 1, *v3->field_208, &v13);
+                    UTIL_TraceLine(&*v3->field_8, &v4, 1, *v3->field_208, &v13);
                     if (1.0 > v14)
                     {
                         *(unsigned int *)((char *)&GatherSpotsForTeamEvil + v26) = v15;
@@ -177,7 +177,7 @@ double PlaceNewDBGatherSpot__11CBotManager(st_56bb20_4 *a0)
                 }
             } while ((iter += 1, iter <= 9));
         }
-        g_625f80->field_14(&cout, "Cannot create new DragonBall spot for team evil, max reached.\n");
+        cout+512->field_14(&cout, "Cannot create new DragonBall spot for team evil, max reached.\n");
         return 2.0;
     }
 }

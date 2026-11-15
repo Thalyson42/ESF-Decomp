@@ -53,21 +53,21 @@ typedef struct st_49f7c0_8 {
 extern st_49f7c0_8 *g_pGameRules;
 extern unsigned int g_teamplay;
 extern unsigned int gmsgSayText;
-extern st_49f7c0_0 *g_616878;
-extern st_49f7c0_0 *g_61687c;
-extern st_49f7c0_0 *g_616880;
-extern st_49f7c0_0 *g_616898;
-extern st_49f7c0_0 *g_6168d4;
-extern st_49f7c0_0 *g_6168d8;
-extern st_49f7c0_0 *g_6168dc;
-extern st_49f7c0_0 *g_616904;
-extern st_49f7c0_0 *g_616908;
-extern st_49f7c0_0 *g_61690c;
-extern st_49f7c0_0 *g_616910;
-extern st_49f7c0_0 *g_616968;
-extern st_49f7c0_0 *g_61696c;
-extern st_49f7c0_0 *g_616984;
-extern st_49f7c0_0 *g_6169fc;
+extern st_49f7c0_0 *g_engfuncs.pfnMessageBegin;
+extern st_49f7c0_0 *g_engfuncs.pfnMessageEnd;
+extern st_49f7c0_0 *g_engfuncs.pfnWriteByte;
+extern st_49f7c0_0 *g_engfuncs.pfnWriteString;
+extern st_49f7c0_0 *g_engfuncs.pfnPEntityOfEntOffset;
+extern st_49f7c0_0 *g_engfuncs.pfnEntOffsetOfPEntity;
+extern st_49f7c0_0 *g_engfuncs.pfnIndexOfEdict;
+extern st_49f7c0_0 *g_engfuncs.pfnServerPrint;
+extern st_49f7c0_0 *g_engfuncs.pfnCmd_Args;
+extern st_49f7c0_0 *g_engfuncs.pfnCmd_Argv;
+extern st_49f7c0_0 *g_engfuncs.pfnCmd_Argc;
+extern st_49f7c0_0 *g_engfuncs.pfnGetInfoKeyBuffer;
+extern st_49f7c0_0 *g_engfuncs.pfnInfoKeyValue;
+extern st_49f7c0_0 *g_engfuncs.pfnGetPlayerUserId;
+extern st_49f7c0_0 *g_engfuncs.pfnSequenceGet;
 extern st_49f7c0_2 *gpGlobals;
 extern int g_VoiceGameMgr;
 extern int ChatClass;
@@ -116,24 +116,24 @@ int Host_Say__FP7edict_si(st_49f7c0_3 *a0, unsigned int a1)
     v8 = "say";
     v7 = "say_team";
     v2 = 0;
-    v12 = g_61690c(v2);
-    if (!g_616910(v2))
+    v12 = g_engfuncs.pfnCmd_Argv(v2);
+    if (!g_engfuncs.pfnCmd_Argc(v2))
         return v14;
-    v6 = sub_48c260(&a0->field_80);
+    v6 = GetClassPtr__H1Z11CBasePlayer_PX01_PX01(&a0->field_80);
     if (v6->field_9dc > *(float *)&gpGlobals->field_0)
         return v14;
-    if (!sub_48cac0(v12, v8) || !sub_48cac0(v12, v7))
+    if (!strcasecmp@GLIBC_2.0(v12, v8) || !strcasecmp@GLIBC_2.0(v12, v7))
     {
-        v14 = g_616910();
+        v14 = g_engfuncs.pfnCmd_Argc();
         if (v14 <= 1)
             return v14;
-        v9 = g_616908();
+        v9 = g_engfuncs.pfnCmd_Args();
     }
     else
     {
-        if ((int)g_616910() > 1)
+        if ((int)g_engfuncs.pfnCmd_Argc() > 1)
         {
-            v5 = g_616908();
+            v5 = g_engfuncs.pfnCmd_Args();
             v4 = v12;
             v13 = "%s %s";
         }
@@ -142,7 +142,7 @@ int Host_Say__FP7edict_si(st_49f7c0_3 *a0, unsigned int a1)
             v4 = v12;
             v13 = "%s";
         }
-        sub_48d990(&v10, v13);
+        sprintf@GLIBC_2.0(&v10, v13);
         v9 = &v10;
     }
     if (*v9 == 0x22)
@@ -163,7 +163,7 @@ int Host_Say__FP7edict_si(st_49f7c0_3 *a0, unsigned int a1)
         {
 LABEL_49f96a:
             v19 = a0;
-            sub_48ac50(&ChatClass, v19, v9);
+            CChatClass::StoreChatMsg(&ChatClass, v19, v9);
             if (a1)
             {
                 v5 = v19->field_250 + gpGlobals->field_98;
@@ -181,12 +181,12 @@ LABEL_49f96a:
         }
         if (*iter)
         {
-            if (!sub_488970(*iter))
+            if (!isprint@GLIBC_2.0(*iter))
             {
                 iter += 1;
                 continue;
             }
-            if (sub_488b30(*iter))
+            if (isspace@GLIBC_2.0(*iter))
             {
                 iter += 1;
             }
@@ -204,7 +204,7 @@ LABEL_49f962:
             goto LABEL_49f96a;
         }
     }
-    sub_48d990(&v11, v20);
+    sprintf@GLIBC_2.0(&v11, v20);
     v21 = &v11;
     v22 = 0xffffffff;
     do
@@ -220,63 +220,63 @@ LABEL_49f962:
     } while (v25 && (v25 -= 1, v26 = v27 + 1, *v27));
     if (~v25 - 1 > v24)
         v9[v24] = 0;
-    sub_48c150(&v11, v9);
-    sub_48c150(&v11, "\n");
+    strcat@GLIBC_2.0(&v11, v9);
+    strcat@GLIBC_2.0(&v11, "\n");
     v6->field_9dc = (float)(1.0 + *(float *)&gpGlobals->field_0);
     v28 = NULL;
     while (1)
     {
-        v28 = sub_487e80(v28, "player");
+        v28 = UTIL_FindEntityByClassname(v28, "player");
         if (!v28)
             break;
         v29 = 0;
-        if (!v28->field_0->field_208 || !g_6168d8(v28->field_0->field_208))
+        if (!v28->field_0->field_208 || !g_engfuncs.pfnEntOffsetOfPEntity(v28->field_0->field_208))
             v29 = 1;
         if (v29)
             break;
-        if (!v28->field_0 || v28->field_0->field_208 == a0 || !v28->field_60->field_a4(v28) || (char)sub_487d30(&g_VoiceGameMgr, v28, v6))
+        if (!v28->field_0 || v28->field_0->field_208 == a0 || !v28->field_60->field_a4(v28) || (char)CVoiceGameMgr::PlayerHasBlockedPlayer(&g_VoiceGameMgr, v28, v6))
             continue;
         if (a1)
         {
             v30 = a0;
-            if (v30 || (v30 = g_6168d4(0), v30))
+            if (v30 || (v30 = g_engfuncs.pfnPEntityOfEntOffset(0), v30))
                 v31 = v30->field_7c;
             else
                 v31 = 0;
             if (g_pGameRules->field_44->field_c8(g_pGameRules, v28, v31) != 1)
                 continue;
         }
-        g_616878(1, gmsgSayText, 0, v28->field_0->field_208);
-        v32 = g_6168dc(a0);
-        g_616880(v32);
-        g_616898(&v11);
-        g_61687c();
+        g_engfuncs.pfnMessageBegin(1, gmsgSayText, 0, v28->field_0->field_208);
+        v32 = g_engfuncs.pfnIndexOfEdict(a0);
+        g_engfuncs.pfnWriteByte(v32);
+        g_engfuncs.pfnWriteString(&v11);
+        g_engfuncs.pfnMessageEnd();
     }
-    g_616878(1, gmsgSayText, 0, a0->field_288);
-    v33 = g_6168dc(a0);
-    g_616880(v33);
-    g_616898(&v11);
-    g_61687c();
-    g_616904(&v11);
+    g_engfuncs.pfnMessageBegin(1, gmsgSayText, 0, a0->field_288);
+    v33 = g_engfuncs.pfnIndexOfEdict(a0);
+    g_engfuncs.pfnWriteByte(v33);
+    g_engfuncs.pfnWriteString(&v11);
+    g_engfuncs.pfnMessageEnd();
+    g_engfuncs.pfnServerPrint(&v11);
     v34 = (!a1 ? "say" : "say_team");
     if (!g_teamplay)
     {
         v4 = v9;
         v3 = v34;
-        v2 = g_616984(a0);
-        v1 = g_6169fc(a0);
-        v37 = g_616984(a0);
-        sub_488680("\"%s<%i><%s><%i>\" %s \"%s\"\n", a0->field_250 + gpGlobals->field_98, v37);
+        v2 = g_engfuncs.pfnGetPlayerUserId(a0);
+        v1 = g_engfuncs.pfnSequenceGet(a0);
+        v37 = g_engfuncs.pfnGetPlayerUserId(a0);
+        UTIL_LogPrintf("\"%s<%i><%s><%i>\" %s \"%s\"\n", a0->field_250 + gpGlobals->field_98, v37);
         return v14;
     }
     v4 = v9;
     v3 = v34;
     v0 = "model";
-    v35 = g_616968(a0);
-    v2 = g_61696c(v35);
-    v1 = g_6169fc(a0);
-    v36 = g_616984(a0);
-    sub_488680("\"%s<%i><%s><%s>\" %s \"%s\"\n", a0->field_250 + gpGlobals->field_98, v36);
+    v35 = g_engfuncs.pfnGetInfoKeyBuffer(a0);
+    v2 = g_engfuncs.pfnInfoKeyValue(v35);
+    v1 = g_engfuncs.pfnSequenceGet(a0);
+    v36 = g_engfuncs.pfnGetPlayerUserId(a0);
+    UTIL_LogPrintf("\"%s<%i><%s><%s>\" %s \"%s\"\n", a0->field_250 + gpGlobals->field_98, v36);
     return v14;
 }
 

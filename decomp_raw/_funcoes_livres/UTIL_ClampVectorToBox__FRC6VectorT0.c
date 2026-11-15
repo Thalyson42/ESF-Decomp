@@ -30,7 +30,7 @@ st_534220_0 * UTIL_ClampVectorToBox__FRC6VectorT0(void)
     v9 = v1 * v1 + v2 * v2 + v3 * v3;
     v10 = sqrt(v9);
     if (isnan(v10))
-        sub_487dc0(*(unsigned int *)&v9);
+        sqrt(*(unsigned int *)&v9);
     else
         v9 = v10;
     v0 = (float)v9;

@@ -96,11 +96,11 @@ char CreateResponseList__10CChatClassPQ210CChatClass12SOldChatTextPt12TMultiChoi
     char v30;  // [bp-0x63]
 
     v29 = 0;
-    sub_48d0e0(&v30, 0, 79);
+    memset@GLIBC_2.0(&v30, 0, 79);
     v31 = NULL;
     v27 = 0;
-    sub_48e110(&v29, &a1->field_21);
-    v28 = sub_48d6b0(&v29, " ,.;:[](){}-=+*-/\\<>?!@#$%%^&\n\r\t");
+    strcpy@GLIBC_2.0(&v29, &a1->field_21);
+    v28 = strtok@GLIBC_2.0(&v29, " ,.;:[](){}-=+*-/\\<>?!@#$%%^&\n\r\t");
     v33 = _INSERT(v28, 0, 0) | 0xffff0000;
     v25 = v33;
     v26 = &KeyWordIsInNodeList__10CChatClassPQ210CChatClass9CChatNodePCc;
@@ -142,7 +142,7 @@ LABEL_545cdb:
                     } while (v39->field_4);
                 }
             }
-            v28 = sub_48d6b0(0, " ,.;:[](){}-=+*-/\\<>?!@#$%%^&\n\r\t");
+            v28 = strtok@GLIBC_2.0(0, " ,.;:[](){}-=+*-/\\<>?!@#$%%^&\n\r\t");
             v33 = _INSERT(v28, 0, 0) | 0xffff0000;
             v19 = v33;
             v20 = &KeyWordIsInNodeList__10CChatClassPQ210CChatClass9CChatNodePCc;
@@ -163,8 +163,8 @@ LABEL_545cdb:
         }
         else
         {
-            sub_48e110(&v29, &a1->field_21);
-            v28 = sub_48d6b0(&v29, " \n\r\t");
+            strcpy@GLIBC_2.0(&v29, &a1->field_21);
+            v28 = strtok@GLIBC_2.0(&v29, " \n\r\t");
             v46 = _INSERT(v28, 0, 0) | 0xffff0000;
             v16 = v46;
             v17 = &KeyWordIsInNodeList__10CChatClassPQ210CChatClass9CChatNodePCc;
@@ -207,7 +207,7 @@ LABEL_545e71:
                             } while (v53->field_4);
                         }
                     }
-                    v28 = sub_48d6b0(0, " \n\r\t");
+                    v28 = strtok@GLIBC_2.0(0, " \n\r\t");
                     v46 = _INSERT(v28, 0, 0) | 0xffff0000;
                     v10 = v46;
                     v11 = &KeyWordIsInNodeList__10CChatClassPQ210CChatClass9CChatNodePCc;

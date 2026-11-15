@@ -8,7 +8,7 @@ extern char __vt_9CKrillin2;
 
 st_4cd7c0_0 * __9CKrillin2P11CBasePlayer(st_4cd7c0_0 *a0, int a1)
 {
-    sub_488fd0(a0, a1);
+    __8CKrillinP11CBasePlayer(a0, a1);
     a0->field_4 = &__vt_9CKrillin2;
     return a0;
 }

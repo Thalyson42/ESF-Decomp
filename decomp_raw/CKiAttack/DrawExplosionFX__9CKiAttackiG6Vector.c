@@ -55,12 +55,12 @@ typedef struct st_4cb770_4 {
 } st_4cb770_4;
 
 extern unsigned int gmsgExplosion;
-extern st_4cb770_5 *g_616878;
-extern st_4cb770_5 *g_61687c;
-extern st_4cb770_5 *g_616880;
-extern st_4cb770_5 *g_61688c;
-extern st_4cb770_5 *g_616894;
-extern st_4cb770_5 *g_6168d4;
+extern st_4cb770_5 *g_engfuncs.pfnMessageBegin;
+extern st_4cb770_5 *g_engfuncs.pfnMessageEnd;
+extern st_4cb770_5 *g_engfuncs.pfnWriteByte;
+extern st_4cb770_5 *g_engfuncs.pfnWriteLong;
+extern st_4cb770_5 *g_engfuncs.pfnWriteCoord;
+extern st_4cb770_5 *g_engfuncs.pfnPEntityOfEntOffset;
 extern st_4cb770_4 *gpGlobals;
 
 float DrawExplosionFX__9CKiAttackiG6Vector(st_4cb770_3 **a0, int a1, float *a2)
@@ -94,16 +94,16 @@ float DrawExplosionFX__9CKiAttackiG6Vector(st_4cb770_3 **a0, int a1, float *a2)
     float v12;  // [bp-0x24]
     float v13;  // [bp-0x20]
 
-    g_616878(2, gmsgExplosion, 0, 0, v1, v2, v3);
-    g_616894(*a2);
-    g_616894(a2[1]);
+    g_engfuncs.pfnMessageBegin(2, gmsgExplosion, 0, 0, v1, v2, v3);
+    g_engfuncs.pfnWriteCoord(*a2);
+    g_engfuncs.pfnWriteCoord(a2[1]);
     v14 = a2[2];
-    g_616894(v14);
-    g_61688c(a1);
+    g_engfuncs.pfnWriteCoord(v14);
+    g_engfuncs.pfnWriteLong(a1);
     v0 = 4;
-    g_616880(v0);
-    g_61687c(v0);
-    if (sub_488af0(*a0->field_0 + gpGlobals->field_98, "kiblast"))
+    g_engfuncs.pfnWriteByte(v0);
+    g_engfuncs.pfnMessageEnd(v0);
+    if (strcmp@GLIBC_2.0(*a0->field_0 + gpGlobals->field_98, "kiblast"))
     {
         return v14;
     }
@@ -115,14 +115,14 @@ float DrawExplosionFX__9CKiAttackiG6Vector(st_4cb770_3 **a0, int a1, float *a2)
         v15 = NULL;
         while (1)
         {
-            v15 = sub_48bba0(v15, a2, (float)a1);
+            v15 = UTIL_FindEntityInSphere(v15, a2, (float)a1);
             if (!v15)
                 break;
             if (v15->field_60->field_a0(v15) && v15->field_4c4)
                 return v14;
         }
         v16 = v4->field_208;
-        if (v4->field_208 || (v16 = g_6168d4(0), v16))
+        if (v4->field_208 || (v16 = g_engfuncs.pfnPEntityOfEntOffset(0), v16))
             v17 = v16->field_7c;
         else
             v17 = NULL;
@@ -162,7 +162,7 @@ float DrawExplosionFX__9CKiAttackiG6Vector(st_4cb770_3 **a0, int a1, float *a2)
             v22 = v19 * v19 + v20 * v20 + v21 * v21;
             v23 = sqrt(v22);
             if (isnan(v23))
-                sub_487dc0(*(unsigned int *)&v22);
+                sqrt(*(unsigned int *)&v22);
             else
                 v22 = v23;
             v8 = (float)v22;
@@ -177,7 +177,7 @@ float DrawExplosionFX__9CKiAttackiG6Vector(st_4cb770_3 **a0, int a1, float *a2)
             v8 = (float)v24;
             v9 = (float)v25;
             v10 = (float)v26;
-            sub_488990(v18, &v8);
+            CBlob::CreateBlob(v18, &v8);
             idx = 0;
             do
             {

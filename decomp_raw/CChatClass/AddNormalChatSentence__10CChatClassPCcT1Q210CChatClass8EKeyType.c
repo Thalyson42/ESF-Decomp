@@ -92,28 +92,28 @@ LABEL_5453a0:
             v11 = v15;
 LABEL_5453d8:
             if (v11)
-                return sub_488b40(v11, a1);
+                return AddSentence__Q210CChatClass9CChatNodePCc(v11, a1);
         }
     }
-    v21 = sub_48d6a0(20);
+    v21 = __builtin_new(20);
     v3 = 1;
     v3 = 0;
-    v11 = sub_489cd0(v21, a2, a3);
+    v11 = __Q210CChatClass9CChatNodePCcQ210CChatClass8EKeyType(v21, a2, a3);
     if (v3)
-        sub_48d4e0(v21);
-    sub_488b40(v11, a1);
+        __builtin_delete(v21);
+    AddSentence__Q210CChatClass9CChatNodePCc(v11, a1);
     v22 = a0->field_34c;
     if (!*v22)
     {
-        v23 = sub_48d6a0(12);
+        v23 = __builtin_new(12);
         v2 = 1;
         v23->field_4 = NULL;
         v23->field_8 = NULL;
-        sub_48d0e0(v23, 0, 4);
+        memset@GLIBC_2.0(v23, 0, 4);
         v2 = 0;
         *v22 = v23;
         if (v2)
-            sub_48d4e0(v23);
+            __builtin_delete(v23);
         *v22->field_0 = v11;
         *v22->field_4 = NULL;
         *v22->field_8 = NULL;
@@ -124,15 +124,15 @@ LABEL_5453d8:
     else
     {
         v1 = v22[1];
-        v25 = sub_48d6a0(12);
+        v25 = __builtin_new(12);
         v0 = 1;
         v25->field_4 = NULL;
         v25->field_8 = NULL;
-        sub_48d0e0(v25, 0, 4);
+        memset@GLIBC_2.0(v25, 0, 4);
         v0 = 0;
         v1->field_4 = v25;
         if (v0)
-            sub_48d4e0(v25);
+            __builtin_delete(v25);
         v22[1]->field_4->field_8 = v22[1];
         v26 = v22[1]->field_4;
         v22[1] = v26;

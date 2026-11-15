@@ -10,11 +10,11 @@ unsigned int PM_Init(unsigned int a0)
     if (pm_shared_initialized)
     {
         v0 = "!pm_shared_initialized";
-        sub_4892a0(v0, "../pm_shared/pm_shared.c", 0xffc, "PM_Init");
+        __assert_fail@GLIBC_2.0(v0, "../pm_shared/pm_shared.c", 0xffc, "PM_Init");
     }
     pmove = a0;
-    sub_48a820(v0);
-    v1 = sub_487c50();
+    PM_CreateStuckTable(v0);
+    v1 = PM_InitTextureTypes();
     pm_shared_initialized = 1;
     return v1;
 }

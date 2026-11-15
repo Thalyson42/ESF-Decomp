@@ -41,7 +41,7 @@ unsigned int * CurveThink__9CKiAttack(float idx)
     *(float *)&v9 = *(float *)(*(int *)idx + 32);
     *(float *)&v10 = *(float *)&v15[1];
     *(float *)&v11 = *(float *)&v15[2];
-    sub_48ac10(idx);
+    CMagicAttack::NormalThink(idx);
     *(float *)(*(int *)idx + 260) = (float)(0.05 + *(float *)gpGlobals);
     return gpGlobals;
 }

@@ -14,7 +14,7 @@ typedef struct st_53a280_2 {
 } st_53a280_2;
 
 extern unsigned int g_fGameOver;
-extern st_53a280_1 *g_6168a4;
+extern st_53a280_1 *g_engfuncs.pfnCVarGetFloat;
 extern unsigned int g_flWeaponCheat;
 
 unsigned int * Spawn__6CWorld(double a0, st_53a280_2 *a1)
@@ -23,7 +23,7 @@ unsigned int * Spawn__6CWorld(double a0, st_53a280_2 *a1)
 
     g_fGameOver = 0;
     a1->field_60->field_c(a1);
-    g_6168a4("sv_cheats");
+    g_engfuncs.pfnCVarGetFloat("sv_cheats");
     *(float *)&g_flWeaponCheat = (float)v0;
     return &g_flWeaponCheat;
 }

@@ -21,7 +21,7 @@ typedef struct st_514420_1 {
     unsigned int field_0;
 } st_514420_1;
 
-extern st_514420_1 *g_6168cc;
+extern st_514420_1 *g_engfuncs.pfnAllocString;
 
 unsigned int KeyValue__12CCineMonsterP14KeyValueData_s(st_514420_2 *a0, st_514420_0 *a1)
 {
@@ -35,58 +35,58 @@ unsigned int KeyValue__12CCineMonsterP14KeyValueData_s(st_514420_2 *a0, st_51442
     double v7;  // mm7
     unsigned int v8;  // eax
 
-    if (!sub_488af0(a1->field_4, "m_iszIdle"))
+    if (!strcmp@GLIBC_2.0(a1->field_4, "m_iszIdle"))
     {
-        v0 = g_6168cc(a1->field_8);
+        v0 = g_engfuncs.pfnAllocString(a1->field_8);
         a0->field_2a8 = v0;
         a1->field_c = 1;
         return v0;
     }
-    else if (!sub_488af0(a1->field_4, "m_iszPlay"))
+    else if (!strcmp@GLIBC_2.0(a1->field_4, "m_iszPlay"))
     {
-        v1 = g_6168cc(a1->field_8);
+        v1 = g_engfuncs.pfnAllocString(a1->field_8);
         a0->field_2ac = v1;
         a1->field_c = 1;
         return v1;
     }
-    else if (!sub_488af0(a1->field_4, "m_iszEntity"))
+    else if (!strcmp@GLIBC_2.0(a1->field_4, "m_iszEntity"))
     {
-        v2 = g_6168cc(a1->field_8);
+        v2 = g_engfuncs.pfnAllocString(a1->field_8);
         a0->field_2b0 = v2;
         a1->field_c = 1;
         return v2;
     }
-    else if (!sub_488af0(a1->field_4, "m_fMoveTo"))
+    else if (!strcmp@GLIBC_2.0(a1->field_4, "m_fMoveTo"))
     {
-        v3 = sub_48b500(a1->field_8, 0, 10, 0);
+        v3 = __strtol_internal@GLIBC_2.0(a1->field_8, 0, 10, 0);
         a0->field_2b4 = v3;
         a1->field_c = 1;
         return v3;
     }
-    else if (!sub_488af0(a1->field_4, "m_flRepeat"))
+    else if (!strcmp@GLIBC_2.0(a1->field_4, "m_flRepeat"))
     {
-        v4 = sub_487fc0(a1->field_8, 0, 0);
+        v4 = __strtod_internal@GLIBC_2.0(a1->field_8, 0, 0);
         a0->field_2c0 = (float)v5;
         a1->field_c = 1;
         return v4;
     }
-    else if (!sub_488af0(a1->field_4, "m_flRadius"))
+    else if (!strcmp@GLIBC_2.0(a1->field_4, "m_flRadius"))
     {
-        v6 = sub_487fc0(a1->field_8, 0, 0);
+        v6 = __strtod_internal@GLIBC_2.0(a1->field_8, 0, 0);
         a0->field_2bc = (float)v7;
         a1->field_c = 1;
         return v6;
     }
-    else if (!sub_488af0(a1->field_4, "m_iFinishSchedule"))
+    else if (!strcmp@GLIBC_2.0(a1->field_4, "m_iFinishSchedule"))
     {
-        v8 = sub_48b500(a1->field_8, 0, 10, 0);
+        v8 = __strtol_internal@GLIBC_2.0(a1->field_8, 0, 10, 0);
         a0->field_2b8 = v8;
         a1->field_c = 1;
         return v8;
     }
     else
     {
-        return sub_488d50(a0, a1);
+        return CBaseMonster::KeyValue(a0, a1);
     }
 }
 

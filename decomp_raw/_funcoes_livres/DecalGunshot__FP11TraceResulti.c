@@ -16,8 +16,8 @@ typedef struct st_537490_2 {
     unsigned int field_0;
 } st_537490_2;
 
-extern st_537490_2 *g_6168d4;
-extern st_537490_2 *g_6168d8;
+extern st_537490_2 *g_engfuncs.pfnPEntityOfEntOffset;
+extern st_537490_2 *g_engfuncs.pfnEntOffsetOfPEntity;
 
 unsigned int * DecalGunshot__FP11TraceResulti(st_537490_1 *a0)
 {
@@ -25,7 +25,7 @@ unsigned int * DecalGunshot__FP11TraceResulti(st_537490_1 *a0)
     unsigned int *v1;  // eax
     unsigned int v2;  // edi
 
-    v0 = sub_48c490(a0->field_30);
+    v0 = UTIL_IsValidEntity(a0->field_30);
     if (!v0)
         return v0;
     v1 = (!a0->field_30 ? NULL : (struct st_537490_0 *)&a0->field_30->field_80);
@@ -36,11 +36,11 @@ unsigned int * DecalGunshot__FP11TraceResulti(st_537490_1 *a0)
             return v1;
     }
     v2 = 0;
-    if (!a0->field_30 || (v1 = g_6168d8(a0->field_30), !v1))
+    if (!a0->field_30 || (v1 = g_engfuncs.pfnEntOffsetOfPEntity(a0->field_30), !v1))
         v2 = 1;
     if (v2 || a0->field_30)
         return v1;
-    g_6168d4(0);
+    g_engfuncs.pfnPEntityOfEntOffset(0);
     return v1;
 }
 

@@ -13,7 +13,7 @@ typedef struct st_590390_0 {
     unsigned int field_d0;
 } st_590390_0;
 
-extern char g_5ccd00;
+extern char __vt_13CVoiceGameMgr+8;
 extern st_590390_0 *pmove;
 
 int PM_AirAccelerate(float *a0, float a1, float a2)
@@ -28,7 +28,7 @@ int PM_AirAccelerate(float *a0, float a1, float a2)
 
     v0 = a1;
     if (pmove->field_d0 || pmove->field_cc != 0.0f)
-        return &g_5ccd00;
+        return &__vt_13CVoiceGameMgr+8;
     if (30.0 < v0)
         v1 = 30.0;
     else
@@ -47,8 +47,8 @@ int PM_AirAccelerate(float *a0, float a1, float a2)
             *(float *)&v6[idx] = (float)(v3 * a0[idx] + *(float *)&v6[idx]);
             idx += 1;
         } while (idx <= 2);
-        return &g_5ccd00;
+        return &__vt_13CVoiceGameMgr+8;
     }
-    return &g_5ccd00;
+    return &__vt_13CVoiceGameMgr+8;
 }
 

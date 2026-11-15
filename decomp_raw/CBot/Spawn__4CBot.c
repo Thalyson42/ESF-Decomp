@@ -8,9 +8,9 @@ typedef struct st_53d380_1 {
 } st_53d380_1;
 
 extern unsigned int g_vecZero;
-extern unsigned int g_616790;
-extern unsigned int g_616794;
-extern st_53d380_1 *g_616928;
+extern unsigned int g_vecZero+4;
+extern unsigned int g_vecZero+8;
+extern st_53d380_1 *g_engfuncs.pfnRandomLong;
 extern st_53d380_0 *gpGlobals;
 
 unsigned int * Spawn__4CBot(float idx)
@@ -26,7 +26,7 @@ unsigned int * Spawn__4CBot(float idx)
     unsigned int v7;  // [bp-0x20]
     unsigned int v8;  // [bp-0x1c]
 
-    sub_48de30(idx);
+    CBasePlayer::Spawn(idx);
     *(unsigned int *)(*(int *)idx + 420) = 8200;
     *(unsigned int *)(*(unsigned int *)&idx + 2792) = 0;
     *(float *)(*(unsigned int *)&idx + 2548) = *(float *)gpGlobals;
@@ -43,13 +43,13 @@ unsigned int * Spawn__4CBot(float idx)
     *(unsigned int *)(*(unsigned int *)&idx + 3000) = 0;
     *(unsigned int *)(*(unsigned int *)&idx + 3004) = 0;
     *(unsigned int *)(*(unsigned int *)&idx + 4200) = 33;
-    sub_487cc0(idx);
+    CBot::KillCurrentTask(idx);
     *(unsigned int *)(*(unsigned int *)&idx + 2812) = 0;
     *(unsigned int *)(*(unsigned int *)&idx + 2876) = 0;
     *(unsigned int *)(*(unsigned int *)&idx + 2880) = 0;
     *(unsigned short *)(*(unsigned int *)&idx + 2808) = 0;
-    sub_48d0e0(*(unsigned int *)&idx + 2884, 0, 32);
-    sub_48d0e0(*(unsigned int *)&idx + 2596, 0, 128);
+    memset@GLIBC_2.0(*(unsigned int *)&idx + 2884, 0, 32);
+    memset@GLIBC_2.0(*(unsigned int *)&idx + 2596, 0, 128);
     *(char *)(*(unsigned int *)&idx + 2592) = 0;
     *(char *)(*(unsigned int *)&idx + 2732) = 0;
     *(unsigned short *)(*(unsigned int *)&idx + 0xb00) = 0;
@@ -62,7 +62,7 @@ unsigned int * Spawn__4CBot(float idx)
     *(float *)&v2 = *(float *)&v10[1];
     *(float *)&v4 = *(float *)&v10[2];
     v0 = &v1;
-    sub_489120(&v6, &v1);
+    WrapAngles(&v6, &v1);
     *(unsigned int *)(*(unsigned int *)&idx + 3088) = v6;
     *(unsigned int *)(*(unsigned int *)&idx + 3092) = v7;
     *(unsigned int *)(*(unsigned int *)&idx + 3096) = v8;
@@ -73,15 +73,15 @@ unsigned int * Spawn__4CBot(float idx)
     *(unsigned int *)(*(unsigned int *)&idx + 3116) = 0;
     *(unsigned int *)(*(unsigned int *)&idx + 3044) = 0;
     *(unsigned int *)(*(unsigned int *)&idx + 3048) = g_vecZero;
-    *(unsigned int *)(*(unsigned int *)&idx + 3052) = g_616790;
-    *(unsigned int *)(*(unsigned int *)&idx + 3056) = g_616794;
+    *(unsigned int *)(*(unsigned int *)&idx + 3052) = g_vecZero+4;
+    *(unsigned int *)(*(unsigned int *)&idx + 3056) = g_vecZero+8;
     *(unsigned int *)(*(unsigned int *)&idx + 3060) = 0;
-    sub_48c6c0(idx);
+    CBot::ClearMeleeComboList(idx);
     memset(*(unsigned int *)&idx + 2960, 0, 20);
     *(unsigned int *)(*(unsigned int *)&idx + 2852) = g_vecZero;
-    *(unsigned int *)(*(unsigned int *)&idx + 2856) = g_616790;
-    *(unsigned int *)(*(unsigned int *)&idx + 2860) = g_616794;
-    sub_48c9f0(idx);
+    *(unsigned int *)(*(unsigned int *)&idx + 2856) = g_vecZero+4;
+    *(unsigned int *)(*(unsigned int *)&idx + 2860) = g_vecZero+8;
+    CBot::DeleteCombos(idx);
     *(unsigned int *)(*(unsigned int *)&idx + 2736) = 0;
     *(unsigned int *)(*(unsigned int *)&idx + 4148) = 0;
     *(unsigned int *)(*(unsigned int *)&idx + 4184) = 0;
@@ -100,7 +100,7 @@ unsigned int * Spawn__4CBot(float idx)
     *(float *)(*(unsigned int *)&idx + 3420) = *(float *)gpGlobals;
     *(char *)(*(unsigned int *)&idx + 3412) = 0;
     *(unsigned int *)(*(unsigned int *)&idx + 3416) = 0;
-    sub_48d0d0(idx);
+    CBot::ResetMoveSpeed(idx);
     *(unsigned int *)(*(unsigned int *)&idx + 3428) = 2;
     *(unsigned int *)(*(unsigned int *)&idx + 2744) = 0;
     *(unsigned int *)(*(unsigned int *)&idx + 2748) = 0;
@@ -117,7 +117,7 @@ unsigned int * Spawn__4CBot(float idx)
     *(unsigned int *)(*(unsigned int *)&idx + 3460) = 0;
     *(unsigned int *)(*(unsigned int *)&idx + 3464) = 0;
     *(unsigned int *)(*(unsigned int *)&idx + 4144) = 0;
-    if ((int)g_616928(1, 100) <= 50)
+    if ((int)g_engfuncs.pfnRandomLong(1, 100) <= 50)
         *(unsigned int *)(*(unsigned int *)&idx + 0xff0) = 0;
     else
         *(unsigned int *)(*(unsigned int *)&idx + 0xff0) = 1;

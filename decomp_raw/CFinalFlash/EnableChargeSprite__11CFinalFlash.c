@@ -28,7 +28,7 @@ int EnableChargeSprite__11CFinalFlash(st_4bd760_2 *a0)
     unsigned int v2;  // [bp-0x1c]
 
     if (a0->field_80->field_324)
-        return sub_487b90(a0->field_20c);
+        return CSprite::TurnOn(a0->field_20c);
     *(float *)&a0->field_80->field_0->padding_0[332] = 25.0f;
     a0->field_80->field_0->field_15c = 19;
     v3 = a0->field_80->field_0;
@@ -38,6 +38,6 @@ int EnableChargeSprite__11CFinalFlash(st_4bd760_2 *a0)
     v3->field_150 = v0;
     v3->field_154 = v1;
     v3->field_158 = v2;
-    return sub_487b90(a0->field_20c);
+    return CSprite::TurnOn(a0->field_20c);
 }
 

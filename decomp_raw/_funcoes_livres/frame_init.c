@@ -53,9 +53,9 @@ int frame_init(st_5961b4_0 *a0)
     }
     a0->field_10 = count;
     v13 = count * 4;
-    v8 = sub_489f30(v13);
+    v8 = malloc@GLIBC_2.0(v13);
     v14 = a0;
-    v10 = sub_489f30(v13);
+    v10 = malloc@GLIBC_2.0(v13);
     v9 = 0;
     v11 = 0;
     v6 = 0xffffffff;

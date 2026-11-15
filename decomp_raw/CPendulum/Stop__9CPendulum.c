@@ -23,8 +23,8 @@ typedef struct st_4930d0_1 {
 } st_4930d0_1;
 
 extern unsigned int g_vecZero;
-extern unsigned int g_616790;
-extern unsigned int g_616794;
+extern unsigned int g_vecZero+4;
+extern unsigned int g_vecZero+8;
 
 int Stop__9CPendulum(st_4930d0_0 *a0)
 {
@@ -40,8 +40,8 @@ int Stop__9CPendulum(st_4930d0_0 *a0)
     a0->field_10 = 0;
     v1 = a0->field_0;
     v1[23] = g_vecZero;
-    v1[24] = g_616790;
-    v1[25] = g_616794;
-    return g_616794;
+    v1[24] = g_vecZero+4;
+    v1[25] = g_vecZero+8;
+    return g_vecZero+8;
 }
 

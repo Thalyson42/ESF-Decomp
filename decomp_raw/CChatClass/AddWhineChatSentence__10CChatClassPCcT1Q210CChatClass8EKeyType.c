@@ -57,27 +57,27 @@ st_5458a0_0 * AddWhineChatSentence__10CChatClassPCcT1Q210CChatClass8EKeyType(st_
         v7 = 0;
 LABEL_545918:
         if (v7)
-            return sub_488b40(v7, a1);
+            return AddSentence__Q210CChatClass9CChatNodePCc(v7, a1);
     }
-    v12 = sub_48d6a0(20);
+    v12 = __builtin_new(20);
     v3 = 1;
     v3 = 0;
-    v7 = sub_489cd0(v12, a2, a3);
+    v7 = __Q210CChatClass9CChatNodePCcQ210CChatClass8EKeyType(v12, a2, a3);
     if (v3)
-        sub_48d4e0(v12);
-    sub_488b40(v7, a1);
+        __builtin_delete(v12);
+    AddSentence__Q210CChatClass9CChatNodePCc(v7, a1);
     v13 = a0->field_354;
     if (!*v13)
     {
-        v14 = sub_48d6a0(12);
+        v14 = __builtin_new(12);
         v2 = 1;
         v14->field_4 = NULL;
         v14->field_8 = NULL;
-        sub_48d0e0(v14, 0, 4);
+        memset@GLIBC_2.0(v14, 0, 4);
         v2 = 0;
         *v13 = v14;
         if (v2)
-            sub_48d4e0(v14);
+            __builtin_delete(v14);
         *v13->field_0 = v7;
         *v13->field_4 = NULL;
         *v13->field_8 = NULL;
@@ -88,15 +88,15 @@ LABEL_545918:
     else
     {
         v1 = v13[1];
-        v16 = sub_48d6a0(12);
+        v16 = __builtin_new(12);
         v0 = 1;
         v16->field_4 = NULL;
         v16->field_8 = NULL;
-        sub_48d0e0(v16, 0, 4);
+        memset@GLIBC_2.0(v16, 0, 4);
         v0 = 0;
         v1->field_4 = v16;
         if (v0)
-            sub_48d4e0(v16);
+            __builtin_delete(v16);
         v13[1]->field_4->field_8 = v13[1];
         v17 = v13[1]->field_4;
         v13[1] = v17;

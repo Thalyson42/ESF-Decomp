@@ -14,9 +14,9 @@ unsigned int Touch__9CPushableP11CBaseEntity(int a0, st_4c3920_0 **a1)
 {
     unsigned int v0;  // eax
 
-    v0 = sub_488af0(*(int *)*a1 + gpGlobals->field_98, "worldspawn");
+    v0 = strcmp@GLIBC_2.0(*(int *)*a1 + gpGlobals->field_98, "worldspawn");
     if (!v0)
         return v0;
-    return sub_489580(a0, a1, 1);
+    return CPushable::Move(a0, a1, 1);
 }
 

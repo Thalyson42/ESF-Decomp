@@ -56,28 +56,28 @@ double PrimaryAttack__9CEyelaser(float idx)
     float v29;  // [bp-0x20]
     float v30;  // [bp-0x1c]
 
-    if (sub_48c980(*(int *)(*(unsigned int *)&idx + 128), 50))
+    if (CBasePlayer::UseKi(*(int *)(*(unsigned int *)&idx + 128), 50))
     {
         if (!*(int *)(*(unsigned int *)&idx + 0xcc))
         {
-            sub_48a670(idx, *(int *)(*(unsigned int *)&idx + 196));
-            sub_48a670(idx, *(int *)(*(unsigned int *)&idx + 200));
+            CEyelaser::SetBeam(idx, *(int *)(*(unsigned int *)&idx + 196));
+            CEyelaser::SetBeam(idx, *(int *)(*(unsigned int *)&idx + 200));
             *(unsigned int *)(*(unsigned int *)&idx + 0xcc) = 1;
         }
         if (!*(char *)(*(unsigned int *)&idx + 212))
         {
             *(char *)(*(unsigned int *)&idx + 212) = 1;
-            sub_489390(*(int *)(*(int *)*(int *)(*(unsigned int *)&idx + 128) + 520), 1, "weapons/eyebeam_fire.wav", 0x3f800000, 0.800000011920929f, 0, 100);
+            EMIT_SOUND_DYN(*(int *)(*(int *)*(int *)(*(unsigned int *)&idx + 128) + 520), 1, "weapons/eyebeam_fire.wav", 0x3f800000, 0.800000011920929f, 0, 100);
         }
-        v34 = sub_4882e0(*(int *)(*(unsigned int *)&idx + 196));
+        v34 = CBeam::GetEndPos(*(int *)(*(unsigned int *)&idx + 196));
         v28 = *v34;
         v29 = v34[1];
         v30 = v34[2];
-        v35 = sub_4882e0(*(int *)(*(unsigned int *)&idx + 200));
+        v35 = CBeam::GetEndPos(*(int *)(*(unsigned int *)&idx + 200));
         v25 = *v35;
         v26 = v35[1];
         v27 = v35[2];
-        sub_48a800(*(int *)*(int *)(*(unsigned int *)&idx + 128) + 116);
+        UTIL_MakeVectors(*(int *)*(int *)(*(unsigned int *)&idx + 128) + 116);
         v36 = &gpGlobals->field_28;
         v22 = gpGlobals->field_28;
         v23 = *(float *)&v36[1];
@@ -92,7 +92,7 @@ double PrimaryAttack__9CEyelaser(float idx)
         v10 = (float)(v37 + v19);
         v11 = (float)(v38 + v20);
         v12 = v21 + v4;
-        sub_487b80(v1, &v10, 0, *(int *)(*(int *)idx + 520), &v14);
+        UTIL_TraceLine(v1, &v10, 0, *(int *)(*(int *)idx + 520), &v14);
         v39 = &gpGlobals->field_40;
         v5 = gpGlobals->field_40 + gpGlobals->field_40;
         v6 = *(float *)&v39[1] + *(float *)&v39[1];
@@ -114,28 +114,28 @@ double PrimaryAttack__9CEyelaser(float idx)
         v12 = v3;
         v13 = v4;
         v0 = &v11;
-        sub_48c6f0(idx, *(int *)(*(unsigned int *)&idx + 196), &v8, &v11);
+        CEyelaser::ShootLaser(idx, *(int *)(*(unsigned int *)&idx + 196), &v8, &v11);
         v8 = v25;
         v9 = v26;
         v10 = v27;
         v11 = v5;
         v12 = v6;
         v13 = v7;
-        sub_48c6f0(idx, *(int *)(*(unsigned int *)&idx + 200), &v8, v0);
+        CEyelaser::ShootLaser(idx, *(int *)(*(unsigned int *)&idx + 200), &v8, v0);
         if (*(int *)(*(unsigned int *)&idx + 208) > 4)
         {
             (*(int *)(*(int *)(*(unsigned int *)&idx + 96) + 328))(idx);
             return v42;
         }
-        sub_488640();
+        UTIL_WeaponTimeBase();
         *(float *)(*(unsigned int *)&idx + 156) = (float)(v41 + 0.2);
         *(unsigned int *)(*(unsigned int *)&idx + 208) = *(int *)(*(unsigned int *)&idx + 208) + 1;
         return v41 + 0.2;
     }
     else if (*(int *)(*(unsigned int *)&idx + 0xcc))
     {
-        sub_48d7d0(idx, *(int *)(*(unsigned int *)&idx + 196));
-        sub_48d7d0(idx, *(int *)(*(unsigned int *)&idx + 200));
+        CEyelaser::SetRedEye(idx, *(int *)(*(unsigned int *)&idx + 196));
+        CEyelaser::SetRedEye(idx, *(int *)(*(unsigned int *)&idx + 200));
         *(unsigned int *)(*(unsigned int *)&idx + 0xcc) = 0;
         return v32;
     }

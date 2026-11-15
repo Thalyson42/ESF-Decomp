@@ -20,11 +20,11 @@ st_55c850_0 * Think__32CAvoidAttackWhileSwoopComboEntry(st_55c850_1 *a0)
     v0 = *(int *)a0->field_4;
     if (*(int *)(*(int *)a0->field_4 + 264) == 11)
     {
-        sub_48c350(a0->field_4);
-        v0 = sub_48d470(a0->field_4, 50.0f, 750.0f);
+        CBot::SetSwoopButton(a0->field_4);
+        v0 = CBot::GetNearestHostileAttack(a0->field_4, 50.0f, 750.0f);
         if (v0)
         {
-            v0 = sub_48aab0(a0->field_4, v0);
+            v0 = UTIL_GetHeadingPercentage(a0->field_4, v0);
             if ((short)(unsigned short)v0 > 64)
                 return v0;
         }

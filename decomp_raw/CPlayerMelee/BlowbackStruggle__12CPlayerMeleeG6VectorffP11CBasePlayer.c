@@ -37,14 +37,14 @@ unsigned int BlowbackStruggle__12CPlayerMeleeG6VectorffP11CBasePlayer(st_50bbf0_
     float v10;  // [bp-0x20]
     float v11;  // [bp-0x1c]
 
-    if (a3 < a2 && sub_48c980(a0->field_124, 35))
+    if (a3 < a2 && CBasePlayer::UseKi(a0->field_124, 35))
     {
         v8 = a0->field_124;
         v12 = a4;
     }
     else
     {
-        if (!sub_48c980(a4, 35))
+        if (!CBasePlayer::UseKi(a4, 35))
         {
             v9 = -*a1;
             v10 = -a1[1];
@@ -52,11 +52,11 @@ unsigned int BlowbackStruggle__12CPlayerMeleeG6VectorffP11CBasePlayer(st_50bbf0_
             v7 = 200.0f;
             v6 = 400.0f;
             v5 = 700.0f;
-            sub_48c240(a0, a4, 0, &v9, 700.0f, 400.0f, 200.0f, 0x3f800000);
+            CPlayerMelee::StartToss(a0, a4, 0, &v9, 700.0f, 400.0f, 200.0f, 0x3f800000);
             v9 = *a1;
             v10 = a1[1];
             v11 = a1[2];
-            return sub_48c240(&a4[8].field_60, a0->field_124, 0, &v9, v5, v6, v7, 0x3f800000);
+            return CPlayerMelee::StartToss(&a4[8].field_60, a0->field_124, 0, &v9, v5, v6, v7, 0x3f800000);
         }
         v8 = a4;
         v12 = a0->field_124;
@@ -72,7 +72,7 @@ unsigned int BlowbackStruggle__12CPlayerMeleeG6VectorffP11CBasePlayer(st_50bbf0_
         v9 = *a1;
         v10 = a1[1];
         v11 = a1[2];
-        return sub_48b420(&v8[8].field_60, 0, v12, &v9, 4, 7.699999809265137f, 1400.0f, 800.0f, 450.0f, 1.5f);
+        return CPlayerMelee::Powerhit(&v8[8].field_60, 0, v12, &v9, 4, 7.699999809265137f, 1400.0f, 800.0f, 450.0f, 1.5f);
     }
     v9 = *a1;
     v10 = a1[1];
@@ -82,13 +82,13 @@ unsigned int BlowbackStruggle__12CPlayerMeleeG6VectorffP11CBasePlayer(st_50bbf0_
     v2 = 500.0f;
     v1 = 900.0f;
     v0 = &v9;
-    sub_48b420(&v8[8].field_60, 0, v12, &v9, 4, 7.699999809265137f, 900.0f, 500.0f, 300.0f, 1.5f);
+    CPlayerMelee::Powerhit(&v8[8].field_60, 0, v12, &v9, 4, 7.699999809265137f, 900.0f, 500.0f, 300.0f, 1.5f);
     v13 = v12->field_60->field_8c(v12);
     if (!v13)
         return v13;
     v9 = -*a1;
     v10 = -a1[1];
     v11 = -a1[2];
-    return sub_48b420(&v12[8].field_60, 0, v8, v0, 4, 4.550000190734863f, v1, v2, v3, v4);
+    return CPlayerMelee::Powerhit(&v12[8].field_60, 0, v8, v0, 4, 4.550000190734863f, v1, v2, v3, v4);
 }
 

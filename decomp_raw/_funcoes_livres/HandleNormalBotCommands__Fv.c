@@ -51,20 +51,20 @@ typedef struct st_566e40_8 {
 
 extern st_566e40_8 *g_pGameRules;
 extern unsigned int g_teamplay;
-extern st_566e40_0 *g_61690c;
-extern st_566e40_0 *g_61698c;
+extern st_566e40_0 *g_engfuncs.pfnCmd_Argv;
+extern st_566e40_0 *g_engfuncs.pfnIsDedicatedServer;
 extern st_566e40_3 BotManager;
-extern char g_6253c5;
-extern int g_6253c6;
-extern int g_6253c7;
-extern int g_6253c8;
-extern int g_6253c9;
-extern int g_6253ca;
-extern int g_6253cb;
-extern int g_6253cc;
-extern int g_6253cd;
+extern char BotManager+3397;
+extern int BotManager+3398;
+extern int BotManager+3399;
+extern int BotManager+3400;
+extern int BotManager+3401;
+extern int BotManager+3402;
+extern int BotManager+3403;
+extern int BotManager+3404;
+extern int BotManager+3405;
 extern st_566e40_2 cout;
-extern st_566e40_1 *g_625f80;
+extern st_566e40_1 *cout+512;
 
 st_566e40_3 * HandleNormalBotCommands__Fv(void)
 {
@@ -145,15 +145,15 @@ st_566e40_3 * HandleNormalBotCommands__Fv(void)
     char *v21;  // [bp-0xc]
     int v22;  // [bp-0x8]
 
-    v24 = g_61698c(v4, v5, v6) != 0;
-    v22 = g_61690c(v24);
-    v25 = g_61690c(v24 + 1);
-    v21 = g_61690c(v24 + 2);
-    v20 = g_61690c(v24 + 3);
-    v19 = g_61690c(v24 + 4);
-    v26 = g_61690c(v24 + 5);
-    g_6253c5 = 1;
-    if (!sub_488af0(v22, "addbot"))
+    v24 = g_engfuncs.pfnIsDedicatedServer(v4, v5, v6) != 0;
+    v22 = g_engfuncs.pfnCmd_Argv(v24);
+    v25 = g_engfuncs.pfnCmd_Argv(v24 + 1);
+    v21 = g_engfuncs.pfnCmd_Argv(v24 + 2);
+    v20 = g_engfuncs.pfnCmd_Argv(v24 + 3);
+    v19 = g_engfuncs.pfnCmd_Argv(v24 + 4);
+    v26 = g_engfuncs.pfnCmd_Argv(v24 + 5);
+    BotManager+3397 = 1;
+    if (!strcmp@GLIBC_2.0(v22, "addbot"))
     {
         v18 = -0x1;
         v27 = v18;
@@ -170,7 +170,7 @@ st_566e40_3 * HandleNormalBotCommands__Fv(void)
         if (v25 && *v25 && *v25 != 42)
         {
             if (g_teamplay)
-                v18 = sub_48b500(v25, 0, 10, 0);
+                v18 = __strtol_internal@GLIBC_2.0(v25, 0, 10, 0);
             else
                 v18 = -0x1;
         }
@@ -178,25 +178,25 @@ st_566e40_3 * HandleNormalBotCommands__Fv(void)
         {
             v29 = v21;
             if (*v29 && *v29 != 42)
-                v17 = sub_48b500(v29, 0, 10, 0);
+                v17 = __strtol_internal@GLIBC_2.0(v29, 0, 10, 0);
         }
         if (v19)
         {
             v30 = v19;
             if (*v30 && *v30 != 42)
-                v16 = sub_48b500(v30, 0, 10, 0);
+                v16 = __strtol_internal@GLIBC_2.0(v30, 0, 10, 0);
         }
         if (v26 && *v26 && *v26 != 42)
-            v15 = sub_48b500(v26, 0, 10, 0);
-        return sub_4892c0(&BotManager.padding_0[0], v18, v17, v14, v16, v15);
+            v15 = __strtol_internal@GLIBC_2.0(v26, 0, 10, 0);
+        return CBotManager::CreateBot(&BotManager.padding_0[0], v18, v17, v14, v16, v15);
     }
     else
     {
-        if (!sub_488af0(v22, "addsbot"))
+        if (!strcmp@GLIBC_2.0(v22, "addsbot"))
         {
             if (!g_teamplay)
             {
-                g_625f80->field_14(&cout.padding_0[0], "Cannot create Super Bots in free fight!\n");
+                cout+512->field_14(&cout.padding_0[0], "Cannot create Super Bots in free fight!\n");
                 goto LABEL_569e70;
             }
             else
@@ -212,34 +212,34 @@ st_566e40_3 * HandleNormalBotCommands__Fv(void)
                         v11 = v32;
                 }
                 if (v25 && *v25 && *v25 != 42)
-                    v12 = sub_48b500(v25, 0, 10, 0);
+                    v12 = __strtol_internal@GLIBC_2.0(v25, 0, 10, 0);
                 if (v21)
                 {
                     v33 = v21;
                     if (*v33 && *v33 != 42)
-                        v31 = sub_48b500(v33, 0, 10, 0);
+                        v31 = __strtol_internal@GLIBC_2.0(v33, 0, 10, 0);
                 }
                 if (v20)
                 {
                     v34 = v20;
                     if (*v34 && *v34 != 42)
-                        v13 = sub_48b500(v34, 0, 10, 0);
+                        v13 = __strtol_internal@GLIBC_2.0(v34, 0, 10, 0);
                 }
-                return sub_48e120(&BotManager.padding_0[0], v31, v11, v13, v12);
+                return CBotManager::CreateSuperBot(&BotManager.padding_0[0], v31, v11, v13, v12);
             }
         }
-        v35 = sub_488af0(v22, "idlebots");
+        v35 = strcmp@GLIBC_2.0(v22, "idlebots");
         if (v35)
         {
-            v37 = sub_488af0(v22, "botsmove");
+            v37 = strcmp@GLIBC_2.0(v22, "botsmove");
             if (!v37)
             {
                 if (v25)
                 {
                     if (*v25)
                     {
-                        v3 = sub_48b500(v25, 0, 10, 0, "botsmove") != 0;
-                        v36 = &g_6253c8;
+                        v3 = __strtol_internal@GLIBC_2.0(v25, 0, 10, 0, "botsmove") != 0;
+                        v36 = &BotManager+3400;
                     }
                     else
                     {
@@ -253,15 +253,15 @@ st_566e40_3 * HandleNormalBotCommands__Fv(void)
             }
             else
             {
-                v38 = sub_488af0(v22, "botsusediscs");
+                v38 = strcmp@GLIBC_2.0(v22, "botsusediscs");
                 if (!v38)
                 {
                     if (v25)
                     {
                         if (*v25)
                         {
-                            v3 = sub_48b500(v25, 0, 10, 0, "botsusediscs") != 0;
-                            v36 = &g_6253c9;
+                            v3 = __strtol_internal@GLIBC_2.0(v25, 0, 10, 0, "botsusediscs") != 0;
+                            v36 = &BotManager+3401;
                         }
                         else
                         {
@@ -275,15 +275,15 @@ st_566e40_3 * HandleNormalBotCommands__Fv(void)
                 }
                 else
                 {
-                    v39 = sub_488af0(v22, "shouldbotschat");
+                    v39 = strcmp@GLIBC_2.0(v22, "shouldbotschat");
                     if (!v39)
                     {
                         if (v25)
                         {
                             if (*v25)
                             {
-                                v3 = sub_48b500(v25, 0, 10, 0, "shouldbotschat") != 0;
-                                v36 = &g_6253cd;
+                                v3 = __strtol_internal@GLIBC_2.0(v25, 0, 10, 0, "shouldbotschat") != 0;
+                                v36 = &BotManager+3405;
                             }
                             else
                             {
@@ -297,15 +297,15 @@ st_566e40_3 * HandleNormalBotCommands__Fv(void)
                     }
                     else
                     {
-                        v40 = sub_488af0(v22, "bot_balanceteams");
+                        v40 = strcmp@GLIBC_2.0(v22, "bot_balanceteams");
                         if (!v40)
                         {
                             if (v25)
                             {
                                 if (*v25)
                                 {
-                                    v3 = sub_48b500(v25, 0, 10, 0, "bot_balanceteams") != 0;
-                                    v36 = &g_6253cc;
+                                    v3 = __strtol_internal@GLIBC_2.0(v25, 0, 10, 0, "bot_balanceteams") != 0;
+                                    v36 = &BotManager+3404;
                                 }
                                 else
                                 {
@@ -319,15 +319,15 @@ st_566e40_3 * HandleNormalBotCommands__Fv(void)
                         }
                         else
                         {
-                            v41 = sub_488af0(v22, "observer");
+                            v41 = strcmp@GLIBC_2.0(v22, "observer");
                             if (!v41)
                             {
                                 if (v25)
                                 {
                                     if (*v25)
                                     {
-                                        v3 = sub_48b500(v25, 0, 10, 0, "observer") != 0;
-                                        v36 = &g_6253ca;
+                                        v3 = __strtol_internal@GLIBC_2.0(v25, 0, 10, 0, "observer") != 0;
+                                        v36 = &BotManager+3402;
                                     }
                                     else
                                     {
@@ -341,15 +341,15 @@ st_566e40_3 * HandleNormalBotCommands__Fv(void)
                             }
                             else
                             {
-                                v42 = sub_488af0(v22, "botsshoot");
+                                v42 = strcmp@GLIBC_2.0(v22, "botsshoot");
                                 if (!v42)
                                 {
                                     if (v25)
                                     {
                                         if (*v25)
                                         {
-                                            v3 = sub_48b500(v25, 0, 10, 0, "botsshoot") != 0;
-                                            v36 = &g_6253c7;
+                                            v3 = __strtol_internal@GLIBC_2.0(v25, 0, 10, 0, "botsshoot") != 0;
+                                            v36 = &BotManager+3399;
                                         }
                                         else
                                         {
@@ -363,15 +363,15 @@ st_566e40_3 * HandleNormalBotCommands__Fv(void)
                                 }
                                 else
                                 {
-                                    v43 = sub_488af0(v22, "botssearchenemies");
+                                    v43 = strcmp@GLIBC_2.0(v22, "botssearchenemies");
                                     if (!v43)
                                     {
                                         if (v25)
                                         {
                                             if (*v25)
                                             {
-                                                v3 = sub_48b500(v25, 0, 10, 0, "botssearchenemies") != 0;
-                                                v36 = &g_6253c6;
+                                                v3 = __strtol_internal@GLIBC_2.0(v25, 0, 10, 0, "botssearchenemies") != 0;
+                                                v36 = &BotManager+3398;
                                             }
                                             else
                                             {
@@ -385,26 +385,26 @@ st_566e40_3 * HandleNormalBotCommands__Fv(void)
                                     }
                                     else
                                     {
-                                        v44 = sub_488af0(v22, "bot_aggression_level");
+                                        v44 = strcmp@GLIBC_2.0(v22, "bot_aggression_level");
                                         if (!v44)
                                         {
                                             if (!v25)
                                                 return v44;
                                             if (!*v25)
                                                 return v44;
-                                            if (!sub_488af0(v25, "defensive"))
+                                            if (!strcmp@GLIBC_2.0(v25, "defensive"))
                                             {
                                                 v45 = 2;
                                             }
                                             else
                                             {
-                                                if (!sub_488af0(v25, "normal"))
+                                                if (!strcmp@GLIBC_2.0(v25, "normal"))
                                                 {
                                                     v45 = 1;
                                                 }
                                                 else
                                                 {
-                                                    if (sub_488af0(v25, "aggressive"))
+                                                    if (strcmp@GLIBC_2.0(v25, "aggressive"))
                                                     {
                                                         v46 = "Invalid aggression level\n";
                                                         goto LABEL_569c08;
@@ -415,17 +415,17 @@ st_566e40_3 * HandleNormalBotCommands__Fv(void)
                                                     }
                                                 }
                                             }
-                                            return sub_48be30(&BotManager.padding_0[0], v45);
+                                            return CBotManager::ChangeAggressionLevel(&BotManager.padding_0[0], v45);
                                         }
                                         else
                                         {
-                                            v47 = sub_488af0(v22, "botskill");
+                                            v47 = strcmp@GLIBC_2.0(v22, "botskill");
                                             if (!v47)
                                             {
                                                 if (v25)
                                                 {
                                                     if (*v25)
-                                                        return sub_48d3f0(&BotManager.padding_0[0], (short)sub_48b500(v25, 0, 10, 0));
+                                                        return CBotManager::ChangeBotSkill(&BotManager.padding_0[0], (short)__strtol_internal@GLIBC_2.0(v25, 0, 10, 0));
                                                     return v47;
                                                 }
                                                 else
@@ -433,14 +433,14 @@ st_566e40_3 * HandleNormalBotCommands__Fv(void)
                                                     return v47;
                                                 }
                                             }
-                                            v48 = sub_488af0(v22, "bot_chat_percent");
+                                            v48 = strcmp@GLIBC_2.0(v22, "bot_chat_percent");
                                             if (!v48)
                                             {
                                                 if (v25)
                                                 {
                                                     if (*v25)
                                                     {
-                                                        v3 = (short)sub_48b500(v25, 0, 10, 0, "chat_percent");
+                                                        v3 = (short)__strtol_internal@GLIBC_2.0(v25, 0, 10, 0, "chat_percent");
                                                         v2 = 25;
                                                     }
                                                     else
@@ -455,14 +455,14 @@ st_566e40_3 * HandleNormalBotCommands__Fv(void)
                                             }
                                             else
                                             {
-                                                v49 = sub_488af0(v22, "bot_taunt_percent");
+                                                v49 = strcmp@GLIBC_2.0(v22, "bot_taunt_percent");
                                                 if (!v49)
                                                 {
                                                     if (v25)
                                                     {
                                                         if (*v25)
                                                         {
-                                                            v3 = (short)sub_48b500(v25, 0, 10, 0, "taunt_percent");
+                                                            v3 = (short)__strtol_internal@GLIBC_2.0(v25, 0, 10, 0, "taunt_percent");
                                                             v2 = 27;
                                                         }
                                                         else
@@ -477,14 +477,14 @@ st_566e40_3 * HandleNormalBotCommands__Fv(void)
                                                 }
                                                 else
                                                 {
-                                                    v50 = sub_488af0(v22, "bot_whine_percent");
+                                                    v50 = strcmp@GLIBC_2.0(v22, "bot_whine_percent");
                                                     if (!v50)
                                                     {
                                                         if (v25)
                                                         {
                                                             if (*v25)
                                                             {
-                                                                v3 = (short)sub_48b500(v25, 0, 10, 0, "whine_percent");
+                                                                v3 = (short)__strtol_internal@GLIBC_2.0(v25, 0, 10, 0, "whine_percent");
                                                                 v2 = 29;
                                                             }
                                                             else
@@ -499,14 +499,14 @@ st_566e40_3 * HandleNormalBotCommands__Fv(void)
                                                     }
                                                     else
                                                     {
-                                                        v51 = sub_488af0(v22, "bot_chat_tag_percent");
+                                                        v51 = strcmp@GLIBC_2.0(v22, "bot_chat_tag_percent");
                                                         if (!v51)
                                                         {
                                                             if (v25)
                                                             {
                                                                 if (*v25)
                                                                 {
-                                                                    v3 = (short)sub_48b500(v25, 0, 10, 0, "chat_tag_percent");
+                                                                    v3 = (short)__strtol_internal@GLIBC_2.0(v25, 0, 10, 0, "chat_tag_percent");
                                                                     v2 = 31;
                                                                 }
                                                                 else
@@ -521,14 +521,14 @@ st_566e40_3 * HandleNormalBotCommands__Fv(void)
                                                         }
                                                         else
                                                         {
-                                                            v52 = sub_488af0(v22, "bot_chat_drop_percent");
+                                                            v52 = strcmp@GLIBC_2.0(v22, "bot_chat_drop_percent");
                                                             if (!v52)
                                                             {
                                                                 if (v25)
                                                                 {
                                                                     if (*v25)
                                                                     {
-                                                                        v3 = (short)sub_48b500(v25, 0, 10, 0, "chat_drop_percent");
+                                                                        v3 = (short)__strtol_internal@GLIBC_2.0(v25, 0, 10, 0, "chat_drop_percent");
                                                                         v2 = 33;
                                                                     }
                                                                     else
@@ -543,14 +543,14 @@ st_566e40_3 * HandleNormalBotCommands__Fv(void)
                                                             }
                                                             else
                                                             {
-                                                                v53 = sub_488af0(v22, "bot_chat_swap_percent");
+                                                                v53 = strcmp@GLIBC_2.0(v22, "bot_chat_swap_percent");
                                                                 if (!v53)
                                                                 {
                                                                     if (v25)
                                                                     {
                                                                         if (*v25)
                                                                         {
-                                                                            v3 = (short)sub_48b500(v25, 0, 10, 0, "chat_swap_percent");
+                                                                            v3 = (short)__strtol_internal@GLIBC_2.0(v25, 0, 10, 0, "chat_swap_percent");
                                                                             v2 = 35;
                                                                         }
                                                                         else
@@ -565,14 +565,14 @@ st_566e40_3 * HandleNormalBotCommands__Fv(void)
                                                                 }
                                                                 else
                                                                 {
-                                                                    v54 = sub_488af0(v22, "bot_chat_lower_percent");
+                                                                    v54 = strcmp@GLIBC_2.0(v22, "bot_chat_lower_percent");
                                                                     if (!v54)
                                                                     {
                                                                         if (v25)
                                                                         {
                                                                             if (*v25)
                                                                             {
-                                                                                v3 = (short)sub_48b500(v25, 0, 10, 0, "chat_lower_percent");
+                                                                                v3 = (short)__strtol_internal@GLIBC_2.0(v25, 0, 10, 0, "chat_lower_percent");
                                                                                 v2 = 37;
                                                                             }
                                                                             else
@@ -587,14 +587,14 @@ st_566e40_3 * HandleNormalBotCommands__Fv(void)
                                                                     }
                                                                     else
                                                                     {
-                                                                        v55 = sub_488af0(v22, "bot_melee_percent");
+                                                                        v55 = strcmp@GLIBC_2.0(v22, "bot_melee_percent");
                                                                         if (!v55)
                                                                         {
                                                                             if (v25)
                                                                             {
                                                                                 if (*v25)
                                                                                 {
-                                                                                    v3 = (short)sub_48b500(v25, 0, 10, 0, "melee_percent");
+                                                                                    v3 = (short)__strtol_internal@GLIBC_2.0(v25, 0, 10, 0, "melee_percent");
                                                                                     v2 = 1;
                                                                                 }
                                                                                 else
@@ -609,14 +609,14 @@ st_566e40_3 * HandleNormalBotCommands__Fv(void)
                                                                         }
                                                                         else
                                                                         {
-                                                                            v56 = sub_488af0(v22, "bot_meleecombo_percent");
+                                                                            v56 = strcmp@GLIBC_2.0(v22, "bot_meleecombo_percent");
                                                                             if (!v56)
                                                                             {
                                                                                 if (v25)
                                                                                 {
                                                                                     if (*v25)
                                                                                     {
-                                                                                        v3 = (short)sub_48b500(v25, 0, 10, 0, "meleecombo_percent");
+                                                                                        v3 = (short)__strtol_internal@GLIBC_2.0(v25, 0, 10, 0, "meleecombo_percent");
                                                                                         v2 = 21;
                                                                                     }
                                                                                     else
@@ -631,14 +631,14 @@ st_566e40_3 * HandleNormalBotCommands__Fv(void)
                                                                             }
                                                                             else
                                                                             {
-                                                                                v57 = sub_488af0(v22, "bot_meleekick_percent");
+                                                                                v57 = strcmp@GLIBC_2.0(v22, "bot_meleekick_percent");
                                                                                 if (!v57)
                                                                                 {
                                                                                     if (v25)
                                                                                     {
                                                                                         if (*v25)
                                                                                         {
-                                                                                            v3 = (short)sub_48b500(v25, 0, 10, 0, "meleekick_percent");
+                                                                                            v3 = (short)__strtol_internal@GLIBC_2.0(v25, 0, 10, 0, "meleekick_percent");
                                                                                             v2 = 23;
                                                                                         }
                                                                                         else
@@ -653,14 +653,14 @@ st_566e40_3 * HandleNormalBotCommands__Fv(void)
                                                                                 }
                                                                                 else
                                                                                 {
-                                                                                    v58 = sub_488af0(v22, "bot_teleport_percent");
+                                                                                    v58 = strcmp@GLIBC_2.0(v22, "bot_teleport_percent");
                                                                                     if (!v58)
                                                                                     {
                                                                                         if (v25)
                                                                                         {
                                                                                             if (*v25)
                                                                                             {
-                                                                                                v3 = (short)sub_48b500(v25, 0, 10, 0, "teleport_percent");
+                                                                                                v3 = (short)__strtol_internal@GLIBC_2.0(v25, 0, 10, 0, "teleport_percent");
                                                                                                 v2 = 39;
                                                                                             }
                                                                                             else
@@ -675,14 +675,14 @@ st_566e40_3 * HandleNormalBotCommands__Fv(void)
                                                                                     }
                                                                                     else
                                                                                     {
-                                                                                        v59 = sub_488af0(v22, "bot_swoop_percent");
+                                                                                        v59 = strcmp@GLIBC_2.0(v22, "bot_swoop_percent");
                                                                                         if (!v59)
                                                                                         {
                                                                                             if (v25)
                                                                                             {
                                                                                                 if (*v25)
                                                                                                 {
-                                                                                                    v3 = (short)sub_48b500(v25, 0, 10, 0, "swoop_percent");
+                                                                                                    v3 = (short)__strtol_internal@GLIBC_2.0(v25, 0, 10, 0, "swoop_percent");
                                                                                                     v2 = 41;
                                                                                                 }
                                                                                                 else
@@ -697,14 +697,14 @@ st_566e40_3 * HandleNormalBotCommands__Fv(void)
                                                                                         }
                                                                                         else
                                                                                         {
-                                                                                            v60 = sub_488af0(v22, "bot_block_percent");
+                                                                                            v60 = strcmp@GLIBC_2.0(v22, "bot_block_percent");
                                                                                             if (!v60)
                                                                                             {
                                                                                                 if (v25)
                                                                                                 {
                                                                                                     if (*v25)
                                                                                                     {
-                                                                                                        v3 = (short)sub_48b500(v25, 0, 10, 0, "block_percent");
+                                                                                                        v3 = (short)__strtol_internal@GLIBC_2.0(v25, 0, 10, 0, "block_percent");
                                                                                                         v2 = 0x33;
                                                                                                     }
                                                                                                     else
@@ -719,14 +719,14 @@ st_566e40_3 * HandleNormalBotCommands__Fv(void)
                                                                                             }
                                                                                             else
                                                                                             {
-                                                                                                v61 = sub_488af0(v22, "bot_fly_percent");
+                                                                                                v61 = strcmp@GLIBC_2.0(v22, "bot_fly_percent");
                                                                                                 if (!v61)
                                                                                                 {
                                                                                                     if (v25)
                                                                                                     {
                                                                                                         if (*v25)
                                                                                                         {
-                                                                                                            v3 = (short)sub_48b500(v25, 0, 10, 0, "fly_percent");
+                                                                                                            v3 = (short)__strtol_internal@GLIBC_2.0(v25, 0, 10, 0, "fly_percent");
                                                                                                             v2 = 45;
                                                                                                         }
                                                                                                         else
@@ -741,13 +741,13 @@ st_566e40_3 * HandleNormalBotCommands__Fv(void)
                                                                                                 }
                                                                                                 else
                                                                                                 {
-                                                                                                    v62 = sub_488af0(v22, "sbot_laser_percent");
+                                                                                                    v62 = strcmp@GLIBC_2.0(v22, "sbot_laser_percent");
                                                                                                     if (!v62)
                                                                                                     {
                                                                                                         if (v25)
                                                                                                         {
                                                                                                             if (*v25)
-                                                                                                                return sub_48df00(&BotManager.padding_0[0], (short)sub_48b500(v25, 0, 10, 0));
+                                                                                                                return CBotManager::ChangeSBotLaserPercent(&BotManager.padding_0[0], (short)__strtol_internal@GLIBC_2.0(v25, 0, 10, 0));
                                                                                                             return v62;
                                                                                                         }
                                                                                                         else
@@ -755,45 +755,45 @@ st_566e40_3 * HandleNormalBotCommands__Fv(void)
                                                                                                             return v62;
                                                                                                         }
                                                                                                     }
-                                                                                                    if (!sub_488af0(v22, "restorebotpersonalities"))
-                                                                                                        return sub_48ae40(&BotManager.padding_0[0]);
-                                                                                                    if (!sub_488af0(v22, "bot_fill"))
+                                                                                                    if (!strcmp@GLIBC_2.0(v22, "restorebotpersonalities"))
+                                                                                                        return CBotManager::CreateBotPersonalities(&BotManager.padding_0[0]);
+                                                                                                    if (!strcmp@GLIBC_2.0(v22, "bot_fill"))
                                                                                                     {
                                                                                                         if (v25 && *v25)
                                                                                                         {
-                                                                                                            if (!sub_488af0(v25, "full"))
+                                                                                                            if (!strcmp@GLIBC_2.0(v25, "full"))
                                                                                                             {
-                                                                                                                sub_48d520(&BotManager.padding_0[0]);
+                                                                                                                CBotManager::FillServer(&BotManager.padding_0[0]);
                                                                                                             }
                                                                                                             else
                                                                                                             {
                                                                                                                 if (g_teamplay)
                                                                                                                 {
-                                                                                                                    if (!sub_488af0(v25, "half_good"))
+                                                                                                                    if (!strcmp@GLIBC_2.0(v25, "half_good"))
                                                                                                                     {
                                                                                                                         v2 = 1;
                                                                                                                         goto LABEL_56962c;
                                                                                                                     }
                                                                                                                     else
                                                                                                                     {
-                                                                                                                        if (!sub_488af0(v25, "half_evil"))
+                                                                                                                        if (!strcmp@GLIBC_2.0(v25, "half_evil"))
                                                                                                                         {
                                                                                                                             v2 = 2;
 LABEL_56962c:
-                                                                                                                            return sub_488ee0(&BotManager.padding_0[0]);
+                                                                                                                            return CBotManager::FillAHalfTeam(&BotManager.padding_0[0]);
                                                                                                                         }
-                                                                                                                        if (!sub_488af0(v25, "full_good"))
+                                                                                                                        if (!strcmp@GLIBC_2.0(v25, "full_good"))
                                                                                                                         {
                                                                                                                             v2 = 1;
                                                                                                                             goto LABEL_56967c;
                                                                                                                         }
                                                                                                                         else
                                                                                                                         {
-                                                                                                                            if (!sub_488af0(v25, "full_evil"))
+                                                                                                                            if (!strcmp@GLIBC_2.0(v25, "full_evil"))
                                                                                                                             {
                                                                                                                                 v2 = 2;
 LABEL_56967c:
-                                                                                                                                return sub_4889a0(&BotManager.padding_0[0]);
+                                                                                                                                return CBotManager::FillATeam(&BotManager.padding_0[0]);
                                                                                                                             }
                                                                                                                         }
                                                                                                                     }
@@ -801,7 +801,7 @@ LABEL_56967c:
                                                                                                             }
                                                                                                         }
                                                                                                         v10 = &cout.padding_0[0];
-                                                                                                        g_625f80->field_14(v10, "Fill arguments:\n\n");
+                                                                                                        cout+512->field_14(v10, "Fill arguments:\n\n");
                                                                                                         v10->field_200->field_14(v10, "\"full\" : fills the whole server with bots\n\n");
                                                                                                         v10->field_200->field_14(v10, "Teamplay only arguments:\n\n");
                                                                                                         v10->field_200->field_14(v10, "\"half_good\" : fills half team good with bots\n");
@@ -811,13 +811,13 @@ LABEL_56967c:
                                                                                                         v63 = v10;
                                                                                                         goto LABEL_569c0b;
                                                                                                     }
-                                                                                                    v64 = sub_488af0(v22, "min_bots");
+                                                                                                    v64 = strcmp@GLIBC_2.0(v22, "min_bots");
                                                                                                     if (!v64)
                                                                                                     {
                                                                                                         if (v25)
                                                                                                         {
                                                                                                             if (*v25)
-                                                                                                                return sub_48dfa0(&BotManager.padding_0[0], (short)sub_48b500(v25, 0, 10, 0));
+                                                                                                                return CBotManager::SetMinBots(&BotManager.padding_0[0], (short)__strtol_internal@GLIBC_2.0(v25, 0, 10, 0));
                                                                                                             return v64;
                                                                                                         }
                                                                                                         else
@@ -825,13 +825,13 @@ LABEL_56967c:
                                                                                                             return v64;
                                                                                                         }
                                                                                                     }
-                                                                                                    v65 = sub_488af0(v22, "max_bots");
+                                                                                                    v65 = strcmp@GLIBC_2.0(v22, "max_bots");
                                                                                                     if (!v65)
                                                                                                     {
                                                                                                         if (v25)
                                                                                                         {
                                                                                                             if (*v25)
-                                                                                                                return sub_48a3f0(&BotManager.padding_0[0], (short)sub_48b500(v25, 0, 10, 0));
+                                                                                                                return CBotManager::SetMaxBots(&BotManager.padding_0[0], (short)__strtol_internal@GLIBC_2.0(v25, 0, 10, 0));
                                                                                                             return v65;
                                                                                                         }
                                                                                                         else
@@ -839,17 +839,17 @@ LABEL_56967c:
                                                                                                             return v65;
                                                                                                         }
                                                                                                     }
-                                                                                                    v66 = sub_488af0(v22, "killbot");
+                                                                                                    v66 = strcmp@GLIBC_2.0(v22, "killbot");
                                                                                                     if (!v66)
                                                                                                     {
                                                                                                         if (!v25)
                                                                                                             return v66;
                                                                                                         if (*v25)
                                                                                                         {
-                                                                                                            v67 = sub_48a5b0(v25);
+                                                                                                            v67 = FindPlayerByName(v25);
                                                                                                             *(unsigned short *)&v1 = 1;
                                                                                                             *(unsigned short *)&v0 = 1;
-                                                                                                            if ((char)sub_489a70(v67, v0, v1))
+                                                                                                            if ((char)UTIL_IsValidPlayer(v67, v0, v1))
                                                                                                             {
                                                                                                                 v9 = 0;
                                                                                                                 v68 = v67->field_60->field_a4(v67);
@@ -860,7 +860,7 @@ LABEL_56967c:
                                                                                                                 }
                                                                                                                 if (!v9)
                                                                                                                     return v68;
-                                                                                                                return sub_48d240(v67->field_0->field_208);
+                                                                                                                return ClientKill(v67->field_0->field_208);
                                                                                                             }
                                                                                                         }
                                                                                                         else
@@ -869,7 +869,7 @@ LABEL_56967c:
                                                                                                         }
                                                                                                         goto LABEL_569bfc;
                                                                                                     }
-                                                                                                    v69 = sub_488af0(v22, "botteam");
+                                                                                                    v69 = strcmp@GLIBC_2.0(v22, "botteam");
                                                                                                     if (!v69)
                                                                                                     {
                                                                                                         if (!v25)
@@ -886,19 +886,19 @@ LABEL_56967c:
                                                                                                         }
                                                                                                         else
                                                                                                         {
-                                                                                                            v70 = sub_48a5b0(v25);
+                                                                                                            v70 = FindPlayerByName(v25);
                                                                                                             *(unsigned short *)&v1 = 1;
                                                                                                             *(unsigned short *)&v0 = 1;
-                                                                                                            if (!(char)sub_489a70(v70, v0, v1))
+                                                                                                            if (!(char)UTIL_IsValidPlayer(v70, v0, v1))
                                                                                                                 goto LABEL_569bfc;
-                                                                                                            if (!sub_488af0(v21, "good"))
+                                                                                                            if (!strcmp@GLIBC_2.0(v21, "good"))
                                                                                                             {
                                                                                                                 v71 = 1;
                                                                                                                 goto LABEL_569b35;
                                                                                                             }
                                                                                                             else
                                                                                                             {
-                                                                                                                if (sub_488af0(v21, "evil"))
+                                                                                                                if (strcmp@GLIBC_2.0(v21, "evil"))
                                                                                                                 {
                                                                                                                     v46 = "Error, invalid team\n";
                                                                                                                 }
@@ -923,7 +923,7 @@ LABEL_569b35:
                                                                                                     }
                                                                                                     else
                                                                                                     {
-                                                                                                        v73 = sub_488af0(v22, "botclass");
+                                                                                                        v73 = strcmp@GLIBC_2.0(v22, "botclass");
                                                                                                         if (!v73)
                                                                                                         {
                                                                                                             if (v25)
@@ -934,10 +934,10 @@ LABEL_569b35:
                                                                                                                     {
                                                                                                                         if (*v21)
                                                                                                                         {
-                                                                                                                            v74 = sub_48a5b0(v25);
+                                                                                                                            v74 = FindPlayerByName(v25);
                                                                                                                             *(unsigned short *)&v1 = 1;
                                                                                                                             *(unsigned short *)&v0 = 1;
-                                                                                                                            if ((char)sub_489a70(v74, v0, v1))
+                                                                                                                            if ((char)UTIL_IsValidPlayer(v74, v0, v1))
                                                                                                                             {
                                                                                                                                 v7 = 0;
                                                                                                                                 v75 = v74->field_60->field_a4(v74);
@@ -948,7 +948,7 @@ LABEL_569b35:
                                                                                                                                 }
                                                                                                                                 if (!v7)
                                                                                                                                     return v75;
-                                                                                                                                return sub_48af30(v74, v21);
+                                                                                                                                return CBasePlayer::ChangeClass(v74, v21);
                                                                                                                             }
                                                                                                                         }
                                                                                                                         else
@@ -974,38 +974,38 @@ LABEL_569b35:
                                                                                                         else
                                                                                                         {
                                                                                                             v2 = "botkicklast";
-                                                                                                            if (!sub_488af0(v22, v2))
+                                                                                                            if (!strcmp@GLIBC_2.0(v22, v2))
                                                                                                             {
                                                                                                                 *(unsigned short *)&v2 = 1;
-                                                                                                                return sub_48b870(&BotManager.padding_0[0], v2);
+                                                                                                                return CBotManager::KickLastBot(&BotManager.padding_0[0], v2);
                                                                                                             }
-                                                                                                            if (!sub_488af0(v22, "botkickall"))
+                                                                                                            if (!strcmp@GLIBC_2.0(v22, "botkickall"))
                                                                                                             {
                                                                                                                 v2 = 0xffffffff;
                                                                                                             }
                                                                                                             else
                                                                                                             {
-                                                                                                                if (!sub_488af0(v22, "botkickallgood"))
+                                                                                                                if (!strcmp@GLIBC_2.0(v22, "botkickallgood"))
                                                                                                                 {
                                                                                                                     v2 = 1;
                                                                                                                 }
                                                                                                                 else
                                                                                                                 {
-                                                                                                                    if (!sub_488af0(v22, "botkickallevil"))
+                                                                                                                    if (!strcmp@GLIBC_2.0(v22, "botkickallevil"))
                                                                                                                     {
                                                                                                                         v2 = 2;
                                                                                                                     }
                                                                                                                     else
                                                                                                                     {
-                                                                                                                        if (!sub_488af0(v22, "bot_menu"))
-                                                                                                                            return sub_489ce0(-0x1);
-                                                                                                                        v76 = sub_488af0(v22, "menuselect");
+                                                                                                                        if (!strcmp@GLIBC_2.0(v22, "bot_menu"))
+                                                                                                                            return NMenu::ExecuteMenuCommand(-0x1);
+                                                                                                                        v76 = strcmp@GLIBC_2.0(v22, "menuselect");
                                                                                                                         if (!v76)
                                                                                                                         {
                                                                                                                             if (v25)
                                                                                                                             {
                                                                                                                                 if (*v25)
-                                                                                                                                    return sub_489ce0(sub_48b500(v25, 0, 10, 0));
+                                                                                                                                    return NMenu::ExecuteMenuCommand(__strtol_internal@GLIBC_2.0(v25, 0, 10, 0));
                                                                                                                                 return v76;
                                                                                                                             }
                                                                                                                             else
@@ -1014,12 +1014,12 @@ LABEL_569b35:
                                                                                                                             }
                                                                                                                         }
 LABEL_569e70:
-                                                                                                                        g_6253c5 = 0;
+                                                                                                                        BotManager+3397 = 0;
                                                                                                                         return &BotManager.padding_0[0];
                                                                                                                     }
                                                                                                                 }
                                                                                                             }
-                                                                                                            return sub_488aa0(&BotManager.padding_0[0]);
+                                                                                                            return CBotManager::KickBots(&BotManager.padding_0[0]);
                                                                                                         }
 LABEL_569bfc:
                                                                                                         v46 = "Error, invalid bot\n";
@@ -1042,7 +1042,7 @@ LABEL_569c0b:
                                                     }
                                                 }
                                             }
-                                            return sub_489f90(&BotManager.padding_0[0]);
+                                            return CBotManager::ChangePersoPercentSetting(&BotManager.padding_0[0]);
                                         }
                                     }
                                 }
@@ -1058,14 +1058,14 @@ LABEL_569c0b:
         }
         else if (*v25)
         {
-            v3 = sub_48b500(v25, 0, 10, 0, "idlebots") != 0;
-            v36 = &g_6253cb;
+            v3 = __strtol_internal@GLIBC_2.0(v25, 0, 10, 0, "idlebots") != 0;
+            v36 = &BotManager+3403;
         }
         else
         {
             return v35;
         }
-        return sub_48c390(&BotManager.padding_0[0], v36);
+        return CBotManager::ChangeBotBoolSetting(&BotManager.padding_0[0], v36);
     }
 }
 

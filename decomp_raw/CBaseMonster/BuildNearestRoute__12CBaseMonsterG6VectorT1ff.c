@@ -28,13 +28,13 @@ typedef struct st_4d7ee0_3 {
     unsigned int field_0;
 } st_4d7ee0_3;
 
-extern st_4d7ee0_3 *g_6168b4;
+extern st_4d7ee0_3 *g_engfuncs.pfnAlertMessage;
 extern st_4d7ee0_2 *gpGlobals;
 extern unsigned int WorldGraph;
-extern unsigned int g_617164;
-extern unsigned int g_61716c;
-extern unsigned int g_617178;
-extern unsigned int g_619228;
+extern unsigned int WorldGraph+4;
+extern unsigned int WorldGraph+12;
+extern unsigned int WorldGraph+24;
+extern unsigned int WorldGraph+8392;
 
 unsigned int BuildNearestRoute__12CBaseMonsterG6VectorT1ff(st_4d7ee0_1 *a0, float *a1, float *a2, float a3, float a4)
 {
@@ -69,17 +69,17 @@ unsigned int BuildNearestRoute__12CBaseMonsterG6VectorT1ff(st_4d7ee0_1 *a0, floa
     v14 = 0.5 * a4;
     if (v14 < a3)
         a3 = (float)v14;
-    if (!WorldGraph || !g_617164)
+    if (!WorldGraph || !WorldGraph+4)
     {
-        g_6168b4(2, "Graph not ready for BuildNearestRoute!\n");
+        g_engfuncs.pfnAlertMessage(2, "Graph not ready for BuildNearestRoute!\n");
     }
     else
     {
-        v2 = sub_488f40(&WorldGraph, &a0->field_0->field_8, a0);
-        v3 = sub_488e90(&WorldGraph, a0);
+        v2 = CGraph::FindNearestNode(&WorldGraph, &a0->field_0->field_8, a0);
+        v3 = CGraph::HullIndex(&WorldGraph, a0);
         if (v2 == -0x1)
         {
-            g_6168b4(2, "BuildNearestRoute() - %s has no nearest node!\n", a0->field_0->field_0 + gpGlobals->field_98);
+            g_engfuncs.pfnAlertMessage(2, "BuildNearestRoute() - %s has no nearest node!\n", a0->field_0->field_0 + gpGlobals->field_98);
         }
         else
         {
@@ -91,16 +91,16 @@ unsigned int BuildNearestRoute__12CBaseMonsterG6VectorT1ff(st_4d7ee0_1 *a0, floa
             v12 = v6;
             v13 = v7;
             v4 = 0;
-            if ((int)v4 < (int)g_617178)
+            if ((int)v4 < (int)WorldGraph+24)
             {
                 v1 = &v5;
                 do
                 {
                     v0 = &WorldGraph;
-                    v16 = (v4 + g_619228) % g_617178;
-                    v17 = g_61716c + v16 * 88;
+                    v16 = (v4 + WorldGraph+8392) % WorldGraph+24;
+                    v17 = WorldGraph+12 + v16 * 88;
                     v0[2098] = v16 + 1;
-                    if (sub_4889b0(v0, v2, v16, v3, 0) != v2)
+                    if (CGraph::NextNodeInRoute(v0, v2, v16, v3, 0) != v2)
                     {
                         v18 = a1;
                         v19 = *v18 - *v17;
@@ -112,7 +112,7 @@ unsigned int BuildNearestRoute__12CBaseMonsterG6VectorT1ff(st_4d7ee0_1 *a0, floa
                         v22 = v19 * v19 + v20 * v20 + v21 * v21;
                         v23 = sqrt(v22);
                         if (isnan(v23))
-                            sub_487dc0(*(unsigned int *)&v22);
+                            sqrt(*(unsigned int *)&v22);
                         else
                             v22 = v23;
                         v8 = (float)v22;
@@ -122,8 +122,8 @@ unsigned int BuildNearestRoute__12CBaseMonsterG6VectorT1ff(st_4d7ee0_1 *a0, floa
                             v5 = *v17 + *(float *)&v24->field_174;
                             v6 = v17[1] + *(float *)&v24->field_178;
                             v7 = v17[2] + *(float *)&v24->field_17c;
-                            sub_487b80(v1, &v11, 1, v24->field_208, &v9);
-                            if (v10 == 1.0f && sub_48bfa0(a0, v17, 64, 0))
+                            UTIL_TraceLine(v1, &v11, 1, v24->field_208, &v9);
+                            if (v10 == 1.0f && CBaseMonster::BuildRoute(a0, v17, 64, 0))
                             {
                                 *(float *)&a0->field_220 = *v17;
                                 *(float *)&a0->field_224 = v17[1];
@@ -132,7 +132,7 @@ unsigned int BuildNearestRoute__12CBaseMonsterG6VectorT1ff(st_4d7ee0_1 *a0, floa
                             }
                         }
                     }
-                } while ((v4 += 1, (int)v4 < (int)g_617178));
+                } while ((v4 += 1, (int)v4 < (int)WorldGraph+24));
             }
         }
     }

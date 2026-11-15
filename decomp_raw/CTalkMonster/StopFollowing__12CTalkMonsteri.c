@@ -55,7 +55,7 @@ typedef struct st_527140_4 {
     struct st_527140_3 *field_60;
 } st_527140_4;
 
-extern st_527140_1 *g_61692c;
+extern st_527140_1 *g_engfuncs.pfnRandomFloat;
 
 unsigned int StopFollowing__12CTalkMonsteri(st_527140_2 *a0, unsigned int a1)
 {
@@ -73,10 +73,10 @@ unsigned int StopFollowing__12CTalkMonsteri(st_527140_2 *a0, unsigned int a1)
 
     v4 = 0;
     v5 = &a0->field_110;
-    v6 = sub_48d8b0(v5);
+    v6 = EHANDLE::__opi(v5);
     if (v6)
     {
-        v7 = sub_489fd0(v5);
+        v7 = EHANDLE::__rf(v5);
         v8 = v7->field_60->field_a0(v7);
         v6 = _INSERT(v8, 0, v8 != 0);
         v4 = v8 != 0;
@@ -88,7 +88,7 @@ unsigned int StopFollowing__12CTalkMonsteri(st_527140_2 *a0, unsigned int a1)
         v3 = 2.0f;
         v2 = 0x3f800000;
         strncpy(&v0, "333@", 4);
-        g_61692c(v0, 3.200000047683716f);
+        g_engfuncs.pfnRandomFloat(v0, 3.200000047683716f);
         strncpy(&v1, "333@", 4);
         a0->field_60->field_168(a0, a0->field_2c8, v1);
         v9 = a0->field_114;
@@ -96,11 +96,11 @@ unsigned int StopFollowing__12CTalkMonsteri(st_527140_2 *a0, unsigned int a1)
         a0->field_314 = v9;
     }
     if (a0->field_214 == 1)
-        sub_48bce0(a0);
-    sub_48d960(&a0->field_110, 0);
+        CBaseMonster::RouteClear(a0);
+    EHANDLE::__as(&a0->field_110, 0);
     if (a1)
-        sub_489f60(a0);
-    v10 = sub_48d8b0(&a0->field_108);
+        CBaseMonster::ClearSchedule(a0);
+    v10 = EHANDLE::__opi(&a0->field_108);
     if (!v10)
         return v10;
     a0->field_184 = 2;

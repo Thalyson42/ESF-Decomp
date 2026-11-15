@@ -34,10 +34,10 @@ typedef struct st_491e70_3 {
 extern char SpinUp__13CFuncRotating;
 extern char _GLOBAL_OFFSET_TABLE_;
 extern unsigned int g_vecZero;
-extern unsigned int g_616790;
-extern unsigned int g_616794;
-extern st_491e70_3 *g_6167c4;
-extern st_491e70_3 *g_6168cc;
+extern unsigned int g_vecZero+4;
+extern unsigned int g_vecZero+8;
+extern st_491e70_3 *g_engfuncs.pfnPrecacheSound;
+extern st_491e70_3 *g_engfuncs.pfnAllocString;
 extern st_491e70_2 *gpGlobals;
 
 unsigned int * Precache__13CFuncRotating(st_491e70_1 *a0)
@@ -77,9 +77,9 @@ unsigned int * Precache__13CFuncRotating(st_491e70_1 *a0)
         } while (v4 && (v4 -= 1, v5 = v6 + 1, *v6));
         if (v4 == 0xfffffffe)
             goto LABEL_491ee0;
-        g_6167c4(v3);
+        g_engfuncs.pfnPrecacheSound(v3);
         v0 = v2;
-        v7 = g_6168cc;
+        v7 = g_engfuncs.pfnAllocString;
     }
     else
     {
@@ -98,15 +98,15 @@ LABEL_491ee0:
             } while (v8 && (v8 -= 1, v9 = v10 + 1, *v10));
             if (v8 == 0xfffffffe)
                 goto LABEL_491fc5;
-            g_6167c4(v2);
+            g_engfuncs.pfnPrecacheSound(v2);
             v0 = v2;
-            v7 = g_6168cc;
+            v7 = g_engfuncs.pfnAllocString;
         }
         else
         {
 LABEL_491fc5:
             v1 = "common/null.wav";
-            v7 = g_6168cc;
+            v7 = g_engfuncs.pfnAllocString;
         }
     }
     v11 = v7(v2);
@@ -118,12 +118,12 @@ LABEL_491fc5:
     if (*(float *)&g_vecZero == v12->field_5c)
     {
         v16 = _INSERT(v15, 0, 0);
-        if (*(float *)&g_616790 == *(float *)&v13[1])
+        if (*(float *)&g_vecZero+4 == *(float *)&v13[1])
         {
             v17 = *(float *)&v13[2];
-            v18 = _INSERT(v16, 1, (isunordered(*(float *)&g_616794, v17) ? 69 : *(float *)&g_616794 == v17 ? 64 : *(float *)&g_616794 < v17));
-            v19 = _INSERT(v18, 0, *(float *)&g_616794 == v17);
-            v14 = *(float *)&g_616794 == v17;
+            v18 = _INSERT(v16, 1, (isunordered(*(float *)&g_vecZero+8, v17) ? 69 : *(float *)&g_vecZero+8 == v17 ? 64 : *(float *)&g_vecZero+8 < v17));
+            v19 = _INSERT(v18, 0, *(float *)&g_vecZero+8 == v17);
+            v14 = *(float *)&g_vecZero+8 == v17;
         }
     }
     if (!v14)

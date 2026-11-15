@@ -19,8 +19,8 @@ st_56d590_2 * __ls__11CBaseOutputd(st_56d590_2 *a0, int a1, int a2)
     char v1;  // [bp-0x23]
 
     v0 = 0;
-    sub_48d0e0(&v1, 0, 24);
-    sub_48d990(&v0, "%f", a1, a2);
+    memset@GLIBC_2.0(&v1, 0, 24);
+    sprintf@GLIBC_2.0(&v0, "%f", a1, a2);
     a0->field_200->field_14(a0, &v0);
     return a0;
 }

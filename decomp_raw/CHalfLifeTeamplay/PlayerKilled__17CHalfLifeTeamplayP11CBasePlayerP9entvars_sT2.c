@@ -11,8 +11,8 @@ int PlayerKilled__17CHalfLifeTeamplayP11CBasePlayerP9entvars_sT2(st_528730_0 *a0
 
     if (a0->field_5c)
         return v1;
-    sub_488a60(a0, a1, a2, a3);
+    CHalfLifeMultiplay::PlayerKilled(a0, a1, a2, a3);
     *(unsigned short *)&v0 = 0;
-    return sub_48c940(a0, v0);
+    return CHalfLifeTeamplay::RecountTeams(a0, v0);
 }
 

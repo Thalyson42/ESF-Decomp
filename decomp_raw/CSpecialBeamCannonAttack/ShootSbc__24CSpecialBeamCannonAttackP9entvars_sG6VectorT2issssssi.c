@@ -74,14 +74,14 @@ typedef struct st_51f520_8 {
 extern char ExplodeTouch__16CExplodingAttackP11CBaseEntity;
 extern char NormalThink__12CMagicAttack;
 extern unsigned int gmsgSBCTrail;
-extern st_51f520_5 *g_6167c8;
-extern st_51f520_5 *g_616878;
-extern st_51f520_5 *g_61687c;
-extern st_51f520_5 *g_616880;
-extern st_51f520_5 *g_616888;
-extern st_51f520_5 *g_61688c;
-extern st_51f520_5 *g_6168d4;
-extern st_51f520_5 *g_6168dc;
+extern st_51f520_5 *g_engfuncs.pfnSetModel;
+extern st_51f520_5 *g_engfuncs.pfnMessageBegin;
+extern st_51f520_5 *g_engfuncs.pfnMessageEnd;
+extern st_51f520_5 *g_engfuncs.pfnWriteByte;
+extern st_51f520_5 *g_engfuncs.pfnWriteShort;
+extern st_51f520_5 *g_engfuncs.pfnWriteLong;
+extern st_51f520_5 *g_engfuncs.pfnPEntityOfEntOffset;
+extern st_51f520_5 *g_engfuncs.pfnIndexOfEdict;
 extern st_51f520_8 *gpGlobals;
 
 short ShootSbc__24CSpecialBeamCannonAttackP9entvars_sG6VectorT2issssssi(st_51f520_7 *a0, float *a1, float *a2, int a3, short a4, short a5, short a6, short a7, short a8, short a9, unsigned int a10)
@@ -127,12 +127,12 @@ short ShootSbc__24CSpecialBeamCannonAttackP9entvars_sG6VectorT2issssssi(st_51f52
     float v19;  // [bp-0x14]
     float v20;  // [bp-0x10]
 
-    v1 = sub_48bc30(0);
+    v1 = GetClassPtr__H1Z24CSpecialBeamCannonAttack_PX01_PX01(0);
     v1->field_60->field_8(v1);
     v21 = v1;
     v21->field_0->field_108 = 5;
     v21->field_0->field_10c = 1;
-    g_6167c8(v21->field_0->field_208, "sprites/null.spr");
+    g_engfuncs.pfnSetModel(v21->field_0->field_208, "sprites/null.spr");
     v22 = v1;
     v22->field_2d0 = a10;
     v22->field_2d4 = 2;
@@ -143,7 +143,7 @@ short ShootSbc__24CSpecialBeamCannonAttackP9entvars_sG6VectorT2issssssi(st_51f52
     v23 = *a2 * *a2 + a2[1] * a2[1] + a2[2] * a2[2];
     v24 = sqrt(v23);
     if (isnan(v24))
-        sub_487dc0(*(unsigned int *)&v23);
+        sqrt(*(unsigned int *)&v23);
     else
         v23 = v24;
     v8 = (float)v23;
@@ -168,7 +168,7 @@ short ShootSbc__24CSpecialBeamCannonAttackP9entvars_sG6VectorT2issssssi(st_51f52
     v14 = (float)(v26 + *a1);
     v16 = (float)(v27 + a1[1]);
     v17 = a1[2] + v20;
-    sub_48db50(v1->field_0, &v14);
+    UTIL_SetOrigin(v1->field_0, &v14);
     v28 = v1->field_0;
     *(float *)&v28->field_20 = *a2;
     *(float *)&v28->field_24 = a2[1];
@@ -176,13 +176,13 @@ short ShootSbc__24CSpecialBeamCannonAttackP9entvars_sG6VectorT2issssssi(st_51f52
     v29 = *a2 * *a2 + a2[1] * a2[1] + a2[2] * a2[2];
     v30 = sqrt(v29);
     if (isnan(v30))
-        sub_487dc0(*(unsigned int *)&v29);
+        sqrt(*(unsigned int *)&v29);
     else
         v29 = v30;
     v31 = v1;
     v31->field_2a8 = (float)v29;
     v0 = v31->field_0;
-    sub_488860(&v2, &v31->field_0->field_20);
+    UTIL_VecToAngles(&v2, &v31->field_0->field_20);
     v0->field_50 = v2;
     v0->field_54 = v4;
     v0->field_58 = v6;
@@ -195,27 +195,27 @@ short ShootSbc__24CSpecialBeamCannonAttackP9entvars_sG6VectorT2issssssi(st_51f52
     v8 = -32.0f;
     v9 = -32.0f;
     v10 = -32.0f;
-    sub_48a0d0(v1->field_0, &v8, &v3);
-    g_616878(2, gmsgSBCTrail, 0, 0);
+    UTIL_SetSize(v1->field_0, &v8, &v3);
+    g_engfuncs.pfnMessageBegin(2, gmsgSBCTrail, 0, 0);
     v33 = a0->field_208;
-    if (a0->field_208 || (v33 = g_6168d4(0), v33))
+    if (a0->field_208 || (v33 = g_engfuncs.pfnPEntityOfEntOffset(0), v33))
         v34 = v33->field_7c;
     else
         v34 = NULL;
-    v35 = g_6168dc(*v34->field_208);
-    g_616880(v35);
-    v36 = g_6168dc(v1->field_0->field_208);
-    g_61688c(v36);
-    g_616880(1);
-    g_616888(a5);
-    g_616888(a6);
-    g_616888(a4);
-    g_616880(2);
-    g_616888(a8);
-    g_616888(a9);
-    g_616888(a7);
-    g_616880(1);
-    v38 = _INSERT(g_61687c(), 0, 0) | 0xffff0000;
+    v35 = g_engfuncs.pfnIndexOfEdict(*v34->field_208);
+    g_engfuncs.pfnWriteByte(v35);
+    v36 = g_engfuncs.pfnIndexOfEdict(v1->field_0->field_208);
+    g_engfuncs.pfnWriteLong(v36);
+    g_engfuncs.pfnWriteByte(1);
+    g_engfuncs.pfnWriteShort(a5);
+    g_engfuncs.pfnWriteShort(a6);
+    g_engfuncs.pfnWriteShort(a4);
+    g_engfuncs.pfnWriteByte(2);
+    g_engfuncs.pfnWriteShort(a8);
+    g_engfuncs.pfnWriteShort(a9);
+    g_engfuncs.pfnWriteShort(a7);
+    g_engfuncs.pfnWriteByte(1);
+    v38 = _INSERT(g_engfuncs.pfnMessageEnd(), 0, 0) | 0xffff0000;
     v39 = v1;
     v39->field_14 = v38;
     v39->field_18 = &ExplodeTouch__16CExplodingAttackP11CBaseEntity;

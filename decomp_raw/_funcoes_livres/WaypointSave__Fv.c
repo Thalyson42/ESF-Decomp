@@ -52,20 +52,20 @@ int WaypointSave__Fv(void)
     v6 = 0;
     v7 = num_waypoints;
     v1 = &v4[0];
-    sub_48d0e0(&v8, 0, 32);
-    sub_48d360(&v8, gpGlobals->field_c + gpGlobals->field_98, 31);
+    memset@GLIBC_2.0(&v8, 0, 32);
+    strncpy@GLIBC_2.0(&v8, gpGlobals->field_c + gpGlobals->field_98, 31);
     v9 = 0;
-    sub_48e110(&v10, gpGlobals->field_c + gpGlobals->field_98);
-    sub_48c150(&v10, ".ESF_wpt");
-    sub_489050(&v11, "waypoints", &v10);
-    v0 = sub_48d440(&v11, "wb");
-    sub_48d9f0(v1, 52, 1, v0);
+    strcpy@GLIBC_2.0(&v10, gpGlobals->field_c + gpGlobals->field_98);
+    strcat@GLIBC_2.0(&v10, ".ESF_wpt");
+    BuildBotFileName(&v11, "waypoints", &v10);
+    v0 = fopen@GLIBC_2.1(&v11, "wb");
+    fwrite@GLIBC_2.0(v1, 52, 1, v0);
     iter = 0;
     if (iter < num_waypoints)
     {
         do
         {
-            sub_48d9f0(&(&waypoints)[16 * iter], 16, 1, v0);
+            fwrite@GLIBC_2.0(&(&waypoints)[16 * iter], 16, 1, v0);
             iter += 1;
         } while (iter < num_waypoints);
     }
@@ -90,7 +90,7 @@ int WaypointSave__Fv(void)
             } while (v15->field_8);
             v3 = v14;
         }
-        sub_48d9f0(&v3, 2, 1, v0);
+        fwrite@GLIBC_2.0(&v3, 2, 1, v0);
         v17 = (&paths.field_0)[iter];
         if ((&paths.field_0)[iter])
         {
@@ -102,7 +102,7 @@ int WaypointSave__Fv(void)
                 {
                     v20 = v19 * 2;
                     if (*(short *)(v20 + v18) != 0xffff)
-                        sub_48d9f0(v20 + v18, 2, 1, v0);
+                        fwrite@GLIBC_2.0(v20 + v18, 2, 1, v0);
                 } while ((v19 += 1, v19 <= 3));
                 v17 = v18->field_8;
                 if (!v18->field_8)
@@ -115,6 +115,6 @@ int WaypointSave__Fv(void)
             iter += 1;
         }
     }
-    return sub_48c560(v0);
+    return fclose@GLIBC_2.1(v0);
 }
 

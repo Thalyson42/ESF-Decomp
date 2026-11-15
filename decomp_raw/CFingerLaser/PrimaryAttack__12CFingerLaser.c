@@ -73,8 +73,8 @@ typedef struct st_4bdc70_7 {
 } st_4bdc70_7;
 
 extern char SUB_Remove__11CBaseEntity;
-extern st_4bdc70_3 *g_6168d4;
-extern st_4bdc70_3 *g_6168dc;
+extern st_4bdc70_3 *g_engfuncs.pfnPEntityOfEntOffset;
+extern st_4bdc70_3 *g_engfuncs.pfnIndexOfEdict;
 extern st_4bdc70_7 *gpGlobals;
 extern char g_800000;
 
@@ -129,7 +129,7 @@ float PrimaryAttack__12CFingerLaser(float idx)
     float v25;  // [bp-0x20]
     float v26;  // [bp-0x1c]
 
-    if (!sub_48c980(*(int *)(*(unsigned int *)&idx + 128), 150))
+    if (!CBasePlayer::UseKi(*(int *)(*(unsigned int *)&idx + 128), 150))
         return v50;
     v28 = (st_4bdc70_0 *)idx;
     if (v28->field_c4)
@@ -142,11 +142,11 @@ float PrimaryAttack__12CFingerLaser(float idx)
         v1 = 6;
         v29 = *(int *)(*(unsigned int *)&idx + 128);
     }
-    sub_48d680(v29);
+    CBasePlayer::SetAnimation(v29);
     v30 = (st_4bdc70_6 *)idx;
     v30->field_c4 = v30->field_c4 ^ 1;
-    sub_48bac0(v30);
-    sub_48a800(*(int *)*(int *)(*(unsigned int *)&idx + 128) + 116);
+    CFingerLaser::EmitShootSound(v30);
+    UTIL_MakeVectors(*(int *)*(int *)(*(unsigned int *)&idx + 128) + 116);
     v31 = &gpGlobals->field_28;
     v24 = gpGlobals->field_28;
     v25 = *(float *)&v31[1];
@@ -160,12 +160,12 @@ float PrimaryAttack__12CFingerLaser(float idx)
     v9 = (float)(v32 + v18);
     v10 = (float)(v33 + v20);
     v11 = v22 + v6;
-    sub_487b80(&v19, &v9, 1, *(int *)(*(int *)idx + 520), &v12);
+    UTIL_TraceLine(&v19, &v9, 1, *(int *)(*(int *)idx + 520), &v12);
     v3 = v14;
     v4 = v15;
     v7 = v16;
-    v34 = sub_48b530("sprites/fingerlaserbeam.spr", 3);
-    sub_48d2c0(v34, &v3, g_6168dc(*(int *)(*(int *)*(int *)(*(unsigned int *)&idx + 128) + 520)));
+    v34 = CBeam::BeamCreate("sprites/fingerlaserbeam.spr", 3);
+    CBeam::PointEntInit(v34, &v3, g_engfuncs.pfnIndexOfEdict(*(int *)(*(int *)*(int *)(*(unsigned int *)&idx + 128) + 520)));
     v36 = _INSERT(v34->field_0->field_110 & 0xfff, 1, (char)((v34->field_0->field_110 & 0xfff) >> 8) | 16);
     v34->field_0->field_110 = v36;
     v8 = 0xff;
@@ -182,9 +182,9 @@ float PrimaryAttack__12CFingerLaser(float idx)
     v41 = *(int *)*(int *)(*(unsigned int *)&idx + 128);
     do
     {
-        sub_487b80(&v18, &v3, 0, *(int *)(v41 + 520), &v12);
+        UTIL_TraceLine(&v18, &v3, 0, *(int *)(v41 + 520), &v12);
         v42 = v17;
-        if (v42 || (v42 = g_6168d4(0), v42))
+        if (v42 || (v42 = g_engfuncs.pfnPEntityOfEntOffset(0), v42))
             v43 = v42->field_7c;
         else
             v43 = NULL;
@@ -209,7 +209,7 @@ float PrimaryAttack__12CFingerLaser(float idx)
         if ((!v44->field_0->field_198 ? 0 : v44->field_0->field_198 + 128) != *(int *)v46->field_80)
         {
             v0 = &g_800000;
-            sub_48aef0(v46);
+            CBasePlayerWeapon::GetPowerRatio(v46);
             v44->field_60->field_34(v44, *(int *)*(int *)(*(unsigned int *)&idx + 128), *(int *)*(int *)(*(unsigned int *)&idx + 128), (float)(v40 * 25.0 * v2));
         }
         v41 = v44->field_0;
@@ -218,7 +218,7 @@ float PrimaryAttack__12CFingerLaser(float idx)
         v23 = v16;
         v40 = 1.0;
     } while (1.0 > v13);
-    sub_488640();
+    UTIL_WeaponTimeBase();
     v47 = 1.0 + 3.0;
     v48 = (float *)idx;
     v48[40] = (float)v47;

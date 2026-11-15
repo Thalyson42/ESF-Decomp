@@ -16,12 +16,12 @@ st_57f5a0_1 ** UTIL_GetAttackFromPlayerByName__FP11CBasePlayerPCc(st_57f5a0_0 **
     v0 = NULL;
     while (1)
     {
-        v0 = sub_487e80(v0, a1);
+        v0 = UTIL_FindEntityByClassname(v0, a1);
         if (!v0)
         {
             return NULL;
         }
-        else if (*v0->field_198 == *a0->field_208 && !(char)sub_48b140(v0))
+        else if (*v0->field_198 == *a0->field_208 && !(char)IsNull(v0))
         {
             return v0;
         }

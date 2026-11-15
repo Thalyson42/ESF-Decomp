@@ -10,7 +10,7 @@ typedef struct st_536ae0_1 {
     unsigned int field_0;
 } st_536ae0_1;
 
-extern st_536ae0_1 *g_6168b4;
+extern st_536ae0_1 *g_engfuncs.pfnAlertMessage;
 
 st_536ae0_0 * BufferReadBytes__8CRestorePci(st_536ae0_0 **a0, int a1, int a2)
 {
@@ -31,7 +31,7 @@ st_536ae0_0 * BufferReadBytes__8CRestorePci(st_536ae0_0 **a0, int a1, int a2)
     }
     else if (a2 + (char *)*a0->field_8 > *a0->field_c)
     {
-        g_6168b4(4, "Restore overflow!");
+        g_engfuncs.pfnAlertMessage(4, "Restore overflow!");
         v2 = *a0->field_c;
         *a0->field_8 = v2;
         return v2;
@@ -39,7 +39,7 @@ st_536ae0_0 * BufferReadBytes__8CRestorePci(st_536ae0_0 **a0, int a1, int a2)
     else
     {
         if (a1)
-            sub_48c4b0(a1, *a0->field_4, a2);
+            memcpy@GLIBC_2.0(a1, *a0->field_4, a2);
         *a0->field_4 = *a0->field_4 + a2;
         v3 = *a0;
         v3->field_8 = (char *)v3->field_8 + a2;

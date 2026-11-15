@@ -5,6 +5,6 @@ unsigned int __throw_type_match(int a0, int a1)
     unsigned int v1;  // [bp+0xc]
 
     sub_5949a4(v0);
-    return (!sub_488af0(a0, a1) ? v1 : 0);
+    return (!strcmp@GLIBC_2.0(a0, a1) ? v1 : 0);
 }
 

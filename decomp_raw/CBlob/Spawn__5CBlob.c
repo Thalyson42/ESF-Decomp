@@ -3,7 +3,7 @@ typedef struct st_4caf20_0 {
     unsigned int field_0;
 } st_4caf20_0;
 
-extern st_4caf20_0 *g_6167c8;
+extern st_4caf20_0 *g_engfuncs.pfnSetModel;
 
 int Spawn__5CBlob(float a0)
 {
@@ -15,7 +15,7 @@ int Spawn__5CBlob(float a0)
     float v5;  // [bp-0x1c]
 
     (*(int *)(*(int *)(*(unsigned int *)&a0 + 96) + 12))(a0);
-    g_6167c8(*(int *)(*(int *)a0 + 520), "sprites/null.spr");
+    g_engfuncs.pfnSetModel(*(int *)(*(int *)a0 + 520), "sprites/null.spr");
     *(unsigned int *)(*(int *)a0 + 328) = 5;
     *(unsigned int *)(*(int *)a0 + 264) = 0;
     *(unsigned int *)(*(int *)a0 + 268) = 1;
@@ -25,6 +25,6 @@ int Spawn__5CBlob(float a0)
     v0 = -50.0f;
     v1 = -50.0f;
     v2 = -50.0f;
-    return sub_48a0d0(*(int *)a0, &v0, &v3);
+    return UTIL_SetSize(*(int *)a0, &v0, &v3);
 }
 

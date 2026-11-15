@@ -8,7 +8,7 @@ typedef struct st_48ea60_1 {
     unsigned int field_0;
 } st_48ea60_1;
 
-extern st_48ea60_1 *g_6168e8;
+extern st_48ea60_1 *g_engfuncs.pfnGetModelPtr;
 
 int SetBodygroup__14CBaseAnimatingii(st_48ea60_0 **a0, unsigned int a1, unsigned int a2)
 {
@@ -19,6 +19,6 @@ int SetBodygroup__14CBaseAnimatingii(st_48ea60_0 **a0, unsigned int a1, unsigned
     v2 = a2;
     v1 = a1;
     v0 = *a0;
-    return sub_489750(g_6168e8(*a0->field_208));
+    return SetBodygroup(g_engfuncs.pfnGetModelPtr(*a0->field_208));
 }
 

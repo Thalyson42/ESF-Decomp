@@ -4,7 +4,7 @@ typedef struct st_56e640_0 {
 } st_56e640_0;
 
 extern unsigned short _5NMenu.BotTeam;
-extern st_56e640_0 *g_616928;
+extern st_56e640_0 *g_engfuncs.pfnRandomLong;
 extern unsigned short _5NMenu.CurrentMenuChoice;
 
 int CustomBotTeamMenu__5NMenuv(void)
@@ -16,9 +16,9 @@ int CustomBotTeamMenu__5NMenuv(void)
     else
     {
         if (_5NMenu.CurrentMenuChoice != 3)
-            return sub_48d6f0();
-        _5NMenu.BotTeam = g_616928(1, 2);
+            return NMenu::ResetMenu();
+        _5NMenu.BotTeam = g_engfuncs.pfnRandomLong(1, 2);
     }
-    return sub_48c740(3);
+    return NMenu::SetNewMenu(3);
 }
 

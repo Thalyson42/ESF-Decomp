@@ -7,8 +7,8 @@ typedef struct st_56fe40_1 {
     unsigned int field_0;
 } st_56fe40_1;
 
-extern st_56fe40_1 *g_616928;
-extern st_56fe40_1 *g_61692c;
+extern st_56fe40_1 *g_engfuncs.pfnRandomLong;
+extern st_56fe40_1 *g_engfuncs.pfnRandomFloat;
 extern st_56fe40_0 *gpGlobals;
 
 double BotAim__4CBot(float idx)
@@ -52,7 +52,7 @@ double BotAim__4CBot(float idx)
     *(float *)&v12 = *(float *)(*(unsigned int *)&idx + 3088);
     *(float *)&v13 = *(float *)(*(unsigned int *)&idx + 3092);
     *(float *)&v14 = *(float *)(*(unsigned int *)&idx + 3096);
-    sub_489120(&v18, &v12);
+    WrapAngles(&v18, &v12);
     if (180.0f < v19)
         v19 = (float)(v19 - 360.0);
     if (180.0f < v18)
@@ -63,40 +63,40 @@ double BotAim__4CBot(float idx)
         v15 = v18;
         v16 = v19;
         v17 = v20;
-        sub_489120(&v12, &v15);
+        WrapAngles(&v12, &v15);
         v26[29] = v12;
         v26[30] = v13;
         v26[31] = v14;
     }
     else
     {
-        g_61692c(*(float *)(*(int *)(*(unsigned int *)&idx + 0xa00) + 8), *(float *)(*(int *)(*(unsigned int *)&idx + 0xa00) + 12));
+        g_engfuncs.pfnRandomFloat(*(float *)(*(int *)(*(unsigned int *)&idx + 0xa00) + 8), *(float *)(*(int *)(*(unsigned int *)&idx + 0xa00) + 12));
         *(float *)&v11 = *(float *)(*(int *)(*(unsigned int *)&idx + 0xa00) + 8);
-        g_61692c(*(float *)(*(int *)(*(unsigned int *)&idx + 0xa00) + 16), *(float *)(*(int *)(*(unsigned int *)&idx + 0xa00) + 20));
+        g_engfuncs.pfnRandomFloat(*(float *)(*(int *)(*(unsigned int *)&idx + 0xa00) + 16), *(float *)(*(int *)(*(unsigned int *)&idx + 0xa00) + 20));
         *(float *)&v10 = *(float *)(*(int *)(*(unsigned int *)&idx + 0xa00) + 16);
-        g_61692c(*(float *)(*(int *)(*(unsigned int *)&idx + 0xa00) + 24), *(float *)(*(int *)(*(unsigned int *)&idx + 0xa00) + 28));
+        g_engfuncs.pfnRandomFloat(*(float *)(*(int *)(*(unsigned int *)&idx + 0xa00) + 24), *(float *)(*(int *)(*(unsigned int *)&idx + 0xa00) + 28));
         v9 = *(float *)(*(int *)(*(unsigned int *)&idx + 0xa00) + 24);
-        g_61692c(*(float *)(*(int *)(*(unsigned int *)&idx + 0xa00) + 32), *(float *)(*(int *)(*(unsigned int *)&idx + 0xa00) + 36));
+        g_engfuncs.pfnRandomFloat(*(float *)(*(int *)(*(unsigned int *)&idx + 0xa00) + 32), *(float *)(*(int *)(*(unsigned int *)&idx + 0xa00) + 36));
         v8 = *(float *)(*(int *)(*(unsigned int *)&idx + 0xa00) + 32);
         v4 = v11;
         v2 = v10;
         v1 = fabsf(v18 + *(float *)(*(int *)idx + 116));
         v0 = fabsf(v19 - *(float *)(*(int *)idx + 120));
-        v7 = (v9 == 0.0f ? 0 : !g_616928(0, 1) ? (float)-(v9 / 100.0 * v1) : (float)(v9 / 100.0 * v1));
-        v6 = (v8 == 0.0f ? 0 : !g_616928(0, 1) ? (float)-(v8 / 100.0 * v0) : (float)(v8 / 100.0 * v0));
+        v7 = (v9 == 0.0f ? 0 : !g_engfuncs.pfnRandomLong(0, 1) ? (float)-(v9 / 100.0 * v1) : (float)(v9 / 100.0 * v1));
+        v6 = (v8 == 0.0f ? 0 : !g_engfuncs.pfnRandomLong(0, 1) ? (float)-(v8 / 100.0 * v0) : (float)(v8 / 100.0 * v0));
         v5 = (float)(1.0 <= v1 ? v1 / 70.0 * *(float *)&v4 : *(float *)&v4 * 0.009999999776482582);
         v3 = (float)(1.0 <= v0 ? v0 / 60.0 * *(float *)&v2 : *(float *)&v2 * 0.014999999664723873);
         v27 = v7 + v18;
-        sub_48d430(v27);
+        UTIL_WrapAngle(v27);
         *(float *)&v18 = v27;
         v28 = v6 + v19;
-        sub_48d430(v28);
+        UTIL_WrapAngle(v28);
         *(float *)&v19 = v28;
         *(float *)(*(unsigned int *)&idx + 3124) = *(float *)(*(unsigned int *)&idx + 3116);
         *(float *)(*(unsigned int *)&idx + 3120) = *(float *)(*(unsigned int *)&idx + 3112);
-        sub_488dd0(idx, v5, v18);
+        CBot::BotChangePitch(idx, v5, v18);
         *(int *)(*(unsigned int *)&idx + 3116) = v18;
-        sub_488090(idx, v3, v19);
+        CBot::BotChangeYaw(idx, v3, v19);
         *(int *)(*(unsigned int *)&idx + 3112) = v19;
     }
     *(float *)(*(int *)idx + 80) = (float)(*(float *)(*(int *)idx + 116) / 3.0);

@@ -110,10 +110,10 @@ double TaskThink__22CControlFriezaDiscTask(st_551800_4 *a0)
     v15 = *(float *)&a0->field_24;
     if (v15 >= *(float *)gpGlobals && a0->field_8->field_b6c)
     {
-        v14 = sub_48a780(a0->field_8);
+        v14 = CBasePlayer::GetMaxSpeed(a0->field_8);
         if (0.0 < (double)v14)
-            sub_48bfd0(a0->field_8);
-        v16 = sub_487b70(a0->field_8, "Frieza Disc");
+            CBot::BotCombatMovement(a0->field_8);
+        v16 = UTIL_GetAttackFromPlayerByName(a0->field_8, "Frieza Disc");
         if (!v16)
         {
             v15 = *(float *)&a0->field_24 - *(float *)gpGlobals;
@@ -126,7 +126,7 @@ double TaskThink__22CControlFriezaDiscTask(st_551800_4 *a0)
             v18 = *(float *)(*(int *)a0->field_8->field_b6c + 32) * *(float *)(*(int *)a0->field_8->field_b6c + 32) + *(float *)&v17[1] * *(float *)&v17[1] + *(float *)&v17[2] * *(float *)&v17[2];
             v19 = sqrt(v18);
             if (isnan(v19))
-                sub_487dc0(*(unsigned int *)&v18);
+                sqrt(*(unsigned int *)&v18);
             else
                 v18 = v19;
             v10 = (float)v18;
@@ -148,7 +148,7 @@ double TaskThink__22CControlFriezaDiscTask(st_551800_4 *a0)
             v25 = v22 * v22 + v23 * v23 + v24 * v24;
             v26 = sqrt(v25);
             if (isnan(v26))
-                sub_487dc0(*(unsigned int *)&v25);
+                sqrt(*(unsigned int *)&v25);
             else
                 v25 = v26;
             v1 = (float)v25;
@@ -167,7 +167,7 @@ double TaskThink__22CControlFriezaDiscTask(st_551800_4 *a0)
             v33 = v30 * v30 + v31 * v31 + v32 * v32;
             v34 = sqrt(v33);
             if (isnan(v34))
-                sub_487dc0(*(unsigned int *)&v33);
+                sqrt(*(unsigned int *)&v33);
             else
                 v33 = v34;
             v2 = (float)v33;
@@ -175,7 +175,7 @@ double TaskThink__22CControlFriezaDiscTask(st_551800_4 *a0)
             v13 = (float)(v1 - (double)(int)v14 * 250.0 / 1.5);
             if (v13 > v2)
             {
-                v14 = sub_48a780(a0->field_8);
+                v14 = CBasePlayer::GetMaxSpeed(a0->field_8);
                 if (*(float *)&v14 == 0.0f)
                     a0->field_c->field_201 = a0->field_c->field_201 | 8;
             }
@@ -183,7 +183,7 @@ double TaskThink__22CControlFriezaDiscTask(st_551800_4 *a0)
             v36 = *v16->field_20 * *v16->field_20 + *(float *)&v35[1] * *(float *)&v35[1] + *(float *)&v35[2] * *(float *)&v35[2];
             v37 = sqrt(v36);
             if (isnan(v37))
-                sub_487dc0(*(unsigned int *)&v36);
+                sqrt(*(unsigned int *)&v36);
             else
                 v36 = v37;
             v2 = (float)v36;
@@ -196,13 +196,13 @@ double TaskThink__22CControlFriezaDiscTask(st_551800_4 *a0)
                 v38 = *(float *)gpGlobals - 4.0;
                 if (v38 < *(float *)&a0->field_1c)
                 {
-                    v39 = _ccall(15, 5, sub_48aab0(a0->field_8, a0->field_8->field_b6c) & 0xffff, 74, 0);
+                    v39 = _ccall(15, 5, UTIL_GetHeadingPercentage(a0->field_8, a0->field_8->field_b6c) & 0xffff, 74, 0);
                     v0 = v39 & 1;
                 }
             }
             if (!v0)
                 return v38;
-            if (!(char)sub_48bf70(a0->field_8, a0->field_8->field_b6c))
+            if (!(char)CBot::CanAttackPlayer(a0->field_8, a0->field_8->field_b6c))
                 v0 = 0;
             if (!v0)
                 return v38;

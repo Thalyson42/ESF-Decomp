@@ -19,7 +19,7 @@ unsigned int Use__8CGameEndP11CBaseEntityT18USE_TYPEf(int a0, int a1)
 {
     unsigned int v0;  // eax
 
-    v0 = sub_48aa30(a0, a1);
+    v0 = CRuleEntity::CanFireForActivator(a0, a1);
     if (!v0)
         return v0;
     return g_pGameRules->field_44->field_ec(g_pGameRules);

@@ -15,16 +15,16 @@ typedef struct st_4f3ab0_2 {
 } st_4f3ab0_2;
 
 extern unsigned int gmsgSensuBean;
-extern st_4f3ab0_2 *g_616878;
-extern st_4f3ab0_2 *g_61687c;
-extern st_4f3ab0_2 *g_616880;
+extern st_4f3ab0_2 *g_engfuncs.pfnMessageBegin;
+extern st_4f3ab0_2 *g_engfuncs.pfnMessageEnd;
+extern st_4f3ab0_2 *g_engfuncs.pfnWriteByte;
 
 int RemoveAllItems__11CBasePlayeri(st_4f3ab0_1 *a0, int a1)
 {
-    sub_48cfe0(a0, a1);
+    CBasePlayer::RemoveAllWeapons(a0, a1);
     a0->field_75c = 0;
-    g_616878(1, gmsgSensuBean, 0, a0->field_0->field_208);
-    g_616880(0);
-    return g_61687c(0);
+    g_engfuncs.pfnMessageBegin(1, gmsgSensuBean, 0, a0->field_0->field_208);
+    g_engfuncs.pfnWriteByte(0);
+    return g_engfuncs.pfnMessageEnd(0);
 }
 

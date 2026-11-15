@@ -32,17 +32,17 @@ typedef struct st_538a70_3 {
     unsigned int field_218;
 } st_538a70_3;
 
-extern st_538a70_2 *g_616878;
-extern st_538a70_2 *g_61687c;
-extern st_538a70_2 *g_616880;
+extern st_538a70_2 *g_engfuncs.pfnMessageBegin;
+extern st_538a70_2 *g_engfuncs.pfnMessageEnd;
+extern st_538a70_2 *g_engfuncs.pfnWriteByte;
 
 int SendWeaponAnim__17CBasePlayerWeaponiii(st_538a70_4 *a0, unsigned int a1)
 {
     a0->field_60->field_154(a0);
     *(unsigned int *)(*(int *)a0->field_80 + 536) = a1;
-    g_616878(1, 35, 0, *(int *)(*(int *)a0->field_80 + 520));
-    g_616880(a1);
-    g_616880(a0->field_0->field_114);
-    return g_61687c();
+    g_engfuncs.pfnMessageBegin(1, 35, 0, *(int *)(*(int *)a0->field_80 + 520));
+    g_engfuncs.pfnWriteByte(a1);
+    g_engfuncs.pfnWriteByte(a0->field_0->field_114);
+    return g_engfuncs.pfnMessageEnd();
 }
 

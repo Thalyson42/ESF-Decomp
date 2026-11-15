@@ -17,14 +17,14 @@ st_524490_0 * ManageNullKeyset__6CSwoop(void* a0)
         v1 = v0 - 2;
         if (v1 > 0x1)
         {
-            v2 = sub_48b040(a0, v0);
+            v2 = CSwoop::DirectionsToFlags(a0, v0);
             v1 = v2 & (int)a0[12];
             if (v1)
             {
-                v3 = sub_48b040(a0, v0);
+                v3 = CSwoop::DirectionsToFlags(a0, v0);
                 v1 = v3 & *(int *)(*(int *)(int)a0[120] + 384);
                 if (!v1)
-                    v1 = sub_48c1f0(a0, sub_48b040(a0, v0));
+                    v1 = CSwoop::RemoveFromNullKeyset(a0, CSwoop::DirectionsToFlags(a0, v0));
             }
         }
     } while ((v0 += 1, v0 <= 0x5));

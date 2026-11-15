@@ -23,7 +23,7 @@ short GoUp__9CFuncPlat(float idx)
 
     v4 = *(int *)idx;
     if (v4->field_1e8)
-        v5 = sub_489390(*(int *)&v4[1].padding_0[28], 6, v4->field_1e8 + gpGlobals->field_98, *(float *)(*(unsigned int *)&idx + 264), 0.800000011920929f, 0, 100);
+        v5 = EMIT_SOUND_DYN(*(int *)&v4[1].padding_0[28], 6, v4->field_1e8 + gpGlobals->field_98, *(float *)(*(unsigned int *)&idx + 264), 0.800000011920929f, 0, 100);
     *(unsigned int *)(*(unsigned int *)&idx + 128) = 2;
     *(unsigned int *)(*(unsigned int *)&idx + 220) = _INSERT(v5, 0, 0) | 0xffff0000;
     *(char **)(*(unsigned int *)&idx + 224) = &CallHitTop__9CFuncPlat;
@@ -31,6 +31,6 @@ short GoUp__9CFuncPlat(float idx)
     *(float *)&v0 = *(float *)(*(unsigned int *)&idx + 156);
     *(float *)&v1 = *(float *)&v7[1];
     *(float *)&v2 = *(float *)&v7[2];
-    return sub_488220(idx, &v0, *(float *)(*(int *)idx + 504));
+    return CBaseToggle::LinearMove(idx, &v0, *(float *)(*(int *)idx + 504));
 }
 

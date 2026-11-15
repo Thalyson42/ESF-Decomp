@@ -32,23 +32,23 @@ float AngleVectorsTranspose(float *a0, st_58d6a0_0 *a1, st_58d6a0_1 *a2, unsigne
     v9 = (float)(0.017453292519943295 * a0[1]);
     v10 = v9;
     v2 = v10;
-    sub_48aeb0(*(unsigned int *)&v2, *(unsigned int *)((void*)&v2 + 4));
+    sin(*(unsigned int *)&v2, *(unsigned int *)((void*)&v2 + 4));
     v6 = v10;
-    sub_48a9e0(*(unsigned int *)&v2, *(unsigned int *)((void*)&v2 + 4));
+    cos(*(unsigned int *)&v2, *(unsigned int *)((void*)&v2 + 4));
     v4 = v10;
     v9 = (float)(v3 * *a0);
     v11 = v9;
     v1 = v11;
-    sub_48aeb0(*(unsigned int *)&v1, *(unsigned int *)((void*)&v1 + 4));
+    sin(*(unsigned int *)&v1, *(unsigned int *)((void*)&v1 + 4));
     v7 = v11;
-    sub_48a9e0(*(unsigned int *)&v1, *(unsigned int *)((void*)&v1 + 4));
+    cos(*(unsigned int *)&v1, *(unsigned int *)((void*)&v1 + 4));
     v5 = v11;
     v9 = (float)(v3 * a0[2]);
     v12 = v9;
     v0 = v12;
-    sub_48aeb0(*(unsigned int *)&v0, *(unsigned int *)((void*)&v0 + 4));
+    sin(*(unsigned int *)&v0, *(unsigned int *)((void*)&v0 + 4));
     v8 = v12;
-    sub_48a9e0(*(unsigned int *)&v0, *(unsigned int *)((void*)&v0 + 4));
+    cos(*(unsigned int *)&v0, *(unsigned int *)((void*)&v0 + 4));
     v9 = v12;
     if (a1)
     {

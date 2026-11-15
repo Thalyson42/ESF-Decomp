@@ -6,6 +6,6 @@ typedef struct st_4c4300_0 {
 
 int EmitShootSound__10CGallitGun(st_4c4300_0 *a0)
 {
-    return sub_48d4f0(a0->field_80, "gallitgunfire.wav");
+    return CBasePlayer::EmitClassSound(a0->field_80, "gallitgunfire.wav");
 }
 

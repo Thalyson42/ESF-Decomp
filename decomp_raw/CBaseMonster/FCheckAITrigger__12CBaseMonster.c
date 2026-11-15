@@ -9,7 +9,7 @@ typedef struct st_4d94b0_0 {
 } st_4d94b0_0;
 
 extern char _GLOBAL_OFFSET_TABLE_;
-extern st_4d94b0_0 *g_6168b4;
+extern st_4d94b0_0 *g_engfuncs.pfnAlertMessage;
 extern st_4d94b0_1 *gpGlobals;
 
 unsigned int FCheckAITrigger__12CBaseMonster(unsigned int *a0)
@@ -25,8 +25,8 @@ unsigned int FCheckAITrigger__12CBaseMonster(unsigned int *a0)
         }
         else if (v0)
         {
-            g_6168b4(2, "AI Trigger Fire Target\n");
-            sub_48c1b0(a0[164] + gpGlobals->field_98, a0, a0, 3, 0);
+            g_engfuncs.pfnAlertMessage(2, "AI Trigger Fire Target\n");
+            FireTargets(a0[164] + gpGlobals->field_98, a0, a0, 3, 0);
             a0[163] = 0;
             return 1;
         }

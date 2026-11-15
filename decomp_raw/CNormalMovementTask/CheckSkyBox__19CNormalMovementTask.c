@@ -65,8 +65,8 @@ unsigned int * CheckSkyBox__19CNormalMovementTask(st_572270_1 *a0)
     v4 = a0->field_c->field_f4;
     v5 = *(float *)&v11[1];
     v6 = *(float *)&v11[2];
-    sub_489120(&v10, &v4);
-    sub_48a800(&v10);
+    WrapAngles(&v10, &v4);
+    UTIL_MakeVectors(&v10);
     v12 = a0->field_c;
     v13 = v12 + 0x22;
     v7 = v12[0x22] + v12[125];
@@ -81,9 +81,9 @@ unsigned int * CheckSkyBox__19CNormalMovementTask(st_572270_1 *a0)
     v4 = (float)(v15 + v7);
     v5 = (float)(v16 + v8);
     v6 = v9 + v3;
-    if (sub_48ae20(&v4) != 0xfffffffa)
+    if (UTIL_PointContents(&v4) != 0xfffffffa)
         return v17;
-    sub_4898c0(a0->field_8);
+    CBot::TurnAround(a0->field_8);
     a0->field_8->field_d88 = (float)(1.0 + *v0->field_0);
     v17 = a0->field_8;
     v17[699] = (float)(1.5 + v17[699]);

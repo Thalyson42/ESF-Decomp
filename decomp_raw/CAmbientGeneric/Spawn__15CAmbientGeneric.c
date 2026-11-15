@@ -12,7 +12,7 @@ typedef struct st_51a840_1 {
 extern char RampThink__15CAmbientGeneric;
 extern char ToggleUse__15CAmbientGenericP11CBaseEntityT18USE_TYPEf;
 extern char SUB_Remove__11CBaseEntity;
-extern st_51a840_1 *g_6168b4;
+extern st_51a840_1 *g_engfuncs.pfnAlertMessage;
 extern st_51a840_0 *gpGlobals;
 
 unsigned int Spawn__15CAmbientGeneric(float idx)
@@ -78,7 +78,7 @@ unsigned int Spawn__15CAmbientGeneric(float idx)
     v11 = *(int *)idx;
     v1 = *(float *)&v11[4];
     v0 = *(float *)&v11[3];
-    g_6168b4(4, "EMPTY AMBIENT AT: %f, %f, %f\n", (unsigned int)(*(float *)&v11[2] >> 0));
+    g_engfuncs.pfnAlertMessage(4, "EMPTY AMBIENT AT: %f, %f, %f\n", (unsigned int)(*(float *)&v11[2] >> 0));
     *(float *)(*(int *)idx + 260) = (float)(0.1 + gpGlobals->field_0);
     v12 = _INSERT(gpGlobals, 0, 0);
     *(unsigned int *)(*(unsigned int *)&idx + 12) = v12 | 0xffff0000;

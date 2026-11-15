@@ -51,7 +51,7 @@ char IsValidThrowVictim__16CFinishMeleeTaskP11CBasePlayer(st_54aa20_2 *a0, st_54
     v9 = *a1->field_20 * *a1->field_20 + *(float *)&v8[1] * *(float *)&v8[1] + *(float *)&v8[2] * *(float *)&v8[2];
     v10 = sqrt(v9);
     if (isnan(v10))
-        sub_487dc0(*(unsigned int *)&v9);
+        sqrt(*(unsigned int *)&v9);
     else
         v9 = v10;
     v7 = (float)v9;
@@ -71,12 +71,12 @@ char IsValidThrowVictim__16CFinishMeleeTaskP11CBasePlayer(st_54aa20_2 *a0, st_54
     v16 = v13 * v13 + v14 * v14 + v15 * v15;
     v17 = sqrt(v16);
     if (isnan(v17))
-        sub_487dc0(*(unsigned int *)&v16);
+        sqrt(*(unsigned int *)&v16);
     else
         v16 = v17;
     v0 = (float)v16;
     if (v0 <= 1500.0f)
-        return sub_4897e0(a0->field_8, a1) == 1;
+        return CBasePlayer::CanMelee(a0->field_8, a1) == 1;
     return 0;
 }
 

@@ -38,28 +38,28 @@ unsigned int HoldDirection__12CPlayerMeleeP12melee_move_s(st_505bf0_3 *a0, unsig
         return 0;
     v3 = *(float *)gpGlobals;
     *(float *)&a1[3] = v3;
-    if (sub_48c4f0(a0))
+    if (CPlayerMelee::UseAttackerMoves(a0))
     {
-        sub_48bbe0(a0);
+        CPlayerMelee::TotalCmbTime(a0);
         v1 = v3;
-        sub_487b30(a0->field_130);
+        CPlayerMelee::GetStunTime(a0->field_130);
         v2 = 0;
         if (v3 < v1)
         {
-            sub_48d690(a0, a1);
+            CPlayerMelee::LetGoDirection(a0, a1);
             return 1;
         }
-        sub_48b4e0(a0, a1);
+        CPlayerMelee::GetCmbTime(a0, a1);
         v0 = v3;
         if (v0 > *(float *)(a0->field_180->field_c(a0) + 12))
         {
             v4 = a0->field_180->field_c(a0);
             *(float *)&a1[3] = *(float *)&a1[2] + v4->field_c;
-            if (sub_48d690(a0, a1))
+            if (CPlayerMelee::LetGoDirection(a0, a1))
                 return 1;
-            sub_487fe0(a0, &v2);
-            sub_48e0d0(a0, &v2);
-            sub_48d920(a0, v2);
+            CPlayerMelee::SetAttackFlags(a0, &v2);
+            CPlayerMelee::SetMovementFlags(a0, &v2);
+            CPlayerMelee::AddDirection(a0, v2);
         }
     }
     return 0;

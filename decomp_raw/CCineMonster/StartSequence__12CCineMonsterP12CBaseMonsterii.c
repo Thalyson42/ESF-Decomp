@@ -32,10 +32,10 @@ unsigned int StartSequence__12CCineMonsterP12CBaseMonsterii(int a0, st_515520_0 
 
     if (!a2 && a3)
     {
-        sub_48dc70(a0, a1);
+        CCineMonster::SequenceDone(a0, a1);
         return 0;
     }
-    v1 = sub_48afe0(a1, a2 + gpGlobals->field_98);
+    v1 = CBaseAnimating::LookupSequence(a1, a2 + gpGlobals->field_98);
     *a1->field_128 = v1;
     if (*a1->field_128 == 0xffffffff)
     {
@@ -44,7 +44,7 @@ unsigned int StartSequence__12CCineMonsterP12CBaseMonsterii(int a0, st_515520_0 
         *a1->field_128 = 0;
     }
     *a1->field_130 = 0;
-    sub_488850(a1);
+    CBaseAnimating::ResetSequenceInfo(a1);
     return 1;
 }
 

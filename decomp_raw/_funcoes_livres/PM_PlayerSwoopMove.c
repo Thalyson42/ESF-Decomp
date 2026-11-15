@@ -107,7 +107,7 @@ double PM_PlayerSwoopMove(void)
     *(char **)((char *)&v0 + 12) = &v28;
     *(char **)((char *)&v0 + 8) = &v29;
     *(float **)((char *)&v0 + 4) = &v30;
-    sub_4896c0(*(unsigned int *)((void*)&v0 + 4), *(unsigned int *)((void*)&v0 + 8), *(unsigned int *)((void*)&v0 + 12), *(unsigned int *)((void*)&v0 + 16), v1, v2, v3);
+    AngleVectors(*(unsigned int *)((void*)&v0 + 4), *(unsigned int *)((void*)&v0 + 8), *(unsigned int *)((void*)&v0 + 12), *(unsigned int *)((void*)&v0 + 16), v1, v2, v3);
     v9 = __fnstcw();
     v8 = v9 | 0xc00;
     v6 = pmove->field_244;
@@ -128,7 +128,7 @@ double PM_PlayerSwoopMove(void)
         v42 = v35;
         v26 = v42;
         *(float **)((char *)&v0 + 4) = &v24;
-        sub_489290(v36);
+        VectorNormalize(v36);
         v7 = v42;
         esp = (char *)&v0 + 16;
         if (v42 > *(float *)&pmove->field_1f4)
@@ -136,7 +136,7 @@ double PM_PlayerSwoopMove(void)
             *(float **)((char *)&v0 + 8) = &v33;
             *(double *)((char *)&v0 + 4) = *(float *)&pmove->field_1f4 / v42;
             *(float **)&v0 = &v33;
-            sub_48d230(v36, v37, v38);
+            VectorScale(v36, v37, v38);
             v7 = *(float *)&pmove->field_1f4;
             esp = (char *)&v0 + 12;
         }
@@ -150,7 +150,7 @@ double PM_PlayerSwoopMove(void)
         v17 = v44;
         esp = esp - 12;
         *(float **)(esp - 4) = &v15;
-        sub_489290(v36);
+        VectorNormalize(v36);
         v45 = v44;
         esp = esp + 8;
         if (v45 != 0.0f)
@@ -170,7 +170,7 @@ double PM_PlayerSwoopMove(void)
             esp = esp - 8;
             *(float *)esp = (float)(v5 / v46);
             *(st_590b40_0 **)(esp - 4) = &pmove->field_5c;
-            sub_48d230(v36, v37, v38);
+            VectorScale(v36, v37, v38);
             esp = esp + 8;
         }
         else
@@ -184,7 +184,7 @@ double PM_PlayerSwoopMove(void)
         {
             esp = esp - 12;
             *(float **)(esp - 4) = &v33;
-            sub_489290(v36);
+            VectorNormalize(v36);
             v47 = v7 * pmove->field_4f4f0->field_10 * pmove->field_10 * pmove->field_c4;
             esp = esp + 8;
             if (v47 > v4)
@@ -203,7 +203,7 @@ double PM_PlayerSwoopMove(void)
         esp = esp - 8;
         *(float *)esp = pmove->field_10;
         *(st_590b40_0 **)(esp - 4) = &pmove->field_38;
-        sub_48c590(v36, v37, v38, v39);
+        VectorMA(v36, v37, v38, v39);
         v21 = v18;
         v22 = v19;
         v23 = v20;
@@ -226,7 +226,7 @@ double PM_PlayerSwoopMove(void)
             *(double *)&pmove->field_40 = v14;
             return v14;
         }
-        sub_48dbe0();
+        PM_FlyMove();
         return v50;
     }
 }

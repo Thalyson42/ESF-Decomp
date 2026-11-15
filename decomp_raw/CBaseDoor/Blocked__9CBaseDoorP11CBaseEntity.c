@@ -71,10 +71,10 @@ typedef struct st_4acc10_8 {
 } st_4acc10_8;
 
 extern unsigned int g_vecZero;
-extern unsigned int g_616790;
-extern unsigned int g_616794;
-extern st_4acc10_6 *g_6167f8;
-extern st_4acc10_6 *g_6168d8;
+extern unsigned int g_vecZero+4;
+extern unsigned int g_vecZero+8;
+extern st_4acc10_6 *g_engfuncs.pfnFindEntityByString;
+extern st_4acc10_6 *g_engfuncs.pfnEntOffsetOfPEntity;
 extern st_4acc10_8 *gpGlobals;
 
 st_4acc10_4 * Blocked__9CBaseDoorP11CBaseEntity(st_4acc10_1 *a0, st_4acc10_7 *a1)
@@ -104,9 +104,9 @@ st_4acc10_4 * Blocked__9CBaseDoorP11CBaseEntity(st_4acc10_1 *a0, st_4acc10_7 *a1
     if (0.0 <= a0->field_8c)
     {
         if (a0->field_80 == 3)
-            sub_48bf20(a0);
+            CBaseDoor::DoorGoUp(a0);
         else
-            sub_489940(a0);
+            CBaseDoor::DoorGoDown(a0);
     }
     if (!a0->field_0->field_1cc)
         return a0->field_0;
@@ -114,14 +114,14 @@ st_4acc10_4 * Blocked__9CBaseDoorP11CBaseEntity(st_4acc10_1 *a0, st_4acc10_7 *a1
     {
         do
         {
-            v2 = g_6167f8(v2, "targetname", a0->field_0->field_1cc + gpGlobals->field_98);
+            v2 = g_engfuncs.pfnFindEntityByString(v2, "targetname", a0->field_0->field_1cc + gpGlobals->field_98);
         } while ((v4 = (!v2 ? NULL : (struct st_4acc10_4 *)&v2->field_80), v4 == a0->field_0));
         v5 = 0;
-        if (!v2 || (v4 = g_6168d8(v2), !v4))
+        if (!v2 || (v4 = g_engfuncs.pfnEntOffsetOfPEntity(v2), !v4))
             v5 = 1;
         if (v5)
             break;
-        if ((!sub_488af0((!v2 ? NULL : (struct st_4acc10_4 *)&v2->field_80)->field_0 + gpGlobals->field_98, "func_door") || !sub_488af0((!v2 ? NULL : (struct st_4acc10_4 *)&v2->field_80)->field_0 + gpGlobals->field_98, "func_door_rotating")) && (v6 = sub_488040((!v2 ? 0 : (struct st_4acc10_4 *)&v2->field_80)), 0.0 <= v6->field_8c))
+        if ((!strcmp@GLIBC_2.0((!v2 ? NULL : (struct st_4acc10_4 *)&v2->field_80)->field_0 + gpGlobals->field_98, "func_door") || !strcmp@GLIBC_2.0((!v2 ? NULL : (struct st_4acc10_4 *)&v2->field_80)->field_0 + gpGlobals->field_98, "func_door_rotating")) && (v6 = GetClassPtr__H1Z9CBaseDoor_PX01_PX01((!v2 ? 0 : (struct st_4acc10_4 *)&v2->field_80)), 0.0 <= v6->field_8c))
         {
             v7 = &v6->field_0->field_20;
             v8 = &a0->field_0->field_20;
@@ -137,7 +137,7 @@ st_4acc10_4 * Blocked__9CBaseDoorP11CBaseEntity(st_4acc10_1 *a0, st_4acc10_7 *a1
                     v0 = *(float *)&v10[2] == *(float *)&v9[2];
                 if (v0)
                 {
-                    if (!sub_488af0((!v2 ? NULL : (struct st_4acc10_4 *)&v2->field_80)->field_0 + gpGlobals->field_98, "func_door"))
+                    if (!strcmp@GLIBC_2.0((!v2 ? NULL : (struct st_4acc10_4 *)&v2->field_80)->field_0 + gpGlobals->field_98, "func_door"))
                     {
                         v11 = &v6->field_0->field_0;
                         v12 = a0->field_0;
@@ -146,8 +146,8 @@ st_4acc10_4 * Blocked__9CBaseDoorP11CBaseEntity(st_4acc10_1 *a0, st_4acc10_7 *a1
                         v11[4] = v12->field_10;
                         v13 = &v6->field_0->field_0;
                         v13[8] = g_vecZero;
-                        v13[9] = g_616790;
-                        v13[10] = g_616794;
+                        v13[9] = g_vecZero+4;
+                        v13[10] = g_vecZero+8;
                     }
                     else
                     {
@@ -158,15 +158,15 @@ st_4acc10_4 * Blocked__9CBaseDoorP11CBaseEntity(st_4acc10_1 *a0, st_4acc10_7 *a1
                         v14[22] = v15->field_58;
                         v16 = &v6->field_0->field_0;
                         v16[23] = g_vecZero;
-                        v16[24] = g_616790;
-                        v16[25] = g_616794;
+                        v16[24] = g_vecZero+4;
+                        v16[25] = g_vecZero+8;
                     }
                 }
             }
             if (v6->field_80 == 3)
-                sub_48bf20(v6);
+                CBaseDoor::DoorGoUp(v6);
             else
-                sub_489940(v6);
+                CBaseDoor::DoorGoDown(v6);
         }
     }
     return v4;

@@ -24,7 +24,7 @@ unsigned int * ToggleUse__13CMonsterMakerP11CBaseEntityT18USE_TYPEf(st_4d3920_1 
 {
     unsigned int *v0;  // eax
 
-    v0 = sub_48ab90(a0, a3, a0->field_2bc);
+    v0 = CBaseEntity::ShouldToggle(a0, a3, a0->field_2bc);
     if (!v0)
         return v0;
     if (a0->field_2bc)

@@ -28,7 +28,7 @@ unsigned int * Use__9CBubblingP11CBaseEntityT18USE_TYPEf(st_4af470_0 *a0, unsign
     unsigned int v0;  // eax
     unsigned int *v2;  // eax
 
-    v0 = sub_48ab90(a0, a3, a0->field_70);
+    v0 = CBaseEntity::ShouldToggle(a0, a3, a0->field_70);
     if (v0)
     {
         v0 = !a0->field_70;

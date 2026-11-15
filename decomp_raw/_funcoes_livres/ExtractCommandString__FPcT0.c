@@ -47,7 +47,7 @@ unsigned int ExtractCommandString__FPcT0(char *a0, int a1)
             }
         }
         *node = 0;
-        sub_48c150(a1, &v2);
+        strcat@GLIBC_2.0(a1, &v2);
         v0 = &v1;
         v8 = &v1;
         v9 = 0xffffffff;
@@ -57,10 +57,10 @@ unsigned int ExtractCommandString__FPcT0(char *a0, int a1)
         } while (v9 && (v9 -= 1, v8 = v10 + 1, *v10));
         if (v9 != 0xfffffffe)
         {
-            sub_48c150(a1, " ");
-            sub_48c150(a1, v0);
+            strcat@GLIBC_2.0(a1, " ");
+            strcat@GLIBC_2.0(a1, v0);
         }
-        v4 = sub_48c150(a1, "\n");
+        v4 = strcat@GLIBC_2.0(a1, "\n");
         if (!*v6)
             return v4;
         iter = v6 + 1;

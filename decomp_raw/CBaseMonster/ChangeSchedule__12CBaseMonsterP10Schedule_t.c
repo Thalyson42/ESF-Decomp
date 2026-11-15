@@ -21,7 +21,7 @@ typedef struct st_511d30_2 {
     unsigned int field_0;
 } st_511d30_2;
 
-extern st_511d30_2 *g_6168b4;
+extern st_511d30_2 *g_engfuncs.pfnAlertMessage;
 
 st_511d30_0 * ChangeSchedule__12CBaseMonsterP10Schedule_t(st_511d30_1 *a0, st_511d30_0 *a1)
 {
@@ -33,7 +33,7 @@ st_511d30_0 * ChangeSchedule__12CBaseMonsterP10Schedule_t(st_511d30_1 *a0, st_51
     if (a1->field_a & 2)
     {
         if (!a1->field_c)
-            return g_6168b4(2, "COND_HEAR_SOUND with no sound mask!\n");
+            return g_engfuncs.pfnAlertMessage(2, "COND_HEAR_SOUND with no sound mask!\n");
     }
     else
     {
@@ -42,6 +42,6 @@ st_511d30_0 * ChangeSchedule__12CBaseMonsterP10Schedule_t(st_511d30_1 *a0, st_51
     }
     if (a0->field_18c->field_a & 2)
         return a0->field_18c;
-    return g_6168b4(2, "Sound mask without COND_HEAR_SOUND!\n");
+    return g_engfuncs.pfnAlertMessage(2, "Sound mask without COND_HEAR_SOUND!\n");
 }
 

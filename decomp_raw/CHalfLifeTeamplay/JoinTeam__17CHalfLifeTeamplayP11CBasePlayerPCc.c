@@ -62,14 +62,14 @@ typedef struct st_529070_6 {
     unsigned int field_98;
 } st_529070_6;
 
-extern float g_5bd040;
+extern float realteams+12;
 extern unsigned int gmsgVGUIMenu;
-extern st_529070_2 *g_616878;
-extern st_529070_2 *g_61687c;
-extern st_529070_2 *g_616880;
-extern st_529070_2 *g_616984;
+extern st_529070_2 *g_engfuncs.pfnMessageBegin;
+extern st_529070_2 *g_engfuncs.pfnMessageEnd;
+extern st_529070_2 *g_engfuncs.pfnWriteByte;
+extern st_529070_2 *g_engfuncs.pfnGetPlayerUserId;
 extern st_529070_6 *gpGlobals;
-extern char g_6246ac;
+extern char BotManager+44;
 
 unsigned int JoinTeam__17CHalfLifeTeamplayP11CBasePlayerPCc(st_529070_8 *a0, st_529070_5 *a1, int a2)
 {
@@ -82,16 +82,16 @@ unsigned int JoinTeam__17CHalfLifeTeamplayP11CBasePlayerPCc(st_529070_8 *a0, st_
     char v3;  // [bp-0x415]
     char v4;  // [bp-0x404]
 
-    v5 = sub_488af0(&a1[1].padding_64[464], a2);
+    v5 = strcmp@GLIBC_2.0(&a1[1].padding_64[464], a2);
     if (!v5)
         return v5;
-    if (g_6246ac)
+    if (BotManager+44)
     {
         v3 = 0;
         if (!a1->field_60->field_a4(a1))
             v3 = (a1->field_0->field_1a5 & 32) != 0;
-        if (!v3 && !sub_488af0(a2, "Evil"))
-            return sub_489df0("Cannot join team evil when there are superbots ingame\n", a1);
+        if (!v3 && !strcmp@GLIBC_2.0(a2, "Evil"))
+            return UTIL_SayText("Cannot join team evil when there are superbots ingame\n", a1);
     }
     a1->field_34c = 0;
     if (a1->field_350)
@@ -101,28 +101,28 @@ unsigned int JoinTeam__17CHalfLifeTeamplayP11CBasePlayerPCc(st_529070_8 *a0, st_
         a1->field_0->field_15c = 0;
         if (a1->field_310 & 32)
             goto LABEL_5291c4;
-        if (g_5bd040 != 1.0f && !a1->field_0->field_244)
+        if (realteams+12 != 1.0f && !a1->field_0->field_244)
             a1->field_764->field_4->field_30(a1->field_764);
     }
-    if (!(a1->field_310 & 32) && g_5bd040 != 1.0f && !a1->field_0->field_244)
+    if (!(a1->field_310 & 32) && realteams+12 != 1.0f && !a1->field_0->field_244)
     {
-        sub_48d990(&v4, "* %s has joined %s\n", a1->field_0->field_1d0 + gpGlobals->field_98, a2);
-        sub_489df0(&v4, a1);
+        sprintf@GLIBC_2.0(&v4, "* %s has joined %s\n", a1->field_0->field_1d0 + gpGlobals->field_98, a2);
+        UTIL_SayText(&v4, a1);
         v2 = a2;
-        v6 = g_616984(a1->field_0->field_208);
+        v6 = g_engfuncs.pfnGetPlayerUserId(a1->field_0->field_208);
         v1 = a1->field_0->field_1d0 + gpGlobals->field_98;
-        sub_488680("\"%s<%i>\" has joined %s\n", v1, v6);
+        UTIL_LogPrintf("\"%s<%i>\" has joined %s\n", v1, v6);
         a0->field_44->field_d8(a0, a1, a2, 0, 0);
         *(unsigned short *)&v1 = 0;
-        return sub_48c940(a0, v1);
+        return CHalfLifeTeamplay::RecountTeams(a0, v1);
     }
 LABEL_5291c4:
-    sub_48d990(&v4, "* %s has joined %s\n", a1->field_0->field_1d0 + gpGlobals->field_98, a2);
-    sub_489df0(&v4, a1);
+    sprintf@GLIBC_2.0(&v4, "* %s has joined %s\n", a1->field_0->field_1d0 + gpGlobals->field_98, a2);
+    UTIL_SayText(&v4, a1);
     v2 = a2;
-    v7 = g_616984(a1->field_0->field_208);
-    sub_488680("\"%s<%i>\" has joined %s\n", a1->field_0->field_1d0 + gpGlobals->field_98, v7);
-    if (g_5bd040 == 1.0f)
+    v7 = g_engfuncs.pfnGetPlayerUserId(a1->field_0->field_208);
+    UTIL_LogPrintf("\"%s<%i>\" has joined %s\n", a1->field_0->field_1d0 + gpGlobals->field_98, v7);
+    if (realteams+12 == 1.0f)
     {
         if (a1->field_310 & 32)
         {
@@ -132,22 +132,22 @@ LABEL_5291c4:
         {
             a0->field_44->field_d8(a0, a1, a2, 1, 0);
             a1->field_0->field_20c = 0;
-            sub_48ba90(a1);
+            CBasePlayer::StartObserving(a1);
         }
         v1 = gmsgVGUIMenu;
-        g_616878(1, v1, 0, a1->field_0->field_208);
+        g_engfuncs.pfnMessageBegin(1, v1, 0, a1->field_0->field_208);
         v0 = 33;
     }
     else
     {
         a0->field_44->field_d8(a0, a1, a2, 0, 0);
         v1 = gmsgVGUIMenu;
-        g_616878(1, v1, 0, a1->field_0->field_208);
+        g_engfuncs.pfnMessageBegin(1, v1, 0, a1->field_0->field_208);
         v0 = 3;
     }
-    g_616880(v0);
-    g_61687c();
+    g_engfuncs.pfnWriteByte(v0);
+    g_engfuncs.pfnMessageEnd();
     *(unsigned short *)&v1 = 0;
-    return sub_48c940(a0, v1);
+    return CHalfLifeTeamplay::RecountTeams(a0, v1);
 }
 

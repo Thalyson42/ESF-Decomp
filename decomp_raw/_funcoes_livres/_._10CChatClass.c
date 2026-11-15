@@ -49,7 +49,7 @@ unsigned int _._10CChatClass(st_5446d0_1 *a0, unsigned int a1)
     if (a0->field_348)
     {
         if (a0->field_348)
-            sub_48c1d0(a0->field_348, 3);
+            _._Q210CChatClass9CChatNode(a0->field_348, 3);
         a0->field_348 = 0;
     }
     if (a0->field_34c)
@@ -70,11 +70,11 @@ unsigned int _._10CChatClass(st_5446d0_1 *a0, unsigned int a1)
                     if (v3)
                         v3->field_8 = 0;
                     v2->field_4 = NULL;
-                    sub_48d4e0(v2);
+                    __builtin_delete(v2);
                 }
                 v4 = v1;
                 if (v4)
-                    sub_48c1d0(v4, 3);
+                    _._Q210CChatClass9CChatNode(v4, 3);
             }
         }
         if (a0->field_34c)
@@ -89,12 +89,12 @@ unsigned int _._10CChatClass(st_5446d0_1 *a0, unsigned int a1)
                     iter1 = iter1->field_4;
                     v7->field_4 = NULL;
                     v7->field_8 = 0;
-                    sub_48d4e0(v7);
+                    __builtin_delete(v7);
                 } while (iter1);
             }
             v5[1] = NULL;
             *v5 = NULL;
-            sub_48d4e0(v5);
+            __builtin_delete(v5);
         }
         a0->field_34c = NULL;
     }
@@ -116,11 +116,11 @@ unsigned int _._10CChatClass(st_5446d0_1 *a0, unsigned int a1)
                     if (v11)
                         v11->field_8 = 0;
                     v10->field_4 = NULL;
-                    sub_48d4e0(v10);
+                    __builtin_delete(v10);
                 }
                 v12 = v9;
                 if (v12)
-                    sub_48c1d0(v12, 3);
+                    _._Q210CChatClass9CChatNode(v12, 3);
             }
         }
         if (a0->field_350)
@@ -135,12 +135,12 @@ unsigned int _._10CChatClass(st_5446d0_1 *a0, unsigned int a1)
                     iter = iter->field_4;
                     v15->field_4 = NULL;
                     v15->field_8 = 0;
-                    sub_48d4e0(v15);
+                    __builtin_delete(v15);
                 } while (iter);
             }
             v13[1] = NULL;
             *v13 = NULL;
-            sub_48d4e0(v13);
+            __builtin_delete(v13);
         }
         a0->field_350 = NULL;
     }
@@ -162,11 +162,11 @@ unsigned int _._10CChatClass(st_5446d0_1 *a0, unsigned int a1)
                     if (v19)
                         v19->field_8 = 0;
                     v18->field_4 = NULL;
-                    sub_48d4e0(v18);
+                    __builtin_delete(v18);
                 }
                 v20 = v17;
                 if (v20)
-                    sub_48c1d0(v20, 3);
+                    _._Q210CChatClass9CChatNode(v20, 3);
             }
         }
         if (a0->field_354)
@@ -181,18 +181,18 @@ unsigned int _._10CChatClass(st_5446d0_1 *a0, unsigned int a1)
                     node = node->field_4;
                     v23->field_4 = NULL;
                     v23->field_8 = 0;
-                    sub_48d4e0(v23);
+                    __builtin_delete(v23);
                 } while (node);
             }
             v21[1] = NULL;
             *v21 = NULL;
-            sub_48d4e0(v21);
+            __builtin_delete(v21);
         }
         a0->field_354 = NULL;
     }
     v24 = a1;
     if ((char)v24 & 1)
-        v24 = sub_48d4e0(a0);
+        v24 = __builtin_delete(a0);
     return v24;
 }
 

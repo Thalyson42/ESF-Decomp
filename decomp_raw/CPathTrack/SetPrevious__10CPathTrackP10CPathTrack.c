@@ -29,7 +29,7 @@ unsigned int SetPrevious__10CPathTrackP10CPathTrack(st_4e71a0_1 *a0, st_4e71a0_0
 
     if (!a1)
         return v1;
-    v0 = sub_488af0(*a1->field_1cc + gpGlobals->field_98, gpGlobals->field_98 + a0->field_68);
+    v0 = strcmp@GLIBC_2.0(*a1->field_1cc + gpGlobals->field_98, gpGlobals->field_98 + a0->field_68);
     if (!v0)
         return v0;
     a0->field_70 = a1;

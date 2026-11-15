@@ -15,9 +15,9 @@ int GetChatTextFromTextMsg__10CChatClassPCcPc(unsigned int a0, char *a1, char *a
     if (a1 && *a1 && *a1 == 2)
     {
         v0 = 0;
-        sub_48d0e0(&v0 + 1, 0, 0xff);
+        memset@GLIBC_2.0(&v0 + 1, 0, 0xff);
         v1 = &v0;
-        sub_48e110(&v0, a1 + 1);
+        strcpy@GLIBC_2.0(&v0, a1 + 1);
         v2 = 0xffffffff;
         do
         {
@@ -38,7 +38,7 @@ int GetChatTextFromTextMsg__10CChatClassPCcPc(unsigned int a0, char *a1, char *a
                 } while (v6 && (v6 -= 1, v7 = v8 + 1, *v8));
             } while (v4 < ~v6 - 1 && (&v0)[v4] && (&v0)[v4] != 58);
         }
-        return sub_48e110(a2, &(&v0)[2 + v4]);
+        return strcpy@GLIBC_2.0(a2, &(&v0)[2 + v4]);
     }
     *(char *)&v9 = 0;
     *a2 = 0;

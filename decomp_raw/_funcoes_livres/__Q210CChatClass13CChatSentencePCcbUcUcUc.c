@@ -22,13 +22,13 @@ st_543d00_0 * __Q210CChatClass13CChatSentencePCcbUcUcUc(st_543d00_0 *a0, char *a
     {
         v2 = v1;
     } while (v0 && (v0 -= 1, v1 = v2 + 1, *v2));
-    v3 = sub_48c340(~v0);
+    v3 = __builtin_vec_new(~v0);
     a0->field_24 = v3;
     a0->field_28 = a2;
     a0->field_29 = a3;
     a0->field_2a = a4;
     a0->field_2b = a5;
-    sub_48e110(v3, a1);
+    strcpy@GLIBC_2.0(v3, a1);
     a0->field_0 = 0;
     return a0;
 }

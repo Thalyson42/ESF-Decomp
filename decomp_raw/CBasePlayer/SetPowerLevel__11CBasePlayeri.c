@@ -10,7 +10,7 @@ typedef struct st_4f2c10_1 {
     unsigned int field_0;
 } st_4f2c10_1;
 
-extern st_4f2c10_1 *g_6168b4;
+extern st_4f2c10_1 *g_engfuncs.pfnAlertMessage;
 
 int SetPowerLevel__11CBasePlayeri(st_4f2c10_0 *a0, int a1)
 {
@@ -25,7 +25,7 @@ int SetPowerLevel__11CBasePlayeri(st_4f2c10_0 *a0, int a1)
         a0->field_744 = v0;
     if (a0->field_744 >= 0)
         return a1;
-    v1 = g_6168b4(1, "negative PowerLevel\n");
+    v1 = g_engfuncs.pfnAlertMessage(1, "negative PowerLevel\n");
     a0->field_744 = 0;
     return v1;
 }

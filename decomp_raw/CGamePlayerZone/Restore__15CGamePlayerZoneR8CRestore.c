@@ -3,6 +3,6 @@ extern int _15CGamePlayerZone.m_SaveData;
 
 unsigned int Restore__15CGamePlayerZoneR8CRestore(int a0, int a1)
 {
-    return (!sub_488320(a0, a1) ? 0 : sub_48a980(a1, "CGamePlayerZone", a0, &_15CGamePlayerZone.m_SaveData, 4));
+    return (!CRuleEntity::Restore(a0, a1) ? 0 : CRestore::ReadFields(a1, "CGamePlayerZone", a0, &_15CGamePlayerZone.m_SaveData, 4));
 }
 

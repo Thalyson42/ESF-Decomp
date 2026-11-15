@@ -28,9 +28,9 @@ typedef struct st_4ecf00_0 {
     unsigned int field_98;
 } st_4ecf00_0;
 
-extern st_4ecf00_1 *g_6167f8;
-extern st_4ecf00_1 *g_6168b4;
-extern st_4ecf00_1 *g_6168d8;
+extern st_4ecf00_1 *g_engfuncs.pfnFindEntityByString;
+extern st_4ecf00_1 *g_engfuncs.pfnAlertMessage;
+extern st_4ecf00_1 *g_engfuncs.pfnEntOffsetOfPEntity;
 extern st_4ecf00_0 *gpGlobals;
 
 unsigned int Find__16CFuncTrackChange(float idx)
@@ -62,31 +62,31 @@ unsigned int Find__16CFuncTrackChange(float idx)
     float v5;  // [bp-0x20]
     float v6;  // [bp-0x1c]
 
-    v8 = g_6167f8(0, "targetname", *(int *)(*(unsigned int *)&idx + 304) + gpGlobals->field_98);
+    v8 = g_engfuncs.pfnFindEntityByString(0, "targetname", *(int *)(*(unsigned int *)&idx + 304) + gpGlobals->field_98);
     v9 = 0;
-    if (!v8 || !g_6168d8(v8))
+    if (!v8 || !g_engfuncs.pfnEntOffsetOfPEntity(v8))
         v9 = 1;
     if (v9)
-        return g_6168b4(4, "Can't find top track for track change! %s\n", *(int *)(*(unsigned int *)&idx + 304) + gpGlobals->field_98);
+        return g_engfuncs.pfnAlertMessage(4, "Can't find top track for track change! %s\n", *(int *)(*(unsigned int *)&idx + 304) + gpGlobals->field_98);
     v10 = (unsigned int *)idx;
-    v10[73] = sub_48a5e0(v8);
-    v11 = g_6167f8(0, "targetname", v10[77] + gpGlobals->field_98);
+    v10[73] = CPathTrack::Instance(v8);
+    v11 = g_engfuncs.pfnFindEntityByString(0, "targetname", v10[77] + gpGlobals->field_98);
     v12 = 0;
-    if (!v11 || !g_6168d8(v11))
+    if (!v11 || !g_engfuncs.pfnEntOffsetOfPEntity(v11))
         v12 = 1;
     if (!v12)
     {
-        *(unsigned int *)(*(unsigned int *)&idx + 296) = sub_48a5e0(v11);
-        v13 = g_6167f8(0, "targetname", *(int *)(*(unsigned int *)&idx + 312) + gpGlobals->field_98);
+        *(unsigned int *)(*(unsigned int *)&idx + 296) = CPathTrack::Instance(v11);
+        v13 = g_engfuncs.pfnFindEntityByString(0, "targetname", *(int *)(*(unsigned int *)&idx + 312) + gpGlobals->field_98);
         v14 = 0;
-        if (!v13 || !g_6168d8(v13))
+        if (!v13 || !g_engfuncs.pfnEntOffsetOfPEntity(v13))
             v14 = 1;
         if (v14)
         {
-            g_6168b4(4, "Can't find train for track change! %s\n", *(int *)(*(unsigned int *)&idx + 312) + gpGlobals->field_98);
-            return g_6167f8(0, "targetname", *(int *)(*(unsigned int *)&idx + 312) + gpGlobals->field_98);
+            g_engfuncs.pfnAlertMessage(4, "Can't find train for track change! %s\n", *(int *)(*(unsigned int *)&idx + 312) + gpGlobals->field_98);
+            return g_engfuncs.pfnFindEntityByString(0, "targetname", *(int *)(*(unsigned int *)&idx + 312) + gpGlobals->field_98);
         }
-        v15 = sub_489170(g_6167f8(0, "targetname", *(int *)(*(unsigned int *)&idx + 312) + gpGlobals->field_98));
+        v15 = CFuncTrackTrain::Instance(g_engfuncs.pfnFindEntityByString(0, "targetname", *(int *)(*(unsigned int *)&idx + 312) + gpGlobals->field_98));
         *(unsigned int *)(*(unsigned int *)&idx + 300) = v15;
         if (v15)
         {
@@ -106,12 +106,12 @@ unsigned int Find__16CFuncTrackChange(float idx)
             v2 = (float)v21;
             v3 = (float)v22;
             v23 = (st_4ecf00_2 *)idx;
-            v23->field_128 = sub_489b20(*(int *)(*(unsigned int *)&idx + 296), &v1);
+            v23->field_128 = CPathTrack::Nearest(*(int *)(*(unsigned int *)&idx + 296), &v1);
             v1 = v4;
             v2 = v5;
             v3 = v6;
             v24 = (st_4ecf00_4 *)idx;
-            v24->field_124 = sub_489b20(v23->field_124, &v1);
+            v24->field_124 = CPathTrack::Nearest(v23->field_124, &v1);
             v25 = v24->field_60->field_100(v24, v24->field_80);
             v26 = (unsigned int *)idx;
             v26[3] = 0;
@@ -126,6 +126,6 @@ unsigned int Find__16CFuncTrackChange(float idx)
         v0 = *(int *)(*(unsigned int *)&idx + 308) + gpGlobals->field_98;
         v16 = "Can't find bottom track for track change! %s\n";
     }
-    return g_6168b4(4, v16);
+    return g_engfuncs.pfnAlertMessage(4, v16);
 }
 

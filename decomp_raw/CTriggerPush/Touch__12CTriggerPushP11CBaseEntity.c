@@ -100,9 +100,9 @@ float Touch__12CTriggerPushP11CBaseEntity(st_52e800_1 **a0, st_52e800_0 **a1)
             v9->field_24 = v7;
             v9->field_28 = v8;
             if (0.0 >= v9->field_28)
-                return sub_48cc00(a0);
+                return UTIL_Remove(a0);
             v9->field_1a5 = v9->field_1a5 & 253;
-            return sub_48cc00(a0);
+            return UTIL_Remove(a0);
         }
         else
         {

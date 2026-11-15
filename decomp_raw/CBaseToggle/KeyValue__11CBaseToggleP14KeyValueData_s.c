@@ -19,7 +19,7 @@ typedef struct st_522bb0_2 {
     unsigned int field_0;
 } st_522bb0_2;
 
-extern st_522bb0_2 *g_6168cc;
+extern st_522bb0_2 *g_engfuncs.pfnAllocString;
 
 unsigned int KeyValue__11CBaseToggleP14KeyValueData_s(st_522bb0_1 *a0, st_522bb0_0 *a1)
 {
@@ -31,37 +31,37 @@ unsigned int KeyValue__11CBaseToggleP14KeyValueData_s(st_522bb0_1 *a0, st_522bb0
     unsigned int v5;  // eax
     double v6;  // mm7
 
-    if (!sub_488af0(a1->field_4, "lip"))
+    if (!strcmp@GLIBC_2.0(a1->field_4, "lip"))
     {
-        v0 = sub_487fc0(a1->field_8, 0, 0);
+        v0 = __strtod_internal@GLIBC_2.0(a1->field_8, 0, 0);
         a0->field_90 = (float)v1;
         a1->field_c = 1;
         return v0;
     }
-    else if (!sub_488af0(a1->field_4, "wait"))
+    else if (!strcmp@GLIBC_2.0(a1->field_4, "wait"))
     {
-        v2 = sub_487fc0(a1->field_8, 0, 0);
+        v2 = __strtod_internal@GLIBC_2.0(a1->field_8, 0, 0);
         a0->field_8c = (float)v3;
         a1->field_c = 1;
         return v2;
     }
-    else if (!sub_488af0(a1->field_4, "master"))
+    else if (!strcmp@GLIBC_2.0(a1->field_4, "master"))
     {
-        v4 = g_6168cc(a1->field_8);
+        v4 = g_engfuncs.pfnAllocString(a1->field_8);
         a0->field_100 = v4;
         a1->field_c = 1;
         return v4;
     }
-    else if (!sub_488af0(a1->field_4, "distance"))
+    else if (!strcmp@GLIBC_2.0(a1->field_4, "distance"))
     {
-        v5 = sub_487fc0(a1->field_8, 0, 0);
+        v5 = __strtod_internal@GLIBC_2.0(a1->field_8, 0, 0);
         a0->field_88 = (float)v6;
         a1->field_c = 1;
         return v5;
     }
     else
     {
-        return sub_48b920(a0, a1);
+        return CBaseDelay::KeyValue(a0, a1);
     }
 }
 

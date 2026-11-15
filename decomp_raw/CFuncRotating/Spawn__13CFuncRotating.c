@@ -31,7 +31,7 @@ typedef struct st_491c20_1 {
 extern char HurtTouch__13CFuncRotatingP11CBaseEntity;
 extern char RotatingUse__13CFuncRotatingP11CBaseEntityT18USE_TYPEf;
 extern char SUB_CallUseToggle__11CBaseEntity;
-extern st_491c20_1 *g_6167c8;
+extern st_491c20_1 *g_engfuncs.pfnSetModel;
 extern st_491c20_0 *gpGlobals;
 
 int Spawn__13CFuncRotating(float idx)
@@ -114,8 +114,8 @@ LABEL_491c9c:
         *(unsigned int *)(*(int *)idx + 268) = 4;
     }
     *(unsigned int *)(*(int *)idx + 264) = 7;
-    sub_48db50(*(int *)idx, *(int *)idx + 8);
-    *(unsigned int *)(*(unsigned int *)&idx + 28) = _INSERT(g_6167c8(*(int *)(*(int *)idx + 520), *(int *)(*(int *)idx + 184) + gpGlobals->field_98), 0, 0) | 0xffff0000;
+    UTIL_SetOrigin(*(int *)idx, *(int *)idx + 8);
+    *(unsigned int *)(*(unsigned int *)&idx + 28) = _INSERT(g_engfuncs.pfnSetModel(*(int *)(*(int *)idx + 520), *(int *)(*(int *)idx + 184) + gpGlobals->field_98), 0, 0) | 0xffff0000;
     *(char **)(*(unsigned int *)&idx + 32) = &RotatingUse__13CFuncRotatingP11CBaseEntityT18USE_TYPEf;
     if (0.0 >= *(float *)(*(int *)idx + 504))
         *(float *)(*(int *)idx + 504) = 0.0f;

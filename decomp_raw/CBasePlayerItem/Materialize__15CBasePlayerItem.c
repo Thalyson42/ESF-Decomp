@@ -31,7 +31,7 @@ short Materialize__15CBasePlayerItem(st_5380b0_1 *a0)
         a0->field_0->field_118 = a0->field_0->field_118 | 2;
     }
     a0->field_0->field_10c = 1;
-    v1 = _INSERT(sub_48db50(a0->field_0, &a0->field_0->field_8), 0, 0);
+    v1 = _INSERT(UTIL_SetOrigin(a0->field_0, &a0->field_0->field_8), 0, 0);
     a0->field_14 = v1 | 0xffff0000;
     a0->field_18 = &DefaultTouch__15CBasePlayerItemP11CBaseEntity;
     a0->field_c = 0;

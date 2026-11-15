@@ -120,7 +120,7 @@ double Touch__9CShenlongP11CBaseEntity(st_5182a0_5 **a0, st_5182a0_4 *a1)
         v24 = v22 * v22 + v23 * v23;
         v25 = sqrt(v24);
         if (isnan(v25))
-            sub_487dc0(*(unsigned int *)&v24);
+            sqrt(*(unsigned int *)&v24);
         else
             v24 = v25;
         v12 = (float)v24;
@@ -138,7 +138,7 @@ double Touch__9CShenlongP11CBaseEntity(st_5182a0_5 **a0, st_5182a0_4 *a1)
         v26 = v5 * v5 + v6 * v6;
         v27 = sqrt(v26);
         if (isnan(v27))
-            sub_487dc0(*(unsigned int *)&v26);
+            sqrt(*(unsigned int *)&v26);
         else
             v26 = v27;
         v12 = (float)v26;
@@ -161,7 +161,7 @@ double Touch__9CShenlongP11CBaseEntity(st_5182a0_5 **a0, st_5182a0_4 *a1)
         *(double *)&a1->field_0->padding_14[12] = v6;
         return v6;
     }
-    else if (!sub_488af0(a1->field_0->field_4 + gpGlobals->field_98, "magic_attack"))
+    else if (!strcmp@GLIBC_2.0(a1->field_0->field_4 + gpGlobals->field_98, "magic_attack"))
     {
         if (a1->field_0->field_198)
         {
@@ -172,18 +172,18 @@ double Touch__9CShenlongP11CBaseEntity(st_5182a0_5 **a0, st_5182a0_4 *a1)
             v12 = v29[2] - v30->field_8;
             v13 = *(float *)&v31[1] - *(float *)&v32[1];
             v14 = *(float *)&v31[2] - *(float *)&v32[2];
-            sub_488860(&v9, &v12);
+            UTIL_VecToAngles(&v9, &v12);
             v30->field_50 = v9;
             v30->field_54 = v10;
             v30->field_58 = v11;
         }
         v33 = a0;
         *v33->field_12c = 0;
-        v34 = sub_48afe0(v33, "lounge");
+        v34 = CBaseAnimating::LookupSequence(v33, "lounge");
         v35 = a0;
         *v35->field_128 = v34;
         *v35->field_130 = 0;
-        sub_488850(v35);
+        CBaseAnimating::ResetSequenceInfo(v35);
         return v36;
     }
     else

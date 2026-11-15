@@ -28,7 +28,7 @@ char PM_ParticleLine(double a0, float *a1, float *a2, unsigned int a3, unsigned 
     v6 = *a2 - *a1;
     v7 = a2[1] - a1[1];
     v8 = a2[2] - a1[2];
-    sub_489290(&v6);
+    VectorNormalize(&v6);
     v0 = v8;
     i = 0;
     if (i > v0)

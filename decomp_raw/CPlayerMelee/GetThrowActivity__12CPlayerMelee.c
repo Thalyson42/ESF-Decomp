@@ -19,19 +19,19 @@ unsigned int GetThrowActivity__12CPlayerMelee(float a0)
                 {
                     v1 = 1;
                     v0 = a0;
-                    sub_489b80(v0, v1);
-                    if (sub_489b80(v0, v1) > 5)
+                    CPlayerMelee::GetThrowDirection(v0, v1);
+                    if (CPlayerMelee::GetThrowDirection(v0, v1) > 5)
                         return v5;
-                    goto *((void *)(&(&_GLOBAL_OFFSET_TABLE_)[-1 * *(int *)(&(&_GLOBAL_OFFSET_TABLE_)[4 * sub_489b80(v0, v1)] - 1125724)]));
+                    goto *((void *)(&(&_GLOBAL_OFFSET_TABLE_)[-1 * *(int *)(&(&_GLOBAL_OFFSET_TABLE_)[4 * CPlayerMelee::GetThrowDirection(v0, v1)] - 1125724)]));
                 }
                 else if (*(int *)(*(unsigned int *)&a0 + 100) == 2)
                 {
                     v1 = 0;
                     v0 = a0;
-                    sub_489b80(v0, v1);
-                    if (sub_489b80(v0, v1) - 2 > 3)
+                    CPlayerMelee::GetThrowDirection(v0, v1);
+                    if (CPlayerMelee::GetThrowDirection(v0, v1) - 2 > 3)
                         return v3;
-                    goto *((void *)(&(&_GLOBAL_OFFSET_TABLE_)[-1 * *(int *)(&(&_GLOBAL_OFFSET_TABLE_)[4 * sub_489b80(v0, v1)] - 1125572)]));
+                    goto *((void *)(&(&_GLOBAL_OFFSET_TABLE_)[-1 * *(int *)(&(&_GLOBAL_OFFSET_TABLE_)[4 * CPlayerMelee::GetThrowDirection(v0, v1)] - 1125572)]));
                 }
             }
             if (*(int *)(*(unsigned int *)&a0 + 100) == 4)
@@ -49,19 +49,19 @@ unsigned int GetThrowActivity__12CPlayerMelee(float a0)
         }
         v1 = 1;
         v0 = a0;
-        sub_489b80(v0, v1);
-        if (sub_489b80(v0, v1) > 5)
+        CPlayerMelee::GetThrowDirection(v0, v1);
+        if (CPlayerMelee::GetThrowDirection(v0, v1) > 5)
             return v5;
-        goto *((void *)(&(&_GLOBAL_OFFSET_TABLE_)[-1 * *(int *)(&(&_GLOBAL_OFFSET_TABLE_)[4 * sub_489b80(v0, v1)] - 1125724)]));
+        goto *((void *)(&(&_GLOBAL_OFFSET_TABLE_)[-1 * *(int *)(&(&_GLOBAL_OFFSET_TABLE_)[4 * CPlayerMelee::GetThrowDirection(v0, v1)] - 1125724)]));
     }
     else
     {
         v1 = 1;
         v0 = a0;
-        sub_489b80(v0, v1);
-        if (sub_489b80(v0, v1) > 5)
+        CPlayerMelee::GetThrowDirection(v0, v1);
+        if (CPlayerMelee::GetThrowDirection(v0, v1) > 5)
             return v5;
-        goto *((void *)(&(&_GLOBAL_OFFSET_TABLE_)[-1 * *(int *)(&(&_GLOBAL_OFFSET_TABLE_)[4 * sub_489b80(v0, v1)] - 1125724)]));
+        goto *((void *)(&(&_GLOBAL_OFFSET_TABLE_)[-1 * *(int *)(&(&_GLOBAL_OFFSET_TABLE_)[4 * CPlayerMelee::GetThrowDirection(v0, v1)] - 1125724)]));
     }
 }
 

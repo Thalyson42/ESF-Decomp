@@ -5,7 +5,7 @@ void __register_frame(int a0)
     int v1;  // [bp-0x18]
 
     sub_5968cc(v0, v1);
-    sub_48ddd0(a0, sub_489f30(24));
+    __register_frame_info(a0, malloc@GLIBC_2.0(24));
     return;
 }
 

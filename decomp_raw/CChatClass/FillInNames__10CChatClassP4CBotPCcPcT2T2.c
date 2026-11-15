@@ -28,7 +28,7 @@ typedef struct st_5480f0_3 {
     unsigned int field_0;
 } st_5480f0_3;
 
-extern st_5480f0_3 *g_616928;
+extern st_5480f0_3 *g_engfuncs.pfnRandomLong;
 extern st_5480f0_0 *gpGlobals;
 
 st_5480f0_0 * FillInNames__10CChatClassP4CBotPCcPcT2T2(int a0, st_5480f0_2 *a1, st_5480f0_0 *a2, char *a3, char *a4, int a5)
@@ -68,12 +68,12 @@ st_5480f0_0 * FillInNames__10CChatClassP4CBotPCcPcT2T2(int a0, st_5480f0_2 *a1, 
     node = NULL;
     *a3 = 0;
     v2 = "%n";
-    v14 = sub_48b210(a2, v2);
+    v14 = strstr@GLIBC_2.0(a2, v2);
     v1 = "%r";
     v0 = a2;
     while (1)
     {
-        v9 = sub_48b210(v0, v1);
+        v9 = strstr@GLIBC_2.0(v0, v1);
         if (!v14)
         {
             if (!v9)
@@ -93,7 +93,7 @@ LABEL_548163:
             v24 = a3;
             *(char *)(node + v24) = 0;
             iter2 = &iter2->field_2;
-            sub_48c150(v24, a4);
+            strcat@GLIBC_2.0(v24, a4);
             iter = 0xffffffff;
             v25 = a4;
             do
@@ -110,14 +110,14 @@ LABEL_548163:
             {
                 do
                 {
-                    v16 = sub_48a500(iter1);
+                    v16 = UTIL_PlayerByIndex(iter1);
                     if (v16 == a1)
                         continue;
                     if (!a1->field_a20)
                     {
                         *(unsigned short *)&v3 = 0;
                         *(unsigned short *)&v2 = 0;
-                        if (!(char)sub_489a70(v16, v2, v3))
+                        if (!(char)UTIL_IsValidPlayer(v16, v2, v3))
                             continue;
                     }
                     else if (!(1 << ((char)(iter1 - 1) & 31) & a1->field_aa8))
@@ -125,16 +125,16 @@ LABEL_548163:
                         continue;
                     }
                     v2 = v16->field_0->field_1d0 + gpGlobals->field_98;
-                    sub_48e110(&(&v12)[33 * v5], v2);
+                    strcpy@GLIBC_2.0(&(&v12)[33 * v5], v2);
                     v5 += 1;
                 } while ((iter1 += 1, v15 = gpGlobals, iter1 <= gpGlobals->field_90));
             }
             if (v5 <= 1)
                 return v15;
-            v17 = g_616928(0, v5 - 1);
+            v17 = g_engfuncs.pfnRandomLong(0, v5 - 1);
             v7 = 0;
             v18 = &(&v12)[33 * v17];
-            if (!sub_488af0(v18, a4) || !sub_488af0(v18, a5))
+            if (!strcmp@GLIBC_2.0(v18, a4) || !strcmp@GLIBC_2.0(v18, a5))
                 v7 = 1;
             iter1 = 0;
             if (v7)
@@ -142,14 +142,14 @@ LABEL_548163:
                 v4 = &v12;
                 do
                 {
-                    v17 = g_616928(0, v5 - 1);
+                    v17 = g_engfuncs.pfnRandomLong(0, v5 - 1);
                     v7 = 0;
                     v19 = &v4[33 * v17];
-                    if (!sub_488af0(v19, a4) || !sub_488af0(v19, a5))
+                    if (!strcmp@GLIBC_2.0(v19, a4) || !strcmp@GLIBC_2.0(v19, a5))
                         v7 = 1;
                 } while ((iter1 += 1, v7 && iter1 <= 19));
             }
-            sub_48a7c0(a0, a1->field_a04, &(&v12)[33 * v17], &v13);
+            CChatClass::HumanizeName(a0, a1->field_a04, &(&v12)[33 * v17], &v13);
             for (; a2 + iter2 < v9; node += 1)
             {
                 *(char *)(node + a3) = *(char *)(iter2 + a2);
@@ -159,7 +159,7 @@ LABEL_548163:
             *(char *)(node + v20) = 0;
             iter2 = &iter2->field_2;
             v21 = &v13;
-            sub_48c150(v20, &v13);
+            strcat@GLIBC_2.0(v20, &v13);
             iter = 0xffffffff;
             do
             {
@@ -170,7 +170,7 @@ LABEL_548163:
         *(char *)(node + a3) = 0;
         v2 = "%n";
         v27 = a2 + iter2;
-        v14 = sub_48b210(v27, v2);
+        v14 = strstr@GLIBC_2.0(v27, v2);
         v1 = "%r";
         v0 = v27;
     }

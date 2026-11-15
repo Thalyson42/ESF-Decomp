@@ -10,30 +10,30 @@ typedef struct st_527520_1 {
     unsigned int field_0;
 } st_527520_1;
 
-extern st_527520_1 *g_6168cc;
+extern st_527520_1 *g_engfuncs.pfnAllocString;
 
 unsigned int KeyValue__12CTalkMonsterP14KeyValueData_s(unsigned int *a0, st_527520_0 *a1)
 {
     unsigned int v0;  // eax
     unsigned int v1;  // eax
 
-    if (!sub_488af0(a1->field_4, "UseSentence"))
+    if (!strcmp@GLIBC_2.0(a1->field_4, "UseSentence"))
     {
-        v0 = g_6168cc(a1->field_8);
+        v0 = g_engfuncs.pfnAllocString(a1->field_8);
         a0[192] = v0;
         a1->field_c = 1;
         return v0;
     }
-    else if (!sub_488af0(a1->field_4, "UnUseSentence"))
+    else if (!strcmp@GLIBC_2.0(a1->field_4, "UnUseSentence"))
     {
-        v1 = g_6168cc(a1->field_8);
+        v1 = g_engfuncs.pfnAllocString(a1->field_8);
         a0[193] = v1;
         a1->field_c = 1;
         return v1;
     }
     else
     {
-        return sub_488d50(a0, a1);
+        return CBaseMonster::KeyValue(a0, a1);
     }
 }
 

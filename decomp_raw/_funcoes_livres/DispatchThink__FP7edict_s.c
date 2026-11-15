@@ -30,7 +30,7 @@ typedef struct st_49c3b0_5 {
     unsigned int field_98;
 } st_49c3b0_5;
 
-extern st_49c3b0_2 *g_6168b4;
+extern st_49c3b0_2 *g_engfuncs.pfnAlertMessage;
 extern st_49c3b0_5 *gpGlobals;
 
 st_49c3b0_4 * DispatchThink__FP7edict_s(st_49c3b0_4 *a0)
@@ -42,7 +42,7 @@ st_49c3b0_4 * DispatchThink__FP7edict_s(st_49c3b0_4 *a0)
         return a0;
     if (v0->field_0->field_1a4 >= NULL)
         return v0->field_60->field_b0(v0);
-    g_6168b4(4, "Dormant entity %s is thinking!!\n", v0->field_0->field_0 + gpGlobals->field_98);
+    g_engfuncs.pfnAlertMessage(4, "Dormant entity %s is thinking!!\n", v0->field_0->field_0 + gpGlobals->field_98);
     return v0->field_60->field_b0(v0);
 }
 

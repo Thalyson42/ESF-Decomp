@@ -20,7 +20,7 @@ int what__C9exception(st_595c2c_0 **a0)
     }
     else
     {
-        sub_48c860();
+        __throw_bad_typeid();
         v1 = NULL;
     }
     return *v1;

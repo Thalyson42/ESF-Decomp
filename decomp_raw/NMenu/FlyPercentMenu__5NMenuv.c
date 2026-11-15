@@ -7,7 +7,7 @@ int FlyPercentMenu__5NMenuv(void)
     int v0;  // [bp-0x1c]
 
     if (_5NMenu.CurrentMenuChoice <= 8)
-        sub_489f90(&BotManager, 45, (short)sub_48cb20("fly_percent"));
-    return sub_48d6f0(v0);
+        CBotManager::ChangePersoPercentSetting(&BotManager, 45, (short)NMenu::GetPercentFromMenu("fly_percent"));
+    return NMenu::ResetMenu(v0);
 }
 

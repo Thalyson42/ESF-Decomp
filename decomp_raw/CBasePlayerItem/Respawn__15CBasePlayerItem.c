@@ -48,8 +48,8 @@ typedef struct st_5381f0_2 {
 
 extern char AttemptToMaterialize__15CBasePlayerItem;
 extern st_5381f0_2 *g_pGameRules;
-extern st_5381f0_1 *g_616828;
-extern st_5381f0_1 *g_6168b4;
+extern st_5381f0_1 *g_engfuncs.pfnDropToFloor;
+extern st_5381f0_1 *g_engfuncs.pfnAlertMessage;
 extern st_5381f0_4 *gpGlobals;
 
 st_5381f0_6 * Respawn__15CBasePlayerItem(st_5381f0_3 **a0)
@@ -62,10 +62,10 @@ st_5381f0_6 * Respawn__15CBasePlayerItem(st_5381f0_3 **a0)
 
     g_pGameRules->field_44->field_88(&v0, g_pGameRules, a0);
     v1 = *a0;
-    v2 = sub_48a0f0(v1->field_0 + gpGlobals->field_98, &v0, &v1->field_50, v1->field_198);
+    v2 = CBaseEntity::Create(v1->field_0 + gpGlobals->field_98, &v0, &v1->field_50, v1->field_198);
     if (!v2)
     {
-        g_6168b4(1, "Respawn failed to create %s!\n", *a0->field_0 + gpGlobals->field_98);
+        g_engfuncs.pfnAlertMessage(1, "Respawn failed to create %s!\n", *a0->field_0 + gpGlobals->field_98);
         return v2;
     }
     v3 = v2->field_0;
@@ -74,7 +74,7 @@ st_5381f0_6 * Respawn__15CBasePlayerItem(st_5381f0_3 **a0)
     v2->field_18 = 0;
     v2->field_c = _INSERT(v3, 0, 0) | 0xffff0000;
     v2->field_10 = &AttemptToMaterialize__15CBasePlayerItem;
-    g_616828(*a0->field_208);
+    g_engfuncs.pfnDropToFloor(*a0->field_208);
     g_pGameRules->field_44->field_80(g_pGameRules, a0);
     v2->field_0->field_104 = (float)v5;
     return v2;

@@ -23,10 +23,10 @@ typedef struct st_4bc360_1 {
 
 extern char NormalThink__12CMagicAttack;
 extern unsigned int gmsgDetachTrail;
-extern st_4bc360_1 *g_616878;
-extern st_4bc360_1 *g_61687c;
-extern st_4bc360_1 *g_61688c;
-extern st_4bc360_1 *g_6168dc;
+extern st_4bc360_1 *g_engfuncs.pfnMessageBegin;
+extern st_4bc360_1 *g_engfuncs.pfnMessageEnd;
+extern st_4bc360_1 *g_engfuncs.pfnWriteLong;
+extern st_4bc360_1 *g_engfuncs.pfnIndexOfEdict;
 extern st_4bc360_0 *gpGlobals;
 
 short Release__16CExplodingAttack(st_4bc360_3 *a0)
@@ -36,10 +36,10 @@ short Release__16CExplodingAttack(st_4bc360_3 *a0)
     unsigned int v2;  // [bp-0x28]
     unsigned int v3;  // [bp-0x24]
 
-    g_616878(2, gmsgDetachTrail, 0, 0, v1, v2, v3);
-    v0 = g_6168dc(a0->field_0->field_208);
-    g_61688c(v0);
-    a0->field_c = _INSERT(g_61687c(v0), 0, 0) | 0xffff0000;
+    g_engfuncs.pfnMessageBegin(2, gmsgDetachTrail, 0, 0, v1, v2, v3);
+    v0 = g_engfuncs.pfnIndexOfEdict(a0->field_0->field_208);
+    g_engfuncs.pfnWriteLong(v0);
+    a0->field_c = _INSERT(g_engfuncs.pfnMessageEnd(v0), 0, 0) | 0xffff0000;
     a0->field_10 = &NormalThink__12CMagicAttack;
     a0->field_0->field_104 = (float)(0.5 + *(float *)gpGlobals);
     return (unsigned short)gpGlobals;

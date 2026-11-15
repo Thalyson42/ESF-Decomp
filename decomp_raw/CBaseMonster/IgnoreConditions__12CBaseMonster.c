@@ -25,7 +25,7 @@ unsigned int IgnoreConditions__12CBaseMonster(st_4d4640_3 *a0)
     unsigned int v0;  // edi
 
     v0 = 0;
-    if (!sub_48cea0(a0))
+    if (!CBaseMonster::FShouldEat(a0))
         v0 = 64;
     if (a0->field_180 != 6)
     {

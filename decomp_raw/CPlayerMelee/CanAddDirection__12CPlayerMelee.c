@@ -29,14 +29,14 @@ unsigned int CanAddDirection__12CPlayerMelee(st_505810_0 *a0)
 
     if (a0->field_7c)
     {
-        v0 = sub_48d000(a0, a0->field_148);
-        v1 = sub_48bdd0(a0, a0->field_14c);
+        v0 = CPlayerMelee::GetMoveCountFinishedOnly(a0, a0->field_148);
+        v1 = CPlayerMelee::GetMoveCount(a0, a0->field_14c);
     }
     else
     {
         if (!a0->field_ec && a0->field_13c)
         {
-            v0 = sub_48bdd0(a0, a0->field_14c);
+            v0 = CPlayerMelee::GetMoveCount(a0, a0->field_14c);
             v2 = a0->field_134;
         }
         else if (!a0->field_138)
@@ -49,14 +49,14 @@ unsigned int CanAddDirection__12CPlayerMelee(st_505810_0 *a0)
         }
         else if (a0->field_130->field_ec)
         {
-            v0 = sub_48bdd0(a0, a0->field_14c);
+            v0 = CPlayerMelee::GetMoveCount(a0, a0->field_14c);
             v2 = a0->field_130;
         }
         else
         {
             return 1;
         }
-        v1 = sub_48d000(a0, v2[82]);
+        v1 = CPlayerMelee::GetMoveCountFinishedOnly(a0, v2[82]);
     }
     if (v0 != v1)
         return 1;

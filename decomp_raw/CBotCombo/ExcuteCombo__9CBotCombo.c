@@ -62,7 +62,7 @@ double ExcuteCombo__9CBotCombo(st_564e90_5 *a0)
             v2 = v1 + *(float *)&a0->field_8->field_c;
             if (v2 > *(float *)gpGlobals)
             {
-                sub_48d0d0(a0->field_c);
+                CBot::ResetMoveSpeed(a0->field_c);
                 return v2;
             }
             a0->field_8->field_10->field_10(a0->field_8);
@@ -93,7 +93,7 @@ double ExcuteCombo__9CBotCombo(st_564e90_5 *a0)
                     if (v7)
                         v7->field_8 = 0;
                     v6->field_4 = NULL;
-                    sub_48d4e0(v6);
+                    __builtin_delete(v6);
                 }
                 v4 = v5;
             }

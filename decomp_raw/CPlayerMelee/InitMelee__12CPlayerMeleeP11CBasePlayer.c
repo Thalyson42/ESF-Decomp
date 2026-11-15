@@ -82,28 +82,28 @@ unsigned int * InitMelee__12CPlayerMeleeP11CBasePlayer(st_507050_7 *a0, int a1)
     st_507050_4 *v0;  // esi
     unsigned int *v1;  // eax
 
-    sub_48b7e0(a0, a1);
-    sub_488660(a0, 0);
-    sub_488660(a0->field_130, a0->field_124);
-    sub_48b7e0(a0->field_130, 0);
+    CPlayerMelee::SetDefender(a0, a1);
+    CPlayerMelee::SetAttackerOther(a0, 0);
+    CPlayerMelee::SetAttackerOther(a0->field_130, a0->field_124);
+    CPlayerMelee::SetDefender(a0->field_130, 0);
     a0->field_124->field_37c = 0;
     a0->field_128->field_37c = 0;
     if (!a0->field_f4)
     {
         if (a0->field_124->field_320)
-            sub_48c5a0(a0->field_124);
+            CBasePlayer::StopFly(a0->field_124);
         if (a0->field_124->field_324)
-            sub_48dbc0(a0->field_124);
+            CBasePlayer::StopTurbo(a0->field_124);
         if (a0->field_128->field_330)
-            sub_48ba60(a0->field_128);
+            CBasePlayer::StopPowerUp(a0->field_128);
         if (a0->field_128->field_320)
-            sub_48c5a0(a0->field_128);
+            CBasePlayer::StopFly(a0->field_128);
         if (a0->field_128->field_324)
-            sub_48dbc0(a0->field_128);
+            CBasePlayer::StopTurbo(a0->field_128);
         if (a0->field_128->field_508)
-            sub_48a7a0(a0->field_128);
+            CBasePlayer::StopSwoop(a0->field_128);
         if (a0->field_128->field_6c8)
-            sub_48daa0(a0->field_128);
+            CBasePlayer::RemoveWallJump(a0->field_128);
         a0->field_128->field_32c = a0->field_128->field_32c;
         if (a0->field_128->field_968)
         {
@@ -122,8 +122,8 @@ unsigned int * InitMelee__12CPlayerMeleeP11CBasePlayer(st_507050_7 *a0, int a1)
                 }
             }
         }
-        sub_4887c0(a0);
-        sub_4887c0(a0->field_130);
+        CPlayerMelee::RemoveAllAnims(a0);
+        CPlayerMelee::RemoveAllAnims(a0->field_130);
     }
     a0->field_124->field_37c = 1;
     a0->field_128->field_37c = 1;

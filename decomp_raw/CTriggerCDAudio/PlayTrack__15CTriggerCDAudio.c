@@ -8,9 +8,9 @@ int PlayTrack__15CTriggerCDAudio(float idx)
     v2 = __fnstcw();
     v1 = v2 | 0xc00;
     v0 = (int)*(float *)(*(int *)idx + 352);
-    sub_488000(v0);
+    PlayCDTrack(v0);
     *(unsigned int *)(*(unsigned int *)&idx + 20) = 0;
     *(unsigned int *)(*(unsigned int *)&idx + 24) = 0;
-    return sub_48cc00(idx);
+    return UTIL_Remove(idx);
 }
 

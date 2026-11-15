@@ -111,20 +111,20 @@ double EmitDamage__12CPlayerMelee(float idx)
     v7 = 0;
     if (!*(int *)(*(int *)(*(unsigned int *)&idx + 380) + 64))
     {
-        if (!sub_489bd0(idx, *(int *)(*(unsigned int *)&idx + 296)))
+        if (!CPlayerMelee::CanUseTrunksSword(idx, *(int *)(*(unsigned int *)&idx + 296)))
         {
             if (*(int *)(*(int *)(*(unsigned int *)&idx + 380) + 84) == 2 || *(int *)(*(int *)(*(unsigned int *)&idx + 380) + 60))
             {
-                sub_4897c0(idx);
-                sub_48c080(idx, *(int *)(*(unsigned int *)&idx + 296));
+                CPlayerMelee::GetDamage(idx);
+                CPlayerMelee::GetPowerRatio(idx, *(int *)(*(unsigned int *)&idx + 296));
                 v6 = (float)(v26 * (float)v26);
                 if (1.0 > v6)
                     v6 = 1.0f;
                 (*(int *)(*(int *)(*(int *)(*(unsigned int *)&idx + 296) + 96) + 52))(*(int *)(*(unsigned int *)&idx + 296), *(int *)*(int *)(*(unsigned int *)&idx + 292), *(int *)*(int *)(*(unsigned int *)&idx + 292), v6, 0x2000000);
                 if (*(int *)(*(int *)(*(unsigned int *)&idx + 380) + 60) && *(int *)(*(int *)(*(unsigned int *)&idx + 380) + 84) == 1)
                 {
-                    sub_488530(idx, 11, 0);
-                    sub_488530(*(int *)(*(unsigned int *)&idx + 304), 11, 0);
+                    CPlayerMelee::MeleeText(idx, 11, 0);
+                    CPlayerMelee::MeleeText(*(int *)(*(unsigned int *)&idx + 304), 11, 0);
                 }
                 v27 = v6;
                 v24 = __fnstcw();
@@ -138,8 +138,8 @@ double EmitDamage__12CPlayerMelee(float idx)
                 v2 = 0;
                 v1 = 10;
             }
-            sub_488530(idx);
-            sub_489250(idx, sub_48be70(idx));
+            CPlayerMelee::MeleeText(idx);
+            CPlayerMelee::EmitExeSound(idx, CPlayerMelee::GetSoundEdict(idx));
         }
         else
         {
@@ -163,7 +163,7 @@ double EmitDamage__12CPlayerMelee(float idx)
     v31 = *(float *)(*(unsigned int *)&idx + 272) * *(float *)(*(unsigned int *)&idx + 272) + *(float *)(*(unsigned int *)&idx + 276) * *(float *)(*(unsigned int *)&idx + 276) + *(float *)(*(unsigned int *)&idx + 280) * *(float *)(*(unsigned int *)&idx + 280);
     v32 = sqrt(v31);
     if (isnan(v32))
-        sub_487dc0(*(unsigned int *)&v31);
+        sqrt(*(unsigned int *)&v31);
     else
         v31 = v32;
     v18 = (float)v31;
@@ -210,7 +210,7 @@ double EmitDamage__12CPlayerMelee(float idx)
         v35 = v19 * v19 + v20 * v20 + 0.0;
         v36 = sqrt(v35);
         if (isnan(v36))
-            sub_487dc0(*(unsigned int *)&v35);
+            sqrt(*(unsigned int *)&v35);
         else
             v35 = v36;
         v14 = (float)v35;
@@ -242,7 +242,7 @@ LABEL_503fad:
         *(float *)(index + 156) = (float)v39;
     }
     *(unsigned int *)(*(unsigned int *)&idx + 252) = 1;
-    sub_48a700(idx, 0);
+    CPlayerMelee::StopMelee(idx, 0);
     *(unsigned int *)(*(unsigned int *)&idx + 252) = 0;
     if (v7)
     {
@@ -254,12 +254,12 @@ LABEL_503fad:
         if (!(*(int *)(*(int *)&v5->padding_4[92] + 140))(v5))
         {
             v0 = 4;
-            sub_489390(*(int *)&v5->field_0[1].padding_2c[188], v0, "weapons/swordkill.wav", 0x3f800000, 0.800000011920929f, 0, 100);
-            sub_488530(idx, 4, 0);
+            EMIT_SOUND_DYN(*(int *)&v5->field_0[1].padding_2c[188], v0, "weapons/swordkill.wav", 0x3f800000, 0.800000011920929f, 0, 100);
+            CPlayerMelee::MeleeText(idx, 4, 0);
             v41 = v5;
             v41->field_0->field_10c = 0;
             *(unsigned short *)&v0 = 0;
-            sub_48c7d0(v41->field_0, v0);
+            CBodySlice::SpawnBodySlices(v41->field_0, v0);
             v42 = v5;
             v42->field_0->padding_110[8] = v42->field_0->padding_110[8] | 128;
             v43 = v42->field_0;
@@ -278,7 +278,7 @@ LABEL_503fad:
     v9 = v19;
     v11 = v20;
     v13 = v21;
-    sub_48c240(v4, *(int *)(*(unsigned int *)&idx + 292), 1, &v9, 1200.0f, 600.0f, 275.0f, 1.5f);
+    CPlayerMelee::StartToss(v4, *(int *)(*(unsigned int *)&idx + 292), 1, &v9, 1200.0f, 600.0f, 275.0f, 1.5f);
     return v27;
 }
 

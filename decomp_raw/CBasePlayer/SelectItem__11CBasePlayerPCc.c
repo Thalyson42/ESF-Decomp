@@ -71,7 +71,7 @@ st_4fba90_3 * SelectItem__11CBasePlayerPCc(st_4fba90_3 *a0, int a1)
                 continue;
             do
             {
-                v4 = sub_488af0((char *)iter->field_0->field_0 + gpGlobals->field_98, a1);
+                v4 = strcmp@GLIBC_2.0((char *)iter->field_0->field_0 + gpGlobals->field_98, a1);
             } while (v4 && (iter = iter->field_84, iter));
         }
         if (iter)

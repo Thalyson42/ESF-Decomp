@@ -4,9 +4,9 @@ typedef struct st_4a85e0_0 {
 } st_4a85e0_0;
 
 extern unsigned int gmsgPowerStruggle;
-extern st_4a85e0_0 *g_616878;
-extern st_4a85e0_0 *g_61687c;
-extern st_4a85e0_0 *g_616884;
+extern st_4a85e0_0 *g_engfuncs.pfnMessageBegin;
+extern st_4a85e0_0 *g_engfuncs.pfnMessageEnd;
+extern st_4a85e0_0 *g_engfuncs.pfnWriteChar;
 
 double PrimaryAttack__15CControlledBeam(float idx)
 {
@@ -24,7 +24,7 @@ double PrimaryAttack__15CControlledBeam(float idx)
     unsigned short v7;  // [bp-0x1a]
     int v8;  // [bp-0x18]
 
-    sub_488640(v2, v3, v4);
+    UTIL_WeaponTimeBase(v2, v3, v4);
     v11 = v10 + 0.2;
     *(float *)(*(unsigned int *)&idx + 156) = (float)v11;
     if (*(int *)(*(unsigned int *)&idx + 196) == 2 && *(int *)(*(unsigned int *)&idx + 200))
@@ -36,9 +36,9 @@ double PrimaryAttack__15CControlledBeam(float idx)
                 v7 = __fnstcw();
                 v6 = v7 | 0xc00;
                 v8 = (int)((double)*(int *)(*(unsigned int *)&idx + 228) * 0.25);
-                if (sub_48c980(*(int *)(*(unsigned int *)&idx + 128), v8))
+                if (CBasePlayer::UseKi(*(int *)(*(unsigned int *)&idx + 128), v8))
                 {
-                    sub_48aef0(idx);
+                    CBasePlayerWeapon::GetPowerRatio(idx);
                     v7 = __fnstcw();
                     v6 = v7 | 0xc00;
                     v8 = (int)(v12 * (double)*(int *)(*(unsigned int *)&idx + 232) + *(float *)(*(int *)*(int *)(*(unsigned int *)&idx + 200) + 480));
@@ -54,9 +54,9 @@ double PrimaryAttack__15CControlledBeam(float idx)
                 v7 = __fnstcw();
                 v6 = v7 | 0xc00;
                 v8 = (int)((double)*(int *)(*(unsigned int *)&idx + 228) * 0.25);
-                if (sub_48c980(*(int *)(*(unsigned int *)&idx + 128), v8))
+                if (CBasePlayer::UseKi(*(int *)(*(unsigned int *)&idx + 128), v8))
                 {
-                    sub_48aef0(idx);
+                    CBasePlayerWeapon::GetPowerRatio(idx);
                     v7 = __fnstcw();
                     v6 = v7 | 0xc00;
                     v8 = (int)(v12 * (double)*(int *)(*(unsigned int *)&idx + 232) + *(float *)(*(int *)*(int *)(*(unsigned int *)&idx + 200) + 480));
@@ -72,27 +72,27 @@ double PrimaryAttack__15CControlledBeam(float idx)
             {
                 v1 = idx;
                 (*(int *)(*(int *)(*(unsigned int *)&idx + 96) + 328))(v1);
-                sub_488640(v1);
+                UTIL_WeaponTimeBase(v1);
                 *(float *)(*(unsigned int *)&idx + 156) = (float)v11;
                 return 0.2;
             }
-            g_616878(1, gmsgPowerStruggle, 0, *(int *)(*(int *)*(int *)(*(unsigned int *)&idx + 128) + 520));
+            g_engfuncs.pfnMessageBegin(1, gmsgPowerStruggle, 0, *(int *)(*(int *)*(int *)(*(unsigned int *)&idx + 128) + 520));
             v7 = __fnstcw();
             v6 = v7 | 0xc00;
             v8 = (int)(*(float *)(*(int *)(*(unsigned int *)&idx + 200) + 696) * 100.0);
             v0 = v8;
-            g_616884(v0);
-            g_61687c(v0);
+            g_engfuncs.pfnWriteChar(v0);
+            g_engfuncs.pfnMessageEnd(v0);
             return 0.2;
         }
-        sub_48bd60(idx);
+        CControlledBeam::StopAiming(idx);
         v13 = *(int *)(*(unsigned int *)&idx + 200);
         if (v13[177])
             (*(int *)(v13[24] + 508))(v13);
         *(unsigned int **)(*(unsigned int *)&idx + 200) = NULL;
         return 0.2;
     }
-    sub_48a630(idx);
+    CControlledBeam::Charge(idx);
     *(float *)(*(unsigned int *)&idx + 160) = *(float *)(*(unsigned int *)&idx + 156);
     return 0.2;
 }

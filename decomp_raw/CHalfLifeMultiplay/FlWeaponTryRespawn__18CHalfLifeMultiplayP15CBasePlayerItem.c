@@ -23,18 +23,18 @@ typedef struct st_4dd730_2 {
     unsigned int field_94;
 } st_4dd730_2;
 
-extern st_4dd730_1 *g_616964;
+extern st_4dd730_1 *g_engfuncs.pfnNumberOfEntities;
 extern st_4dd730_2 *gpGlobals;
-extern char g_62f744[4];
+extern char _15CBasePlayerItem.ItemInfoArray+36[4];
 
 double FlWeaponTryRespawn__18CHalfLifeMultiplayP15CBasePlayerItem(st_4dd730_4 *a0, st_4dd730_0 *a1)
 {
     int v0;  // eax
     double v1;  // mm7
 
-    if (a1 && a1->field_88 && g_62f744[44 * a1->field_88] & 8)
+    if (a1 && a1->field_88 && _15CBasePlayerItem.ItemInfoArray+36[44 * a1->field_88] & 8)
     {
-        v0 = g_616964();
+        v0 = g_engfuncs.pfnNumberOfEntities();
         if (v0 >= (int)(gpGlobals->field_94 - 100))
         {
             a0->field_44->field_80(a0, a1);

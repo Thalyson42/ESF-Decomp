@@ -17,8 +17,8 @@ typedef struct st_519cd0_0 {
 
 int CreateShield__13CShieldAttack(st_519cd0_1 *a0)
 {
-    a0->field_c4 = sub_48e060(a0->field_80);
-    sub_489390(*(int *)(*(int *)a0->field_80 + 520), 1, "weapons/shield.wav", 0x3f800000, 0.800000011920929f, 0, 100);
-    return sub_48d4f0(a0->field_80, "shield_charge.wav");
+    a0->field_c4 = CShield::CreateShield(a0->field_80);
+    EMIT_SOUND_DYN(*(int *)(*(int *)a0->field_80 + 520), 1, "weapons/shield.wav", 0x3f800000, 0.800000011920929f, 0, 100);
+    return CBasePlayer::EmitClassSound(a0->field_80, "shield_charge.wav");
 }
 

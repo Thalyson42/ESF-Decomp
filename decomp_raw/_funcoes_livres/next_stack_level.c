@@ -16,7 +16,7 @@ st_594fd8_0 * next_stack_level(int a0, unsigned int *a1, int a2)
     int v2;  // [bp-0x14]
 
     sub_594fd4(v0, v1, v2);
-    v3 = sub_489620(a0, a2);
+    v3 = __frame_state_for(a0, a2);
     if (v3)
     {
         v4 = v3->field_58;

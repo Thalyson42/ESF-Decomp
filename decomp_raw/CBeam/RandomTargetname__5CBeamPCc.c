@@ -3,7 +3,7 @@ typedef struct st_4b01b0_0 {
     unsigned int field_0;
 } st_4b01b0_0;
 
-extern st_4b01b0_0 *g_616928;
+extern st_4b01b0_0 *g_engfuncs.pfnRandomLong;
 
 int RandomTargetname__5CBeamPCc(unsigned int a0, int a1)
 {
@@ -16,11 +16,11 @@ int RandomTargetname__5CBeamPCc(unsigned int a0, int a1)
     v2 = 0;
     while (1)
     {
-        v2 = sub_48cce0(v2, a1);
+        v2 = UTIL_FindEntityByTargetname(v2, a1);
         if (!v2)
             break;
         v1 += 1;
-        if ((int)g_616928(0, v1 - 1) <= 0)
+        if ((int)g_engfuncs.pfnRandomLong(0, v1 - 1) <= 0)
             v0 = v2;
     }
     return v0;

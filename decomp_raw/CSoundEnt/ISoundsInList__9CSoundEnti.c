@@ -3,7 +3,7 @@ typedef struct st_51f270_0 {
     unsigned int field_0;
 } st_51f270_0;
 
-extern st_51f270_0 *g_6168b4;
+extern st_51f270_0 *g_engfuncs.pfnAlertMessage;
 
 unsigned int ISoundsInList__9CSoundEnti(unsigned int *a0, unsigned int a1)
 {
@@ -21,7 +21,7 @@ unsigned int ISoundsInList__9CSoundEnti(unsigned int *a0, unsigned int a1)
     }
     else
     {
-        g_6168b4(1, "Unknown Sound List Type!\n");
+        g_engfuncs.pfnAlertMessage(1, "Unknown Sound List Type!\n");
     }
     if (v0 == 0xffffffff)
         return 0;

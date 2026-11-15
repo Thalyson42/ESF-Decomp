@@ -31,7 +31,7 @@ st_5203e0_0 * SpectatorThink__14CBaseSpectator(st_5203e0_1 **a0)
     *a0->field_108 = 8;
     v0 = *a0;
     if (*a0->field_184)
-        v0 = sub_48cc90(a0);
+        v0 = CBaseSpectator::SpectatorImpulseCommand(a0);
     return v0;
 }
 

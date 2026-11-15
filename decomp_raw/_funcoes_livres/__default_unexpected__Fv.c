@@ -4,6 +4,6 @@ void __default_unexpected__Fv(void)
     int v1;  // ebx
 
     sub_5955b0(v1);
-    sub_48a720(v1);
+    terminate(v1);
 }
 

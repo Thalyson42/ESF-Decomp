@@ -62,52 +62,52 @@ double SecondaryAttack__6CMelee(st_4d2e10_1 *a0)
 
     if (a0->field_80->field_400)
     {
-        v12 = sub_48bea0(&a0->field_80->field_380, 0);
-        if (!v12 || !sub_4897e0(a0->field_80, v12) || !sub_48c980(a0->field_80, 35))
+        v12 = CPlayerMelee::GetEnemyPrepunch(&a0->field_80->field_380, 0);
+        if (!v12 || !CBasePlayer::CanMelee(a0->field_80, v12) || !CBasePlayer::UseKi(a0->field_80, 35))
             goto LABEL_4d3022;
-        sub_489b10(&v9, &a0->field_80->field_504);
+        CSwoop::GetCurrentDirection(&v9, &a0->field_80->field_504);
         v3 = v9;
         v4 = v10;
         v5 = v11;
-        sub_48c3f0(&a0->field_80->field_380, v12, &v3, a0->field_80->field_504);
+        CPlayerMelee::SimpleMeleePowerhit(&a0->field_80->field_380, v12, &v3, a0->field_80->field_504);
 LABEL_4d3008:
-        sub_488640();
+        UTIL_WeaponTimeBase();
         v16 = 0.9;
     }
     else
     {
         v1 = 0;
-        v13 = sub_48bea0(&a0->field_80->field_380, 0);
-        if (v13 && sub_4897e0(a0->field_80, v13))
+        v13 = CPlayerMelee::GetEnemyPrepunch(&a0->field_80->field_380, 0);
+        if (v13 && CBasePlayer::CanMelee(a0->field_80, v13))
         {
-            if (v13->field_508 && !(v0 = &v13->field_380, v14 = sub_48bea0(v0, 0), a0->field_80 != v14 || !v13->field_968 || v13->field_968->field_88 - 1 > 1))
+            if (v13->field_508 && !(v0 = &v13->field_380, v14 = CPlayerMelee::GetEnemyPrepunch(v0, 0), a0->field_80 != v14 || !v13->field_968 || v13->field_968->field_88 - 1 > 1))
             {
-                if (sub_48bea0(v0, v14))
+                if (CPlayerMelee::GetEnemyPrepunch(v0, v14))
                 {
-                    sub_48a740(v13);
+                    CBasePlayer::Swoop(v13);
                     return v15;
                 }
             }
             else
             {
-                if (v13->field_380 <= 1 && sub_48c980(a0->field_80, 35))
+                if (v13->field_380 <= 1 && CBasePlayer::UseKi(a0->field_80, 35))
                 {
-                    sub_489b10(&v3, &a0->field_80->field_504);
+                    CSwoop::GetCurrentDirection(&v3, &a0->field_80->field_504);
                     v6 = v3;
                     v7 = v4;
                     v8 = v5;
-                    v1 = sub_489100(&a0->field_80->field_380, v13, &v6, a0->field_80->field_504);
+                    v1 = CPlayerMelee::Powerhit(&a0->field_80->field_380, v13, &v6, a0->field_80->field_504);
                 }
             }
             if (v1)
                 goto LABEL_4d3008;
-            sub_488640();
+            UTIL_WeaponTimeBase();
             v16 = 0.65;
         }
         else
         {
 LABEL_4d3022:
-            sub_488640();
+            UTIL_WeaponTimeBase();
             v16 = 0.1;
         }
     }

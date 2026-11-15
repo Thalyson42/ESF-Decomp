@@ -15,7 +15,7 @@ typedef struct st_4f0f80_2 {
 } st_4f0f80_2;
 
 extern st_4f0f80_0 g_vecAuraColor;
-extern st_4f0f80_2 *g_6168dc;
+extern st_4f0f80_2 *g_engfuncs.pfnIndexOfEdict;
 extern st_4f0f80_1 *gpGlobals;
 
 unsigned int StartAscend__11CBasePlayer(float idx)
@@ -117,16 +117,16 @@ unsigned int StartAscend__11CBasePlayer(float idx)
             v3 = (float)v14;
             if ((double)*(int *)(*(unsigned int *)&idx + 1860) >= v3 && (*(int *)(*(int *)(*(int *)(*(unsigned int *)&idx + 1896) + 4) + 32))(*(int *)(*(unsigned int *)&idx + 1896)))
             {
-                sub_48bf90(idx);
+                CBasePlayer::Ascend(idx);
                 v0 = idx;
-                sub_489fc0(v0, -1.0f);
+                CBasePlayer::TransformFX(v0, -1.0f);
                 v1 = _INSERT(v0, 0, 0);
-                v19 = sub_48be10(*(unsigned int *)&idx + 896, 1, sub_48b670(*(unsigned int *)&idx + 896, v1, *(float *)gpGlobals, 1, "change_finish"));
+                v19 = CPlayerMelee::SetAnimPriority(*(unsigned int *)&idx + 896, 1, CPlayerMelee::AddAnimation(*(unsigned int *)&idx + 896, v1, *(float *)gpGlobals, 1, "change_finish"));
                 return v19;
             }
             *(unsigned int *)(*(unsigned int *)&idx + 1904) = 1;
             if (!(*(char *)(*(int *)idx + 421) & 2) && !*(int *)(*(unsigned int *)&idx + 800))
-                sub_488d40(idx);
+                CBasePlayer::StartFly(idx);
             *(unsigned int *)(*(unsigned int *)&idx + 1876) = 0;
             v20 = (v3 - (double)*(int *)(*(unsigned int *)&idx + 1860)) * 10.0 / (v3 - v4);
             *(float *)(*(unsigned int *)&idx + 1908) = (float)v20;
@@ -156,8 +156,8 @@ LABEL_4f12d9:
 LABEL_4f12e5:
                 *(unsigned int *)(*(unsigned int *)&idx + 1408) = 0;
             }
-            sub_489fc0(idx, *(float *)(*(unsigned int *)&idx + 1908));
-            sub_4887c0(*(unsigned int *)&idx + 896);
+            CBasePlayer::TransformFX(idx, *(float *)(*(unsigned int *)&idx + 1908));
+            CPlayerMelee::RemoveAllAnims(*(unsigned int *)&idx + 896);
             v21 = *(int *)idx;
             v22 = v21 + 20;
             *(float *)&v8 = *(float *)&v21[20];
@@ -168,7 +168,7 @@ LABEL_4f12e5:
             *(float *)&v6 = *(float *)&v22[1];
             *(float *)&v7 = *(float *)&v22[2];
             v2 = &v5;
-            sub_48da70(g_6168dc(v21[130]));
+            UTIL_Model_FixAngles(g_engfuncs.pfnIndexOfEdict(v21[130]));
             *(float *)(*(unsigned int *)&idx + 1908) = *(float *)(*(unsigned int *)&idx + 1908) + *(float *)gpGlobals;
             return v19;
         }

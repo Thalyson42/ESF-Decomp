@@ -75,8 +75,8 @@ typedef struct st_564fb0_0 {
 
 extern char __vt_19CTeleportComboEntry;
 extern char __vt_18CBaseBotComboEntry;
-extern st_564fb0_0 *g_616928;
-extern st_564fb0_0 *g_61692c;
+extern st_564fb0_0 *g_engfuncs.pfnRandomLong;
+extern st_564fb0_0 *g_engfuncs.pfnRandomFloat;
 extern st_564fb0_9 *gpGlobals;
 
 char MakeRandomTeleports__9CBotCombo8ETeleDirN21(st_564fb0_8 *a0, unsigned int a1, unsigned int a2, unsigned int a3)
@@ -192,20 +192,20 @@ char MakeRandomTeleports__9CBotCombo8ETeleDirN21(st_564fb0_8 *a0, unsigned int a
     v51 = v48 * v48 + v49 * v49 + v50 * v50;
     v52 = sqrt(v51);
     if (isnan(v52))
-        sub_487dc0(*(unsigned int *)&v51);
+        sqrt(*(unsigned int *)&v51);
     else
         v51 = v52;
     v14 = (float)v51;
     if (a2 == 3)
     {
-        g_61692c(300.0f, 500.0f);
+        g_engfuncs.pfnRandomFloat(300.0f, 500.0f);
         v26 = __fnstcw();
         v25 = v26 | 0xc00;
         v13 = (int)(v14 / 300.0);
     }
     else
     {
-        v13 = g_616928(3, 5);
+        v13 = g_engfuncs.pfnRandomLong(3, 5);
     }
     while (1)
     {
@@ -237,21 +237,21 @@ char MakeRandomTeleports__9CBotCombo8ETeleDirN21(st_564fb0_8 *a0, unsigned int a
             {
                 v54 = 0;
                 if (a1 == 6)
-                    v54 = g_616928(0, 1);
+                    v54 = g_engfuncs.pfnRandomLong(0, 1);
                 if (!a1 || v54)
                     v55 = 2;
                 else
                     v55 = 4;
                 v56 = 0;
                 if (a2 == 6)
-                    v56 = g_616928(0, 1);
+                    v56 = g_engfuncs.pfnRandomLong(0, 1);
                 if (a2 == 2 || v56)
                     v57 = v55 | 8;
                 else
                     v57 = v55 | 16;
                 v58 = 0;
                 if (a3 == 6)
-                    v58 = g_616928(0, 1);
+                    v58 = g_engfuncs.pfnRandomLong(0, 1);
                 if (a3 == 5 || v58)
                     v59 = v57 | 64;
                 else
@@ -266,9 +266,9 @@ char MakeRandomTeleports__9CBotCombo8ETeleDirN21(st_564fb0_8 *a0, unsigned int a
                         v36 = v60[31];
                         v34 = -45.0f;
                         v24 = (float)(45.0 + *(float *)&v35);
-                        sub_48d430(v24);
+                        UTIL_WrapAngle(v24);
                         v35 = v24;
-                        sub_48a800(&v34);
+                        UTIL_MakeVectors(&v34);
                         v61 = &gpGlobals->field_28;
                         v62 = 400.0 * gpGlobals->field_28;
                         v15 = (float)v62;
@@ -361,9 +361,9 @@ LABEL_565474:
                                     v71 = -45.0;
 LABEL_565480:
                                     v24 = (float)(v71 + *(float *)&v35);
-                                    sub_48d430(v24);
+                                    UTIL_WrapAngle(v24);
                                     v35 = v24;
-                                    sub_48a800(&v34);
+                                    UTIL_MakeVectors(&v34);
                                     v73 = &gpGlobals->field_28;
                                     v74 = 400.0 * gpGlobals->field_28;
                                     v18 = (float)v74;
@@ -409,9 +409,9 @@ LABEL_565584:
                                         v80 = 45.0;
 LABEL_565590:
                                         v24 = (float)(v80 + *(float *)&v35);
-                                        sub_48d430(v24);
+                                        UTIL_WrapAngle(v24);
                                         v35 = v24;
-                                        sub_48a800(&v34);
+                                        UTIL_MakeVectors(&v34);
                                         v82 = &gpGlobals->field_28;
                                         v83 = 400.0 * gpGlobals->field_28;
                                         v18 = (float)v83;
@@ -429,10 +429,10 @@ LABEL_565601:
                                         v32 = v16;
                                         v33 = v17;
 LABEL_565630:
-                                        sub_488460(&v27, &v31, 0, 1, a0->field_c->field_0->field_208, &v37);
+                                        UTIL_TraceHull(&v27, &v31, 0, 1, a0->field_c->field_0->field_208, &v37);
                                         if (1.0 <= v39)
                                         {
-                                            v85 = sub_48d6a0(32);
+                                            v85 = __builtin_new(32);
                                             v86 = a0->field_c;
                                             v85->field_10 = &__vt_18CBaseBotComboEntry;
                                             v85->field_0 = 0;
@@ -446,15 +446,15 @@ LABEL_565630:
                                             v3 = v85;
                                             if (!a0->field_0)
                                             {
-                                                v87 = sub_48d6a0(12);
+                                                v87 = __builtin_new(12);
                                                 v2 = 1;
                                                 v87->field_4 = NULL;
                                                 v87->field_8 = 0;
-                                                sub_48d0e0(v87, 0, 4);
+                                                memset@GLIBC_2.0(v87, 0, 4);
                                                 v2 = 0;
                                                 a0->field_0 = v87;
                                                 if (v2)
-                                                    sub_48d4e0(v87);
+                                                    __builtin_delete(v87);
                                                 v88 = a0;
                                                 v88->field_0->field_0 = v3;
                                                 v88->field_0->field_4 = NULL;
@@ -464,15 +464,15 @@ LABEL_565630:
                                             else
                                             {
                                                 v1 = a0->field_4;
-                                                v89 = sub_48d6a0(12);
+                                                v89 = __builtin_new(12);
                                                 v0 = 1;
                                                 v89->field_4 = 0;
                                                 v89->field_8 = NULL;
-                                                sub_48d0e0(v89, 0, 4);
+                                                memset@GLIBC_2.0(v89, 0, 4);
                                                 v0 = 0;
                                                 v1->field_4 = v89;
                                                 if (v0)
-                                                    sub_48d4e0(v89);
+                                                    __builtin_delete(v89);
                                                 v90 = a0;
                                                 v90->field_4->field_4->field_8 = v90->field_4;
                                                 v91 = v90->field_4->field_4;

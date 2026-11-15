@@ -36,7 +36,7 @@ typedef struct st_521520_5 {
     unsigned int field_0;
 } st_521520_5;
 
-extern st_521520_5 *g_6168dc;
+extern st_521520_5 *g_engfuncs.pfnIndexOfEdict;
 
 int InitChargeSprite__11CSpiritBomb(st_521520_3 *a0)
 {
@@ -49,13 +49,13 @@ int InitChargeSprite__11CSpiritBomb(st_521520_3 *a0)
     st_521520_3 *v7;  // edx
     int v0;  // [bp-0x24]
 
-    v1 = sub_48c010("sprites/spiritbomb.spr", *(int *)a0->field_80 + 8, 1);
+    v1 = CSprite::SpriteCreate("sprites/spiritbomb.spr", *(int *)a0->field_80 + 8, 1);
     v2 = a0;
     v2->field_d4 = v1;
     v3 = *(int *)(*(int *)v2->field_80 + 520);
     if (v3)
     {
-        v4 = g_6168dc(v3);
+        v4 = g_engfuncs.pfnIndexOfEdict(v3);
         *v1->field_110 = v4;
         *v1->field_114 = 1;
         *v1->field_194 = v3;
@@ -74,6 +74,6 @@ int InitChargeSprite__11CSpiritBomb(st_521520_3 *a0)
     v7 = a0;
     *(float *)(*(int *)v7->field_d4 + 324) = 0.010499999858438969f;
     *(float *)(*(int *)v7->field_d4 + 312) = 10.0f;
-    return sub_48df90(v7->field_d4);
+    return CSprite::TurnOff(v7->field_d4);
 }
 

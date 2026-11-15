@@ -93,6 +93,6 @@ int SpawnInsideTrigger__12CPlatTriggerP9CFuncPlat(st_4e8e40_2 *a0, st_4e8e40_0 *
         v7 = (float)((*(float *)&v15[56] + *(float *)&v15[59]) * 0.5);
         v1 = (float)(1.0 + v7);
     }
-    return sub_48a0d0(a0->field_0, &v6, &v0);
+    return UTIL_SetSize(a0->field_0, &v6, &v0);
 }
 

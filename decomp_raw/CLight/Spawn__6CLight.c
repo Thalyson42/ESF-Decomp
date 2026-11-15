@@ -24,8 +24,8 @@ typedef struct st_4cdea0_2 {
     unsigned int field_0;
 } st_4cdea0_2;
 
-extern st_4cdea0_2 *g_616818;
-extern st_4cdea0_2 *g_61686c;
+extern st_4cdea0_2 *g_engfuncs.pfnRemoveEntity;
+extern st_4cdea0_2 *g_engfuncs.pfnLightStyle;
 extern st_4cdea0_3 *gpGlobals;
 
 int Spawn__6CLight(st_4cdea0_1 *a0)
@@ -34,7 +34,7 @@ int Spawn__6CLight(st_4cdea0_1 *a0)
 
     if (!a0->field_0->field_1cc)
     {
-        return g_616818(a0->field_0->field_208);
+        return g_engfuncs.pfnRemoveEntity(a0->field_0->field_208);
     }
     else if (a0->field_64 <= 31)
     {
@@ -42,15 +42,15 @@ int Spawn__6CLight(st_4cdea0_1 *a0)
     }
     else if (a0->field_0->field_1a0 & 1)
     {
-        return g_61686c(a0->field_64, "a");
+        return g_engfuncs.pfnLightStyle(a0->field_64, "a");
     }
     else if (a0->field_68)
     {
-        return g_61686c(a0->field_64, a0->field_68 + gpGlobals->field_98);
+        return g_engfuncs.pfnLightStyle(a0->field_64, a0->field_68 + gpGlobals->field_98);
     }
     else
     {
-        return g_61686c(a0->field_64, "m");
+        return g_engfuncs.pfnLightStyle(a0->field_64, "m");
     }
 }
 

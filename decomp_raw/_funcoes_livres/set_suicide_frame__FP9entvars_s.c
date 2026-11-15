@@ -10,7 +10,7 @@ unsigned int set_suicide_frame__FP9entvars_s(unsigned int *a0)
 {
     unsigned int v0;  // eax
 
-    v0 = sub_488af0(a0[46] + gpGlobals->field_98, "models/player.mdl");
+    v0 = strcmp@GLIBC_2.0(a0[46] + gpGlobals->field_98, "models/player.mdl");
     if (!v0)
     {
         a0[67] = 0;

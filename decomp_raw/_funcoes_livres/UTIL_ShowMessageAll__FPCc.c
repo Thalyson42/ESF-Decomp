@@ -14,10 +14,10 @@ st_532d50_0 * UTIL_ShowMessageAll__FPCc(int a0)
     iter = 1;
     while (iter <= (int)gpGlobals->field_90)
     {
-        v1 = sub_48a500(iter);
+        v1 = UTIL_PlayerByIndex(iter);
         if (v1)
         {
-            sub_488380(a0, v1);
+            UTIL_ShowMessage(a0, v1);
             iter += 1;
         }
         else

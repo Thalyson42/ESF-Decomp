@@ -8,10 +8,10 @@ typedef struct st_49e340_1 {
     unsigned int field_0;
 } st_49e340_1;
 
-extern st_49e340_1 *g_6168d8;
+extern st_49e340_1 *g_engfuncs.pfnEntOffsetOfPEntity;
 
 int eoffset__11CBaseEntity(st_49e340_0 **a0)
 {
-    return g_6168d8(*a0->field_208);
+    return g_engfuncs.pfnEntOffsetOfPEntity(*a0->field_208);
 }
 

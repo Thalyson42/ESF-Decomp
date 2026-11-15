@@ -15,9 +15,9 @@ st_52b000_0 * Use__13CTriggerRelayP11CBaseEntityT18USE_TYPEf(st_52b000_1 *a0)
     int v0;  // [bp-0x1c]
     int v1;  // [bp-0x18]
 
-    sub_48d150(a0, a0, a0->field_6c, 0, v0, v1);
+    CBaseDelay::SUB_UseTargets(a0, a0, a0->field_6c, 0, v0, v1);
     if (!(a0->field_0->field_1a0 & 1))
         return a0->field_0;
-    return sub_48cc00(a0);
+    return UTIL_Remove(a0);
 }
 

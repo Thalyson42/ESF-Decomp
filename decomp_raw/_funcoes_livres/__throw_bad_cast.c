@@ -38,7 +38,7 @@ void __throw_bad_cast(void)
     iter = &v4->field_7e01b;
     v2 = *(int *)&iter[1].padding_0[3448];
     v2 = *(int *)&iter[1].padding_0[1132];
-    v7 = sub_48df10(4);
+    v7 = __eh_alloc(4);
     *v7 = *(int *)&iter[1].padding_0[3448];
     *v7 = *(int *)&iter[1].padding_0[1132];
     while (1)
@@ -47,13 +47,13 @@ void __throw_bad_cast(void)
         v2 = *(int *)&iter[1].padding_0[3448];
         v1 = *v7->field_4(iter->field_1bec);
         v0 = v7;
-        sub_488580(v0, v1);
-        sub_48a220(v0, v1);
+        __cp_push_exception(v0, v1);
+        __throw(v0, v1);
         sub_595ab0();
         iter = &iter[72].padding_0[1059];
         v2 = *(int *)&iter[1].padding_0[1132];
         v2 = *(int *)&iter[1].padding_0[3448];
-        sub_48a220();
+        __throw();
     }
 }
 

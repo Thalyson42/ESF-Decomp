@@ -6,11 +6,11 @@ float TotalCmbTimeNC__12CPlayerMelee(float a0)
     float v0;  // [bp-0x8]
 
     v0 = 0;
-    v2 = sub_48cc50(a0);
+    v2 = CPlayerMelee::GetCurrentDirection(a0);
     if (!v2)
         return v0;
-    sub_48bbe0(a0);
-    sub_48b4e0(a0, v2);
+    CPlayerMelee::TotalCmbTime(a0);
+    CPlayerMelee::GetCmbTime(a0, v2);
     v0 = (float)((float)v3 - v3);
     return v0;
 }

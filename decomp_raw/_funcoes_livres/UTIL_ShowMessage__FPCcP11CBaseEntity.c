@@ -20,9 +20,9 @@ typedef struct st_532cd0_3 {
 } st_532cd0_3;
 
 extern unsigned int gmsgHudText;
-extern st_532cd0_2 *g_616878;
-extern st_532cd0_2 *g_61687c;
-extern st_532cd0_2 *g_616898;
+extern st_532cd0_2 *g_engfuncs.pfnMessageBegin;
+extern st_532cd0_2 *g_engfuncs.pfnMessageEnd;
+extern st_532cd0_2 *g_engfuncs.pfnWriteString;
 
 unsigned int UTIL_ShowMessage__FPCcP11CBaseEntity(unsigned int a0, st_532cd0_3 *a1)
 {
@@ -34,8 +34,8 @@ unsigned int UTIL_ShowMessage__FPCcP11CBaseEntity(unsigned int a0, st_532cd0_3 *
     v0 = a1->field_60->field_a4(a1);
     if (!v0)
         return v0;
-    g_616878(1, gmsgHudText, 0, a1->field_0->field_208);
-    g_616898(a0);
-    return g_61687c(a0);
+    g_engfuncs.pfnMessageBegin(1, gmsgHudText, 0, a1->field_0->field_208);
+    g_engfuncs.pfnWriteString(a0);
+    return g_engfuncs.pfnMessageEnd(a0);
 }
 

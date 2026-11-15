@@ -21,14 +21,14 @@ typedef struct st_4baaa0_2 {
 extern unsigned int gmsgExplosion;
 extern unsigned int gmsgAddEffect;
 extern short g_sRockGibs;
-extern st_4baaa0_2 *g_616878;
-extern st_4baaa0_2 *g_61687c;
-extern st_4baaa0_2 *g_616880;
-extern st_4baaa0_2 *g_616888;
-extern st_4baaa0_2 *g_61688c;
-extern st_4baaa0_2 *g_616894;
-extern st_4baaa0_2 *g_6168dc;
-extern st_4baaa0_2 *g_61692c;
+extern st_4baaa0_2 *g_engfuncs.pfnMessageBegin;
+extern st_4baaa0_2 *g_engfuncs.pfnMessageEnd;
+extern st_4baaa0_2 *g_engfuncs.pfnWriteByte;
+extern st_4baaa0_2 *g_engfuncs.pfnWriteShort;
+extern st_4baaa0_2 *g_engfuncs.pfnWriteLong;
+extern st_4baaa0_2 *g_engfuncs.pfnWriteCoord;
+extern st_4baaa0_2 *g_engfuncs.pfnIndexOfEdict;
+extern st_4baaa0_2 *g_engfuncs.pfnRandomFloat;
 
 unsigned int DrawExplosionFX__16CExplodingAttackiG6Vector(st_4baaa0_1 *a0, int a1, float *a2)
 {
@@ -81,7 +81,7 @@ unsigned int DrawExplosionFX__16CExplodingAttackiG6Vector(st_4baaa0_1 *a0, int a
     v28 = a0->field_0->field_20 * a0->field_0->field_20 + *(float *)&v27[1] * *(float *)&v27[1] + *(float *)&v27[2] * *(float *)&v27[2];
     v29 = sqrt(v28);
     if (isnan(v29))
-        sub_487dc0(*(unsigned int *)&v28);
+        sqrt(*(unsigned int *)&v28);
     else
         v28 = v29;
     v4 = (float)v28;
@@ -106,7 +106,7 @@ unsigned int DrawExplosionFX__16CExplodingAttackiG6Vector(st_4baaa0_1 *a0, int a
     v33 = a0->field_0->field_20 * a0->field_0->field_20 + *(float *)&v32[1] * *(float *)&v32[1] + *(float *)&v32[2] * *(float *)&v32[2];
     v34 = sqrt(v33);
     if (isnan(v34))
-        sub_487dc0(*(unsigned int *)&v33);
+        sqrt(*(unsigned int *)&v33);
     else
         v33 = v34;
     v7 = (float)v33;
@@ -144,7 +144,7 @@ unsigned int DrawExplosionFX__16CExplodingAttackiG6Vector(st_4baaa0_1 *a0, int a
     v7 = (float)(v40 + v10);
     v8 = (float)(v41 + v11);
     v9 = v12 + v15;
-    sub_487b80(&v4, &v7, 1, a0->field_0->field_208, &v19);
+    UTIL_TraceLine(&v4, &v7, 1, a0->field_0->field_208, &v19);
     v7 = v21;
     v8 = v22;
     v9 = v23;
@@ -154,49 +154,49 @@ unsigned int DrawExplosionFX__16CExplodingAttackiG6Vector(st_4baaa0_1 *a0, int a
         v8 = a2[1];
         v9 = a2[2];
     }
-    sub_48b7f0(&v7, 12.0f, 100.0f, 5.0f, (float)a1);
-    g_616878(2, gmsgExplosion, 0, 0);
-    g_616894(v7);
-    g_616894(v8);
-    g_616894(v9);
-    g_61688c(a1);
+    UTIL_ScreenShake(&v7, 12.0f, 100.0f, 5.0f, (float)a1);
+    g_engfuncs.pfnMessageBegin(2, gmsgExplosion, 0, 0);
+    g_engfuncs.pfnWriteCoord(v7);
+    g_engfuncs.pfnWriteCoord(v8);
+    g_engfuncs.pfnWriteCoord(v9);
+    g_engfuncs.pfnWriteLong(a1);
     v0 = a0->field_2d4;
-    g_616880(v0);
-    g_61687c(v0);
-    g_616878(2, gmsgAddEffect, 0, 0);
-    g_616880(2);
-    v42 = g_6168dc(a0->field_0->field_208);
-    g_616888(v42);
-    g_616894(v7);
-    g_616894(v8);
-    g_616894(v9);
+    g_engfuncs.pfnWriteByte(v0);
+    g_engfuncs.pfnMessageEnd(v0);
+    g_engfuncs.pfnMessageBegin(2, gmsgAddEffect, 0, 0);
+    g_engfuncs.pfnWriteByte(2);
+    v42 = g_engfuncs.pfnIndexOfEdict(a0->field_0->field_208);
+    g_engfuncs.pfnWriteShort(v42);
+    g_engfuncs.pfnWriteCoord(v7);
+    g_engfuncs.pfnWriteCoord(v8);
+    g_engfuncs.pfnWriteCoord(v9);
     v0 = a1;
-    g_616888(v0);
-    g_61687c(v0);
+    g_engfuncs.pfnWriteShort(v0);
+    g_engfuncs.pfnMessageEnd(v0);
     v43 = 1.0;
     if (1.0 > v20)
     {
-        g_616878(2, 23, 0, 0);
-        g_616880(108);
-        g_616894(v7);
-        g_616894(v8);
-        g_616894(v9);
-        g_616894(0x42480000);
-        g_616894(0x42480000);
-        g_616894(0x42480000);
-        g_616894((float)(200.0 * v24));
-        g_616894((float)(200.0 * v25));
+        g_engfuncs.pfnMessageBegin(2, 23, 0, 0);
+        g_engfuncs.pfnWriteByte(108);
+        g_engfuncs.pfnWriteCoord(v7);
+        g_engfuncs.pfnWriteCoord(v8);
+        g_engfuncs.pfnWriteCoord(v9);
+        g_engfuncs.pfnWriteCoord(0x42480000);
+        g_engfuncs.pfnWriteCoord(0x42480000);
+        g_engfuncs.pfnWriteCoord(0x42480000);
+        g_engfuncs.pfnWriteCoord((float)(200.0 * v24));
+        g_engfuncs.pfnWriteCoord((float)(200.0 * v25));
         v43 = 200.0f * v26;
-        g_616894((float)v43);
-        g_616880(30);
-        g_616888(g_sRockGibs);
-        g_616880(20);
-        g_616880(50);
+        g_engfuncs.pfnWriteCoord((float)v43);
+        g_engfuncs.pfnWriteByte(30);
+        g_engfuncs.pfnWriteShort(g_sRockGibs);
+        g_engfuncs.pfnWriteByte(20);
+        g_engfuncs.pfnWriteByte(50);
         v0 = 0;
-        g_616880(v0);
-        g_61687c(v0);
+        g_engfuncs.pfnWriteByte(v0);
+        g_engfuncs.pfnMessageEnd(v0);
     }
-    g_61692c(0, 0x3f800000);
-    return (v43 < 0.5 ? sub_48d7a0(&v19, 11) : sub_48d7a0(&v19, 12));
+    g_engfuncs.pfnRandomFloat(0, 0x3f800000);
+    return (v43 < 0.5 ? UTIL_DecalTrace(&v19, 11) : UTIL_DecalTrace(&v19, 12));
 }
 

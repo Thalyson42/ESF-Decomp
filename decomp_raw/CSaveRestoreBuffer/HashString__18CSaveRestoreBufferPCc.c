@@ -11,7 +11,7 @@ int HashString__18CSaveRestoreBufferPCc(unsigned int a0, char *a1)
         return 0;
     do
     {
-        v2 = sub_48c8b0(v1, 4);
+        v2 = _rotr(v1, 4);
         v1 = *v0 ^ v2;
         v0 += 1;
     } while (*v0);

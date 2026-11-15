@@ -31,9 +31,9 @@ typedef struct st_52de50_5 {
     unsigned int field_98;
 } st_52de50_5;
 
-extern st_52de50_4 *g_6167f8;
-extern st_52de50_4 *g_6168d4;
-extern st_52de50_4 *g_6168d8;
+extern st_52de50_4 *g_engfuncs.pfnFindEntityByString;
+extern st_52de50_4 *g_engfuncs.pfnPEntityOfEntOffset;
+extern st_52de50_4 *g_engfuncs.pfnEntOffsetOfPEntity;
 extern st_52de50_5 *gpGlobals;
 
 unsigned int InTransitionVolume__12CChangeLevelP11CBaseEntityPc(st_52de50_1 *a0, unsigned int a1)
@@ -55,7 +55,7 @@ unsigned int InTransitionVolume__12CChangeLevelP11CBaseEntityPc(st_52de50_1 *a0,
     if (v4->field_108 == 12 && v4->field_194)
     {
         v5 = v4->field_194;
-        if (v4->field_194 || (v5 = g_6168d4(0), v5))
+        if (v4->field_194 || (v5 = g_engfuncs.pfnPEntityOfEntOffset(0), v5))
             v6 = v5->field_7c;
         else
             v6 = NULL;
@@ -67,20 +67,20 @@ unsigned int InTransitionVolume__12CChangeLevelP11CBaseEntityPc(st_52de50_1 *a0,
     v0 = NULL;
     while (1)
     {
-        v0 = g_6167f8(v0, v1, v2);
+        v0 = g_engfuncs.pfnFindEntityByString(v0, v1, v2);
         v7 = 0;
-        if (!v0 || !g_6168d8(v0))
+        if (!v0 || !g_engfuncs.pfnEntOffsetOfPEntity(v0))
             v7 = 1;
         if (v7)
             return v3;
         v8 = v0;
-        if (v8 || (v8 = g_6168d4(0), v8))
+        if (v8 || (v8 = g_engfuncs.pfnPEntityOfEntOffset(0), v8))
             v9 = v8->field_7c;
         else
             v9 = NULL;
-        if (v9 && !sub_488af0(*(int *)*v9 + gpGlobals->field_98, "trigger_transition"))
+        if (v9 && !strcmp@GLIBC_2.0(*(int *)*v9 + gpGlobals->field_98, "trigger_transition"))
         {
-            if (sub_48b160(v9, a0))
+            if (CBaseEntity::Intersects(v9, a0))
                 break;
             v3 = 0;
         }

@@ -82,12 +82,12 @@ int ManageEnemyList__4CBot(float a0)
     {
         v5 = 0;
         v0 = v4[2 * node];
-        v3 = sub_489f70(a0, v0);
-        if (!v3 || (v0 = v4[2 * node], !(char)sub_48bf70(a0, v0)))
+        v3 = CBot::IsValidEnemy(a0, v0);
+        if (!v3 || (v0 = v4[2 * node], !(char)CBot::CanAttackPlayer(a0, v0)))
             v5 = 1;
         if (v5)
         {
-            v16 = sub_489630(a0);
+            v16 = CBot::BotFindEnemy(a0);
             if (v16)
             {
                 v4[2 * node] = v16;
@@ -98,7 +98,7 @@ int ManageEnemyList__4CBot(float a0)
                 *(unsigned short *)&v0 = 0;
                 v17 = node * 8;
                 v18 = *(unsigned int *)&a0 + 2888;
-                if ((char)sub_489a70(*(int *)(v17 + v18), v0, v1))
+                if ((char)UTIL_IsValidPlayer(*(int *)(v17 + v18), v0, v1))
                     *(int *)(*(unsigned int *)&a0 + 2928) = *(int *)(v17 + v18);
                 v4[2 * node] = 0;
             }
@@ -126,16 +126,16 @@ int ManageEnemyList__4CBot(float a0)
             {
                 *(unsigned short *)&v1 = 1;
                 *(unsigned short *)&v0 = 1;
-                if ((char)sub_489a70(*(int *)&v21[1].padding_33c[188], v0, v1))
+                if ((char)UTIL_IsValidPlayer(*(int *)&v21[1].padding_33c[188], v0, v1))
                     iter -= 2;
             }
             if (v21->field_0->field_108 == 11)
                 iter += 2;
             if (v21->field_334 || v21->field_338)
                 iter += 2;
-            if ((short)sub_48aab0(a0, v21) > 64)
+            if ((short)UTIL_GetHeadingPercentage(a0, v21) > 64)
                 iter += 1;
-            if ((char)sub_489330(a0, v21))
+            if ((char)EntIsInFieldOfView(a0, v21))
                 iter += 1;
             v22 = &v21->field_0->field_8;
             *(float *)&v12 = *(float *)&v21->field_0->field_8;
@@ -151,7 +151,7 @@ int ManageEnemyList__4CBot(float a0)
             v27 = v24 * v24 + v25 * v25 + v26 * v26;
             v28 = sqrt(v27);
             if (isnan(v28))
-                sub_487dc0(*(unsigned int *)&v27);
+                sqrt(*(unsigned int *)&v27);
             else
                 v27 = v28;
             v8 = (float)v27;
@@ -171,11 +171,11 @@ int ManageEnemyList__4CBot(float a0)
                 iter += 1;
             }
             v0 = v21;
-            if (!(char)sub_48bf70(a0, v0))
+            if (!(char)CBot::CanAttackPlayer(a0, v0))
                 iter -= 2;
             *(unsigned short *)(*(unsigned int *)&a0 + node * 8 + 2884) = iter;
         }
     } while ((node += 1, node <= 3));
-    return sub_48b520(*(unsigned int *)&a0 + 2884, 4, 8, &EnemyPriorityCmp__FPCvT0);
+    return qsort@GLIBC_2.0(*(unsigned int *)&a0 + 2884, 4, 8, &EnemyPriorityCmp__FPCvT0);
 }
 

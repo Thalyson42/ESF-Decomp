@@ -46,20 +46,20 @@ typedef struct st_4dcf60_4 {
 
 extern unsigned int g_teamplay;
 extern unsigned int gmsgDeathMsg;
-extern st_4dcf60_4 *g_616878;
-extern st_4dcf60_4 *g_61687c;
-extern st_4dcf60_4 *g_616880;
-extern st_4dcf60_4 *g_616888;
-extern st_4dcf60_4 *g_61688c;
-extern st_4dcf60_4 *g_616898;
-extern st_4dcf60_4 *g_6168d4;
-extern st_4dcf60_4 *g_6168dc;
-extern st_4dcf60_4 *g_616968;
-extern st_4dcf60_4 *g_61696c;
-extern st_4dcf60_4 *g_616984;
-extern st_4dcf60_4 *g_6169fc;
+extern st_4dcf60_4 *g_engfuncs.pfnMessageBegin;
+extern st_4dcf60_4 *g_engfuncs.pfnMessageEnd;
+extern st_4dcf60_4 *g_engfuncs.pfnWriteByte;
+extern st_4dcf60_4 *g_engfuncs.pfnWriteShort;
+extern st_4dcf60_4 *g_engfuncs.pfnWriteLong;
+extern st_4dcf60_4 *g_engfuncs.pfnWriteString;
+extern st_4dcf60_4 *g_engfuncs.pfnPEntityOfEntOffset;
+extern st_4dcf60_4 *g_engfuncs.pfnIndexOfEdict;
+extern st_4dcf60_4 *g_engfuncs.pfnGetInfoKeyBuffer;
+extern st_4dcf60_4 *g_engfuncs.pfnInfoKeyValue;
+extern st_4dcf60_4 *g_engfuncs.pfnGetPlayerUserId;
+extern st_4dcf60_4 *g_engfuncs.pfnSequenceGet;
 extern st_4dcf60_7 *gpGlobals;
-extern st_4dcf60_5 g_62f738;
+extern st_4dcf60_5 _15CBasePlayerItem.ItemInfoArray+24;
 
 int DeathNotice__18CHalfLifeMultiplayP11CBasePlayerP9entvars_sT2(unsigned int a0, st_4dcf60_3 **a1, st_4dcf60_3 *a2, st_4dcf60_3 *a3)
 {
@@ -122,18 +122,18 @@ int DeathNotice__18CHalfLifeMultiplayP11CBasePlayerP9entvars_sT2(unsigned int a0
     v14 = a2;
     if (v14->field_1a4 & 8)
     {
-        v13 = g_6168dc(v14->field_208);
+        v13 = g_engfuncs.pfnIndexOfEdict(v14->field_208);
         if (a3)
         {
             if (a3 == v14)
             {
                 v15 = v14->field_208;
-                if (v14->field_208 || (v15 = g_6168d4(0), v15))
+                if (v14->field_208 || (v15 = g_engfuncs.pfnPEntityOfEntOffset(0), v15))
                     v16 = v15->field_7c;
                 else
                     v16 = NULL;
                 if (v16->field_968)
-                    iter = (&g_62f738.field_0)[11 * v16->field_968->field_88];
+                    iter = (&_15CBasePlayerItem.ItemInfoArray+24.field_0)[11 * v16->field_968->field_88];
             }
             else
             {
@@ -150,24 +150,24 @@ LABEL_4dd04d:
         v18 = a3->field_0;
         goto LABEL_4dd04d;
     }
-    if (!sub_48ba50(iter, "weapon_", 7))
+    if (!strncmp@GLIBC_2.0(iter, "weapon_", 7))
     {
         iter += 7;
     }
-    else if (!sub_48ba50(iter, "monster_", 8))
+    else if (!strncmp@GLIBC_2.0(iter, "monster_", 8))
     {
         iter += 8;
     }
-    else if (!sub_48ba50(iter, "func_", 5))
+    else if (!strncmp@GLIBC_2.0(iter, "func_", 5))
     {
         iter += 5;
     }
-    g_616878(2, gmsgDeathMsg, 0, 0);
-    g_616880(v13);
-    v19 = g_6168dc(*a1->field_208);
-    g_616880(v19);
-    g_616898(iter);
-    g_61687c();
+    g_engfuncs.pfnMessageBegin(2, gmsgDeathMsg, 0, 0);
+    g_engfuncs.pfnWriteByte(v13);
+    v19 = g_engfuncs.pfnIndexOfEdict(*a1->field_208);
+    g_engfuncs.pfnWriteByte(v19);
+    g_engfuncs.pfnWriteString(iter);
+    g_engfuncs.pfnMessageEnd();
     v20 = "egon";
     v21 = 5;
     v22 = 13;
@@ -226,10 +226,10 @@ LABEL_4dd171:
         {
             v8 = iter;
             v5 = "model";
-            v39 = g_616968(v38->field_208);
-            v7 = g_61696c(v39);
-            v6 = g_6169fc(*a1->field_208);
-            v5 = g_616984(*a1->field_208);
+            v39 = g_engfuncs.pfnGetInfoKeyBuffer(v38->field_208);
+            v7 = g_engfuncs.pfnInfoKeyValue(v39);
+            v6 = g_engfuncs.pfnSequenceGet(*a1->field_208);
+            v5 = g_engfuncs.pfnGetPlayerUserId(*a1->field_208);
             v4 = *a1->field_1d0 + gpGlobals->field_98;
             v40 = "\"%s<%i><%s><%s>\" committed suicide with \"%s\"\n";
             goto LABEL_4dd5cd;
@@ -237,10 +237,10 @@ LABEL_4dd171:
         else
         {
             v8 = iter;
-            v7 = g_616984(*a1->field_208);
-            v6 = g_6169fc(*a1->field_208);
+            v7 = g_engfuncs.pfnGetPlayerUserId(*a1->field_208);
+            v6 = g_engfuncs.pfnSequenceGet(*a1->field_208);
             v41 = a1;
-            v5 = g_616984(*v41->field_208);
+            v5 = g_engfuncs.pfnGetPlayerUserId(*v41->field_208);
             v4 = *v41->field_1d0 + gpGlobals->field_98;
             v40 = "\"%s<%i><%s><%i>\" committed suicide with \"%s\"\n";
             goto LABEL_4dd5cd;
@@ -256,33 +256,33 @@ LABEL_4dd171:
                 v10 = "model";
                 v5 = "model";
                 v42 = a1;
-                v43 = g_616968(*v42->field_208);
-                v7 = g_61696c(v43);
-                v6 = g_6169fc(*v42->field_208);
-                v5 = g_616984(*v42->field_208);
+                v43 = g_engfuncs.pfnGetInfoKeyBuffer(*v42->field_208);
+                v7 = g_engfuncs.pfnInfoKeyValue(v43);
+                v6 = g_engfuncs.pfnSequenceGet(*v42->field_208);
+                v5 = g_engfuncs.pfnGetPlayerUserId(*v42->field_208);
                 v4 = *a1->field_1d0 + gpGlobals->field_98;
                 v1 = v10;
-                v44 = g_616968(a2->field_208);
-                v3 = g_61696c(v44);
-                v2 = g_6169fc(a2->field_208);
-                v1 = g_616984(a2->field_208);
+                v44 = g_engfuncs.pfnGetInfoKeyBuffer(a2->field_208);
+                v3 = g_engfuncs.pfnInfoKeyValue(v44);
+                v2 = g_engfuncs.pfnSequenceGet(a2->field_208);
+                v1 = g_engfuncs.pfnGetPlayerUserId(a2->field_208);
                 v0 = a2->field_1d0 + gpGlobals->field_98;
                 v45 = "\"%s<%i><%s><%s>\" killed \"%s<%i><%s><%s>\" with \"%s\"\n";
             }
             else
             {
                 v8 = iter;
-                v7 = g_616984(*a1->field_208);
-                v6 = g_6169fc(*a1->field_208);
-                v5 = g_616984(*a1->field_208);
+                v7 = g_engfuncs.pfnGetPlayerUserId(*a1->field_208);
+                v6 = g_engfuncs.pfnSequenceGet(*a1->field_208);
+                v5 = g_engfuncs.pfnGetPlayerUserId(*a1->field_208);
                 v4 = *a1->field_1d0 + gpGlobals->field_98;
-                v3 = g_616984(a2->field_208);
-                v2 = g_6169fc(a2->field_208);
-                v1 = g_616984(a2->field_208);
+                v3 = g_engfuncs.pfnGetPlayerUserId(a2->field_208);
+                v2 = g_engfuncs.pfnSequenceGet(a2->field_208);
+                v1 = g_engfuncs.pfnGetPlayerUserId(a2->field_208);
                 v0 = a2->field_1d0 + gpGlobals->field_98;
                 v45 = "\"%s<%i><%s><%i>\" killed \"%s<%i><%s><%i>\" with \"%s\"\n";
             }
-            sub_488680(v45);
+            UTIL_LogPrintf(v45);
         }
         else
         {
@@ -290,36 +290,36 @@ LABEL_4dd171:
             {
                 v8 = iter;
                 v5 = "model";
-                v46 = g_616968(*a1->field_208);
-                v7 = g_61696c(v46);
-                v6 = g_6169fc(*a1->field_208);
+                v46 = g_engfuncs.pfnGetInfoKeyBuffer(*a1->field_208);
+                v7 = g_engfuncs.pfnInfoKeyValue(v46);
+                v6 = g_engfuncs.pfnSequenceGet(*a1->field_208);
                 v47 = a1;
-                v5 = g_616984(*v47->field_208);
+                v5 = g_engfuncs.pfnGetPlayerUserId(*v47->field_208);
                 v4 = *v47->field_1d0 + gpGlobals->field_98;
                 v40 = "\"%s<%i><%s><%s>\" committed suicide with \"%s\" (world)\n";
             }
             else
             {
                 v8 = iter;
-                v7 = g_616984(*a1->field_208);
-                v6 = g_6169fc(*a1->field_208);
+                v7 = g_engfuncs.pfnGetPlayerUserId(*a1->field_208);
+                v6 = g_engfuncs.pfnSequenceGet(*a1->field_208);
                 v48 = a1;
-                v5 = g_616984(*v48->field_208);
+                v5 = g_engfuncs.pfnGetPlayerUserId(*v48->field_208);
                 v4 = *v48->field_1d0 + gpGlobals->field_98;
                 v40 = "\"%s<%i><%s><%i>\" committed suicide with \"%s\" (world)\n";
             }
 LABEL_4dd5cd:
-            sub_488680(v40);
+            UTIL_LogPrintf(v40);
         }
     }
-    g_616878(9, 0x33, 0, 0);
-    g_616880(9);
-    g_616880(2);
-    v49 = g_6168dc(*a1->field_208);
-    g_616888(v49);
-    v50 = g_6168dc((!a3 ? a2->field_208 : a3->field_208));
-    g_616888(v50);
-    g_61688c(39);
-    return g_61687c(39);
+    g_engfuncs.pfnMessageBegin(9, 0x33, 0, 0);
+    g_engfuncs.pfnWriteByte(9);
+    g_engfuncs.pfnWriteByte(2);
+    v49 = g_engfuncs.pfnIndexOfEdict(*a1->field_208);
+    g_engfuncs.pfnWriteShort(v49);
+    v50 = g_engfuncs.pfnIndexOfEdict((!a3 ? a2->field_208 : a3->field_208));
+    g_engfuncs.pfnWriteShort(v50);
+    g_engfuncs.pfnWriteLong(39);
+    return g_engfuncs.pfnMessageEnd(39);
 }
 

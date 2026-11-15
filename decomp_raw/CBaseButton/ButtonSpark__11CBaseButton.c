@@ -19,15 +19,15 @@ typedef struct st_4970e0_2 {
     unsigned int field_0;
 } st_4970e0_2;
 
-extern st_4970e0_2 *g_61692c;
+extern st_4970e0_2 *g_engfuncs.pfnRandomFloat;
 extern st_4970e0_3 *gpGlobals;
 
 int ButtonSpark__11CBaseButton(double a0, st_4970e0_1 *a1)
 {
     a1->field_c = _INSERT(0, 0, 0) | 0xffff0000;
     a1->field_10 = ButtonSpark__11CBaseButton;
-    g_61692c(0, 1.5f);
+    g_engfuncs.pfnRandomFloat(0, 1.5f);
     a1->field_0->field_104 = (float)(a0 + 0.1 + *(float *)gpGlobals);
-    return sub_489c40(a1->field_0, &a1->field_0->padding_0[220]);
+    return DoSpark(a1->field_0, &a1->field_0->padding_0[220]);
 }
 

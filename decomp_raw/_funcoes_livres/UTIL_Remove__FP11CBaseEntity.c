@@ -13,7 +13,7 @@ st_534ec0_0 * UTIL_Remove__FP11CBaseEntity(st_534ec0_0 **a0)
 
     if (!a0)
         return v1;
-    sub_48b850(a0);
+    CBaseEntity::UpdateOnRemove(a0);
     *a0->field_1a7 = *a0->field_1a7 | 64;
     v0 = *a0;
     v0->field_1cc = 0;

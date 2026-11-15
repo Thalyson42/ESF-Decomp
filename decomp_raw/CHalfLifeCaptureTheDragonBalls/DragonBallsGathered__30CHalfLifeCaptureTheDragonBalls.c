@@ -36,7 +36,7 @@ unsigned int DragonBallsGathered__30CHalfLifeCaptureTheDragonBalls(float a0)
         v9 = *(float *)(*v13 + 8) + v5;
         v10 = *(float *)(index + 4) + v6;
         v11 = *(float *)(index + 8) + v7;
-        sub_487b80(*v13 + 8, &v9, 1, *(int *)(*v13 + 520), &v3);
+        UTIL_TraceLine(*v13 + 8, &v9, 1, *(int *)(*v13 + 520), &v3);
         if (1.0 > v4 || *(int *)(*(int *)(*(unsigned int *)&v1 + v2 * 4) + 100))
             break;
         idx = v2 + 1;
@@ -58,7 +58,7 @@ unsigned int DragonBallsGathered__30CHalfLifeCaptureTheDragonBalls(float a0)
                 v21 = v18 * v18 + v19 * v19 + v20 * v20;
                 v22 = sqrt(v21);
                 if (isnan(v22))
-                    sub_487dc0(*(unsigned int *)&v21);
+                    sqrt(*(unsigned int *)&v21);
                 else
                     v21 = v22;
                 v8 = (float)v21;

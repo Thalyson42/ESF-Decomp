@@ -33,7 +33,7 @@ unsigned int Glow__11CDragonBall(st_4ae3c0_1 *a0)
     v4 = v2;
     v3->field_158 = v4;
     if (a0->field_6c == 1)
-        v4 = sub_489390(a0->field_0->field_208, 4, "weapons/db_glowing.wav", 0x3f800000, 0.800000011920929f, 0, 100);
+        v4 = EMIT_SOUND_DYN(a0->field_0->field_208, 4, "weapons/db_glowing.wav", 0x3f800000, 0.800000011920929f, 0, 100);
     return v4;
 }
 

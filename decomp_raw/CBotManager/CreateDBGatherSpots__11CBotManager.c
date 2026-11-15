@@ -40,18 +40,18 @@ typedef struct st_56a7b0_0 {
 extern unsigned int FindSelection__t12TMultiChoice1ZP11CBaseEntityPQ2t12TMultiChoice1ZP11CBaseEntity12SMultiChoicei;
 extern unsigned int g_teamplay;
 extern char CheckForDBSpot;
-extern st_56a7b0_0 *g_6168a4;
-extern st_56a7b0_0 *g_616928;
+extern st_56a7b0_0 *g_engfuncs.pfnCVarGetFloat;
+extern st_56a7b0_0 *g_engfuncs.pfnRandomLong;
 extern unsigned int GatherDBPosForTeamGood;
-extern unsigned int g_625c24;
-extern unsigned int g_625c28;
+extern unsigned int GatherDBPosForTeamGood+4;
+extern unsigned int GatherDBPosForTeamGood+8;
 extern unsigned int GatherDBPosForTeamEvil;
-extern unsigned int g_625c30;
-extern unsigned int g_625c34;
+extern unsigned int GatherDBPosForTeamEvil+4;
+extern unsigned int GatherDBPosForTeamEvil+8;
 extern unsigned int GatherSpotsForTeamGood[4];
 extern unsigned int GatherSpotsForTeamEvil[4];
 extern char cout;
-extern st_56a7b0_5 *g_625f80;
+extern st_56a7b0_5 *cout+512;
 
 double CreateDBGatherSpots__11CBotManager(float a0)
 {
@@ -128,21 +128,21 @@ double CreateDBGatherSpots__11CBotManager(float a0)
     CheckForDBSpot = 0;
     if (!g_teamplay)
         return v71;
-    g_6168a4("mp_gamemode");
+    g_engfuncs.pfnCVarGetFloat("mp_gamemode");
     if (v26 != 2.0)
         return 2.0;
-    v27 = sub_48a550(a0, 1);
-    v18 = sub_48a550(a0, 2);
+    v27 = CBotManager::GetRandomDBSpotIndex(a0, 1);
+    v18 = CBotManager::GetRandomDBSpotIndex(a0, 2);
     if ((short)v27 > -0x1 && (short)v18 > -0x1)
     {
         v28 = v27 * 16;
         GatherDBPosForTeamGood = *(int *)((char *)&GatherSpotsForTeamGood[0] + v28);
-        g_625c24 = *(int *)((char *)&GatherSpotsForTeamGood[0] + v28 + 4);
-        g_625c28 = *(int *)((char *)&GatherSpotsForTeamGood[0] + v28 + 8);
+        GatherDBPosForTeamGood+4 = *(int *)((char *)&GatherSpotsForTeamGood[0] + v28 + 4);
+        GatherDBPosForTeamGood+8 = *(int *)((char *)&GatherSpotsForTeamGood[0] + v28 + 8);
         v29 = v18 * 16;
         GatherDBPosForTeamEvil = *(int *)((char *)&GatherSpotsForTeamEvil[0] + v29);
-        g_625c30 = *(int *)((char *)&GatherSpotsForTeamEvil[0] + v29 + 4);
-        g_625c34 = *(int *)((char *)&GatherSpotsForTeamEvil[0] + v29 + 8);
+        GatherDBPosForTeamEvil+4 = *(int *)((char *)&GatherSpotsForTeamEvil[0] + v29 + 4);
+        GatherDBPosForTeamEvil+8 = *(int *)((char *)&GatherSpotsForTeamEvil[0] + v29 + 8);
         return 2.0;
     }
     if (v27 == 0xffff)
@@ -155,23 +155,23 @@ double CreateDBGatherSpots__11CBotManager(float a0)
             goto LABEL_56a8dc;
         v30 = "Error: missing DB gather spot for team evil!\n";
     }
-    g_625f80->field_14(&cout, v30);
+    cout+512->field_14(&cout, v30);
 LABEL_56a8dc:
     v19 = 0;
     v23 = 0;
-    v31 = sub_48d6a0(8);
+    v31 = __builtin_new(8);
     *v31 = NULL;
     v31[1] = NULL;
     v24 = v31;
     v20 = 0;
     while (1)
     {
-        v19 = sub_487e80(v19, "item_dragonball");
+        v19 = UTIL_FindEntityByClassname(v19, "item_dragonball");
         if (!v19)
             break;
-        if (!(char)sub_48b140(v19))
+        if (!(char)IsNull(v19))
         {
-            v32 = sub_48d6a0(12);
+            v32 = __builtin_new(12);
             v32->field_0 = 0;
             v32->field_4 = 0;
             v17 = v32;
@@ -181,15 +181,15 @@ LABEL_56a8dc:
             v33 = v24;
             if (!*v33)
             {
-                v34 = sub_48d6a0(12);
+                v34 = __builtin_new(12);
                 v16 = 1;
                 v34->field_4 = NULL;
                 v34->field_8 = NULL;
-                sub_48d0e0(v34, 0, 4);
+                memset@GLIBC_2.0(v34, 0, 4);
                 v16 = 0;
                 *v33 = v34;
                 if (v16)
-                    sub_48d4e0(v34);
+                    __builtin_delete(v34);
                 *v33->field_0 = v17;
                 *v33->field_4 = NULL;
                 *v33->field_8 = NULL;
@@ -198,15 +198,15 @@ LABEL_56a8dc:
             else
             {
                 v15 = v33[1];
-                v35 = sub_48d6a0(12);
+                v35 = __builtin_new(12);
                 v14 = 1;
                 v35->field_4 = NULL;
                 v35->field_8 = NULL;
-                sub_48d0e0(v35, 0, 4);
+                memset@GLIBC_2.0(v35, 0, 4);
                 v14 = 0;
                 v15->field_4 = v35;
                 if (v14)
-                    sub_48d4e0(v35);
+                    __builtin_delete(v35);
                 v33[1]->field_4->field_8 = v33[1];
                 v36 = v33[1]->field_4;
                 v33[1] = v36;
@@ -218,7 +218,7 @@ LABEL_56a8dc:
     }
     v20 = NULL;
     v13 = &v20;
-    v12 = g_616928(0, v23);
+    v12 = g_engfuncs.pfnRandomLong(0, v23);
     v10 = _INSERT(v12, 0, 0) | 0xffff0000;
     v11 = &FindSelection__t12TMultiChoice1ZP11CBaseEntityPQ2t12TMultiChoice1ZP11CBaseEntity12SMultiChoicei;
     v38 = *v24;
@@ -244,23 +244,23 @@ LABEL_56ab63:
     {
         v42 = *v20;
         GatherDBPosForTeamGood = v42[2];
-        g_625c24 = v42[3];
-        g_625c28 = v42[4];
+        GatherDBPosForTeamGood+4 = v42[3];
+        GatherDBPosForTeamGood+8 = v42[4];
     }
     v21 = 0;
-    v43 = sub_48d6a0(8);
+    v43 = __builtin_new(8);
     *v43 = NULL;
     v43[1] = NULL;
     v22 = v43;
     v19 = NULL;
     while (1)
     {
-        v19 = sub_487e80(v19, "item_dragonball");
+        v19 = UTIL_FindEntityByClassname(v19, "item_dragonball");
         if (!v19)
             break;
-        if (!(char)sub_48b140(v19) && v19 != v20)
+        if (!(char)IsNull(v19) && v19 != v20)
         {
-            v44 = sub_48d6a0(12);
+            v44 = __builtin_new(12);
             v44->field_0 = 0;
             v44->field_4 = 0;
             v8 = v44;
@@ -270,15 +270,15 @@ LABEL_56ab63:
             v45 = v22;
             if (!*v45)
             {
-                v46 = sub_48d6a0(12);
+                v46 = __builtin_new(12);
                 v7 = 1;
                 v46->field_4 = NULL;
                 v46->field_8 = NULL;
-                sub_48d0e0(v46, 0, 4);
+                memset@GLIBC_2.0(v46, 0, 4);
                 v7 = 0;
                 *v45 = v46;
                 if (v7)
-                    sub_48d4e0(v46);
+                    __builtin_delete(v46);
                 *v45->field_0 = v8;
                 *v45->field_4 = NULL;
                 *v45->field_8 = NULL;
@@ -287,15 +287,15 @@ LABEL_56ab63:
             else
             {
                 v6 = v45[1];
-                v47 = sub_48d6a0(12);
+                v47 = __builtin_new(12);
                 v5 = 1;
                 v47->field_4 = NULL;
                 v47->field_8 = NULL;
-                sub_48d0e0(v47, 0, 4);
+                memset@GLIBC_2.0(v47, 0, 4);
                 v5 = 0;
                 v6->field_4 = v47;
                 if (v5)
-                    sub_48d4e0(v47);
+                    __builtin_delete(v47);
                 v45[1]->field_4->field_8 = v45[1];
                 v48 = v45[1]->field_4;
                 v45[1] = v48;
@@ -307,7 +307,7 @@ LABEL_56ab63:
     }
     v19 = NULL;
     v4 = &v19;
-    v3 = g_616928(0, v21);
+    v3 = g_engfuncs.pfnRandomLong(0, v21);
     v1 = _INSERT(v3, 0, 0) | 0xffff0000;
     v2 = &FindSelection__t12TMultiChoice1ZP11CBaseEntityPQ2t12TMultiChoice1ZP11CBaseEntity12SMultiChoicei;
     v50 = *v22;
@@ -333,8 +333,8 @@ LABEL_56ae23:
     {
         v54 = *v19;
         GatherDBPosForTeamEvil = v54[2];
-        g_625c30 = v54[3];
-        g_625c34 = v54[4];
+        GatherDBPosForTeamEvil+4 = v54[3];
+        GatherDBPosForTeamEvil+8 = v54[4];
     }
     while (*v22 && (v55 = v22, *v55))
     {
@@ -349,12 +349,12 @@ LABEL_56ae23:
             if (v58)
                 v58->field_8 = NULL;
             v57->field_4 = NULL;
-            sub_48d4e0(v57);
+            __builtin_delete(v57);
         }
         v59 = v56;
         if (!v59)
             break;
-        sub_48d4e0(v59);
+        __builtin_delete(v59);
     }
     if (v22)
     {
@@ -368,12 +368,12 @@ LABEL_56ae23:
                 iter = iter->field_4;
                 v62->field_4 = NULL;
                 v62->field_8 = NULL;
-                sub_48d4e0(v62);
+                __builtin_delete(v62);
             } while (iter);
         }
         v60[1] = NULL;
         *v60 = NULL;
-        sub_48d4e0(v60);
+        __builtin_delete(v60);
     }
     v22 = 0;
     while (*v24 && (v63 = v24, *v63))
@@ -389,12 +389,12 @@ LABEL_56ae23:
             if (v66)
                 v66->field_8 = NULL;
             v65->field_4 = NULL;
-            sub_48d4e0(v65);
+            __builtin_delete(v65);
         }
         v67 = v64;
         if (!v67)
             break;
-        sub_48d4e0(v67);
+        __builtin_delete(v67);
     }
     if (v24)
     {
@@ -408,12 +408,12 @@ LABEL_56ae23:
                 node = node->field_4;
                 v70->field_4 = NULL;
                 v70->field_8 = NULL;
-                sub_48d4e0(v70);
+                __builtin_delete(v70);
             } while (node);
         }
         v68[1] = NULL;
         *v68 = NULL;
-        sub_48d4e0(v68);
+        __builtin_delete(v68);
     }
     v24 = 0;
     return 2.0;

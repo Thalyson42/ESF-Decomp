@@ -21,12 +21,12 @@ typedef struct st_4fc480_0 {
     unsigned int field_0;
 } st_4fc480_0;
 
-extern float g_5bd0f4;
+extern float decalfrequency+12;
 extern unsigned int gmsgLogo;
-extern st_4fc480_0 *g_616878;
-extern st_4fc480_0 *g_61687c;
-extern st_4fc480_0 *g_616880;
-extern st_4fc480_0 *g_6168ec;
+extern st_4fc480_0 *g_engfuncs.pfnMessageBegin;
+extern st_4fc480_0 *g_engfuncs.pfnMessageEnd;
+extern st_4fc480_0 *g_engfuncs.pfnWriteByte;
+extern st_4fc480_0 *g_engfuncs.pfnRegUserMsg;
 extern st_4fc480_1 *gpGlobals;
 
 int ImpulseCommands__11CBasePlayer(float a0)
@@ -57,7 +57,7 @@ int ImpulseCommands__11CBasePlayer(float a0)
     char v15;  // [bp-0x44]
     float v16;  // [bp-0x34]
 
-    sub_48e140(a0);
+    CBasePlayer::PlayerUse(a0);
     v18 = *(int *)(*(int *)a0 + 388);
     switch (v18)
     {
@@ -65,7 +65,7 @@ int ImpulseCommands__11CBasePlayer(float a0)
         v1 = &gpGlobals;
         if (gpGlobals->field_0 >= *(float *)(*(unsigned int *)&a0 + 2456))
         {
-            sub_48a800(*(int *)a0 + 116);
+            UTIL_MakeVectors(*(int *)a0 + 116);
             v19 = *(int *)a0;
             v20 = &v19->padding_0[8];
             v9 = *(float *)&v19->padding_0[8] + *(float *)&v19->padding_0[372];
@@ -83,12 +83,12 @@ int ImpulseCommands__11CBasePlayer(float a0)
             v3 = *(float *)&v19->padding_0[8] + *(float *)&v19->padding_0[372];
             v4 = *(float *)&v20->padding_0[4] + *(float *)&v19->padding_0[376];
             v5 = *(float *)&v20->padding_0[8] + *(float *)&v19->padding_0[380];
-            sub_487b80(&v3, &v12, 1, *(int *)&v19[1].padding_0[128], &v15);
+            UTIL_TraceLine(&v3, &v12, 1, *(int *)&v19[1].padding_0[128], &v15);
             if (v16 != 1.0f)
             {
-                *(float *)(*(unsigned int *)&a0 + 2456) = *v1->field_0 + g_5bd0f4;
-                v24 = sub_48d290(0);
-                sub_48bd70(v24, *(int *)a0);
+                *(float *)(*(unsigned int *)&a0 + 2456) = *v1->field_0 + decalfrequency+12;
+                v24 = GetClassPtr__H1Z9CSprayCan_PX01_PX01(0);
+                CSprayCan::Spawn(v24, *(int *)a0);
                 break;
             }
         }
@@ -97,16 +97,16 @@ int ImpulseCommands__11CBasePlayer(float a0)
         if (!gmsgLogo)
         {
             v2 = 1;
-            gmsgLogo = g_6168ec("Logo", 1);
+            gmsgLogo = g_engfuncs.pfnRegUserMsg("Logo", 1);
         }
         else
         {
             v2 = 0;
         }
-        g_616878(1, gmsgLogo, 0, *(int *)(*(int *)a0 + 520));
+        g_engfuncs.pfnMessageBegin(1, gmsgLogo, 0, *(int *)(*(int *)a0 + 520));
         v0 = v2;
-        g_616880(v0);
-        g_61687c(v0);
+        g_engfuncs.pfnWriteByte(v0);
+        g_engfuncs.pfnMessageEnd(v0);
         if (!v2)
         {
             gmsgLogo = 0;
@@ -114,7 +114,7 @@ int ImpulseCommands__11CBasePlayer(float a0)
         }
         break;
     default:
-        sub_48bc00(a0, v18);
+        CBasePlayer::CheatImpulseCommands(a0, v18);
     }
     v25 = *(int *)a0;
     v25->field_184 = 0;

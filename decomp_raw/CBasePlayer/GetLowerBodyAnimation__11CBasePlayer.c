@@ -22,7 +22,7 @@ unsigned int GetLowerBodyAnimation__11CBasePlayer(float idx)
     v6 = *(float *)(*(int *)idx + 32) * *(float *)(*(int *)idx + 32) + *(float *)(*(int *)idx + 36) * *(float *)(*(int *)idx + 36);
     v7 = sqrt(v6);
     if (isnan(v7))
-        sub_487dc0(*(unsigned int *)&v6);
+        sqrt(*(unsigned int *)&v6);
     else
         v6 = v7;
     v3 = (float)v6;
@@ -34,7 +34,7 @@ unsigned int GetLowerBodyAnimation__11CBasePlayer(float idx)
     if (*(int *)(*(int *)idx + 448) > 1)
     {
         v2 = v3;
-        v4 = sub_48a780(idx);
+        v4 = CBasePlayer::GetMaxSpeed(idx);
         if ((double)v4 / 1.6 >= v2)
         {
             v0 = 50;
@@ -74,12 +74,12 @@ unsigned int GetLowerBodyAnimation__11CBasePlayer(float idx)
                 *(unsigned int *)(*(unsigned int *)&idx + 376) = 7;
             v0 = 7;
 LABEL_4f5558:
-            v9 = sub_488bc0(idx);
+            v9 = CBaseAnimating::LookupActivity(idx);
             goto LABEL_4f56d0;
         }
     }
     v1 = v3;
-    v4 = sub_48a780(idx);
+    v4 = CBasePlayer::GetMaxSpeed(idx);
     if ((double)v4 / 1.3 < v1 || *(int *)(*(unsigned int *)&idx + 804) && 0.0 < v3)
     {
         if (*(char *)(*(int *)idx + 384) & 16)
@@ -95,7 +95,7 @@ LABEL_4f55f4:
         }
         else
         {
-            if (!sub_48a030(idx))
+            if (!CBasePlayer::CanPlayForwardWalk(idx))
                 goto LABEL_4f55f4;
             v8 = "run";
             goto LABEL_4f56b2;
@@ -103,10 +103,10 @@ LABEL_4f55f4:
     }
     if (0.0 >= v3)
     {
-        v10 = sub_48afe0(idx, "idle");
+        v10 = CBaseAnimating::LookupSequence(idx, "idle");
         if (*(int *)(*(int *)idx + 296) != v10)
         {
-            v11 = sub_48afe0(idx, "deep_idle");
+            v11 = CBaseAnimating::LookupSequence(idx, "deep_idle");
             if (*(int *)(*(int *)idx + 296) != v11)
                 *(float *)(*(unsigned int *)&idx + 1420) = *(float *)gpGlobals;
         }
@@ -114,14 +114,14 @@ LABEL_4f55f4:
         {
             v8 = "deep_idle";
 LABEL_4f56b2:
-            v9 = sub_48afe0(idx, v8);
+            v9 = CBaseAnimating::LookupSequence(idx, v8);
         }
         else
         {
-            v9 = sub_48afe0(idx, "idle");
+            v9 = CBaseAnimating::LookupSequence(idx, "idle");
         }
     }
-    else if (!(*(char *)(*(int *)idx + 384) & 16) && sub_48a030(idx))
+    else if (!(*(char *)(*(int *)idx + 384) & 16) && CBasePlayer::CanPlayForwardWalk(idx))
     {
         v8 = "walk2handed";
         goto LABEL_4f56b2;

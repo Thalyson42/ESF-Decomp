@@ -28,7 +28,7 @@ double LimitVelocity__4CGib(st_4a3430_0 **a0)
     v8 = *a0->field_20 * *a0->field_20 + *(float *)&v7[1] * *(float *)&v7[1] + *(float *)&v7[2] * *(float *)&v7[2];
     v9 = sqrt(v8);
     if (isnan(v9))
-        sub_487dc0(*(unsigned int *)&v8);
+        sqrt(*(unsigned int *)&v8);
     else
         v8 = v9;
     v4 = (float)v8;
@@ -39,7 +39,7 @@ double LimitVelocity__4CGib(st_4a3430_0 **a0)
     v12 = v10[8] * v10[8] + *(float *)&v11[1] * *(float *)&v11[1] + *(float *)&v11[2] * *(float *)&v11[2];
     v13 = sqrt(v12);
     if (isnan(v13))
-        sub_487dc0(*(unsigned int *)&v12);
+        sqrt(*(unsigned int *)&v12);
     else
         v12 = v13;
     v0 = (float)v12;

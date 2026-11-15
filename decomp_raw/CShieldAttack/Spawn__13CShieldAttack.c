@@ -26,6 +26,6 @@ int Spawn__13CShieldAttack(st_5194b0_2 *a0)
     a0->field_c0 = 0;
     a0->field_b0 = 0xffffffff;
     memset(a0 + 1, 0, 20);
-    return sub_48cf50(a0);
+    return CBasePlayerItem::FallInit(a0);
 }
 

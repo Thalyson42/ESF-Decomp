@@ -20,7 +20,7 @@ st_491040_1 * Use__9CFuncWallP11CBaseEntityT18USE_TYPEf(st_491040_0 **a0, unsign
     v2 = __fnstcw();
     v1 = v2 | 0xc00;
     v0 = (int)*a0->field_130;
-    v3 = sub_48ab90(a0, a3, v0);
+    v3 = CBaseEntity::ShouldToggle(a0, a3, v0);
     if (!v3)
         return v3;
     v4 = *a0;

@@ -69,7 +69,7 @@ float Touch__9CPendulumP11CBaseEntity(st_493340_4 **a0, st_493340_3 *a1)
     if (0.0 > v0)
         v0 = -v0;
     a1->field_60->field_34(a1, *a0, *a0, v0, 1);
-    sub_48b610(&v2, *a0);
+    VecBModelOrigin(&v2, *a0);
     v17 = &v15->field_8;
     v18 = v15->field_8 - v3;
     v6 = v18;
@@ -80,7 +80,7 @@ float Touch__9CPendulumP11CBaseEntity(st_493340_4 **a0, st_493340_3 *a1)
     v21 = v18 * v18 + v19 * v19 + v20 * v20;
     v22 = sqrt(v21);
     if (isnan(v22))
-        sub_487dc0(*(unsigned int *)&v21);
+        sqrt(*(unsigned int *)&v21);
     else
         v21 = v22;
     v1 = (float)v21;

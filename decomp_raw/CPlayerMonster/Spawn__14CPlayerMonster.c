@@ -3,7 +3,7 @@ typedef struct st_50ca80_0 {
     unsigned int field_0;
 } st_50ca80_0;
 
-extern st_50ca80_0 *g_6167c8;
+extern st_50ca80_0 *g_engfuncs.pfnSetModel;
 
 int Spawn__14CPlayerMonster(float idx)
 {
@@ -17,14 +17,14 @@ int Spawn__14CPlayerMonster(float idx)
     float v5;  // [bp-0x1c]
 
     (*(int *)(*(int *)(*(unsigned int *)&idx + 96) + 12))(idx);
-    g_6167c8(*(int *)(*(int *)idx + 520), "models/player.mdl");
+    g_engfuncs.pfnSetModel(*(int *)(*(int *)idx + 520), "models/player.mdl");
     v3 = 4.0f;
     v4 = 4.0f;
     v5 = 9.0f;
     v0 = -4.0f;
     v1 = -4.0f;
     v2 = -9.0f;
-    sub_48a0d0(*(int *)idx, &v0, &v3);
+    UTIL_SetSize(*(int *)idx, &v0, &v3);
     *(unsigned int *)(*(int *)idx + 268) = 3;
     *(unsigned int *)(*(int *)idx + 264) = 4;
     *(unsigned int *)(*(unsigned int *)&idx + 632) = 247;

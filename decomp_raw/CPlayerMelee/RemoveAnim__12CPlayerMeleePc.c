@@ -18,14 +18,14 @@ int RemoveAnim__12CPlayerMeleePc(st_500910_1 *a0, int a1)
     {
         return v1;
     }
-    else if (sub_488af0(a1, a0->field_84))
+    else if (strcmp@GLIBC_2.0(a1, a0->field_84))
     {
-        for (iter = a0->field_84; iter->field_2a4 && sub_488af0(iter, a1); iter = iter->field_2a4);
-        return sub_48b460(a0, iter);
+        for (iter = a0->field_84; iter->field_2a4 && strcmp@GLIBC_2.0(iter, a1); iter = iter->field_2a4);
+        return CPlayerMelee::RemoveAnim(a0, iter);
     }
     else
     {
-        return sub_48b460(a0, a0->field_84);
+        return CPlayerMelee::RemoveAnim(a0, a0->field_84);
     }
 }
 

@@ -21,20 +21,20 @@ unsigned int HandleChargeAttack__12CPlayerMelee(st_509e90_1 *a0)
 
     if (a0->field_108)
     {
-        v0 = sub_48c1c0(a0, a0->field_148, a0->field_130->field_14c);
+        v0 = CPlayerMelee::HandleDelayedBlock(a0, a0->field_148, a0->field_130->field_14c);
         if (!v0)
             return v0;
-        return sub_489c80(a0);
+        return CPlayerMelee::ExecuteCombo(a0);
     }
     else
     {
-        v1 = sub_48bed0(a0);
+        v1 = CPlayerMelee::SetDirections(a0);
         if (!v1)
             return v1;
-        v2 = sub_48a0b0(a0, a0->field_148, a0->field_130->field_14c);
+        v2 = CPlayerMelee::SetDelayEndBlock(a0, a0->field_148, a0->field_130->field_14c);
         if (v2)
             return v2;
-        return sub_489c80(a0);
+        return CPlayerMelee::ExecuteCombo(a0);
     }
 }
 

@@ -63,7 +63,7 @@ st_4cb660_2 * CreateBlob__5CBlobP11CBasePlayerG6Vector(st_4cb660_5 **a0, unsigne
     unsigned int v1;  // [bp-0x20]
     unsigned int v2;  // [bp-0x1c]
 
-    v3 = sub_4897d0(0);
+    v3 = GetClassPtr__H1Z5CBlob_PX01_PX01(0);
     v3->field_60->field_8(v3);
     v4 = &v3->field_0->field_0;
     v0 = 0;
@@ -88,8 +88,8 @@ st_4cb660_2 * CreateBlob__5CBlobP11CBasePlayerG6Vector(st_4cb660_5 **a0, unsigne
     v3->field_18 = &BlobTouch__5CBlobP11CBaseEntity;
     *(float *)&v3->field_0->field_104 = gpGlobals->field_0;
     *(float *)&v3->field_68 = gpGlobals->field_0;
-    sub_48db50(v3->field_0, &v3->field_0->field_8);
-    sub_48da50(v3);
+    UTIL_SetOrigin(v3->field_0, &v3->field_0->field_8);
+    CBlob::CreateExplosion(v3);
     return v3;
 }
 

@@ -15,16 +15,16 @@ int AggressionLevelMenu__5NMenuv(void)
         if (_5NMenu.CurrentMenuChoice == 1)
             v1 = 2;
         else
-            return sub_48d6f0();
+            return NMenu::ResetMenu();
     }
     else
     {
         if (_5NMenu.CurrentMenuChoice == 3)
             v1 = 0;
         else
-            return sub_48d6f0();
+            return NMenu::ResetMenu();
     }
-    sub_48be30(&BotManager, v1);
-    return sub_48d6f0(&BotManager, v1);
+    CBotManager::ChangeAggressionLevel(&BotManager, v1);
+    return NMenu::ResetMenu(&BotManager, v1);
 }
 

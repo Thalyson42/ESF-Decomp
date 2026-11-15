@@ -61,7 +61,7 @@ typedef struct st_5187b0_5 {
 
 extern char ExplodeTouch__16CExplodingAttackP11CBaseEntity;
 extern char NormalThink__12CMagicAttack;
-extern st_5187b0_2 *g_6167c8;
+extern st_5187b0_2 *g_engfuncs.pfnSetModel;
 extern st_5187b0_5 *gpGlobals;
 
 short ShootShield__10CShieldAtkP9entvars_sG6VectorT2i(st_5187b0_4 *a0, float *a1, float *a2, unsigned int a3)
@@ -94,11 +94,11 @@ short ShootShield__10CShieldAtkP9entvars_sG6VectorT2i(st_5187b0_4 *a0, float *a1
     float v12;  // [bp-0x14]
     float v13;  // [bp-0x10]
 
-    v14 = sub_489d90(0);
+    v14 = GetClassPtr__H1Z10CShieldAtk_PX01_PX01(0);
     v14->field_60->field_8(v14);
     v14->field_0->field_108 = 5;
     v14->field_0->field_10c = 1;
-    g_6167c8(v14->field_0->field_208, "sprites/shieldattack.spr");
+    g_engfuncs.pfnSetModel(v14->field_0->field_208, "sprites/shieldattack.spr");
     v14->field_2d4 = 4;
     v14->field_2d0 = 4;
     v15 = a3;
@@ -114,12 +114,12 @@ short ShootShield__10CShieldAtkP9entvars_sG6VectorT2i(st_5187b0_4 *a0, float *a1
     v18 = *v17 * *v17 + v17[1] * v17[1] + v17[2] * v17[2];
     v19 = sqrt(v18);
     if (isnan(v19))
-        sub_487dc0(*(unsigned int *)&v18);
+        sqrt(*(unsigned int *)&v18);
     else
         v18 = v19;
     v14->field_2a8 = (float)v18;
     v20 = v14->field_0;
-    sub_488860(&v5, &v20->field_20);
+    UTIL_VecToAngles(&v5, &v20->field_20);
     v20->field_50 = v5;
     v20->field_54 = v8;
     v20->field_58 = v10;
@@ -129,7 +129,7 @@ short ShootShield__10CShieldAtkP9entvars_sG6VectorT2i(st_5187b0_4 *a0, float *a1
     v21 = *a2 * *a2 + a2[1] * a2[1] + a2[2] * a2[2];
     v22 = sqrt(v21);
     if (isnan(v22))
-        sub_487dc0(*(unsigned int *)&v21);
+        sqrt(*(unsigned int *)&v21);
     else
         v21 = v22;
     v0 = (float)v21;
@@ -153,7 +153,7 @@ short ShootShield__10CShieldAtkP9entvars_sG6VectorT2i(st_5187b0_4 *a0, float *a1
     v6 = *a1 + v11;
     v7 = a1[1] + v12;
     v9 = a1[2] + v13;
-    sub_48db50(v14->field_0, &v6);
+    UTIL_SetOrigin(v14->field_0, &v6);
     v5 = 5.42932517e-315;
     v8 = 5.42932517e-315;
     v10 = 5.42932517e-315;
@@ -162,7 +162,7 @@ short ShootShield__10CShieldAtkP9entvars_sG6VectorT2i(st_5187b0_4 *a0, float *a1
     v11 = (float)v25;
     v12 = (float)v25;
     v13 = (float)v25;
-    v27 = _INSERT(sub_48a0d0(v14->field_0, &v11, &v5), 0, 0) | 0xffff0000;
+    v27 = _INSERT(UTIL_SetSize(v14->field_0, &v11, &v5), 0, 0) | 0xffff0000;
     v14->field_14 = v27;
     v14->field_18 = &ExplodeTouch__16CExplodingAttackP11CBaseEntity;
     v14->field_c = _INSERT(v27, 0, 0) | 0xffff0000;

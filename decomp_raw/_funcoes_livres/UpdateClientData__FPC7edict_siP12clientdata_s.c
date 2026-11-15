@@ -148,7 +148,7 @@ unsigned int UpdateClientData__FPC7edict_siP12clientdata_s(st_4a2ef0_1 *a0, unsi
     v2 = v3 | 0xc00;
     v1 = (int)a0->field_234;
     a2->field_58 = v1;
-    sub_48e110(&a2->field_8c, v0->field_1e4(a0));
+    strcpy@GLIBC_2.0(&a2->field_8c, v0->field_1e4(a0));
     *(float *)&a2->field_5c = a0->field_290;
     *(float *)&a2->field_60 = a0->field_294;
     a2->field_64 = a0->field_298;

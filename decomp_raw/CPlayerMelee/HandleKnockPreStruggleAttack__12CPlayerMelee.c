@@ -9,9 +9,9 @@ unsigned int HandleKnockPreStruggleAttack__12CPlayerMelee(float a0)
 {
     if (*(float *)(*(unsigned int *)&a0 + 168) < *(float *)gpGlobals)
     {
-        sub_489610(a0, 1);
-        sub_488530(a0, 0x11, 0);
+        CPlayerMelee::SetMode(a0, 1);
+        CPlayerMelee::MeleeText(a0, 0x11, 0);
     }
-    return sub_488530(*(int *)(*(unsigned int *)&a0 + 304), 0x11, 0);
+    return CPlayerMelee::MeleeText(*(int *)(*(unsigned int *)&a0 + 304), 0x11, 0);
 }
 

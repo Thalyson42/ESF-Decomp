@@ -21,6 +21,6 @@ int Spawn__18CSpecialBeamCannon(float idx)
         iter += 4;
     }
     *(short *)iter = *(short *)i;
-    return sub_48cf50(idx);
+    return CBasePlayerItem::FallInit(idx);
 }
 

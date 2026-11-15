@@ -114,10 +114,10 @@ typedef struct st_52e9a0_2 {
 } st_52e9a0_2;
 
 extern unsigned int g_vecZero;
-extern unsigned int g_616790;
-extern st_52e9a0_5 *g_616794;
-extern st_52e9a0_3 *g_6167f8;
-extern st_52e9a0_3 *g_6168d8;
+extern unsigned int g_vecZero+4;
+extern st_52e9a0_5 *g_vecZero+8;
+extern st_52e9a0_3 *g_engfuncs.pfnFindEntityByString;
+extern st_52e9a0_3 *g_engfuncs.pfnEntOffsetOfPEntity;
 extern st_52e9a0_2 *gpGlobals;
 
 st_52e9a0_5 * TeleportTouch__12CBaseTriggerP11CBaseEntity(st_52e9a0_1 *a0, st_52e9a0_5 *a1)
@@ -141,7 +141,7 @@ st_52e9a0_5 * TeleportTouch__12CBaseTriggerP11CBaseEntity(st_52e9a0_1 *a0, st_52
     v5 = a1->field_0;
     if (!(v5->field_1a4 & 40))
         return a1;
-    v6 = sub_488a80(a0->field_100, a1);
+    v6 = UTIL_IsMasterTriggered(a0->field_100, a1);
     if (!v6)
         return v6;
     v7 = _INSERT(a0->field_0, 0, a0->field_0->field_1a0 ^ 1);
@@ -153,10 +153,10 @@ st_52e9a0_5 * TeleportTouch__12CBaseTriggerP11CBaseEntity(st_52e9a0_1 *a0, st_52
         if (v8)
             return v8;
     }
-    v9 = g_6167f8(0, "targetname", a0->field_0->field_1c8 + gpGlobals->field_98);
+    v9 = g_engfuncs.pfnFindEntityByString(0, "targetname", a0->field_0->field_1c8 + gpGlobals->field_98);
     v10 = v9;
     v0 = 0;
-    if (!v10 || (v9 = g_6168d8(v10), !v9))
+    if (!v10 || (v9 = g_engfuncs.pfnEntOffsetOfPEntity(v10), !v9))
         v0 = 1;
     if (v0)
         return v9;
@@ -169,7 +169,7 @@ st_52e9a0_5 * TeleportTouch__12CBaseTriggerP11CBaseEntity(st_52e9a0_1 *a0, st_52
         *(float *)&v3 = *(float *)&v3 - a1->field_0->field_e4;
     v4 = (float)(1.0 + *(float *)&v3);
     v5->field_1a5 = v5->field_1a5 & 253;
-    sub_48db50(v5, &v1);
+    UTIL_SetOrigin(v5, &v1);
     v5->field_50 = v10->field_d0;
     v5->field_54 = v10->field_d4;
     v5->field_58 = v10->field_d8;
@@ -181,8 +181,8 @@ st_52e9a0_5 * TeleportTouch__12CBaseTriggerP11CBaseEntity(st_52e9a0_1 *a0, st_52
     }
     v5->field_a0 = 1;
     v5->field_2c = g_vecZero;
-    v5->field_30 = g_616790;
-    v5->field_34 = g_616794;
+    v5->field_30 = g_vecZero+4;
+    v5->field_34 = g_vecZero+8;
     v13 = &v5->field_2c;
     v5->field_20 = g_vecZero;
     v5->field_24 = v13->field_4;

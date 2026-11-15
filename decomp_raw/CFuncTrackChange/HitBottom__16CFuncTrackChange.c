@@ -15,7 +15,7 @@ unsigned int HitBottom__16CFuncTrackChange(float idx)
     unsigned int v1;  // [bp-0x20]
     unsigned int v2;  // [bp-0x1c]
 
-    sub_48b410(idx);
+    CFuncPlatRot::HitBottom(idx);
     if (*(int *)(*(unsigned int *)&idx + 316) == 2)
     {
         v4 = *(int *)(*(unsigned int *)&idx + 300);
@@ -23,7 +23,7 @@ unsigned int HitBottom__16CFuncTrackChange(float idx)
         *(float *)&v0 = *(float *)&*v4->field_8;
         *(float *)&v1 = *(float *)&v5[1];
         *(float *)&v2 = *(float *)&v5[2];
-        v4[25] = sub_489b20(*(int *)(*(unsigned int *)&idx + 296), &v0);
+        v4[25] = CPathTrack::Nearest(*(int *)(*(unsigned int *)&idx + 296), &v0);
     }
     *(unsigned int *)(*(unsigned int *)&idx + 12) = 0;
     *(unsigned int *)(*(unsigned int *)&idx + 16) = 0;

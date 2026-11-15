@@ -34,7 +34,7 @@ typedef struct st_549390_1 {
     struct st_549390_0 *field_8;
 } st_549390_1;
 
-extern char g_6253c4;
+extern char BotManager+3396;
 
 int MakeSentenceChoiceList3__10CChatClassPQ210CChatClass13CChatSentencePt12TMultiChoice1ZPQ210CChatClass13CChatSentence(unsigned int a0, st_549390_0 *a1, st_549390_4 *a2)
 {
@@ -53,17 +53,17 @@ int MakeSentenceChoiceList3__10CChatClassPQ210CChatClass13CChatSentencePt12TMult
     st_549390_1 *v3;  // [bp-0xc]
     unsigned short v4;  // [bp-0x6]
 
-    v5 = g_6253c4 - 1;
+    v5 = BotManager+3396 - 1;
     if (a1->field_2a > (int)v5)
         return v5;
     v6 = _INSERT(v5, 0, a1->field_2b);
-    if (a1->field_2b > g_6253c4)
+    if (a1->field_2b > BotManager+3396)
         return v6;
     v7 = a1->field_29;
     v4 = v7;
     if (!(unsigned short)v7)
         return v7;
-    v8 = sub_48d6a0(12);
+    v8 = __builtin_new(12);
     v8->field_0 = 0;
     v8->field_4 = 0;
     v3 = v8;
@@ -74,15 +74,15 @@ int MakeSentenceChoiceList3__10CChatClassPQ210CChatClass13CChatSentencePt12TMult
     v10 = a2->field_4;
     if (!*v10)
     {
-        v11 = sub_48d6a0(12);
+        v11 = __builtin_new(12);
         v2 = 1;
         v11->field_4 = NULL;
         v11->field_8 = 0;
-        sub_48d0e0(v11, 0, 4);
+        memset@GLIBC_2.0(v11, 0, 4);
         v2 = 0;
         *v10 = v11;
         if (v2)
-            sub_48d4e0(v11);
+            __builtin_delete(v11);
         *v10->field_0 = v3;
         *v10->field_4 = NULL;
         *v10->field_8 = 0;
@@ -91,15 +91,15 @@ int MakeSentenceChoiceList3__10CChatClassPQ210CChatClass13CChatSentencePt12TMult
     else
     {
         v1 = v10[1];
-        v12 = sub_48d6a0(12);
+        v12 = __builtin_new(12);
         v0 = 1;
         v12->field_4 = 0;
         v12->field_8 = NULL;
-        sub_48d0e0(v12, 0, 4);
+        memset@GLIBC_2.0(v12, 0, 4);
         v0 = 0;
         v1->field_4 = v12;
         if (v0)
-            sub_48d4e0(v12);
+            __builtin_delete(v12);
         v10[1]->field_4->field_8 = v10[1];
         v13 = v10[1]->field_4;
         v10[1] = v13;

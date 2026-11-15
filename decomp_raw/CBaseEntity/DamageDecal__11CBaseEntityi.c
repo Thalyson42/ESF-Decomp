@@ -8,10 +8,10 @@ typedef struct st_49d9a0_1 {
     unsigned int field_0;
 } st_49d9a0_1;
 
-extern st_49d9a0_1 *g_616928;
+extern st_49d9a0_1 *g_engfuncs.pfnRandomLong;
 
 unsigned int DamageDecal__11CBaseEntityi(st_49d9a0_0 **a0)
 {
-    return (*a0->field_148 == 4 ? 0xffffffff : !*a0->field_148 ? g_616928(0, 4) : 35);
+    return (*a0->field_148 == 4 ? 0xffffffff : !*a0->field_148 ? g_engfuncs.pfnRandomLong(0, 4) : 35);
 }
 

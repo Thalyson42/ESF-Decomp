@@ -35,8 +35,8 @@ typedef struct st_4c4960_1 {
 } st_4c4960_1;
 
 extern unsigned int g_vecZero;
-extern unsigned int g_616790;
-extern unsigned int g_616794;
+extern unsigned int g_vecZero+4;
+extern unsigned int g_vecZero+8;
 
 st_4c4960_1 * GetPlayerSpawnSpot__10CGameRulesP11CBasePlayer(unsigned int a0, st_4c4960_0 **a1)
 {
@@ -56,7 +56,7 @@ st_4c4960_1 * GetPlayerSpawnSpot__10CGameRulesP11CBasePlayer(unsigned int a0, st
     float v4;  // [bp-0x20]
     float v5;  // [bp-0x1c]
 
-    v6 = sub_48db30(a1);
+    v6 = EntSelectSpawnPoint(a1);
     v7 = *a1;
     v8 = (!v6 ? NULL : (struct st_4c4960_1 *)&v6[1].padding_14[16]);
     v0 = 0;
@@ -71,12 +71,12 @@ st_4c4960_1 * GetPlayerSpawnSpot__10CGameRulesP11CBasePlayer(unsigned int a0, st
     *(float *)&v7[4] = v5;
     v10 = *a1;
     v10[29] = g_vecZero;
-    v10[30] = g_616790;
-    v10[31] = g_616794;
+    v10[30] = g_vecZero+4;
+    v10[31] = g_vecZero+8;
     v11 = *a1;
     v11[8] = g_vecZero;
-    v11[9] = g_616790;
-    v11[10] = g_616794;
+    v11[9] = g_vecZero+4;
+    v11[10] = g_vecZero+8;
     v12 = (!v6 ? NULL : (struct st_4c4960_1 *)&v6[1].padding_14[16]);
     v13 = *a1;
     v13[20] = v12->field_50;
@@ -84,8 +84,8 @@ st_4c4960_1 * GetPlayerSpawnSpot__10CGameRulesP11CBasePlayer(unsigned int a0, st
     v13[22] = v12->field_58;
     v14 = *a1;
     v14[26] = g_vecZero;
-    v14[27] = g_616790;
-    v14[28] = g_616794;
+    v14[27] = g_vecZero+4;
+    v14[28] = g_vecZero+8;
     *a1->field_a0 = 1;
     return v6;
 }

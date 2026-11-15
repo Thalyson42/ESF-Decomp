@@ -26,6 +26,6 @@ unsigned int get_reg_addr(char *a0, st_594f20_0 *a1)
             v2 = *(int *)((char *)a1 + 0x4 * v2 + 16);
         } while (v2[v3] == 2);
     }
-    return (*(char *)(v2 + a1 + 92) == 1 ? *(int *)((char *)a1 + 0x4 * v2 + 16) + a1->field_0 : sub_48a650());
+    return (*(char *)(v2 + a1 + 92) == 1 ? *(int *)((char *)a1 + 0x4 * v2 + 16) + a1->field_0 : abort@GLIBC_2.0());
 }
 

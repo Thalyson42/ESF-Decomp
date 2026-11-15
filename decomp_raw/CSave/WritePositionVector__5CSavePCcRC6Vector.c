@@ -23,9 +23,9 @@ int WritePositionVector__5CSavePCcRC6Vector(st_535890_0 **a0, int a1, float *a2)
             v0 = *a2 - v3->field_544;
             v1 = a2[1] - v3->field_548;
             v2 = a2[2] - v3->field_54c;
-            sub_4881a0(a0, a1, &v0);
+            CSave::WriteVector(a0, a1, &v0);
         }
     }
-    return sub_4881a0(a0, a1, a2);
+    return CSave::WriteVector(a0, a1, a2);
 }
 

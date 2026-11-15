@@ -61,13 +61,13 @@ typedef struct st_510cc0_1 {
 extern char ExplodeTouch__16CExplodingAttackP11CBaseEntity;
 extern char NormalThink__12CMagicAttack;
 extern unsigned int gmsgFlare;
-extern st_510cc0_2 *g_6167c8;
-extern st_510cc0_2 *g_616878;
-extern st_510cc0_2 *g_61687c;
-extern st_510cc0_2 *g_616888;
-extern st_510cc0_2 *g_61688c;
-extern st_510cc0_2 *g_616894;
-extern st_510cc0_2 *g_6168dc;
+extern st_510cc0_2 *g_engfuncs.pfnSetModel;
+extern st_510cc0_2 *g_engfuncs.pfnMessageBegin;
+extern st_510cc0_2 *g_engfuncs.pfnMessageEnd;
+extern st_510cc0_2 *g_engfuncs.pfnWriteShort;
+extern st_510cc0_2 *g_engfuncs.pfnWriteLong;
+extern st_510cc0_2 *g_engfuncs.pfnWriteCoord;
+extern st_510cc0_2 *g_engfuncs.pfnIndexOfEdict;
 extern st_510cc0_5 *gpGlobals;
 
 short ShootScatterShotAttack__18CScatterShotAttackP9entvars_sG6VectorT2isss(st_510cc0_4 *a0, float *a1, float *a2, int a3, short a4, short a5, short a6)
@@ -106,11 +106,11 @@ short ShootScatterShotAttack__18CScatterShotAttackP9entvars_sG6VectorT2isss(st_5
     float v16;  // [bp-0x14]
     float v17;  // [bp-0x10]
 
-    v18 = sub_48bff0(0);
+    v18 = GetClassPtr__H1Z18CScatterShotAttack_PX01_PX01(0);
     v18->field_60->field_8(v18);
     v18->field_0->field_108 = 5;
     v18->field_0->field_10c = 1;
-    g_6167c8(v18->field_0->field_208, "sprites/null.spr");
+    g_engfuncs.pfnSetModel(v18->field_0->field_208, "sprites/null.spr");
     v19 = a3;
     if (v19 > 9999)
         v19 = 9999;
@@ -121,7 +121,7 @@ short ShootScatterShotAttack__18CScatterShotAttackP9entvars_sG6VectorT2isss(st_5
     v20 = *a2 * *a2 + a2[1] * a2[1] + a2[2] * a2[2];
     v21 = sqrt(v20);
     if (isnan(v21))
-        sub_487dc0(*(unsigned int *)&v20);
+        sqrt(*(unsigned int *)&v20);
     else
         v20 = v21;
     v7 = (float)v20;
@@ -145,7 +145,7 @@ short ShootScatterShotAttack__18CScatterShotAttackP9entvars_sG6VectorT2isss(st_5
     v12 = *a1 + v15;
     v13 = a1[1] + v16;
     v14 = a1[2] + v17;
-    sub_48db50(v18->field_0, &v12);
+    UTIL_SetOrigin(v18->field_0, &v12);
     v24 = v2;
     v12 = v24;
     v13 = v24;
@@ -154,7 +154,7 @@ short ShootScatterShotAttack__18CScatterShotAttackP9entvars_sG6VectorT2isss(st_5
     v15 = (float)v25;
     v16 = (float)v25;
     v17 = (float)v25;
-    sub_48a0d0(v18->field_0, &v15, &v12);
+    UTIL_SetSize(v18->field_0, &v15, &v12);
     v26 = v18->field_0;
     v27 = a2;
     *(float *)&v26->field_20 = *v27;
@@ -163,34 +163,34 @@ short ShootScatterShotAttack__18CScatterShotAttackP9entvars_sG6VectorT2isss(st_5
     v28 = *v27 * *v27 + v27[1] * v27[1] + v27[2] * v27[2];
     v29 = sqrt(v28);
     if (isnan(v29))
-        sub_487dc0(*(unsigned int *)&v28);
+        sqrt(*(unsigned int *)&v28);
     else
         v28 = v29;
     v18->field_2a8 = (float)v28;
     v30 = v18->field_0;
-    sub_488860(&v12, &v30->field_20);
+    UTIL_VecToAngles(&v12, &v30->field_20);
     *(float *)&v30->field_50 = v12;
     *(float *)&v30->field_54 = v13;
     *(float *)&v30->field_58 = v14;
     v18->field_0->field_198 = a0->field_208;
     v1 = &gpGlobals;
     v18->field_0->field_0 = -1 * gpGlobals->field_98 + 5927881;
-    g_616878(2, gmsgFlare, 0, 0);
-    v31 = g_6168dc(v18->field_0->field_208);
-    g_61688c(v31);
-    g_616888(a4);
-    g_616888(a5);
+    g_engfuncs.pfnMessageBegin(2, gmsgFlare, 0, 0);
+    v31 = g_engfuncs.pfnIndexOfEdict(v18->field_0->field_208);
+    g_engfuncs.pfnWriteLong(v31);
+    g_engfuncs.pfnWriteShort(a4);
+    g_engfuncs.pfnWriteShort(a5);
     v6 = __fnstcw();
     v5 = v6 | 0xc00;
     v4 = (int)(0.1 * v3);
-    g_616888(v4);
-    g_616888(a6);
-    g_616888(40);
-    g_616894(*a1);
-    g_616894(a1[1]);
+    g_engfuncs.pfnWriteShort(v4);
+    g_engfuncs.pfnWriteShort(a6);
+    g_engfuncs.pfnWriteShort(40);
+    g_engfuncs.pfnWriteCoord(*a1);
+    g_engfuncs.pfnWriteCoord(a1[1]);
     v0 = a1[2];
-    g_616894(v0);
-    v33 = _INSERT(g_61687c(v0), 0, 0) | 0xffff0000;
+    g_engfuncs.pfnWriteCoord(v0);
+    v33 = _INSERT(g_engfuncs.pfnMessageEnd(v0), 0, 0) | 0xffff0000;
     v18->field_14 = v33;
     v18->field_18 = &ExplodeTouch__16CExplodingAttackP11CBaseEntity;
     v18->field_c = _INSERT(v33, 0, 0) | 0xffff0000;

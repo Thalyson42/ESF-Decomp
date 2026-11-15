@@ -7,6 +7,6 @@ typedef struct st_51a2b0_0 {
 int Deploy__11CSolarFlare(st_51a2b0_0 *a0)
 {
     a0->field_c4 = 0;
-    return sub_489360(a0, "solarflare");
+    return CBasePlayerWeapon::DefaultDeploy(a0, "solarflare");
 }
 

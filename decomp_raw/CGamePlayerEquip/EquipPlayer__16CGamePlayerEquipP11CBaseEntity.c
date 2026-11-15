@@ -53,7 +53,7 @@ int * EquipPlayer__16CGamePlayerEquipP11CBaseEntity(unsigned int a0, st_4d0db0_2
             do
             {
                 v8 = v7;
-                v5 = sub_48a270(v3, *(int *)((char *)v8 + v1) + gpGlobals->field_98);
+                v5 = CBasePlayer::GiveNamedItem(v3, *(int *)((char *)v8 + v1) + gpGlobals->field_98);
                 i += 1;
                 v7 = v2 * 4;
             } while (i < *(int *)((char *)v8 + v0));

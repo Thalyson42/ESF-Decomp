@@ -7,8 +7,8 @@ typedef struct st_4a4850_0 {
 } st_4a4850_0;
 
 extern float g_vecAttackDir;
-extern float g_616784;
-extern float g_616788;
+extern float g_vecAttackDir+4;
+extern float g_vecAttackDir+8;
 extern st_4a4850_0 *gpGlobals;
 
 int GetDeathActivity__12CBaseMonster(float a0)
@@ -45,12 +45,12 @@ int GetDeathActivity__12CBaseMonster(float a0)
     v10 = v4;
     v1 = 0;
     v14 = 36;
-    sub_48a800(*(int *)a0 + 80);
+    UTIL_MakeVectors(*(int *)a0 + 80);
     v15 = -1.0 * g_vecAttackDir;
     v2 = (float)v15;
-    v16 = -1.0 * g_616784;
+    v16 = -1.0 * g_vecAttackDir+4;
     v3 = (float)v16;
-    v4 = (float)(-1.0 * g_616788);
+    v4 = (float)(-1.0 * g_vecAttackDir+8);
     v17 = &gpGlobals->field_28;
     v0 = (float)(v15 * gpGlobals->field_28 + v16 * *(float *)&v17[1] + *(float *)&v17[2] * v4);
     switch (*(int *)(*(unsigned int *)&a0 + 380))
@@ -79,7 +79,7 @@ LABEL_4a4984:
             break;
         }
     }
-    if (sub_488bc0(a0, v14) == 0xffffffff)
+    if (CBaseAnimating::LookupActivity(a0, v14) == 0xffffffff)
     {
         if (v1)
         {
@@ -94,7 +94,7 @@ LABEL_4a4984:
             v14 = 37;
         }
     }
-    if (sub_488bc0(a0, v14) == 0xffffffff)
+    if (CBaseAnimating::LookupActivity(a0, v14) == 0xffffffff)
         v14 = 36;
     if (v14 == 38)
     {
@@ -107,7 +107,7 @@ LABEL_4a4984:
         v2 = (float)(v20 + v8);
         v3 = (float)(v21 + v9);
         v4 = v10 + v7;
-        sub_488460(&v8, &v2, 0, 3, *(int *)(*(int *)a0 + 520), &v11);
+        UTIL_TraceHull(&v8, &v2, 0, 3, *(int *)(*(int *)a0 + 520), &v11);
         if (v12 != 1.0f)
             v14 = 36;
     }
@@ -122,7 +122,7 @@ LABEL_4a4984:
         v2 = (float)(v8 - v23);
         v3 = (float)(v9 - v24);
         v4 = v10 - v7;
-        sub_488460(&v8, &v2, 0, 3, *(int *)(*(int *)a0 + 520), &v11);
+        UTIL_TraceHull(&v8, &v2, 0, 3, *(int *)(*(int *)a0 + 520), &v11);
         if (v12 != 1.0f)
             v14 = 36;
     }

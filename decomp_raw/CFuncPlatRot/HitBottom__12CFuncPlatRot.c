@@ -18,8 +18,8 @@ typedef struct st_4e97f0_1 {
 } st_4e97f0_1;
 
 extern unsigned int g_vecZero;
-extern unsigned int g_616790;
-extern unsigned int g_616794;
+extern unsigned int g_vecZero+4;
+extern unsigned int g_vecZero+8;
 
 unsigned int HitBottom__12CFuncPlatRot(st_4e97f0_0 *a0)
 {
@@ -27,11 +27,11 @@ unsigned int HitBottom__12CFuncPlatRot(st_4e97f0_0 *a0)
     unsigned int *v1;  // edx
     unsigned int v2;  // eax
 
-    sub_48a050(a0);
+    CFuncPlat::HitBottom(a0);
     v0 = a0->field_0;
     v0[23] = g_vecZero;
-    v0[24] = g_616790;
-    v0[25] = g_616794;
+    v0[24] = g_vecZero+4;
+    v0[25] = g_vecZero+8;
     v1 = a0->field_0;
     v1[20] = a0->field_118;
     v1[21] = a0->field_11c;

@@ -8,10 +8,10 @@ typedef struct st_533060_1 {
     unsigned int field_0;
 } st_533060_1;
 
-extern st_533060_1 *g_6167d4;
+extern st_533060_1 *g_engfuncs.pfnSetSize;
 
 int UTIL_SetSize__FP9entvars_sRC6VectorT1(st_533060_0 *a0, unsigned int a1, unsigned int a2)
 {
-    return g_6167d4(a0->field_208, a1, a2);
+    return g_engfuncs.pfnSetSize(a0->field_208, a1, a2);
 }
 

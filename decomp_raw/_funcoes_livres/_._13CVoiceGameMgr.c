@@ -13,7 +13,7 @@ unsigned int _._13CVoiceGameMgr(st_58bec0_0 *a0, char a1)
     v0 = &__vt_13CVoiceGameMgr;
     a0->field_18 = &__vt_13CVoiceGameMgr;
     if (a1 & 1)
-        v0 = sub_48d4e0(a0);
+        v0 = __builtin_delete(a0);
     return v0;
 }
 

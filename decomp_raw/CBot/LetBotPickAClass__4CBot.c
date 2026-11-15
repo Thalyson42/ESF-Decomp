@@ -51,11 +51,11 @@ typedef struct st_53b2f0_4 {
 extern unsigned int FindSelection__t12TMultiChoice1ZPCcPQ2t12TMultiChoice1ZPCc12SMultiChoicei;
 extern st_53b2f0_4 *g_pGameRules;
 extern char _GLOBAL_OFFSET_TABLE_;
-extern st_53b2f0_3 *g_616928;
+extern st_53b2f0_3 *g_engfuncs.pfnRandomLong;
 extern st_53b2f0_8 *gpGlobals;
 extern int ChatClass;
 extern char cout;
-extern st_53b2f0_7 *g_625f80;
+extern st_53b2f0_7 *cout+512;
 
 int LetBotPickAClass__4CBot(st_53b2f0_1 *a0)
 {
@@ -172,18 +172,18 @@ int LetBotPickAClass__4CBot(st_53b2f0_1 *a0)
     {
         if (v41 && g_pGameRules->field_44->field_100(g_pGameRules, v41, a0))
         {
-            sub_48af30(a0, v41);
+            CBasePlayer::ChangeClass(a0, v41);
         }
         else
         {
             iter = 0;
-            v44 = sub_48d6a0(8);
+            v44 = __builtin_new(8);
             *v44 = NULL;
             v44[1] = NULL;
             v43 = v44;
             if (g_pGameRules->field_44->field_100(g_pGameRules, "buu", a0))
             {
-                v45 = sub_48d6a0(12);
+                v45 = __builtin_new(12);
                 *v45 = 0;
                 v45[1] = 0;
                 v40 = v45;
@@ -193,15 +193,15 @@ int LetBotPickAClass__4CBot(st_53b2f0_1 *a0)
                 v46 = v43;
                 if (!*v46)
                 {
-                    v47 = sub_48d6a0(12);
+                    v47 = __builtin_new(12);
                     v39 = 1;
                     v47->field_4 = NULL;
                     v47->field_8 = NULL;
-                    sub_48d0e0(v47, 0, 4);
+                    memset@GLIBC_2.0(v47, 0, 4);
                     v39 = 0;
                     *v46 = v47;
                     if (v39)
-                        sub_48d4e0(v47);
+                        __builtin_delete(v47);
                     *v46->field_0 = v40;
                     *v46->field_4 = NULL;
                     *v46->field_8 = NULL;
@@ -210,15 +210,15 @@ int LetBotPickAClass__4CBot(st_53b2f0_1 *a0)
                 else
                 {
                     v38 = v46[1];
-                    v48 = sub_48d6a0(12);
+                    v48 = __builtin_new(12);
                     v37 = 1;
                     v48->field_4 = NULL;
                     v48->field_8 = NULL;
-                    sub_48d0e0(v48, 0, 4);
+                    memset@GLIBC_2.0(v48, 0, 4);
                     v37 = 0;
                     v38->field_4 = v48;
                     if (v37)
-                        sub_48d4e0(v48);
+                        __builtin_delete(v48);
                     v46[1]->field_4->field_8 = v46[1];
                     v49 = v46[1]->field_4;
                     v46[1] = v49;
@@ -229,7 +229,7 @@ int LetBotPickAClass__4CBot(st_53b2f0_1 *a0)
             }
             if (g_pGameRules->field_44->field_100(g_pGameRules, "goku", a0))
             {
-                v50 = sub_48d6a0(12);
+                v50 = __builtin_new(12);
                 *v50 = 0;
                 v50[1] = 0;
                 v36 = v50;
@@ -239,15 +239,15 @@ int LetBotPickAClass__4CBot(st_53b2f0_1 *a0)
                 v51 = v43;
                 if (!*v51)
                 {
-                    v52 = sub_48d6a0(12);
+                    v52 = __builtin_new(12);
                     v35 = 1;
                     v52->field_4 = NULL;
                     v52->field_8 = NULL;
-                    sub_48d0e0(v52, 0, 4);
+                    memset@GLIBC_2.0(v52, 0, 4);
                     v35 = 0;
                     *v51 = v52;
                     if (v35)
-                        sub_48d4e0(v52);
+                        __builtin_delete(v52);
                     *v51->field_0 = v36;
                     *v51->field_4 = NULL;
                     *v51->field_8 = NULL;
@@ -256,15 +256,15 @@ int LetBotPickAClass__4CBot(st_53b2f0_1 *a0)
                 else
                 {
                     v34 = v51[1];
-                    v53 = sub_48d6a0(12);
+                    v53 = __builtin_new(12);
                     v33 = 1;
                     v53->field_4 = NULL;
                     v53->field_8 = NULL;
-                    sub_48d0e0(v53, 0, 4);
+                    memset@GLIBC_2.0(v53, 0, 4);
                     v33 = 0;
                     v34->field_4 = v53;
                     if (v33)
-                        sub_48d4e0(v53);
+                        __builtin_delete(v53);
                     v51[1]->field_4->field_8 = v51[1];
                     v54 = v51[1]->field_4;
                     v51[1] = v54;
@@ -275,7 +275,7 @@ int LetBotPickAClass__4CBot(st_53b2f0_1 *a0)
             }
             if (g_pGameRules->field_44->field_100(g_pGameRules, "gohan", a0))
             {
-                v55 = sub_48d6a0(12);
+                v55 = __builtin_new(12);
                 *v55 = 0;
                 v55[1] = 0;
                 v32 = v55;
@@ -285,15 +285,15 @@ int LetBotPickAClass__4CBot(st_53b2f0_1 *a0)
                 v56 = v43;
                 if (!*v56)
                 {
-                    v57 = sub_48d6a0(12);
+                    v57 = __builtin_new(12);
                     v31 = 1;
                     v57->field_4 = NULL;
                     v57->field_8 = NULL;
-                    sub_48d0e0(v57, 0, 4);
+                    memset@GLIBC_2.0(v57, 0, 4);
                     v31 = 0;
                     *v56 = v57;
                     if (v31)
-                        sub_48d4e0(v57);
+                        __builtin_delete(v57);
                     *v56->field_0 = v32;
                     *v56->field_4 = NULL;
                     *v56->field_8 = NULL;
@@ -302,15 +302,15 @@ int LetBotPickAClass__4CBot(st_53b2f0_1 *a0)
                 else
                 {
                     v30 = v56[1];
-                    v58 = sub_48d6a0(12);
+                    v58 = __builtin_new(12);
                     v29 = 1;
                     v58->field_4 = NULL;
                     v58->field_8 = NULL;
-                    sub_48d0e0(v58, 0, 4);
+                    memset@GLIBC_2.0(v58, 0, 4);
                     v29 = 0;
                     v30->field_4 = v58;
                     if (v29)
-                        sub_48d4e0(v58);
+                        __builtin_delete(v58);
                     v56[1]->field_4->field_8 = v56[1];
                     v59 = v56[1]->field_4;
                     v56[1] = v59;
@@ -321,7 +321,7 @@ int LetBotPickAClass__4CBot(st_53b2f0_1 *a0)
             }
             if (g_pGameRules->field_44->field_100(g_pGameRules, "krillin", a0))
             {
-                v60 = sub_48d6a0(12);
+                v60 = __builtin_new(12);
                 *v60 = 0;
                 v60[1] = 0;
                 v28 = v60;
@@ -331,15 +331,15 @@ int LetBotPickAClass__4CBot(st_53b2f0_1 *a0)
                 v61 = v43;
                 if (!*v61)
                 {
-                    v62 = sub_48d6a0(12);
+                    v62 = __builtin_new(12);
                     v27 = 1;
                     v62->field_4 = NULL;
                     v62->field_8 = NULL;
-                    sub_48d0e0(v62, 0, 4);
+                    memset@GLIBC_2.0(v62, 0, 4);
                     v27 = 0;
                     *v61 = v62;
                     if (v27)
-                        sub_48d4e0(v62);
+                        __builtin_delete(v62);
                     *v61->field_0 = v28;
                     *v61->field_4 = NULL;
                     *v61->field_8 = NULL;
@@ -348,15 +348,15 @@ int LetBotPickAClass__4CBot(st_53b2f0_1 *a0)
                 else
                 {
                     v26 = v61[1];
-                    v63 = sub_48d6a0(12);
+                    v63 = __builtin_new(12);
                     v25 = 1;
                     v63->field_4 = NULL;
                     v63->field_8 = NULL;
-                    sub_48d0e0(v63, 0, 4);
+                    memset@GLIBC_2.0(v63, 0, 4);
                     v25 = 0;
                     v26->field_4 = v63;
                     if (v25)
-                        sub_48d4e0(v63);
+                        __builtin_delete(v63);
                     v61[1]->field_4->field_8 = v61[1];
                     v64 = v61[1]->field_4;
                     v61[1] = v64;
@@ -367,7 +367,7 @@ int LetBotPickAClass__4CBot(st_53b2f0_1 *a0)
             }
             if (g_pGameRules->field_44->field_100(g_pGameRules, "frieza", a0))
             {
-                v65 = sub_48d6a0(12);
+                v65 = __builtin_new(12);
                 *v65 = 0;
                 v65[1] = 0;
                 v24 = v65;
@@ -377,15 +377,15 @@ int LetBotPickAClass__4CBot(st_53b2f0_1 *a0)
                 v66 = v43;
                 if (!*v66)
                 {
-                    v67 = sub_48d6a0(12);
+                    v67 = __builtin_new(12);
                     v23 = 1;
                     v67->field_4 = NULL;
                     v67->field_8 = NULL;
-                    sub_48d0e0(v67, 0, 4);
+                    memset@GLIBC_2.0(v67, 0, 4);
                     v23 = 0;
                     *v66 = v67;
                     if (v23)
-                        sub_48d4e0(v67);
+                        __builtin_delete(v67);
                     *v66->field_0 = v24;
                     *v66->field_4 = NULL;
                     *v66->field_8 = NULL;
@@ -394,15 +394,15 @@ int LetBotPickAClass__4CBot(st_53b2f0_1 *a0)
                 else
                 {
                     v22 = v66[1];
-                    v68 = sub_48d6a0(12);
+                    v68 = __builtin_new(12);
                     v21 = 1;
                     v68->field_4 = NULL;
                     v68->field_8 = NULL;
-                    sub_48d0e0(v68, 0, 4);
+                    memset@GLIBC_2.0(v68, 0, 4);
                     v21 = 0;
                     v22->field_4 = v68;
                     if (v21)
-                        sub_48d4e0(v68);
+                        __builtin_delete(v68);
                     v66[1]->field_4->field_8 = v66[1];
                     v69 = v66[1]->field_4;
                     v66[1] = v69;
@@ -413,7 +413,7 @@ int LetBotPickAClass__4CBot(st_53b2f0_1 *a0)
             }
             if (g_pGameRules->field_44->field_100(g_pGameRules, "piccolo", a0))
             {
-                v70 = sub_48d6a0(12);
+                v70 = __builtin_new(12);
                 *v70 = 0;
                 v70[1] = 0;
                 v20 = v70;
@@ -423,15 +423,15 @@ int LetBotPickAClass__4CBot(st_53b2f0_1 *a0)
                 v71 = v43;
                 if (!*v71)
                 {
-                    v72 = sub_48d6a0(12);
+                    v72 = __builtin_new(12);
                     v19 = 1;
                     v72->field_4 = NULL;
                     v72->field_8 = NULL;
-                    sub_48d0e0(v72, 0, 4);
+                    memset@GLIBC_2.0(v72, 0, 4);
                     v19 = 0;
                     *v71 = v72;
                     if (v19)
-                        sub_48d4e0(v72);
+                        __builtin_delete(v72);
                     *v71->field_0 = v20;
                     *v71->field_4 = NULL;
                     *v71->field_8 = NULL;
@@ -440,15 +440,15 @@ int LetBotPickAClass__4CBot(st_53b2f0_1 *a0)
                 else
                 {
                     v18 = v71[1];
-                    v73 = sub_48d6a0(12);
+                    v73 = __builtin_new(12);
                     v17 = 1;
                     v73->field_4 = NULL;
                     v73->field_8 = NULL;
-                    sub_48d0e0(v73, 0, 4);
+                    memset@GLIBC_2.0(v73, 0, 4);
                     v17 = 0;
                     v18->field_4 = v73;
                     if (v17)
-                        sub_48d4e0(v73);
+                        __builtin_delete(v73);
                     v71[1]->field_4->field_8 = v71[1];
                     v74 = v71[1]->field_4;
                     v71[1] = v74;
@@ -459,7 +459,7 @@ int LetBotPickAClass__4CBot(st_53b2f0_1 *a0)
             }
             if (g_pGameRules->field_44->field_100(g_pGameRules, "trunks", a0))
             {
-                v75 = sub_48d6a0(12);
+                v75 = __builtin_new(12);
                 *v75 = 0;
                 v75[1] = 0;
                 v16 = v75;
@@ -469,15 +469,15 @@ int LetBotPickAClass__4CBot(st_53b2f0_1 *a0)
                 v76 = v43;
                 if (!*v76)
                 {
-                    v77 = sub_48d6a0(12);
+                    v77 = __builtin_new(12);
                     v15 = 1;
                     v77->field_4 = NULL;
                     v77->field_8 = NULL;
-                    sub_48d0e0(v77, 0, 4);
+                    memset@GLIBC_2.0(v77, 0, 4);
                     v15 = 0;
                     *v76 = v77;
                     if (v15)
-                        sub_48d4e0(v77);
+                        __builtin_delete(v77);
                     *v76->field_0 = v16;
                     *v76->field_4 = NULL;
                     *v76->field_8 = NULL;
@@ -486,15 +486,15 @@ int LetBotPickAClass__4CBot(st_53b2f0_1 *a0)
                 else
                 {
                     v14 = v76[1];
-                    v78 = sub_48d6a0(12);
+                    v78 = __builtin_new(12);
                     v13 = 1;
                     v78->field_4 = NULL;
                     v78->field_8 = NULL;
-                    sub_48d0e0(v78, 0, 4);
+                    memset@GLIBC_2.0(v78, 0, 4);
                     v13 = 0;
                     v14->field_4 = v78;
                     if (v13)
-                        sub_48d4e0(v78);
+                        __builtin_delete(v78);
                     v76[1]->field_4->field_8 = v76[1];
                     v79 = v76[1]->field_4;
                     v76[1] = v79;
@@ -505,7 +505,7 @@ int LetBotPickAClass__4CBot(st_53b2f0_1 *a0)
             }
             if (g_pGameRules->field_44->field_100(g_pGameRules, "vegeta", a0))
             {
-                v80 = sub_48d6a0(12);
+                v80 = __builtin_new(12);
                 *v80 = 0;
                 v80[1] = 0;
                 v12 = v80;
@@ -515,15 +515,15 @@ int LetBotPickAClass__4CBot(st_53b2f0_1 *a0)
                 v81 = v43;
                 if (!*v81)
                 {
-                    v82 = sub_48d6a0(12);
+                    v82 = __builtin_new(12);
                     v11 = 1;
                     v82->field_4 = NULL;
                     v82->field_8 = NULL;
-                    sub_48d0e0(v82, 0, 4);
+                    memset@GLIBC_2.0(v82, 0, 4);
                     v11 = 0;
                     *v81 = v82;
                     if (v11)
-                        sub_48d4e0(v82);
+                        __builtin_delete(v82);
                     *v81->field_0 = v12;
                     *v81->field_4 = NULL;
                     *v81->field_8 = NULL;
@@ -532,15 +532,15 @@ int LetBotPickAClass__4CBot(st_53b2f0_1 *a0)
                 else
                 {
                     v10 = v81[1];
-                    v83 = sub_48d6a0(12);
+                    v83 = __builtin_new(12);
                     v9 = 1;
                     v83->field_4 = NULL;
                     v83->field_8 = NULL;
-                    sub_48d0e0(v83, 0, 4);
+                    memset@GLIBC_2.0(v83, 0, 4);
                     v9 = 0;
                     v10->field_4 = v83;
                     if (v9)
-                        sub_48d4e0(v83);
+                        __builtin_delete(v83);
                     v81[1]->field_4->field_8 = v81[1];
                     v84 = v81[1]->field_4;
                     v81[1] = v84;
@@ -551,7 +551,7 @@ int LetBotPickAClass__4CBot(st_53b2f0_1 *a0)
             }
             if (g_pGameRules->field_44->field_100(g_pGameRules, "cell", a0))
             {
-                v85 = sub_48d6a0(12);
+                v85 = __builtin_new(12);
                 *v85 = 0;
                 v85[1] = 0;
                 v8 = v85;
@@ -561,15 +561,15 @@ int LetBotPickAClass__4CBot(st_53b2f0_1 *a0)
                 v86 = v43;
                 if (!*v86)
                 {
-                    v87 = sub_48d6a0(12);
+                    v87 = __builtin_new(12);
                     v7 = 1;
                     v87->field_4 = NULL;
                     v87->field_8 = NULL;
-                    sub_48d0e0(v87, 0, 4);
+                    memset@GLIBC_2.0(v87, 0, 4);
                     v7 = 0;
                     *v86 = v87;
                     if (v7)
-                        sub_48d4e0(v87);
+                        __builtin_delete(v87);
                     *v86->field_0 = v8;
                     *v86->field_4 = NULL;
                     *v86->field_8 = NULL;
@@ -578,15 +578,15 @@ int LetBotPickAClass__4CBot(st_53b2f0_1 *a0)
                 else
                 {
                     v6 = v86[1];
-                    v88 = sub_48d6a0(12);
+                    v88 = __builtin_new(12);
                     v5 = 1;
                     v88->field_4 = NULL;
                     v88->field_8 = NULL;
-                    sub_48d0e0(v88, 0, 4);
+                    memset@GLIBC_2.0(v88, 0, 4);
                     v5 = 0;
                     v6->field_4 = v88;
                     if (v5)
-                        sub_48d4e0(v88);
+                        __builtin_delete(v88);
                     v86[1]->field_4->field_8 = v86[1];
                     v89 = v86[1]->field_4;
                     v86[1] = v89;
@@ -596,7 +596,7 @@ int LetBotPickAClass__4CBot(st_53b2f0_1 *a0)
                 iter += 50;
             }
             v4 = &v41;
-            v3 = g_616928(0, iter);
+            v3 = g_engfuncs.pfnRandomLong(0, iter);
             v1 = _INSERT(v3, 0, 0) | 0xffff0000;
             v2 = &FindSelection__t12TMultiChoice1ZPCcPQ2t12TMultiChoice1ZPCc12SMultiChoicei;
             v91 = *v43;
@@ -617,14 +617,14 @@ int LetBotPickAClass__4CBot(st_53b2f0_1 *a0)
 LABEL_53c4df:
                 if (!v94 || (v41 = v94[2], !g_pGameRules->field_44->field_100(g_pGameRules, v41, a0)))
                     goto LABEL_53c530;
-                sub_48af30(a0, v41);
+                CBasePlayer::ChangeClass(a0, v41);
             }
             else
             {
 LABEL_53c530:
-                g_625f80->field_14(&cout, "Error: Bot ");
-                g_625f80->field_14(&cout, a0->field_0->field_1d0 + gpGlobals->field_98);
-                g_625f80->field_14(&cout, " couldn't pick a class!\n");
+                cout+512->field_14(&cout, "Error: Bot ");
+                cout+512->field_14(&cout, a0->field_0->field_1d0 + gpGlobals->field_98);
+                cout+512->field_14(&cout, " couldn't pick a class!\n");
             }
             while (*v43 && (v95 = v43, *v95))
             {
@@ -639,12 +639,12 @@ LABEL_53c530:
                     if (v98)
                         v98->field_8 = NULL;
                     v97->field_4 = NULL;
-                    sub_48d4e0(v97);
+                    __builtin_delete(v97);
                 }
                 v99 = v96;
                 if (!v99)
                     break;
-                sub_48d4e0(v99);
+                __builtin_delete(v99);
             }
             if (v43)
             {
@@ -658,20 +658,20 @@ LABEL_53c530:
                         node = node->field_4;
                         v102->field_4 = NULL;
                         v102->field_8 = NULL;
-                        sub_48d4e0(v102);
+                        __builtin_delete(v102);
                     } while (node);
                 }
                 v100[1] = NULL;
                 *v100 = NULL;
-                sub_48d4e0(v100);
+                __builtin_delete(v100);
             }
             v43 = 0;
         }
         a0->field_9e8 = 0;
-        v103 = g_616928(1, 100);
+        v103 = g_engfuncs.pfnRandomLong(1, 100);
         if (v103 > 50)
             return v103;
-        return sub_488920(&ChatClass, a0);
+        return CChatClass::LetBotSayAWelcomeSentence(&ChatClass, a0);
     }
 }
 

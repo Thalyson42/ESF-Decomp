@@ -7,7 +7,7 @@ typedef struct st_493d00_1 {
     unsigned int field_0;
 } st_493d00_1;
 
-extern st_493d00_1 *g_6168b4;
+extern st_493d00_1 *g_engfuncs.pfnAlertMessage;
 extern st_493d00_0 *gpGlobals;
 extern char g_800000;
 
@@ -20,16 +20,16 @@ unsigned int * StrangleThink__15CBodyPartAttack(float idx)
     if (!*(int *)(*(int *)(*(unsigned int *)&idx + 684) + 864))
     {
         *(unsigned int *)(*(int *)(*(unsigned int *)&idx + 684) + 864) = 1;
-        sub_48d680(*(int *)(*(unsigned int *)&idx + 684), 10);
+        CBasePlayer::SetAnimation(*(int *)(*(unsigned int *)&idx + 684), 10);
         *(unsigned int *)(*(int *)idx + 300) = 0;
         *(unsigned int *)(*(int *)idx + 304) = 0;
-        v3 = sub_48afe0(idx, "struggle");
+        v3 = CBaseAnimating::LookupSequence(idx, "struggle");
         *(unsigned int *)(*(int *)idx + 296) = v3;
-        sub_488850(idx);
+        CBaseAnimating::ResetSequenceInfo(idx);
     }
     if (750.0f < *(float *)(*(int *)*(int *)(*(unsigned int *)&idx + 684) + 608))
     {
-        g_6168b4(1, "unstrangled\n");
+        g_engfuncs.pfnAlertMessage(1, "unstrangled\n");
         *(unsigned int *)(*(int *)(*(unsigned int *)&idx + 684) + 864) = 0;
 LABEL_493dec:
         (*(int *)(*(int *)(*(unsigned int *)&idx + 96) + 508))(idx);

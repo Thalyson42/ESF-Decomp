@@ -24,12 +24,12 @@ void CopyMoveToExe__12CPlayerMelee(unsigned int *a0)
     a0[95] = 0;
     a0[48] = 0;
     a0[47] = 0;
-    if (!sub_48c0f0(a0))
+    if (!CPlayerMelee::SetComboMoves(a0))
         return;
-    iter = sub_48cc50(a0);
+    iter = CPlayerMelee::GetCurrentDirection(a0);
     if (!iter)
     {
-        sub_489040(a0);
+        CPlayerMelee::StopMelee(a0);
         return;
     }
     if (iter->field_1c)
@@ -44,20 +44,20 @@ void CopyMoveToExe__12CPlayerMelee(unsigned int *a0)
     v4 = &v5;
     do
     {
-        if (sub_48cbe0(a0, iter->field_4))
+        if (CPlayerMelee::IsDirectionless(a0, iter->field_4))
         {
             iter = iter->field_20;
         }
         else
         {
             a0[47] = a0[47] + 1;
-            sub_48ce30(a0, iter, v4);
+            CPlayerMelee::GetAnimForMove(a0, iter, v4);
             v3 = v4;
-            v2 = sub_48dbf0(a0, iter);
+            v2 = CPlayerMelee::GetMeleeStrength(a0, iter);
             v1 = iter->field_18;
             v0 = a0[47];
-            sub_48a4c0(a0, iter);
-            sub_48abd0(a0, sub_488230(a0, iter->field_4, iter->field_14, v7));
+            CPlayerMelee::GetDamageDelay(a0, iter);
+            CPlayerMelee::AddExeMove(a0, CPlayerMelee::CreateExeMove(a0, iter->field_4, iter->field_14, v7));
             iter = iter->field_20;
         }
     } while (iter);

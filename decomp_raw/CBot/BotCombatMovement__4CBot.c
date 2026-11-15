@@ -29,9 +29,9 @@ typedef struct st_571010_2 {
 } st_571010_2;
 
 extern unsigned int _GLOBAL_OFFSET_TABLE_;
-extern st_571010_2 *g_61692c;
+extern st_571010_2 *g_engfuncs.pfnRandomFloat;
 extern st_571010_4 *gpGlobals;
-extern char g_6253c8;
+extern char BotManager+3400;
 
 double BotCombatMovement__4CBot(float a0)
 {
@@ -94,12 +94,12 @@ double BotCombatMovement__4CBot(float a0)
     v16 = *(unsigned int *)((void*)&v11 + 0xcc);
     if (!(int)v16[2924])
         return v53;
-    *(unsigned int *)((char *)&v11 + 192) = sub_48a780(v16);
+    *(unsigned int *)((char *)&v11 + 192) = CBasePlayer::GetMaxSpeed(v16);
     if ((double)(int)*(unsigned int *)((void*)&v11 + 192) == 0.0)
     {
         return (double)(int)*(unsigned int *)((void*)&v11 + 192);
     }
-    else if (g_6253c8)
+    else if (BotManager+3400)
     {
         v17 = *(int *)(int)v16[2924] + 8;
         *(float *)((char *)&v11 + 160) = *(float *)(*(int *)(int)v16[2924] + 8);
@@ -115,13 +115,13 @@ double BotCombatMovement__4CBot(float a0)
         v22 = v19 * v19 + v20 * v20 + v21 * v21;
         v23 = sqrt(v22);
         if (isnan(v23))
-            sub_487dc0(*(unsigned int *)&v22);
+            sqrt(*(unsigned int *)&v22);
         else
             v22 = v23;
         v10 = (float)v22;
-        if ((char)(char)v16[2556] > 2 && !(char)sub_489330(v16, (int)v16[2924]))
+        if ((char)(char)v16[2556] > 2 && !(char)EntIsInFieldOfView(v16, (int)v16[2924]))
         {
-            sub_48d0d0(v16);
+            CBot::ResetMoveSpeed(v16);
             *(unsigned short *)&v16[2920] = 0;
             return v22;
         }
@@ -133,7 +133,7 @@ double BotCombatMovement__4CBot(float a0)
         v24 = (float)v16[2916];
         if (v24 < gpGlobals->field_0)
         {
-            g_61692c(1300.0f, 1600.0f);
+            g_engfuncs.pfnRandomFloat(1300.0f, 1600.0f);
             v2 = 1300.0 > v10;
             (*(int *)((int)v16[96] + 208))(&v11, v16);
             *(unsigned int *)((char *)&v11 + 120) = *(unsigned int *)&v11;
@@ -171,16 +171,16 @@ double BotCombatMovement__4CBot(float a0)
                     *(float *)((char *)&v11 + 12) = *(float *)(*(int *)v16 + 116);
                     *(float *)((char *)&v11 + 16) = *(float *)&v27[1];
                     *(float *)((char *)&v11 + 20) = *(float *)&v27[2];
-                    sub_489120(v1, (char *)&v11 + 12);
+                    WrapAngles(v1, (char *)&v11 + 12);
                     *(unsigned int *)((char *)&v11 + 108) = *(unsigned int *)&v11;
                     *(unsigned int *)((char *)&v11 + 112) = *(unsigned int *)((void*)&v11 + 4);
                     *(unsigned int *)((char *)&v11 + 116) = *(unsigned int *)((void*)&v11 + 8);
                     v28 = v6 + *(unsigned int *)((void*)&v11 + 112);
-                    sub_48d430(v28);
+                    UTIL_WrapAngle(v28);
                     *(float *)((char *)&v11 + 112) = v28;
-                    sub_48d430(v7);
+                    UTIL_WrapAngle(v7);
                     *(float *)((char *)&v11 + 108) = v28;
-                    sub_48a800((char *)&v11 + 108);
+                    UTIL_MakeVectors((char *)&v11 + 108);
                     if (v2)
                     {
                         v29 = &gpGlobals->field_28;
@@ -216,7 +216,7 @@ double BotCombatMovement__4CBot(float a0)
                     *(float *)&v11 = *(float *)&v38->field_8 + *(float *)&v38->field_174;
                     *(float *)((char *)&v11 + 4) = *(float *)&v39[1] + *(float *)&v38->field_178;
                     *(float *)((char *)&v11 + 8) = *(float *)&v39[2] + *(float *)&v38->field_17c;
-                    sub_488460(v1, (char *)&v11 + 120, 0, 1, v38->field_208, (char *)&v11 + 32);
+                    UTIL_TraceHull(v1, (char *)&v11 + 120, 0, 1, v38->field_208, (char *)&v11 + 32);
                     v40 = *(int *)v16 + 8;
                     v41 = *(float *)(*(int *)v16 + 8) - *(unsigned int *)((void*)&v11 + 52);
                     v13 = _INSERT(v11, 0, v41);
@@ -227,7 +227,7 @@ double BotCombatMovement__4CBot(float a0)
                     v44 = v41 * v41 + v42 * v42 + v43 * v43;
                     v45 = sqrt(v44);
                     if (isnan(v45))
-                        sub_487dc0(*(unsigned int *)&v44);
+                        sqrt(*(unsigned int *)&v44);
                     else
                         v44 = v45;
                     *(float *)((char *)&v11 + 4 * v0 + 4 * j + 132) = (float)v44;
@@ -241,7 +241,7 @@ double BotCombatMovement__4CBot(float a0)
                     v50 = v47 * v47 + v48 * v48 + v49 * v49;
                     v51 = sqrt(v50);
                     if (isnan(v51))
-                        sub_487dc0(*(unsigned int *)&v50);
+                        sqrt(*(unsigned int *)&v50);
                     else
                         v50 = v51;
                     *(float *)((char *)&v11 + 24) = (float)v50;
@@ -260,7 +260,7 @@ double BotCombatMovement__4CBot(float a0)
                 i += 1;
             } while (i <= 2);
             *(unsigned short *)&v16[2920] = 0;
-            g_61692c(0.800000011920929f, 1.2000000476837158f);
+            g_engfuncs.pfnRandomFloat(0.800000011920929f, 1.2000000476837158f);
             v24 = 0.800000011920929 + gpGlobals->field_0;
             *(float *)&v16[2916] = (float)v24;
             if (v5 == 1)
@@ -274,9 +274,9 @@ double BotCombatMovement__4CBot(float a0)
             if ((unsigned int)v4 <= 4)
                 goto *((void *)((unsigned int *)((char *)&_GLOBAL_OFFSET_TABLE_ - *(int *)((char *)&(&_GLOBAL_OFFSET_TABLE_)[v4] - 664716))));
         }
-        sub_48d0d0(v16);
-        sub_488e30(v16, (short)v16[2920]);
-        sub_48d730(v16);
+        CBot::ResetMoveSpeed(v16);
+        CBot::SetMoveDir(v16, (short)v16[2920]);
+        CBot::CheckStrafe(v16);
         return v24;
     }
     else

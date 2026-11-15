@@ -102,8 +102,8 @@ typedef struct st_550e70_7 {
 } st_550e70_7;
 
 extern st_550e70_9 g_engfuncs;
-extern st_550e70_10 *g_616928;
-extern st_550e70_10 *g_61692c;
+extern st_550e70_10 *g_engfuncs.pfnRandomLong;
+extern st_550e70_10 *g_engfuncs.pfnRandomFloat;
 extern st_550e70_7 *gpGlobals;
 
 double TaskThink__16CControlBeamTask(st_550e70_5 *a0)
@@ -192,17 +192,17 @@ double TaskThink__16CControlBeamTask(st_550e70_5 *a0)
 LABEL_5517d3:
             a0->field_c->field_201 = a0->field_c->field_201 | 8;
         }
-        else if ((char)sub_489f70(a0->field_8, a0->field_8->field_b6c))
+        else if ((char)CBot::IsValidEnemy(a0->field_8, a0->field_8->field_b6c))
         {
-            v7 = sub_489660(a0->field_8);
+            v7 = UTIL_GetLastAttackFromPlayer(a0->field_8);
             if (v7)
             {
-                v33 = sub_489660(a0->field_8->field_b6c);
+                v33 = UTIL_GetLastAttackFromPlayer(a0->field_8->field_b6c);
                 v34 = &*v7->field_8;
                 v28 = *v7->field_8;
                 v29 = *(float *)&v34[1];
                 v30 = *(float *)&v34[2];
-                if (v33 && ((char)sub_48ccf0(*v33->field_208) || (char)sub_48ab40(*v33->field_208)) && (char)sub_489330(v7, v33))
+                if (v33 && ((char)IsBeamAttack(*v33->field_208) || (char)IsNonBeamAttack(*v33->field_208)) && (char)EntIsInFieldOfView(v7, v33))
                 {
                     v35 = &*v33->field_8;
                     v25 = *v33->field_8;
@@ -212,7 +212,7 @@ LABEL_5517d3:
                     v8 = *v33->field_8;
                     v9 = *(float *)&v35[1];
                     v10 = *(float *)&v35[2];
-                    sub_48a170(&v16, v36, &v8);
+                    CBot::GetAimAngles(&v16, v36, &v8);
                     v36->field_c10 = v17;
                     v36->field_c14 = v18;
                     *(float *)&v36->field_c18 = v19;
@@ -232,7 +232,7 @@ LABEL_5517d3:
                 v41 = v38 * v38 + v39 * v39 + v40 * v40;
                 v42 = sqrt(v41);
                 if (isnan(v42))
-                    sub_487dc0(*(unsigned int *)&v41);
+                    sqrt(*(unsigned int *)&v41);
                 else
                     v41 = v42;
                 v6 = (float)v41;
@@ -246,7 +246,7 @@ LABEL_5517d3:
                 v47 = v44 * v44 + v45 * v45 + v46 * v46;
                 v48 = sqrt(v47);
                 if (isnan(v48))
-                    sub_487dc0(*(unsigned int *)&v47);
+                    sqrt(*(unsigned int *)&v47);
                 else
                     v47 = v48;
                 v14 = (float)v47;
@@ -276,7 +276,7 @@ LABEL_55113f:
                     v53 = v50 * v50 + v51 * v51 + v52 * v52;
                     v54 = sqrt(v53);
                     if (isnan(v54))
-                        sub_487dc0(*(unsigned int *)&v53);
+                        sqrt(*(unsigned int *)&v53);
                     else
                         v53 = v54;
                     v18 = (float)v53;
@@ -293,13 +293,13 @@ LABEL_55113f:
                             v11 = *(float *)(*(int *)v55->field_b6c + 8);
                             v12 = *(float *)&v56[1];
                             v13 = *(float *)&v56[2];
-                            sub_48a170(&v20, v55, &v11);
+                            CBot::GetAimAngles(&v20, v55, &v11);
                             v55->field_c10 = v20;
                             v55->field_c14 = v21;
                             *(float *)&v55->field_c18 = v22;
                             return v13;
                         }
-                        sub_48b720(a0->field_8, a0->field_8->field_b6c);
+                        CBot::AimAtEnemy(a0->field_8, a0->field_8->field_b6c);
                         return v32;
                     }
                     goto LABEL_5517d3;
@@ -310,14 +310,14 @@ LABEL_55113f:
                 v32 = a0->field_18 - gpGlobals->field_0;
                 if (v32 >= 9.0)
                 {
-                    sub_48b720(a0->field_8, a0->field_8->field_b6c);
+                    CBot::AimAtEnemy(a0->field_8, a0->field_8->field_b6c);
                     return v32;
                 }
             }
         }
         else
         {
-            v57 = sub_489660(a0->field_8);
+            v57 = UTIL_GetLastAttackFromPlayer(a0->field_8);
             if (!v57)
                 goto LABEL_5517d3;
             v5 = (float)(12.0 * *v57->field_1e0);
@@ -335,13 +335,13 @@ LABEL_55113f:
             v63 = v60 * v60 + v61 * v61 + v62 * v62;
             v64 = sqrt(v63);
             if (isnan(v64))
-                sub_487dc0(*(unsigned int *)&v63);
+                sqrt(*(unsigned int *)&v63);
             else
                 v63 = v64;
             v14 = (float)v63;
             if (v14 >= v5)
                 return v14;
-            sub_48a800(&*v57->field_50);
+            UTIL_MakeVectors(&*v57->field_50);
             v65 = &*v57->field_8;
             v8 = *v57->field_8;
             v9 = *(float *)&v65[1];
@@ -356,22 +356,22 @@ LABEL_55113f:
             v12 = (float)(v68 + v9);
             v13 = v10 + v17;
             v2 = &v14;
-            sub_488460(&v8, &v11, 1, 1, *v57->field_208, v2);
+            UTIL_TraceHull(&v8, &v11, 1, 1, *v57->field_208, v2);
             v32 = 800.0;
             v31 = (float)(800.0 * v19);
             if (v31 >= 800.0f)
                 return 800.0;
             *(unsigned short *)&v2 = 1;
-            if ((char)sub_48dc80(a0->field_8, v2))
+            if ((char)CBot::BotCanBeamJump(a0->field_8, v2))
             {
                 a0->field_8->field_1068 = 22;
             }
             else
             {
                 v4 = &g_engfuncs.padding_0[0];
-                if (!g_616928(0, 1))
+                if (!g_engfuncs.pfnRandomLong(0, 1))
                 {
-                    if (!(char)sub_487c70(*v57->field_208, 2, 800.0f))
+                    if (!(char)CheckForCollide(*v57->field_208, 2, 800.0f))
                     {
                         v1 = 50.0f;
                         v0 = 40.0f;
@@ -382,32 +382,32 @@ LABEL_551630:
                     }
                     else
                     {
-                        if ((char)sub_487c70(*v57->field_208, 4, 800.0f))
+                        if ((char)CheckForCollide(*v57->field_208, 4, 800.0f))
                             goto LABEL_551654;
 LABEL_5515a6:
-                        g_61692c(40.0f, 50.0f);
+                        g_engfuncs.pfnRandomFloat(40.0f, 50.0f);
                         v70 = a0->field_8->field_c14 - 40.0;
                     }
-                    sub_48d430((float)v70);
+                    UTIL_WrapAngle((float)v70);
                     a0->field_8->field_c14 = (float)v70;
                     return v70;
                 }
-                if (!(char)sub_487c70(*v57->field_208, 4, 800.0f))
+                if (!(char)CheckForCollide(*v57->field_208, 4, 800.0f))
                     goto LABEL_5515a6;
-                if (!(char)sub_487c70(*v57->field_208, 2, 800.0f))
+                if (!(char)CheckForCollide(*v57->field_208, 2, 800.0f))
                 {
                     v1 = 50.0f;
                     v0 = 40.0f;
-                    v69 = g_61692c;
+                    v69 = g_engfuncs.pfnRandomFloat;
                     goto LABEL_551630;
                 }
                 else
                 {
 LABEL_551654:
                     v3 = &g_engfuncs.padding_0[0];
-                    if (!g_616928(0, 1))
+                    if (!g_engfuncs.pfnRandomLong(0, 1))
                     {
-                        if (!(char)sub_487c70(*v57->field_208, 64, 800.0f))
+                        if (!(char)CheckForCollide(*v57->field_208, 64, 800.0f))
                         {
                             v1 = 50.0f;
                             v71 = 40.0;
@@ -419,24 +419,24 @@ LABEL_5517b0:
                         }
                         else
                         {
-                            if ((char)sub_487c70(*v57->field_208, 32, 800.0f))
+                            if ((char)CheckForCollide(*v57->field_208, 32, 800.0f))
                                 return 800.0;
 LABEL_551726:
-                            g_61692c(40.0f, 50.0f);
+                            g_engfuncs.pfnRandomFloat(40.0f, 50.0f);
                             v73 = a0->field_8->field_c10 - 40.0;
                         }
-                        sub_48d430((float)v73);
+                        UTIL_WrapAngle((float)v73);
                         a0->field_8->field_c10 = (float)v73;
                         return v73;
                     }
-                    if (!(char)sub_487c70(*v57->field_208, 32, 800.0f))
+                    if (!(char)CheckForCollide(*v57->field_208, 32, 800.0f))
                         goto LABEL_551726;
                     v71 = 800.0;
-                    if ((char)sub_487c70(*v57->field_208, 64, 800.0f))
+                    if ((char)CheckForCollide(*v57->field_208, 64, 800.0f))
                         return 800.0;
                     v1 = 50.0f;
                     v0 = 40.0f;
-                    v72 = g_61692c;
+                    v72 = g_engfuncs.pfnRandomFloat;
                     goto LABEL_5517b0;
                 }
             }

@@ -18,11 +18,11 @@ int ButtonActivate__11CBaseButton(float idx)
     unsigned int v1;  // [bp-0x20]
     unsigned int v2;  // [bp-0x1c]
 
-    sub_489390(*(int *)(*(int *)idx + 520), 2, *(int *)(*(int *)idx + 488) + gpGlobals->field_98, 0x3f800000, 0.800000011920929f, 0, 100);
-    v4 = sub_488810(*(unsigned int *)&idx + 212);
-    if (!sub_488a80(*(int *)(*(unsigned int *)&idx + 0x100), v4))
-        return sub_48dfe0(*(int *)idx, *(unsigned int *)&idx + 272, 1, 1);
-    v5 = sub_48dfe0(*(int *)idx, *(unsigned int *)&idx + 272, 0, 1);
+    EMIT_SOUND_DYN(*(int *)(*(int *)idx + 520), 2, *(int *)(*(int *)idx + 488) + gpGlobals->field_98, 0x3f800000, 0.800000011920929f, 0, 100);
+    v4 = EHANDLE::__opP11CBaseEntity(*(unsigned int *)&idx + 212);
+    if (!UTIL_IsMasterTriggered(*(int *)(*(unsigned int *)&idx + 0x100), v4))
+        return PlayLockSounds(*(int *)idx, *(unsigned int *)&idx + 272, 1, 1);
+    v5 = PlayLockSounds(*(int *)idx, *(unsigned int *)&idx + 272, 0, 1);
     *(unsigned int *)(*(unsigned int *)&idx + 128) = 2;
     v6 = _INSERT(v5, 0, 0);
     *(unsigned int *)(*(unsigned int *)&idx + 220) = v6 | 0xffff0000;
@@ -33,12 +33,12 @@ int ButtonActivate__11CBaseButton(float idx)
         *(float *)&v0 = *(float *)(*(unsigned int *)&idx + 192);
         *(float *)&v1 = *(float *)&v8[1];
         *(float *)&v2 = *(float *)&v8[2];
-        return sub_488a40(idx, &v0, *(float *)(*(int *)idx + 504));
+        return CBaseToggle::AngularMove(idx, &v0, *(float *)(*(int *)idx + 504));
     }
     v7 = *(unsigned int *)&idx + 168;
     *(float *)&v0 = *(float *)(*(unsigned int *)&idx + 168);
     *(float *)&v1 = *(float *)&v7[1];
     *(float *)&v2 = *(float *)&v7[2];
-    return sub_488220(idx, &v0, *(float *)(*(int *)idx + 504));
+    return CBaseToggle::LinearMove(idx, &v0, *(float *)(*(int *)idx + 504));
 }
 

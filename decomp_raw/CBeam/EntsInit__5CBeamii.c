@@ -11,10 +11,10 @@ typedef struct st_4aff00_0 {
 int EntsInit__5CBeamii(st_4aff00_0 **a0, int a1, int a2)
 {
     *a0->field_148 = *a0->field_148 & 240 | 2;
-    sub_489030(a0, a1);
-    sub_48c910(a0, a2);
+    CBeam::SetStartEntity(a0, a1);
+    CBeam::SetEndEntity(a0, a2);
     *a0->field_128 = *a0->field_128 & 0xfff;
     *a0->field_110 = *a0->field_110 & 0xfff;
-    return sub_48bc90(a0);
+    return CBeam::RelinkBeam(a0);
 }
 

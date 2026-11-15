@@ -8,10 +8,10 @@ typedef struct st_49e0b0_1 {
     unsigned int field_0;
 } st_49e0b0_1;
 
-extern st_49e0b0_1 *g_6168bc;
+extern st_49e0b0_1 *g_engfuncs.pfnPvAllocEntPrivateData;
 
 int __nw__11CBaseEntityUiP9entvars_s(unsigned int a0, st_49e0b0_0 *a1)
 {
-    return g_6168bc(a1->field_208, a0);
+    return g_engfuncs.pfnPvAllocEntPrivateData(a1->field_208, a0);
 }
 

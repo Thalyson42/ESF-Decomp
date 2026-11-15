@@ -22,7 +22,7 @@ unsigned int DelAllDirectionsAttacker__12CPlayerMelee(st_505ef0_1 *a0)
         {
             v0 = a0->field_148;
             a0->field_148 = v0->field_1c;
-            v1 = sub_48d4e0(v0);
+            v1 = __builtin_delete(v0);
         } while (a0->field_148);
     }
     a0->field_c8 = 0;

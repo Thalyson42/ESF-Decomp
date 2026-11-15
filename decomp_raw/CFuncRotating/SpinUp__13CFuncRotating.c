@@ -83,7 +83,7 @@ int SpinUp__13CFuncRotating(float idx)
     if (v19 < 0)
         v19 = -v19;
     if (v18 < v19)
-        return sub_48c6a0(idx, 1);
+        return CFuncRotating::RampPitchVol(idx, 1);
     v2 = __fnstcw();
     v1 = v2 | 0xc00;
     v0 = (int)*(float *)&v10;
@@ -121,11 +121,11 @@ int SpinUp__13CFuncRotating(float idx)
             *(float *)&v24->field_5c = v3;
             *(float *)&v24->field_60 = v4;
             *(float *)&v24->field_64 = v5;
-            *(unsigned int *)(*(unsigned int *)&idx + 12) = _INSERT(sub_489390(*(int *)(*(int *)idx + 520), 6, *(int *)(*(int *)idx + 500) + gpGlobals->field_98, *(float *)(*(unsigned int *)&idx + 108), *(float *)(*(unsigned int *)&idx + 104), 192, 100), 0, 0) | 0xffff0000;
+            *(unsigned int *)(*(unsigned int *)&idx + 12) = _INSERT(EMIT_SOUND_DYN(*(int *)(*(int *)idx + 520), 6, *(int *)(*(int *)idx + 500) + gpGlobals->field_98, *(float *)(*(unsigned int *)&idx + 108), *(float *)(*(unsigned int *)&idx + 104), 192, 100), 0, 0) | 0xffff0000;
             *(char **)(*(unsigned int *)&idx + 16) = &Rotate__13CFuncRotating;
-            return sub_488570(idx);
+            return CFuncRotating::Rotate(idx);
         }
     }
-    return sub_48c6a0(idx, 1);
+    return CFuncRotating::RampPitchVol(idx, 1);
 }
 

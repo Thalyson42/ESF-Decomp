@@ -32,6 +32,6 @@ int Spawn__16CExplodingAttack(st_4ba9d0_2 *a0)
     a0->field_2cc = 0;
     a0->field_2b4 = 0;
     a0->field_2c0 = 0;
-    return sub_4896b0(a0);
+    return CMagicAttack::Spawn(a0);
 }
 

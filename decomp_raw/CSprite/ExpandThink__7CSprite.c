@@ -23,6 +23,6 @@ unsigned int * ExpandThink__7CSprite(float idx)
         return gpGlobals;
     }
     *(float *)(*(int *)idx + 332) = 0.0f;
-    return sub_48cc00(idx);
+    return UTIL_Remove(idx);
 }
 

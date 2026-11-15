@@ -12,7 +12,7 @@ int GetAmmoIndex__11CBasePlayerPCc(int a0)
         do
         {
             v1 = v0 * 8;
-            if (*(int *)(v1 + (char *)&_15CBasePlayerItem.AmmoInfoArray[0]) && !sub_48cac0(a0, *(int *)(v1 + (char *)&_15CBasePlayerItem.AmmoInfoArray[0])))
+            if (*(int *)(v1 + (char *)&_15CBasePlayerItem.AmmoInfoArray[0]) && !strcasecmp@GLIBC_2.0(a0, *(int *)(v1 + (char *)&_15CBasePlayerItem.AmmoInfoArray[0])))
                 return v0;
         } while ((v0 += 1, v0 <= 31));
     }

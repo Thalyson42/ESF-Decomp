@@ -9,6 +9,6 @@ extern char __vt_14CKickEnemyTask;
 int _._14CKickEnemyTask(st_586590_0 *a0, int a1)
 {
     a0->field_14 = &__vt_14CKickEnemyTask;
-    return sub_488170(a0, a1);
+    return _._9CBaseTask(a0, a1);
 }
 

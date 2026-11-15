@@ -40,10 +40,10 @@ typedef struct st_506d50_6 {
 } st_506d50_6;
 
 extern unsigned int gmsgMeleeAtkHud;
-extern st_506d50_2 *g_616878;
-extern st_506d50_2 *g_61687c;
-extern st_506d50_2 *g_616880;
-extern st_506d50_2 *g_616888;
+extern st_506d50_2 *g_engfuncs.pfnMessageBegin;
+extern st_506d50_2 *g_engfuncs.pfnMessageEnd;
+extern st_506d50_2 *g_engfuncs.pfnWriteByte;
+extern st_506d50_2 *g_engfuncs.pfnWriteShort;
 
 int SendPredictVars__12CPlayerMeleef(st_506d50_3 *a0, float a1)
 {
@@ -58,28 +58,28 @@ int SendPredictVars__12CPlayerMeleef(st_506d50_3 *a0, float a1)
     unsigned short v5;  // [bp-0x8]
     unsigned short v6;  // [bp-0x6]
 
-    g_616878(1, gmsgMeleeAtkHud, 0, *(int *)(*(int *)a0->field_124 + 520), v0, v1, v2);
-    g_616880(4);
+    g_engfuncs.pfnMessageBegin(1, gmsgMeleeAtkHud, 0, *(int *)(*(int *)a0->field_124 + 520), v0, v1, v2);
+    g_engfuncs.pfnWriteByte(4);
     v7 = a0->field_180->field_c(a0);
     v3 = 100.0f;
     v6 = __fnstcw();
     v5 = v6 | 0xc00;
     v4 = (int)(100.0 * v7->field_4);
-    g_616888(v4);
+    g_engfuncs.pfnWriteShort(v4);
     v8 = a0->field_180->field_c(a0);
     v6 = __fnstcw();
     v5 = v6 | 0xc00;
     v4 = (int)(v3 * v8->field_8);
-    g_616888(v4);
+    g_engfuncs.pfnWriteShort(v4);
     v9 = a0->field_180->field_c(a0);
     v6 = __fnstcw();
     v5 = v6 | 0xc00;
     v4 = (int)(v3 * v9->field_c);
-    g_616888(v4);
+    g_engfuncs.pfnWriteShort(v4);
     v6 = __fnstcw();
     v5 = v6 | 0xc00;
     v4 = (int)(a1 * v3);
-    g_616888(v4);
-    return g_61687c(v4);
+    g_engfuncs.pfnWriteShort(v4);
+    return g_engfuncs.pfnMessageEnd(v4);
 }
 

@@ -110,7 +110,7 @@ double DrainAttack__14CDrainEntsTaskP11CBaseEntity(st_552e40_5 *a0, st_552e40_1 
     }
     if (!v3)
     {
-        v6 = sub_48d6a0(20);
+        v6 = __builtin_new(20);
         v7 = a1;
         v6->field_0 = v7;
         v8 = &v6->field_4;
@@ -123,15 +123,15 @@ double DrainAttack__14CDrainEntsTaskP11CBaseEntity(st_552e40_5 *a0, st_552e40_1 
         v10 = a0->field_1c;
         if (!*v10)
         {
-            v11 = sub_48d6a0(12);
+            v11 = __builtin_new(12);
             v2 = 1;
             v11->field_4 = NULL;
             v11->field_8 = NULL;
-            sub_48d0e0(v11, 0, 4);
+            memset@GLIBC_2.0(v11, 0, 4);
             v2 = 0;
             *v10 = v11;
             if (v2)
-                sub_48d4e0(v11);
+                __builtin_delete(v11);
             *v10->field_0 = v3;
             *v10->field_4 = NULL;
             *v10->field_8 = NULL;
@@ -140,15 +140,15 @@ double DrainAttack__14CDrainEntsTaskP11CBaseEntity(st_552e40_5 *a0, st_552e40_1 
         else
         {
             v1 = v10[1];
-            v12 = sub_48d6a0(12);
+            v12 = __builtin_new(12);
             v0 = 1;
             v12->field_4 = NULL;
             v12->field_8 = NULL;
-            sub_48d0e0(v12, 0, 4);
+            memset@GLIBC_2.0(v12, 0, 4);
             v0 = 0;
             v1->field_4 = v12;
             if (v0)
-                sub_48d4e0(v12);
+                __builtin_delete(v12);
             v10[1]->field_4->field_8 = v10[1];
             v13 = v10[1]->field_4;
             v10[1] = v13;
@@ -160,7 +160,7 @@ double DrainAttack__14CDrainEntsTaskP11CBaseEntity(st_552e40_5 *a0, st_552e40_1 
     v15 = *a1->field_20 * *a1->field_20 + *(float *)&v14->padding_0[4] * *(float *)&v14->padding_0[4] + *(float *)&v14->padding_0[8] * *(float *)&v14->padding_0[8];
     v16 = sqrt(v15);
     if (isnan(v16))
-        sub_487dc0(*(unsigned int *)&v15);
+        sqrt(*(unsigned int *)&v15);
     else
         v15 = v16;
     v4 = (float)v15;
@@ -172,12 +172,12 @@ double DrainAttack__14CDrainEntsTaskP11CBaseEntity(st_552e40_5 *a0, st_552e40_1 
         *v17->field_28 = (float)(v3->field_c / 100.0);
     }
     *a1->field_1e0 = (float)(*a1->field_1e0 - (double)a0->field_8->field_744 / 1000000.0 * 0.375);
-    sub_48c980(a0->field_8, 5);
-    sub_489700(a0->field_8, 500);
+    CBasePlayer::UseKi(a0->field_8, 5);
+    CBasePlayer::IncreasePL(a0->field_8, 500);
     if (2.0 >= *a1->field_1e0)
     {
         *(unsigned int *)&*a1->field_1e0 = 0x3f800000;
-        sub_4899f0(*a1->field_208, a0->field_c);
+        DispatchTouch(*a1->field_208, a0->field_c);
     }
     return 2.0;
 }

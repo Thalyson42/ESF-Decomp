@@ -16,14 +16,14 @@ void StartChargedAttackRetaliate__12CPlayerMelee(double a0, double a1, st_509c50
 {
     int v0;  // 128
 
-    sub_48caa0(a2);
-    sub_48b7e0(a2, a2->field_12c);
-    sub_487b30(a2);
-    sub_48c900(a2, a2->field_130->field_178, a2->field_14c, v0);
-    sub_48b280(a2->field_130, v0);
-    sub_48b280(a2, 0);
-    sub_48b4c0(a2);
-    sub_48c6e0(a2, v0);
+    CPlayerMelee::DelAllDirectionsAttacker(a2);
+    CPlayerMelee::SetDefender(a2, a2->field_12c);
+    CPlayerMelee::GetStunTime(a2);
+    CPlayerMelee::PredictBlockRatio(a2, a2->field_130->field_178, a2->field_14c, v0);
+    CPlayerMelee::SetActiveStunTime(a2->field_130, v0);
+    CPlayerMelee::SetActiveStunTime(a2, 0);
+    CPlayerMelee::MeleeHudDisable(a2);
+    CPlayerMelee::SendPredictVars(a2, v0);
     return;
 }
 

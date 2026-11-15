@@ -30,7 +30,7 @@ float UTIL_DotPoints__FRC6VectorN20(float *a0, float *a1, float *a2)
     v14 = v6 * v6 + v7 * v7;
     v15 = sqrt(v14);
     if (isnan(v15))
-        sub_487dc0(*(unsigned int *)&v14);
+        sqrt(*(unsigned int *)&v14);
     else
         v14 = v15;
     v13 = (float)v14;

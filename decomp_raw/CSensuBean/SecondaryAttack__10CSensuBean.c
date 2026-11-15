@@ -36,9 +36,9 @@ typedef struct st_517a70_5 {
 } st_517a70_5;
 
 extern unsigned int gmsgSensuBean;
-extern st_517a70_2 *g_616878;
-extern st_517a70_2 *g_61687c;
-extern st_517a70_2 *g_616880;
+extern st_517a70_2 *g_engfuncs.pfnMessageBegin;
+extern st_517a70_2 *g_engfuncs.pfnMessageEnd;
+extern st_517a70_2 *g_engfuncs.pfnWriteByte;
 extern st_517a70_5 *gpGlobals;
 
 st_517a70_3 * SecondaryAttack__10CSensuBean(st_517a70_4 *a0)
@@ -61,21 +61,21 @@ st_517a70_3 * SecondaryAttack__10CSensuBean(st_517a70_4 *a0)
     v8 = a0->field_80;
     if (v8->field_75c <= 0)
         return v8;
-    sub_48a800(&v8->field_0->padding_0[116]);
+    UTIL_MakeVectors(&v8->field_0->padding_0[116]);
     v9 = &gpGlobals->field_28;
     v5 = (float)(500.0 * gpGlobals->field_28);
     v6 = (float)(500.0 * *(float *)&v9[1]);
     v7 = (float)(500.0 * *(float *)&v9[2]);
-    sub_48d680(a0->field_80, 6);
+    CBasePlayer::SetAnimation(a0->field_80, 6);
     a0->field_80->field_60->field_1e0(&v4, a0->field_80);
     v1 = v5;
     v2 = v6;
     v3 = v7;
-    sub_48e100(a0->field_80->field_0, &v4, &v1);
+    CBean::ThrowBean(a0->field_80->field_0, &v4, &v1);
     a0->field_80->field_75c = a0->field_80->field_75c - 1;
-    g_616878(1, gmsgSensuBean, 0, a0->field_80->field_0->field_208);
+    g_engfuncs.pfnMessageBegin(1, gmsgSensuBean, 0, a0->field_80->field_0->field_208);
     v0 = a0->field_80->field_75c;
-    g_616880(v0);
-    return g_61687c(v0);
+    g_engfuncs.pfnWriteByte(v0);
+    return g_engfuncs.pfnMessageEnd(v0);
 }
 

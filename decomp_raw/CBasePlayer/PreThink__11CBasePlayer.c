@@ -96,13 +96,13 @@ typedef struct st_4f8f00_2 {
     struct st_4f8f00_0 *field_44;
 } st_4f8f00_2;
 
-extern float g_5bd1a8;
+extern float simplemelee+12;
 extern st_4f8f00_2 *g_pGameRules;
 extern unsigned int g_vecZero;
-extern unsigned int g_616790;
-extern st_4f8f00_1 *g_616794;
+extern unsigned int g_vecZero+4;
+extern st_4f8f00_1 *g_vecZero+8;
 extern unsigned int g_fGameOver;
-extern st_4f8f00_1 *g_6168e0;
+extern st_4f8f00_1 *g_engfuncs.pfnPEntityOfEntIndex;
 extern st_4f8f00_3 *gpGlobals;
 
 unsigned int * PreThink__11CBasePlayer(float idx)
@@ -155,38 +155,38 @@ unsigned int * PreThink__11CBasePlayer(float idx)
     g_pGameRules->field_44->field_4c(g_pGameRules, v1);
     if (g_fGameOver)
         return &g_fGameOver;
-    sub_48a800(*(int *)idx + 116);
-    sub_4886f0(idx);
-    sub_48d5f0(idx);
+    UTIL_MakeVectors(*(int *)idx + 116);
+    CBasePlayer::ItemPreFrame(idx);
+    CBasePlayer::WaterMove(idx);
     (*(int *)(*(int *)(*(unsigned int *)&idx + 96) + 516))(idx);
-    sub_487c80(idx);
+    CBasePlayer::CheckTimeBasedDamage(idx);
     if (*(int *)(*(int *)idx + 580))
     {
-        sub_489650(idx);
+        CBasePlayer::Spectator_HandleButtons(idx);
         v23 = *(int *)idx;
         v23->field_184 = 0;
         return v23;
     }
-    if (g_5bd1a8 == 1.0f && !*(int *)(*(unsigned int *)&idx + 0x400) || g_5bd1a8 == 0.0f && *(int *)(*(unsigned int *)&idx + 0x400))
+    if (simplemelee+12 == 1.0f && !*(int *)(*(unsigned int *)&idx + 0x400) || simplemelee+12 == 0.0f && *(int *)(*(unsigned int *)&idx + 0x400))
     {
         if (*(int *)(*(unsigned int *)&idx + 892))
             goto LABEL_4f9059;
         *(unsigned int *)(*(unsigned int *)&idx + 0x400) = !*(int *)(*(unsigned int *)&idx + 0x400);
         v24 = *(unsigned int *)&idx + 896;
-        sub_48b000(v24);
-        sub_487b50(v24, idx);
+        CPlayerMelee::Reset(v24);
+        CPlayerMelee::SetAttacker(v24, idx);
     }
     if (!*(int *)(*(unsigned int *)&idx + 892))
         goto LABEL_4f9074;
 LABEL_4f9059:
     v25 = *(unsigned int *)&idx + 896;
-    sub_48cf90(v25);
-    sub_48dff0(v25);
+    CPlayerMelee::ManageToss(v25);
+    CPlayerMelee::ManageMelee(v25);
 LABEL_4f9074:
-    sub_48d1e0(idx);
+    CBasePlayer::CheckWallJump(idx);
     if (!(*(char *)(*(int *)idx + 423) & 4))
-        sub_48d4b0(*(unsigned int *)&idx + 1284);
-    sub_489540(idx);
+        CSwoop::ManageSwoop(*(unsigned int *)&idx + 1284);
+    CBasePlayer::CheckSubModelStatus(idx);
     if (*(int *)(*(unsigned int *)&idx + 844) && gpGlobals->field_0 > *(float *)(*(unsigned int *)&idx + 1852))
     {
         if (*(int *)(*(unsigned int *)&idx + 848))
@@ -201,13 +201,13 @@ LABEL_4f9074:
     }
     if (*(int *)(*(unsigned int *)&idx + 1832) && gpGlobals->field_0 - *(float *)(*(unsigned int *)&idx + 1836) > 10.0f)
     {
-        sub_48deb0(*(int *)(*(unsigned int *)&idx + 1832));
+        CBasePlayer::ReleaseCandy(*(int *)(*(unsigned int *)&idx + 1832));
         *(unsigned int *)(*(unsigned int *)&idx + 1832) = 0;
     }
     if (*(int *)(*(unsigned int *)&idx + 888) && !*(int *)(*(unsigned int *)&idx + 828))
     {
         v1 = 0;
-        sub_48cfe0(idx, v1);
+        CBasePlayer::RemoveAllWeapons(idx, v1);
         (*(int *)(*(int *)(*(int *)(*(unsigned int *)&idx + 1892) + 4) + 48))(*(int *)(*(unsigned int *)&idx + 1892));
         *(unsigned int *)(*(unsigned int *)&idx + 888) = 0;
     }
@@ -224,7 +224,7 @@ LABEL_4f9074:
             if (*(int *)(*(unsigned int *)&idx + 828))
                 goto LABEL_4f9238;
             *(unsigned short *)&v1 = 1;
-            sub_4886c0(idx, v1);
+            CBasePlayer::Descend(idx, v1);
         }
 LABEL_4f9238:
         if (!*(int *)(*(unsigned int *)&idx + 800) && !*(int *)(*(unsigned int *)&idx + 804))
@@ -245,16 +245,16 @@ LABEL_4f92b4:
         if (1000.0 > *(float *)&v27->padding_254[12] && !(*(float *)&v27->padding_254[12] = (float)(*(float *)&v27->padding_254[12] + 70.0), 1000.0 >= *(float *)(*(int *)idx + 608)))
             *(float *)(*(int *)idx + 608) = 1000.0f;
 LABEL_4f92f7:
-        if (*(int *)(*(unsigned int *)&idx + 804) && !sub_48c980(idx, 2))
-            sub_48dbc0(idx);
-        if (*(int *)(*(unsigned int *)&idx + 800) && !sub_48c980(idx, 1))
-            sub_48c5a0(idx);
-        if (*(int *)(*(unsigned int *)&idx + 892) && *(int *)(*(unsigned int *)&idx + 1288) && !sub_48c980(idx, 16))
-            sub_48a7a0(idx);
+        if (*(int *)(*(unsigned int *)&idx + 804) && !CBasePlayer::UseKi(idx, 2))
+            CBasePlayer::StopTurbo(idx);
+        if (*(int *)(*(unsigned int *)&idx + 800) && !CBasePlayer::UseKi(idx, 1))
+            CBasePlayer::StopFly(idx);
+        if (*(int *)(*(unsigned int *)&idx + 892) && *(int *)(*(unsigned int *)&idx + 1288) && !CBasePlayer::UseKi(idx, 16))
+            CBasePlayer::StopSwoop(idx);
         *(float *)(*(unsigned int *)&idx + 792) = gpGlobals->field_0;
     }
     if (*(float *)(*(unsigned int *)&idx + 1828) < gpGlobals->field_0)
-        sub_48a900(idx);
+        CBasePlayer::UpdateOldPositions(idx);
     if (20.0f >= *(float *)(*(int *)idx + 608))
     {
         *(unsigned int *)(*(int *)idx + 592) = 1;
@@ -272,24 +272,24 @@ LABEL_4f92f7:
         v19 = (int)((double)*(int *)(*(unsigned int *)&idx + 1860) - (double)*(int *)(*(unsigned int *)&idx + 1864) * 0.0001);
         if (v19 > 0)
         {
-            sub_487b40(idx, v19);
+            CBasePlayer::SetPowerLevel(idx, v19);
         }
         else if ((*(int *)(*(int *)(*(unsigned int *)&idx + 96) + 140))(idx))
         {
-            v28 = g_6168e0(0);
+            v28 = g_engfuncs.pfnPEntityOfEntIndex(0);
             v29 = (!v28 ? 0 : v28 + 128);
             (*(int *)(*(int *)(*(unsigned int *)&idx + 96) + 52))(idx, v29, v29, 900.0f, 0x1000);
         }
     }
     if (*(int *)(*(unsigned int *)&idx + 1904) && 0.0 < gpGlobals->field_0 - *(float *)(*(unsigned int *)&idx + 1908))
-        sub_48bf90(idx);
+        CBasePlayer::Ascend(idx);
     if (*(int *)(*(unsigned int *)&idx + 856))
     {
         v30 = *(int *)*(int *)(*(unsigned int *)&idx + 1920) + 80;
         *(float *)&v14 = *(float *)(*(int *)*(int *)(*(unsigned int *)&idx + 1920) + 80);
         *(float *)&v15 = *(float *)&v30[1];
         *(float *)&v16 = *(float *)&v30[2];
-        sub_48a800(&v14);
+        UTIL_MakeVectors(&v14);
         v31 = &gpGlobals->field_28;
         v11 = gpGlobals->field_28;
         v12 = *(float *)&v31[1];
@@ -308,7 +308,7 @@ LABEL_4f92f7:
         v6 = (float)(v32 + *(float *)(*(int *)idx + 8));
         v7 = (float)(v33 + *(float *)&v34[1]);
         v8 = *(float *)&v34[2] + v5;
-        sub_488460(v34, &v6, 0, 1, *(int *)(*(int *)*(int *)(*(unsigned int *)&idx + 1920) + 520), &v9);
+        UTIL_TraceHull(v34, &v6, 0, 1, *(int *)(*(int *)*(int *)(*(unsigned int *)&idx + 1920) + 520), &v9);
         if (1.0 > v10)
         {
             v35 = *(int *)*(int *)(*(unsigned int *)&idx + 1920);
@@ -329,15 +329,15 @@ LABEL_4f92f7:
         }
         if (gpGlobals->field_0 > *(float *)(*(unsigned int *)&idx + 1844))
         {
-            if (!sub_48c980(idx, 5))
+            if (!CBasePlayer::UseKi(idx, 5))
             {
-                sub_4895a0(idx);
+                CBasePlayer::StopBlock(idx);
             }
             else
             {
                 if (g_pGameRules->field_0)
                 {
-                    v19 = sub_48bb90(idx);
+                    v19 = CBasePlayer::GetPowerLevel(idx);
                     v18 = __fnstcw();
                     v17 = v18 | 0xc00;
                     v19 = (int)((double)*(int *)(*(unsigned int *)&idx + 1840) + (double)v19 / (double)g_pGameRules->field_0 * 4.0);
@@ -354,7 +354,7 @@ LABEL_4f92f7:
         v0 = NULL;
         while (1)
         {
-            v37 = sub_48bba0(v0, v1, v2);
+            v37 = UTIL_FindEntityInSphere(v0, v1, v2);
             if (!v37)
                 break;
             if (v37->field_60->field_28(v37) == 1 && v37->field_0->field_10c)
@@ -364,9 +364,9 @@ LABEL_4f92f7:
             v0 = v37;
         }
     }
-    sub_487eb0(idx);
+    CBasePlayer::CheckSuitUpdate(idx);
     if (*(int *)(*(int *)idx + 368) > 0)
-        return sub_48b0a0(idx);
+        return CBasePlayer::PlayerDeathThink(idx);
     if (*(char *)(*(unsigned int *)&idx + 784) & 2)
         *(char *)(*(int *)idx + 423) = *(char *)(*(int *)idx + 423) | 1;
     else
@@ -375,13 +375,13 @@ LABEL_4f92f7:
         (*(int *)(*(int *)(*(unsigned int *)&idx + 96) + 504))(idx);
     if (!(*(char *)(*(int *)idx + 421) & 2))
         *(float *)(*(unsigned int *)&idx + 732) = -*(float *)(*(int *)idx + 40);
-    v38 = sub_48d960(*(unsigned int *)&idx + 264, 0);
+    v38 = EHANDLE::__as(*(unsigned int *)&idx + 264, 0);
     if (!(*(char *)(*(unsigned int *)&idx + 784) & 4))
         return v38;
     v39 = *(int *)idx;
     *(unsigned int *)&v39->padding_9[23] = g_vecZero;
-    *(unsigned int *)&v39->padding_9[27] = g_616790;
-    *(st_4f8f00_1 **)&v39->padding_9[31] = g_616794;
-    return g_616794;
+    *(unsigned int *)&v39->padding_9[27] = g_vecZero+4;
+    *(st_4f8f00_1 **)&v39->padding_9[31] = g_vecZero+8;
+    return g_vecZero+8;
 }
 

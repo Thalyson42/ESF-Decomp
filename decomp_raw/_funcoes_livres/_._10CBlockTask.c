@@ -17,7 +17,7 @@ int _._10CBlockTask(st_583730_1 *a0, int a1)
 {
     a0->field_14 = &__vt_10CBlockTask;
     if (a0->field_8->field_32c)
-        sub_4895a0(a0->field_8);
-    return sub_488170(a0, a1);
+        CBasePlayer::StopBlock(a0->field_8);
+    return _._9CBaseTask(a0, a1);
 }
 

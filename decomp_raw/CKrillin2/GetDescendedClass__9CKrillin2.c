@@ -3,7 +3,7 @@ int GetDescendedClass__9CKrillin2(int *a0)
 {
     int v0;  // eax
 
-    v0 = sub_48d6a0(8);
-    return sub_488fd0(v0, *a0);
+    v0 = __builtin_new(8);
+    return __8CKrillinP11CBasePlayer(v0, *a0);
 }
 

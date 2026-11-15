@@ -34,7 +34,7 @@ int FVisible__11CBaseEntityRC6Vector(st_4a6b60_3 *a0, int a1)
     v3 = v0;
     v4 = v1;
     v5 = v2;
-    sub_488820(&v3, a1, 1, 1, a0->field_0->field_208, &v6);
+    UTIL_TraceLine(&v3, a1, 1, 1, a0->field_0->field_208, &v6);
     return 1.0 == v7;
 }
 

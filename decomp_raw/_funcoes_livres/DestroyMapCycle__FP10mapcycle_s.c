@@ -23,11 +23,11 @@ st_4ddd20_1 * DestroyMapCycle__FP10mapcycle_s(st_4ddd20_1 *a0)
             do
             {
                 v2 = v1;
-                sub_48d4e0(v2);
+                __builtin_delete(v2);
                 v1 = *v2;
             } while (*v2 != i);
         }
-        sub_48d4e0(a0->field_0);
+        __builtin_delete(a0->field_0);
     }
     a0->field_0 = NULL;
     a0->field_4 = 0;

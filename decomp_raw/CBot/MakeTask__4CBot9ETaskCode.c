@@ -36,7 +36,7 @@ st_5800f0_3 * MakeTask__4CBot9ETaskCode(st_5800f0_3 *a0, st_5800f0_3 *a1)
             return v1;
         v2 = a0;
         v2->field_106c = a0->field_1064->field_14->field_20(a0->field_1064);
-        v0 = sub_487cc0(v2);
+        v0 = CBot::KillCurrentTask(v2);
     }
     if (a1 > 0x20)
         return v0;

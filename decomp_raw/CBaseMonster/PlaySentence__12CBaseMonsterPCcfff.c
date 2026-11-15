@@ -33,11 +33,11 @@ unsigned int PlaySentence__12CBaseMonsterPCcfff(st_4d9d00_3 *a0, char *a1, unsig
     }
     else if (*a1 == 33)
     {
-        return sub_489390(a0->field_0->field_208, 2, a1, a3, a4, 0, 100);
+        return EMIT_SOUND_DYN(a0->field_0->field_208, 2, a1, a3, a4, 0, 100);
     }
     else
     {
-        return sub_48d620(a0->field_0->field_208, a1, a3, a4, 0, 100);
+        return SENTENCEG_PlayRndSz(a0->field_0->field_208, a1, a3, a4, 0, 100);
     }
 }
 

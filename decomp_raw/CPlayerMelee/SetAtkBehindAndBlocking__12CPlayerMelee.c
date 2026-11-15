@@ -28,7 +28,7 @@ typedef struct st_508740_2 {
     unsigned int field_32c;
 } st_508740_2;
 
-extern st_508740_3 *g_616810;
+extern st_508740_3 *g_engfuncs.pfnAngleVectors;
 
 unsigned int * SetAtkBehindAndBlocking__12CPlayerMelee(st_508740_1 *a0)
 {
@@ -52,8 +52,8 @@ unsigned int * SetAtkBehindAndBlocking__12CPlayerMelee(st_508740_1 *a0)
 
     a0->field_d4 = 0;
     a0->field_d8 = 0;
-    g_616810(*(int *)a0->field_12c + 116, &v9, 0, 0, v0, v1);
-    g_616810(a0->field_124->field_0 + 116, &v5, 0, 0);
+    g_engfuncs.pfnAngleVectors(*(int *)a0->field_12c + 116, &v9, 0, 0, v0, v1);
+    g_engfuncs.pfnAngleVectors(a0->field_124->field_0 + 116, &v5, 0, 0);
     v13 = -v6;
     v2 = (float)v13;
     v14 = -v7;
@@ -68,7 +68,7 @@ unsigned int * SetAtkBehindAndBlocking__12CPlayerMelee(st_508740_1 *a0)
     {
         a0->field_134->field_144 = 0;
         a0->field_144 = 0;
-        a0->field_d4 = sub_489e20(a0->field_134, a0->field_124);
+        a0->field_d4 = CPlayerMelee::BlocksAttack(a0->field_134, a0->field_124);
         a0->field_134->field_144 = 1;
         a0->field_144 = 1;
     }

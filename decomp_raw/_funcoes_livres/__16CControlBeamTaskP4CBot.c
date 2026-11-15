@@ -11,7 +11,7 @@ extern char __vt_16CControlBeamTask;
 
 st_55a0c0_0 * __16CControlBeamTaskP4CBot(st_55a0c0_0 *a0, int a1)
 {
-    sub_48ce80(a0, a1);
+    __9CBaseTaskP4CBot(a0, a1);
     a0->field_14 = &__vt_16CControlBeamTask;
     a0->field_18 = (float)(*(float *)&a0->field_0 + 10.0);
     a0->field_1c = 0;

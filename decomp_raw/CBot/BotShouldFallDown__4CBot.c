@@ -40,7 +40,7 @@ typedef struct st_574a60_5 {
     unsigned int field_0;
 } st_574a60_5;
 
-extern st_574a60_5 *g_616928;
+extern st_574a60_5 *g_engfuncs.pfnRandomLong;
 
 char BotShouldFallDown__4CBot(st_574a60_3 *a0)
 {
@@ -60,7 +60,7 @@ char BotShouldFallDown__4CBot(st_574a60_3 *a0)
     float v5;  // [bp-0x20]
     float v6;  // [bp-0x1c]
 
-    if (a0->field_a18 - 60 > 98 || !(v7 = g_616928(1, 100), (int)g_616928(1, 100) <= a0->field_a04->field_2e))
+    if (a0->field_a18 - 60 > 98 || !(v7 = g_engfuncs.pfnRandomLong(1, 100), (int)g_engfuncs.pfnRandomLong(1, 100) <= a0->field_a04->field_2e))
         return 0;
     if ((a0->field_a1c == 3 || a0->field_a1c == 5) && a0->field_b6c)
     {
@@ -78,7 +78,7 @@ char BotShouldFallDown__4CBot(st_574a60_3 *a0)
         v13 = v10 * v10 + v11 * v11 + v12 * v12;
         v14 = sqrt(v13);
         if (isnan(v14))
-            sub_487dc0(*(unsigned int *)&v13);
+            sqrt(*(unsigned int *)&v13);
         else
             v13 = v14;
         v0 = (float)v13;
@@ -88,7 +88,7 @@ char BotShouldFallDown__4CBot(st_574a60_3 *a0)
     else
     {
 LABEL_574b89:
-        if (!(char)sub_487c70(a0->field_0->field_208, 64, 1200.0f))
+        if (!(char)CheckForCollide(a0->field_0->field_208, 64, 1200.0f))
             return 1;
     }
     return 0;

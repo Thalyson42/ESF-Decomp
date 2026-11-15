@@ -28,8 +28,8 @@ typedef struct st_4b0110_3 {
     struct st_4b0110_1 *field_60;
 } st_4b0110_3;
 
-extern st_4b0110_2 *g_6168b4;
-extern st_4b0110_2 *g_6168d4;
+extern st_4b0110_2 *g_engfuncs.pfnAlertMessage;
+extern st_4b0110_2 *g_engfuncs.pfnPEntityOfEntOffset;
 
 st_4b0110_0 * TriggerTouch__5CBeamP11CBaseEntity(st_4b0110_5 **a0, st_4b0110_0 **a1)
 {
@@ -39,13 +39,13 @@ st_4b0110_0 * TriggerTouch__5CBeamP11CBaseEntity(st_4b0110_5 **a0, st_4b0110_0 *
     if (!(*a1->field_1a4 & 40))
         return *a1;
     if (!*a0->field_198)
-        return g_6168b4(1, "Firing targets!!!\n");
+        return g_engfuncs.pfnAlertMessage(1, "Firing targets!!!\n");
     v0 = *a0->field_198;
-    if (*a0->field_198 || (v0 = g_6168d4(0), v0))
+    if (*a0->field_198 || (v0 = g_engfuncs.pfnPEntityOfEntOffset(0), v0))
         v1 = v0->field_7c;
     else
         v1 = NULL;
     v1->field_60->field_b8(v1, a1, a0, 3, 0);
-    return g_6168b4(1, "Firing targets!!!\n");
+    return g_engfuncs.pfnAlertMessage(1, "Firing targets!!!\n");
 }
 

@@ -6,7 +6,7 @@ typedef struct st_53cc60_0 {
 } st_53cc60_0;
 
 extern st_53cc60_0 *gpGlobals;
-extern char g_6253cd;
+extern char BotManager+3405;
 extern int ChatClass;
 
 unsigned int BotPreThink__4CBot(float idx)
@@ -18,18 +18,18 @@ unsigned int BotPreThink__4CBot(float idx)
     if (*(char *)(*(unsigned int *)&idx + 2732))
         *(char *)(*(unsigned int *)&idx + 2732) = 0;
     if (!*(char *)(*(unsigned int *)&idx + 2756))
-        sub_48e110(*(unsigned int *)&idx + 2756, *(int *)(*(int *)idx + 464) + gpGlobals->field_98);
+        strcpy@GLIBC_2.0(*(unsigned int *)&idx + 2756, *(int *)(*(int *)idx + 464) + gpGlobals->field_98);
     if (gpGlobals->field_0 - *(float *)(*(unsigned int *)&idx + 2548) < 2.5f && *(int *)(*(unsigned int *)&idx + 3408))
     {
-        sub_488290(&ChatClass, idx, *(int *)(*(unsigned int *)&idx + 3408));
+        CChatClass::LetBotWhine(&ChatClass, idx, *(int *)(*(unsigned int *)&idx + 3408));
         *(unsigned int *)(*(unsigned int *)&idx + 3408) = 0;
     }
     if (*(char *)(*(unsigned int *)&idx + 3140) && *(float *)(*(unsigned int *)&idx + 3144) < gpGlobals->field_0)
     {
         *(char *)(*(unsigned int *)&idx + 3140) = 0;
-        if (g_6253cd)
-            sub_48b950(idx, 0, *(unsigned int *)&idx + 3148);
+        if (BotManager+3405)
+            UTIL_HostSay(idx, 0, *(unsigned int *)&idx + 3148);
     }
-    return sub_48b030(idx);
+    return CBot::CheckSBotStuff(idx);
 }
 

@@ -7,6 +7,6 @@ typedef struct st_511260_0 {
 int Deploy__12CScatterShot(st_511260_0 *a0)
 {
     a0->field_e4 = 0;
-    return sub_489360(a0, "scattershot");
+    return CBasePlayerWeapon::DefaultDeploy(a0, "scattershot");
 }
 

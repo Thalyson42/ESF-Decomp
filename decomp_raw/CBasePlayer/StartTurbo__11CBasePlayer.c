@@ -76,7 +76,7 @@ st_4f08f0_0 * StartTurbo__11CBasePlayer(st_4f08f0_3 *a0)
             a0->field_324 = 1;
             if (a0->field_76c)
                 return v1;
-            v2 = sub_4884f0(a0);
+            v2 = CAura::Create(a0);
             a0->field_76c = v2;
             return v2;
         }

@@ -11,15 +11,15 @@ unsigned int MakeCombo__4CBot10EComboType(st_55aa30_0 *a0, int a1)
     char v0;  // [bp-0x5]
 
     if (a0->field_1070 && a0->field_1070)
-        sub_48dbd0(a0->field_1070, 3);
-    sub_48acb0(a0, 12);
-    v1 = sub_48d6a0(24);
+        _._9CBotCombo(a0->field_1070, 3);
+    CBot::MakeTask(a0, 12);
+    v1 = __builtin_new(24);
     v0 = 1;
-    v2 = sub_48bc60(v1, a0, a1);
+    v2 = __9CBotComboP4CBot10EComboType(v1, a0, a1);
     v0 = 0;
     a0->field_1070 = v2;
     if (!v0)
         return v2;
-    return sub_48d4e0(v1);
+    return __builtin_delete(v1);
 }
 

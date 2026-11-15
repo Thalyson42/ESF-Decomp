@@ -14,10 +14,10 @@ st_532850_0 * UTIL_HudMessageAll__FRC14hudtextparms_sPCc(int a0, int a1)
     iter = 1;
     while (iter <= (int)gpGlobals->field_90)
     {
-        v1 = sub_48a500(iter);
+        v1 = UTIL_PlayerByIndex(iter);
         if (v1)
         {
-            sub_48dcb0(v1, a0, a1);
+            UTIL_HudMessage(v1, a0, a1);
             iter += 1;
         }
         else

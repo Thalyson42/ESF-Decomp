@@ -3,7 +3,7 @@ typedef struct st_4b4420_0 {
     unsigned int field_0;
 } st_4b4420_0;
 
-extern st_4b4420_0 *g_6167d0;
+extern st_4b4420_0 *g_engfuncs.pfnModelFrames;
 
 int Spawn__11CGibShooter(float idx)
 {
@@ -17,8 +17,8 @@ int Spawn__11CGibShooter(float idx)
         *(float *)(*(unsigned int *)&idx + 100) = 0.10000000149011612f;
     if (*(float *)(*(unsigned int *)&idx + 132) == 0.0f)
         *(float *)(*(unsigned int *)&idx + 132) = 25.0f;
-    sub_48ccb0(*(int *)idx);
-    v1 = g_6167d0(*(int *)(*(unsigned int *)&idx + 120));
+    SetMovedir(*(int *)idx);
+    v1 = g_engfuncs.pfnModelFrames(*(int *)(*(unsigned int *)&idx + 120));
     v2 = *(int *)idx;
     v2[69] = v1;
     return v2;

@@ -9,10 +9,10 @@ unsigned int * AnimateUntilDead__7CSprite(float a0)
 {
     if (*(float *)gpGlobals <= *(float *)(*(int *)a0 + 484))
     {
-        sub_48c890(a0);
+        CSprite::AnimateThink(a0);
         *(float *)(*(int *)a0 + 260) = *(float *)gpGlobals;
         return gpGlobals;
     }
-    return sub_48cc00(a0);
+    return UTIL_Remove(a0);
 }
 

@@ -45,12 +45,12 @@ int end_fde_sort(st_595f1c_1 *a0, unsigned int a1)
 
     sub_595f18(v0, v1, v2);
     if (a0->field_4 != a1)
-        sub_48a650();
+        abort@GLIBC_2.0();
     v12 = &a0->field_8;
     fde_split(a0, v12);
     v5 = v12;
     if (a0->field_c + a0->field_4 != a0->field_4)
-        sub_48a650();
+        abort@GLIBC_2.0();
     v13 = a0->field_8;
     idx1 = v5->field_4;
     i = idx1;
@@ -117,7 +117,7 @@ int end_fde_sort(st_595f1c_1 *a0, unsigned int a1)
         }
     }
     fde_merge(a0, v5);
-    sub_48cf10(a0->field_8);
+    free@GLIBC_2.0(a0->field_8);
     return a0->field_0;
 }
 

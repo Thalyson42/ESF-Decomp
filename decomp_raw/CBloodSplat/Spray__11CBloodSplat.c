@@ -50,7 +50,7 @@ short Spray__11CBloodSplat(st_4fc0c0_2 *a0)
     v7 = &g_Language;
     if (g_Language != 1)
     {
-        sub_48a800(&a0->field_0->field_50);
+        UTIL_MakeVectors(&a0->field_0->field_50);
         v8 = &gpGlobals->field_28;
         v9 = 128.0 * gpGlobals->field_28;
         v0 = (float)v9;
@@ -62,8 +62,8 @@ short Spray__11CBloodSplat(st_4fc0c0_2 *a0)
         v3 = (float)(v9 + *(float *)&v11->field_8);
         v4 = (float)(v10 + *(float *)&v12[1]);
         v5 = *(float *)&v12[2] + v2;
-        sub_487b80(v12, &v3, 1, v11->field_198, &v6);
-        v7 = sub_48d7e0(&v6, 247);
+        UTIL_TraceLine(v12, &v3, 1, v11->field_198, &v6);
+        v7 = UTIL_BloodDecalTrace(&v6, 247);
     }
     a0->field_c = _INSERT(v7, 0, 0) | 0xffff0000;
     a0->field_10 = &SUB_Remove__11CBaseEntity;

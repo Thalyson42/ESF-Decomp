@@ -26,6 +26,6 @@ int Deploy__15CControlledBeam(st_4a7450_2 *a0)
     a0->field_208 = 0;
     a0->field_204 = 0;
     a0->field_c4 = 0;
-    return sub_489360(a0, &a0->field_f4);
+    return CBasePlayerWeapon::DefaultDeploy(a0, &a0->field_f4);
 }
 

@@ -31,11 +31,11 @@ typedef struct st_4cb210_0 {
 } st_4cb210_0;
 
 extern unsigned int gmsgBlobKill;
-extern st_4cb210_0 *g_616878;
-extern st_4cb210_0 *g_61687c;
-extern st_4cb210_0 *g_616888;
-extern st_4cb210_0 *g_6168d4;
-extern st_4cb210_0 *g_6168dc;
+extern st_4cb210_0 *g_engfuncs.pfnMessageBegin;
+extern st_4cb210_0 *g_engfuncs.pfnMessageEnd;
+extern st_4cb210_0 *g_engfuncs.pfnWriteShort;
+extern st_4cb210_0 *g_engfuncs.pfnPEntityOfEntOffset;
+extern st_4cb210_0 *g_engfuncs.pfnIndexOfEdict;
 extern char g_800000;
 
 int Remove__5CBlob(float a0)
@@ -80,12 +80,12 @@ int Remove__5CBlob(float a0)
     v14 = &v12->field_198->padding_0[128];
     if (!v12->field_198)
         v14 = NULL;
-    sub_48ab00(&v5, *(int *)a0, v14);
-    g_616878(2, gmsgBlobKill, 0, 0);
-    v15 = g_6168dc(*(int *)(*(int *)a0 + 520));
-    g_616888(v15);
-    g_616888(*(int *)(*(unsigned int *)&a0 + 100));
-    g_61687c();
+    RadiusDamage(&v5, *(int *)a0, v14);
+    g_engfuncs.pfnMessageBegin(2, gmsgBlobKill, 0, 0);
+    v15 = g_engfuncs.pfnIndexOfEdict(*(int *)(*(int *)a0 + 520));
+    g_engfuncs.pfnWriteShort(v15);
+    g_engfuncs.pfnWriteShort(*(int *)(*(unsigned int *)&a0 + 100));
+    g_engfuncs.pfnMessageEnd();
     v16 = *(int *)a0;
     if (!v16->field_198)
         return v16;
@@ -93,7 +93,7 @@ int Remove__5CBlob(float a0)
     if (!v16->field_198)
         v17 = NULL;
     v18 = v17->field_208;
-    if (v17->field_208 || (v18 = g_6168d4(0), v18))
+    if (v17->field_208 || (v18 = g_engfuncs.pfnPEntityOfEntOffset(0), v18))
         v19 = *(int *)(v18 + 124);
     else
         v19 = 0;
@@ -111,6 +111,6 @@ int Remove__5CBlob(float a0)
         *(float *)(v20 + 1424 + idx * 4) = -1.0f;
         idx += 1;
     } while (idx <= 1);
-    return sub_48cc00(a0);
+    return UTIL_Remove(a0);
 }
 

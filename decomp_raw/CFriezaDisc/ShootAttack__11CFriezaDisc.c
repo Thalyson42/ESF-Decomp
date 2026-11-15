@@ -60,7 +60,7 @@ double ShootAttack__11CFriezaDisc(st_4c1190_3 *a0)
     float v14;  // [bp-0x1c]
 
     a0->field_1d4 = 1;
-    sub_48a800(a0->field_80->field_0 + 116);
+    UTIL_MakeVectors(a0->field_80->field_0 + 116);
     a0->field_80->field_60->field_1e0(&v8, a0->field_80);
     v0 = 0;
     v1 = 0;
@@ -82,7 +82,7 @@ double ShootAttack__11CFriezaDisc(st_4c1190_3 *a0)
     v6 = (float)v17;
     v7 = (float)v18;
     v9 = (float)v19;
-    sub_489570(a0->field_1d8, &v3, &v6);
+    CFriezaDiscAttack::Shoot(a0->field_1d8, &v3, &v6);
     a0->field_80->field_340 = 0;
     a0->field_80->field_33c = 1;
     a0->field_80->field_754 = 0;

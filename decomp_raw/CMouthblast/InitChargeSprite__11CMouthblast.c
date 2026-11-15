@@ -38,7 +38,7 @@ typedef struct st_4db330_5 {
     unsigned int field_0;
 } st_4db330_5;
 
-extern st_4db330_5 *g_6168dc;
+extern st_4db330_5 *g_engfuncs.pfnIndexOfEdict;
 
 int InitChargeSprite__11CMouthblast(st_4db330_3 *a0)
 {
@@ -52,14 +52,14 @@ int InitChargeSprite__11CMouthblast(st_4db330_3 *a0)
     unsigned int v0;  // [bp-0x28]
     int v1;  // [bp-0x24]
 
-    v2 = sub_48c010("sprites/mouthblastcharge.spr", *(int *)a0->field_80 + 8, 1);
+    v2 = CSprite::SpriteCreate("sprites/mouthblastcharge.spr", *(int *)a0->field_80 + 8, 1);
     v3 = a0;
     v3->field_20c = v2;
     v4 = *(int *)(*(int *)v3->field_80 + 520);
     v0 = a0->field_1f8;
     if (v4)
     {
-        v5 = g_6168dc(v4);
+        v5 = g_engfuncs.pfnIndexOfEdict(v4);
         *v2->field_110 = v5;
         *v2->field_114 = v0;
         *v2->field_194 = v4;
@@ -78,6 +78,6 @@ int InitChargeSprite__11CMouthblast(st_4db330_3 *a0)
     v8 = a0;
     *(float *)(*(int *)v8->field_20c + 324) = 0.10000000149011612f;
     *(float *)(*(int *)v8->field_20c + 312) = 10.0f;
-    return sub_48df90(v8->field_20c);
+    return CSprite::TurnOff(v8->field_20c);
 }
 

@@ -5,7 +5,7 @@ typedef struct st_56e580_0 {
 
 extern unsigned int g_teamplay;
 extern unsigned short _5NMenu.BotSkill;
-extern st_56e580_0 *g_616928;
+extern st_56e580_0 *g_engfuncs.pfnRandomLong;
 extern unsigned short _5NMenu.CurrentMenuChoice;
 
 unsigned int CustomBotSkillMenu__5NMenuv(void)
@@ -21,9 +21,9 @@ unsigned int CustomBotSkillMenu__5NMenuv(void)
     else
     {
         if (_5NMenu.CurrentMenuChoice != 7)
-            return sub_48d6f0();
-        _5NMenu.BotSkill = g_616928(1, 5);
+            return NMenu::ResetMenu();
+        _5NMenu.BotSkill = g_engfuncs.pfnRandomLong(1, 5);
     }
-    return (!g_teamplay ? sub_48c740(3) : sub_48c740(2));
+    return (!g_teamplay ? NMenu::SetNewMenu(3) : NMenu::SetNewMenu(2));
 }
 

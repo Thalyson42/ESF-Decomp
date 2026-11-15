@@ -39,37 +39,37 @@ int KeyValue__14CBasePlatTrainP14KeyValueData_s(st_4e8020_1 *a0, st_4e8020_0 *a1
     unsigned short v1;  // [bp-0xc]
     unsigned short v2;  // [bp-0xa]
 
-    if (!sub_488af0(a1->field_4, "lip"))
+    if (!strcmp@GLIBC_2.0(a1->field_4, "lip"))
     {
-        v3 = sub_487fc0(a1->field_8, 0, 0);
+        v3 = __strtod_internal@GLIBC_2.0(a1->field_8, 0, 0);
         a0->field_90 = (float)v4;
         a1->field_c = 1;
         return v3;
     }
-    else if (!sub_488af0(a1->field_4, "wait"))
+    else if (!strcmp@GLIBC_2.0(a1->field_4, "wait"))
     {
-        v5 = sub_487fc0(a1->field_8, 0, 0);
+        v5 = __strtod_internal@GLIBC_2.0(a1->field_8, 0, 0);
         a0->field_8c = (float)v6;
         a1->field_c = 1;
         return v5;
     }
-    else if (!sub_488af0(a1->field_4, "height"))
+    else if (!strcmp@GLIBC_2.0(a1->field_4, "height"))
     {
-        v7 = sub_487fc0(a1->field_8, 0, 0);
+        v7 = __strtod_internal@GLIBC_2.0(a1->field_8, 0, 0);
         a0->field_d0 = (float)v8;
         a1->field_c = 1;
         return v7;
     }
-    else if (!sub_488af0(a1->field_4, "rotation"))
+    else if (!strcmp@GLIBC_2.0(a1->field_4, "rotation"))
     {
-        v9 = sub_487fc0(a1->field_8, 0, 0);
+        v9 = __strtod_internal@GLIBC_2.0(a1->field_8, 0, 0);
         a0->field_f0 = (float)v10;
         a1->field_c = 1;
         return v9;
     }
-    else if (!sub_488af0(a1->field_4, "movesnd"))
+    else if (!strcmp@GLIBC_2.0(a1->field_4, "movesnd"))
     {
-        sub_487fc0(a1->field_8, 0, 0);
+        __strtod_internal@GLIBC_2.0(a1->field_8, 0, 0);
         v2 = __fnstcw();
         v1 = v2 | 0xc00;
         v0 = (int)v11;
@@ -77,9 +77,9 @@ int KeyValue__14CBasePlatTrainP14KeyValueData_s(st_4e8020_1 *a0, st_4e8020_0 *a1
         a1->field_c = 1;
         return v0;
     }
-    else if (!sub_488af0(a1->field_4, "stopsnd"))
+    else if (!strcmp@GLIBC_2.0(a1->field_4, "stopsnd"))
     {
-        sub_487fc0(a1->field_8, 0, 0);
+        __strtod_internal@GLIBC_2.0(a1->field_8, 0, 0);
         v2 = __fnstcw();
         v1 = v2 | 0xc00;
         v0 = (int)v12;
@@ -87,16 +87,16 @@ int KeyValue__14CBasePlatTrainP14KeyValueData_s(st_4e8020_1 *a0, st_4e8020_0 *a1
         a1->field_c = 1;
         return v0;
     }
-    else if (!sub_488af0(a1->field_4, "volume"))
+    else if (!strcmp@GLIBC_2.0(a1->field_4, "volume"))
     {
-        v13 = sub_487fc0(a1->field_8, 0, 0);
+        v13 = __strtod_internal@GLIBC_2.0(a1->field_8, 0, 0);
         a0->field_108 = (float)v14;
         a1->field_c = 1;
         return v13;
     }
     else
     {
-        return sub_48ba40(a0, a1);
+        return CBaseToggle::KeyValue(a0, a1);
     }
 }
 

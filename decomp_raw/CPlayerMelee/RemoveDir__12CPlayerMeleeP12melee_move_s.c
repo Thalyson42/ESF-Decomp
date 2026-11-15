@@ -24,12 +24,12 @@ st_505a80_0 * RemoveDir__12CPlayerMeleeP12melee_move_s(st_505a80_0 **a0, st_505a
             {
                 a0[82] = a0[82]->field_1c;
                 v2 = iter;
-                sub_48d4e0(a1);
+                __builtin_delete(a1);
                 return v2;
             }
             a0[83] = a0[83]->field_1c;
             v2 = iter;
-            sub_48d4e0(a1);
+            __builtin_delete(a1);
             return v2;
         }
         for (; iter->field_1c; iter = iter->field_1c)
@@ -43,12 +43,12 @@ st_505a80_0 * RemoveDir__12CPlayerMeleeP12melee_move_s(st_505a80_0 **a0, st_505a
                     v2 = v3;
                     if (!v2)
                     {
-                        sub_48d4e0(a1);
+                        __builtin_delete(a1);
                         return v2;
                     }
                     v3->field_20 = iter;
                     v2 = v3;
-                    sub_48d4e0(a1);
+                    __builtin_delete(a1);
                     return v2;
                 }
                 break;

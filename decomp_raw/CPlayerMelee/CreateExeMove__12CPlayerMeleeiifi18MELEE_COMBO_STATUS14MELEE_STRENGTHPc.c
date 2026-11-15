@@ -24,7 +24,7 @@ st_5045c0_0 * CreateExeMove__12CPlayerMeleeiifi18MELEE_COMBO_STATUS14MELEE_STREN
 {
     st_5045c0_0 *v0;  // edi
 
-    v0 = sub_48d6a0(864);
+    v0 = __builtin_new(864);
     v0->field_40 = 0;
     v0->field_44 = 0;
     v0->field_3c = 0;
@@ -38,10 +38,10 @@ st_5045c0_0 * CreateExeMove__12CPlayerMeleeiifi18MELEE_COMBO_STATUS14MELEE_STREN
     v0->field_54 = 0;
     v0->field_4c = a5;
     v0->field_50 = a6;
-    sub_48e110(v0, a7);
+    strcpy@GLIBC_2.0(v0, a7);
     v0->field_358 = 0;
     v0->field_35c = 0;
-    sub_489130(a0, v0);
+    CPlayerMelee::ResetComboArray(a0, v0);
     return v0;
 }
 

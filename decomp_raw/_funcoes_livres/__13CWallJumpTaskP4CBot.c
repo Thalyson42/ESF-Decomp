@@ -23,7 +23,7 @@ extern st_584480_2 *gpGlobals;
 
 st_584480_1 * __13CWallJumpTaskP4CBot(st_584480_1 *a0, int a1)
 {
-    sub_48ce80(a0, a1);
+    __9CBaseTaskP4CBot(a0, a1);
     a0->field_14 = &__vt_13CWallJumpTask;
     if (!a0->field_8->field_6c8)
         a0->field_0 = (float)(1.0 + *(float *)gpGlobals);

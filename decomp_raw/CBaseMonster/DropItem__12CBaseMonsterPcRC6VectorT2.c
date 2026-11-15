@@ -23,8 +23,8 @@ typedef struct st_4da5d0_2 {
     unsigned int field_0;
 } st_4da5d0_2;
 
-extern st_4da5d0_2 *g_6168b4;
-extern st_4da5d0_2 *g_61692c;
+extern st_4da5d0_2 *g_engfuncs.pfnAlertMessage;
+extern st_4da5d0_2 *g_engfuncs.pfnRandomFloat;
 
 st_4da5d0_1 ** DropItem__12CBaseMonsterPcRC6VectorT2(st_4da5d0_0 **a0, int a1, int a2, int a3)
 {
@@ -43,7 +43,7 @@ st_4da5d0_1 ** DropItem__12CBaseMonsterPcRC6VectorT2(st_4da5d0_0 **a0, int a1, i
     }
     else
     {
-        v4 = sub_48a0f0(a1, a2, a3, *a0->field_208);
+        v4 = CBaseEntity::Create(a1, a2, a3, *a0->field_208);
         if (v4)
         {
             v5 = *v4;
@@ -52,7 +52,7 @@ st_4da5d0_1 ** DropItem__12CBaseMonsterPcRC6VectorT2(st_4da5d0_0 **a0, int a1, i
             v5[9] = v6->field_24;
             v5[10] = v6->field_28;
             v7 = *v4;
-            g_61692c(0, 100.0f);
+            g_engfuncs.pfnRandomFloat(0, 100.0f);
             v0 = 0;
             v1 = 100.0f;
             v2 = 0;
@@ -63,7 +63,7 @@ st_4da5d0_1 ** DropItem__12CBaseMonsterPcRC6VectorT2(st_4da5d0_0 **a0, int a1, i
         }
         v3 = "DropItem() - Didn't create!\n";
     }
-    g_6168b4(1, v3);
+    g_engfuncs.pfnAlertMessage(1, v3);
     return NULL;
 }
 

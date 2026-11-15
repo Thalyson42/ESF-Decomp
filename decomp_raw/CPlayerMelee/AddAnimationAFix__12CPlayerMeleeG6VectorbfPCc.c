@@ -22,7 +22,7 @@ typedef struct st_500120_4 {
     unsigned int field_0;
 } st_500120_4;
 
-extern st_500120_4 *g_6168dc;
+extern st_500120_4 *g_engfuncs.pfnIndexOfEdict;
 
 st_500120_3 * AddAnimationAFix__12CPlayerMeleeG6VectorbfPCc(st_500120_1 *a0, int a1, char a2, float a3, int a4)
 {
@@ -32,13 +32,13 @@ st_500120_3 * AddAnimationAFix__12CPlayerMeleeG6VectorbfPCc(st_500120_1 *a0, int
     char v2;  // [bp-0x24]
 
     v1 = _INSERT(0, 0, a2);
-    v4 = sub_48b670(a0, v1, a3, 1, a4);
+    v4 = CPlayerMelee::AddAnimation(a0, v1, a3, 1, a4);
     if (v4)
     {
         v4->field_298 = 1;
-        sub_488860(&v2, a1);
+        UTIL_VecToAngles(&v2, a1);
         v0 = &v2;
-        sub_48da70(g_6168dc(*(int *)(*(int *)a0->field_124 + 520)));
+        UTIL_Model_FixAngles(g_engfuncs.pfnIndexOfEdict(*(int *)(*(int *)a0->field_124 + 520)));
     }
     return v4;
 }

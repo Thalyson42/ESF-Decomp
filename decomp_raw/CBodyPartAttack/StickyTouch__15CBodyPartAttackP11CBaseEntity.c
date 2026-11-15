@@ -130,11 +130,11 @@ float StickyTouch__15CBodyPartAttackP11CBaseEntity(st_493e70_6 *a0, st_493e70_5 
             a0->field_18 = 0;
             a0->field_0->field_12c = 0;
             a0->field_0->field_130 = 0;
-            v5 = sub_48afe0(a0, "wrap");
+            v5 = CBaseAnimating::LookupSequence(a0, "wrap");
             a0->field_0->field_128 = v5;
-            a0->field_c = _INSERT(sub_488850(a0), 0, 0) | 0xffff0000;
+            a0->field_c = _INSERT(CBaseAnimating::ResetSequenceInfo(a0), 0, 0) | 0xffff0000;
             a0->field_10 = &StrangleThink__15CBodyPartAttack;
-            sub_48b980(a0, a0->field_0->field_128);
+            CBaseAnimating::GetAnimTime(a0, a0->field_0->field_128);
             a0->field_0->field_104 = (float)(v7 + *(float *)gpGlobals);
             return v8;
         }
@@ -146,7 +146,7 @@ float StickyTouch__15CBodyPartAttackP11CBaseEntity(st_493e70_6 *a0, st_493e70_5 
     else
     {
         memset(&a0->field_0->field_128, 0, 12);
-        sub_488850(a0);
+        CBaseAnimating::ResetSequenceInfo(a0);
         v13 = a0->field_0;
         v1 = 0;
         v2 = 0;
@@ -154,7 +154,7 @@ float StickyTouch__15CBodyPartAttackP11CBaseEntity(st_493e70_6 *a0, st_493e70_5 
         v13->field_20 = v1;
         v13->field_24 = v2;
         v13->field_28 = v3;
-        sub_48b5d0(a0);
+        CBaseEntity::SUB_StartFadeOut(a0);
         return v14;
     }
 }

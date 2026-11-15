@@ -123,16 +123,16 @@ LABEL_51b1c9:
             v2 = 0;
             v1 = v12;
             v0 = &a0->field_0->field_8;
-            return sub_4897b0(a0->field_0->field_208);
+            return UTIL_EmitAmbientSound(a0->field_0->field_208);
         }
 LABEL_51b343:
         if (a0->field_d0)
             a0->field_cc = 1;
         else
-            sub_4897b0(a0->field_0->field_208, &a0->field_0->field_8, v12, 0, 0, 32, 0);
-        sub_48a760(a0);
+            UTIL_EmitAmbientSound(a0->field_0->field_208, &a0->field_0->field_8, v12, 0, 0, 32, 0);
+        CAmbientGeneric::InitModulationParms(a0);
         v10 = (float)((double)a0->field_b4 * 0.01);
-        sub_4897b0(a0->field_0->field_208, &a0->field_0->field_8, v12, v10, *(float *)&a0->field_64, 0, a0->field_a4);
+        UTIL_EmitAmbientSound(a0->field_0->field_208, &a0->field_0->field_8, v12, v10, *(float *)&a0->field_64, 0, a0->field_a4);
     }
     else
     {
@@ -150,7 +150,7 @@ LABEL_51b343:
                 v2 = 0;
                 v1 = v12;
                 v0 = &a0->field_0->field_8;
-                return sub_4897b0(a0->field_0->field_208);
+                return UTIL_EmitAmbientSound(a0->field_0->field_208);
             }
             a0->field_78 = a0->field_ac;
             a0->field_74 = 0;

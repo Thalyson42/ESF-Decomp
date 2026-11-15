@@ -2,6 +2,6 @@
 int Spawn__12CTriggerOnce(float a0)
 {
     *(float *)(*(unsigned int *)&a0 + 140) = -1.0f;
-    return sub_48d350(a0);
+    return CTriggerMultiple::Spawn(a0);
 }
 

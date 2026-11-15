@@ -3,7 +3,7 @@ typedef struct st_4b1cf0_0 {
     unsigned int field_0;
 } st_4b1cf0_0;
 
-extern st_4b1cf0_0 *g_61692c;
+extern st_4b1cf0_0 *g_engfuncs.pfnRandomFloat;
 
 char RandomArea__10CLightning(float a0)
 {
@@ -78,11 +78,11 @@ char RandomArea__10CLightning(float a0)
         v36 = *(float *)&v40[1];
         v41 = *&v40[2];
         *(unsigned int *)&v37 = v41;
-        g_61692c(0xbf800000, 0x3f800000);
+        g_engfuncs.pfnRandomFloat(0xbf800000, 0x3f800000);
         v3 = v41;
-        g_61692c(0xbf800000, 0x3f800000);
+        g_engfuncs.pfnRandomFloat(0xbf800000, 0x3f800000);
         v2 = v41;
-        g_61692c(0xbf800000, 0x3f800000);
+        g_engfuncs.pfnRandomFloat(0xbf800000, 0x3f800000);
         v31 = v3;
         v42 = v2;
         v33 = v42;
@@ -91,7 +91,7 @@ char RandomArea__10CLightning(float a0)
         v44 = *(float *)&v3 * *(float *)&v31 + __int_as_float(v42) * __int_as_float(v42) + v43 * v43;
         v45 = sqrt(v44);
         if (isnan(v45))
-            sub_487dc0(*(unsigned int *)&v44);
+            sqrt(*(unsigned int *)&v44);
         else
             v44 = v45;
         v22 = (float)v44;
@@ -121,18 +121,18 @@ char RandomArea__10CLightning(float a0)
         v18 = (float)(v49 + v35);
         v19 = (float)(v50 + v36);
         v20 = v37 + v12;
-        sub_487b80(&v35, &v18, 1, *(int *)(*(int *)a0 + 520), &v21);
+        UTIL_TraceLine(&v35, &v18, 1, *(int *)(*(int *)a0 + 520), &v21);
         v39 = v23;
         i = v51;
         if (v39 != 1.0)
         {
             do
             {
-                g_61692c(0xbf800000, 0x3f800000);
+                g_engfuncs.pfnRandomFloat(0xbf800000, 0x3f800000);
                 v1 = (float)v39;
-                g_61692c(0xbf800000, 0x3f800000);
+                g_engfuncs.pfnRandomFloat(0xbf800000, 0x3f800000);
                 v0 = (float)v39;
-                g_61692c(0xbf800000, 0x3f800000);
+                g_engfuncs.pfnRandomFloat(0xbf800000, 0x3f800000);
                 v13 = v1;
                 v14 = v0;
                 v15 = (float)i;
@@ -145,7 +145,7 @@ char RandomArea__10CLightning(float a0)
             v53 = v10 * v10 + v11 * v11 + v12 * v12;
             v54 = sqrt(v53);
             if (isnan(v54))
-                sub_487dc0(*(unsigned int *)&v53);
+                sqrt(*(unsigned int *)&v53);
             else
                 v53 = v54;
             v19 = (float)v53;
@@ -172,7 +172,7 @@ char RandomArea__10CLightning(float a0)
             v13 = v16 + v35;
             v14 = v17 + v36;
             v15 = v37 + v18;
-            sub_487b80(&v35, &v13, 1, *(int *)(*(int *)a0 + 520), &v5);
+            UTIL_TraceLine(&v35, &v13, 1, *(int *)(*(int *)a0 + 520), &v5);
             v39 = 1.0;
             if (v6 != 1.0f)
             {
@@ -185,18 +185,18 @@ char RandomArea__10CLightning(float a0)
                 v60 = v57 * v57 + v58 * v58 + v59 * v59;
                 v61 = sqrt(v60);
                 if (isnan(v61))
-                    sub_487dc0(*(unsigned int *)&v60);
+                    sqrt(*(unsigned int *)&v60);
                 else
                     v60 = v61;
                 v19 = (float)v60;
                 v39 = 0.1 * *(float *)(*(unsigned int *)&a0 + 148);
                 if (v39 <= v19)
                 {
-                    sub_487b80(&v24, &v7, 1, *(int *)(*(int *)a0 + 520), &v5);
+                    UTIL_TraceLine(&v24, &v7, 1, *(int *)(*(int *)a0 + 520), &v5);
                     v39 = 1.0;
                     if (v6 == 1.0f)
                     {
-                        v62 = sub_487e40(a0, &v24, &v7);
+                        v62 = CLightning::Zap(a0, &v24, &v7);
                         return v62;
                     }
                 }

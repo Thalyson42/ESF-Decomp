@@ -37,9 +37,9 @@ typedef struct st_4bbde0_0 {
 
 extern char ExplodeTouch__16CExplodingAttackP11CBaseEntity;
 extern unsigned int gmsgPowerStruggle;
-extern st_4bbde0_0 *g_616878;
-extern st_4bbde0_0 *g_61687c;
-extern st_4bbde0_0 *g_616884;
+extern st_4bbde0_0 *g_engfuncs.pfnMessageBegin;
+extern st_4bbde0_0 *g_engfuncs.pfnMessageEnd;
+extern st_4bbde0_0 *g_engfuncs.pfnWriteChar;
 extern st_4bbde0_1 *gpGlobals;
 extern char g_800000;
 
@@ -92,7 +92,7 @@ double BlockStruggleThink__16CExplodingAttack(float idx)
     float v20;  // [bp-0x20]
     int v21;  // [bp-0x8], Other Possible Types: unsigned int
 
-    if (!sub_48b6d0(idx, *(int *)(*(unsigned int *)&idx + 700)))
+    if (!CMagicAttack::BlocksAttack(idx, *(int *)(*(unsigned int *)&idx + 700)))
     {
         (*(int *)(*(int *)(*(unsigned int *)&idx + 96) + 0x200))(idx);
         return v23;
@@ -103,10 +103,10 @@ double BlockStruggleThink__16CExplodingAttack(float idx)
     {
         *(unsigned int *)(*(unsigned int *)&idx + 688) = 0;
         v24->field_358 = 0;
-        g_616878(1, gmsgPowerStruggle, 0, *(int *)(*(int *)*(int *)(*(unsigned int *)&idx + 700) + 520));
+        g_engfuncs.pfnMessageBegin(1, gmsgPowerStruggle, 0, *(int *)(*(int *)*(int *)(*(unsigned int *)&idx + 700) + 520));
         v1 = 127;
-        g_616884(v1);
-        g_61687c(v1);
+        g_engfuncs.pfnWriteChar(v1);
+        g_engfuncs.pfnMessageEnd(v1);
         if (*(int *)(*(int *)(*(unsigned int *)&idx + 700) + 800))
             *(unsigned int *)(*(int *)*(int *)(*(unsigned int *)&idx + 700) + 264) = 14;
         else
@@ -142,8 +142,8 @@ double BlockStruggleThink__16CExplodingAttack(float idx)
 LABEL_4bbf8b:
             *(float *)(*(unsigned int *)&idx + 696) = (float)v28;
         }
-        sub_488e40(*(int *)idx + 80);
-        v21 = sub_48a780(*(int *)(*(unsigned int *)&idx + 700));
+        UTIL_MakeAimVectors(*(int *)idx + 80);
+        v21 = CBasePlayer::GetMaxSpeed(*(int *)(*(unsigned int *)&idx + 700));
         v29 = (double)v21;
         v2 = (float)v29;
         if (v27)
@@ -174,7 +174,7 @@ LABEL_4bbf8b:
             v37 = *(float *)(*(int *)idx + 32) * *(float *)(*(int *)idx + 32) + *(float *)&v36[1] * *(float *)&v36[1] + *(float *)&v36[2] * *(float *)&v36[2];
             v38 = sqrt(v37);
             if (isnan(v38))
-                sub_487dc0(*(unsigned int *)&v37);
+                sqrt(*(unsigned int *)&v37);
             else
                 v37 = v38;
             v9 = (float)v37;
@@ -203,13 +203,13 @@ LABEL_4bbf8b:
         *(float *)&v39->padding_21[3] = v7;
         *(float *)&v39->padding_21[7] = v8;
 LABEL_4bc166:
-        g_616878(1, gmsgPowerStruggle, 0, *(int *)(*(int *)*(int *)(*(unsigned int *)&idx + 700) + 520));
+        g_engfuncs.pfnMessageBegin(1, gmsgPowerStruggle, 0, *(int *)(*(int *)*(int *)(*(unsigned int *)&idx + 700) + 520));
         v5 = __fnstcw();
         v4 = v5 | 0xc00;
         v21 = (int)(-*(float *)(*(unsigned int *)&idx + 696) * 100.0);
         v1 = v21;
-        g_616884(v1);
-        g_61687c(v1);
+        g_engfuncs.pfnWriteChar(v1);
+        g_engfuncs.pfnMessageEnd(v1);
         v44 = *(int *)*(int *)(*(unsigned int *)&idx + 700);
         v45 = *(int *)idx;
         *(int *)&v44[2].padding_0[112] = *(int *)&v45->field_20;

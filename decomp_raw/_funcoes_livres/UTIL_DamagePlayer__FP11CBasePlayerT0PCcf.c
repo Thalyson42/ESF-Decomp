@@ -102,7 +102,7 @@ float UTIL_DamagePlayer__FP11CBasePlayerT0PCcf(st_57f1e0_2 **a0, st_57f1e0_5 *a1
         v2 = 0;
         v4 = 0;
         v6 = 0;
-        pDamageEnt.2804 = sub_48b6e0("info_target", &v2, &v12, 0);
+        pDamageEnt.2804 = UTIL_CreateEnt("info_target", &v2, &v12, 0);
         if (!pDamageEnt.2804)
             return v19;
     }
@@ -113,14 +113,14 @@ float UTIL_DamagePlayer__FP11CBasePlayerT0PCcf(st_57f1e0_2 **a0, st_57f1e0_5 *a1
     v7 = a1->field_0->field_50 + v10;
     v8 = *(float *)&v20[1] + v11;
     v9 = *(float *)&v20[2] + v13;
-    sub_489120(&v2, &v7);
-    sub_48a800(&v2);
+    WrapAngles(&v2, &v7);
+    UTIL_MakeVectors(&v2);
     v21 = *(int *)pDamageEnt.2804;
     v22 = v21 + 8;
     v23 = *(float *)&v21[8] * *(float *)&v21[8] + *(float *)&v22[1] * *(float *)&v22[1] + *(float *)&v22[2] * *(float *)&v22[2];
     v24 = sqrt(v23);
     if (isnan(v24))
-        sub_487dc0(*(unsigned int *)&v23);
+        sqrt(*(unsigned int *)&v23);
     else
         v23 = v24;
     v0 = (float)v23;

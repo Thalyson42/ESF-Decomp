@@ -3,7 +3,7 @@ typedef struct st_48f000_0 {
     unsigned int field_0;
 } st_48f000_0;
 
-extern st_48f000_0 *g_6168b4;
+extern st_48f000_0 *g_engfuncs.pfnAlertMessage;
 
 float * GetEyePosition__FPvPf(float *a0, unsigned int *a1)
 {
@@ -14,6 +14,6 @@ float * GetEyePosition__FPvPf(float *a0, unsigned int *a1)
         *(float *)&a1[2] = a0[21];
         return a0;
     }
-    return g_6168b4(1, "GetEyePosition() Can't get pstudiohdr ptr!\n");
+    return g_engfuncs.pfnAlertMessage(1, "GetEyePosition() Can't get pstudiohdr ptr!\n");
 }
 

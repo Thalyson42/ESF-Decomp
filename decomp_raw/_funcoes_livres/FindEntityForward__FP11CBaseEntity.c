@@ -30,8 +30,8 @@ typedef struct st_4fc290_2 {
     unsigned int field_0;
 } st_4fc290_2;
 
-extern st_4fc290_2 *g_6168d4;
-extern st_4fc290_2 *g_6168d8;
+extern st_4fc290_2 *g_engfuncs.pfnPEntityOfEntOffset;
+extern st_4fc290_2 *g_engfuncs.pfnEntOffsetOfPEntity;
 extern st_4fc290_1 *gpGlobals;
 
 unsigned int FindEntityForward__FP11CBaseEntity(st_4fc290_0 **a0)
@@ -59,7 +59,7 @@ unsigned int FindEntityForward__FP11CBaseEntity(st_4fc290_0 **a0)
     float v13;  // [bp-0x34]
     st_4fc290_3 *v14;  // [bp-0x14]
 
-    sub_48a800(&*a0->field_74);
+    UTIL_MakeVectors(&*a0->field_74);
     v15 = *a0;
     v16 = &v15->field_8;
     v6 = v15->field_8 + v15->field_174;
@@ -77,18 +77,18 @@ unsigned int FindEntityForward__FP11CBaseEntity(st_4fc290_0 **a0)
     v0 = v15->field_8 + v15->field_174;
     v1 = *(float *)&v16[1] + v15->field_178;
     v2 = *(float *)&v16[2] + v15->field_17c;
-    sub_487b80(&v0, &v9, 0, v15->field_208, &v12);
+    UTIL_TraceLine(&v0, &v9, 0, v15->field_208, &v12);
     if (v13 != 1.0f)
     {
         v20 = 0;
-        if (!v14 || !g_6168d8(v14))
+        if (!v14 || !g_engfuncs.pfnEntOffsetOfPEntity(v14))
             v20 = 1;
         if (!v20)
         {
             v21 = v14;
             if (!v21)
             {
-                v21 = g_6168d4(0);
+                v21 = g_engfuncs.pfnPEntityOfEntOffset(0);
                 if (!v21)
                     return 0;
             }

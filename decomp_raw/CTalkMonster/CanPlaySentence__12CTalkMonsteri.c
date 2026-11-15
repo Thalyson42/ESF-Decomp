@@ -15,6 +15,6 @@ typedef struct st_526170_2 {
 
 unsigned int CanPlaySentence__12CTalkMonsteri(st_526170_2 *a0, unsigned int a1)
 {
-    return (!a1 ? sub_48a4a0(a0) : a0->field_60->field_8c(a0));
+    return (!a1 ? CTalkMonster::FOkToSpeak(a0) : a0->field_60->field_8c(a0));
 }
 

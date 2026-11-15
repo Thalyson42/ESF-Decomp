@@ -15,10 +15,10 @@ typedef struct st_519000_2 {
 } st_519000_2;
 
 extern unsigned int gmsgBlobUpdate;
-extern st_519000_2 *g_616878;
-extern st_519000_2 *g_61687c;
-extern st_519000_2 *g_616888;
-extern st_519000_2 *g_6168dc;
+extern st_519000_2 *g_engfuncs.pfnMessageBegin;
+extern st_519000_2 *g_engfuncs.pfnMessageEnd;
+extern st_519000_2 *g_engfuncs.pfnWriteShort;
+extern st_519000_2 *g_engfuncs.pfnIndexOfEdict;
 
 int UpdateShieldClient__7CShield(st_519000_1 *a0)
 {
@@ -27,10 +27,10 @@ int UpdateShieldClient__7CShield(st_519000_1 *a0)
     unsigned int v2;  // [bp-0x18]
     unsigned int v3;  // [bp-0x14]
 
-    g_616878(2, gmsgBlobUpdate, &a0->field_0->padding_0[8], 0, v1, v2, v3);
-    g_616888(a0->field_64);
-    v0 = g_6168dc(a0->field_0->field_208);
-    g_616888(v0);
-    return g_61687c(v0);
+    g_engfuncs.pfnMessageBegin(2, gmsgBlobUpdate, &a0->field_0->padding_0[8], 0, v1, v2, v3);
+    g_engfuncs.pfnWriteShort(a0->field_64);
+    v0 = g_engfuncs.pfnIndexOfEdict(a0->field_0->field_208);
+    g_engfuncs.pfnWriteShort(v0);
+    return g_engfuncs.pfnMessageEnd(v0);
 }
 

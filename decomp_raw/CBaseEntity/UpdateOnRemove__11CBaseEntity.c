@@ -6,8 +6,8 @@ typedef struct st_522150_0 {
     char field_1a6;
 } st_522150_0;
 
-extern unsigned int g_617170;
-extern int g_61717c;
+extern unsigned int WorldGraph+16;
+extern int WorldGraph+28;
 extern int gGlobalState;
 
 st_522150_0 * UpdateOnRemove__11CBaseEntity(st_522150_0 **a0)
@@ -19,19 +19,19 @@ st_522150_0 * UpdateOnRemove__11CBaseEntity(st_522150_0 **a0)
     if (*a0->field_1a6 & 1)
     {
         v0 = 0;
-        if (0 < g_61717c)
+        if (0 < WorldGraph+28)
         {
             do
             {
                 v1 = v0 * 24;
-                if (*(int *)(g_617170 + v1 + 8) == *a0)
-                    *(unsigned int *)(g_617170 + v1 + 8) = 0;
-            } while ((v0 += 1, v0 < g_61717c));
+                if (*(int *)(WorldGraph+16 + v1 + 8) == *a0)
+                    *(unsigned int *)(WorldGraph+16 + v1 + 8) = 0;
+            } while ((v0 += 1, v0 < WorldGraph+28));
         }
     }
     v2 = *a0;
     if (v2->field_4)
-        v2 = sub_48ba80(&gGlobalState, v2->field_4, 2);
+        v2 = CGlobalState::EntitySetState(&gGlobalState, v2->field_4, 2);
     return v2;
 }
 

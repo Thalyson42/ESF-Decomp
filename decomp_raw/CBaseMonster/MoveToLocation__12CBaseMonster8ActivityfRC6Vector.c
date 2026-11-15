@@ -18,6 +18,6 @@ int MoveToLocation__12CBaseMonster8ActivityfRC6Vector(st_4d4960_0 *a0, unsigned 
     a0->field_220 = *a3;
     a0->field_224 = a3[1];
     a0->field_228 = a3[2];
-    return sub_48d390(a0);
+    return CBaseMonster::FRefreshRoute(a0);
 }
 

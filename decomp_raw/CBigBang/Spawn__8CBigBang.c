@@ -36,6 +36,6 @@ int Spawn__8CBigBang(st_490890_2 *a0)
     a0->field_cc = 0;
     a0->field_d4 = 1650944354;
     a0->field_d8 = 6778465;
-    return sub_48cf50(a0);
+    return CBasePlayerItem::FallInit(a0);
 }
 

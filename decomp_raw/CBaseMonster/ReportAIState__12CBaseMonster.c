@@ -46,9 +46,9 @@ typedef struct st_4d8fe0_0 {
 } st_4d8fe0_0;
 
 extern unsigned int activity_map[4];
-extern unsigned int g_5b52a4[4];
+extern unsigned int activity_map+4[4];
 extern unsigned int pStateNames.1183[4];
-extern st_4d8fe0_2 *g_6168b4;
+extern st_4d8fe0_2 *g_engfuncs.pfnAlertMessage;
 extern st_4d8fe0_0 *gpGlobals;
 
 int ReportAIState__12CBaseMonster(float idx)
@@ -70,11 +70,11 @@ int ReportAIState__12CBaseMonster(float idx)
     float v3;  // [bp-0x34]
 
     *(unsigned int *)&v3 = *(int *)*(int *)idx + gpGlobals->field_98;
-    g_6168b4(1, "%s: ", *(unsigned int *)&v3);
+    g_engfuncs.pfnAlertMessage(1, "%s: ", *(unsigned int *)&v3);
     if ((unsigned int)*(int *)(*(unsigned int *)&idx + 384) <= 7)
     {
         *(unsigned int *)&v3 = pStateNames.1183[*(int *)(*(unsigned int *)&idx + 384)];
-        g_6168b4(1, "State: %s, ", *(unsigned int *)&v3);
+        g_engfuncs.pfnAlertMessage(1, "State: %s, ", *(unsigned int *)&v3);
     }
     v5 = 0;
     while (1)
@@ -88,8 +88,8 @@ int ReportAIState__12CBaseMonster(float idx)
         }
         else
         {
-            *(int *)&v3 = *(int *)(v6 + (char *)&g_5b52a4[0]);
-            g_6168b4(1, "Activity %s, ", *(unsigned int *)&v3);
+            *(int *)&v3 = *(int *)(v6 + (char *)&activity_map+4[0]);
+            g_engfuncs.pfnAlertMessage(1, "Activity %s, ", *(unsigned int *)&v3);
             break;
         }
     }
@@ -99,43 +99,43 @@ int ReportAIState__12CBaseMonster(float idx)
         if (!*(int *)(*(int *)(*(unsigned int *)&idx + 396) + 16))
             v7 = "Unknown";
         *(unsigned int *)&v3 = v7;
-        g_6168b4(1, "Schedule %s, ", *(unsigned int *)&v3);
-        v8 = sub_48bbb0(idx);
+        g_engfuncs.pfnAlertMessage(1, "Schedule %s, ", *(unsigned int *)&v3);
+        v8 = CBaseMonster::GetTask(idx);
         if (!v8)
             goto LABEL_4d912e;
         *(unsigned int *)&v3 = CONCAT(*(int *)(*(unsigned int *)&idx + 400), *v8);
         v2 = "Task %d (#%d), ";
         v1 = 1;
-        v9 = g_6168b4;
+        v9 = g_engfuncs.pfnAlertMessage;
     }
     else
     {
         v2 = "No Schedule, ";
         v1 = 1;
-        v9 = g_6168b4;
+        v9 = g_engfuncs.pfnAlertMessage;
     }
     v9(v1, v2);
 LABEL_4d912e:
     v10 = *(unsigned int *)&idx + 264;
-    if (sub_48d8b0(v10))
+    if (EHANDLE::__opi(v10))
     {
-        v11 = sub_489fd0(v10);
-        g_6168b4(1, "\nEnemy is %s", *(int *)*v11 + gpGlobals->field_98);
+        v11 = EHANDLE::__rf(v10);
+        g_engfuncs.pfnAlertMessage(1, "\nEnemy is %s", *(int *)*v11 + gpGlobals->field_98);
     }
     else
     {
-        g_6168b4(1, "No enemy");
+        g_engfuncs.pfnAlertMessage(1, "No enemy");
     }
     v12 = (st_4d8fe0_3 *)idx;
     if (v12->field_60->field_6c(v12))
     {
-        g_6168b4(1, " Moving ");
+        g_engfuncs.pfnAlertMessage(1, " Moving ");
         if (*(float *)&v12->field_170 > gpGlobals->field_0)
         {
             v3 = *(float *)&v12->field_170 - gpGlobals->field_0;
             v2 = ": Stopped for %.2f. ";
             v1 = 1;
-            v13 = g_6168b4;
+            v13 = g_engfuncs.pfnAlertMessage;
         }
         else
         {
@@ -144,19 +144,19 @@ LABEL_4d912e:
                 goto LABEL_4d9247;
             v2 = ": In stopped anim. ";
             v1 = 1;
-            v13 = g_6168b4;
+            v13 = g_engfuncs.pfnAlertMessage;
         }
         v13(v1, v2, *(unsigned int *)&v3);
     }
 LABEL_4d9247:
-    g_6168b4(1, "\n");
+    g_engfuncs.pfnAlertMessage(1, "\n");
     v15 = (st_4d8fe0_4 **)idx;
     v0 = *v15->field_160;
-    g_6168b4(1, "Yaw speed:%3.1f,Health: %3.1f\n", (unsigned int)(*v15->field_b0 >> 0));
+    g_engfuncs.pfnAlertMessage(1, "Yaw speed:%3.1f,Health: %3.1f\n", (unsigned int)(*v15->field_b0 >> 0));
     if (*v15->field_1a0 & 16)
-        g_6168b4(1, " PRISONER! ");
+        g_engfuncs.pfnAlertMessage(1, " PRISONER! ");
     if (*(char *)(*(int *)idx + 417) & 1)
-        g_6168b4(1, " Pre-Disaster! ");
-    return g_6168b4(1, "\n");
+        g_engfuncs.pfnAlertMessage(1, " Pre-Disaster! ");
+    return g_engfuncs.pfnAlertMessage(1, "\n");
 }
 

@@ -26,7 +26,7 @@ st_4b31f0_0 * TurnOn__6CLaser(st_4b31f0_1 *a0)
 
     a0->field_0->field_118 = a0->field_0->field_118 & 127;
     if (a0->field_64)
-        sub_487b90(a0->field_64);
+        CSprite::TurnOn(a0->field_64);
     *(float *)&a0->field_0->field_1e4 = *(float *)gpGlobals;
     v0 = a0->field_0;
     *(float *)&v0->field_104 = *(float *)gpGlobals;

@@ -21,8 +21,8 @@ typedef struct st_4feb30_2 {
     unsigned int field_0;
 } st_4feb30_2;
 
-extern st_4feb30_2 *g_6167f8;
-extern st_4feb30_2 *g_6168d8;
+extern st_4feb30_2 *g_engfuncs.pfnFindEntityByString;
+extern st_4feb30_2 *g_engfuncs.pfnEntOffsetOfPEntity;
 extern st_4feb30_1 *gpGlobals;
 
 double Think__17CInfoIntermission(st_4feb30_0 **a0)
@@ -52,9 +52,9 @@ double Think__17CInfoIntermission(st_4feb30_0 **a0)
     unsigned int v10;  // [bp-0x20]
     unsigned int v11;  // [bp-0x1c]
 
-    v12 = g_6167f8(0, "targetname", *a0->field_1c8 + gpGlobals->field_98);
+    v12 = g_engfuncs.pfnFindEntityByString(0, "targetname", *a0->field_1c8 + gpGlobals->field_98);
     v13 = 0;
-    if (!v12 || !g_6168d8(v12))
+    if (!v12 || !g_engfuncs.pfnEntOffsetOfPEntity(v12))
         v13 = 1;
     if (v13)
         return v24;
@@ -71,7 +71,7 @@ double Think__17CInfoIntermission(st_4feb30_0 **a0)
     v20 = v17 * v17 + v18 * v18 + v19 * v19;
     v21 = sqrt(v20);
     if (isnan(v21))
-        sub_487dc0(*(unsigned int *)&v20);
+        sqrt(*(unsigned int *)&v20);
     else
         v20 = v21;
     v1 = (float)v20;
@@ -88,7 +88,7 @@ double Think__17CInfoIntermission(st_4feb30_0 **a0)
         v6 = (float)(v22 * v3);
         v7 = (float)(v22 * v4);
     }
-    sub_488860(v0, &v5);
+    UTIL_VecToAngles(v0, &v5);
     *(unsigned int *)&v14->field_74 = v8;
     v14->field_78 = v10;
     v14->field_7c = v11;

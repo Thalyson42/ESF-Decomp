@@ -68,19 +68,19 @@ unsigned int __throw_type_match_rtti(st_597068_2 *a0, st_597068_2 *a1, unsigned 
 
     sub_597064(v0, v1, v2);
     v12 = &v11->field_7ca66;
-    if ((char)sub_48be00(a0, a1))
+    if ((char)type_info::__eq(a0, a1))
         return a2;
     v10 = 0;
-    if (a1 && (v13 = sub_48df30(a1->field_4->field_4, v12[2082], 1, &a1->padding_0[a1->field_4->field_0], v12[2200], a1), v13))
+    if (a1 && (v13 = __dynamic_cast(a1->field_4->field_4, v12[2082], 1, &a1->padding_0[a1->field_4->field_0], v12[2200], a1), v13))
     {
         a2 = v13->field_4[1].field_4(v13, a0, 1, a2, 0, 0);
         goto LABEL_5974ec;
     }
-    if (a1 && (v8 = v12[2200], v9 = sub_48df30(a1->field_4->field_4, v12[2741], 1, &a1->padding_0[a1->field_4->field_0], v12[2200], a1), v9 && a0 && (v14 = sub_48df30(a0->field_4->field_4, v12[2741], 1, &a0->padding_0[a0->field_4->field_0], v8, a0), v14)))
+    if (a1 && (v8 = v12[2200], v9 = __dynamic_cast(a1->field_4->field_4, v12[2741], 1, &a1->padding_0[a1->field_4->field_0], v12[2200], a1), v9 && a0 && (v14 = __dynamic_cast(a0->field_4->field_4, v12[2741], 1, &a0->padding_0[a0->field_4->field_0], v8, a0), v14)))
     {
         v15 = v9->field_8;
         v7 = v14->field_8;
-        if (v15 && !(v16 = sub_48df30(v15->field_4->field_4, v12[2189], 1, &v15->padding_0[v15->field_4->field_0], v8, v15), !v16))
+        if (v15 && !(v16 = __dynamic_cast(v15->field_4->field_4, v12[2189], 1, &v15->padding_0[v15->field_4->field_0], v8, v15), !v16))
         {
             v17 = v16->field_c;
             v15 = v16->field_8;
@@ -89,7 +89,7 @@ unsigned int __throw_type_match_rtti(st_597068_2 *a0, st_597068_2 *a1, unsigned 
         {
             v17 = 0;
         }
-        if (v7 && !(v18 = sub_48df30(v7->field_4->field_4, v12[2189], 1, &v7->padding_0[v7->field_4->field_0], v12[2200], v7), !v18))
+        if (v7 && !(v18 = __dynamic_cast(v7->field_4->field_4, v12[2189], 1, &v7->padding_0[v7->field_4->field_0], v12[2200], v7), !v18))
         {
             v6 = v18->field_c;
             v7 = v18->field_8;
@@ -100,29 +100,29 @@ unsigned int __throw_type_match_rtti(st_597068_2 *a0, st_597068_2 *a1, unsigned 
         }
         if ((int)(v17 & 1) <= (int)(v6 & 1) && (int)(v17 & 2) <= (int)(v6 & 2))
         {
-            if ((char)sub_48be00(v7, v15))
+            if ((char)type_info::__eq(v7, v15))
             {
 LABEL_5974e9:
 LABEL_5974ec:
                 v10 = a2;
             }
-            else if ((char)sub_48be00(v7, sub_489480()) && (!v15 || !sub_48df30(v15->field_4->field_4, v12[2196], 1, &v15->padding_0[v15->field_4->field_0], v12[2200], v15)))
+            else if ((char)type_info::__eq(v7, __tfv()) && (!v15 || !__dynamic_cast(v15->field_4->field_4, v12[2196], 1, &v15->padding_0[v15->field_4->field_0], v12[2200], v15)))
             {
                 v10 = a2;
             }
-            else if (v15 && (v19 = sub_48df30(v15->field_4->field_4, v12[2082], 1, &v15->padding_0[v15->field_4->field_0], v12[2200], v15), v19))
+            else if (v15 && (v19 = __dynamic_cast(v15->field_4->field_4, v12[2082], 1, &v15->padding_0[v15->field_4->field_0], v12[2200], v15), v19))
             {
                 a2 = v19->field_4[1].field_4(v19, v7, 1, a2, 0, 0);
                 goto LABEL_5974ec;
             }
-            else if (v15 && (v5 = v12[2200], v4 = v12[2741], v20 = sub_48df30(v15->field_4->field_4, v12[2741], 1, &v15->padding_0[v15->field_4->field_0], v12[2200], v15), v20 && v7 && (v21 = sub_48df30(v7->field_4->field_4, v4, 1, &v7->padding_0[v7->field_4->field_0], v5, v7), v21 = v21, v21)))
+            else if (v15 && (v5 = v12[2200], v4 = v12[2741], v20 = __dynamic_cast(v15->field_4->field_4, v12[2741], 1, &v15->padding_0[v15->field_4->field_0], v12[2200], v15), v20 && v7 && (v21 = __dynamic_cast(v7->field_4->field_4, v4, 1, &v7->padding_0[v7->field_4->field_0], v5, v7), v21 = v21, v21)))
             {
                 v3 = (char)v6 & 1;
                 while (1)
                 {
                     v7 = v21->field_8;
                     v22 = v20->field_8;
-                    if (v22 && !(v23 = sub_48df30(v22->field_4->field_4, v12[2189], 1, &v22->padding_0[v22->field_4->field_0], v12[2200], v22), !v23))
+                    if (v22 && !(v23 = __dynamic_cast(v22->field_4->field_4, v12[2189], 1, &v22->padding_0[v22->field_4->field_0], v12[2200], v22), !v23))
                     {
                         v24 = v23->field_c;
                         v22 = v23->field_8;
@@ -131,7 +131,7 @@ LABEL_5974ec:
                     {
                         v24 = 0;
                     }
-                    if (v7 && !(v25 = sub_48df30(v7->field_4->field_4, v12[2189], 1, &v7->padding_0[v7->field_4->field_0], v12[2200], v7), !v25))
+                    if (v7 && !(v25 = __dynamic_cast(v7->field_4->field_4, v12[2189], 1, &v7->padding_0[v7->field_4->field_0], v12[2200], v7), !v25))
                     {
                         v6 = v25->field_c;
                         v7 = v25->field_8;
@@ -142,11 +142,11 @@ LABEL_5974ec:
                     }
                     if ((int)(v24 & 1) > (int)(v6 & 1) || (v28 = v24 & 2, v29 = v6 & 2, (int)(v24 & 2) > (int)(v6 & 2) || !v3 && ((int)(v24 & 1) < (int)(v6 & 1) || (int)(v24 & 2) < (int)(v6 & 2))))
                         break;
-                    if ((char)sub_48be00(v7, v22))
+                    if ((char)type_info::__eq(v7, v22))
                         goto LABEL_5974e9;
-                    v21 = (!v7 ? NULL : sub_48df30(v7->field_4->field_4, v12[2741], 1, &v7->padding_0[v7->field_4->field_0], v12[2200], v7));
+                    v21 = (!v7 ? NULL : __dynamic_cast(v7->field_4->field_4, v12[2741], 1, &v7->padding_0[v7->field_4->field_0], v12[2200], v7));
                     v21 = v21;
-                    v20 = (!v22 ? NULL : sub_48df30(v22->field_4->field_4, v12[2741], 1, &v22->padding_0[v22->field_4->field_0], v12[2200], v22));
+                    v20 = (!v22 ? NULL : __dynamic_cast(v22->field_4->field_4, v12[2741], 1, &v22->padding_0[v22->field_4->field_0], v12[2200], v22));
                     if (!v21 || !v20)
                         break;
                     if (!((char)v6 & 1))

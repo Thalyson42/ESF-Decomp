@@ -75,7 +75,7 @@ unsigned int GetUpperBodyAnimation__11CBasePlayerRi(st_4f4ca0_1 *a0, unsigned in
     v11 = (float)a0->field_0[32] * (float)a0->field_0[32] + (float)a0->field_0[36] * (float)a0->field_0[36];
     v12 = sqrt(v11);
     if (isnan(v12))
-        sub_487dc0(*(unsigned int *)&v11);
+        sqrt(*(unsigned int *)&v11);
     else
         v11 = v12;
     v6 = (float)v11;
@@ -89,7 +89,7 @@ unsigned int GetUpperBodyAnimation__11CBasePlayerRi(st_4f4ca0_1 *a0, unsigned in
     {
         a0->field_178 = 29;
         strcpy(&v10, "ref_shoot2_");
-        sub_48c150(&v10, &a0[1].padding_17c[168]);
+        strcat@GLIBC_2.0(&v10, &a0[1].padding_17c[168]);
         v1 = &v10;
         goto LABEL_4f534d;
     }
@@ -98,7 +98,7 @@ unsigned int GetUpperBodyAnimation__11CBasePlayerRi(st_4f4ca0_1 *a0, unsigned in
     {
         v13->field_178 = 80;
         strcpy(&v10, "ref2_charge_");
-        sub_48c150(&v10, &v13[1].padding_17c[168]);
+        strcat@GLIBC_2.0(&v10, &v13[1].padding_17c[168]);
         v1 = &v10;
         v0 = a0;
         goto LABEL_4f5361;
@@ -108,7 +108,7 @@ unsigned int GetUpperBodyAnimation__11CBasePlayerRi(st_4f4ca0_1 *a0, unsigned in
         a0->field_178 = 80;
         strcpy(&v10, "ref_charge_");
 LABEL_4f4e13:
-        sub_48c150(&v10, &a0[1].padding_17c[168]);
+        strcat@GLIBC_2.0(&v10, &a0[1].padding_17c[168]);
         v1 = &v10;
         goto LABEL_4f535d;
     }
@@ -165,15 +165,15 @@ LABEL_4f4ee2:
         v3 = &v10;
         v2 = a0;
 LABEL_4f4eed:
-        v26 = sub_48afe0(v2, v3);
+        v26 = CBaseAnimating::LookupSequence(v2, v3);
     }
     else
     {
         a0->field_178 = 3;
         strcpy(&v10, "ref_aim_");
-        sub_48c150(&v10, &a0[1].padding_17c[168]);
+        strcat@GLIBC_2.0(&v10, &a0[1].padding_17c[168]);
         v0 = a0;
-        v26 = sub_48afe0(v0, &v10);
+        v26 = CBaseAnimating::LookupSequence(v0, &v10);
         if (v26 == 0xffffffff)
             v26 = 0;
         if (!v26)
@@ -184,7 +184,7 @@ LABEL_4f4eed:
                 if ((int)v28->field_0[448] > 1)
                 {
                     v5 = v6;
-                    v9 = sub_48a780(v28);
+                    v9 = CBasePlayer::GetMaxSpeed(v28);
                     if ((double)v9 / 1.6 >= v5)
                     {
                         v32 = a0;
@@ -201,7 +201,7 @@ LABEL_4f4eed:
                     }
                     else
                     {
-                        v31 = sub_488bc0(a0, 6);
+                        v31 = CBaseAnimating::LookupActivity(a0, 6);
                         goto LABEL_4f5366;
                     }
                 }
@@ -241,14 +241,14 @@ LABEL_4f50c8:
                                 goto LABEL_4f512a;
                             }
 LABEL_4f511c:
-                            v31 = sub_488bc0(v32);
+                            v31 = CBaseAnimating::LookupActivity(v32);
                             goto LABEL_4f5366;
                         }
                         else
                         {
 LABEL_4f512a:
                             v33->field_178 = 7;
-                            v31 = sub_488bc0(v33, 7);
+                            v31 = CBaseAnimating::LookupActivity(v33, 7);
                             goto LABEL_4f5366;
                         }
                     }
@@ -256,13 +256,13 @@ LABEL_4f512a:
                 else
                 {
                     v4 = v6;
-                    v9 = sub_48a780(a0);
+                    v9 = CBasePlayer::GetMaxSpeed(a0);
                     if ((double)v9 / 1.3 < v4 || a0->field_324 && 0.0 < v6)
                     {
                         v40 = a0;
                         if ((char)v40->field_0[384] & 16)
                         {
-                            v26 = sub_48afe0(v40, "run_backward");
+                            v26 = CBaseAnimating::LookupSequence(v40, "run_backward");
                             a0->field_178 = 96;
                         }
                         else
@@ -274,7 +274,7 @@ LABEL_4f512a:
                             }
                             else
                             {
-                                if (sub_48a030(a0))
+                                if (CBasePlayer::CanPlayForwardWalk(a0))
                                 {
                                     v3 = "run";
                                     v2 = a0;
@@ -287,7 +287,7 @@ LABEL_4f5221:
                                     v2 = a0;
                                 }
                             }
-                            v26 = sub_48afe0(v2, v3);
+                            v26 = CBaseAnimating::LookupSequence(v2, v3);
                             a0->field_178 = 95;
                         }
                     }
@@ -298,12 +298,12 @@ LABEL_4f5221:
                             v35 = a0;
                             if ((char)v35->field_0[384] & 16)
                             {
-                                v26 = sub_48afe0(v35, "walk_backward");
+                                v26 = CBaseAnimating::LookupSequence(v35, "walk_backward");
                                 a0->field_178 = 3;
                             }
                             else
                             {
-                                if (sub_48a030(a0))
+                                if (CBasePlayer::CanPlayForwardWalk(a0))
                                 {
                                     v3 = "walk2handed";
                                     v2 = a0;
@@ -313,18 +313,18 @@ LABEL_4f5221:
                                     v3 = "walk_backward";
                                     v2 = a0;
                                 }
-                                v26 = sub_48afe0(v2, v3);
+                                v26 = CBaseAnimating::LookupSequence(v2, v3);
                                 a0->field_178 = 3;
                             }
                         }
                         else
                         {
                             v36 = a0;
-                            v37 = sub_48afe0(v36, "idle");
+                            v37 = CBaseAnimating::LookupSequence(v36, "idle");
                             if ((int)v36->field_0[296] != v37)
                             {
                                 v38 = a0;
-                                v39 = sub_48afe0(v38, "deep_idle");
+                                v39 = CBaseAnimating::LookupSequence(v38, "deep_idle");
                                 if ((int)v38->field_0[296] != v39)
                                     *(float *)&a0->field_58c = *(float *)gpGlobals;
                             }
@@ -343,7 +343,7 @@ LABEL_4f5360:
                                 v0 = v34;
                             }
 LABEL_4f5361:
-                            v31 = sub_48afe0(v0);
+                            v31 = CBaseAnimating::LookupSequence(v0);
 LABEL_4f5366:
                             v26 = v31;
                         }
@@ -352,7 +352,7 @@ LABEL_4f5366:
             }
             else if ((char)a0->field_0[384] & 8)
             {
-                v26 = sub_48afe0(a0, "fly_forward");
+                v26 = CBaseAnimating::LookupSequence(a0, "fly_forward");
                 a0->field_178 = 93;
             }
             else
@@ -360,12 +360,12 @@ LABEL_4f5366:
                 v27 = a0;
                 if ((char)v27->field_0[384] & 16)
                 {
-                    v26 = sub_48afe0(v27, "fly_backward");
+                    v26 = CBaseAnimating::LookupSequence(v27, "fly_backward");
                     a0->field_178 = 94;
                 }
                 else
                 {
-                    v26 = sub_48afe0(a0, "fly_idle");
+                    v26 = CBaseAnimating::LookupSequence(a0, "fly_idle");
                     a0->field_178 = 5;
                 }
             }

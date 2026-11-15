@@ -12,11 +12,11 @@ int PM_DropPunchAngle(double a0, float a1)
     int v3;  // 128
     float v0;  // [bp-0x8]
 
-    sub_489290(a1);
+    VectorNormalize(a1);
     v0 = (float)(v2 - (v2 * 0.5 + 10.0) * pmove->field_10);
     v3 = 0;
     if (v0 > 0.0f)
         v3 = *(int *)&v0;
-    return sub_48d230(a1, v3, a1);
+    return VectorScale(a1, v3, a1);
 }
 

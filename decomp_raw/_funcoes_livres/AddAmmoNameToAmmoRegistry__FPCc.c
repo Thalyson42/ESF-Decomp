@@ -1,7 +1,7 @@
 // AddAmmoNameToAmmoRegistry__FPCc @0x137660 size=134
 extern int giAmmoIndex;
 extern unsigned int _15CBasePlayerItem.AmmoInfoArray[4];
-extern unsigned int g_62f604;
+extern unsigned int _15CBasePlayerItem.AmmoInfoArray+4;
 
 unsigned int AddAmmoNameToAmmoRegistry__FPCc(unsigned int a0)
 {
@@ -16,7 +16,7 @@ unsigned int AddAmmoNameToAmmoRegistry__FPCc(unsigned int a0)
         v1 = v0 * 8;
         if (*(int *)(v1 + (char *)&_15CBasePlayerItem.AmmoInfoArray[0]))
         {
-            v2 = sub_48cac0(*(int *)(v1 + (char *)&_15CBasePlayerItem.AmmoInfoArray[0]), a0);
+            v2 = strcasecmp@GLIBC_2.0(*(int *)(v1 + (char *)&_15CBasePlayerItem.AmmoInfoArray[0]), a0);
             if (!v2)
                 return v2;
         }
@@ -26,7 +26,7 @@ unsigned int AddAmmoNameToAmmoRegistry__FPCc(unsigned int a0)
         giAmmoIndex = 0;
     idx = giAmmoIndex * 8;
     *(unsigned int *)(idx + (char *)&_15CBasePlayerItem.AmmoInfoArray[0]) = a0;
-    *(int *)(idx + (char *)&g_62f604) = giAmmoIndex;
+    *(int *)(idx + (char *)&_15CBasePlayerItem.AmmoInfoArray+4) = giAmmoIndex;
     return idx;
 }
 

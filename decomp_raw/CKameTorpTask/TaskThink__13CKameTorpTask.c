@@ -30,11 +30,11 @@ typedef struct st_551d10_0 {
 } st_551d10_0;
 
 extern unsigned int g_vecZero;
-extern float g_616790;
-extern float g_616794;
+extern float g_vecZero+4;
+extern float g_vecZero+8;
 extern st_551d10_2 g_engfuncs;
-extern st_551d10_1 *g_616928;
-extern st_551d10_1 *g_61692c;
+extern st_551d10_1 *g_engfuncs.pfnRandomLong;
+extern st_551d10_1 *g_engfuncs.pfnRandomFloat;
 extern st_551d10_0 *gpGlobals;
 
 float TaskThink__13CKameTorpTask(float idx)
@@ -69,7 +69,7 @@ float TaskThink__13CKameTorpTask(float idx)
     float v16;  // [bp-0x24]
     float v17;  // [bp-0x20]
 
-    sub_48d0d0(*(int *)(*(unsigned int *)&idx + 8));
+    CBot::ResetMoveSpeed(*(int *)(*(unsigned int *)&idx + 8));
     if (*(float *)(*(unsigned int *)&idx + 48) < *(float *)gpGlobals && 0.0 < *(float *)(*(unsigned int *)&idx + 48))
     {
         *(unsigned int *)(*(unsigned int *)&idx + 44) = 2;
@@ -98,14 +98,14 @@ float TaskThink__13CKameTorpTask(float idx)
             *(unsigned int *)(*(unsigned int *)&idx + 44) = 0;
             if (!v21->field_330)
                 return __int_as_float(v22);
-            sub_48ba60(v21);
+            CBasePlayer::StopPowerUp(v21);
             return __int_as_float(v22);
         }
         else
         {
             if (!*(int *)(*(int *)(*(unsigned int *)&idx + 8) + 816))
             {
-                sub_48dd60(*(int *)(*(unsigned int *)&idx + 8));
+                CBasePlayer::StartPowerUp(*(int *)(*(unsigned int *)&idx + 8));
                 return __int_as_float(v22);
             }
             return __int_as_float(v22);
@@ -125,10 +125,10 @@ float TaskThink__13CKameTorpTask(float idx)
                 goto LABEL_551f41;
             if (!*(char *)(*(unsigned int *)&idx + 40))
             {
-                sub_487b60(&v10, *(int *)(*(unsigned int *)&idx + 8), 1000.0f);
+                GetFurthestCollision(&v10, *(int *)(*(unsigned int *)&idx + 8), 1000.0f);
                 v24 = 0;
-                if (*(float *)&g_vecZero == *(float *)&v10 && g_616790 == v12)
-                    v24 = g_616794 == v14;
+                if (*(float *)&g_vecZero == *(float *)&v10 && g_vecZero+4 == v12)
+                    v24 = g_vecZero+8 == v14;
                 if (!v24)
                 {
                     v15 = v10;
@@ -138,7 +138,7 @@ float TaskThink__13CKameTorpTask(float idx)
                     v2 = v15;
                     v3 = v16;
                     v6 = v17;
-                    sub_48a170(&v7, v25, &v2);
+                    CBot::GetAimAngles(&v7, v25, &v2);
                     *(unsigned int *)&v25->padding_b70[160] = v7;
                     *(unsigned int *)&v25->padding_b70[164] = v8;
                     *(unsigned int *)&v25->padding_b70[168] = v9;
@@ -154,28 +154,28 @@ LABEL_551f41:
                 v5 = __fnstcw();
                 v4 = v5 | 0xc00;
                 v2 = (int)*(float *)(*(int *)*(int *)(*(unsigned int *)&idx + 8) + 608);
-                if (v2 > 10 && !(char)sub_48bf70(*(int *)(*(unsigned int *)&idx + 8), *(int *)(*(unsigned int *)&idx + 16)))
+                if (v2 > 10 && !(char)CBot::CanAttackPlayer(*(int *)(*(unsigned int *)&idx + 8), *(int *)(*(unsigned int *)&idx + 16)))
                     return *(float *)(*(int *)*(int *)(*(unsigned int *)&idx + 8) + 608);
             }
         }
-        if (!g_616928(0, 4))
+        if (!g_engfuncs.pfnRandomLong(0, 4))
             *(char *)(*(int *)(*(unsigned int *)&idx + 12) + 513) = *(char *)(*(int *)(*(unsigned int *)&idx + 12) + 513) | 8;
         v26 = *(float *)(*(unsigned int *)&idx + 52);
         if (v26 < *(float *)gpGlobals)
             *(unsigned int *)(*(unsigned int *)&idx + 4) = 2;
-        if ((unsigned short)sub_48dae0(idx))
+        if ((unsigned short)CKameTorpTask::CountTorps(idx))
             return v26;
         *(unsigned int *)(*(unsigned int *)&idx + 4) = 2;
         return v26;
     }
     else if (!*(int *)(*(unsigned int *)&idx + 44))
     {
-        sub_48b890(idx);
+        CKameTorpTask::ChargeKameTorps(idx);
         return __int_as_float(v20);
     }
     else if (*(int *)(*(unsigned int *)&idx + 44) == 3)
     {
-        sub_488e30(*(int *)(*(unsigned int *)&idx + 8), *(int *)(*(unsigned int *)&idx + 28));
+        CBot::SetMoveDir(*(int *)(*(unsigned int *)&idx + 8), *(int *)(*(unsigned int *)&idx + 28));
         v27 = *(float *)(*(unsigned int *)&idx + 24);
         if (v27 > *(float *)gpGlobals)
             return v27;
@@ -195,10 +195,10 @@ LABEL_551f41:
     else if (*(float *)(*(unsigned int *)&idx + 36) < *(float *)gpGlobals)
     {
         v1 = &g_engfuncs.padding_0[0];
-        g_61692c(1.75f, 2.75f);
+        g_engfuncs.pfnRandomFloat(1.75f, 2.75f);
         v28 = 1.75 + *(float *)gpGlobals;
         *(float *)(*(unsigned int *)&idx + 36) = (float)v28;
-        if (!(char)sub_487f70(idx))
+        if (!(char)CKameTorpTask::SetMoveAwayDir(idx))
             return v28;
         *(unsigned int *)(*(unsigned int *)&idx + 44) = 3;
         v1->field_16c(0.12999999523162842f, 0.25f);
@@ -210,7 +210,7 @@ LABEL_551f41:
     else if (*(float *)(*(unsigned int *)&idx + 32) < *(float *)gpGlobals)
     {
         v0 = &g_engfuncs.padding_0[0];
-        g_61692c(0.3499999940395355f, 0.75f);
+        g_engfuncs.pfnRandomFloat(0.3499999940395355f, 0.75f);
         *(float *)(*(unsigned int *)&idx + 32) = (float)(0.3499999940395355 + *(float *)gpGlobals);
         if (!*(int *)(*(int *)(*(unsigned int *)&idx + 8) + 0xff0))
         {
@@ -219,10 +219,10 @@ LABEL_551f41:
         }
         else
         {
-            g_61692c(40.0f, 50.0f);
+            g_engfuncs.pfnRandomFloat(40.0f, 50.0f);
             v29 = *(float *)(*(int *)(*(unsigned int *)&idx + 8) + 3092) - 40.0;
         }
-        sub_48d430((float)v29);
+        UTIL_WrapAngle((float)v29);
         *(float *)(*(int *)(*(unsigned int *)&idx + 8) + 3092) = (float)v29;
         return v29;
     }

@@ -6,7 +6,7 @@ void Reset__6CSwoop(unsigned int *a0)
     *a0 = 0xffffffff;
     a0[1] = 0;
     a0[2] = 0;
-    sub_489d40(a0);
+    CSwoop::ResetAllDT(a0);
     a0[30] = 0;
     return;
 }

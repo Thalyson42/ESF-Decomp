@@ -6,6 +6,6 @@ typedef struct st_5106a0_0 {
 
 int EmitChargeSound__12CScatterBeam(st_5106a0_0 *a0)
 {
-    return sub_48d4f0(a0->field_80, "scatterbeamha_charge.wav");
+    return CBasePlayer::EmitClassSound(a0->field_80, "scatterbeamha_charge.wav");
 }
 

@@ -54,7 +54,7 @@ typedef struct st_508870_1 {
     unsigned int field_30;
 } st_508870_1;
 
-extern st_508870_0 *g_6168dc;
+extern st_508870_0 *g_engfuncs.pfnIndexOfEdict;
 extern st_508870_1 *gpGlobals;
 
 int StartPrePunchAttack__12CPlayerMelee(float idx)
@@ -91,12 +91,12 @@ int StartPrePunchAttack__12CPlayerMelee(float idx)
     float v18;  // [bp-0x10]
 
     v6 = 9;
-    v5 = g_6168dc(*(int *)(*(int *)*(int *)(*(unsigned int *)&idx + 296) + 520));
+    v5 = g_engfuncs.pfnIndexOfEdict(*(int *)(*(int *)*(int *)(*(unsigned int *)&idx + 296) + 520));
     v1 = *(int *)(*(int *)*(int *)(*(unsigned int *)&idx + 292) + 520);
-    sub_48dc20(g_6168dc(v1));
-    sub_489e00(*(int *)(*(unsigned int *)&idx + 304));
+    UTIL_Model_Connect(g_engfuncs.pfnIndexOfEdict(v1));
+    CPlayerMelee::SetAtkBehindAndBlocking(*(int *)(*(unsigned int *)&idx + 304));
     *(unsigned short *)&v1 = 1;
-    sub_48b670(idx, v1, gpGlobals->field_0, 1, "ref_autopunch");
+    CPlayerMelee::AddAnimation(idx, v1, gpGlobals->field_0, 1, "ref_autopunch");
     v21 = *(int *)(*(unsigned int *)&idx + 304);
     if (*(int *)(*(int *)(*(unsigned int *)&idx + 304) + 216))
     {
@@ -126,7 +126,7 @@ LABEL_508968:
             v21 = *(int *)(*(unsigned int *)&idx + 304);
         }
     }
-    sub_48b670(v21, v1, v2, v3, v4);
+    CPlayerMelee::AddAnimation(v21, v1, v2, v3, v4);
     v23 = (st_508870_2 *)idx;
     *(float *)&v23->field_90 = gpGlobals->field_0;
     v23->field_94 = 0;
@@ -144,7 +144,7 @@ LABEL_508968:
         v24 = *(float *)(*(unsigned int *)&idx + 280) == 0.0f;
     if (v24)
     {
-        sub_48a800(*(int *)*(int *)(*(unsigned int *)&idx + 292) + 116);
+        UTIL_MakeVectors(*(int *)*(int *)(*(unsigned int *)&idx + 292) + 116);
         v25 = (unsigned int *)idx;
         v25[0x44] = gpGlobals->field_28;
         v25[69] = gpGlobals->field_2c;
@@ -168,10 +168,10 @@ LABEL_508968:
     v16 = (float)(v29 + *(float *)(*(int *)v27->field_128 + 8));
     v17 = (float)(v30 + *(float *)&v31[1]);
     v18 = *(float *)&v31[2] + v9;
-    sub_48db50(*(int *)v27->field_124, &v16);
-    sub_488860(&v16, &v11);
+    UTIL_SetOrigin(*(int *)v27->field_124, &v16);
+    UTIL_VecToAngles(&v16, &v11);
     v0 = &v16;
-    sub_487b20(g_6168dc(*(int *)(*(int *)*(int *)(*(unsigned int *)&idx + 292) + 520)));
-    return sub_489390(sub_48be70(idx), 4, "weapons/prepunch1.wav", 0x3f800000, 0.800000011920929f, 0, 100);
+    UTIL_Model_MeleeStruggle_Anglefix(g_engfuncs.pfnIndexOfEdict(*(int *)(*(int *)*(int *)(*(unsigned int *)&idx + 292) + 520)));
+    return EMIT_SOUND_DYN(CPlayerMelee::GetSoundEdict(idx), 4, "weapons/prepunch1.wav", 0x3f800000, 0.800000011920929f, 0, 100);
 }
 

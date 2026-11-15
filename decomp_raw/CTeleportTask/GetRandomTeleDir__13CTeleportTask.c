@@ -21,7 +21,7 @@ typedef struct st_582850_3 {
 } st_582850_3;
 
 extern unsigned int FindSelection__t12TMultiChoice1ZiPQ2t12TMultiChoice1Zi12SMultiChoicei;
-extern st_582850_3 *g_616928;
+extern st_582850_3 *g_engfuncs.pfnRandomLong;
 
 int GetRandomTeleDir__13CTeleportTask(st_582850_2 *a0)
 {
@@ -112,13 +112,13 @@ int GetRandomTeleDir__13CTeleportTask(st_582850_2 *a0)
     st_582850_0 **v36;  // [bp-0x8], Other Possible Types: unsigned int
 
     iter = 0;
-    v37 = sub_48d6a0(8);
+    v37 = __builtin_new(8);
     *v37 = NULL;
     v37[1] = NULL;
     v36 = v37;
-    if (!(char)sub_487c70(a0->field_c, 2, 350.0f))
+    if (!(char)CheckForCollide(a0->field_c, 2, 350.0f))
     {
-        v38 = sub_48d6a0(12);
+        v38 = __builtin_new(12);
         *v38 = 0;
         v38[1] = 0;
         v33 = v38;
@@ -128,15 +128,15 @@ int GetRandomTeleDir__13CTeleportTask(st_582850_2 *a0)
         v39 = v36;
         if (!*v39)
         {
-            v40 = sub_48d6a0(12);
+            v40 = __builtin_new(12);
             v32 = 1;
             v40->field_4 = NULL;
             v40->field_8 = NULL;
-            sub_48d0e0(v40, 0, 4);
+            memset@GLIBC_2.0(v40, 0, 4);
             v32 = 0;
             *v39 = v40;
             if (v32)
-                sub_48d4e0(v40);
+                __builtin_delete(v40);
             *v39->field_0 = v33;
             *v39->field_4 = NULL;
             *v39->field_8 = NULL;
@@ -145,15 +145,15 @@ int GetRandomTeleDir__13CTeleportTask(st_582850_2 *a0)
         else
         {
             v31 = v39[1];
-            v41 = sub_48d6a0(12);
+            v41 = __builtin_new(12);
             v30 = 1;
             v41->field_4 = NULL;
             v41->field_8 = NULL;
-            sub_48d0e0(v41, 0, 4);
+            memset@GLIBC_2.0(v41, 0, 4);
             v30 = 0;
             v31->field_4 = v41;
             if (v30)
-                sub_48d4e0(v41);
+                __builtin_delete(v41);
             v39[1]->field_4->field_8 = v39[1];
             v42 = v39[1]->field_4;
             v39[1] = v42;
@@ -162,9 +162,9 @@ int GetRandomTeleDir__13CTeleportTask(st_582850_2 *a0)
         }
         iter += 30;
     }
-    if (!(char)sub_487c70(a0->field_c, 4, 350.0f))
+    if (!(char)CheckForCollide(a0->field_c, 4, 350.0f))
     {
-        v43 = sub_48d6a0(12);
+        v43 = __builtin_new(12);
         *v43 = 0;
         v43[1] = 0;
         v29 = v43;
@@ -174,15 +174,15 @@ int GetRandomTeleDir__13CTeleportTask(st_582850_2 *a0)
         v44 = v36;
         if (!*v44)
         {
-            v45 = sub_48d6a0(12);
+            v45 = __builtin_new(12);
             v28 = 1;
             v45->field_4 = NULL;
             v45->field_8 = NULL;
-            sub_48d0e0(v45, 0, 4);
+            memset@GLIBC_2.0(v45, 0, 4);
             v28 = 0;
             *v44 = v45;
             if (v28)
-                sub_48d4e0(v45);
+                __builtin_delete(v45);
             *v44->field_0 = v29;
             *v44->field_4 = NULL;
             *v44->field_8 = NULL;
@@ -191,15 +191,15 @@ int GetRandomTeleDir__13CTeleportTask(st_582850_2 *a0)
         else
         {
             v27 = v44[1];
-            v46 = sub_48d6a0(12);
+            v46 = __builtin_new(12);
             v26 = 1;
             v46->field_4 = NULL;
             v46->field_8 = NULL;
-            sub_48d0e0(v46, 0, 4);
+            memset@GLIBC_2.0(v46, 0, 4);
             v26 = 0;
             v27->field_4 = v46;
             if (v26)
-                sub_48d4e0(v46);
+                __builtin_delete(v46);
             v44[1]->field_4->field_8 = v44[1];
             v47 = v44[1]->field_4;
             v44[1] = v47;
@@ -208,9 +208,9 @@ int GetRandomTeleDir__13CTeleportTask(st_582850_2 *a0)
         }
         iter += 30;
     }
-    if (!(char)sub_487c70(a0->field_c, 32, 650.0f))
+    if (!(char)CheckForCollide(a0->field_c, 32, 650.0f))
     {
-        v48 = sub_48d6a0(12);
+        v48 = __builtin_new(12);
         *v48 = 0;
         v48[1] = 0;
         v25 = v48;
@@ -220,15 +220,15 @@ int GetRandomTeleDir__13CTeleportTask(st_582850_2 *a0)
         v49 = v36;
         if (!*v49)
         {
-            v50 = sub_48d6a0(12);
+            v50 = __builtin_new(12);
             v24 = 1;
             v50->field_4 = NULL;
             v50->field_8 = NULL;
-            sub_48d0e0(v50, 0, 4);
+            memset@GLIBC_2.0(v50, 0, 4);
             v24 = 0;
             *v49 = v50;
             if (v24)
-                sub_48d4e0(v50);
+                __builtin_delete(v50);
             *v49->field_0 = v25;
             *v49->field_4 = NULL;
             *v49->field_8 = NULL;
@@ -237,15 +237,15 @@ int GetRandomTeleDir__13CTeleportTask(st_582850_2 *a0)
         else
         {
             v23 = v49[1];
-            v51 = sub_48d6a0(12);
+            v51 = __builtin_new(12);
             v22 = 1;
             v51->field_4 = NULL;
             v51->field_8 = NULL;
-            sub_48d0e0(v51, 0, 4);
+            memset@GLIBC_2.0(v51, 0, 4);
             v22 = 0;
             v23->field_4 = v51;
             if (v22)
-                sub_48d4e0(v51);
+                __builtin_delete(v51);
             v49[1]->field_4->field_8 = v49[1];
             v52 = v49[1]->field_4;
             v49[1] = v52;
@@ -254,9 +254,9 @@ int GetRandomTeleDir__13CTeleportTask(st_582850_2 *a0)
         }
         iter += 75;
     }
-    if (!(char)sub_487c70(a0->field_c, 64, 650.0f))
+    if (!(char)CheckForCollide(a0->field_c, 64, 650.0f))
     {
-        v53 = sub_48d6a0(12);
+        v53 = __builtin_new(12);
         *v53 = 0;
         v53[1] = 0;
         v21 = v53;
@@ -266,15 +266,15 @@ int GetRandomTeleDir__13CTeleportTask(st_582850_2 *a0)
         v54 = v36;
         if (!*v54)
         {
-            v55 = sub_48d6a0(12);
+            v55 = __builtin_new(12);
             v20 = 1;
             v55->field_4 = NULL;
             v55->field_8 = NULL;
-            sub_48d0e0(v55, 0, 4);
+            memset@GLIBC_2.0(v55, 0, 4);
             v20 = 0;
             *v54 = v55;
             if (v20)
-                sub_48d4e0(v55);
+                __builtin_delete(v55);
             *v54->field_0 = v21;
             *v54->field_4 = NULL;
             *v54->field_8 = NULL;
@@ -283,15 +283,15 @@ int GetRandomTeleDir__13CTeleportTask(st_582850_2 *a0)
         else
         {
             v19 = v54[1];
-            v56 = sub_48d6a0(12);
+            v56 = __builtin_new(12);
             v18 = 1;
             v56->field_4 = NULL;
             v56->field_8 = NULL;
-            sub_48d0e0(v56, 0, 4);
+            memset@GLIBC_2.0(v56, 0, 4);
             v18 = 0;
             v19->field_4 = v56;
             if (v18)
-                sub_48d4e0(v56);
+                __builtin_delete(v56);
             v54[1]->field_4->field_8 = v54[1];
             v57 = v54[1]->field_4;
             v54[1] = v57;
@@ -300,9 +300,9 @@ int GetRandomTeleDir__13CTeleportTask(st_582850_2 *a0)
         }
         iter += 75;
     }
-    if (!(char)sub_487c70(a0->field_c, 0x40000, 650.0f))
+    if (!(char)CheckForCollide(a0->field_c, 0x40000, 650.0f))
     {
-        v58 = sub_48d6a0(12);
+        v58 = __builtin_new(12);
         *v58 = 0;
         v58[1] = 0;
         v17 = v58;
@@ -312,15 +312,15 @@ int GetRandomTeleDir__13CTeleportTask(st_582850_2 *a0)
         v59 = v36;
         if (!*v59)
         {
-            v60 = sub_48d6a0(12);
+            v60 = __builtin_new(12);
             v16 = 1;
             v60->field_4 = NULL;
             v60->field_8 = NULL;
-            sub_48d0e0(v60, 0, 4);
+            memset@GLIBC_2.0(v60, 0, 4);
             v16 = 0;
             *v59 = v60;
             if (v16)
-                sub_48d4e0(v60);
+                __builtin_delete(v60);
             *v59->field_0 = v17;
             *v59->field_4 = NULL;
             *v59->field_8 = NULL;
@@ -329,15 +329,15 @@ int GetRandomTeleDir__13CTeleportTask(st_582850_2 *a0)
         else
         {
             v15 = v59[1];
-            v61 = sub_48d6a0(12);
+            v61 = __builtin_new(12);
             v14 = 1;
             v61->field_4 = NULL;
             v61->field_8 = NULL;
-            sub_48d0e0(v61, 0, 4);
+            memset@GLIBC_2.0(v61, 0, 4);
             v14 = 0;
             v15->field_4 = v61;
             if (v14)
-                sub_48d4e0(v61);
+                __builtin_delete(v61);
             v59[1]->field_4->field_8 = v59[1];
             v62 = v59[1]->field_4;
             v59[1] = v62;
@@ -346,9 +346,9 @@ int GetRandomTeleDir__13CTeleportTask(st_582850_2 *a0)
         }
         iter += 40;
     }
-    if (!(char)sub_487c70(a0->field_c, 0x80000, 650.0f))
+    if (!(char)CheckForCollide(a0->field_c, 0x80000, 650.0f))
     {
-        v63 = sub_48d6a0(12);
+        v63 = __builtin_new(12);
         *v63 = 0;
         v63[1] = 0;
         v13 = v63;
@@ -358,15 +358,15 @@ int GetRandomTeleDir__13CTeleportTask(st_582850_2 *a0)
         v64 = v36;
         if (!*v64)
         {
-            v65 = sub_48d6a0(12);
+            v65 = __builtin_new(12);
             v12 = 1;
             v65->field_4 = NULL;
             v65->field_8 = NULL;
-            sub_48d0e0(v65, 0, 4);
+            memset@GLIBC_2.0(v65, 0, 4);
             v12 = 0;
             *v64 = v65;
             if (v12)
-                sub_48d4e0(v65);
+                __builtin_delete(v65);
             *v64->field_0 = v13;
             *v64->field_4 = NULL;
             *v64->field_8 = NULL;
@@ -375,15 +375,15 @@ int GetRandomTeleDir__13CTeleportTask(st_582850_2 *a0)
         else
         {
             v11 = v64[1];
-            v66 = sub_48d6a0(12);
+            v66 = __builtin_new(12);
             v10 = 1;
             v66->field_4 = NULL;
             v66->field_8 = NULL;
-            sub_48d0e0(v66, 0, 4);
+            memset@GLIBC_2.0(v66, 0, 4);
             v10 = 0;
             v11->field_4 = v66;
             if (v10)
-                sub_48d4e0(v66);
+                __builtin_delete(v66);
             v64[1]->field_4->field_8 = v64[1];
             v67 = v64[1]->field_4;
             v64[1] = v67;
@@ -392,9 +392,9 @@ int GetRandomTeleDir__13CTeleportTask(st_582850_2 *a0)
         }
         iter += 40;
     }
-    if (!(char)sub_487c70(a0->field_c, 8, 650.0f))
+    if (!(char)CheckForCollide(a0->field_c, 8, 650.0f))
     {
-        v68 = sub_48d6a0(12);
+        v68 = __builtin_new(12);
         *v68 = 0;
         v68[1] = 0;
         v9 = v68;
@@ -404,15 +404,15 @@ int GetRandomTeleDir__13CTeleportTask(st_582850_2 *a0)
         v69 = v36;
         if (!*v69)
         {
-            v70 = sub_48d6a0(12);
+            v70 = __builtin_new(12);
             v8 = 1;
             v70->field_4 = NULL;
             v70->field_8 = NULL;
-            sub_48d0e0(v70, 0, 4);
+            memset@GLIBC_2.0(v70, 0, 4);
             v8 = 0;
             *v69 = v70;
             if (v8)
-                sub_48d4e0(v70);
+                __builtin_delete(v70);
             *v69->field_0 = v9;
             *v69->field_4 = NULL;
             *v69->field_8 = NULL;
@@ -421,15 +421,15 @@ int GetRandomTeleDir__13CTeleportTask(st_582850_2 *a0)
         else
         {
             v7 = v69[1];
-            v71 = sub_48d6a0(12);
+            v71 = __builtin_new(12);
             v6 = 1;
             v71->field_4 = NULL;
             v71->field_8 = NULL;
-            sub_48d0e0(v71, 0, 4);
+            memset@GLIBC_2.0(v71, 0, 4);
             v6 = 0;
             v7->field_4 = v71;
             if (v6)
-                sub_48d4e0(v71);
+                __builtin_delete(v71);
             v69[1]->field_4->field_8 = v69[1];
             v72 = v69[1]->field_4;
             v69[1] = v72;
@@ -440,7 +440,7 @@ int GetRandomTeleDir__13CTeleportTask(st_582850_2 *a0)
     }
     v34 = 0;
     v5 = &v34;
-    v4 = g_616928(0, iter);
+    v4 = g_engfuncs.pfnRandomLong(0, iter);
     v2 = _INSERT(v4, 0, 0) | 0xffff0000;
     v3 = &FindSelection__t12TMultiChoice1ZiPQ2t12TMultiChoice1Zi12SMultiChoicei;
     v74 = *v36;
@@ -476,12 +476,12 @@ LABEL_58355f:
             if (v81)
                 v81->field_8 = NULL;
             v80->field_4 = NULL;
-            sub_48d4e0(v80);
+            __builtin_delete(v80);
         }
         v82 = v79;
         if (!v82)
             break;
-        sub_48d4e0(v82);
+        __builtin_delete(v82);
     }
     if (v36)
     {
@@ -495,12 +495,12 @@ LABEL_58355f:
                 node = node->field_4;
                 v85->field_4 = NULL;
                 v85->field_8 = NULL;
-                sub_48d4e0(v85);
+                __builtin_delete(v85);
             } while (node);
         }
         v83[1] = NULL;
         *v83 = NULL;
-        sub_48d4e0(v83);
+        __builtin_delete(v83);
     }
     v36 = 0;
     return v0;

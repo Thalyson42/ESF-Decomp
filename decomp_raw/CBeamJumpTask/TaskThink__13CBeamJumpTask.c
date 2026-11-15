@@ -140,7 +140,7 @@ LABEL_585c73:
                 *(float *)&v3 = *(float *)&v23->field_b24;
                 *(float *)&v5 = *(float *)&v23->field_b28;
                 *(float *)&v6 = *(float *)&v23->field_b2c;
-                sub_48a170(&v11, v23, &v3);
+                CBot::GetAimAngles(&v11, v23, &v3);
                 v23->field_c10 = v11;
                 v23->field_c14 = v12;
                 v23->field_c18 = v13;
@@ -148,8 +148,8 @@ LABEL_585c73:
                     a0->field_c->field_200 = a0->field_c->field_200 | 1;
             }
 LABEL_585d05:
-            v24 = sub_489660(a0->field_8);
-            if (!(char)sub_48b140(v24) || !(v22 = *(float *)&a0->field_18, *(float *)gpGlobals + 0.4 > v22))
+            v24 = UTIL_GetLastAttackFromPlayer(a0->field_8);
+            if (!(char)IsNull(v24) || !(v22 = *(float *)&a0->field_18, *(float *)gpGlobals + 0.4 > v22))
             {
                 v25 = a0->field_8;
                 if (v25->field_33c && a0->field_c->field_188 == 15 && v25->field_b6c)
@@ -168,7 +168,7 @@ LABEL_585d05:
                     v31 = v28 * v28 + v29 * v29 + v30 * v30;
                     v32 = sqrt(v31);
                     if (isnan(v32))
-                        sub_487dc0(*(unsigned int *)&v31);
+                        sqrt(*(unsigned int *)&v31);
                     else
                         v31 = v32;
                     v1 = (float)v31;
@@ -189,7 +189,7 @@ LABEL_585d05:
                     v38 = v35 * v35 + v36 * v36 + v37 * v37;
                     v39 = sqrt(v38);
                     if (isnan(v39))
-                        sub_487dc0(*(unsigned int *)&v38);
+                        sqrt(*(unsigned int *)&v38);
                     else
                         v38 = v39;
                     v0 = (float)v38;
@@ -207,7 +207,7 @@ LABEL_585d05:
                     v45 = v42 * v42 + v43 * v43 + v44 * v44;
                     v46 = sqrt(v45);
                     if (isnan(v46))
-                        sub_487dc0(*(unsigned int *)&v45);
+                        sqrt(*(unsigned int *)&v45);
                     else
                         v45 = v46;
                     v10 = (float)v45;
@@ -237,7 +237,7 @@ LABEL_585f3c:
                     {
                         a0->field_1c = (float)(0.1 + *(float *)gpGlobals);
                         v22 = 50.0;
-                        if (!(char)sub_487c70(a0->field_c, 8, 50.0f))
+                        if (!(char)CheckForCollide(a0->field_c, 8, 50.0f))
                             return 50.0;
                     }
                     else

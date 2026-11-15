@@ -119,7 +119,7 @@ typedef struct st_5750f0_5 {
 
 extern int g_4c4b40;
 extern unsigned int g_teamplay;
-extern st_5750f0_1 *g_6168d4;
+extern st_5750f0_1 *g_engfuncs.pfnPEntityOfEntOffset;
 extern st_5750f0_5 *gpGlobals;
 
 double SenseSurroundingAttacks__4CBotR13danger_info_s(st_5750f0_3 *a0, st_5750f0_10 *a1)
@@ -198,21 +198,21 @@ double SenseSurroundingAttacks__4CBotR13danger_info_s(st_5750f0_3 *a0, st_5750f0
     }
     while (1)
     {
-        v9 = sub_48bd10(v9, "globalname", "magic_attack");
+        v9 = UTIL_FindEntityByString(v9, "globalname", "magic_attack");
         if (!v9)
             break;
-        if ((char)sub_48b960(*v9->field_198) || g_teamplay && *v9->field_198->field_22c == a0->field_0->field_1ac)
+        if ((char)IsNull(*v9->field_198) || g_teamplay && *v9->field_198->field_22c == a0->field_0->field_1ac)
             continue;
         v24 = &*v9->field_20;
         v25 = *v9->field_20 * *v9->field_20 + *(float *)&v24->field_4 * *(float *)&v24->field_4 + *(float *)&v24->field_8 * *(float *)&v24->field_8;
         v26 = sqrt(v25);
         if (isnan(v26))
-            sub_487dc0(*(unsigned int *)&v25);
+            sqrt(*(unsigned int *)&v25);
         else
             v25 = v26;
         v16 = (float)v25;
         v23 = v16;
-        if (v23 < 10.0 || !(v7 = sub_48aab0(a0, v9), v7 >= v0))
+        if (v23 < 10.0 || !(v7 = UTIL_GetHeadingPercentage(a0, v9), v7 >= v0))
             continue;
         v27 = *v9;
         v20 = v27->field_8;
@@ -231,14 +231,14 @@ double SenseSurroundingAttacks__4CBotR13danger_info_s(st_5750f0_3 *a0, st_5750f0
         v32 = v29 * v29 + v30 * v30 + v31 * v31;
         v33 = sqrt(v32);
         if (isnan(v33))
-            sub_487dc0(*(unsigned int *)&v32);
+            sqrt(*(unsigned int *)&v32);
         else
             v32 = v33;
         v8 = (float)v32;
         v23 = v8;
         if (v23 <= 2000.0)
         {
-            if (v23 > 250.0 && !(char)sub_489330(a0, v9) || !a0->field_60->field_e4(a0, &*v9->field_8))
+            if (v23 > 250.0 && !(char)EntIsInFieldOfView(a0, v9) || !a0->field_60->field_e4(a0, &*v9->field_8))
                 continue;
             iter = 0;
             v35 = a0->field_a04;
@@ -330,7 +330,7 @@ LABEL_5756d9:
                 v1 = (float)v23;
 LABEL_5756df:
                 v38 = *v9->field_198;
-                if (*v9->field_198 || (v38 = g_6168d4(0), v38))
+                if (*v9->field_198 || (v38 = g_engfuncs.pfnPEntityOfEntOffset(0), v38))
                     v39 = v38->field_7c;
                 else
                     v39 = NULL;
@@ -447,7 +447,7 @@ LABEL_57582c:
                     {
                         iter -= 12;
                     }
-                    v43 = sub_48cad0(a0, *v9->field_0 + gpGlobals->field_98);
+                    v43 = CBot::ClassifyAttack(a0, *v9->field_0 + gpGlobals->field_98);
                     if (v43 == 1)
                     {
                         iter -= 70;

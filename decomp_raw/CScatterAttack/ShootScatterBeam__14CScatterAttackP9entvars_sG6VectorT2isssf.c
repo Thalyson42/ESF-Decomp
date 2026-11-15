@@ -68,13 +68,13 @@ typedef struct st_50fa30_5 {
 extern char ExplodeTouch__16CExplodingAttackP11CBaseEntity;
 extern char SplitThink__14CScatterAttack;
 extern unsigned int gmsgFlare;
-extern st_50fa30_2 *g_6167c8;
-extern st_50fa30_2 *g_616878;
-extern st_50fa30_2 *g_61687c;
-extern st_50fa30_2 *g_616888;
-extern st_50fa30_2 *g_61688c;
-extern st_50fa30_2 *g_616894;
-extern st_50fa30_2 *g_6168dc;
+extern st_50fa30_2 *g_engfuncs.pfnSetModel;
+extern st_50fa30_2 *g_engfuncs.pfnMessageBegin;
+extern st_50fa30_2 *g_engfuncs.pfnMessageEnd;
+extern st_50fa30_2 *g_engfuncs.pfnWriteShort;
+extern st_50fa30_2 *g_engfuncs.pfnWriteLong;
+extern st_50fa30_2 *g_engfuncs.pfnWriteCoord;
+extern st_50fa30_2 *g_engfuncs.pfnIndexOfEdict;
 extern st_50fa30_5 *gpGlobals;
 
 double ShootScatterBeam__14CScatterAttackP9entvars_sG6VectorT2isssf(st_50fa30_4 *a0, float *a1, float *a2, unsigned int a3, short a4, short a5, short a6, float a7)
@@ -118,7 +118,7 @@ double ShootScatterBeam__14CScatterAttackP9entvars_sG6VectorT2isssf(st_50fa30_4 
     float v19;  // [bp-0x14]
     float v20;  // [bp-0x10]
 
-    v4 = sub_48d750(0);
+    v4 = GetClassPtr__H1Z14CScatterAttack_PX01_PX01(0);
     v4->field_60->field_8(v4);
     v21 = v4;
     v21->field_3b0 = 0;
@@ -127,7 +127,7 @@ double ShootScatterBeam__14CScatterAttackP9entvars_sG6VectorT2isssf(st_50fa30_4 
     v21->field_2e0 = a5;
     v21->field_0->field_108 = 5;
     v21->field_0->field_10c = 1;
-    g_6167c8(v21->field_0->field_208, "sprites/null.spr");
+    g_engfuncs.pfnSetModel(v21->field_0->field_208, "sprites/null.spr");
     v22 = v4;
     v22->field_2d4 = 4;
     v22->field_2d0 = 2;
@@ -143,13 +143,13 @@ double ShootScatterBeam__14CScatterAttackP9entvars_sG6VectorT2isssf(st_50fa30_4 
     v25 = *v24 * *v24 + v24[1] * v24[1] + v24[2] * v24[2];
     v26 = sqrt(v25);
     if (isnan(v26))
-        sub_487dc0(*(unsigned int *)&v25);
+        sqrt(*(unsigned int *)&v25);
     else
         v25 = v26;
     v27 = v4;
     v27->field_2a8 = (float)v25;
     v3 = v27->field_0;
-    sub_488860(&v13, &v27->field_0->field_20);
+    UTIL_VecToAngles(&v13, &v27->field_0->field_20);
     v3->field_50 = v13;
     v3->field_54 = v15;
     v3->field_58 = v17;
@@ -162,7 +162,7 @@ double ShootScatterBeam__14CScatterAttackP9entvars_sG6VectorT2isssf(st_50fa30_4 
     v29 = *a2 * *a2 + a2[1] * a2[1] + a2[2] * a2[2];
     v30 = sqrt(v29);
     if (isnan(v30))
-        sub_487dc0(*(unsigned int *)&v29);
+        sqrt(*(unsigned int *)&v29);
     else
         v29 = v30;
     v8 = (float)v29;
@@ -189,7 +189,7 @@ double ShootScatterBeam__14CScatterAttackP9entvars_sG6VectorT2isssf(st_50fa30_4 
     *a1 = v12;
     a1[1] = v14;
     a1[2] = v16;
-    sub_48db50(v4->field_0, a1);
+    UTIL_SetOrigin(v4->field_0, a1);
     v33 = v1;
     v12 = v33;
     v14 = v33;
@@ -199,28 +199,28 @@ double ShootScatterBeam__14CScatterAttackP9entvars_sG6VectorT2isssf(st_50fa30_4 
     v19 = (float)v34;
     v20 = (float)v34;
     v36 = v4;
-    v36->field_14 = _INSERT(sub_48a0d0(v4->field_0, &v18, &v12), 0, 0) | 0xffff0000;
+    v36->field_14 = _INSERT(UTIL_SetSize(v4->field_0, &v18, &v12), 0, 0) | 0xffff0000;
     v36->field_18 = &ExplodeTouch__16CExplodingAttackP11CBaseEntity;
-    g_616878(2, gmsgFlare, 0, 0);
-    v37 = g_6168dc(v4->field_0->field_208);
-    g_61688c(v37);
-    g_616888(a4);
-    g_616888(a5);
+    g_engfuncs.pfnMessageBegin(2, gmsgFlare, 0, 0);
+    v37 = g_engfuncs.pfnIndexOfEdict(v4->field_0->field_208);
+    g_engfuncs.pfnWriteLong(v37);
+    g_engfuncs.pfnWriteShort(a4);
+    g_engfuncs.pfnWriteShort(a5);
     v7 = __fnstcw();
     v6 = v7 | 0xc00;
     v5 = (int)(0.1 * v2);
-    g_616888(v5);
-    g_616888(a6);
+    g_engfuncs.pfnWriteShort(v5);
+    g_engfuncs.pfnWriteShort(a6);
     v7 = __fnstcw();
     v6 = v7 | 0xc00;
     v5 = (int)(a7 * 300.0);
-    g_616888(v5);
-    g_616894(*a1);
-    g_616894(a1[1]);
+    g_engfuncs.pfnWriteShort(v5);
+    g_engfuncs.pfnWriteCoord(*a1);
+    g_engfuncs.pfnWriteCoord(a1[1]);
     v0 = a1[2];
-    g_616894(v0);
+    g_engfuncs.pfnWriteCoord(v0);
     v39 = v4;
-    v39->field_c = _INSERT(g_61687c(v0), 0, 0) | 0xffff0000;
+    v39->field_c = _INSERT(g_engfuncs.pfnMessageEnd(v0), 0, 0) | 0xffff0000;
     v39->field_10 = &SplitThink__14CScatterAttack;
     v39->field_0->field_104 = (float)(0.3 + gpGlobals->field_0);
     *(float *)&v39->padding_64[260] = 0.5f;

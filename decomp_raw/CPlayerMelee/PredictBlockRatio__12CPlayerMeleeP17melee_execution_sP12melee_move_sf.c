@@ -54,18 +54,18 @@ double PredictBlockRatio__12CPlayerMeleeP17melee_execution_sP12melee_move_sf(st_
                 v2 += 1;
                 if (iter)
                 {
-                    if (v3 && sub_48db20(a0, &v3, v0, v6->field_50))
+                    if (v3 && CPlayerMelee::ContinueBlockStun(a0, &v3, v0, v6->field_50))
                     {
                         v3 -= 1;
                     }
-                    else if (sub_48b240(a0, v6->field_20, iter->field_4) || v6->field_3c)
+                    else if (CPlayerMelee::Block(a0, v6->field_20, iter->field_4) || v6->field_3c)
                     {
                         v1 += 1;
                         v3 = 0;
                     }
                     else
                     {
-                        v3 = sub_48cca0(a0->field_128 + 896, v6->field_50);
+                        v3 = CPlayerMelee::GetBlockStunAmt(a0->field_128 + 896, v6->field_50);
                         v0 = v6->field_50;
                     }
                     iter = iter->field_20;
@@ -74,7 +74,7 @@ double PredictBlockRatio__12CPlayerMeleeP17melee_execution_sP12melee_move_sf(st_
             v4 = v6->field_358;
         } while (v6->field_358);
     }
-    sub_48d580(a0, v1, v2);
+    CPlayerMelee::GetBlockRatio(a0, v1, v2);
     return v7 * a3;
     return 0.0;
 }

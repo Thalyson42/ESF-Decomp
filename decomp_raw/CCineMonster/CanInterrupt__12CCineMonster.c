@@ -15,7 +15,7 @@ unsigned int CanInterrupt__12CCineMonster(st_5158c0_0 *a0)
 
     if (a0->field_2d8)
     {
-        v0 = sub_488810(&a0->padding_0[272]);
+        v0 = EHANDLE::__opP11CBaseEntity(&a0->padding_0[272]);
         if (v0 && !*v0->field_170)
             return 1;
     }

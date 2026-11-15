@@ -9,7 +9,7 @@ unsigned int ServerDeactivate__Fv(void)
     if (g_serveractive == 1)
     {
         g_serveractive = 0;
-        v1 = sub_48aa00(&BotManager);
+        v1 = CBotManager::MapFree(&BotManager);
     }
     return v1;
 }

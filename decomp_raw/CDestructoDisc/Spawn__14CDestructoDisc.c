@@ -12,6 +12,6 @@ int Spawn__14CDestructoDisc(float idx)
     *(unsigned int *)(*(unsigned int *)&idx + 216) = 1952675186;
     *(unsigned int *)(*(unsigned int *)&idx + 220) = 1936286831;
     *(unsigned short *)(*(unsigned int *)&idx + 224) = 99;
-    return sub_48cf50(idx);
+    return CBasePlayerItem::FallInit(idx);
 }
 

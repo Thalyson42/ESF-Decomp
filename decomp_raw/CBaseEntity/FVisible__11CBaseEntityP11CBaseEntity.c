@@ -72,7 +72,7 @@ LABEL_4a6a8e:
             v3 = v0;
             v4 = v1;
             v5 = v2;
-            sub_488820(&v6, &v3, 1, 1, *a0->field_208, &v9);
+            UTIL_TraceLine(&v6, &v3, 1, 1, *a0->field_208, &v9);
             if (v10 == 1.0f)
                 return 1;
         }

@@ -24,7 +24,7 @@ typedef struct st_498db0_2 {
     unsigned int field_0;
 } st_498db0_2;
 
-extern st_498db0_2 *g_6167c8;
+extern st_498db0_2 *g_engfuncs.pfnSetModel;
 extern st_498db0_1 *gpGlobals;
 
 st_498db0_0 * Spawn__13CButtonTarget(st_498db0_0 **a0)
@@ -33,7 +33,7 @@ st_498db0_0 * Spawn__13CButtonTarget(st_498db0_0 **a0)
 
     *a0->field_108 = 7;
     *a0->field_10c = 4;
-    g_6167c8(*a0->field_208, *a0->field_b8 + gpGlobals->field_98);
+    g_engfuncs.pfnSetModel(*a0->field_208, *a0->field_b8 + gpGlobals->field_98);
     *a0->field_16c = 0x3f800000;
     v0 = *a0;
     if (v0->field_1a0 & 2)

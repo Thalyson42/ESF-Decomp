@@ -30,8 +30,8 @@ typedef struct st_4a0ee0_5 {
 } st_4a0ee0_5;
 
 extern unsigned int g_serveractive;
-extern st_4a0ee0_2 *g_6168b4;
-extern st_4a0ee0_2 *g_6168d4;
+extern st_4a0ee0_2 *g_engfuncs.pfnAlertMessage;
+extern st_4a0ee0_2 *g_engfuncs.pfnPEntityOfEntOffset;
 extern st_4a0ee0_5 *gpGlobals;
 extern int BotManager;
 
@@ -59,7 +59,7 @@ int ServerActivate__FP7edict_sii(unsigned int *a0, int a1, int a2)
             if (!*(int *)((char *)a0 + v7) && v6 >= a2 && *(int *)((char *)a0 + v7 + 124))
             {
                 v8 = v7 + (char *)a0;
-                if (v7 + (char *)a0 || (v8 = g_6168d4(0), v8))
+                if (v7 + (char *)a0 || (v8 = g_engfuncs.pfnPEntityOfEntOffset(0), v8))
                     v9 = v8->field_7c;
                 else
                     v9 = NULL;
@@ -73,13 +73,13 @@ int ServerActivate__FP7edict_sii(unsigned int *a0, int a1, int a2)
                     v2 = a0[32 + 201 * v6] + gpGlobals->field_98;
                     v1 = "Can't instance %s\n";
                     v0 = 0x1;
-                    v10 = g_6168b4;
+                    v10 = g_engfuncs.pfnAlertMessage;
                 }
                 v10(v0, v1, v2);
             }
         } while ((v6 += 1, v6 < a1));
     }
-    sub_48e030(v3, v4, v5);
-    return sub_487c00(&BotManager);
+    LinkUserMessages(v3, v4, v5);
+    return CBotManager::MapInit(&BotManager);
 }
 

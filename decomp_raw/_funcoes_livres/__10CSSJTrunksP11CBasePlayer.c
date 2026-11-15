@@ -8,7 +8,7 @@ extern char __vt_10CSSJTrunks;
 
 st_530d40_0 * __10CSSJTrunksP11CBasePlayer(st_530d40_0 *a0, int a1)
 {
-    sub_48bb40(a0, a1);
+    __7CTrunksP11CBasePlayer(a0, a1);
     a0->field_4 = &__vt_10CSSJTrunks;
     return a0;
 }

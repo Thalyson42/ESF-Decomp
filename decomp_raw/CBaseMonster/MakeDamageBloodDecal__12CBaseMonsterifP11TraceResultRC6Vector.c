@@ -29,7 +29,7 @@ typedef struct st_4a7040_4 {
     unsigned int field_8;
 } st_4a7040_4;
 
-extern st_4a7040_2 *g_61692c;
+extern st_4a7040_2 *g_engfuncs.pfnRandomFloat;
 
 double MakeDamageBloodDecal__12CBaseMonsterifP11TraceResultRC6Vector(st_4a7040_3 *a0, int a1, float a2, float *a3, st_4a7040_4 *a4)
 {
@@ -79,13 +79,13 @@ double MakeDamageBloodDecal__12CBaseMonsterifP11TraceResultRC6Vector(st_4a7040_3
         v11 = a4->field_0;
         v12 = a4->field_4;
         v13 = a4->field_8;
-        g_61692c(v2, a2);
+        g_engfuncs.pfnRandomFloat(v2, a2);
         v20 = v18 + v11;
         v10 = _INSERT(CONCAT(*(unsigned int *)&v11, 0), 0, (float)v20);
-        g_61692c(v2, a2);
+        g_engfuncs.pfnRandomFloat(v2, a2);
         v21 = v20 + (double)*(unsigned int *)((void*)&v10 + 4);
         *(float *)((char *)&v10 + 4) = (float)v21;
-        g_61692c(v2, a2);
+        g_engfuncs.pfnRandomFloat(v2, a2);
         *(float *)((char *)&v10 + 8) = (float)(v21 + (double)*(unsigned int *)((void*)&v10 + 8));
         v22 = 172.0 * (double)*(unsigned int *)&v10;
         v4 = (float)v22;
@@ -95,10 +95,10 @@ double MakeDamageBloodDecal__12CBaseMonsterifP11TraceResultRC6Vector(st_4a7040_3
         v7 = (float)(v22 + a3[5]);
         v8 = (float)(v23 + *(float *)&v19[1]);
         v9 = *(float *)&v19[2] + v6;
-        sub_487b80(v19, &v7, 1, a0->field_0->field_208, v0);
+        UTIL_TraceLine(v19, &v7, 1, a0->field_0->field_208, v0);
         v18 = v15;
         if (v18 != 1.0)
-            sub_48d7e0(v0, a0->field_60->field_40(a0));
+            UTIL_BloodDecalTrace(v0, a0->field_60->field_40(a0));
     } while ((v3 += 1, v3 < a1));
     return v18;
 }

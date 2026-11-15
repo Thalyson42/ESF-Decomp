@@ -4,6 +4,6 @@ int __eh_free(int a0)
     int v0;  // [bp-0x1c]
 
     sub_5956f0(v0);
-    return sub_48cf10(a0);
+    return free@GLIBC_2.0(a0);
 }
 

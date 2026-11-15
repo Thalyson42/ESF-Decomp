@@ -73,8 +73,8 @@ int GetWallJumpAnim__11CBasePlayerPcG6VectorT1(unsigned int *a0, int a1, float *
     float v22;  // [bp-0x20]
     float v23;  // [bp-0x1c]
 
-    sub_48e110(a3, a1);
-    sub_48a800(*a0 + 80);
+    strcpy@GLIBC_2.0(a3, a1);
+    UTIL_MakeVectors(*a0 + 80);
     v24 = &gpGlobals->field_28;
     v25 = gpGlobals->field_28;
     v21 = v25;
@@ -97,7 +97,7 @@ int GetWallJumpAnim__11CBasePlayerPcG6VectorT1(unsigned int *a0, int a1, float *
     v27 = 0.0 + v25 * v21 + v22 * v22;
     v28 = sqrt(v27);
     if (isnan(v28))
-        sub_487dc0(*(unsigned int *)&v27);
+        sqrt(*(unsigned int *)&v27);
     else
         v27 = v28;
     v3 = (float)v27;
@@ -120,7 +120,7 @@ int GetWallJumpAnim__11CBasePlayerPcG6VectorT1(unsigned int *a0, int a1, float *
     v30 = v18 * v18 + v19 * v19 + v20 * v20;
     v31 = sqrt(v30);
     if (isnan(v31))
-        sub_487dc0(*(unsigned int *)&v30);
+        sqrt(*(unsigned int *)&v30);
     else
         v30 = v31;
     v6 = (float)v30;
@@ -143,7 +143,7 @@ int GetWallJumpAnim__11CBasePlayerPcG6VectorT1(unsigned int *a0, int a1, float *
     v33 = v15 * v15 + v16 * v16 + v17 * v17;
     v34 = sqrt(v33);
     if (isnan(v34))
-        sub_487dc0(*(unsigned int *)&v33);
+        sqrt(*(unsigned int *)&v33);
     else
         v33 = v34;
     v6 = (float)v33;
@@ -166,7 +166,7 @@ int GetWallJumpAnim__11CBasePlayerPcG6VectorT1(unsigned int *a0, int a1, float *
     v36 = v12 * v12 + v13 * v13 + v14 * v14;
     v37 = sqrt(v36);
     if (isnan(v37))
-        sub_487dc0(*(unsigned int *)&v36);
+        sqrt(*(unsigned int *)&v36);
     else
         v36 = v37;
     v6 = (float)v36;
@@ -189,7 +189,7 @@ int GetWallJumpAnim__11CBasePlayerPcG6VectorT1(unsigned int *a0, int a1, float *
     v39 = *a2 * *a2 + a2[1] * a2[1] + a2[2] * a2[2];
     v40 = sqrt(v39);
     if (isnan(v40))
-        sub_487dc0(*(unsigned int *)&v39);
+        sqrt(*(unsigned int *)&v39);
     else
         v39 = v40;
     v6 = (float)v39;
@@ -218,7 +218,7 @@ int GetWallJumpAnim__11CBasePlayerPcG6VectorT1(unsigned int *a0, int a1, float *
     v45 = v42 * v42 + v43 * v43 + v44 * v44;
     v46 = sqrt(v45);
     if (isnan(v46))
-        sub_487dc0(*(unsigned int *)&v45);
+        sqrt(*(unsigned int *)&v45);
     else
         v45 = v46;
     v6 = (float)v45;
@@ -237,7 +237,7 @@ int GetWallJumpAnim__11CBasePlayerPcG6VectorT1(unsigned int *a0, int a1, float *
         v51 = v48 * v48 + v49 * v49 + v50 * v50;
         v52 = sqrt(v51);
         if (isnan(v52))
-            sub_487dc0(*(unsigned int *)&v51);
+            sqrt(*(unsigned int *)&v51);
         else
             v51 = v52;
         v9 = (float)v51;
@@ -256,15 +256,15 @@ int GetWallJumpAnim__11CBasePlayerPcG6VectorT1(unsigned int *a0, int a1, float *
             v56 = v53 * v53 + v54 * v54 + v55 * v55;
             v57 = sqrt(v56);
             if (isnan(v57))
-                sub_487dc0(*(unsigned int *)&v56);
+                sqrt(*(unsigned int *)&v56);
             else
                 v56 = v57;
             v11 = (float)v56;
             if (v11 > 0.8)
-                return sub_48c150(a3, "forward");
+                return strcat@GLIBC_2.0(a3, "forward");
             v47 = "right";
         }
     }
-    return sub_48c150(a3, v47);
+    return strcat@GLIBC_2.0(a3, v47);
 }
 

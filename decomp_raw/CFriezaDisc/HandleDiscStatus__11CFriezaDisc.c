@@ -44,7 +44,7 @@ double HandleDiscStatus__11CFriezaDisc(float idx)
             v14 = v5 * v5 + v6 * v6 + v7 * v7;
             v15 = sqrt(v14);
             if (isnan(v15))
-                sub_487dc0(*(unsigned int *)&v14);
+                sqrt(*(unsigned int *)&v14);
             else
                 v14 = v15;
             v4 = (float)v14;
@@ -52,12 +52,12 @@ double HandleDiscStatus__11CFriezaDisc(float idx)
             if (v16 < 100.0)
             {
                 *(unsigned int *)(*(unsigned int *)&idx + 468) = 3;
-                sub_48ca40(*(int *)(*(unsigned int *)&idx + 472));
+                CFriezaDiscAttack::Returned(*(int *)(*(unsigned int *)&idx + 472));
                 *(unsigned int *)(*(int *)(*(unsigned int *)&idx + 128) + 832) = 1;
                 *(float *)(*(int *)(*(unsigned int *)&idx + 128) + 1876) = 0.5f;
                 return 0.5;
             }
-            sub_488e80(*(int *)(*(unsigned int *)&idx + 128), 5);
+            CBasePlayer::StopAniTrigger(*(int *)(*(unsigned int *)&idx + 128), 5);
         }
         else
         {
@@ -72,13 +72,13 @@ double HandleDiscStatus__11CFriezaDisc(float idx)
     }
     else if (*(int *)(*(int *)(*(unsigned int *)&idx + 128) + 892))
     {
-        sub_488830(idx);
+        CFriezaDisc::Release(idx);
     }
     else
     {
         return v16;
     }
-    sub_487cf0(idx);
+    CFriezaDisc::StopControl(idx);
     *(unsigned int *)(*(unsigned int *)&idx + 468) = 0;
     return v16;
 }

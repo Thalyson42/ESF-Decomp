@@ -18,7 +18,7 @@ unsigned int Precache__9CFuncPlat(st_4e8d10_2 *a0)
 {
     unsigned int v0;  // eax
 
-    sub_48d4c0(a0);
+    CBasePlatTrain::Precache(a0);
     v0 = a0->field_60->field_ec(a0);
     if (v0)
         return v0;

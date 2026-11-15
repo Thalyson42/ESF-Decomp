@@ -1,7 +1,7 @@
 // CControlledBeam.h -- reconstruído automaticamente (vtable + offsets). REVISAR.
 #pragma once
 
-class CControlledBeam : public CChargedAttack {  // base: heuristica
+class CControlledBeam : public CBasePlayerWeapon {  // base: heuristica
 public:
     virtual void Precache();  // vtable[1] Precache__15CControlledBeam
     virtual void Deploy();  // vtable[61] Deploy__15CControlledBeam

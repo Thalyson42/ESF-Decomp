@@ -31,7 +31,7 @@ typedef struct st_4c16a0_4 {
 } st_4c16a0_4;
 
 extern unsigned int _10CBreakable.pSpawnObjects[4];
-extern st_4c16a0_4 *g_6168cc;
+extern st_4c16a0_4 *g_engfuncs.pfnAllocString;
 extern st_4c16a0_3 *gpGlobals;
 
 st_4c16a0_1 * KeyValue__10CBreakableP14KeyValueData_s(st_4c16a0_2 *a0, st_4c16a0_0 *a1)
@@ -40,22 +40,22 @@ st_4c16a0_1 * KeyValue__10CBreakableP14KeyValueData_s(st_4c16a0_2 *a0, st_4c16a0
     st_4c16a0_1 *v1;  // ecx
     unsigned int v2;  // eax
 
-    if (!sub_488af0(a1->field_4, "explosion"))
+    if (!strcmp@GLIBC_2.0(a1->field_4, "explosion"))
     {
-        v0 = sub_48cac0(a1->field_8, "directed");
+        v0 = strcasecmp@GLIBC_2.0(a1->field_8, "directed");
         if (!v0)
         {
             a0->field_70 = 1;
         }
         else
         {
-            v0 = sub_48cac0(a1->field_8, "random");
+            v0 = strcasecmp@GLIBC_2.0(a1->field_8, "random");
             a0->field_70 = 0;
         }
     }
-    else if (!sub_488af0(a1->field_4, "material"))
+    else if (!strcmp@GLIBC_2.0(a1->field_4, "material"))
     {
-        v0 = sub_48b500(a1->field_8, 0, 10, 0);
+        v0 = __strtol_internal@GLIBC_2.0(a1->field_8, 0, 10, 0);
         if (v0 > 0x9)
             a0->field_6c = 0x1;
         else
@@ -63,20 +63,20 @@ st_4c16a0_1 * KeyValue__10CBreakableP14KeyValueData_s(st_4c16a0_2 *a0, st_4c16a0
     }
     else
     {
-        v0 = sub_488af0(a1->field_4, "deadmodel");
+        v0 = strcmp@GLIBC_2.0(a1->field_4, "deadmodel");
         if (v0)
         {
-            v0 = sub_488af0(a1->field_4, "shards");
+            v0 = strcmp@GLIBC_2.0(a1->field_4, "shards");
             if (v0)
             {
-                if (!sub_488af0(a1->field_4, "gibmodel"))
+                if (!strcmp@GLIBC_2.0(a1->field_4, "gibmodel"))
                 {
-                    v0 = g_6168cc(a1->field_8);
+                    v0 = g_engfuncs.pfnAllocString(a1->field_8);
                     a0->field_7c = v0;
                 }
-                else if (!sub_488af0(a1->field_4, "spawnobject"))
+                else if (!strcmp@GLIBC_2.0(a1->field_4, "spawnobject"))
                 {
-                    v1 = sub_48b500(a1->field_8, 0, 10, 0);
+                    v1 = __strtol_internal@GLIBC_2.0(a1->field_8, 0, 10, 0);
                     v0 = (char *)v1 - 1;
                     if (v0 <= 0x14)
                     {
@@ -84,17 +84,17 @@ st_4c16a0_1 * KeyValue__10CBreakableP14KeyValueData_s(st_4c16a0_2 *a0, st_4c16a0
                         a0->field_80 = *(int *)((char *)&_10CBreakable.pSpawnObjects[0] + 0x4 * v1) - (char *)v0;
                     }
                 }
-                else if (!sub_488af0(a1->field_4, "explodemagnitude"))
+                else if (!strcmp@GLIBC_2.0(a1->field_4, "explodemagnitude"))
                 {
-                    v2 = sub_48b500(a1->field_8, 0, 10, 0);
+                    v2 = __strtol_internal@GLIBC_2.0(a1->field_8, 0, 10, 0);
                     v0 = a0->field_0;
                     v0->field_184 = v2;
                 }
                 else
                 {
-                    v0 = sub_488af0(a1->field_4, "lip");
+                    v0 = strcmp@GLIBC_2.0(a1->field_4, "lip");
                     if (v0)
-                        return sub_48b920(a0, a1);
+                        return CBaseDelay::KeyValue(a0, a1);
                 }
             }
         }

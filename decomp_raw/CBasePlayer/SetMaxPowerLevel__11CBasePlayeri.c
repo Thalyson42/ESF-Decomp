@@ -21,7 +21,7 @@ typedef struct st_4f2b80_3 {
 } st_4f2b80_3;
 
 extern st_4f2b80_3 *g_pGameRules;
-extern st_4f2b80_1 *g_6168b4;
+extern st_4f2b80_1 *g_engfuncs.pfnAlertMessage;
 
 int SetMaxPowerLevel__11CBasePlayeri(st_4f2b80_0 *a0, int a1)
 {
@@ -35,7 +35,7 @@ int SetMaxPowerLevel__11CBasePlayeri(st_4f2b80_0 *a0, int a1)
         a0->field_748 = v0;
     if (a0->field_748 < 0)
     {
-        g_6168b4(1, "negative MaxPowerLevel\n");
+        g_engfuncs.pfnAlertMessage(1, "negative MaxPowerLevel\n");
         a0->field_748 = 0;
     }
     return g_pGameRules->field_44->field_f0(g_pGameRules);

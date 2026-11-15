@@ -9,6 +9,6 @@ extern char __vt_9CIdleTask;
 int _._9CIdleTask(st_586de0_0 *a0, int a1)
 {
     a0->field_14 = &__vt_9CIdleTask;
-    return sub_488170(a0, a1);
+    return _._9CBaseTask(a0, a1);
 }
 

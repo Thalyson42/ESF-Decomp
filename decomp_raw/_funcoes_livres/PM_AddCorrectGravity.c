@@ -33,7 +33,7 @@ unsigned int PM_AddCorrectGravity(void)
     pmove->field_64 = (float)(pmove->field_64 - v1 * *(float *)pmove->field_4f4f0 * 0.5 * pmove->field_10);
     pmove->field_64 = pmove->field_7c * pmove->field_10 + pmove->field_64;
     pmove->field_7c = 0;
-    v2 = sub_489840();
+    v2 = PM_CheckVelocity();
     return v2;
 }
 

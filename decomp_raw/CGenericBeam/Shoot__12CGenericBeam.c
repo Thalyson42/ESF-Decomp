@@ -62,20 +62,20 @@ double Shoot__12CGenericBeam(float idx)
 
     if (!*(char *)(*(unsigned int *)&idx + 528))
     {
-        sub_48c230(idx);
+        CControlledBeam::Shoot(idx);
         return v29;
     }
     *(char *)(*(unsigned int *)&idx + 528) = 0;
-    sub_48c680(*(int *)(*(unsigned int *)&idx + 128), 0);
-    sub_489390(*(int *)(*(int *)*(int *)(*(unsigned int *)&idx + 128) + 520), 1, "common/null.wav", 0x3f800000, 0.800000011920929f, 0, 100);
+    CBasePlayer::DrawChargeBar(*(int *)(*(unsigned int *)&idx + 128), 0);
+    EMIT_SOUND_DYN(*(int *)(*(int *)*(int *)(*(unsigned int *)&idx + 128) + 520), 1, "common/null.wav", 0x3f800000, 0.800000011920929f, 0, 100);
     *(unsigned int *)(*(int *)(*(unsigned int *)&idx + 128) + 820) = 0;
     *(unsigned int *)(*(unsigned int *)&idx + 196) = 0;
     if (*(int *)(*(unsigned int *)&idx + 216) >= *(int *)(*(unsigned int *)&idx + 220) / 3)
     {
-        sub_48d680(*(int *)(*(unsigned int *)&idx + 128), 5);
+        CBasePlayer::SetAnimation(*(int *)(*(unsigned int *)&idx + 128), 5);
         (*(int *)(*(int *)(*(unsigned int *)&idx + 96) + 372))(idx);
         (*(int *)(*(int *)(*(unsigned int *)&idx + 96) + 360))(idx);
-        sub_48a800(*(int *)*(int *)(*(unsigned int *)&idx + 128) + 116);
+        UTIL_MakeVectors(*(int *)*(int *)(*(unsigned int *)&idx + 128) + 116);
         (*(int *)(*(int *)(*(int *)(*(unsigned int *)&idx + 128) + 96) + 480))(&v21, *(int *)(*(unsigned int *)&idx + 128));
         v30 = &gpGlobals->field_28;
         v31 = 10.0 * gpGlobals->field_28;
@@ -114,16 +114,16 @@ double Shoot__12CGenericBeam(float idx)
         v2 = *(int *)(*(unsigned int *)&idx + 508);
         v1 = (float)((double)*(int *)(*(unsigned int *)&idx + 216) / v42);
         v0 = *(unsigned int *)&idx + 244;
-        sub_48aef0(idx);
+        CBasePlayerWeapon::GetPowerRatio(idx);
         v11 = *(int *)(*(unsigned int *)&idx + 216) * 3;
         v10 = __fnstcw();
         v9 = v10 | 0xc00;
         v12 = (int)(v42 * (double)(int)v11);
-        sub_48cdd0(*(int *)*(int *)(*(unsigned int *)&idx + 128), &v16, &v19, v12);
+        CGenericBall::ShootGenericBall(*(int *)*(int *)(*(unsigned int *)&idx + 128), &v16, &v19, v12);
         return (double)(int)v11;
     }
     *(unsigned int *)(*(int *)(*(unsigned int *)&idx + 128) + 1876) = 0x3f800000;
-    sub_489390(*(int *)(*(int *)*(int *)(*(unsigned int *)&idx + 128) + 520), 2, "common/null.wav", 0x3f800000, 0.800000011920929f, 0, 100);
+    EMIT_SOUND_DYN(*(int *)(*(int *)*(int *)(*(unsigned int *)&idx + 128) + 520), 2, "common/null.wav", 0x3f800000, 0.800000011920929f, 0, 100);
     return 0.800000011920929;
 }
 

@@ -8,7 +8,7 @@ unsigned int EntityGetState__12CGlobalStatei(int a0, int a1)
 {
     st_539e60_0 *v0;  // eax
 
-    v0 = sub_48d370(a0, a1);
+    v0 = CGlobalState::Find(a0, a1);
     return (!v0 ? 0 : v0->field_60);
 }
 

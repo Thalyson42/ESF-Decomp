@@ -42,7 +42,7 @@ unsigned int Fire__18CKameTorpedoAttackG6Vectori(st_4c9ea0_0 *a0, unsigned int *
     v3[9] = a1[1];
     v3[10] = a1[2];
     v4 = a0->field_0;
-    sub_488860(&v0, a1);
+    UTIL_VecToAngles(&v0, a1);
     v4[20] = v0;
     v4[21] = v1;
     v4[22] = v2;

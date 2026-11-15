@@ -19,23 +19,23 @@ unsigned int KeyValue__19CMomentaryRotButtonP14KeyValueData_s(st_497eb0_1 *a0, s
     double v1;  // mm7
     unsigned int v2;  // eax
 
-    if (!sub_488af0(a1->field_4, "returnspeed"))
+    if (!strcmp@GLIBC_2.0(a1->field_4, "returnspeed"))
     {
-        v0 = sub_487fc0(a1->field_8, 0, 0);
+        v0 = __strtod_internal@GLIBC_2.0(a1->field_8, 0, 0);
         a0->field_10c = (float)v1;
         a1->field_c = 1;
         return v0;
     }
-    else if (!sub_488af0(a1->field_4, "sounds"))
+    else if (!strcmp@GLIBC_2.0(a1->field_4, "sounds"))
     {
-        v2 = sub_48b500(a1->field_8, 0, 10, 0);
+        v2 = __strtol_internal@GLIBC_2.0(a1->field_8, 0, 10, 0);
         a0->field_128 = v2;
         a1->field_c = 1;
         return v2;
     }
     else
     {
-        return sub_48ba40(a0, a1);
+        return CBaseToggle::KeyValue(a0, a1);
     }
 }
 

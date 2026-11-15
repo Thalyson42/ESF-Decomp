@@ -100,8 +100,8 @@ typedef struct st_54b940_11 {
 } st_54b940_11;
 
 extern char BotWeaponInfoTable;
-extern st_54b940_11 *g_616928;
-extern st_54b940_11 *g_61692c;
+extern st_54b940_11 *g_engfuncs.pfnRandomLong;
+extern st_54b940_11 *g_engfuncs.pfnRandomFloat;
 extern st_54b940_10 *gpGlobals;
 
 double PrepareAttack__11CCombatTaski9EComboUse(st_54b940_7 *a0, char *a1, unsigned int a2)
@@ -207,7 +207,7 @@ LABEL_54ba9a:
             v21 = v18 * v18 + v19 * v19 + v20 * v20;
             v22 = sqrt(v21);
             if (isnan(v22))
-                sub_487dc0(*(unsigned int *)&v21);
+                sqrt(*(unsigned int *)&v21);
             else
                 v21 = v22;
             v3 = (float)v21;
@@ -219,7 +219,7 @@ LABEL_54ba9a:
                 v7 = a0->field_c->field_88;
                 v8 = *(float *)&v23->field_4;
                 v10 = *(float *)&v23->field_8;
-                if (!(char)sub_489330(a0->field_10, a0->field_8))
+                if (!(char)EntIsInFieldOfView(a0->field_10, a0->field_8))
                     v1 = (float)(1.5 * v1);
             }
             else
@@ -227,7 +227,7 @@ LABEL_54ba9a:
                 *(unsigned int *)&v1 = (v3 < 500.0f ? __float_as_int((float)((double)v1 * 1.25)) : v3 < 1000.0f ? __float_as_int((float)((double)v1 * 1.0499999523162842)) : v3 < 1750.0f ? __float_as_int((float)((double)v1 * 0.8500000238418579)) : 0);
             }
             v24 = 100.0;
-            g_61692c(0x3f800000, 100.0f);
+            g_engfuncs.pfnRandomFloat(0x3f800000, 100.0f);
             if (100.0 <= v1)
                 goto LABEL_54bc3b;
             break;
@@ -238,18 +238,18 @@ LABEL_54ba9a:
     }
 LABEL_54bc3f:
     v0 = a1;
-    v25 = &(&BotWeaponInfoTable)[84 * sub_48d810(a0, v0)];
+    v25 = &(&BotWeaponInfoTable)[84 * CCombatTask::GetAttackIndex(a0, v0)];
     v26 = a0->field_8;
     if (v26->field_968 && v26->field_968->field_88 != a1)
     {
         v0 = &v25->field_4;
-        sub_48ce10(v26, v0);
+        CBasePlayer::SelectItem(v26, v0);
     }
     v27 = a1 - 1;
     if (v27 <= 0x1)
     {
         *(unsigned short *)&v0 = _INSERT(v27, 0, v2);
-        sub_4894f0(a0, v0);
+        CCombatTask::AttackWithMelee(a0, v0);
         return v24;
     }
     switch (a1)
@@ -271,7 +271,7 @@ LABEL_54bc3f:
         a0->field_4 = 2;
         return v24;
     default:
-        g_616928(1, 100);
+        g_engfuncs.pfnRandomLong(1, 100);
         if (v25->field_45)
         {
             a0->field_8->field_b80 = v25;
@@ -279,7 +279,7 @@ LABEL_54bc3f:
             if (v25->field_44)
                 v28 = 0x800;
             a0->field_8->field_b7c = v28;
-            if (a1 == 0x4 && v25->field_44 && !(v29 = g_616928(1, 100), (int)g_616928(1, 100) > a0->field_8->field_a04->field_0))
+            if (a1 == 0x4 && v25->field_44 && !(v29 = g_engfuncs.pfnRandomLong(1, 100), (int)g_engfuncs.pfnRandomLong(1, 100) > a0->field_8->field_a04->field_0))
             {
                 v0 = 28;
             }
@@ -302,8 +302,8 @@ LABEL_54bc3f:
                 else
                 {
                     v0 = 6;
-                    sub_48c020(a0);
-                    g_61692c(10.0f, 20.0f);
+                    CBaseTask::MakeCombo(a0);
+                    g_engfuncs.pfnRandomFloat(10.0f, 20.0f);
                     v31 = 10.0 + *(float *)gpGlobals;
                     a0->field_8->field_ab0 = (float)v31;
                     return v31;
@@ -321,8 +321,8 @@ LABEL_54bc3f:
             if (v2)
             {
                 v0 = 7;
-                sub_48c020(a0);
-                g_61692c(10.0f, 20.0f);
+                CBaseTask::MakeCombo(a0);
+                g_engfuncs.pfnRandomFloat(10.0f, 20.0f);
                 v31 = 10.0 + *(float *)gpGlobals;
                 a0->field_8->field_ab0 = (float)v31;
                 return v31;
@@ -345,10 +345,10 @@ LABEL_54bc3f:
                 a0->field_c->field_200 = a0->field_c->field_200 | 1;
             else
                 a0->field_c->field_201 = a0->field_c->field_201 | 8;
-            sub_48bf00(a0->field_8);
+            CBot::AddShootDelay(a0->field_8);
             return 0.0;
         }
-        sub_48c020(a0);
+        CBaseTask::MakeCombo(a0);
         return v24;
     }
 }

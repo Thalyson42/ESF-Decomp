@@ -18,10 +18,10 @@ typedef struct st_50bea0_3 {
 } st_50bea0_3;
 
 extern unsigned int gmsgMeleeFX;
-extern st_50bea0_3 *g_616878;
-extern st_50bea0_3 *g_61687c;
-extern st_50bea0_3 *g_616880;
-extern st_50bea0_3 *g_6168dc;
+extern st_50bea0_3 *g_engfuncs.pfnMessageBegin;
+extern st_50bea0_3 *g_engfuncs.pfnMessageEnd;
+extern st_50bea0_3 *g_engfuncs.pfnWriteByte;
+extern st_50bea0_3 *g_engfuncs.pfnIndexOfEdict;
 
 int EmitShockwave__12CPlayerMelee(st_50bea0_1 *a0)
 {
@@ -32,13 +32,13 @@ int EmitShockwave__12CPlayerMelee(st_50bea0_1 *a0)
     unsigned int v4;  // [bp-0x18]
     unsigned int v5;  // [bp-0x14]
 
-    g_616878(4, gmsgMeleeFX, *(int *)a0->field_124 + 8, 0, v3, v4, v5);
-    g_616880(1);
-    v2 = g_6168dc(*(int *)(*(int *)a0->field_124 + 520));
-    g_616880(v2);
-    g_61687c(v2);
+    g_engfuncs.pfnMessageBegin(4, gmsgMeleeFX, *(int *)a0->field_124 + 8, 0, v3, v4, v5);
+    g_engfuncs.pfnWriteByte(1);
+    v2 = g_engfuncs.pfnIndexOfEdict(*(int *)(*(int *)a0->field_124 + 520));
+    g_engfuncs.pfnWriteByte(v2);
+    g_engfuncs.pfnMessageEnd(v2);
     v1 = 1;
     v0 = 1;
-    return sub_488750(a0, sub_48be70(a0));
+    return CPlayerMelee::EmitClientSound(a0, CPlayerMelee::GetSoundEdict(a0));
 }
 

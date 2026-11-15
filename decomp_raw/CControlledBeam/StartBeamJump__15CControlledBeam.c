@@ -47,7 +47,7 @@ typedef struct st_4a7750_5 {
     unsigned int field_0;
 } st_4a7750_5;
 
-extern st_4a7750_5 *g_6168dc;
+extern st_4a7750_5 *g_engfuncs.pfnIndexOfEdict;
 
 int StartBeamJump__15CControlledBeam(st_4a7750_3 *a0)
 {
@@ -98,7 +98,7 @@ int StartBeamJump__15CControlledBeam(st_4a7750_3 *a0)
     v23 = v19 * v19 + v20 * v20 + v21 * v21;
     v24 = sqrt(v23);
     if (isnan(v24))
-        sub_487dc0(*(unsigned int *)&v23);
+        sqrt(*(unsigned int *)&v23);
     else
         v23 = v24;
     v3 = (float)v23;
@@ -115,7 +115,7 @@ int StartBeamJump__15CControlledBeam(st_4a7750_3 *a0)
         v7 = (float)(v25 * v13);
         v8 = (float)(v25 * v14);
     }
-    v1 = sub_48a780(a0->field_80);
+    v1 = CBasePlayer::GetMaxSpeed(a0->field_80);
     v26 = (double)v1;
     v9 = (float)(v26 * v6);
     v10 = (float)(v26 * v7);
@@ -127,8 +127,8 @@ int StartBeamJump__15CControlledBeam(st_4a7750_3 *a0)
     v3 = -v12;
     v4 = -v13;
     v5 = -v14;
-    sub_488860(&v2, &v3);
+    UTIL_VecToAngles(&v2, &v3);
     v0 = &v2;
-    return sub_48da70(g_6168dc(*(int *)(*(int *)a0->field_80 + 520)));
+    return UTIL_Model_FixAngles(g_engfuncs.pfnIndexOfEdict(*(int *)(*(int *)a0->field_80 + 520)));
 }
 

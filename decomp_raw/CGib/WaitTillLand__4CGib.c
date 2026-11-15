@@ -5,8 +5,8 @@ typedef struct st_4a50d0_0 {
 
 extern char SUB_StartFadeOut__11CBaseEntity;
 extern float g_vecZero;
-extern float g_616790;
-extern float g_616794;
+extern float g_vecZero+4;
+extern float g_vecZero+8;
 extern st_4a50d0_0 *gpGlobals;
 
 unsigned int * WaitTillLand__4CGib(float idx)
@@ -19,15 +19,15 @@ unsigned int * WaitTillLand__4CGib(float idx)
     unsigned int v6;  // eax
 
     if (!(*(int *)(*(int *)(*(unsigned int *)&idx + 96) + 156))(idx))
-        return sub_48cc00(idx);
+        return UTIL_Remove(idx);
     v1 = *(int *)idx + 32;
     v2 = 0;
-    if (g_vecZero == *(float *)(*(int *)idx + 32) && g_616790 == *(float *)&v1[1])
+    if (g_vecZero == *(float *)(*(int *)idx + 32) && g_vecZero+4 == *(float *)&v1[1])
     {
         v3 = *(float *)&v1[2];
-        *((char *)&v4 + 1) = (isunordered(g_616794, v3) ? 69 : g_616794 == v3 ? 64 : g_616794 < v3);
-        v5 = _INSERT(v4, 0, g_616794 == v3);
-        v2 = g_616794 == v3;
+        *((char *)&v4 + 1) = (isunordered(g_vecZero+8, v3) ? 69 : g_vecZero+8 == v3 ? 64 : g_vecZero+8 < v3);
+        v5 = _INSERT(v4, 0, g_vecZero+8 == v3);
+        v2 = g_vecZero+8 == v3;
     }
     if (!v2)
     {
@@ -42,6 +42,6 @@ unsigned int * WaitTillLand__4CGib(float idx)
     *(float *)(*(int *)idx + 260) = *(float *)gpGlobals + *(float *)(*(unsigned int *)&idx + 692);
     if (*(int *)(*(unsigned int *)&idx + 680) == 0xffffffff)
         return gpGlobals;
-    return sub_48d940(16, *(int *)idx + 8, 384, 25.0f);
+    return CSoundEnt::InsertSound(16, *(int *)idx + 8, 384, 25.0f);
 }
 

@@ -21,7 +21,7 @@ typedef struct st_52a3f0_2 {
     float field_30;
 } st_52a3f0_2;
 
-extern st_52a3f0_1 *g_6168b4;
+extern st_52a3f0_1 *g_engfuncs.pfnAlertMessage;
 extern st_52a3f0_2 *gpGlobals;
 
 unsigned int * ShootAttack__12CTelekinesis(st_52a3f0_0 *a0)
@@ -37,11 +37,11 @@ unsigned int * ShootAttack__12CTelekinesis(st_52a3f0_0 *a0)
     float v4;  // [bp-0x20]
     float v5;  // [bp-0x1c]
 
-    v6 = sub_48a800(*(int *)a0->field_80 + 116);
+    v6 = UTIL_MakeVectors(*(int *)a0->field_80 + 116);
     if (!a0->field_204)
         return v6;
     if (a0->field_1ec > 6)
-        g_6168b4(1, "Invalid m_iRock: %d\n", a0->field_1ec);
+        g_engfuncs.pfnAlertMessage(1, "Invalid m_iRock: %d\n", a0->field_1ec);
     v7 = gpGlobals;
     v8 = &gpGlobals->field_28;
     v3 = (float)(1200.0 * gpGlobals->field_28);
@@ -55,7 +55,7 @@ unsigned int * ShootAttack__12CTelekinesis(st_52a3f0_0 *a0)
             v0 = v3;
             v1 = v4;
             v2 = v5;
-            v7 = sub_488130((&a0->field_1d4)[i], &v0);
+            v7 = CRock::Shoot((&a0->field_1d4)[i], &v0);
             i += 1;
         } while (i < a0->field_1ec);
     }

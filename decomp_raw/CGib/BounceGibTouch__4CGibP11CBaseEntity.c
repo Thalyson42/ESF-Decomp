@@ -64,7 +64,7 @@ typedef struct st_4a5200_4 {
 } st_4a5200_4;
 
 extern unsigned int g_Language;
-extern st_4a5200_4 *g_616928;
+extern st_4a5200_4 *g_engfuncs.pfnRandomLong;
 
 st_4a5200_0 ** BounceGibTouch__4CGibP11CBaseEntity(st_4a5200_3 *a0, st_4a5200_0 **a1)
 {
@@ -128,11 +128,11 @@ st_4a5200_0 ** BounceGibTouch__4CGibP11CBaseEntity(st_4a5200_3 *a0, st_4a5200_0 
             v1 = v12 + v5;
             v2 = v13 + v6;
             v3 = v14 + v7;
-            sub_487b80(&v12, &v1, 1, v15->field_208, &v11);
-            sub_48d7e0(&v11, a0->field_2a8);
+            UTIL_TraceLine(&v12, &v1, 1, v15->field_208, &v11);
+            UTIL_BloodDecalTrace(&v11, a0->field_2a8);
             a0->field_2ac = a0->field_2ac - 1;
         }
-        if (a0->field_2b0 != 9 && !g_616928(0, 2))
+        if (a0->field_2b0 != 9 && !g_engfuncs.pfnRandomLong(0, 2))
         {
             v0 = (st_4a5200_0 **)fabsf(*(float *)&a0->field_0->field_28);
             if (1.0 < (double)v0 / 450.0)
@@ -144,7 +144,7 @@ st_4a5200_0 ** BounceGibTouch__4CGibP11CBaseEntity(st_4a5200_3 *a0, st_4a5200_0 
                 v0 = (float)((double)v0 / 450.0 * 0.8);
                 v17 = *(int *)&v0;
             }
-            sub_48ac80(a0->field_0->field_208, a0->field_2b0, v17);
+            CBreakable::MaterialSoundRandom(a0->field_0->field_208, a0->field_2b0, v17);
         }
     }
     v18 = a0->field_0;

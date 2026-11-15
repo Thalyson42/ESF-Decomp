@@ -107,8 +107,8 @@ typedef struct st_54bf50_0 {
 } st_54bf50_0;
 
 extern unsigned int FindSelection__t12TMultiChoice1Z10EComboTypePQ2t12TMultiChoice1Z10EComboType12SMultiChoicei;
-extern st_54bf50_0 *g_616928;
-extern st_54bf50_0 *g_61692c;
+extern st_54bf50_0 *g_engfuncs.pfnRandomLong;
+extern st_54bf50_0 *g_engfuncs.pfnRandomFloat;
 extern st_54bf50_11 *gpGlobals;
 
 double AttackWithMelee__11CCombatTaskb(st_54bf50_8 *a0, char a1)
@@ -217,7 +217,7 @@ double AttackWithMelee__11CCombatTaskb(st_54bf50_8 *a0, char a1)
 
     if (25.0 <= a0->field_8->field_c28 && a0->field_8->field_9fc > 2)
         return 25.0;
-    v47 = sub_48a780(a0->field_8);
+    v47 = CBasePlayer::GetMaxSpeed(a0->field_8);
     if (*(float *)&v47 == 0.0f)
         return (double)v47;
     v48 = a0->field_8;
@@ -237,17 +237,17 @@ double AttackWithMelee__11CCombatTaskb(st_54bf50_8 *a0, char a1)
             {
                 v49 = "weapon_melee";
 LABEL_54c010:
-                sub_48ce10(v48, v49);
+                CBasePlayer::SelectItem(v48, v49);
             }
         }
     }
 LABEL_54c01a:
     if (a0->field_8->field_a04->field_0 <= 99)
     {
-        v50 = g_616928(1, 100);
+        v50 = g_engfuncs.pfnRandomLong(1, 100);
         v51 = a0;
         if (v50 <= v51->field_8->field_a04->field_4)
-            sub_48c020(v51, 28);
+            CBaseTask::MakeCombo(v51, 28);
     }
     if (!a1)
     {
@@ -258,10 +258,10 @@ LABEL_54c01a:
         v43 = (int)v53;
         if (v43 > 149)
         {
-            sub_48c020(a0, 2);
+            CBaseTask::MakeCombo(a0, 2);
             return v53;
         }
-        sub_48c020(v52, 25);
+        CBaseTask::MakeCombo(v52, 25);
         return v53;
     }
     else
@@ -285,7 +285,7 @@ LABEL_54c01a:
         v60 = v57 * v57 + v58 * v58 + v59 * v59;
         v61 = sqrt(v60);
         if (isnan(v61))
-            sub_487dc0(*(unsigned int *)&v60);
+            sqrt(*(unsigned int *)&v60);
         else
             v60 = v61;
         v27 = (float)v60;
@@ -293,7 +293,7 @@ LABEL_54c01a:
         {
             v31 = 0;
         }
-        else if ((short)sub_48aab0(a0->field_8, a0->field_8->field_b6c) > 64)
+        else if ((short)UTIL_GetHeadingPercentage(a0->field_8, a0->field_8->field_b6c) > 64)
         {
             v36 = __fnstcw();
             v35 = v36 | 0xc00;
@@ -332,13 +332,13 @@ LABEL_54c01a:
         v30 = 0;
 LABEL_54c353:
         iter = 0;
-        v62 = sub_48d6a0(8);
+        v62 = __builtin_new(8);
         *v62 = NULL;
         v62[1] = NULL;
         v34 = v62;
         if (v30)
         {
-            v63 = sub_48d6a0(12);
+            v63 = __builtin_new(12);
             *v63 = 0;
             v63[1] = 0;
             v26 = v63;
@@ -348,15 +348,15 @@ LABEL_54c353:
             v64 = v34;
             if (!*v64)
             {
-                v65 = sub_48d6a0(12);
+                v65 = __builtin_new(12);
                 v25 = 1;
                 v65->field_4 = NULL;
                 v65->field_8 = NULL;
-                sub_48d0e0(v65, 0, 4);
+                memset@GLIBC_2.0(v65, 0, 4);
                 v25 = 0;
                 *v64 = v65;
                 if (v25)
-                    sub_48d4e0(v65);
+                    __builtin_delete(v65);
                 *v64->field_0 = v26;
                 *v64->field_4 = NULL;
                 *v64->field_8 = NULL;
@@ -365,15 +365,15 @@ LABEL_54c353:
             else
             {
                 v24 = v64[1];
-                v66 = sub_48d6a0(12);
+                v66 = __builtin_new(12);
                 v23 = 1;
                 v66->field_4 = NULL;
                 v66->field_8 = NULL;
-                sub_48d0e0(v66, 0, 4);
+                memset@GLIBC_2.0(v66, 0, 4);
                 v23 = 0;
                 v24->field_4 = v66;
                 if (v23)
-                    sub_48d4e0(v66);
+                    __builtin_delete(v66);
                 v64[1]->field_4->field_8 = v64[1];
                 v67 = v64[1]->field_4;
                 v64[1] = v67;
@@ -383,7 +383,7 @@ LABEL_54c353:
             iter += v30;
             if (v30)
             {
-                v68 = sub_48d6a0(12);
+                v68 = __builtin_new(12);
                 *v68 = 0;
                 v68[1] = 0;
                 v22 = v68;
@@ -393,15 +393,15 @@ LABEL_54c353:
                 v69 = v34;
                 if (!*v69)
                 {
-                    v70 = sub_48d6a0(12);
+                    v70 = __builtin_new(12);
                     v21 = 1;
                     v70->field_4 = NULL;
                     v70->field_8 = NULL;
-                    sub_48d0e0(v70, 0, 4);
+                    memset@GLIBC_2.0(v70, 0, 4);
                     v21 = 0;
                     *v69 = v70;
                     if (v21)
-                        sub_48d4e0(v70);
+                        __builtin_delete(v70);
                     *v69->field_0 = v22;
                     *v69->field_4 = NULL;
                     *v69->field_8 = NULL;
@@ -410,15 +410,15 @@ LABEL_54c353:
                 else
                 {
                     v20 = v69[1];
-                    v71 = sub_48d6a0(12);
+                    v71 = __builtin_new(12);
                     v19 = 1;
                     v71->field_4 = NULL;
                     v71->field_8 = NULL;
-                    sub_48d0e0(v71, 0, 4);
+                    memset@GLIBC_2.0(v71, 0, 4);
                     v19 = 0;
                     v20->field_4 = v71;
                     if (v19)
-                        sub_48d4e0(v71);
+                        __builtin_delete(v71);
                     v69[1]->field_4->field_8 = v69[1];
                     v72 = v69[1]->field_4;
                     v69[1] = v72;
@@ -430,7 +430,7 @@ LABEL_54c353:
         }
         if (v29)
         {
-            v73 = sub_48d6a0(12);
+            v73 = __builtin_new(12);
             *v73 = 0;
             v73[1] = 0;
             v18 = v73;
@@ -440,15 +440,15 @@ LABEL_54c353:
             v74 = v34;
             if (!*v74)
             {
-                v75 = sub_48d6a0(12);
+                v75 = __builtin_new(12);
                 v17 = 1;
                 v75->field_4 = NULL;
                 v75->field_8 = NULL;
-                sub_48d0e0(v75, 0, 4);
+                memset@GLIBC_2.0(v75, 0, 4);
                 v17 = 0;
                 *v74 = v75;
                 if (v17)
-                    sub_48d4e0(v75);
+                    __builtin_delete(v75);
                 *v74->field_0 = v18;
                 *v74->field_4 = NULL;
                 *v74->field_8 = NULL;
@@ -457,15 +457,15 @@ LABEL_54c353:
             else
             {
                 v16 = v74[1];
-                v76 = sub_48d6a0(12);
+                v76 = __builtin_new(12);
                 v15 = 1;
                 v76->field_4 = NULL;
                 v76->field_8 = NULL;
-                sub_48d0e0(v76, 0, 4);
+                memset@GLIBC_2.0(v76, 0, 4);
                 v15 = 0;
                 v16->field_4 = v76;
                 if (v15)
-                    sub_48d4e0(v76);
+                    __builtin_delete(v76);
                 v74[1]->field_4->field_8 = v74[1];
                 v77 = v74[1]->field_4;
                 v74[1] = v77;
@@ -476,7 +476,7 @@ LABEL_54c353:
         }
         if (v28)
         {
-            v78 = sub_48d6a0(12);
+            v78 = __builtin_new(12);
             *v78 = 0;
             v78[1] = 0;
             v14 = v78;
@@ -486,15 +486,15 @@ LABEL_54c353:
             v79 = v34;
             if (!*v79)
             {
-                v80 = sub_48d6a0(12);
+                v80 = __builtin_new(12);
                 v13 = 1;
                 v80->field_4 = NULL;
                 v80->field_8 = NULL;
-                sub_48d0e0(v80, 0, 4);
+                memset@GLIBC_2.0(v80, 0, 4);
                 v13 = 0;
                 *v79 = v80;
                 if (v13)
-                    sub_48d4e0(v80);
+                    __builtin_delete(v80);
                 *v79->field_0 = v14;
                 *v79->field_4 = NULL;
                 *v79->field_8 = NULL;
@@ -503,15 +503,15 @@ LABEL_54c353:
             else
             {
                 v12 = v79[1];
-                v81 = sub_48d6a0(12);
+                v81 = __builtin_new(12);
                 v11 = 1;
                 v81->field_4 = NULL;
                 v81->field_8 = NULL;
-                sub_48d0e0(v81, 0, 4);
+                memset@GLIBC_2.0(v81, 0, 4);
                 v11 = 0;
                 v12->field_4 = v81;
                 if (v11)
-                    sub_48d4e0(v81);
+                    __builtin_delete(v81);
                 v79[1]->field_4->field_8 = v79[1];
                 v82 = v79[1]->field_4;
                 v79[1] = v82;
@@ -522,7 +522,7 @@ LABEL_54c353:
         }
         if (v31)
         {
-            v83 = sub_48d6a0(12);
+            v83 = __builtin_new(12);
             *v83 = 0;
             v83[1] = 0;
             v10 = v83;
@@ -532,15 +532,15 @@ LABEL_54c353:
             v84 = v34;
             if (!*v84)
             {
-                v85 = sub_48d6a0(12);
+                v85 = __builtin_new(12);
                 v9 = 1;
                 v85->field_4 = NULL;
                 v85->field_8 = NULL;
-                sub_48d0e0(v85, 0, 4);
+                memset@GLIBC_2.0(v85, 0, 4);
                 v9 = 0;
                 *v84 = v85;
                 if (v9)
-                    sub_48d4e0(v85);
+                    __builtin_delete(v85);
                 *v84->field_0 = v10;
                 *v84->field_4 = NULL;
                 *v84->field_8 = NULL;
@@ -549,15 +549,15 @@ LABEL_54c353:
             else
             {
                 v8 = v84[1];
-                v86 = sub_48d6a0(12);
+                v86 = __builtin_new(12);
                 v7 = 1;
                 v86->field_4 = NULL;
                 v86->field_8 = NULL;
-                sub_48d0e0(v86, 0, 4);
+                memset@GLIBC_2.0(v86, 0, 4);
                 v7 = 0;
                 v8->field_4 = v86;
                 if (v7)
-                    sub_48d4e0(v86);
+                    __builtin_delete(v86);
                 v84[1]->field_4->field_8 = v84[1];
                 v87 = v84[1]->field_4;
                 v84[1] = v87;
@@ -567,7 +567,7 @@ LABEL_54c353:
             iter += v31;
         }
         v6 = &v32;
-        v5 = g_616928(0, iter);
+        v5 = g_engfuncs.pfnRandomLong(0, iter);
         v3 = _INSERT(v5, 0, 0) | 0xffff0000;
         v4 = &FindSelection__t12TMultiChoice1Z10EComboTypePQ2t12TMultiChoice1Z10EComboType12SMultiChoicei;
         v89 = *v34;
@@ -598,8 +598,8 @@ LABEL_54cd90:
             v1 = 2;
             v0 = a0;
         }
-        sub_48c020(v0, v1);
-        g_61692c(10.0f, 20.0f);
+        CBaseTask::MakeCombo(v0, v1);
+        g_engfuncs.pfnRandomFloat(10.0f, 20.0f);
         v93 = 10.0 + *(float *)gpGlobals;
         a0->field_8->field_ab0 = (float)v93;
         while (*v34 && (v94 = v34, *v94))
@@ -615,12 +615,12 @@ LABEL_54cd90:
                 if (v97)
                     v97->field_8 = NULL;
                 v96->field_4 = NULL;
-                sub_48d4e0(v96);
+                __builtin_delete(v96);
             }
             v98 = v95;
             if (!v98)
                 break;
-            sub_48d4e0(v98);
+            __builtin_delete(v98);
         }
         if (v34)
         {
@@ -634,12 +634,12 @@ LABEL_54cd90:
                     node = node->field_4;
                     v101->field_4 = NULL;
                     v101->field_8 = NULL;
-                    sub_48d4e0(v101);
+                    __builtin_delete(v101);
                 } while (node);
             }
             v99[1] = NULL;
             *v99 = NULL;
-            sub_48d4e0(v99);
+            __builtin_delete(v99);
         }
         v34 = 0;
         return v93;

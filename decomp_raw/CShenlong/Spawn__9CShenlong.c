@@ -22,8 +22,8 @@ typedef struct st_517de0_0 {
     unsigned int field_0;
 } st_517de0_0;
 
-extern st_517de0_0 *g_6167c8;
-extern st_517de0_0 *g_6168dc;
+extern st_517de0_0 *g_engfuncs.pfnSetModel;
+extern st_517de0_0 *g_engfuncs.pfnIndexOfEdict;
 
 unsigned int Spawn__9CShenlong(float a0)
 {
@@ -45,7 +45,7 @@ unsigned int Spawn__9CShenlong(float a0)
     float v8;  // [bp-0x1c]
 
     (*(int *)(*(int *)(*(unsigned int *)&a0 + 96) + 12))(a0);
-    g_6167c8(*(int *)(*(int *)a0 + 520), "models/shenlong.mdl");
+    g_engfuncs.pfnSetModel(*(int *)(*(int *)a0 + 520), "models/shenlong.mdl");
     *(unsigned int *)(*(int *)a0 + 264) = 13;
     *(unsigned int *)(*(int *)a0 + 268) = 1;
     v6 = 128.0f;
@@ -54,14 +54,14 @@ unsigned int Spawn__9CShenlong(float a0)
     v3 = -128.0f;
     v4 = -128.0f;
     v5 = 0;
-    sub_48a0d0(*(int *)a0, &v3, &v6);
+    UTIL_SetSize(*(int *)a0, &v3, &v6);
     memset(*(int *)a0 + 296, 0, 12);
-    sub_488850(a0);
+    CBaseAnimating::ResetSequenceInfo(a0);
     v2 = 0;
     v1 = *(unsigned int *)&a0 + 680;
     do
     {
-        v10 = sub_48c010("sprites/shens_eyes.spr", *(int *)a0 + 8, 0);
+        v10 = CSprite::SpriteCreate("sprites/shens_eyes.spr", *(int *)a0 + 8, 0);
         v11 = v2 * 4;
         *(st_517de0_1 ***)((char *)v11 + v1) = v10;
         *v10->field_148 = 5;
@@ -75,13 +75,13 @@ unsigned int Spawn__9CShenlong(float a0)
         v0 = v2 + 1;
         if (v12)
         {
-            v14 = g_6168dc(v12);
+            v14 = g_engfuncs.pfnIndexOfEdict(v12);
             *v13->field_110 = v14;
             *v13->field_114 = v0;
             *v13->field_194 = v12;
             *v13->field_108 = 12;
         }
-    } while ((v15 = v2 * 4, *(unsigned int *)(*(int *)*(int *)((char *)v15 + v1) + 332) = 0, v16 = sub_48df90(*(int *)((char *)v15 + v1)), v2 += 1, v2 <= 1));
-    return sub_48df90(*(int *)((char *)v15 + v1));
+    } while ((v15 = v2 * 4, *(unsigned int *)(*(int *)*(int *)((char *)v15 + v1) + 332) = 0, v16 = CSprite::TurnOff(*(int *)((char *)v15 + v1)), v2 += 1, v2 <= 1));
+    return CSprite::TurnOff(*(int *)((char *)v15 + v1));
 }
 

@@ -86,9 +86,9 @@ st_58e8a0_2 * PM_CatagorizeTextureType(void)
     {
         iter = &iter->field_1;
     }
-    sub_48e110(&pmove->field_f0, iter);
+    strcpy@GLIBC_2.0(&pmove->field_f0, iter);
     pmove->field_fc = 0;
-    v8 = sub_48bc70(&pmove->field_f0);
+    v8 = PM_FindTextureType(&pmove->field_f0);
     pmove->field_1f0 = v8;
     return pmove;
 }

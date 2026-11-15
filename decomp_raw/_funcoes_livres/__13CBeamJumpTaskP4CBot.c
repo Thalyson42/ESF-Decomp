@@ -13,13 +13,13 @@ typedef struct st_586f80_1 {
 } st_586f80_1;
 
 extern char __vt_13CBeamJumpTask;
-extern st_586f80_1 *g_61692c;
+extern st_586f80_1 *g_engfuncs.pfnRandomFloat;
 
 st_586f80_0 * __13CBeamJumpTaskP4CBot(double a0, st_586f80_0 *a1, int a2)
 {
-    sub_48ce80(a1, a2);
+    __9CBaseTaskP4CBot(a1, a2);
     a1->field_14 = &__vt_13CBeamJumpTask;
-    g_61692c(2.200000047683716f, 3.200000047683716f);
+    g_engfuncs.pfnRandomFloat(2.200000047683716f, 3.200000047683716f);
     a1->field_18 = (float)(2.200000047683716 + *(float *)&a1->field_0);
     a1->field_1c = 0;
     *(float *)&a1->field_20 = *(float *)&a1->field_0;

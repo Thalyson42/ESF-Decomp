@@ -60,13 +60,13 @@ typedef struct st_4be600_5 {
 extern char ExplodeTouch__16CExplodingAttackP11CBaseEntity;
 extern char NormalThink__12CMagicAttack;
 extern unsigned int gmsgFlare;
-extern st_4be600_2 *g_6167c8;
-extern st_4be600_2 *g_616878;
-extern st_4be600_2 *g_61687c;
-extern st_4be600_2 *g_616888;
-extern st_4be600_2 *g_61688c;
-extern st_4be600_2 *g_616894;
-extern st_4be600_2 *g_6168dc;
+extern st_4be600_2 *g_engfuncs.pfnSetModel;
+extern st_4be600_2 *g_engfuncs.pfnMessageBegin;
+extern st_4be600_2 *g_engfuncs.pfnMessageEnd;
+extern st_4be600_2 *g_engfuncs.pfnWriteShort;
+extern st_4be600_2 *g_engfuncs.pfnWriteLong;
+extern st_4be600_2 *g_engfuncs.pfnWriteCoord;
+extern st_4be600_2 *g_engfuncs.pfnIndexOfEdict;
 extern st_4be600_5 *gpGlobals;
 
 short ShootFinishingBuster__22CFinishingBusterAttackP9entvars_sG6VectorT2ifsss(st_4be600_4 *a0, float *a1, float *a2, unsigned int a3, float a4, short a5, short a6, short a7)
@@ -115,11 +115,11 @@ short ShootFinishingBuster__22CFinishingBusterAttackP9entvars_sG6VectorT2ifsss(s
     float v21;  // [bp-0x14]
     float v22;  // [bp-0x10]
 
-    v23 = sub_48ae10(0);
+    v23 = GetClassPtr__H1Z22CFinishingBusterAttack_PX01_PX01(0);
     v23->field_60->field_8(v23);
     v23->field_0->field_108 = 5;
     v23->field_0->field_10c = 1;
-    g_6167c8(v23->field_0->field_208, "sprites/null.spr");
+    g_engfuncs.pfnSetModel(v23->field_0->field_208, "sprites/null.spr");
     v23->field_2d4 = 0;
     v23->field_2d0 = 6;
     v24 = a3;
@@ -135,12 +135,12 @@ short ShootFinishingBuster__22CFinishingBusterAttackP9entvars_sG6VectorT2ifsss(s
     v27 = *v26 * *v26 + v26[1] * v26[1] + v26[2] * v26[2];
     v28 = sqrt(v27);
     if (isnan(v28))
-        sub_487dc0(*(unsigned int *)&v27);
+        sqrt(*(unsigned int *)&v27);
     else
         v27 = v28;
     v23->field_2a8 = (float)v27;
     v29 = v23->field_0;
-    sub_488860(&v14, &v29->field_20);
+    UTIL_VecToAngles(&v14, &v29->field_20);
     v29->field_50 = v14;
     v29->field_54 = v17;
     v29->field_58 = v19;
@@ -151,7 +151,7 @@ short ShootFinishingBuster__22CFinishingBusterAttackP9entvars_sG6VectorT2ifsss(s
     v30 = *a2 * *a2 + a2[1] * a2[1] + a2[2] * a2[2];
     v31 = sqrt(v30);
     if (isnan(v31))
-        sub_487dc0(*(unsigned int *)&v30);
+        sqrt(*(unsigned int *)&v30);
     else
         v30 = v31;
     v9 = (float)v30;
@@ -176,7 +176,7 @@ short ShootFinishingBuster__22CFinishingBusterAttackP9entvars_sG6VectorT2ifsss(s
     v15 = *v34 + v20;
     v16 = v34[1] + v21;
     v18 = v34[2] + v22;
-    sub_48db50(v23->field_0, &v15);
+    UTIL_SetOrigin(v23->field_0, &v15);
     v35 = v1;
     v15 = v35;
     v16 = v35;
@@ -185,12 +185,12 @@ short ShootFinishingBuster__22CFinishingBusterAttackP9entvars_sG6VectorT2ifsss(s
     v20 = (float)v36;
     v21 = (float)v36;
     v22 = (float)v36;
-    v23->field_14 = _INSERT(sub_48a0d0(v23->field_0, &v20, &v15), 0, 0) | 0xffff0000;
+    v23->field_14 = _INSERT(UTIL_SetSize(v23->field_0, &v20, &v15), 0, 0) | 0xffff0000;
     v23->field_18 = &ExplodeTouch__16CExplodingAttackP11CBaseEntity;
     v38 = *a2 * *a2 + a2[1] * a2[1] + a2[2] * a2[2];
     v39 = sqrt(v38);
     if (isnan(v39))
-        sub_487dc0(*(unsigned int *)&v38);
+        sqrt(*(unsigned int *)&v38);
     else
         v38 = v39;
     v10 = (float)v38;
@@ -215,26 +215,26 @@ short ShootFinishingBuster__22CFinishingBusterAttackP9entvars_sG6VectorT2ifsss(s
     v15 = *v42 + v20;
     v16 = v42[1] + v21;
     v18 = v42[2] + v22;
-    sub_48db50(v23->field_0, &v15);
-    g_616878(2, gmsgFlare, 0, 0);
-    v43 = g_6168dc(v23->field_0->field_208);
-    g_61688c(v43);
-    g_616888(a5);
-    g_616888(a6);
+    UTIL_SetOrigin(v23->field_0, &v15);
+    g_engfuncs.pfnMessageBegin(2, gmsgFlare, 0, 0);
+    v43 = g_engfuncs.pfnIndexOfEdict(v23->field_0->field_208);
+    g_engfuncs.pfnWriteLong(v43);
+    g_engfuncs.pfnWriteShort(a5);
+    g_engfuncs.pfnWriteShort(a6);
     v5 = __fnstcw();
     v4 = v5 | 0xc00;
     v3 = (int)(0.1 * v2);
-    g_616888(v3);
-    g_616888(a7);
+    g_engfuncs.pfnWriteShort(v3);
+    g_engfuncs.pfnWriteShort(a7);
     v5 = __fnstcw();
     v4 = v5 | 0xc00;
     v3 = (int)(a4 * 80.0);
-    g_616888(v3);
-    g_616894(*a1);
-    g_616894(a1[1]);
+    g_engfuncs.pfnWriteShort(v3);
+    g_engfuncs.pfnWriteCoord(*a1);
+    g_engfuncs.pfnWriteCoord(a1[1]);
     v0 = a1[2];
-    g_616894(v0);
-    v23->field_c = _INSERT(g_61687c(v0), 0, 0) | 0xffff0000;
+    g_engfuncs.pfnWriteCoord(v0);
+    v23->field_c = _INSERT(g_engfuncs.pfnMessageEnd(v0), 0, 0) | 0xffff0000;
     v23->field_10 = &NormalThink__12CMagicAttack;
     *(float *)&v23->field_0->field_104 = gpGlobals->field_0;
     return (unsigned short)v23;

@@ -67,7 +67,7 @@ unsigned int FindLateralCover__12CBaseMonsterRC6VectorT1(st_4d9760_3 *a0, float 
     char v18;  // [bp-0x44]
     float v19;  // [bp-0x34]
 
-    sub_48a800(&a0->field_0->field_50);
+    UTIL_MakeVectors(&a0->field_0->field_50);
     v20 = &gpGlobals->field_40;
     v3 = (float)(48.0 * gpGlobals->field_40);
     v4 = (float)(48.0 * *(float *)&v20[1]);
@@ -107,8 +107,8 @@ unsigned int FindLateralCover__12CBaseMonsterRC6VectorT1(st_4d9760_3 *a0, float 
         v6 = *a1 + *a2;
         v7 = a1[1] + a2[1];
         v8 = a1[2] + a2[2];
-        sub_488820(v0, v1, 1, 1, v22->field_208, &v18);
-        if (v19 != 1.0f && a0->field_60->field_194(a0, &v15) && a0->field_60->field_120(a0, &a0->field_0->field_8, &v15, 0, 0) == 2 && sub_4893b0(a0, 4, 0, &v15))
+        UTIL_TraceLine(v0, v1, 1, 1, v22->field_208, &v18);
+        if (v19 != 1.0f && a0->field_60->field_194(a0, &v15) && a0->field_60->field_120(a0, &a0->field_0->field_8, &v15, 0, 0) == 2 && CBaseMonster::MoveToLocation(a0, 4, 0, &v15))
             break;
         v23 = a0->field_0;
         v3 = v12 + v23->field_174;
@@ -117,8 +117,8 @@ unsigned int FindLateralCover__12CBaseMonsterRC6VectorT1(st_4d9760_3 *a0, float 
         v6 = *a1 + *a2;
         v7 = a1[1] + a2[1];
         v8 = a1[2] + a2[2];
-        sub_488820(v0, v1, 1, 1, v23->field_208, &v18);
-        if (v19 != 1.0f && a0->field_60->field_194(a0, &v12) && a0->field_60->field_120(a0, &a0->field_0->field_8, &v12, 0, 0) == 2 && sub_4893b0(a0, 4, 0, &v12))
+        UTIL_TraceLine(v0, v1, 1, 1, v23->field_208, &v18);
+        if (v19 != 1.0f && a0->field_60->field_194(a0, &v12) && a0->field_60->field_120(a0, &a0->field_0->field_8, &v12, 0, 0) == 2 && CBaseMonster::MoveToLocation(a0, 4, 0, &v12))
             break;
         v2 += 1;
         if (v2 > 4)

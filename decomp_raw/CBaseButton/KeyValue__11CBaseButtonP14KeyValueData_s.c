@@ -21,7 +21,7 @@ typedef struct st_496270_1 {
     unsigned int field_0;
 } st_496270_1;
 
-extern st_496270_1 *g_6168cc;
+extern st_496270_1 *g_engfuncs.pfnAllocString;
 
 int KeyValue__11CBaseButtonP14KeyValueData_s(st_496270_2 *a0, st_496270_0 *a1)
 {
@@ -35,16 +35,16 @@ int KeyValue__11CBaseButtonP14KeyValueData_s(st_496270_2 *a0, st_496270_0 *a1)
     unsigned short v1;  // [bp-0x8]
     unsigned short v2;  // [bp-0x6]
 
-    if (!sub_488af0(a1->field_4, "changetarget"))
+    if (!strcmp@GLIBC_2.0(a1->field_4, "changetarget"))
     {
-        v3 = g_6168cc(a1->field_8);
+        v3 = g_engfuncs.pfnAllocString(a1->field_8);
         a0->field_10c = v3;
         a1->field_c = 1;
         return v3;
     }
-    else if (!sub_488af0(a1->field_4, "locked_sound"))
+    else if (!strcmp@GLIBC_2.0(a1->field_4, "locked_sound"))
     {
-        sub_487fc0(a1->field_8, 0, 0);
+        __strtod_internal@GLIBC_2.0(a1->field_8, 0, 0);
         v2 = __fnstcw();
         v1 = v2 | 0xc00;
         v0 = (int)v4;
@@ -52,9 +52,9 @@ int KeyValue__11CBaseButtonP14KeyValueData_s(st_496270_2 *a0, st_496270_0 *a1)
         a1->field_c = 1;
         return v0;
     }
-    else if (!sub_488af0(a1->field_4, "locked_sentence"))
+    else if (!strcmp@GLIBC_2.0(a1->field_4, "locked_sentence"))
     {
-        sub_487fc0(a1->field_8, 0, 0);
+        __strtod_internal@GLIBC_2.0(a1->field_8, 0, 0);
         v2 = __fnstcw();
         v1 = v2 | 0xc00;
         v0 = (int)v5;
@@ -62,9 +62,9 @@ int KeyValue__11CBaseButtonP14KeyValueData_s(st_496270_2 *a0, st_496270_0 *a1)
         a1->field_c = 1;
         return v0;
     }
-    else if (!sub_488af0(a1->field_4, "unlocked_sound"))
+    else if (!strcmp@GLIBC_2.0(a1->field_4, "unlocked_sound"))
     {
-        sub_487fc0(a1->field_8, 0, 0);
+        __strtod_internal@GLIBC_2.0(a1->field_8, 0, 0);
         v2 = __fnstcw();
         v1 = v2 | 0xc00;
         v0 = (int)v6;
@@ -72,9 +72,9 @@ int KeyValue__11CBaseButtonP14KeyValueData_s(st_496270_2 *a0, st_496270_0 *a1)
         a1->field_c = 1;
         return v0;
     }
-    else if (!sub_488af0(a1->field_4, "unlocked_sentence"))
+    else if (!strcmp@GLIBC_2.0(a1->field_4, "unlocked_sentence"))
     {
-        sub_487fc0(a1->field_8, 0, 0);
+        __strtod_internal@GLIBC_2.0(a1->field_8, 0, 0);
         v2 = __fnstcw();
         v1 = v2 | 0xc00;
         v0 = (int)v7;
@@ -82,16 +82,16 @@ int KeyValue__11CBaseButtonP14KeyValueData_s(st_496270_2 *a0, st_496270_0 *a1)
         a1->field_c = 1;
         return v0;
     }
-    else if (!sub_488af0(a1->field_4, "sounds"))
+    else if (!strcmp@GLIBC_2.0(a1->field_4, "sounds"))
     {
-        v8 = sub_48b500(a1->field_8, 0, 10, 0);
+        v8 = __strtol_internal@GLIBC_2.0(a1->field_8, 0, 10, 0);
         a0->field_138 = v8;
         a1->field_c = 1;
         return v8;
     }
     else
     {
-        return sub_48ba40(a0, a1);
+        return CBaseToggle::KeyValue(a0, a1);
     }
 }
 

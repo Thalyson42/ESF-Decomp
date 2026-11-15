@@ -62,11 +62,11 @@ typedef struct st_4a8d20_1 {
 extern char ExplodeTouch__16CExplodingAttackP11CBaseEntity;
 extern char NormalThink__12CMagicAttack;
 extern unsigned int gmsgBall;
-extern st_4a8d20_4 *g_6167c8;
-extern st_4a8d20_4 *g_616878;
-extern st_4a8d20_4 *g_61687c;
-extern st_4a8d20_4 *g_616888;
-extern st_4a8d20_4 *g_6168dc;
+extern st_4a8d20_4 *g_engfuncs.pfnSetModel;
+extern st_4a8d20_4 *g_engfuncs.pfnMessageBegin;
+extern st_4a8d20_4 *g_engfuncs.pfnMessageEnd;
+extern st_4a8d20_4 *g_engfuncs.pfnWriteShort;
+extern st_4a8d20_4 *g_engfuncs.pfnIndexOfEdict;
 extern st_4a8d20_1 *gpGlobals;
 
 short ShootDeathBall__16CDeathBallAttackP9entvars_sG6VectorT2ifs(st_4a8d20_0 *a0, float *a1, float *a2, unsigned int a3, float a4, short a5)
@@ -106,16 +106,16 @@ short ShootDeathBall__16CDeathBallAttackP9entvars_sG6VectorT2ifs(st_4a8d20_0 *a0
     float v14;  // [bp-0x14]
     float v15;  // [bp-0x10]
 
-    v2 = sub_488b20(0);
+    v2 = GetClassPtr__H1Z16CDeathBallAttack_PX01_PX01(0);
     v2->field_60->field_8(v2);
-    g_616878(2, gmsgBall, 0, 0);
-    v16 = g_6168dc(v2->field_0->field_208);
-    g_616888(v16);
-    g_616888(a5);
+    g_engfuncs.pfnMessageBegin(2, gmsgBall, 0, 0);
+    v16 = g_engfuncs.pfnIndexOfEdict(v2->field_0->field_208);
+    g_engfuncs.pfnWriteShort(v16);
+    g_engfuncs.pfnWriteShort(a5);
     v0 = 26;
-    g_616888(v0);
-    g_61687c(v0);
-    g_6167c8(v2->field_0->field_208, "sprites/null.spr");
+    g_engfuncs.pfnWriteShort(v0);
+    g_engfuncs.pfnMessageEnd(v0);
+    g_engfuncs.pfnSetModel(v2->field_0->field_208, "sprites/null.spr");
     v17 = v2;
     v17->field_2d0 = 5;
     v17->field_2d4 = 5;
@@ -136,13 +136,13 @@ short ShootDeathBall__16CDeathBallAttackP9entvars_sG6VectorT2ifs(st_4a8d20_0 *a0
     v21 = *v20 * *v20 + v20[1] * v20[1] + v20[2] * v20[2];
     v22 = sqrt(v21);
     if (isnan(v22))
-        sub_487dc0(*(unsigned int *)&v21);
+        sqrt(*(unsigned int *)&v21);
     else
         v21 = v22;
     v23 = v2;
     v23->field_2a8 = (float)v21;
     v24 = &v23->field_0->field_0;
-    sub_488860(&v8, v24 + 8);
+    UTIL_VecToAngles(&v8, v24 + 8);
     v24[20] = v8;
     v24[21] = v10;
     v24[22] = v12;
@@ -151,7 +151,7 @@ short ShootDeathBall__16CDeathBallAttackP9entvars_sG6VectorT2ifs(st_4a8d20_0 *a0
     v25 = *a2 * *a2 + a2[1] * a2[1] + a2[2] * a2[2];
     v26 = sqrt(v25);
     if (isnan(v26))
-        sub_487dc0(*(unsigned int *)&v25);
+        sqrt(*(unsigned int *)&v25);
     else
         v25 = v26;
     v3 = (float)v25;
@@ -178,7 +178,7 @@ short ShootDeathBall__16CDeathBallAttackP9entvars_sG6VectorT2ifs(st_4a8d20_0 *a0
     *a1 = v7;
     a1[1] = v9;
     a1[2] = v11;
-    sub_48db50(v2->field_0, a1);
+    UTIL_SetOrigin(v2->field_0, a1);
     v29 = v1;
     v7 = v29;
     v9 = v29;
@@ -187,7 +187,7 @@ short ShootDeathBall__16CDeathBallAttackP9entvars_sG6VectorT2ifs(st_4a8d20_0 *a0
     v13 = (float)v30;
     v14 = (float)v30;
     v15 = (float)v30;
-    v32 = _INSERT(sub_48a0d0(v2->field_0, &v13, &v7), 0, 0) | 0xffff0000;
+    v32 = _INSERT(UTIL_SetSize(v2->field_0, &v13, &v7), 0, 0) | 0xffff0000;
     v33 = v2;
     v33->field_14 = v32;
     v33->field_18 = &ExplodeTouch__16CExplodingAttackP11CBaseEntity;

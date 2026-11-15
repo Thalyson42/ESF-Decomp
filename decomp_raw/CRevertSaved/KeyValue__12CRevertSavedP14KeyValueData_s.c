@@ -31,38 +31,38 @@ unsigned int * KeyValue__12CRevertSavedP14KeyValueData_s(st_4fe480_1 *a0, st_4fe
     unsigned int *v7;  // eax
     double v8;  // mm7
 
-    if (!sub_488af0(a1->field_4, "duration"))
+    if (!strcmp@GLIBC_2.0(a1->field_4, "duration"))
     {
-        sub_487fc0(a1->field_8, 0, 0);
+        __strtod_internal@GLIBC_2.0(a1->field_8, 0, 0);
         v0 = a0->field_0;
         v0[118] = (float)v1;
         a1->field_c = 1;
         return v0;
     }
-    else if (!sub_488af0(a1->field_4, "holdtime"))
+    else if (!strcmp@GLIBC_2.0(a1->field_4, "holdtime"))
     {
-        sub_487fc0(a1->field_8, 0, 0);
+        __strtod_internal@GLIBC_2.0(a1->field_8, 0, 0);
         v2 = a0->field_0;
         v2[0x77] = (float)v3;
         a1->field_c = 1;
         return v2;
     }
-    else if (!sub_488af0(a1->field_4, "messagetime"))
+    else if (!strcmp@GLIBC_2.0(a1->field_4, "messagetime"))
     {
-        v4 = sub_487fc0(a1->field_8, 0, 0);
+        v4 = __strtod_internal@GLIBC_2.0(a1->field_8, 0, 0);
         a0->field_64 = (float)v5;
         a1->field_c = 1;
         return v4;
     }
     else
     {
-        v6 = sub_488af0(a1->field_4, "loadtime");
+        v6 = strcmp@GLIBC_2.0(a1->field_4, "loadtime");
         if (v6)
         {
             a1->field_c = 0;
             return v6;
         }
-        v7 = sub_487fc0(a1->field_8, 0, 0);
+        v7 = __strtod_internal@GLIBC_2.0(a1->field_8, 0, 0);
         a0->field_68 = (float)v8;
         a1->field_c = 1;
         return v7;

@@ -1,7 +1,7 @@
 // WaypointFindNearestGoal__FG6VectorP7edict_sfii @0x188a80 size=333
 extern void waypoints;
-extern char g_626821[4];
-extern unsigned int g_626824[4];
+extern char waypoints+1[4];
+extern unsigned int waypoints+4[4];
 extern int num_waypoints;
 
 int WaypointFindNearestGoal__FG6VectorP7edict_sfii(float *a0, unsigned int a1, float a2, unsigned int a3, unsigned int a4)
@@ -37,7 +37,7 @@ int WaypointFindNearestGoal__FG6VectorP7edict_sfii(float *a0, unsigned int a1, f
         {
             iter += 1;
         }
-        else if (g_626821[v10] & 64)
+        else if (waypoints+1[v10] & 64)
         {
             iter += 1;
         }
@@ -46,7 +46,7 @@ int WaypointFindNearestGoal__FG6VectorP7edict_sfii(float *a0, unsigned int a1, f
             v11 = iter * 16;
             if ((a4 & *(int *)&(&waypoints)[v11]) == a4)
             {
-                idx = v11 + (char *)&g_626824[0];
+                idx = v11 + (char *)&waypoints+4[0];
                 v13 = *(float *)idx - *a0;
                 v6 = v13;
                 v14 = *(float *)(idx + 4) - a0[1];
@@ -56,7 +56,7 @@ int WaypointFindNearestGoal__FG6VectorP7edict_sfii(float *a0, unsigned int a1, f
                 v16 = v13 * v13 + v14 * v14 + v15 * v15;
                 v17 = sqrt(v16);
                 if (isnan(v17))
-                    sub_487dc0(*(unsigned int *)&v16);
+                    sqrt(*(unsigned int *)&v16);
                 else
                     v16 = v17;
                 v5 = (float)v16;

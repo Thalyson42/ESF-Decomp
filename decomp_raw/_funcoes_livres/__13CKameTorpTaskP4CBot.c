@@ -29,16 +29,16 @@ typedef struct st_551b70_3 {
 } st_551b70_3;
 
 extern char __vt_13CKameTorpTask;
-extern st_551b70_3 *g_61692c;
+extern st_551b70_3 *g_engfuncs.pfnRandomFloat;
 
 st_551b70_2 * __13CKameTorpTaskP4CBot(double a0, st_551b70_2 *a1, int a2)
 {
     double v0;  // mm7
 
-    sub_48ce80(a1, a2);
+    __9CBaseTaskP4CBot(a1, a2);
     a1->field_14 = &__vt_13CKameTorpTask;
     v0 = 35.0;
-    g_61692c(35.0f, 43.0f);
+    g_engfuncs.pfnRandomFloat(35.0f, 43.0f);
     if (a1->field_8->field_a04->field_34 == 2)
     {
         v0 = 35.0 * 1.2000000476837158;

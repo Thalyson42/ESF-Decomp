@@ -1,7 +1,7 @@
 // AngularMoveDone__11CBaseToggle @0x123320 size=158
 extern unsigned int g_vecZero;
-extern unsigned int g_616790;
-extern unsigned int g_616794;
+extern unsigned int g_vecZero+4;
+extern unsigned int g_vecZero+8;
 
 unsigned int * AngularMoveDone__11CBaseToggle(void* a0)
 {
@@ -16,8 +16,8 @@ unsigned int * AngularMoveDone__11CBaseToggle(void* a0)
     v0[22] = (int)a0[248];
     v1 = *(int *)a0;
     v1[23] = g_vecZero;
-    v1[24] = g_616790;
-    v1[25] = g_616794;
+    v1[24] = g_vecZero+4;
+    v1[25] = g_vecZero+8;
     v2 = *(int *)a0;
     *(float *)&v2[65] = -1.0f;
     if (!(short)a0[222])

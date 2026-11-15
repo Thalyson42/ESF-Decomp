@@ -40,10 +40,10 @@ typedef struct st_53f3f0_0 {
     unsigned int field_98;
 } st_53f3f0_0;
 
-extern st_53f3f0_3 *g_61685c;
+extern st_53f3f0_3 *g_engfuncs.pfnServerCommand;
 extern st_53f3f0_0 *gpGlobals;
 extern char cout;
-extern st_53f3f0_6 *g_625f80;
+extern st_53f3f0_6 *cout+512;
 
 st_53f3f0_5 * KickLastBot__11CBotManagerb(st_53f3f0_5 *a0, char a1)
 {
@@ -66,10 +66,10 @@ st_53f3f0_5 * KickLastBot__11CBotManagerb(st_53f3f0_5 *a0, char a1)
     {
         do
         {
-            v6 = sub_48a500(v3);
+            v6 = UTIL_PlayerByIndex(v3);
             *(unsigned short *)&v1 = 0;
             *(unsigned short *)&v0 = 0;
-            v7 = sub_489a70(v6, v0, v1);
+            v7 = UTIL_IsValidPlayer(v6, v0, v1);
             v8 = 13;
             v9 = v7;
             if (!v7)
@@ -82,8 +82,8 @@ st_53f3f0_5 * KickLastBot__11CBotManagerb(st_53f3f0_5 *a0, char a1)
             if (v2 && (v8 = 15, v9 = v6, v9))
             {
                 v6->field_a08 = 1;
-                sub_48d990(&v5, "kick \"%s\"\n", v6->field_0->field_1d0 + gpGlobals->field_98);
-                g_61685c(&v5);
+                sprintf@GLIBC_2.0(&v5, "kick \"%s\"\n", v6->field_0->field_1d0 + gpGlobals->field_98);
+                g_engfuncs.pfnServerCommand(&v5);
                 break;
             }
             v4 = v3 - 1;
@@ -96,7 +96,7 @@ st_53f3f0_5 * KickLastBot__11CBotManagerb(st_53f3f0_5 *a0, char a1)
     v12->field_d24 = 0;
     memset(&v12->padding_0[20], 0, 5);
     if (a1)
-        v12 = g_625f80->field_14(&cout, "Last bot kicked\n");
+        v12 = cout+512->field_14(&cout, "Last bot kicked\n");
     return v12;
 }
 

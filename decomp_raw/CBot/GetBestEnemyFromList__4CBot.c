@@ -7,10 +7,10 @@ extern st_554230_0 *gpGlobals;
 
 unsigned int GetBestEnemyFromList__4CBot(float a0)
 {
-    sub_4882b0(a0);
+    CBot::ManageEnemyList(a0);
     if (*(int *)(*(unsigned int *)&a0 + 2888))
     {
-        sub_48b720(a0, *(int *)(*(unsigned int *)&a0 + 2888));
+        CBot::AimAtEnemy(a0, *(int *)(*(unsigned int *)&a0 + 2888));
         *(float *)(*(unsigned int *)&a0 + 2880) = *(float *)gpGlobals;
         return *(int *)(*(unsigned int *)&a0 + 2888);
     }

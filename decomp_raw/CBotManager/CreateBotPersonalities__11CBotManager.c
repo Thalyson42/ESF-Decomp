@@ -8,7 +8,7 @@ typedef struct st_5728e0_1 {
     unsigned int field_0;
 } st_5728e0_1;
 
-extern st_5728e0_1 *g_616904;
+extern st_5728e0_1 *g_engfuncs.pfnServerPrint;
 extern int server_cmd.2718;
 
 int CreateBotPersonalities__11CBotManager(st_5728e0_0 *a0)
@@ -363,15 +363,15 @@ int CreateBotPersonalities__11CBotManager(st_5728e0_0 *a0)
     char v8;  // [bp-0x103]
 
     v7 = 0;
-    sub_48d0e0(&v8, 0, 0xff);
+    memset@GLIBC_2.0(&v8, 0, 0xff);
     idx = 0;
-    sub_48d0e0(&a0->padding_0[3408], 0, 540);
-    sub_489050(&v7, "bot_personality.cfg", 0);
-    i = sub_48d440(&v7, "r");
-    g_616904("Reading bot_personalities file... ");
-    sub_48b9e0(a0);
+    memset@GLIBC_2.0(&a0->padding_0[3408], 0, 540);
+    BuildBotFileName(&v7, "bot_personality.cfg", 0);
+    i = fopen@GLIBC_2.1(&v7, "r");
+    g_engfuncs.pfnServerPrint("Reading bot_personalities file... ");
+    CBotManager::MakeRandomPersonalities(a0);
     if (!i)
-        return g_616904("file not found, random settings will be used\n");
+        return g_engfuncs.pfnServerPrint("file not found, random settings will be used\n");
     while (i)
     {
         v9 = NULL;
@@ -379,7 +379,7 @@ int CreateBotPersonalities__11CBotManager(st_5728e0_0 *a0)
         v0 = i;
         while (1)
         {
-            v10 = sub_487f00(v0);
+            v10 = fgetc@GLIBC_2.0(v0);
             if (v10 != 32)
                 break;
             v0 = i;
@@ -394,16 +394,16 @@ LABEL_572a7d:
                 goto LABEL_572a94;
         case 13:
 LABEL_572a82:
-            v10 = sub_487f00(i);
+            v10 = fgetc@GLIBC_2.0(i);
 LABEL_572a94:
             if (v10 == 0xffffffff)
             {
-                sub_48c560(i);
+                fclose@GLIBC_2.1(i);
                 i = 0;
             }
             *(char *)(v9 + &v6) = 0;
-            sub_48e110(&server_cmd.2718, &v6);
-            sub_48c150(&server_cmd.2718, "\n");
+            strcpy@GLIBC_2.0(&server_cmd.2718, &v6);
+            strcat@GLIBC_2.0(&server_cmd.2718, "\n");
             v11 = 0;
             v3 = NULL;
             switch (v6)
@@ -710,7 +710,7 @@ LABEL_572bbf:
                     }
                     if (v3 && *v3)
                     {
-                        v1 = sub_48b500(v3, 0, 10, 0);
+                        v1 = __strtol_internal@GLIBC_2.0(v3, 0, 10, 0);
                         v96 = &v6;
                         v97 = "default_personality";
                         v98 = 20;
@@ -1513,23 +1513,23 @@ LABEL_572bbf:
                                                                                                                                 }
                                                                                                                                 else
                                                                                                                                 {
-                                                                                                                                    if (!sub_488af0(&v6, "aggression_level"))
+                                                                                                                                    if (!strcmp@GLIBC_2.0(&v6, "aggression_level"))
                                                                                                                                     {
-                                                                                                                                        if (!sub_488af0(v3, "defensive"))
+                                                                                                                                        if (!strcmp@GLIBC_2.0(v3, "defensive"))
                                                                                                                                         {
                                                                                                                                             *(unsigned int *)&a0->padding_0[3460 + 60 * idx] = 2;
                                                                                                                                             continue;
                                                                                                                                         }
                                                                                                                                         else
                                                                                                                                         {
-                                                                                                                                            if (!sub_488af0(v3, "normal"))
+                                                                                                                                            if (!strcmp@GLIBC_2.0(v3, "normal"))
                                                                                                                                             {
                                                                                                                                                 *(unsigned int *)&a0->padding_0[3460 + 60 * idx] = 1;
                                                                                                                                                 continue;
                                                                                                                                             }
                                                                                                                                             else
                                                                                                                                             {
-                                                                                                                                                if (!sub_488af0(v3, "aggressive"))
+                                                                                                                                                if (!strcmp@GLIBC_2.0(v3, "aggressive"))
                                                                                                                                                 {
                                                                                                                                                     *(unsigned int *)&a0->padding_0[3460 + 60 * idx] = 0;
                                                                                                                                                     continue;
@@ -1616,13 +1616,13 @@ LABEL_572bbf:
                 if (v10 == 9)
                     v10 = 32;
                 *(char *)(v9 + v2) = v10;
-                v10 = sub_487f00(i);
+                v10 = fgetc@GLIBC_2.0(i);
                 if (*(char *)(v9 + v2) == 32 && v10 == 32)
                 {
                     v9 = v9;
                     do
                     {
-                        v10 = sub_487f00(i);
+                        v10 = fgetc@GLIBC_2.0(i);
                     } while (*(char *)(v9 + &v6) == 32 && v10 == 32);
                 }
                 v9 += 1;
@@ -1634,6 +1634,6 @@ LABEL_572bbf:
             goto LABEL_572a7d;
         }
     }
-    return g_616904("done\n");
+    return g_engfuncs.pfnServerPrint("done\n");
 }
 

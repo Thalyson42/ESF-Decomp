@@ -61,25 +61,25 @@ unsigned int * WishGrantThink__9CShenlong(float idx)
 
     if (*(int *)(*(unsigned int *)&idx + 696) < 0)
     {
-        sub_489390(*(int *)(*(int *)*(int *)(*(unsigned int *)&idx + 700) + 520), 1, "dragon/grantwish.wav", 0x3f800000, 0, 0, 100);
+        EMIT_SOUND_DYN(*(int *)(*(int *)*(int *)(*(unsigned int *)&idx + 700) + 520), 1, "dragon/grantwish.wav", 0x3f800000, 0, 0, 100);
         v2 = *(unsigned int *)&idx + 700;
         v3 = 0;
         do
         {
             v4 = v3 * 4;
             if (*(int *)((char *)v4 + v2))
-                sub_487e60(*(int *)((char *)v4 + v2));
+                CDragonBall::Spread(*(int *)((char *)v4 + v2));
         } while ((v3 += 1, v3 <= 6));
-        sub_48cc00(*(int *)(*(unsigned int *)&idx + 680));
-        sub_48cc00(*(int *)(*(unsigned int *)&idx + 684));
+        UTIL_Remove(*(int *)(*(unsigned int *)&idx + 680));
+        UTIL_Remove(*(int *)(*(unsigned int *)&idx + 684));
         v5 = (st_518030_0 **)idx;
         *v5->field_12c = 0;
-        v6 = sub_48afe0(v5, "wish_granted");
+        v6 = CBaseAnimating::LookupSequence(v5, "wish_granted");
         v7 = (st_518030_1 **)idx;
         *v7->field_128 = v6;
         *v7->field_130 = 0;
-        sub_488850(v7);
-        return sub_48b5d0(idx);
+        CBaseAnimating::ResetSequenceInfo(v7);
+        return CBaseEntity::SUB_StartFadeOut(idx);
     }
     else
     {

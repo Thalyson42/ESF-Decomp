@@ -55,10 +55,10 @@ double RotateThink__5CRock(st_529720_2 *a0)
             a0->field_0->field_28 = 0;
         v3 = *(float *)gpGlobals - *(float *)&a0->field_2e0 + *(float *)&a0->field_2dc;
         v0 = v3 + v3;
-        sub_48a9e0(*(unsigned int *)&v0);
+        cos(*(unsigned int *)&v0);
         v4 = v0 * 30.0;
         a0->field_0->field_20 = (float)v4;
-        sub_48aeb0(*(unsigned int *)&v0, *(unsigned int *)((void*)&v0 + 4));
+        sin(*(unsigned int *)&v0, *(unsigned int *)((void*)&v0 + 4));
         a0->field_0->field_24 = (float)(-v4 * 30.0);
     }
     else

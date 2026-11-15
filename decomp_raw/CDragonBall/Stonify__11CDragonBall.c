@@ -21,7 +21,7 @@ typedef struct st_4ae720_2 {
 
 extern char UnStoneThink__11CDragonBall;
 extern char dbrespawntime;
-extern float g_5bd004;
+extern float dbrespawntime+12;
 extern st_4ae720_2 *gpGlobals;
 
 int Stonify__11CDragonBall(st_4ae720_0 *a0)
@@ -34,7 +34,7 @@ int Stonify__11CDragonBall(st_4ae720_0 *a0)
     a0->field_10 = &UnStoneThink__11CDragonBall;
     a0->field_14 = 0;
     a0->field_18 = 0;
-    *(float *)&a0->field_0->field_104 = *(float *)gpGlobals + g_5bd004;
+    *(float *)&a0->field_0->field_104 = *(float *)gpGlobals + dbrespawntime+12;
     return &dbrespawntime;
 }
 

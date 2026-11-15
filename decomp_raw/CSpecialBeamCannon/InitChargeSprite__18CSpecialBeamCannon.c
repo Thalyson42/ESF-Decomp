@@ -36,7 +36,7 @@ typedef struct st_51fc10_5 {
     unsigned int field_0;
 } st_51fc10_5;
 
-extern st_51fc10_5 *g_6168dc;
+extern st_51fc10_5 *g_engfuncs.pfnIndexOfEdict;
 
 int InitChargeSprite__18CSpecialBeamCannon(st_51fc10_3 *a0)
 {
@@ -49,13 +49,13 @@ int InitChargeSprite__18CSpecialBeamCannon(st_51fc10_3 *a0)
     st_51fc10_3 *v7;  // edx
     int v0;  // [bp-0x24]
 
-    v1 = sub_48c010("sprites/sbccharge.spr", *(int *)a0->field_80 + 8, 1);
+    v1 = CSprite::SpriteCreate("sprites/sbccharge.spr", *(int *)a0->field_80 + 8, 1);
     v2 = a0;
     v2->field_1d4 = v1;
     v3 = *(int *)(*(int *)v2->field_80 + 520);
     if (v3)
     {
-        v4 = g_6168dc(v3);
+        v4 = g_engfuncs.pfnIndexOfEdict(v3);
         *v1->field_110 = v4;
         *v1->field_114 = 1;
         *v1->field_194 = v3;
@@ -74,6 +74,6 @@ int InitChargeSprite__18CSpecialBeamCannon(st_51fc10_3 *a0)
     v7 = a0;
     *(float *)(*(int *)v7->field_1d4 + 324) = 0.20000000298023224f;
     *(float *)(*(int *)v7->field_1d4 + 312) = 10.0f;
-    return sub_48df90(v7->field_1d4);
+    return CSprite::TurnOff(v7->field_1d4);
 }
 

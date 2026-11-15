@@ -23,7 +23,7 @@ typedef struct st_583ef0_3 {
     unsigned int field_0;
 } st_583ef0_3;
 
-extern st_583ef0_3 *g_616928;
+extern st_583ef0_3 *g_engfuncs.pfnRandomLong;
 
 st_583ef0_1 * TaskThink__12CBlindedTask(st_583ef0_2 *a0)
 {
@@ -40,8 +40,8 @@ st_583ef0_1 * TaskThink__12CBlindedTask(st_583ef0_2 *a0)
         a0->field_4 = 2;
         return v1;
     }
-    sub_488e30(a0->field_8, 8);
-    v2 = g_616928(0, 2);
+    CBot::SetMoveDir(a0->field_8, 8);
+    v2 = g_engfuncs.pfnRandomLong(0, 2);
     if (v2)
     {
         if (v2 != 1)
@@ -52,20 +52,20 @@ st_583ef0_1 * TaskThink__12CBlindedTask(st_583ef0_2 *a0)
     {
         v0 = 2;
     }
-    sub_488e30(a0->field_8);
+    CBot::SetMoveDir(a0->field_8);
 LABEL_583f71:
-    v3 = g_616928(1, 1000);
+    v3 = g_engfuncs.pfnRandomLong(1, 1000);
     if (v3 > 0x27)
     {
         return v3;
     }
     else if (a0->field_8->field_9fc <= 2)
     {
-        v4 = g_616928(1, 100);
+        v4 = g_engfuncs.pfnRandomLong(1, 100);
         v5 = a0->field_8->field_a04->field_26;
         if (v4 >= v5)
             return v5;
-        return sub_488180(a0->field_8);
+        return CBasePlayer::Teleport(a0->field_8);
     }
     else
     {

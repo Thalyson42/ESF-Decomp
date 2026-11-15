@@ -6,6 +6,6 @@ typedef struct st_57ecd0_0 {
 
 int EntIsInFieldOfView__FP11CBaseEntityT0(st_57ecd0_0 **a0, unsigned int *a1)
 {
-    return sub_48a380(*a1 + 8, *a0->field_208);
+    return FInViewCone(*a1 + 8, *a0->field_208);
 }
 

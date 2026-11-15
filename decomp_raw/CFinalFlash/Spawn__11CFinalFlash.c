@@ -21,6 +21,6 @@ int Spawn__11CFinalFlash(float idx)
     *(float *)(*(unsigned int *)&idx + 500) = 0.05000000074505806f;
     *(unsigned int *)(*(unsigned int *)&idx + 508) = 4;
     *(unsigned int *)(*(unsigned int *)&idx + 504) = 1;
-    return sub_48cf50(idx);
+    return CBasePlayerItem::FallInit(idx);
 }
 

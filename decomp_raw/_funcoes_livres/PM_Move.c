@@ -17,9 +17,9 @@ extern st_5947a0_0 *pmove;
 st_5947a0_0 * PM_Move(unsigned int a0, unsigned int a1)
 {
     if (!pm_shared_initialized)
-        sub_4892a0("pm_shared_initialized", "../pm_shared/pm_shared.c", 4042, "PM_Move");
+        __assert_fail@GLIBC_2.0("pm_shared_initialized", "../pm_shared/pm_shared.c", 4042, "PM_Move");
     pmove = a0;
-    sub_48b5f0(a1 != 0);
+    PM_PlayerMove(a1 != 0);
     if (pmove->field_e0 != 0xffffffff)
         pmove->field_b9 = pmove->field_b9 | 2;
     else

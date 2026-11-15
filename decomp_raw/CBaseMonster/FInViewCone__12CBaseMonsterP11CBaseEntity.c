@@ -43,7 +43,7 @@ int FInViewCone__12CBaseMonsterP11CBaseEntity(st_4a67c0_0 *a0, st_4a67c0_1 **a1)
     float v12;  // [bp-0x1c]
     float v13;  // [bp-0x18]
 
-    sub_48a800(a0->field_0 + 4);
+    UTIL_MakeVectors(a0->field_0 + 4);
     v14 = &*a1->field_8;
     v15 = &a0->field_0->field_8;
     v10 = *a1->field_8 - a0->field_0->field_8;
@@ -56,7 +56,7 @@ int FInViewCone__12CBaseMonsterP11CBaseEntity(st_4a67c0_0 *a0, st_4a67c0_1 **a1)
     v16 = v6 * v6 + v7 * v7;
     v17 = sqrt(v16);
     if (isnan(v17))
-        sub_487dc0(*(unsigned int *)&v16);
+        sqrt(*(unsigned int *)&v16);
     else
         v16 = v17;
     v13 = (float)v16;

@@ -4,10 +4,10 @@ typedef struct st_503410_0 {
     int field_c4;
 } st_503410_0;
 
-extern float g_5bd25c;
+extern float melee_maxextanges+12;
 
 int CanSwitch__12CPlayerMelee(st_503410_0 *a0)
 {
-    return (double)a0->field_c4 < g_5bd25c;
+    return (double)a0->field_c4 < melee_maxextanges+12;
 }
 

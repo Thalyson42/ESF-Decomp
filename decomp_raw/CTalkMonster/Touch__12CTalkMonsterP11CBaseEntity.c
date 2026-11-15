@@ -48,7 +48,7 @@ unsigned int Touch__12CTalkMonsterP11CBaseEntity(st_525f00_4 *a0, st_525f00_2 *a
     {
         return v5;
     }
-    else if (!sub_48bb60(a0))
+    else if (!CTalkMonster::IsTalking(a0))
     {
         v3 = (float)(fabs(a1->field_0->field_20) + fabs(a1->field_0->field_24));
         if (v3 <= 50.0f)
@@ -58,7 +58,7 @@ unsigned int Touch__12CTalkMonsterP11CBaseEntity(st_525f00_4 *a0, st_525f00_2 *a
         v0 = a1->field_0->field_8;
         v1 = *(float *)&v4[1];
         v2 = *(float *)&v4[2];
-        v5 = sub_4882f0(a0, &v0);
+        v5 = CBaseMonster::MakeIdealYaw(a0, &v0);
         return v5;
     }
     else

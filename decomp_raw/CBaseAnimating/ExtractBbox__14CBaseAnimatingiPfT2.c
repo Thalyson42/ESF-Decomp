@@ -8,7 +8,7 @@ typedef struct st_48eb00_1 {
     unsigned int field_0;
 } st_48eb00_1;
 
-extern st_48eb00_1 *g_6168e8;
+extern st_48eb00_1 *g_engfuncs.pfnGetModelPtr;
 
 int ExtractBbox__14CBaseAnimatingiPfT2(st_48eb00_0 **a0, unsigned int a1, unsigned int a2, unsigned int a3)
 {
@@ -19,6 +19,6 @@ int ExtractBbox__14CBaseAnimatingiPfT2(st_48eb00_0 **a0, unsigned int a1, unsign
     v2 = a3;
     v1 = a2;
     v0 = a1;
-    return sub_488710(g_6168e8(*a0->field_208));
+    return ExtractBbox(g_engfuncs.pfnGetModelPtr(*a0->field_208));
 }
 

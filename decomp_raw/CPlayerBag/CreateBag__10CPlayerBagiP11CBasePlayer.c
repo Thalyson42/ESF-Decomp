@@ -34,14 +34,14 @@ st_4efad0_2 * CreateBag__10CPlayerBagiP11CBasePlayer(unsigned int a0, st_4efad0_
     unsigned int *v3;  // ecx
     unsigned int *v4;  // edx
 
-    v0 = sub_489780(0);
+    v0 = GetClassPtr__H1Z10CPlayerBag_PX01_PX01(0);
     v0->field_60->field_8(v0);
     v1 = v0->field_0;
     v2 = *a1;
     v1[2] = v2[2];
     v1[3] = v2[3];
     v1[4] = v2[4];
-    sub_48db50(v0->field_0, &v0->field_0->field_8);
+    UTIL_SetOrigin(v0->field_0, &v0->field_0->field_8);
     v3 = v0->field_0;
     v4 = *a1;
     v3[8] = v4[8];

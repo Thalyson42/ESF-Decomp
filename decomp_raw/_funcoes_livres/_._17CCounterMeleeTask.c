@@ -32,7 +32,7 @@ int _._17CCounterMeleeTask(st_585a30_2 *a0, int a1)
     st_585a30_3 *v0;  // [bp-0x8]
 
     a0->field_14 = &__vt_17CCounterMeleeTask;
-    sub_48bf00(a0->field_8);
+    CBot::AddShootDelay(a0->field_8);
     v0 = &a0->field_8->field_b84;
     iter = a0->field_8->field_b84;
     if (a0->field_8->field_b84)
@@ -43,12 +43,12 @@ int _._17CCounterMeleeTask(st_585a30_2 *a0, int a1)
             iter = iter->field_4;
             v2->field_4 = NULL;
             v2->field_8 = 0;
-            sub_48d4e0(v2);
+            __builtin_delete(v2);
         } while (iter);
     }
     v0->field_4 = 0;
     v0->field_0 = NULL;
-    sub_48c6c0(a0->field_8);
-    return sub_488170(a0, a1);
+    CBot::ClearMeleeComboList(a0->field_8);
+    return _._9CBaseTask(a0, a1);
 }
 

@@ -10,9 +10,9 @@ unsigned int Use__7CSpriteP11CBaseEntityT18USE_TYPEf(st_4b3d70_0 **a0, unsigned 
     unsigned int v1;  // eax
 
     v0 = *a0->field_118 != 128;
-    v1 = sub_48ab90(a0, a3, v0);
+    v1 = CBaseEntity::ShouldToggle(a0, a3, v0);
     if (!v1)
         return v1;
-    return (!v0 ? sub_487b90(a0) : sub_48df90(a0));
+    return (!v0 ? CSprite::TurnOn(a0) : CSprite::TurnOff(a0));
 }
 

@@ -25,7 +25,7 @@ st_55c8d0_3 ** Think__22CSwoopAWhileComboEntry(st_55c8d0_1 *a0)
 {
     if (*(int *)(*(int *)a0->field_4 + 264) == 11)
     {
-        sub_48c350(a0->field_4);
+        CBot::SetSwoopButton(a0->field_4);
         if (a0->field_14 >= *(float *)gpGlobals)
             return &gpGlobals;
     }

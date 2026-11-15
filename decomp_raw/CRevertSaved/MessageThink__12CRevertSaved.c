@@ -13,10 +13,10 @@ unsigned int MessageThink__12CRevertSaved(float idx)
     float v1;  // 128
     unsigned int v2;  // eax
 
-    sub_48cb90(*(int *)(*(int *)idx + 468) + gpGlobals->field_98);
+    UTIL_ShowMessageAll(*(int *)(*(int *)idx + 468) + gpGlobals->field_98);
     v1 = *(float *)(*(unsigned int *)&idx + 104) - *(float *)(*(unsigned int *)&idx + 100);
     if (0.0 >= v1)
-        return sub_48a360(idx);
+        return CRevertSaved::LoadThink(idx);
     *(float *)(*(int *)idx + 260) = v1 + gpGlobals->field_0;
     v2 = _INSERT(gpGlobals, 0, 0);
     *(unsigned int *)(*(unsigned int *)&idx + 12) = v2 | 0xffff0000;

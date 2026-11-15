@@ -65,8 +65,8 @@ typedef struct st_4b1810_1 {
     float field_0;
 } st_4b1810_1;
 
-extern st_4b1810_3 *g_6168d4;
-extern st_4b1810_3 *g_616928;
+extern st_4b1810_3 *g_engfuncs.pfnPEntityOfEntOffset;
+extern st_4b1810_3 *g_engfuncs.pfnRandomLong;
 extern st_4b1810_1 *gpGlobals;
 
 float BeamDamage__5CBeamP11TraceResult(st_4b1810_0 **a0, st_4b1810_6 *a1)
@@ -92,18 +92,18 @@ float BeamDamage__5CBeamP11TraceResult(st_4b1810_0 **a0, st_4b1810_6 *a1)
     float v5;  // [bp-0x30]
     float v6;  // [bp-0x2c], Other Possible Types: unsigned int
 
-    sub_48bc90(a0);
+    CBeam::RelinkBeam(a0);
     if (a1->field_10 != 1.0f && a1->field_30)
     {
         v7 = a1->field_30;
-        if (a1->field_30 || (v7 = g_6168d4(0), v7))
+        if (a1->field_30 || (v7 = g_engfuncs.pfnPEntityOfEntOffset(0), v7))
             v8 = v7->field_7c;
         else
             v8 = NULL;
         v9 = v8;
         if (v9)
         {
-            sub_48a370();
+            ClearMultiDamage();
             v10 = &a1->field_14;
             v11 = &*a0->field_8;
             v12 = a1->field_14 - *a0->field_8;
@@ -115,7 +115,7 @@ float BeamDamage__5CBeamP11TraceResult(st_4b1810_0 **a0, st_4b1810_6 *a1)
             v15 = v12 * v12 + v13 * v13 + v14 * v14;
             v16 = sqrt(v15);
             if (isnan(v16))
-                sub_487dc0(*(unsigned int *)&v15);
+                sqrt(*(unsigned int *)&v15);
             else
                 v15 = v16;
             v0 = (float)v15;
@@ -134,9 +134,9 @@ float BeamDamage__5CBeamP11TraceResult(st_4b1810_0 **a0, st_4b1810_6 *a1)
             }
             v18 = *a0;
             v9->field_60->field_30(v9, v18, (*(float *)gpGlobals - v18->field_1e4) * v18->field_1e0, &v4, a1, 0x400);
-            sub_48d630(*a0, *a0);
+            ApplyMultiDamage(*a0, *a0);
             if (*a0->field_1a0 & 64 && v9->field_60->field_90(v9))
-                sub_48d7a0(a1, g_616928(0, 4) + 28);
+                UTIL_DecalTrace(a1, g_engfuncs.pfnRandomLong(0, 4) + 28);
         }
     }
     v20 = *(float *)gpGlobals;

@@ -46,14 +46,14 @@ float EnvTouch__9CEnvModelP11CBaseEntity(st_4b8e70_4 *a0, st_4b8e70_2 *a1)
 
     if (!a1->field_60->field_a0(a1))
         return v5;
-    v0 = sub_48afe0(a0, "touch");
+    v0 = CBaseAnimating::LookupSequence(a0, "touch");
     if (v0 == 0xffffffff)
         return v3;
     a0->field_0->field_12c = 0;
     a0->field_0->field_130 = 0;
     a0->field_0->field_128 = v0;
-    sub_488850(a0);
-    sub_48b980(a0, a0->field_0->field_128);
+    CBaseAnimating::ResetSequenceInfo(a0);
+    CBaseAnimating::GetAnimTime(a0, a0->field_0->field_128);
     a0->field_0->field_104 = (float)(v1 + *(float *)gpGlobals);
     v2 = _INSERT(gpGlobals, 0, 0);
     a0->field_c = v2 | 0xffff0000;

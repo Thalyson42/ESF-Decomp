@@ -47,7 +47,7 @@ int PM_Jump(void)
         return v6;
     if (!pmove->field_d0)
     {
-        if (sub_48b500(pmove->field_4f554(&pmove->padding_4545b[40853], "tfc"), 0, 10, 0) == 1 && pmove->field_d4 == 5)
+        if (__strtol_internal@GLIBC_2.0(pmove->field_4f554(&pmove->padding_4545b[40853], "tfc"), 0, 10, 0) == 1 && pmove->field_d4 == 5)
             return v5;
         if (pmove->field_cc != 0.0)
         {
@@ -106,7 +106,7 @@ int PM_Jump(void)
                 {
                     if (!(pmove->field_c8 & 2))
                     {
-                        sub_4894e0();
+                        PM_MakeJump();
                         v4 = pmove;
                     }
                     else

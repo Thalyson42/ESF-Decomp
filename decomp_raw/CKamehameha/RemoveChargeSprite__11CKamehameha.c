@@ -6,6 +6,6 @@ typedef struct st_4c99d0_0 {
 
 int RemoveChargeSprite__11CKamehameha(st_4c99d0_0 *a0)
 {
-    return sub_48cc00(a0->field_20c);
+    return UTIL_Remove(a0->field_20c);
 }
 

@@ -15,9 +15,9 @@ st_4b8740_1 * KeyValue__9CEnvModelP14KeyValueData_s(st_4b8740_1 **a0, st_4b8740_
 {
     st_4b8740_1 *v0;  // eax
 
-    if (sub_488af0(a1->field_4, "boundingbox"))
-        return sub_488d50(a0, a1);
-    if (sub_48b500(a1->field_8, 0, 10, 0) == 1)
+    if (strcmp@GLIBC_2.0(a1->field_4, "boundingbox"))
+        return CBaseMonster::KeyValue(a0, a1);
+    if (__strtol_internal@GLIBC_2.0(a1->field_8, 0, 10, 0) == 1)
     {
         v0 = *a0;
         v0->field_10c = 0;

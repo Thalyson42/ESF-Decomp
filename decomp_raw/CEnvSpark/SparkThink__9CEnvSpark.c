@@ -18,13 +18,13 @@ typedef struct st_498c50_2 {
     unsigned int field_0;
 } st_498c50_2;
 
-extern st_498c50_2 *g_61692c;
+extern st_498c50_2 *g_engfuncs.pfnRandomFloat;
 extern st_498c50_3 *gpGlobals;
 
 int SparkThink__9CEnvSpark(double a0, st_498c50_1 *a1)
 {
-    g_61692c(0, a1->field_64);
+    g_engfuncs.pfnRandomFloat(0, a1->field_64);
     a1->field_0->field_104 = (float)(a0 + 0.1 + *(float *)gpGlobals);
-    return sub_489c40(a1->field_0, &a1->field_0->padding_0[8]);
+    return DoSpark(a1->field_0, &a1->field_0->padding_0[8]);
 }
 

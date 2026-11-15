@@ -32,7 +32,7 @@ typedef struct st_49af20_0 {
     int field_90;
 } st_49af20_0;
 
-extern float g_5bcfdc;
+extern float wishlimit+12;
 extern unsigned int g_fGameOver;
 extern st_49af20_0 *gpGlobals;
 
@@ -57,7 +57,7 @@ int Think__30CHalfLifeCaptureTheDragonBalls(float idx)
     v4 = (unsigned int *)idx;
     if (v4[0x99] || v4[166])
     {
-        if (sub_488600(idx))
+        if (CHalfLifeCaptureTheDragonBalls::DragonBallsGathered(idx))
         {
             v5 = (st_49af20_1 *)idx;
             if (!v5->field_274)
@@ -66,7 +66,7 @@ int Think__30CHalfLifeCaptureTheDragonBalls(float idx)
                 i = 0;
                 do
                 {
-                    sub_48d450((&v5->field_278)[i]);
+                    CDragonBall::Glow((&v5->field_278)[i]);
                     i += 1;
                 } while (i <= 6);
             }
@@ -83,13 +83,13 @@ int Think__30CHalfLifeCaptureTheDragonBalls(float idx)
                 {
                     v10 = v8 * 4;
                     if (*(int *)((char *)v10 + v9))
-                        sub_48d9a0(*(int *)((char *)v10 + v9));
+                        CDragonBall::UnGlow(*(int *)((char *)v10 + v9));
                 } while ((v8 += 1, v8 <= 6));
-                sub_48cc00(*(int *)(*(unsigned int *)&idx + 660));
+                UTIL_Remove(*(int *)(*(unsigned int *)&idx + 660));
                 *(unsigned int *)(*(unsigned int *)&idx + 660) = 0;
             }
         }
-        v1 = g_5bcfdc;
+        v1 = wishlimit+12;
         if (v1 != 0.0f && !g_fGameOver)
         {
             idx1 = 0;
@@ -104,7 +104,7 @@ int Think__30CHalfLifeCaptureTheDragonBalls(float idx)
                 v0 = &v2;
                 do
                 {
-                    v13 = sub_48a500(v12);
+                    v13 = UTIL_PlayerByIndex(v12);
                     if (v13 && v13->field_60->field_a0(v13))
                     {
                         index = (*(int *)(*(int *)(*(unsigned int *)&idx + 0x44) + 0xcc))(idx, &v13[1].padding_64[508]) + 1;
@@ -123,9 +123,9 @@ int Think__30CHalfLifeCaptureTheDragonBalls(float idx)
     }
     else if (!v4[154] || *(float *)(*(unsigned int *)&idx + 624) < gpGlobals->field_0)
     {
-        sub_48a870(idx);
+        CHalfLifeCaptureTheDragonBalls::SpawnDragonBalls(idx);
         *(unsigned int *)(*(unsigned int *)&idx + 620) = 1;
     }
-    return sub_48cdf0(idx);
+    return CHalfLifeTeamplay::Think(idx);
 }
 

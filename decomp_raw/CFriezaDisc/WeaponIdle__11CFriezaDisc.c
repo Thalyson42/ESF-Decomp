@@ -7,8 +7,8 @@ typedef struct st_4c0f70_0 {
 void WeaponIdle__11CFriezaDisc(st_4c0f70_0 *a0)
 {
     if (!a0->field_1d4)
-        sub_4881c0(a0);
-    sub_48dd00(a0);
+        CChargedAttack::WeaponIdle(a0);
+    CFriezaDisc::HandleDiscStatus(a0);
     return;
 }
 

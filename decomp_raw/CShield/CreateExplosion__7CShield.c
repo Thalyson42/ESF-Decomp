@@ -19,12 +19,12 @@ typedef struct st_518f20_2 {
 } st_518f20_2;
 
 extern unsigned int gmsgBlobStart;
-extern st_518f20_2 *g_616878;
-extern st_518f20_2 *g_61687c;
-extern st_518f20_2 *g_616880;
-extern st_518f20_2 *g_616888;
-extern st_518f20_2 *g_616894;
-extern st_518f20_2 *g_6168dc;
+extern st_518f20_2 *g_engfuncs.pfnMessageBegin;
+extern st_518f20_2 *g_engfuncs.pfnMessageEnd;
+extern st_518f20_2 *g_engfuncs.pfnWriteByte;
+extern st_518f20_2 *g_engfuncs.pfnWriteShort;
+extern st_518f20_2 *g_engfuncs.pfnWriteCoord;
+extern st_518f20_2 *g_engfuncs.pfnIndexOfEdict;
 
 int CreateExplosion__7CShield(st_518f20_1 *a0)
 {
@@ -33,14 +33,14 @@ int CreateExplosion__7CShield(st_518f20_1 *a0)
     unsigned int v1;  // [bp-0x18]
     unsigned int v2;  // [bp-0x14]
 
-    g_616878(2, gmsgBlobStart, &a0->field_0->field_8, 0, v0, v1, v2);
-    g_616880(0);
-    g_616894(a0->field_0->field_8);
-    g_616894(a0->field_0->field_c);
-    g_616894(a0->field_0->field_10);
-    v3 = g_6168dc(a0->field_0->field_208);
-    g_616888(v3);
-    g_616888(a0->field_64);
-    return g_61687c();
+    g_engfuncs.pfnMessageBegin(2, gmsgBlobStart, &a0->field_0->field_8, 0, v0, v1, v2);
+    g_engfuncs.pfnWriteByte(0);
+    g_engfuncs.pfnWriteCoord(a0->field_0->field_8);
+    g_engfuncs.pfnWriteCoord(a0->field_0->field_c);
+    g_engfuncs.pfnWriteCoord(a0->field_0->field_10);
+    v3 = g_engfuncs.pfnIndexOfEdict(a0->field_0->field_208);
+    g_engfuncs.pfnWriteShort(v3);
+    g_engfuncs.pfnWriteShort(a0->field_64);
+    return g_engfuncs.pfnMessageEnd();
 }
 

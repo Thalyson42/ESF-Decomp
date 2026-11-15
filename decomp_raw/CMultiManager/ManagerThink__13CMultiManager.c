@@ -56,8 +56,8 @@ unsigned int * ManagerThink__13CMultiManager(float a0)
                 v2 = 0;
                 v1 = 3;
                 v0 = v5;
-                v6 = sub_488810(&v5->field_d4);
-                sub_48c1b0(*(int *)&v5->padding_110[4 * v5->field_108] + gpGlobals->field_98, v6);
+                v6 = EHANDLE::__opP11CBaseEntity(&v5->field_d4);
+                FireTargets(*(int *)&v5->padding_110[4 * v5->field_108] + gpGlobals->field_98, v6);
                 v5->field_108 = v5->field_108 + 1;
                 if (v5->field_108 >= v5->field_104)
                     goto LABEL_52b63b;
@@ -80,6 +80,6 @@ LABEL_52b63b:
         v5->field_20 = &ManagerUse__13CMultiManagerP11CBaseEntityT18USE_TYPEf;
         return v8 | 0xffff0000;
     }
-    return sub_48cc00(v5);
+    return UTIL_Remove(v5);
 }
 

@@ -10,13 +10,13 @@ int SENTENCEG_PlaySequentialSz__FP7edict_sPCcffiiii(int a0, int a1, float a2, fl
     if (fSentencesInit)
     {
         v0 = 0;
-        v1 = sub_487db0(a1);
+        v1 = SENTENCEG_GetIndex(a1);
         if (v1 >= 0)
         {
-            v2 = sub_48c2b0(v1, &v0, a6, a7);
+            v2 = USENTENCEG_PickSequential(v1, &v0, a6, a7);
             if (v2 < 0 || !v0)
                 return v2;
-            sub_489390(a0, 2, &v0, a2, a3, a4, a5);
+            EMIT_SOUND_DYN(a0, 2, &v0, a2, a3, a4, a5);
             return v2;
         }
     }

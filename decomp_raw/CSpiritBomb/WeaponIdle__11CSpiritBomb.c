@@ -23,13 +23,13 @@ st_521660_0 * WeaponIdle__11CSpiritBomb(st_521660_1 *a0)
     }
     else if (a0->field_cc)
     {
-        return sub_48d600(a0);
+        return CSpiritBomb::Shoot1(a0);
     }
     else
     {
         if (!a0->field_d0)
             return v0;
-        sub_48ce90(a0);
+        CSpiritBomb::Shoot2(a0);
         return v0;
     }
 }

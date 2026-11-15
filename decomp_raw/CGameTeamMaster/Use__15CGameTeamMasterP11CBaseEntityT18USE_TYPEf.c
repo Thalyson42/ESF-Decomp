@@ -43,7 +43,7 @@ int Use__15CGameTeamMasterP11CBaseEntityT18USE_TYPEf(st_4d01a0_1 *a0, st_4d01a0_
     unsigned int v1;  // eax
     unsigned int v2;  // eax
 
-    v0 = sub_48aa30(a0, a1);
+    v0 = CRuleEntity::CanFireForActivator(a0, a1);
     if (!v0)
     {
         return v1;
@@ -60,12 +60,12 @@ int Use__15CGameTeamMasterP11CBaseEntityT18USE_TYPEf(st_4d01a0_1 *a0, st_4d01a0_
         a0->field_68 = 0xffffffff;
         return v1;
     }
-    else if (sub_48d170(a0, a1))
+    else if (CGameTeamMaster::TeamMatch(a0, a1))
     {
-        sub_48df80(a0, a1, a0->field_6c, a4);
+        CBaseEntity::SUB_UseTargets(a0, a1, a0->field_6c, a4);
         if (!(a0->field_0->field_1a0 & 1))
             return v1;
-        sub_48cc00(a0);
+        UTIL_Remove(a0);
         return v1;
     }
     else

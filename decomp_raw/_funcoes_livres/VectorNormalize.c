@@ -9,7 +9,7 @@ float VectorNormalize(float *a0)
     v1 = *a0 * *a0 + a0[1] * a0[1] + a0[2] * a0[2];
     v2 = sqrt(v1);
     if (isnan(v2))
-        sub_487dc0(*(unsigned int *)&v1);
+        sqrt(*(unsigned int *)&v1);
     else
         v1 = v2;
     v0 = (float)v1;

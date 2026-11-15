@@ -26,9 +26,9 @@ st_49f760_0 * ClientPutInServer__FP7edict_s(int a0)
     st_49f760_3 *v0;  // esi
     st_49f760_0 *v1;  // eax
 
-    v0 = sub_48c260(a0 + 128);
+    v0 = GetClassPtr__H1Z11CBasePlayer_PX01_PX01(a0 + 128);
     v0->field_764 = 0;
-    sub_489b50(v0, -0x1);
+    CBasePlayer::SetCustomDecalFrames(v0, -0x1);
     v0->field_60->field_8(v0);
     v1 = v0->field_0;
     v1->field_118 = v1->field_118 | 32;

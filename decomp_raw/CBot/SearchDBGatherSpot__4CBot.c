@@ -1,13 +1,13 @@
 // SearchDBGatherSpot__4CBot @0x16a0d0 size=414
 extern float g_vecZero;
-extern float g_616790;
-extern float g_616794;
+extern float g_vecZero+4;
+extern float g_vecZero+8;
 extern unsigned int GatherDBPosForTeamGood;
-extern unsigned int g_625c24;
-extern unsigned int g_625c28;
+extern unsigned int GatherDBPosForTeamGood+4;
+extern unsigned int GatherDBPosForTeamGood+8;
 extern unsigned int GatherDBPosForTeamEvil;
-extern unsigned int g_625c30;
-extern unsigned int g_625c34;
+extern unsigned int GatherDBPosForTeamEvil+4;
+extern unsigned int GatherDBPosForTeamEvil+8;
 extern unsigned int num_waypoints;
 
 char SearchDBGatherSpot__4CBot(float idx)
@@ -25,13 +25,13 @@ char SearchDBGatherSpot__4CBot(float idx)
     unsigned int v2;  // [bp-0x1c]
 
     v4 = 0;
-    if (g_vecZero == *(float *)&GatherDBPosForTeamGood && g_616790 == *(float *)&g_625c24)
-        v4 = g_616794 == *(float *)&g_625c28;
+    if (g_vecZero == *(float *)&GatherDBPosForTeamGood && g_vecZero+4 == *(float *)&GatherDBPosForTeamGood+4)
+        v4 = g_vecZero+8 == *(float *)&GatherDBPosForTeamGood+8;
     if (v4)
         return 0;
     v5 = 0;
-    if (g_vecZero == *(float *)&GatherDBPosForTeamEvil && g_616790 == *(float *)&g_625c30)
-        v5 = g_616794 == *(float *)&g_625c34;
+    if (g_vecZero == *(float *)&GatherDBPosForTeamEvil && g_vecZero+4 == *(float *)&GatherDBPosForTeamEvil+4)
+        v5 = g_vecZero+8 == *(float *)&GatherDBPosForTeamEvil+8;
     if (!v5 && *(int *)(*(unsigned int *)&idx + 1888))
     {
         if (*(int *)(*(int *)idx + 428) == 1)
@@ -48,7 +48,7 @@ char SearchDBGatherSpot__4CBot(float idx)
             return 1;
         v8 = -0x1;
         if (num_waypoints)
-            v8 = sub_48c690(idx);
+            v8 = CBot::SearchNearestWPForDBSpot(idx);
         if (v8 != -0x1)
         {
             v9 = *(int *)idx;
@@ -56,8 +56,8 @@ char SearchDBGatherSpot__4CBot(float idx)
             *(float *)&v0 = *(float *)&v9[2];
             *(float *)&v1 = *(float *)&v10[1];
             *(float *)&v2 = *(float *)&v10[2];
-            v11 = sub_48a280(&v0, v9[130], 1750.0f, v9[107]);
-            if (v11 != -0x1 && (unsigned short)sub_48cef0(v11, v8, *(int *)(*(int *)idx + 428)) != 0xffff)
+            v11 = WaypointFindNearest(&v0, v9[130], 1750.0f, v9[107]);
+            if (v11 != -0x1 && (unsigned short)WaypointRouteFromTo(v11, v8, *(int *)(*(int *)idx + 428)) != 0xffff)
             {
                 *(int *)(*(unsigned int *)&idx + 4132) = v8;
                 return 1;

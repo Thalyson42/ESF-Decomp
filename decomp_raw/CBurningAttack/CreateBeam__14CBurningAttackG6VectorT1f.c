@@ -67,12 +67,12 @@ unsigned int CreateBeam__14CBurningAttackG6VectorT1f(double a0, st_494f40_0 *a1,
     v2 = a1->field_1fc;
     v1 = a4;
     v0 = &a1->field_f4;
-    sub_48aef0(a1);
+    CBasePlayerWeapon::GetPowerRatio(a1);
     v13 = a1->field_e8 * a1->field_d8;
     v12 = __fnstcw();
     v11 = v12 | 0xc00;
     v13 = (int)(a0 * (double)(int)v13);
-    v20 = sub_489790(*(int *)a1->field_80, &v17, &v14, v13);
+    v20 = CBurningBeam::ShootBurningBeam(*(int *)a1->field_80, &v17, &v14, v13);
     a1->field_c8 = v20;
     return v20;
 }

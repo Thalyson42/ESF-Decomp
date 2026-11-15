@@ -10,7 +10,7 @@ char uncaught_exception__Fv(void)
     int v0;  // [bp-0x1c]
 
     sub_595bf4(v0);
-    v2 = sub_4895f0(v0);
+    v2 = __get_eh_info(v0);
     if (!*v2)
         return 0;
     return !*v2->field_14;

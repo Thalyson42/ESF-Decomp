@@ -15,13 +15,13 @@ st_4b9f90_1 * KeyValue__13CEnvExplosionP14KeyValueData_s(st_4b9f90_1 *a0, st_4b9
 {
     st_4b9f90_1 *v0;  // eax
 
-    v0 = sub_488af0(a1->field_4, "iMagnitude");
+    v0 = strcmp@GLIBC_2.0(a1->field_4, "iMagnitude");
     if (v0)
     {
         a1->field_c = 0;
         return v0;
     }
-    a0->field_2a8 = sub_48b500(a1->field_8, 0, 10, 0);
+    a0->field_2a8 = __strtol_internal@GLIBC_2.0(a1->field_8, 0, 10, 0);
     a1->field_c = 1;
     return a0;
 }

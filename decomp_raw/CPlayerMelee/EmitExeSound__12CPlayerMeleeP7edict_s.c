@@ -38,7 +38,7 @@ typedef struct st_504900_5 {
 } st_504900_5;
 
 extern char g_vecZero;
-extern st_504900_1 *g_6169ac;
+extern st_504900_1 *g_engfuncs.pfnPlaybackEvent;
 extern unsigned short m_usMeleeSounds;
 
 unsigned int * EmitExeSound__12CPlayerMeleeP7edict_s(st_504900_4 *a0, unsigned int a1)
@@ -58,10 +58,10 @@ unsigned int * EmitExeSound__12CPlayerMeleeP7edict_s(st_504900_4 *a0, unsigned i
         if (v2[21] != 2 && !v2[15])
             return v2;
         if (!a0->field_124->field_764->field_4->field_4c(a0->field_124->field_764) || !a0->field_17c->field_44)
-            return g_6169ac(4, a1, (m_usMeleeSounds | 0x610000) & 0xffff, 0, &g_vecZero, &g_vecZero, 0, 0, a0->field_17c->field_20, a0->field_17c->field_50, 0, 0);
+            return g_engfuncs.pfnPlaybackEvent(4, a1, (m_usMeleeSounds | 0x610000) & 0xffff, 0, &g_vecZero, &g_vecZero, 0, 0, a0->field_17c->field_20, a0->field_17c->field_50, 0, 0);
         v1 = 1;
         v0 = 0;
     }
-    return g_6169ac(4, a1, (m_usMeleeSounds | 0x610000) & 0xffff, 0, &g_vecZero, &g_vecZero, 0, 0, 0, 0);
+    return g_engfuncs.pfnPlaybackEvent(4, a1, (m_usMeleeSounds | 0x610000) & 0xffff, 0, &g_vecZero, &g_vecZero, 0, 0, 0, 0);
 }
 

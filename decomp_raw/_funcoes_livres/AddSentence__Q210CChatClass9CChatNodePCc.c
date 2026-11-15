@@ -91,7 +91,7 @@ st_543fb0_2 * AddSentence__Q210CChatClass9CChatNodePCc(st_543fb0_2 *a0, char *a1
                 }
                 else
                 {
-                    if (sub_48d130(&a1[iter], "UV:", 3))
+                    if (strncasecmp@GLIBC_2.0(&a1[iter], "UV:", 3))
                         break;
                     iter += 3;
                     v20 = iter;
@@ -115,13 +115,13 @@ st_543fb0_2 * AddSentence__Q210CChatClass9CChatNodePCc(st_543fb0_2 *a0, char *a1
                     if (a1 + v20 && *(char *)(a1 + v20))
                     {
                         v13 = 0;
-                        sub_48d0e0(&v14, 0, 79);
+                        memset@GLIBC_2.0(&v14, 0, 79);
                         v7 = &v13;
-                        sub_48e110(&v13, a1);
-                        v23 = sub_48d6b0(v7 + v20, " ");
+                        strcpy@GLIBC_2.0(&v13, a1);
+                        v23 = strtok@GLIBC_2.0(v7 + v20, " ");
                         if (v23 && *v23)
                         {
-                            v9 = sub_48b500(v23, 0, 10, 0);
+                            v9 = __strtol_internal@GLIBC_2.0(v23, 0, 10, 0);
                             v24 = 0xffffffff;
                             do
                             {
@@ -173,25 +173,25 @@ LABEL_544227:
     {
         v9 = 0;
     }
-    v6 = sub_48d6a0(44);
+    v6 = __builtin_new(44);
     v5 = 1;
     v33 = (char)v9;
     *(unsigned short *)&v0 = _INSERT(v33, 0, *(char *)((void*)&v8 + 3));
-    v34 = sub_48a330(v6, &a1[iter], v0, v33, v11, v10);
+    v34 = __Q210CChatClass13CChatSentencePCcbUcUcUc(v6, &a1[iter], v0, v33, v11, v10);
     v5 = 0;
     v35 = a0->field_0;
     v4 = v34;
     if (!*v35)
     {
-        v36 = sub_48d6a0(12);
+        v36 = __builtin_new(12);
         v3 = 1;
         v36->field_4 = NULL;
         v36->field_8 = 0;
-        sub_48d0e0(v36, 0, 4);
+        memset@GLIBC_2.0(v36, 0, 4);
         v3 = 0;
         *v35 = v36;
         if (v3)
-            sub_48d4e0(v36);
+            __builtin_delete(v36);
         *v35->field_0 = v4;
         *v35->field_4 = NULL;
         *v35->field_8 = 0;
@@ -200,15 +200,15 @@ LABEL_544227:
     else
     {
         v2 = v35[1];
-        v37 = sub_48d6a0(12);
+        v37 = __builtin_new(12);
         v1 = 1;
         v37->field_4 = 0;
         v37->field_8 = NULL;
-        sub_48d0e0(v37, 0, 4);
+        memset@GLIBC_2.0(v37, 0, 4);
         v1 = 0;
         v2->field_4 = v37;
         if (v1)
-            sub_48d4e0(v37);
+            __builtin_delete(v37);
         v35[1]->field_4->field_8 = v35[1];
         v38 = v35[1]->field_4;
         v35[1] = v38;
@@ -216,7 +216,7 @@ LABEL_544227:
         v35[1]->field_4 = NULL;
     }
     if (v5)
-        sub_48d4e0(v6);
+        __builtin_delete(v6);
     a0->field_10 = a0->field_10 + 1;
     a0->field_c = a0->field_c + v9;
     return a0;

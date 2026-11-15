@@ -3,6 +3,6 @@ extern int gEntvarsDescription;
 
 int WriteEntVars__5CSavePCcP9entvars_s(int a0, int a1, int a2)
 {
-    return sub_48db60(a0, a1, a2, &gEntvarsDescription, 86);
+    return CSave::WriteFields(a0, a1, a2, &gEntvarsDescription, 86);
 }
 

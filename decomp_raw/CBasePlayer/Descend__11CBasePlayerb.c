@@ -75,11 +75,11 @@ extern st_4f16d0_6 *g_pGameRules;
 extern unsigned int gmsgPowerupFX;
 extern unsigned int gmsgTransform;
 extern st_4f16d0_7 g_vecAuraColor;
-extern st_4f16d0_2 *g_616878;
-extern st_4f16d0_2 *g_61687c;
-extern st_4f16d0_2 *g_616880;
-extern st_4f16d0_2 *g_61688c;
-extern st_4f16d0_2 *g_6168dc;
+extern st_4f16d0_2 *g_engfuncs.pfnMessageBegin;
+extern st_4f16d0_2 *g_engfuncs.pfnMessageEnd;
+extern st_4f16d0_2 *g_engfuncs.pfnWriteByte;
+extern st_4f16d0_2 *g_engfuncs.pfnWriteLong;
+extern st_4f16d0_2 *g_engfuncs.pfnIndexOfEdict;
 
 st_4f16d0_3 * Descend__11CBasePlayerb(st_4f16d0_4 *a0, char a1)
 {
@@ -102,7 +102,7 @@ st_4f16d0_3 * Descend__11CBasePlayerb(st_4f16d0_4 *a0, char a1)
 
     if (a0->field_770)
     {
-        v8 = sub_488480(a0);
+        v8 = CBasePlayer::StopAscending(a0);
         if (a0->field_6cc != 1)
             return v8;
         a0->field_6cc = 0;
@@ -126,25 +126,25 @@ st_4f16d0_3 * Descend__11CBasePlayerb(st_4f16d0_4 *a0, char a1)
             }
             else
             {
-                sub_48cfe0(a0, 0);
+                CBasePlayer::RemoveAllWeapons(a0, 0);
                 a0->field_764->field_4->field_30(a0->field_764);
-                sub_488ad0(a0);
+                CBasePlayer::SelectLastItem(a0);
             }
         }
-        sub_489800(a0->field_764);
+        CBaseClass::SetModel(a0->field_764);
         v1->field_4->field_2c(v1);
         v6 = __fnstcw();
         v5 = v6 | 0xc00;
         v7 = (int)((double)a0->field_748 / v11);
-        sub_48b8d0(a0, v7);
+        CBasePlayer::SetMaxPowerLevel(a0, v7);
         if (5.0 < *(float *)&a0->field_0->field_160 || a0->field_744 > v7)
-            sub_487b40(a0, v7);
+            CBasePlayer::SetPowerLevel(a0, v7);
         v1->field_4->field_2c(v1);
         a0->field_370 = (float)(a0->field_370 / 5.0);
         v0 = (float)(*(float *)&a0->field_0->field_160 / (double)a0->field_24c);
         v12 = a0->field_764->field_4->field_10(a0->field_764);
         a0->field_24c = v12;
-        sub_48c420(a0, v12);
+        CBasePlayer::SetMaxHealth(a0, v12);
         v6 = __fnstcw();
         v5 = v6 | 0xc00;
         v7 = (int)((double)a0->field_24c * v0);
@@ -154,37 +154,37 @@ st_4f16d0_3 * Descend__11CBasePlayerb(st_4f16d0_4 *a0, char a1)
             *(float *)&a0->field_0->field_160 = (float)v7;
         a0->field_74c = a0->field_764->field_4->field_c(a0->field_764);
         g_pGameRules->field_44->field_f0(g_pGameRules);
-        g_616878(1, gmsgTransform, 0, a0->field_0->field_208);
-        g_616880(0);
+        g_engfuncs.pfnMessageBegin(1, gmsgTransform, 0, a0->field_0->field_208);
+        g_engfuncs.pfnWriteByte(0);
         v13 = a0->field_764->field_4->field_28(a0->field_764);
-        g_61688c(v13);
-        g_61687c();
-        sub_489390(a0->field_0->field_208, 1, "weapons/descend.wav", 0x3f800000, 0.800000011920929f, 0, 100);
+        g_engfuncs.pfnWriteLong(v13);
+        g_engfuncs.pfnMessageEnd();
+        EMIT_SOUND_DYN(a0->field_0->field_208, 1, "weapons/descend.wav", 0x3f800000, 0.800000011920929f, 0, 100);
         if (a0->field_76c)
-            sub_48a9d0(a0->field_76c);
+            CAura::SetColor(a0->field_76c);
         if (!a0->field_330)
-            return sub_48d4e0(v1);
+            return __builtin_delete(v1);
         v14 = &(&g_vecAuraColor.field_0)[3 * a0->field_764->field_4->field_38(a0->field_764)];
         v2 = v14->field_0;
         v3 = v14->field_4;
         v4 = v14->field_8;
-        g_616878(4, gmsgPowerupFX, &a0->field_0->padding_0[8], 0);
-        v15 = g_6168dc(a0->field_0->field_208);
-        g_616880(v15);
+        g_engfuncs.pfnMessageBegin(4, gmsgPowerupFX, &a0->field_0->padding_0[8], 0);
+        v15 = g_engfuncs.pfnIndexOfEdict(a0->field_0->field_208);
+        g_engfuncs.pfnWriteByte(v15);
         v6 = __fnstcw();
         v5 = v6 | 0xc00;
         v7 = (int)v2;
-        g_616880(v7);
+        g_engfuncs.pfnWriteByte(v7);
         v6 = __fnstcw();
         v5 = v6 | 0xc00;
         v7 = (int)v3;
-        g_616880(v7);
+        g_engfuncs.pfnWriteByte(v7);
         v6 = __fnstcw();
         v5 = v6 | 0xc00;
         v7 = (int)v4;
-        g_616880(v7);
-        g_61687c();
-        return sub_48d4e0(v1);
+        g_engfuncs.pfnWriteByte(v7);
+        g_engfuncs.pfnMessageEnd();
+        return __builtin_delete(v1);
     }
 }
 

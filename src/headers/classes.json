@@ -1,7 +1,7 @@
 {
  "CAbsorbHealthTask": {
-  "base": null,
-  "base_origem": null,
+  "base": "CBaseTask",
+  "base_origem": "heuristica",
   "virtuals": [
    "_._17CAbsorbHealthTask",
    "GetNesserelyChecks__17CAbsorbHealthTask",
@@ -233,8 +233,8 @@
   ]
  },
  "CAscendTask": {
-  "base": null,
-  "base_origem": null,
+  "base": "CBaseTask",
+  "base_origem": "heuristica",
   "virtuals": [
    "_._11CAscendTask",
    "GetNesserelyChecks__11CAscendTask",
@@ -490,8 +490,8 @@
   ]
  },
  "CAvoidAttackWhileSwoopComboEntry": {
-  "base": null,
-  "base_origem": null,
+  "base": "CBaseBotComboEntry",
+  "base_origem": "heuristica",
   "virtuals": [
    "_._32CAvoidAttackWhileSwoopComboEntry",
    "Think__32CAvoidAttackWhileSwoopComboEntry",
@@ -730,8 +730,8 @@
   ]
  },
  "CBaseClass": {
-  "base": "CSSJTrunks",
-  "base_origem": "heuristica",
+  "base": null,
+  "base_origem": null,
   "virtuals": [
    "GetSoundDir__10CBaseClass",
    "GetStartSpeed__10CBaseClass",
@@ -2959,8 +2959,8 @@
   ]
  },
  "CBeamJumpTask": {
-  "base": null,
-  "base_origem": null,
+  "base": "CBaseTask",
+  "base_origem": "heuristica",
   "virtuals": [
    "_._13CBeamJumpTask",
    "GetNesserelyChecks__13CBeamJumpTask",
@@ -3404,8 +3404,8 @@
   ]
  },
  "CBlindedTask": {
-  "base": null,
-  "base_origem": null,
+  "base": "CBaseTask",
+  "base_origem": "heuristica",
   "virtuals": [
    "_._12CBlindedTask",
    "GetNesserelyChecks__12CBlindedTask",
@@ -3515,8 +3515,8 @@
   ]
  },
  "CBlockTask": {
-  "base": null,
-  "base_origem": null,
+  "base": "CBaseTask",
+  "base_origem": "heuristica",
   "virtuals": [
    "_._10CBlockTask",
    "GetNesserelyChecks__10CBlockTask",
@@ -5240,7 +5240,7 @@
   ]
  },
  "CCandy": {
-  "base": "CChocolate",
+  "base": "CBaseEntity",
   "base_origem": "heuristica",
   "virtuals": [
    "Spawn__6CCandy",
@@ -5707,8 +5707,8 @@
   ]
  },
  "CChargeAttackTask": {
-  "base": null,
-  "base_origem": null,
+  "base": "CBaseTask",
+  "base_origem": "heuristica",
   "virtuals": [
    "_._17CChargeAttackTask",
    "GetNesserelyChecks__17CChargeAttackTask",
@@ -5741,8 +5741,8 @@
   ]
  },
  "CChargeGenBallComboEntry": {
-  "base": null,
-  "base_origem": null,
+  "base": "CBaseBotComboEntry",
+  "base_origem": "heuristica",
   "virtuals": [
    "_._24CChargeGenBallComboEntry",
    "Think__24CChargeGenBallComboEntry",
@@ -6348,8 +6348,8 @@
   ]
  },
  "CCombatTask": {
-  "base": null,
-  "base_origem": null,
+  "base": "CBaseTask",
+  "base_origem": "heuristica",
   "virtuals": [
    "_._11CCombatTask",
    "GetNesserelyChecks__11CCombatTask",
@@ -6389,8 +6389,8 @@
   ]
  },
  "CComboTask": {
-  "base": null,
-  "base_origem": null,
+  "base": "CBaseTask",
+  "base_origem": "heuristica",
   "virtuals": [
    "_._10CComboTask",
    "GetNesserelyChecks__10CComboTask",
@@ -6420,8 +6420,8 @@
   ]
  },
  "CControlBeamTask": {
-  "base": null,
-  "base_origem": null,
+  "base": "CBaseTask",
+  "base_origem": "heuristica",
   "virtuals": [
    "_._16CControlBeamTask",
    "GetNesserelyChecks__16CControlBeamTask",
@@ -6454,8 +6454,8 @@
   ]
  },
  "CControlFriezaDiscTask": {
-  "base": null,
-  "base_origem": null,
+  "base": "CBaseTask",
+  "base_origem": "heuristica",
   "virtuals": [
    "_._22CControlFriezaDiscTask",
    "GetNesserelyChecks__22CControlFriezaDiscTask",
@@ -6490,7 +6490,7 @@
   ]
  },
  "CControlledBeam": {
-  "base": "CChargedAttack",
+  "base": "CBasePlayerWeapon",
   "base_origem": "heuristica",
   "virtuals": [
    "Spawn__11CBaseEntity",
@@ -6778,8 +6778,8 @@
   "methods": []
  },
  "CCounterMeleeTask": {
-  "base": null,
-  "base_origem": null,
+  "base": "CBaseTask",
+  "base_origem": "heuristica",
   "virtuals": [
    "_._17CCounterMeleeTask",
    "GetNesserelyChecks__17CCounterMeleeTask",
@@ -6810,8 +6810,8 @@
   ]
  },
  "CDBTask": {
-  "base": null,
-  "base_origem": null,
+  "base": "CBaseTask",
+  "base_origem": "heuristica",
   "virtuals": [
    "_._7CDBTask",
    "GetNesserelyChecks__7CDBTask",
@@ -7986,8 +7986,8 @@
   ]
  },
  "CDrainEntsTask": {
-  "base": null,
-  "base_origem": null,
+  "base": "CBaseTask",
+  "base_origem": "heuristica",
   "virtuals": [
    "_._14CDrainEntsTask",
    "GetNesserelyChecks__14CDrainEntsTask",
@@ -8833,7 +8833,7 @@
   ]
  },
  "CExplodingAttack": {
-  "base": "CShieldAtk",
+  "base": "CMagicAttack",
   "base_origem": "heuristica",
   "virtuals": [
    "Spawn__16CExplodingAttack",
@@ -9468,8 +9468,8 @@
   ]
  },
  "CFinishMeleeTask": {
-  "base": null,
-  "base_origem": null,
+  "base": "CBaseTask",
+  "base_origem": "heuristica",
   "virtuals": [
    "_._16CFinishMeleeTask",
    "GetNesserelyChecks__16CFinishMeleeTask",
@@ -10043,7 +10043,7 @@
   ]
  },
  "CFrieza2": {
-  "base": "CFrieza",
+  "base": "CBaseClass",
   "base_origem": "heuristica",
   "virtuals": [
    "GetSoundDir__7CFrieza",
@@ -14247,8 +14247,8 @@
   ]
  },
  "CHuntEnemyTask": {
-  "base": null,
-  "base_origem": null,
+  "base": "CBaseTask",
+  "base_origem": "heuristica",
   "virtuals": [
    "_._14CHuntEnemyTask",
    "GetNesserelyChecks__14CHuntEnemyTask",
@@ -14280,8 +14280,8 @@
   ]
  },
  "CIdleTask": {
-  "base": null,
-  "base_origem": null,
+  "base": "CBaseTask",
+  "base_origem": "heuristica",
   "virtuals": [
    "_._9CIdleTask",
    "GetNesserelyChecks__9CIdleTask",
@@ -14597,8 +14597,8 @@
   "methods": []
  },
  "CJumpOffGroundTask": {
-  "base": null,
-  "base_origem": null,
+  "base": "CBaseTask",
+  "base_origem": "heuristica",
   "virtuals": [
    "_._18CJumpOffGroundTask",
    "GetNesserelyChecks__18CJumpOffGroundTask",
@@ -14630,8 +14630,8 @@
   ]
  },
  "CKameTorpTask": {
-  "base": null,
-  "base_origem": null,
+  "base": "CBaseTask",
+  "base_origem": "heuristica",
   "virtuals": [
    "_._13CKameTorpTask",
    "GetNesserelyChecks__13CKameTorpTask",
@@ -15374,8 +15374,8 @@
   ]
  },
  "CKickEnemyTask": {
-  "base": null,
-  "base_origem": null,
+  "base": "CBaseTask",
+  "base_origem": "heuristica",
   "virtuals": [
    "_._14CKickEnemyTask",
    "GetNesserelyChecks__14CKickEnemyTask",
@@ -15640,8 +15640,8 @@
   ]
  },
  "CLeftOutput": {
-  "base": null,
-  "base_origem": null,
+  "base": "CScreenOutput",
+  "base_origem": "heuristica",
   "virtuals": [
    "_._11CLeftOutput",
    "Display__13CScreenOutput",
@@ -15852,8 +15852,8 @@
   ]
  },
  "CLookAroundTask": {
-  "base": null,
-  "base_origem": null,
+  "base": "CBaseTask",
+  "base_origem": "heuristica",
   "virtuals": [
    "_._15CLookAroundTask",
    "GetNesserelyChecks__15CLookAroundTask",
@@ -15890,7 +15890,7 @@
   ]
  },
  "CMagicAttack": {
-  "base": "CPowerStruggle",
+  "base": "CBaseMonster",
   "base_origem": "heuristica",
   "virtuals": [
    "Spawn__12CMagicAttack",
@@ -16363,8 +16363,8 @@
   ]
  },
  "CMiddleOutput": {
-  "base": null,
-  "base_origem": null,
+  "base": "CScreenOutput",
+  "base_origem": "heuristica",
   "virtuals": [
    "_._13CMiddleOutput",
    "Display__13CScreenOutput",
@@ -17191,8 +17191,8 @@
   ]
  },
  "CNormalJumpTask": {
-  "base": null,
-  "base_origem": null,
+  "base": "CBaseTask",
+  "base_origem": "heuristica",
   "virtuals": [
    "_._15CNormalJumpTask",
    "GetNesserelyChecks__15CNormalJumpTask",
@@ -17225,8 +17225,8 @@
   ]
  },
  "CNormalMovementTask": {
-  "base": null,
-  "base_origem": null,
+  "base": "CBaseTask",
+  "base_origem": "heuristica",
   "virtuals": [
    "_._19CNormalMovementTask",
    "GetNesserelyChecks__19CNormalMovementTask",
@@ -17622,7 +17622,7 @@
   ]
  },
  "CPiccolo2": {
-  "base": "CPiccolo",
+  "base": "CBaseClass",
   "base_origem": "heuristica",
   "virtuals": [
    "GetSoundDir__8CPiccolo",
@@ -18620,8 +18620,8 @@
   ]
  },
  "CPowerStruggleTask": {
-  "base": null,
-  "base_origem": null,
+  "base": "CBaseTask",
+  "base_origem": "heuristica",
   "virtuals": [
    "_._18CPowerStruggleTask",
    "GetNesserelyChecks__18CPowerStruggleTask",
@@ -18652,8 +18652,8 @@
   ]
  },
  "CPowerUpTask": {
-  "base": null,
-  "base_origem": null,
+  "base": "CBaseTask",
+  "base_origem": "heuristica",
   "virtuals": [
    "_._12CPowerUpTask",
    "GetNesserelyChecks__12CPowerUpTask",
@@ -18683,8 +18683,8 @@
   ]
  },
  "CPowerupComboEntry": {
-  "base": null,
-  "base_origem": null,
+  "base": "CBaseBotComboEntry",
+  "base_origem": "heuristica",
   "virtuals": [
    "_._18CPowerupComboEntry",
    "Think__18CPowerupComboEntry",
@@ -18807,8 +18807,8 @@
   ]
  },
  "CRecoverHPTask": {
-  "base": null,
-  "base_origem": null,
+  "base": "CBaseTask",
+  "base_origem": "heuristica",
   "virtuals": [
    "_._14CRecoverHPTask",
    "GetNesserelyChecks__14CRecoverHPTask",
@@ -18839,8 +18839,8 @@
   ]
  },
  "CRecoverMeleeTask": {
-  "base": null,
-  "base_origem": null,
+  "base": "CBaseTask",
+  "base_origem": "heuristica",
   "virtuals": [
    "_._17CRecoverMeleeTask",
    "GetNesserelyChecks__17CRecoverMeleeTask",
@@ -19292,8 +19292,8 @@
   ]
  },
  "CRightOutput": {
-  "base": null,
-  "base_origem": null,
+  "base": "CScreenOutput",
+  "base_origem": "heuristica",
   "virtuals": [
    "_._12CRightOutput",
    "Display__13CScreenOutput",
@@ -19838,7 +19838,7 @@
   ]
  },
  "CSSJGohan": {
-  "base": "CGohan",
+  "base": "CBaseClass",
   "base_origem": "heuristica",
   "virtuals": [
    "GetSoundDir__6CGohan",
@@ -19962,7 +19962,7 @@
   ]
  },
  "CSSJVegeta": {
-  "base": "CVegeta",
+  "base": "CBaseClass",
   "base_origem": "heuristica",
   "virtuals": [
    "GetSoundDir__7CVegeta",
@@ -20743,8 +20743,8 @@
   ]
  },
  "CScreenOutput": {
-  "base": null,
-  "base_origem": null,
+  "base": "CBaseOutput",
+  "base_origem": "heuristica",
   "virtuals": [
    "_._13CScreenOutput",
    "Display__13CScreenOutput",
@@ -21609,8 +21609,8 @@
   ]
  },
  "CShootCandyTask": {
-  "base": null,
-  "base_origem": null,
+  "base": "CBaseTask",
+  "base_origem": "heuristica",
   "virtuals": [
    "_._15CShootCandyTask",
    "GetNesserelyChecks__15CShootCandyTask",
@@ -21681,8 +21681,8 @@
   ]
  },
  "CShootNonChargebleTask": {
-  "base": null,
-  "base_origem": null,
+  "base": "CBaseTask",
+  "base_origem": "heuristica",
   "virtuals": [
    "_._22CShootNonChargebleTask",
    "GetNesserelyChecks__22CShootNonChargebleTask",
@@ -21714,8 +21714,8 @@
   ]
  },
  "CShootScatterShotsTask": {
-  "base": null,
-  "base_origem": null,
+  "base": "CBaseTask",
+  "base_origem": "heuristica",
   "virtuals": [
    "_._22CShootScatterShotsTask",
    "GetNesserelyChecks__22CShootScatterShotsTask",
@@ -22990,8 +22990,8 @@
   ]
  },
  "CSwoopCloseToEnemyComboEntry": {
-  "base": null,
-  "base_origem": null,
+  "base": "CBaseBotComboEntry",
+  "base_origem": "heuristica",
   "virtuals": [
    "_._28CSwoopCloseToEnemyComboEntry",
    "Think__28CSwoopCloseToEnemyComboEntry",
@@ -23008,8 +23008,8 @@
   ]
  },
  "CSwoopTask": {
-  "base": null,
-  "base_origem": null,
+  "base": "CBaseTask",
+  "base_origem": "heuristica",
   "virtuals": [
    "_._10CSwoopTask",
    "GetNesserelyChecks__10CSwoopTask",
@@ -23579,8 +23579,8 @@
   ]
  },
  "CTeleportComboEntry": {
-  "base": null,
-  "base_origem": null,
+  "base": "CBaseBotComboEntry",
+  "base_origem": "heuristica",
   "virtuals": [
    "_._19CTeleportComboEntry",
    "Think__19CTeleportComboEntry",
@@ -23602,8 +23602,8 @@
   ]
  },
  "CTeleportTask": {
-  "base": null,
-  "base_origem": null,
+  "base": "CBaseTask",
+  "base_origem": "heuristica",
   "virtuals": [
    "_._13CTeleportTask",
    "GetNesserelyChecks__13CTeleportTask",
@@ -24975,8 +24975,8 @@
   ]
  },
  "CWallJumpTask": {
-  "base": null,
-  "base_origem": null,
+  "base": "CBaseTask",
+  "base_origem": "heuristica",
   "virtuals": [
    "_._13CWallJumpTask",
    "GetNesserelyChecks__13CWallJumpTask",

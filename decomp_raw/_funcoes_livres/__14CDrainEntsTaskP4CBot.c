@@ -17,17 +17,17 @@ typedef struct st_55a4c0_2 {
 } st_55a4c0_2;
 
 extern char __vt_14CDrainEntsTask;
-extern st_55a4c0_2 *g_61692c;
+extern st_55a4c0_2 *g_engfuncs.pfnRandomFloat;
 
 st_55a4c0_0 * __14CDrainEntsTaskP4CBot(double a0, st_55a4c0_0 *a1, int a2)
 {
     unsigned int *v0;  // eax
 
-    sub_48ce80(a1, a2);
+    __9CBaseTaskP4CBot(a1, a2);
     a1->field_14 = &__vt_14CDrainEntsTask;
-    g_61692c(3.0f, 7.0f);
+    g_engfuncs.pfnRandomFloat(3.0f, 7.0f);
     a1->field_18 = (float)(3.0 + *(float *)&a1->field_0);
-    v0 = sub_48d6a0(8);
+    v0 = __builtin_new(8);
     *v0 = 0;
     v0[1] = 0;
     a1->field_1c = v0;

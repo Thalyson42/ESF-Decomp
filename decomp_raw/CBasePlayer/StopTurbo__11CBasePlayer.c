@@ -24,7 +24,7 @@ unsigned int StopTurbo__11CBasePlayer(st_4f09a0_0 *a0)
         a0->field_324 = 0;
         if (!a0->field_76c)
             return v1;
-        v0 = sub_48dd20(a0->field_76c);
+        v0 = CAura::Destroy(a0->field_76c);
         a0->field_76c = 0;
         return v0;
     }

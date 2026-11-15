@@ -20,15 +20,15 @@ st_4edaf0_0 * UpdateAutoTargets__14CFuncTrackAutoi(float idx)
     {
         if (!*(int *)(*(unsigned int *)&idx + 320))
         {
-            v2 = sub_48d550(*(int *)(*(unsigned int *)&idx + 292));
+            v2 = CPathTrack::GetNext(*(int *)(*(unsigned int *)&idx + 292));
             v3 = *(int *)(*(unsigned int *)&idx + 296);
         }
         else
         {
-            v2 = sub_48d550(*(int *)(*(unsigned int *)&idx + 296));
+            v2 = CPathTrack::GetNext(*(int *)(*(unsigned int *)&idx + 296));
             v3 = *(int *)(*(unsigned int *)&idx + 292);
         }
-        v0 = sub_48d550(v3);
+        v0 = CPathTrack::GetNext(v3);
         if (v2)
         {
             *v2->field_1a0 = *v2->field_1a0 & 254;

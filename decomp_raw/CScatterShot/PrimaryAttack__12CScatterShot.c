@@ -16,7 +16,7 @@ typedef struct st_511430_0 {
     unsigned int field_0;
 } st_511430_0;
 
-extern st_511430_0 *g_616928;
+extern st_511430_0 *g_engfuncs.pfnRandomLong;
 extern st_511430_1 *gpGlobals;
 
 double PrimaryAttack__12CScatterShot(float a0)
@@ -76,17 +76,17 @@ double PrimaryAttack__12CScatterShot(float a0)
     float v28;  // [bp-0x20]
     float v29;  // [bp-0x1c]
 
-    sub_4883e0(a0);
+    CScatterShot::CleanUpShotList(a0);
     if (*(int *)(*(unsigned int *)&a0 + 228) > 7)
     {
         return v55;
     }
-    else if (sub_48c980(*(int *)(*(unsigned int *)&a0 + 128), 20))
+    else if (CBasePlayer::UseKi(*(int *)(*(unsigned int *)&a0 + 128), 20))
     {
-        sub_489390(*(int *)(*(int *)*(int *)(*(unsigned int *)&a0 + 128) + 520), 1, "weapons/kiblast.wav", 0x3f800000, 0.800000011920929f, 0, 100);
-        v4 = g_616928(0xfffffff6, 10) * 4;
-        v3 = g_616928(0xfffffff6, 10) * 4;
-        sub_48a800(*(int *)*(int *)(*(unsigned int *)&a0 + 128) + 116);
+        EMIT_SOUND_DYN(*(int *)(*(int *)*(int *)(*(unsigned int *)&a0 + 128) + 520), 1, "weapons/kiblast.wav", 0x3f800000, 0.800000011920929f, 0, 100);
+        v4 = g_engfuncs.pfnRandomLong(0xfffffff6, 10) * 4;
+        v3 = g_engfuncs.pfnRandomLong(0xfffffff6, 10) * 4;
+        UTIL_MakeVectors(*(int *)*(int *)(*(unsigned int *)&a0 + 128) + 116);
         (*(int *)(*(int *)(*(int *)(*(unsigned int *)&a0 + 128) + 96) + 480))(&v17, *(int *)(*(unsigned int *)&a0 + 128));
         v31 = &gpGlobals->field_28;
         v32 = 10.0 * gpGlobals->field_28;
@@ -100,7 +100,7 @@ double PrimaryAttack__12CScatterShot(float a0)
         v27 = v24;
         v28 = v25;
         v29 = v26;
-        sub_48d680(*(int *)(*(unsigned int *)&a0 + 128), 5);
+        CBasePlayer::SetAnimation(*(int *)(*(unsigned int *)&a0 + 128), 5);
         v34 = &gpGlobals->field_28;
         v14 = (float)(200.0 * gpGlobals->field_28);
         v15 = (float)(200.0 * *(float *)&v34[1]);
@@ -129,7 +129,7 @@ double PrimaryAttack__12CScatterShot(float a0)
         v45 = v42 * v42 + v43 * v43 + v44 * v44;
         v46 = sqrt(v45);
         if (isnan(v46))
-            sub_487dc0(*(unsigned int *)&v45);
+            sqrt(*(unsigned int *)&v45);
         else
             v45 = v46;
         v21 = (float)v45;
@@ -162,12 +162,12 @@ double PrimaryAttack__12CScatterShot(float a0)
         v2 = *(short *)(*(unsigned int *)&a0 + 236);
         v1 = *(short *)(*(unsigned int *)&a0 + 234);
         v0 = *(short *)(*(unsigned int *)&a0 + 232);
-        sub_48aef0(a0);
+        CBasePlayerWeapon::GetPowerRatio(a0);
         v6 = __fnstcw();
         v5 = v6 | 0xc00;
         v7 = (int)(v51 * 10.0);
-        sub_489cc0(a0, sub_48b590(*(int *)*(int *)(*(unsigned int *)&a0 + 128), &v14, &v18, v7));
-        sub_488640();
+        CScatterShot::AddShotEntry(a0, CScatterShotAttack::ShootScatterShotAttack(*(int *)*(int *)(*(unsigned int *)&a0 + 128), &v14, &v18, v7));
+        UTIL_WeaponTimeBase();
         *(float *)(*(unsigned int *)&a0 + 156) = (float)(v53 + 0.3);
         return v53 + 0.3;
     }

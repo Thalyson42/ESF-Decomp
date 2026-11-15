@@ -16,7 +16,7 @@ typedef struct st_50e960_0 {
     unsigned int field_0;
 } st_50e960_0;
 
-extern st_50e960_0 *g_616928;
+extern st_50e960_0 *g_engfuncs.pfnRandomLong;
 extern st_50e960_1 *gpGlobals;
 
 double ShootAttack__8CRenzoku(float a0)
@@ -105,9 +105,9 @@ double ShootAttack__8CRenzoku(float a0)
     float v45;  // [bp-0x20]
     float v46;  // [bp-0x1c]
 
-    v4 = g_616928(0, 10);
-    v3 = g_616928(0xfffffff6, 10);
-    sub_48a800(*(int *)*(int *)(*(unsigned int *)&a0 + 128) + 116);
+    v4 = g_engfuncs.pfnRandomLong(0, 10);
+    v3 = g_engfuncs.pfnRandomLong(0xfffffff6, 10);
+    UTIL_MakeVectors(*(int *)*(int *)(*(unsigned int *)&a0 + 128) + 116);
     if (*(int *)(*(unsigned int *)&a0 + 472))
     {
         (*(int *)(*(int *)(*(int *)(*(unsigned int *)&a0 + 128) + 96) + 480))(&v31, *(int *)(*(unsigned int *)&a0 + 128));
@@ -124,7 +124,7 @@ double ShootAttack__8CRenzoku(float a0)
         v52 = gpGlobals->field_28 * gpGlobals->field_28 + *(float *)&v51[1] * *(float *)&v51[1] + *(float *)&v51[2] * *(float *)&v51[2];
         v53 = sqrt(v52);
         if (isnan(v53))
-            sub_487dc0(*(unsigned int *)&v52);
+            sqrt(*(unsigned int *)&v52);
         else
             v52 = v53;
         v11 = (float)v52;
@@ -198,7 +198,7 @@ double ShootAttack__8CRenzoku(float a0)
         v70 = gpGlobals->field_28 * gpGlobals->field_28 + *(float *)&v69[1] * *(float *)&v69[1] + *(float *)&v69[2] * *(float *)&v69[2];
         v71 = sqrt(v70);
         if (isnan(v71))
-            sub_487dc0(*(unsigned int *)&v70);
+            sqrt(*(unsigned int *)&v70);
         else
             v70 = v71;
         v27 = (float)v70;
@@ -255,7 +255,7 @@ double ShootAttack__8CRenzoku(float a0)
         v43 = v10;
         v1 = 6;
     }
-    sub_48d680(*(int *)(*(unsigned int *)&a0 + 128));
+    CBasePlayer::SetAnimation(*(int *)(*(unsigned int *)&a0 + 128));
     *(unsigned int *)(*(unsigned int *)&a0 + 472) = !*(int *)(*(unsigned int *)&a0 + 472);
     v8 = v44;
     v9 = v45;
@@ -266,11 +266,11 @@ double ShootAttack__8CRenzoku(float a0)
     v2 = *(short *)(*(unsigned int *)&a0 + 480);
     v1 = *(short *)(*(unsigned int *)&a0 + 478);
     v0 = *(short *)(*(unsigned int *)&a0 + 476);
-    sub_48aef0(a0);
+    CBasePlayerWeapon::GetPowerRatio(a0);
     v6 = __fnstcw();
     v5 = v6 | 0xc00;
     v7 = (int)(v13 * 5.0);
-    sub_489210(*(int *)*(int *)(*(unsigned int *)&a0 + 128), &v8, &v11, v7);
+    CKiAttack::ShootCurvedKiAttack(*(int *)*(int *)(*(unsigned int *)&a0 + 128), &v8, &v11, v7);
     return v13 * 5.0;
 }
 

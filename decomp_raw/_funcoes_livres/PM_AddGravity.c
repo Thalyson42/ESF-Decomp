@@ -29,6 +29,6 @@ int PM_AddGravity(void)
     pmove->field_64 = (float)(pmove->field_64 - v2 * *(float *)pmove->field_4f4f0 * pmove->field_10);
     pmove->field_64 = pmove->field_7c * pmove->field_10 + pmove->field_64;
     pmove->field_7c = 0;
-    return sub_489840(v0);
+    return PM_CheckVelocity(v0);
 }
 

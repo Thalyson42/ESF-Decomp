@@ -51,7 +51,7 @@ int ResetWallJumpVars__11CBasePlayer(st_4f6fb0_0 *a0)
     v3[162] = v0;
     v3[163] = v1;
     v3[164] = v2;
-    sub_489d40(&a0->field_504);
-    return sub_48c610(&a0->field_504);
+    CSwoop::ResetAllDT(&a0->field_504);
+    return CSwoop::AddAllToNullKeyset(&a0->field_504);
 }
 

@@ -15,9 +15,9 @@ unsigned int KeyValue__13CTriggerRelayP14KeyValueData_s(st_52ae70_1 *a0, st_52ae
 {
     unsigned int v0;  // eax
 
-    if (sub_488af0(a1->field_4, "triggerstate"))
-        return sub_48b920(a0, a1);
-    v0 = sub_48b500(a1->field_8, 0, 10, 0);
+    if (strcmp@GLIBC_2.0(a1->field_4, "triggerstate"))
+        return CBaseDelay::KeyValue(a0, a1);
+    v0 = __strtol_internal@GLIBC_2.0(a1->field_8, 0, 10, 0);
     switch (v0)
     {
     case 0:

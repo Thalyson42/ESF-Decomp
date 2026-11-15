@@ -13,7 +13,7 @@ typedef struct st_539a30_2 {
     unsigned int field_0;
 } st_539a30_2;
 
-extern st_539a30_2 *g_61681c;
+extern st_539a30_2 *g_engfuncs.pfnCreateNamedEntity;
 extern st_539a30_1 *gpGlobals;
 extern st_539a30_0 *g_pBodyQueueHead;
 
@@ -25,14 +25,14 @@ st_539a30_0 * InitBodyQue__Fv(void)
     unsigned int v0;  // [bp-0x8]
 
     v0 = -1 * gpGlobals->field_98 + 5945697;
-    g_pBodyQueueHead = g_61681c(v0);
+    g_pBodyQueueHead = g_engfuncs.pfnCreateNamedEntity(v0);
     v2 = &g_pBodyQueueHead->padding_0[128];
     if (!g_pBodyQueueHead)
         v2 = NULL;
     v3 = 0;
     do
     {
-        v4 = g_61681c(v0);
+        v4 = g_engfuncs.pfnCreateNamedEntity(v0);
         *(st_539a30_0 **)&v2->padding_0[408] = v4;
         v2 = &v4->padding_0[128];
         if (!v4)

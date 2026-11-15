@@ -16,10 +16,10 @@ int SetDelayEndBlock__12CPlayerMeleeP12melee_move_sT1(st_509e10_0 *a0, int a1, i
 {
     int v0;  // eax
 
-    if ((int)sub_48bdd0(a0, a1) <= 3)
+    if ((int)CPlayerMelee::GetMoveCount(a0, a1) <= 3)
     {
-        v0 = sub_48bdd0(a0, a1);
-        if (v0 > (int)sub_48bdd0(a0, a2) && a0->field_ac + 1.0 > *(float *)gpGlobals)
+        v0 = CPlayerMelee::GetMoveCount(a0, a1);
+        if (v0 > (int)CPlayerMelee::GetMoveCount(a0, a2) && a0->field_ac + 1.0 > *(float *)gpGlobals)
             a0->field_108 = 1;
     }
     return a0->field_108;

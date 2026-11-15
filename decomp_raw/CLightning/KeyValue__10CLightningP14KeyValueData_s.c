@@ -37,7 +37,7 @@ typedef struct st_4b0600_1 {
     unsigned int field_0;
 } st_4b0600_1;
 
-extern st_4b0600_1 *g_6168cc;
+extern st_4b0600_1 *g_engfuncs.pfnAllocString;
 
 st_4b0600_4 * KeyValue__10CLightningP14KeyValueData_s(st_4b0600_3 *a0, st_4b0600_0 *a1)
 {
@@ -58,85 +58,85 @@ st_4b0600_4 * KeyValue__10CLightningP14KeyValueData_s(st_4b0600_3 *a0, st_4b0600
     double v8;  // mm7
     st_4b0600_4 *v9;  // eax
 
-    if (!sub_488af0(a1->field_4, "LightningStart"))
+    if (!strcmp@GLIBC_2.0(a1->field_4, "LightningStart"))
     {
-        v0 = g_6168cc(a1->field_8);
+        v0 = g_engfuncs.pfnAllocString(a1->field_8);
         a0->field_68 = v0;
         a1->field_c = 1;
         return v0;
     }
-    else if (!sub_488af0(a1->field_4, "LightningEnd"))
+    else if (!strcmp@GLIBC_2.0(a1->field_4, "LightningEnd"))
     {
-        v1 = g_6168cc(a1->field_8);
+        v1 = g_engfuncs.pfnAllocString(a1->field_8);
         a0->field_6c = v1;
         a1->field_c = 1;
         return v1;
     }
-    else if (!sub_488af0(a1->field_4, "life"))
+    else if (!strcmp@GLIBC_2.0(a1->field_4, "life"))
     {
-        v2 = sub_487fc0(a1->field_8, 0, 0);
+        v2 = __strtod_internal@GLIBC_2.0(a1->field_8, 0, 0);
         a0->field_70 = (float)v3;
         a1->field_c = 1;
         return v2;
     }
-    else if (!sub_488af0(a1->field_4, "BoltWidth"))
+    else if (!strcmp@GLIBC_2.0(a1->field_4, "BoltWidth"))
     {
-        v4 = sub_48b500(a1->field_8, 0, 10, 0);
+        v4 = __strtol_internal@GLIBC_2.0(a1->field_8, 0, 10, 0);
         a0->field_74 = v4;
         a1->field_c = 1;
         return v4;
     }
-    else if (!sub_488af0(a1->field_4, "NoiseAmplitude"))
+    else if (!strcmp@GLIBC_2.0(a1->field_4, "NoiseAmplitude"))
     {
-        v5 = sub_48b500(a1->field_8, 0, 10, 0);
+        v5 = __strtol_internal@GLIBC_2.0(a1->field_8, 0, 10, 0);
         a0->field_78 = v5;
         a1->field_c = 1;
         return v5;
     }
-    else if (!sub_488af0(a1->field_4, "TextureScroll"))
+    else if (!strcmp@GLIBC_2.0(a1->field_4, "TextureScroll"))
     {
-        v6 = sub_48b500(a1->field_8, 0, 10, 0);
+        v6 = __strtol_internal@GLIBC_2.0(a1->field_8, 0, 10, 0);
         a0->field_80 = v6;
         a1->field_c = 1;
         return v6;
     }
-    else if (!sub_488af0(a1->field_4, "StrikeTime"))
+    else if (!strcmp@GLIBC_2.0(a1->field_4, "StrikeTime"))
     {
-        v7 = sub_487fc0(a1->field_8, 0, 0);
+        v7 = __strtod_internal@GLIBC_2.0(a1->field_8, 0, 0);
         a0->field_84 = (float)v8;
         a1->field_c = 1;
         return v7;
     }
-    else if (!sub_488af0(a1->field_4, "texture"))
+    else if (!strcmp@GLIBC_2.0(a1->field_4, "texture"))
     {
-        v9 = g_6168cc(a1->field_8);
+        v9 = g_engfuncs.pfnAllocString(a1->field_8);
         a0->field_8c = v9;
         a1->field_c = 1;
         return v9;
     }
-    else if (!sub_488af0(a1->field_4, "framestart"))
+    else if (!strcmp@GLIBC_2.0(a1->field_4, "framestart"))
     {
-        v10 = sub_48b500(a1->field_8, 0, 10, 0);
+        v10 = __strtol_internal@GLIBC_2.0(a1->field_8, 0, 10, 0);
         a0->field_90 = v10;
         a1->field_c = 1;
         return v10;
     }
-    else if (!sub_488af0(a1->field_4, "Radius"))
+    else if (!strcmp@GLIBC_2.0(a1->field_4, "Radius"))
     {
-        v11 = sub_487fc0(a1->field_8, 0, 0);
+        v11 = __strtod_internal@GLIBC_2.0(a1->field_8, 0, 0);
         a0->field_94 = (float)v12;
         a1->field_c = 1;
         return v11;
     }
     else
     {
-        v13 = sub_488af0(a1->field_4, "damage");
+        v13 = strcmp@GLIBC_2.0(a1->field_4, "damage");
         if (v13)
         {
             a1->field_c = 0;
             return v13;
         }
-        sub_487fc0(a1->field_8, 0, 0);
+        __strtod_internal@GLIBC_2.0(a1->field_8, 0, 0);
         v14 = a0->field_0;
         v14->field_1e0 = (float)v15;
         a1->field_c = 1;

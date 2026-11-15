@@ -1,7 +1,7 @@
 // LinearMoveDone__11CBaseToggle @0x1230d0 size=155
 extern unsigned int g_vecZero;
-extern unsigned int g_616790;
-extern unsigned int g_616794;
+extern unsigned int g_vecZero+4;
+extern unsigned int g_vecZero+8;
 
 int LinearMoveDone__11CBaseToggle(float a0)
 {
@@ -9,11 +9,11 @@ int LinearMoveDone__11CBaseToggle(float a0)
     unsigned int v2;  // eax
     unsigned int v3;  // edx
 
-    sub_48db50(*(int *)a0, *(unsigned int *)&a0 + 228);
+    UTIL_SetOrigin(*(int *)a0, *(unsigned int *)&a0 + 228);
     idx = *(int *)a0;
     *(unsigned int *)(idx + 32) = g_vecZero;
-    *(unsigned int *)(idx + 36) = g_616790;
-    *(unsigned int *)(idx + 40) = g_616794;
+    *(unsigned int *)(idx + 36) = g_vecZero+4;
+    *(unsigned int *)(idx + 40) = g_vecZero+8;
     v2 = *(int *)a0;
     *(float *)(v2 + 260) = -1.0f;
     if (!*(short *)(*(unsigned int *)&a0 + 222))

@@ -47,9 +47,9 @@ typedef struct st_49b180_6 {
 } st_49b180_6;
 
 extern unsigned int gmsgVGUIMenu;
-extern st_49b180_5 *g_616878;
-extern st_49b180_5 *g_61687c;
-extern st_49b180_5 *g_616880;
+extern st_49b180_5 *g_engfuncs.pfnMessageBegin;
+extern st_49b180_5 *g_engfuncs.pfnMessageEnd;
+extern st_49b180_5 *g_engfuncs.pfnWriteByte;
 
 unsigned int PlayerUses__30CHalfLifeCaptureTheDragonBallsP11CBasePlayer(st_49b180_1 *a0, st_49b180_6 *a1)
 {
@@ -96,17 +96,17 @@ unsigned int PlayerUses__30CHalfLifeCaptureTheDragonBallsP11CBasePlayer(st_49b18
         v22 = v19 * v19 + v20 * v20 + v21 * v21;
         v23 = sqrt(v22);
         if (isnan(v23))
-            sub_487dc0(*(unsigned int *)&v22);
+            sqrt(*(unsigned int *)&v22);
         else
             v22 = v23;
         v10 = (float)v22;
         if (v10 < 100.0f)
         {
             a1->field_348 = 1;
-            g_616878(1, gmsgVGUIMenu, 0, a1->field_0->field_208);
+            g_engfuncs.pfnMessageBegin(1, gmsgVGUIMenu, 0, a1->field_0->field_208);
             v0 = 31;
-            g_616880(v0);
-            g_61687c(v0);
+            g_engfuncs.pfnWriteByte(v0);
+            g_engfuncs.pfnMessageEnd(v0);
             if (a0->field_294)
                 return 1;
             v24 = a0->field_278;
@@ -123,7 +123,7 @@ unsigned int PlayerUses__30CHalfLifeCaptureTheDragonBallsP11CBasePlayer(st_49b18
             v1 = v7;
             v2 = v8;
             v3 = v9;
-            a0->field_294 = sub_489720(&v10, &v1, &a0->field_278);
+            a0->field_294 = CShenlong::CreateShenlong(&v10, &v1, &a0->field_278);
             return 1;
         }
         idx += 1;

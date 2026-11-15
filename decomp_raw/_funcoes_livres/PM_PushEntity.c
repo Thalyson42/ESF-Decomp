@@ -62,7 +62,7 @@ unsigned int * PM_PushEntity(void)
             *iter = *i;
             iter += 1;
         }
-        sub_48caf0();
+        PM_AddToTouched();
     }
     node = v11;
     j = &v6;

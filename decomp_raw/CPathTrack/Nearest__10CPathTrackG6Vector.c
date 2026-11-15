@@ -17,7 +17,7 @@ typedef struct st_4e75e0_2 {
     unsigned int field_0;
 } st_4e75e0_2;
 
-extern st_4e75e0_2 *g_6168b4;
+extern st_4e75e0_2 *g_engfuncs.pfnAlertMessage;
 extern st_4e75e0_1 *gpGlobals;
 
 st_4e75e0_0 ** Nearest__10CPathTrackG6Vector(st_4e75e0_0 **a0, float *a1)
@@ -55,12 +55,12 @@ st_4e75e0_0 ** Nearest__10CPathTrackG6Vector(st_4e75e0_0 **a0, float *a1)
     v12 = v6 * v6 + v7 * v7 + 0.0;
     v13 = sqrt(v12);
     if (isnan(v13))
-        sub_487dc0(*(unsigned int *)&v12);
+        sqrt(*(unsigned int *)&v12);
     else
         v12 = v13;
     v0 = (float)v12;
     v14 = a0;
-    v15 = sub_48d550(v14);
+    v15 = CPathTrack::GetNext(v14);
     v1 = 0;
     if (v15 && v15 != v14)
     {
@@ -69,7 +69,7 @@ st_4e75e0_0 ** Nearest__10CPathTrackG6Vector(st_4e75e0_0 **a0, float *a1)
             v1 += 1;
             if (v1 > 9999)
             {
-                g_6168b4(4, "Bad sequence of path_tracks from %s", *a0->field_1cc + gpGlobals->field_98);
+                g_engfuncs.pfnAlertMessage(4, "Bad sequence of path_tracks from %s", *a0->field_1cc + gpGlobals->field_98);
                 return NULL;
             }
             v16 = &*v15->field_8;
@@ -84,7 +84,7 @@ st_4e75e0_0 ** Nearest__10CPathTrackG6Vector(st_4e75e0_0 **a0, float *a1)
             v18 = v6 * v6 + v7 * v7 + 0.0;
             v19 = sqrt(v18);
             if (isnan(v19))
-                sub_487dc0(*(unsigned int *)&v18);
+                sqrt(*(unsigned int *)&v18);
             else
                 v18 = v19;
             v5 = (float)v18;
@@ -93,7 +93,7 @@ st_4e75e0_0 ** Nearest__10CPathTrackG6Vector(st_4e75e0_0 **a0, float *a1)
                 v0 = v5;
                 v14 = v15;
             }
-            v15 = sub_48d550(v15);
+            v15 = CPathTrack::GetNext(v15);
         } while (v15 && v15 != a0);
     }
     return v14;

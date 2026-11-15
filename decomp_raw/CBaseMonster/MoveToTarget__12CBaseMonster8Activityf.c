@@ -13,6 +13,6 @@ int MoveToTarget__12CBaseMonster8Activityf(st_4d49c0_0 *a0, unsigned int a1, flo
     a0->field_22c = a1;
     a0->field_21c = a2;
     a0->field_214 = 1;
-    return sub_48d390(a0);
+    return CBaseMonster::FRefreshRoute(a0);
 }
 

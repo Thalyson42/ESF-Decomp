@@ -15,6 +15,6 @@ typedef struct st_4a8ae0_0 {
 
 int SilenceVoice__15CControlledBeam(st_4a8ae0_1 *a0)
 {
-    return sub_489390(*(int *)(*(int *)a0->field_80 + 520), 2, "common/null.wav", 0x3f800000, 0.800000011920929f, 0, 100);
+    return EMIT_SOUND_DYN(*(int *)(*(int *)a0->field_80 + 520), 2, "common/null.wav", 0x3f800000, 0.800000011920929f, 0, 100);
 }
 

@@ -43,8 +43,8 @@ typedef struct st_4a5490_2 {
 
 extern char SUB_Remove__11CBaseEntity;
 extern unsigned int g_vecZero;
-extern unsigned int g_616790;
-extern unsigned int g_616794;
+extern unsigned int g_vecZero+4;
+extern unsigned int g_vecZero+8;
 extern st_4a5490_2 *gpGlobals;
 
 unsigned int * StickyGibTouch__4CGibP11CBaseEntity(st_4a5490_1 *a0, st_4a5490_3 **a1)
@@ -78,7 +78,7 @@ unsigned int * StickyGibTouch__4CGibP11CBaseEntity(st_4a5490_1 *a0, st_4a5490_3 
     v11->field_c = _INSERT(0, 0, 0) | 0xffff0000;
     v11->field_10 = &SUB_Remove__11CBaseEntity;
     v11->field_0->field_104 = (float)(gpGlobals->field_0 + 10.0);
-    if (!sub_488af0(*(int *)*a1 + gpGlobals->field_98, "worldspawn"))
+    if (!strcmp@GLIBC_2.0(*(int *)*a1 + gpGlobals->field_98, "worldspawn"))
     {
         v13 = a0->field_0;
         v14 = v13 + 8;
@@ -91,8 +91,8 @@ unsigned int * StickyGibTouch__4CGibP11CBaseEntity(st_4a5490_1 *a0, st_4a5490_3 
         v3 = (float)(v15 + *(float *)&v13[2]);
         v4 = (float)(v16 + *(float *)&v17[1]);
         v5 = *(float *)&v17[2] + v2;
-        sub_487b80(v17, &v3, 1, v13[130], &v6);
-        sub_48d7e0(&v6, a0->field_2a8);
+        UTIL_TraceLine(v17, &v3, 1, v13[130], &v6);
+        UTIL_BloodDecalTrace(&v6, a0->field_2a8);
         v18 = a0;
         v19 = v18->field_0;
         v0 = (float)(-1.0 * v7);
@@ -102,19 +102,19 @@ unsigned int * StickyGibTouch__4CGibP11CBaseEntity(st_4a5490_1 *a0, st_4a5490_3 
         *(float *)&v19[9] = v1;
         *(float *)&v19[10] = v2;
         v20 = v18->field_0;
-        sub_488860(&v0, v20 + 8);
+        UTIL_VecToAngles(&v0, v20 + 8);
         *(float *)&v20[20] = v0;
         *(float *)&v20[21] = v1;
         *(float *)&v20[22] = v2;
         v21 = a0->field_0;
         v21[8] = g_vecZero;
-        v21[9] = g_616790;
-        v21[10] = g_616794;
+        v21[9] = g_vecZero+4;
+        v21[10] = g_vecZero+8;
         v22 = a0;
         v23 = v22->field_0;
         v23[23] = g_vecZero;
-        v23[24] = g_616790;
-        v23[25] = g_616794;
+        v23[24] = g_vecZero+4;
+        v23[25] = g_vecZero+8;
         v24 = v22->field_0;
         v24[66] = 0;
         return v24;

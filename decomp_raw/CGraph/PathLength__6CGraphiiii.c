@@ -10,7 +10,7 @@ typedef struct st_4df7f0_1 {
     unsigned int field_0;
 } st_4df7f0_1;
 
-extern st_4df7f0_1 *g_6168b4;
+extern st_4df7f0_1 *g_engfuncs.pfnAlertMessage;
 
 double PathLength__6CGraphiiii(st_4df7f0_0 *a0, int a1, int a2, int a3, unsigned int a4)
 {
@@ -35,18 +35,18 @@ double PathLength__6CGraphiiii(st_4df7f0_0 *a0, int a1, int a2, int a3, unsigned
             v4 = v3 - 1;
             if (v3 <= 0)
             {
-                g_6168b4(1, "Route Failure\n");
+                g_engfuncs.pfnAlertMessage(1, "Route Failure\n");
                 return 0.0;
             }
-            v8 = sub_4889b0(a0, i, a2, a3, v2);
+            v8 = CGraph::NextNodeInRoute(a0, i, a2, a3, v2);
             if (i == v8)
                 return 0.0;
-            sub_48d800(a0, i, v8, &v6);
+            CGraph::HashSearch(a0, i, v8, &v6);
             if ((int)v6 < 0)
             {
                 v1 = a2;
                 v0 = i;
-                g_6168b4(1, "HashLinks is broken from %d to %d.\n");
+                g_engfuncs.pfnAlertMessage(1, "HashLinks is broken from %d to %d.\n");
                 return 0.0;
             }
             v5 += *(float *)(a0->field_10 + v6 * 24 + 20);

@@ -147,8 +147,8 @@ st_58fca0_3 * PM_WalkMove(double a0, double a1, double a2, double a3)
     v0 = pmove->field_4546c;
     pmove->field_1c = 0;
     pmove->field_28 = 0;
-    sub_489290(&pmove->field_14);
-    sub_489290(&pmove->field_20);
+    VectorNormalize(&pmove->field_14);
+    VectorNormalize(&pmove->field_20);
     idx = 0;
     do
     {
@@ -160,19 +160,19 @@ st_58fca0_3 * PM_WalkMove(double a0, double a1, double a2, double a3)
     v36 = *(float *)&v32;
     *(float *)&v29 = v36;
     v30 = 0;
-    sub_489290(&v28);
+    VectorNormalize(&v28);
     if (v36 > pmove->field_1f4)
     {
-        sub_48d230(&v31, pmove->field_1f4 / v36, &v31);
+        VectorScale(&v31, pmove->field_1f4 / v36, &v31);
         v36 = pmove->field_1f4;
     }
     pmove->field_64 = 0;
-    sub_48b110(&v28, v36, pmove->field_4f4f0->field_10);
+    PM_Accelerate(&v28, v36, pmove->field_4f4f0->field_10);
     pmove->field_64 = 0;
     pmove->field_5c = pmove->field_5c + pmove->field_74;
     pmove->field_60 = pmove->field_60 + pmove->field_78;
     pmove->field_64 = pmove->field_7c + pmove->field_64;
-    sub_48c330(&pmove->field_5c);
+    Length(&pmove->field_5c);
     if (1.0 > a0)
     {
         memset(&pmove->field_5c, 0, 12);
@@ -201,7 +201,7 @@ st_58fca0_3 * PM_WalkMove(double a0, double a1, double a2, double a3)
             v15 = pmove->field_5c;
             v16 = pmove->field_60;
             v17 = pmove->field_64;
-            sub_48dbe0();
+            PM_FlyMove();
             *(float *)&v12 = pmove->field_38;
             *(float *)&v13 = pmove->field_3c;
             *(float *)&v14 = *(float *)&pmove->field_40;
@@ -227,7 +227,7 @@ st_58fca0_3 * PM_WalkMove(double a0, double a1, double a2, double a3)
                 *(unsigned int *)&pmove->field_3c = v6;
                 pmove->field_40 = v7;
             }
-            sub_48dbe0();
+            PM_FlyMove();
             *(float *)&v25 = pmove->field_38;
             *(float *)&v26 = pmove->field_3c;
             v40 = *(float *)&pmove->field_40;

@@ -23,7 +23,7 @@ typedef struct st_498f10_2 {
     struct st_498f10_0 *field_60;
 } st_498f10_2;
 
-extern st_498f10_1 *g_6168d4;
+extern st_498f10_1 *g_engfuncs.pfnPEntityOfEntOffset;
 
 unsigned int TakeDamage__13CButtonTargetP9entvars_sT1fi(st_498f10_2 *a0, unsigned int a1, st_498f10_4 *a2)
 {
@@ -37,7 +37,7 @@ unsigned int TakeDamage__13CButtonTargetP9entvars_sT1fi(st_498f10_2 *a0, unsigne
     v1 = 3;
     v0 = a0;
     v3 = a2->field_208;
-    if (a2->field_208 || (v3 = g_6168d4(0), v3))
+    if (a2->field_208 || (v3 = g_engfuncs.pfnPEntityOfEntOffset(0), v3))
         v4 = v3->field_7c;
     else
         v4 = 0;

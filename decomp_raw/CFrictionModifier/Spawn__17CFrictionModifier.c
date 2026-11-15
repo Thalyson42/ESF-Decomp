@@ -26,7 +26,7 @@ typedef struct st_52a7e0_3 {
 } st_52a7e0_3;
 
 extern char ChangeFriction__17CFrictionModifierP11CBaseEntity;
-extern st_52a7e0_3 *g_6167c8;
+extern st_52a7e0_3 *g_engfuncs.pfnSetModel;
 extern st_52a7e0_2 *gpGlobals;
 
 unsigned int Spawn__17CFrictionModifier(st_52a7e0_0 *a0)
@@ -35,7 +35,7 @@ unsigned int Spawn__17CFrictionModifier(st_52a7e0_0 *a0)
     unsigned int v1;  // eax
 
     a0->field_0->field_10c = 1;
-    g_6167c8(a0->field_0->field_208, a0->field_0->field_b8 + gpGlobals->field_98);
+    g_engfuncs.pfnSetModel(a0->field_0->field_208, a0->field_0->field_b8 + gpGlobals->field_98);
     v0 = a0->field_0;
     v0[66] = 0;
     v1 = _INSERT(v0, 0, 0);

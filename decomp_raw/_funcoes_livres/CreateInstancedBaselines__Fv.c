@@ -3,6 +3,6 @@ int CreateInstancedBaselines__Fv(void)
 {
     char v0;  // [bp-0x164]
 
-    return sub_48d0e0(&v0, 0, 340);
+    return memset@GLIBC_2.0(&v0, 0, 340);
 }
 

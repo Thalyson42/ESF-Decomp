@@ -29,24 +29,24 @@ extern char Started.2948;
 extern unsigned int length.2949;
 extern int char_count.2950;
 extern int OldServerName.2954;
-extern st_543320_0 *g_616878;
-extern st_543320_0 *g_61687c;
-extern st_543320_0 *g_616880;
-extern st_543320_0 *g_616898;
-extern st_543320_0 *g_6168a8;
-extern st_543320_0 *g_6168d4;
-extern st_543320_0 *g_6168ec;
-extern st_543320_0 *g_61693c;
-extern st_543320_0 *g_616940;
-extern st_543320_0 *g_61698c;
+extern st_543320_0 *g_engfuncs.pfnMessageBegin;
+extern st_543320_0 *g_engfuncs.pfnMessageEnd;
+extern st_543320_0 *g_engfuncs.pfnWriteByte;
+extern st_543320_0 *g_engfuncs.pfnWriteString;
+extern st_543320_0 *g_engfuncs.pfnCVarGetString;
+extern st_543320_0 *g_engfuncs.pfnPEntityOfEntOffset;
+extern st_543320_0 *g_engfuncs.pfnRegUserMsg;
+extern st_543320_0 *g_engfuncs.pfnLoadFileForMe;
+extern st_543320_0 *g_engfuncs.pfnFreeFile;
+extern st_543320_0 *g_engfuncs.pfnIsDedicatedServer;
 extern st_543320_3 *pFileList.2951;
 extern unsigned int aFileList.2952;
 extern unsigned int _.tmp_0.2953;
 extern char chunk.2955;
-extern char g_624664;
-extern st_543320_2 *g_62468c;
+extern char chunk.2955+100;
+extern st_543320_2 *BotManager+12;
 extern char cout;
-extern st_543320_4 *g_625f80;
+extern st_543320_4 *cout+512;
 
 st_543320_1 ** ShowInGameBotHelpWindow__Fv(void)
 {
@@ -72,9 +72,9 @@ st_543320_1 ** ShowInGameBotHelpWindow__Fv(void)
     unsigned int v2;  // [bp-0x18]
     unsigned int v3;  // [bp-0x14]
 
-    if (!g_61698c(v1, v2, v3))
+    if (!g_engfuncs.pfnIsDedicatedServer(v1, v2, v3))
     {
-        if (!g_61698c() && !(v5 = g_62468c, !g_62468c && !(v5 = g_6168d4(0), v5)))
+        if (!g_engfuncs.pfnIsDedicatedServer() && !(v5 = BotManager+12, !BotManager+12 && !(v5 = g_engfuncs.pfnPEntityOfEntOffset(0), v5)))
             v6 = v5->field_7c;
         else
             v6 = NULL;
@@ -88,28 +88,28 @@ st_543320_1 ** ShowInGameBotHelpWindow__Fv(void)
         _.tmp_0.2953 = 1;
     }
     if (!gmsgMOTD)
-        gmsgMOTD = g_6168ec("MOTD", 0xffffffff);
+        gmsgMOTD = g_engfuncs.pfnRegUserMsg("MOTD", 0xffffffff);
     if (!gmsgServerName)
-        gmsgServerName = g_6168ec("ServerName", 0xffffffff);
+        gmsgServerName = g_engfuncs.pfnRegUserMsg("ServerName", 0xffffffff);
     if (!Started.2948)
     {
         *(char *)&PrintingInGameHelp = 1;
         char_count.2950 = 0;
         length.2949 = 0;
-        pFileList.2951 = g_61693c("esf_bot/ingame_help.txt", &length.2949);
+        pFileList.2951 = g_engfuncs.pfnLoadFileForMe("esf_bot/ingame_help.txt", &length.2949);
         aFileList.2952 = pFileList.2951;
         Started.2948 = 1;
-        sub_48e110(&OldServerName.2954, g_6168a8("hostname"));
-        if (g_61698c())
+        strcpy@GLIBC_2.0(&OldServerName.2954, g_engfuncs.pfnCVarGetString("hostname"));
+        if (g_engfuncs.pfnIsDedicatedServer())
         {
-            g_625f80->field_14(&cout, "In game bot help\n\n");
+            cout+512->field_14(&cout, "In game bot help\n\n");
         }
         else
         {
-            if (!g_61698c())
+            if (!g_engfuncs.pfnIsDedicatedServer())
             {
-                v8 = g_62468c;
-                if (g_62468c || (v8 = g_6168d4(0), v8))
+                v8 = BotManager+12;
+                if (BotManager+12 || (v8 = g_engfuncs.pfnPEntityOfEntOffset(0), v8))
                     v9 = v8->field_7c;
                 else
                     v9 = NULL;
@@ -119,10 +119,10 @@ st_543320_1 ** ShowInGameBotHelpWindow__Fv(void)
             {
                 v10 = NULL;
             }
-            g_616878(1, gmsgServerName, 0, *v10->field_208);
+            g_engfuncs.pfnMessageBegin(1, gmsgServerName, 0, *v10->field_208);
             v0 = "In game bot help";
-            g_616898(v0);
-            g_61687c(v0);
+            g_engfuncs.pfnWriteString(v0);
+            g_engfuncs.pfnMessageEnd(v0);
         }
     }
     if (pFileList.2951)
@@ -137,12 +137,12 @@ st_543320_1 ** ShowInGameBotHelpWindow__Fv(void)
             } while (v12 && (v12 -= 1, v11 = (char *)v13 + 1, *(char *)v13));
             if (~v12 - 1 <= 99)
             {
-                sub_48e110(&chunk.2955, pFileList.2951);
+                strcpy@GLIBC_2.0(&chunk.2955, pFileList.2951);
             }
             else
             {
-                sub_48d360(&chunk.2955, pFileList.2951, 100);
-                g_624664 = 0;
+                strncpy@GLIBC_2.0(&chunk.2955, pFileList.2951, 100);
+                chunk.2955+100 = 0;
             }
             v14 = &chunk.2955;
             v15 = 0xffffffff;
@@ -155,16 +155,16 @@ st_543320_1 ** ShowInGameBotHelpWindow__Fv(void)
                 pFileList.2951 = char_count.2950 + aFileList.2952;
             else
                 *(char *)&pFileList.2951->field_0 = 0;
-            if (g_61698c())
+            if (g_engfuncs.pfnIsDedicatedServer())
             {
-                g_625f80->field_14(&cout, &chunk.2955);
+                cout+512->field_14(&cout, &chunk.2955);
             }
             else
             {
-                if (!g_61698c())
+                if (!g_engfuncs.pfnIsDedicatedServer())
                 {
-                    v17 = g_62468c;
-                    if (g_62468c || (v17 = g_6168d4(0), v17))
+                    v17 = BotManager+12;
+                    if (BotManager+12 || (v17 = g_engfuncs.pfnPEntityOfEntOffset(0), v17))
                         v18 = v17->field_7c;
                     else
                         v18 = NULL;
@@ -174,23 +174,23 @@ st_543320_1 ** ShowInGameBotHelpWindow__Fv(void)
                 {
                     v19 = NULL;
                 }
-                g_616878(1, gmsgMOTD, 0, *v19->field_208);
-                g_616880(!(char)pFileList.2951->field_0);
-                g_616898(&chunk.2955);
-                g_61687c();
+                g_engfuncs.pfnMessageBegin(1, gmsgMOTD, 0, *v19->field_208);
+                g_engfuncs.pfnWriteByte(!(char)pFileList.2951->field_0);
+                g_engfuncs.pfnWriteString(&chunk.2955);
+                g_engfuncs.pfnMessageEnd();
             }
         }
         if (pFileList.2951 && (char)pFileList.2951->field_0 && char_count.2950 <= 0x600)
             return pFileList.2951;
     }
     v0 = aFileList.2952;
-    g_616940(v0);
-    if (!g_61698c(v0))
+    g_engfuncs.pfnFreeFile(v0);
+    if (!g_engfuncs.pfnIsDedicatedServer(v0))
     {
-        if (!g_61698c())
+        if (!g_engfuncs.pfnIsDedicatedServer())
         {
-            v20 = g_62468c;
-            if (g_62468c || (v20 = g_6168d4(0), v20))
+            v20 = BotManager+12;
+            if (BotManager+12 || (v20 = g_engfuncs.pfnPEntityOfEntOffset(0), v20))
                 v21 = v20->field_7c;
             else
                 v21 = NULL;
@@ -200,10 +200,10 @@ st_543320_1 ** ShowInGameBotHelpWindow__Fv(void)
         {
             v22 = NULL;
         }
-        g_616878(1, gmsgServerName, 0, *v22->field_208);
+        g_engfuncs.pfnMessageBegin(1, gmsgServerName, 0, *v22->field_208);
         v0 = &OldServerName.2954;
-        g_616898(v0);
-        g_61687c(v0);
+        g_engfuncs.pfnWriteString(v0);
+        g_engfuncs.pfnMessageEnd(v0);
     }
     length.2949 = 0;
     char_count.2950 = 0;

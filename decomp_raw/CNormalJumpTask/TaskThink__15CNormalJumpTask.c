@@ -40,8 +40,8 @@ typedef struct st_585820_5 {
     unsigned int field_0;
 } st_585820_5;
 
-extern st_585820_5 *g_616928;
-extern st_585820_5 *g_61692c;
+extern st_585820_5 *g_engfuncs.pfnRandomLong;
+extern st_585820_5 *g_engfuncs.pfnRandomFloat;
 extern st_585820_4 *gpGlobals;
 
 double TaskThink__15CNormalJumpTask(st_585820_3 *a0)
@@ -64,7 +64,7 @@ double TaskThink__15CNormalJumpTask(st_585820_3 *a0)
         {
             if (a0->field_c->field_225 & 2)
             {
-                sub_48c5a0(a0->field_8);
+                CBasePlayer::StopFly(a0->field_8);
             }
             else
             {
@@ -72,17 +72,17 @@ double TaskThink__15CNormalJumpTask(st_585820_3 *a0)
                 return 0.1;
             }
         }
-        sub_488e30(a0->field_8, a0->field_8->field_af8);
+        CBot::SetMoveDir(a0->field_8, a0->field_8->field_af8);
         v0 = &gpGlobals;
         if (a0->field_1c >= *(float *)gpGlobals)
             return a0->field_1c;
-        g_61692c(0.25f, 0.4000000059604645f);
+        g_engfuncs.pfnRandomFloat(0.25f, 0.4000000059604645f);
         v2 = 0.25 + *(float *)*v0;
         a0->field_1c = (float)v2;
-        v3 = g_616928(1, 100);
+        v3 = g_engfuncs.pfnRandomLong(1, 100);
         if ((int)v3 > a0->field_8->field_a04->field_26)
             return v2;
-        sub_488180(a0->field_8);
+        CBasePlayer::Teleport(a0->field_8);
         return v2;
     }
     else

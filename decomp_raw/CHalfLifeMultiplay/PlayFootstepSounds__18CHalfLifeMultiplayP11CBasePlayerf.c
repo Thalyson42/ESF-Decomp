@@ -20,12 +20,12 @@ unsigned int PlayFootstepSounds__18CHalfLifeMultiplayP11CBasePlayerf(unsigned in
 
     if (g_footsteps && g_footsteps->field_c == 0.0f)
         return 0;
-    if (!sub_48d140(a1))
+    if (!CBasePlayer::IsOnLadder(a1))
     {
         v1 = *a1->field_20 * *a1->field_20 + *a1->field_24 * *a1->field_24;
         v2 = sqrt(v1);
         if (isnan(v2))
-            sub_487dc0(*(unsigned int *)&v1);
+            sqrt(*(unsigned int *)&v1);
         else
             v1 = v2;
         v0 = (float)v1;

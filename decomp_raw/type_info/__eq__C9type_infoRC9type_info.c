@@ -6,7 +6,7 @@ char __eq__C9type_infoRC9type_info(int *a0, int *a1)
 
     sub_597f68(v0);
     v1 = 0;
-    if (a1 != a0 && sub_488af0(*a0, *a1))
+    if (a1 != a0 && strcmp@GLIBC_2.0(*a0, *a1))
         return v1;
     v1 = 1;
     return v1;

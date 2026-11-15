@@ -3,7 +3,7 @@ int UTIL_ScreenFade__FP11CBaseEntityRC6Vectorffii(int a0, int a1, float a2, floa
 {
     char v0;  // [bp-0x24]
 
-    sub_48dec0(&v0, a1, a2, a3, a4, a5);
-    return sub_48c780(&v0, a0);
+    UTIL_ScreenFadeBuild(&v0, a1, a2, a3, a4, a5);
+    return UTIL_ScreenFadeWrite(&v0, a0);
 }
 

@@ -7,7 +7,7 @@ int TeleportPercentMenu__5NMenuv(void)
     int v0;  // [bp-0x1c]
 
     if (_5NMenu.CurrentMenuChoice <= 8)
-        sub_489f90(&BotManager, 39, (short)sub_48cb20("teleport_percent"));
-    return sub_48d6f0(v0);
+        CBotManager::ChangePersoPercentSetting(&BotManager, 39, (short)NMenu::GetPercentFromMenu("teleport_percent"));
+    return NMenu::ResetMenu(v0);
 }
 

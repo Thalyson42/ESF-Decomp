@@ -25,8 +25,8 @@ typedef struct st_4e9640_1 {
 } st_4e9640_1;
 
 extern unsigned int g_vecZero;
-extern unsigned int g_616790;
-extern unsigned int g_616794;
+extern unsigned int g_vecZero+4;
+extern unsigned int g_vecZero+8;
 
 float SetupRotation__12CFuncPlatRot(st_4e9640_0 *a0)
 {
@@ -45,7 +45,7 @@ float SetupRotation__12CFuncPlatRot(st_4e9640_0 *a0)
 
     if (*(float *)&a0->field_f0 != 0.0f)
     {
-        sub_48b820(a0->field_0);
+        CBaseToggle::AxisDir(a0->field_0);
         v6 = a0->field_0;
         a0->field_118 = v6[20];
         a0->field_11c = v6[21];
@@ -66,11 +66,11 @@ float SetupRotation__12CFuncPlatRot(st_4e9640_0 *a0)
     else
     {
         a0->field_118 = g_vecZero;
-        a0->field_11c = g_616790;
-        a0->field_120 = g_616794;
+        a0->field_11c = g_vecZero+4;
+        a0->field_120 = g_vecZero+8;
         a0->field_10c = g_vecZero;
-        a0->field_110 = g_616790;
-        v10 = *(float *)&g_616794;
+        a0->field_110 = g_vecZero+4;
+        v10 = *(float *)&g_vecZero+8;
     }
     *(float *)&a0->field_114 = v10;
     v11 = a0->field_0;

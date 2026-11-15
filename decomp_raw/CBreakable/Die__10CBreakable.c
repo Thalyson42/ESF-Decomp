@@ -50,14 +50,14 @@ typedef struct st_4c2930_0 {
 extern char SUB_Remove__11CBaseEntity;
 extern char _GLOBAL_OFFSET_TABLE_;
 extern float g_vecAttackDir;
-extern float g_616784;
-extern float g_616788;
-extern st_4c2930_0 *g_616878;
-extern st_4c2930_0 *g_61687c;
-extern st_4c2930_0 *g_616880;
-extern st_4c2930_0 *g_616888;
-extern st_4c2930_0 *g_616894;
-extern st_4c2930_0 *g_61692c;
+extern float g_vecAttackDir+4;
+extern float g_vecAttackDir+8;
+extern st_4c2930_0 *g_engfuncs.pfnMessageBegin;
+extern st_4c2930_0 *g_engfuncs.pfnMessageEnd;
+extern st_4c2930_0 *g_engfuncs.pfnWriteByte;
+extern st_4c2930_0 *g_engfuncs.pfnWriteShort;
+extern st_4c2930_0 *g_engfuncs.pfnWriteCoord;
+extern st_4c2930_0 *g_engfuncs.pfnRandomFloat;
 extern st_4c2930_7 *gpGlobals;
 
 int Die__10CBreakable(double a0, float a1)
@@ -111,7 +111,7 @@ int Die__10CBreakable(double a0, float a1)
     float v29;  // [bp-0x1c]
 
     v2 = 0;
-    g_61692c(0.8500000238418579f, 0x3f800000);
+    g_engfuncs.pfnRandomFloat(0.8500000238418579f, 0x3f800000);
     v23 = __fnstcw();
     v22 = v23 | 0xc00;
     v21 = (int)*(float *)(*(int *)a1 + 352);
@@ -131,8 +131,8 @@ int Die__10CBreakable(double a0, float a1)
         if (*(int *)(*(unsigned int *)&a1 + 112) == 1)
         {
             v15 = (float)(200.0 * g_vecAttackDir);
-            v16 = (float)(200.0 * g_616784);
-            v17 = (float)(200.0 * g_616788);
+            v16 = (float)(200.0 * g_vecAttackDir+4);
+            v17 = (float)(200.0 * g_vecAttackDir+8);
             v24 = v15;
             v25 = v16;
             v26 = v17;
@@ -161,24 +161,24 @@ int Die__10CBreakable(double a0, float a1)
         v27 = v15;
         v28 = v16;
         v29 = v17;
-        g_616878(4, 23, &v27, 0);
-        g_616880(108);
-        g_616894(v27);
-        g_616894(v28);
-        g_616894(v29);
-        g_616894(*(float *)(*(int *)a1 + 244));
-        g_616894(*(float *)(*(int *)a1 + 248));
-        g_616894(*(float *)(*(int *)a1 + 252));
-        g_616894(v24);
-        g_616894(v25);
-        g_616894(v26);
-        g_616880(10);
-        g_616888(*(int *)(*(unsigned int *)&a1 + 116));
-        g_616880(0);
-        g_616880(25);
+        g_engfuncs.pfnMessageBegin(4, 23, &v27, 0);
+        g_engfuncs.pfnWriteByte(108);
+        g_engfuncs.pfnWriteCoord(v27);
+        g_engfuncs.pfnWriteCoord(v28);
+        g_engfuncs.pfnWriteCoord(v29);
+        g_engfuncs.pfnWriteCoord(*(float *)(*(int *)a1 + 244));
+        g_engfuncs.pfnWriteCoord(*(float *)(*(int *)a1 + 248));
+        g_engfuncs.pfnWriteCoord(*(float *)(*(int *)a1 + 252));
+        g_engfuncs.pfnWriteCoord(v24);
+        g_engfuncs.pfnWriteCoord(v25);
+        g_engfuncs.pfnWriteCoord(v26);
+        g_engfuncs.pfnWriteByte(10);
+        g_engfuncs.pfnWriteShort(*(int *)(*(unsigned int *)&a1 + 116));
+        g_engfuncs.pfnWriteByte(0);
+        g_engfuncs.pfnWriteByte(25);
         v0 = v2;
-        g_616880(v0);
-        g_61687c(v0);
+        g_engfuncs.pfnWriteByte(v0);
+        g_engfuncs.pfnMessageEnd(v0);
         v38 = *(int *)a1;
         v39 = &v38->field_c4;
         *(float *)&v5 = *(float *)&v38->field_c4;
@@ -190,7 +190,7 @@ int Die__10CBreakable(double a0, float a1)
         *(float *)&v12 = *(float *)&v40[2];
         *(float *)&v9 = *(float *)&v38->field_d8;
         v13 = (float)(*(float *)&v12 + 8.0);
-        v41 = sub_48dfd0(&v3, 0x100, &v5, &v10, 0x200);
+        v41 = UTIL_EntitiesInBox(&v3, 0x100, &v5, &v10, 0x200);
         if (v41)
         {
             i = 0;
@@ -209,20 +209,20 @@ int Die__10CBreakable(double a0, float a1)
         *v44->field_1cc = 0;
         *v44->field_10c = 0;
         v46 = (st_4c2930_6 *)a1;
-        v46->field_c = _INSERT(sub_48d150(v44, 0, 3, 0), 0, 0) | 0xffff0000;
+        v46->field_c = _INSERT(CBaseDelay::SUB_UseTargets(v44, 0, 3, 0), 0, 0) | 0xffff0000;
         v46->field_10 = &SUB_Remove__11CBaseEntity;
         v46->field_0->field_104 = (float)(0.1 + *(float *)&v46->field_0->field_100);
         if (v46->field_80)
         {
-            sub_48b610(&v14, v46->field_0);
-            sub_48a0f0(*(int *)(*(unsigned int *)&a1 + 128) + gpGlobals->field_98, &v14, *(int *)a1 + 80, *(int *)(*(int *)a1 + 520));
+            VecBModelOrigin(&v14, v46->field_0);
+            CBaseEntity::Create(*(int *)(*(unsigned int *)&a1 + 128) + gpGlobals->field_98, &v14, *(int *)a1 + 80, *(int *)(*(int *)a1 + 520));
         }
-        v47 = sub_48df20(a1);
+        v47 = CBreakable::ExplosionMagnitude(a1);
         if (v47 <= 0)
             return v47;
         (*(int *)(*(int *)(*(unsigned int *)&a1 + 96) + 0xcc))(&v14, a1);
         v48 = *(int *)a1;
-        return sub_48c170(&v14, &v48->padding_9[71], *(int *)&v48[2].padding_9[71], *(int *)&v48[1].padding_9[159], 1);
+        return ExplosionCreate(&v14, &v48->padding_9[71], *(int *)&v48[2].padding_9[71], *(int *)&v48[1].padding_9[159], 1);
     }
 }
 

@@ -21,6 +21,6 @@ int _._17CAbsorbHealthTask(st_5861e0_0 *a0, int a1)
     a0->field_c->field_1dc = 0;
     a0->field_c->field_1c8 = 2;
     *(float *)&a0->field_c->padding_1cc[0] = 255.0f;
-    return sub_488170(a0, a1);
+    return _._9CBaseTask(a0, a1);
 }
 

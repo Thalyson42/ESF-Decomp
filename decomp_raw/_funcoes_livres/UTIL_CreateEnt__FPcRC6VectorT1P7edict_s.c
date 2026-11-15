@@ -32,9 +32,9 @@ typedef struct st_57f430_1 {
     unsigned int field_0;
 } st_57f430_1;
 
-extern st_57f430_1 *g_61681c;
-extern st_57f430_1 *g_6168d4;
-extern st_57f430_1 *g_6168d8;
+extern st_57f430_1 *g_engfuncs.pfnCreateNamedEntity;
+extern st_57f430_1 *g_engfuncs.pfnPEntityOfEntOffset;
+extern st_57f430_1 *g_engfuncs.pfnEntOffsetOfPEntity;
 extern st_57f430_0 *gpGlobals;
 
 st_57f430_2 ** UTIL_CreateEnt__FPcRC6VectorT1P7edict_s(unsigned int a0, unsigned int *a1, unsigned int *a2, unsigned int a3)
@@ -45,13 +45,13 @@ st_57f430_2 ** UTIL_CreateEnt__FPcRC6VectorT1P7edict_s(unsigned int a0, unsigned
     st_57f430_2 *v4;  // edx
     unsigned int v0;  // [bp-0x8]
 
-    v1 = g_61681c(a0 - gpGlobals->field_98);
+    v1 = g_engfuncs.pfnCreateNamedEntity(a0 - gpGlobals->field_98);
     v0 = 0;
-    if (!v1 || !g_6168d8(v1))
+    if (!v1 || !g_engfuncs.pfnEntOffsetOfPEntity(v1))
         v0 = 1;
     if (v0)
         return NULL;
-    if (v1 || (v1 = g_6168d4(0), v1))
+    if (v1 || (v1 = g_engfuncs.pfnPEntityOfEntOffset(0), v1))
         v2 = v1->field_7c;
     else
         v2 = NULL;
@@ -64,7 +64,7 @@ st_57f430_2 ** UTIL_CreateEnt__FPcRC6VectorT1P7edict_s(unsigned int a0, unsigned
     v4->field_50 = *a2;
     v4->field_54 = a2[1];
     v4->field_58 = a2[2];
-    sub_488ec0(*v2->field_208);
+    DispatchSpawn(*v2->field_208);
     return v2;
 }
 

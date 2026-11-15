@@ -29,15 +29,15 @@ int KeyValue__9CPushableP14KeyValueData_s(st_4c3490_1 **a0, st_4c3490_0 *a1)
     float v10;  // [bp-0x34]
     float v11;  // [bp-0x30]
 
-    if (!sub_488af0(a1->field_4, "size"))
+    if (!strcmp@GLIBC_2.0(a1->field_4, "size"))
     {
         v3 = 0;
         v2 = 10;
         v1 = 0;
         v0 = a1->field_8;
-        sub_48b500(v0, v1, v2, v3);
+        __strtol_internal@GLIBC_2.0(v0, v1, v2, v3);
         a1->field_c = 1;
-        if (sub_48b500(v0, v1, v2, v3) > 3)
+        if (__strtol_internal@GLIBC_2.0(v0, v1, v2, v3) > 3)
         {
             v6 = 4.0f;
             v7 = 4.0f;
@@ -47,13 +47,13 @@ int KeyValue__9CPushableP14KeyValueData_s(st_4c3490_1 **a0, st_4c3490_0 *a1)
             v11 = -9.0f;
             v2 = &v6;
             v1 = &v9;
-            return sub_48a0d0(*a0);
+            return UTIL_SetSize(*a0);
         }
-        goto *((void *)(&(&_GLOBAL_OFFSET_TABLE_)[-1 * *(int *)(&(&_GLOBAL_OFFSET_TABLE_)[4 * sub_48b500(v0, v1, v2, v3)] - 1377548)]));
+        goto *((void *)(&(&_GLOBAL_OFFSET_TABLE_)[-1 * *(int *)(&(&_GLOBAL_OFFSET_TABLE_)[4 * __strtol_internal@GLIBC_2.0(v0, v1, v2, v3)] - 1377548)]));
     }
-    else if (!sub_488af0(a1->field_4, "buoyancy"))
+    else if (!strcmp@GLIBC_2.0(a1->field_4, "buoyancy"))
     {
-        sub_487fc0(a1->field_8, 0, 0);
+        __strtod_internal@GLIBC_2.0(a1->field_8, 0, 0);
         v5 = __fnstcw();
         v4 = v5 | 0xc00;
         *a0->field_110 = (int)v12;
@@ -62,7 +62,7 @@ int KeyValue__9CPushableP14KeyValueData_s(st_4c3490_1 **a0, st_4c3490_0 *a1)
     }
     else
     {
-        return sub_48c000(a0, a1);
+        return CBreakable::KeyValue(a0, a1);
     }
 }
 

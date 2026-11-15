@@ -15,7 +15,7 @@ st_586af0_0 * __15CLookAroundTaskP4CBot(st_586af0_0 *a0, int a1)
     unsigned int v0;  // eax
     unsigned int i;  // eax
 
-    sub_48ce80(a0, a1);
+    __9CBaseTaskP4CBot(a0, a1);
     a0->field_14 = &__vt_15CLookAroundTask;
     v0 = 3;
     do

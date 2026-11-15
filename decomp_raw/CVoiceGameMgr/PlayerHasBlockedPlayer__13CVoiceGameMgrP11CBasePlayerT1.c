@@ -13,7 +13,7 @@ typedef struct st_58c1c0_2 {
     unsigned int field_0;
 } st_58c1c0_2;
 
-extern st_58c1c0_2 *g_6168dc;
+extern st_58c1c0_2 *g_engfuncs.pfnIndexOfEdict;
 extern char g_BanMasks;
 
 int PlayerHasBlockedPlayer__13CVoiceGameMgrP11CBasePlayerT1(char *a0, char *a1, st_58c1c0_0 **a2)
@@ -29,8 +29,8 @@ int PlayerHasBlockedPlayer__13CVoiceGameMgrP11CBasePlayerT1(char *a0, char *a1, 
     v1 = a1;
     if (v1 && a2)
     {
-        v2 = g_6168dc(*(int *)(*(int *)v1 + 520)) - 1;
-        v1 = g_6168dc(*a2->field_208);
+        v2 = g_engfuncs.pfnIndexOfEdict(*(int *)(*(int *)v1 + 520)) - 1;
+        v1 = g_engfuncs.pfnIndexOfEdict(*a2->field_208);
         v3 = v1 - 1;
         if (v2 >= NULL)
         {
@@ -40,7 +40,7 @@ int PlayerHasBlockedPlayer__13CVoiceGameMgrP11CBasePlayerT1(char *a0, char *a1, 
                 v4 = &g_BanMasks + 0x4 * v2;
                 v5 = &v0;
                 if (v3 < NULL || v3 >= 0x20)
-                    v4 = sub_4892a0("i >= 0 && i < GetNumBits()", "../game_shared/bitvec.h", 133, "class CBitVecAccessor CBitVec<32>::operator [](int)");
+                    v4 = __assert_fail@GLIBC_2.0("i >= 0 && i < GetNumBits()", "../game_shared/bitvec.h", 133, "class CBitVecAccessor CBitVec<32>::operator [](int)");
                 *(unsigned int *)v0.padding_0 = v4;
                 v5->field_4 = v3;
                 v6 = 1 << ((char)(v0.field_4 & 31) & 31);

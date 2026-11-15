@@ -16,8 +16,8 @@ typedef struct st_492fa0_0 {
 extern char Stop__9CPendulum;
 extern char Swing__9CPendulum;
 extern unsigned int g_vecZero;
-extern unsigned int g_616790;
-extern unsigned int g_616794;
+extern unsigned int g_vecZero+4;
+extern unsigned int g_vecZero+8;
 extern st_492fa0_0 *gpGlobals;
 
 float PendulumUse__9CPendulumP11CBaseEntityT18USE_TYPEf(float idx)
@@ -51,7 +51,7 @@ float PendulumUse__9CPendulumP11CBaseEntityT18USE_TYPEf(float idx)
     }
     else if (v4->padding_0[416] & 16)
     {
-        sub_4881d0(*(int *)&v4->padding_0[416], &v4->padding_0[80], *(unsigned int *)&idx + 0x88);
+        CBaseToggle::AxisDelta(*(int *)&v4->padding_0[416], &v4->padding_0[80], *(unsigned int *)&idx + 0x88);
         v6 = *(int *)idx;
         v7 = *(unsigned int *)&*(float *)(*(unsigned int *)&idx + 116);
         v8 = &v6->padding_0[0x44];
@@ -74,8 +74,8 @@ float PendulumUse__9CPendulumP11CBaseEntityT18USE_TYPEf(float idx)
         *(unsigned int *)(*(unsigned int *)&idx + 16) = 0;
         v12 = *(int *)idx;
         *(unsigned int *)&v12->padding_0[92] = g_vecZero;
-        *(unsigned int *)&v12->padding_0[96] = g_616790;
-        *(unsigned int *)&v12->padding_0[100] = g_616794;
+        *(unsigned int *)&v12->padding_0[96] = g_vecZero+4;
+        *(unsigned int *)&v12->padding_0[100] = g_vecZero+8;
         return __int_as_float(v5);
     }
 }

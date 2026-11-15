@@ -23,8 +23,8 @@ typedef struct st_4c4a60_4 {
     struct st_4c4a60_2 *field_44;
 } st_4c4a60_4;
 
-extern unsigned int g_62f728[4];
-extern unsigned int g_62f72c[4];
+extern unsigned int _15CBasePlayerItem.ItemInfoArray+8[4];
+extern unsigned int _15CBasePlayerItem.ItemInfoArray+12[4];
 
 unsigned int CanHavePlayerItem__10CGameRulesP11CBasePlayerP15CBasePlayerItem(st_4c4a60_4 *a0, st_4c4a60_0 **a1, st_4c4a60_1 *a2)
 {
@@ -33,7 +33,7 @@ unsigned int CanHavePlayerItem__10CGameRulesP11CBasePlayerP15CBasePlayerItem(st_
     if (!*a1->field_170)
     {
         v0 = a2->field_88 * 44;
-        if (*(int *)(v0 + (char *)&g_62f728[0]) && a0->field_44->field_a0(a0, a1, *(int *)(v0 + (char *)&g_62f728[0]), *(int *)(v0 + (char *)&g_62f72c[0])) || !sub_48cd70(a1, a2))
+        if (*(int *)(v0 + (char *)&_15CBasePlayerItem.ItemInfoArray+8[0]) && a0->field_44->field_a0(a0, a1, *(int *)(v0 + (char *)&_15CBasePlayerItem.ItemInfoArray+8[0]), *(int *)(v0 + (char *)&_15CBasePlayerItem.ItemInfoArray+12[0])) || !CBasePlayer::HasPlayerItem(a1, a2))
             return 1;
     }
     return 0;

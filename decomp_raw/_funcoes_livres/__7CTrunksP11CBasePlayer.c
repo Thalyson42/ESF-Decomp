@@ -8,7 +8,7 @@ extern char __vt_7CTrunks;
 
 st_530c00_0 * __7CTrunksP11CBasePlayer(st_530c00_0 *a0, int a1)
 {
-    sub_48b790(a0, a1);
+    __10CBaseClassP11CBasePlayer(a0, a1);
     a0->field_4 = &__vt_7CTrunks;
     return a0;
 }

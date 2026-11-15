@@ -48,7 +48,7 @@ unsigned int * UpdatePlayerStats__18CHalfLifeMultiplay(unsigned int *a0)
     iter = 1;
     while (iter <= gpGlobals->field_90)
     {
-        v4 = sub_48a500(iter);
+        v4 = UTIL_PlayerByIndex(iter);
         if (!v4)
         {
             iter += 1;
@@ -65,7 +65,7 @@ unsigned int * UpdatePlayerStats__18CHalfLifeMultiplay(unsigned int *a0)
         {
             v2 += 1;
             v1 += v4->field_748;
-            v0 += sub_48ced0(v4);
+            v0 += CBasePlayer::GetPotentialPL(v4);
             iter += 1;
         }
         else

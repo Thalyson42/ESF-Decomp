@@ -76,7 +76,7 @@ st_583df0_1 * TaskThink__18CPowerStruggleTask(st_583df0_5 *a0)
     if (v1 <= 20)
         return v1;
     *(unsigned short *)&v0 = 1;
-    sub_48ab70(v5, v0);
+    CBot::ToggleTurbo(v5, v0);
     a0->field_8->field_ab4 = (float)(1.5 + *(float *)&gpGlobals->field_0);
     return gpGlobals;
 }

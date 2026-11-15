@@ -50,8 +50,8 @@ unsigned int * ShowBadNode__9CTestHull(st_4e1e50_1 **a0)
 
     *a0->field_108 = 5;
     *a0->field_54 = (float)(*a0->field_54 + 4.0);
-    sub_48a800(&*a0->field_50);
-    sub_48a150(&*a0->field_8, &g_vecZero, 0xff, 25);
+    UTIL_MakeVectors(&*a0->field_50);
+    UTIL_ParticleEffect(&*a0->field_8, &g_vecZero, 0xff, 25);
     v9 = &gpGlobals->field_28;
     v0 = 64.0f * gpGlobals->field_28;
     v1 = 64.0f * *(float *)&v9[1];
@@ -60,7 +60,7 @@ unsigned int * ShowBadNode__9CTestHull(st_4e1e50_1 **a0)
     v6 = *a0->field_8 + v0;
     v7 = *(float *)&v10[1] + v1;
     v8 = *(float *)&v10[2] + v2;
-    sub_48a150(&v6, &g_vecZero, 0xff, 25);
+    UTIL_ParticleEffect(&v6, &g_vecZero, 0xff, 25);
     v11 = &gpGlobals->field_28;
     v3 = 64.0f * gpGlobals->field_28;
     v4 = 64.0f * *(float *)&v11[1];
@@ -69,7 +69,7 @@ unsigned int * ShowBadNode__9CTestHull(st_4e1e50_1 **a0)
     v0 = *a0->field_8 - v3;
     v1 = *(float *)&v12[1] - v4;
     v2 = *(float *)&v12[2] - v5;
-    sub_48a150(&v0, &g_vecZero, 0xff, 25);
+    UTIL_ParticleEffect(&v0, &g_vecZero, 0xff, 25);
     v13 = &gpGlobals->field_40;
     v3 = 64.0f * gpGlobals->field_40;
     v4 = 64.0f * *(float *)&v13[1];
@@ -78,7 +78,7 @@ unsigned int * ShowBadNode__9CTestHull(st_4e1e50_1 **a0)
     v0 = *a0->field_8 + v3;
     v1 = *(float *)&v14[1] + v4;
     v2 = *(float *)&v14[2] + v5;
-    sub_48a150(&v0, &g_vecZero, 0xff, 25);
+    UTIL_ParticleEffect(&v0, &g_vecZero, 0xff, 25);
     v15 = &gpGlobals->field_40;
     v3 = 64.0f * gpGlobals->field_40;
     v4 = 64.0f * *(float *)&v15[1];
@@ -87,7 +87,7 @@ unsigned int * ShowBadNode__9CTestHull(st_4e1e50_1 **a0)
     v0 = *a0->field_8 - v3;
     v1 = *(float *)&v16[1] - v4;
     v2 = *(float *)&v16[2] - v5;
-    sub_48a150(&v0, &g_vecZero, 0xff, 25);
+    UTIL_ParticleEffect(&v0, &g_vecZero, 0xff, 25);
     *a0->field_104 = (float)(0.1 + gpGlobals->field_0);
     return gpGlobals;
 }

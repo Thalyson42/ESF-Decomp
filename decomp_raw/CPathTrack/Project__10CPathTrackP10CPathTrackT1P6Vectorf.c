@@ -49,7 +49,7 @@ float Project__10CPathTrackP10CPathTrackT1P6Vectorf(unsigned int a0, st_4e7000_0
         v17 = v14 * v14 + v15 * v15 + v16 * v16;
         v18 = sqrt(v17);
         if (isnan(v18))
-            sub_487dc0(*(unsigned int *)&v17);
+            sqrt(*(unsigned int *)&v17);
         else
             v17 = v18;
         v3 = (float)v17;

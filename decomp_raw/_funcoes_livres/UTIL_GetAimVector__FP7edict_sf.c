@@ -3,7 +3,7 @@ typedef struct st_533320_0 {
     unsigned int field_0;
 } st_533320_0;
 
-extern st_533320_0 *g_616858;
+extern st_533320_0 *g_engfuncs.pfnGetAimVector;
 
 unsigned int * UTIL_GetAimVector__FP7edict_sf(void)
 {
@@ -14,7 +14,7 @@ unsigned int * UTIL_GetAimVector__FP7edict_sf(void)
     unsigned int v4;  // [bp+0x8]
     unsigned int v5;  // [bp+0xc]
 
-    g_616858(v4, v5, &v0);
+    g_engfuncs.pfnGetAimVector(v4, v5, &v0);
     *idx = v0;
     idx[1] = v1;
     idx[2] = v2;

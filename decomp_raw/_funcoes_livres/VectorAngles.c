@@ -28,7 +28,7 @@ float VectorAngles(float *a0, st_58e0a0_0 *a1)
         v4 = *a0 * *a0 + a0[1] * a0[1];
         v5 = sqrt(v4);
         if (isnan(v5))
-            sub_487dc0(*(unsigned int *)&v4);
+            sqrt(*(unsigned int *)&v4);
         else
             v4 = v5;
         v2 = (float)v4;

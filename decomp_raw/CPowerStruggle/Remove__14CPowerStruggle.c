@@ -10,7 +10,7 @@ int Remove__14CPowerStruggle(float idx)
     unsigned int v3;  // esi
     st_50dac0_0 **v0;  // [bp-0x8]
 
-    v0 = sub_48c8c0(idx);
+    v0 = CPowerStruggle::GetStrongestAttack(idx);
     if (*(int *)(*(unsigned int *)&idx + 684))
     {
         do
@@ -23,8 +23,8 @@ int Remove__14CPowerStruggle(float idx)
                     *(unsigned int *)(*v2 + 408) = *v0->field_198;
                 (*(int *)(*(int *)(*(int *)(*(int *)(*(unsigned int *)&idx + 684) + 4) + 96) + 0x200))(*(int *)(*(int *)(*(unsigned int *)&idx + 684) + 4));
             }
-        } while ((v3 = *(int *)*(int *)(*(unsigned int *)&idx + 684), sub_48d4e0(*(int *)(*(unsigned int *)&idx + 684)), *(unsigned int *)(*(unsigned int *)&idx + 684) = v3, v3));
+        } while ((v3 = *(int *)*(int *)(*(unsigned int *)&idx + 684), __builtin_delete(*(int *)(*(unsigned int *)&idx + 684)), *(unsigned int *)(*(unsigned int *)&idx + 684) = v3, v3));
     }
-    return sub_487f90(idx);
+    return CMagicAttack::Remove(idx);
 }
 

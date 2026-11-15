@@ -88,10 +88,10 @@ typedef struct st_52da60_2 {
 
 extern st_52da60_2 *g_pGameRules;
 extern st_52da60_12 g_engfuncs;
-extern st_52da60_1 *g_6168b4;
-extern st_52da60_1 *g_6168d4;
-extern st_52da60_1 *g_6168d8;
-extern st_52da60_1 *g_6168e0;
+extern st_52da60_1 *g_engfuncs.pfnAlertMessage;
+extern st_52da60_1 *g_engfuncs.pfnPEntityOfEntOffset;
+extern st_52da60_1 *g_engfuncs.pfnEntOffsetOfPEntity;
+extern st_52da60_1 *g_engfuncs.pfnPEntityOfEntIndex;
 extern st_52da60_5 *gpGlobals;
 extern int st_szNextMap;
 extern char st_szNextSpot;
@@ -126,21 +126,21 @@ unsigned int ChangeLevelNow__12CChangeLevelP11CBaseEntity(st_52da60_4 *a0, int a
     else if (a0->field_0->field_1e4 != *(float *)&gpGlobals->field_0)
     {
         a0->field_0->field_1e4 = *(float *)&gpGlobals->field_0;
-        v6 = g_6168e0(1);
-        if (v6 || (v6 = g_6168d4(0), v6))
+        v6 = g_engfuncs.pfnPEntityOfEntIndex(1);
+        if (v6 || (v6 = g_engfuncs.pfnPEntityOfEntOffset(0), v6))
             v7 = v6->field_7c;
         else
             v7 = NULL;
         v2 = v7;
         v8 = &a0->field_124;
-        if (!sub_48cf30(v7, v8))
+        if (!CChangeLevel::InTransitionVolume(v7, v8))
         {
-            v9 = g_6168b4(2, "Player isn't in the transition volume %s, aborting\n", v8);
+            v9 = g_engfuncs.pfnAlertMessage(2, "Player isn't in the transition volume %s, aborting\n", v8);
             return v9;
         }
         if (a0->field_144)
         {
-            v10 = sub_488c00(0);
+            v10 = GetClassPtr__H1Z11CFireAndDie_PX01_PX01(0);
             if (v10)
             {
                 v10->field_0->field_1c8 = a0->field_144;
@@ -150,20 +150,20 @@ unsigned int ChangeLevelNow__12CChangeLevelP11CBaseEntity(st_52da60_4 *a0, int a
                 v11->field_8 = v12[2];
                 v11->field_c = v12[3];
                 v11->field_10 = v12[4];
-                sub_488ec0(v10->field_0->field_208);
+                DispatchSpawn(v10->field_0->field_208);
             }
         }
-        sub_48e110(&st_szNextMap, &a0->field_104);
-        sub_48d960(&a0->field_d4, a1);
-        sub_48d150(a0, a1, 3, 0);
+        strcpy@GLIBC_2.0(&st_szNextMap, &a0->field_104);
+        EHANDLE::__as(&a0->field_d4, a1);
+        CBaseDelay::SUB_UseTargets(a0, a1, 3, 0);
         st_szNextSpot = 0;
-        v13 = sub_48bb50(&a0->field_124);
+        v13 = CChangeLevel::FindLandmark(&a0->field_124);
         v1 = 0;
-        if (!v13 || !g_6168d8(v13))
+        if (!v13 || !g_engfuncs.pfnEntOffsetOfPEntity(v13))
             v1 = 1;
         if (!v1)
         {
-            sub_48e110(&st_szNextSpot, &a0->field_124);
+            strcpy@GLIBC_2.0(&st_szNextSpot, &a0->field_124);
             v14 = &v13->field_80;
             if (!v13)
                 v14 = NULL;
@@ -172,7 +172,7 @@ unsigned int ChangeLevelNow__12CChangeLevelP11CBaseEntity(st_52da60_4 *a0, int a
             gpGlobals->field_a8 = v14[4];
         }
         v0 = &g_engfuncs.padding_0[0];
-        g_6168b4(1, "CHANGE LEVEL: %s %s\n", &st_szNextMap, &st_szNextSpot);
+        g_engfuncs.pfnAlertMessage(1, "CHANGE LEVEL: %s %s\n", &st_szNextMap, &st_szNextSpot);
         v0->field_18(&st_szNextMap, &st_szNextSpot);
         return v9;
     }

@@ -15,17 +15,17 @@ typedef struct st_4a2c80_1 {
     unsigned int field_0;
 } st_4a2c80_1;
 
-extern unsigned int g_5b83c0;
-extern unsigned int g_5b83e4;
-extern unsigned int g_5b8408;
-extern unsigned int g_5b842c;
-extern unsigned int g_5b8450;
-extern unsigned int g_5b8474;
-extern unsigned int g_5b8498;
-extern unsigned int g_5b84bc;
-extern unsigned int g_5b84e0;
+extern unsigned int custom_entity_field_alias+32;
+extern unsigned int custom_entity_field_alias+68;
+extern unsigned int custom_entity_field_alias+104;
+extern unsigned int custom_entity_field_alias+140;
+extern unsigned int custom_entity_field_alias+176;
+extern unsigned int custom_entity_field_alias+212;
+extern unsigned int custom_entity_field_alias+248;
+extern unsigned int custom_entity_field_alias+284;
+extern unsigned int custom_entity_field_alias+320;
 extern unsigned int initialized.1850;
-extern st_4a2c80_1 *g_6169d8;
+extern st_4a2c80_1 *g_engfuncs.pfnSetGroupMask;
 
 int Custom_Encode__FP7delta_sPCUcT1(int a0, st_4a2c80_2 *a1, st_4a2c80_0 *a2)
 {
@@ -38,26 +38,26 @@ int Custom_Encode__FP7delta_sPCUcT1(int a0, st_4a2c80_2 *a1, st_4a2c80_0 *a2)
 
     if (!initialized.1850)
     {
-        sub_4880f0(a0);
+        Custom_Entity_FieldInit(a0);
         initialized.1850 = 1;
     }
     v0 = a2->field_48 & 15;
     if (v0 > 1)
     {
-        g_6169d8(a0, g_5b83c0);
-        g_6169d8(a0, g_5b83e4);
-        g_6169d8(a0, g_5b8408);
+        g_engfuncs.pfnSetGroupMask(a0, custom_entity_field_alias+32);
+        g_engfuncs.pfnSetGroupMask(a0, custom_entity_field_alias+68);
+        g_engfuncs.pfnSetGroupMask(a0, custom_entity_field_alias+104);
     }
     if (v0)
     {
-        g_6169d8(a0, g_5b842c);
-        g_6169d8(a0, g_5b8450);
-        g_6169d8(a0, g_5b8474);
+        g_engfuncs.pfnSetGroupMask(a0, custom_entity_field_alias+140);
+        g_engfuncs.pfnSetGroupMask(a0, custom_entity_field_alias+176);
+        g_engfuncs.pfnSetGroupMask(a0, custom_entity_field_alias+212);
     }
     if (v0 - 1 > 1)
     {
-        g_6169d8(a0, g_5b8498);
-        g_6169d8(a0, g_5b84bc);
+        g_engfuncs.pfnSetGroupMask(a0, custom_entity_field_alias+248);
+        g_engfuncs.pfnSetGroupMask(a0, custom_entity_field_alias+284);
     }
     v4 = __fnstcw();
     v3 = v4 | 0xc00;
@@ -67,7 +67,7 @@ int Custom_Encode__FP7delta_sPCUcT1(int a0, st_4a2c80_2 *a1, st_4a2c80_0 *a2)
     v2 = (int)a2->field_5c;
     v5 = v2;
     if (v1 == v5)
-        v5 = g_6169d8(a0, g_5b84e0);
+        v5 = g_engfuncs.pfnSetGroupMask(a0, custom_entity_field_alias+320);
     return v5;
 }
 

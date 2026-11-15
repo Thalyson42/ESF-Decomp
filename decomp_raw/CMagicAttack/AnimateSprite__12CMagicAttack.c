@@ -10,7 +10,7 @@ typedef struct st_4cebf0_1 {
     unsigned int field_0;
 } st_4cebf0_1;
 
-extern st_4cebf0_1 *g_6167d0;
+extern st_4cebf0_1 *g_engfuncs.pfnModelFrames;
 
 int AnimateSprite__12CMagicAttack(st_4cebf0_0 **a0)
 {
@@ -19,7 +19,7 @@ int AnimateSprite__12CMagicAttack(st_4cebf0_0 **a0)
     unsigned int v3;  // eax
     int v0;  // [bp-0x8]
 
-    v1 = g_6167d0(*a0->field_b4) - 1;
+    v1 = g_engfuncs.pfnModelFrames(*a0->field_b4) - 1;
     if (v1 <= 0)
         return v3;
     v2 = *a0;

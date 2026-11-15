@@ -11,7 +11,7 @@ typedef struct st_50af40_0 {
     unsigned int field_0;
 } st_50af40_0;
 
-extern st_50af40_0 *g_6168dc;
+extern st_50af40_0 *g_engfuncs.pfnIndexOfEdict;
 extern st_50af40_1 *gpGlobals;
 
 int StartBurstStruggleAttack__12CPlayerMelee(float idx)
@@ -39,14 +39,14 @@ int StartBurstStruggleAttack__12CPlayerMelee(float idx)
     float v14;  // [bp-0x1c]
 
     v4 = 9;
-    v3 = g_6168dc(*(int *)(*(int *)*(int *)(*(unsigned int *)&idx + 296) + 520));
+    v3 = g_engfuncs.pfnIndexOfEdict(*(int *)(*(int *)*(int *)(*(unsigned int *)&idx + 296) + 520));
     v2 = *(int *)(*(int *)*(int *)(*(unsigned int *)&idx + 292) + 520);
-    sub_48dc20(g_6168dc(v2));
+    UTIL_Model_Connect(g_engfuncs.pfnIndexOfEdict(v2));
     *(unsigned short *)&v1 = 1;
-    sub_48b670(idx, v1, gpGlobals->field_0, 1, "struggle_attack");
+    CPlayerMelee::AddAnimation(idx, v1, gpGlobals->field_0, 1, "struggle_attack");
     *(unsigned short *)&v2 = 1;
-    sub_48b670(*(int *)(*(unsigned int *)&idx + 304), v2, gpGlobals->field_0, 1, "struggle_defend");
-    sub_48a800(*(int *)*(int *)(*(unsigned int *)&idx + 292) + 116);
+    CPlayerMelee::AddAnimation(*(int *)(*(unsigned int *)&idx + 304), v2, gpGlobals->field_0, 1, "struggle_defend");
+    UTIL_MakeVectors(*(int *)*(int *)(*(unsigned int *)&idx + 292) + 116);
     v17 = gpGlobals->field_28;
     *(unsigned int *)(*(unsigned int *)&idx + 272) = v17;
     *(unsigned int *)(*(unsigned int *)&idx + 276) = gpGlobals->field_2c;
@@ -68,10 +68,10 @@ int StartBurstStruggleAttack__12CPlayerMelee(float idx)
     v9 = (float)(v20 + *(float *)(*(int *)*(int *)(*(unsigned int *)&idx + 296) + 8));
     v10 = (float)(v21 + *(float *)(v22 + 4));
     v11 = *(float *)(v22 + 8) + v8;
-    sub_48db50(*(int *)*(int *)(*(unsigned int *)&idx + 292), &v9);
+    UTIL_SetOrigin(*(int *)*(int *)(*(unsigned int *)&idx + 292), &v9);
     v5 = &v6;
-    sub_488860(&v6, &v12);
+    UTIL_VecToAngles(&v6, &v12);
     v0 = v5;
-    return sub_487b20(g_6168dc(*(int *)(*(int *)*(int *)(*(unsigned int *)&idx + 292) + 520)));
+    return UTIL_Model_MeleeStruggle_Anglefix(g_engfuncs.pfnIndexOfEdict(*(int *)(*(int *)*(int *)(*(unsigned int *)&idx + 292) + 520)));
 }
 

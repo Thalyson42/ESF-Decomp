@@ -66,7 +66,7 @@ typedef struct st_4ec1f0_6 {
 } st_4ec1f0_6;
 
 extern char Next__10CFuncTrain;
-extern st_4ec1f0_6 *g_6168b4;
+extern st_4ec1f0_6 *g_engfuncs.pfnAlertMessage;
 extern st_4ec1f0_5 *gpGlobals;
 
 double NearestPath__15CFuncTrackTrain(float a0)
@@ -116,10 +116,10 @@ double NearestPath__15CFuncTrackTrain(float a0)
     v1 = 1024.0f;
     while (1)
     {
-        v14 = sub_48bba0(v14, *(int *)a0 + 8, 1024.0f);
+        v14 = UTIL_FindEntityInSphere(v14, *(int *)a0 + 8, 1024.0f);
         if (!v14)
             break;
-        if (!(*v14->field_1a4 & 40) && !sub_488af0(*v14->field_0 + gpGlobals->field_98, "path_track"))
+        if (!(*v14->field_1a4 & 40) && !strcmp@GLIBC_2.0(*v14->field_0 + gpGlobals->field_98, "path_track"))
         {
             idx = *(int *)a0 + 8;
             v16 = &*v14->field_8;
@@ -132,7 +132,7 @@ double NearestPath__15CFuncTrackTrain(float a0)
             v20 = v17 * v17 + v18 * v18 + v19 * v19;
             v21 = sqrt(v20);
             if (isnan(v21))
-                sub_487dc0(*(unsigned int *)&v20);
+                sqrt(*(unsigned int *)&v20);
             else
                 v20 = v21;
             v7 = (float)v20;
@@ -145,14 +145,14 @@ double NearestPath__15CFuncTrackTrain(float a0)
     }
     if (!v2)
     {
-        g_6168b4(1, "Can't find a nearby track !!!\n");
+        g_engfuncs.pfnAlertMessage(1, "Can't find a nearby track !!!\n");
         v22 = (unsigned int *)a0;
         v22[3] = 0;
         v22[4] = 0;
         return 1024.0;
     }
-    g_6168b4(2, "TRAIN: %s, Nearest track is %s\n", *(int *)(*(int *)a0 + 460) + gpGlobals->field_98, *v2->field_1cc + gpGlobals->field_98);
-    v23 = sub_48d550(v2);
+    g_engfuncs.pfnAlertMessage(2, "TRAIN: %s, Nearest track is %s\n", *(int *)(*(int *)a0 + 460) + gpGlobals->field_98, *v2->field_1cc + gpGlobals->field_98);
+    v23 = CPathTrack::GetNext(v2);
     if (v23)
     {
         index = *(int *)a0 + 8;
@@ -166,7 +166,7 @@ double NearestPath__15CFuncTrackTrain(float a0)
         v29 = v26 * v26 + v27 * v27 + v28 * v28;
         v30 = sqrt(v29);
         if (isnan(v30))
-            sub_487dc0(*(unsigned int *)&v29);
+            sqrt(*(unsigned int *)&v29);
         else
             v29 = v30;
         v0 = (float)v29;
@@ -181,7 +181,7 @@ double NearestPath__15CFuncTrackTrain(float a0)
         v36 = v33 * v33 + v34 * v34 + v35 * v35;
         v37 = sqrt(v36);
         if (isnan(v37))
-            sub_487dc0(*(unsigned int *)&v36);
+            sqrt(*(unsigned int *)&v36);
         else
             v36 = v37;
         v11 = (float)v36;
@@ -194,7 +194,7 @@ double NearestPath__15CFuncTrackTrain(float a0)
         return *(float *)&v38->field_0->field_1f8;
     v3 = (float)(0.1 + *(float *)&v38->field_0->field_100);
     v40 = (st_4ec1f0_7 *)a0;
-    v40->field_c = _INSERT(sub_4885e0(v38, v3, 0), 0, 0) | 0xffff0000;
+    v40->field_c = _INSERT(CFuncTrackTrain::NextThink(v38, v3, 0), 0, 0) | 0xffff0000;
     v40->field_10 = &Next__10CFuncTrain;
     return v3;
 }

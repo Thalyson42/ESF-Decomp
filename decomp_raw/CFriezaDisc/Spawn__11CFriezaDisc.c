@@ -12,6 +12,6 @@ int Spawn__11CFriezaDisc(float idx)
     *(unsigned int *)(*(unsigned int *)&idx + 216) = 1768186234;
     *(unsigned short *)(*(unsigned int *)&idx + 220) = 25459;
     *(char *)(*(unsigned int *)&idx + 222) = 0;
-    return sub_48cf50(idx);
+    return CBasePlayerItem::FallInit(idx);
 }
 

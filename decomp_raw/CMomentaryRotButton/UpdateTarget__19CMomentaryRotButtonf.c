@@ -25,9 +25,9 @@ typedef struct st_4984b0_4 {
     unsigned int field_98;
 } st_4984b0_4;
 
-extern st_4984b0_1 *g_6167f8;
-extern st_4984b0_1 *g_6168d4;
-extern st_4984b0_1 *g_6168d8;
+extern st_4984b0_1 *g_engfuncs.pfnFindEntityByString;
+extern st_4984b0_1 *g_engfuncs.pfnPEntityOfEntOffset;
+extern st_4984b0_1 *g_engfuncs.pfnEntOffsetOfPEntity;
 extern st_4984b0_4 *gpGlobals;
 
 st_4984b0_3 * UpdateTarget__19CMomentaryRotButtonf(st_4984b0_3 **a0, unsigned int a1)
@@ -43,15 +43,15 @@ st_4984b0_3 * UpdateTarget__19CMomentaryRotButtonf(st_4984b0_3 **a0, unsigned in
     v0 = NULL;
     while (1)
     {
-        v1 = g_6167f8(v0, "targetname", *a0->field_1c8 + gpGlobals->field_98);
+        v1 = g_engfuncs.pfnFindEntityByString(v0, "targetname", *a0->field_1c8 + gpGlobals->field_98);
         v0 = v1;
         v2 = 0;
-        if (!v0 || (v1 = g_6168d8(v0), !v1))
+        if (!v0 || (v1 = g_engfuncs.pfnEntOffsetOfPEntity(v0), !v1))
             v2 = 1;
         if (v2)
             break;
         v3 = v0;
-        if (v3 || (v3 = g_6168d4(0), v3))
+        if (v3 || (v3 = g_engfuncs.pfnPEntityOfEntOffset(0), v3))
             v4 = v3->field_7c;
         else
             v4 = NULL;

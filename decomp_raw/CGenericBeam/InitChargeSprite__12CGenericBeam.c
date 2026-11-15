@@ -77,7 +77,7 @@ typedef struct st_4c5b30_0 {
 } st_4c5b30_0;
 
 extern st_4c5b30_0 g_pAuraColorString;
-extern st_4c5b30_4 *g_6168dc;
+extern st_4c5b30_4 *g_engfuncs.pfnIndexOfEdict;
 
 int InitChargeSprite__12CGenericBeam(st_4c5b30_8 *a0)
 {
@@ -94,15 +94,15 @@ int InitChargeSprite__12CGenericBeam(st_4c5b30_8 *a0)
     char v2;  // [bp-0x104]
 
     v3 = a0->field_80->field_764->field_4->field_38(a0->field_80->field_764);
-    sub_48e110(&v2, (&g_pAuraColorString.field_0)[v3]);
-    sub_48d990(&v1, "sprites/%scharge.spr", &v2);
-    v4 = sub_48c010(&v1, &a0->field_80->field_0->padding_0[8], 1);
+    strcpy@GLIBC_2.0(&v2, (&g_pAuraColorString.field_0)[v3]);
+    sprintf@GLIBC_2.0(&v1, "sprites/%scharge.spr", &v2);
+    v4 = CSprite::SpriteCreate(&v1, &a0->field_80->field_0->padding_0[8], 1);
     v5 = a0;
     v5->field_20c = v4;
     v6 = v5->field_80->field_0->field_208;
     if (v6)
     {
-        v7 = g_6168dc(v6);
+        v7 = g_engfuncs.pfnIndexOfEdict(v6);
         *v4->field_110 = v7;
         *v4->field_114 = 1;
         *v4->field_194 = v6;
@@ -121,6 +121,6 @@ int InitChargeSprite__12CGenericBeam(st_4c5b30_8 *a0)
     v10 = a0;
     *(float *)(*(int *)v10->field_20c + 324) = 0.10000000149011612f;
     *(float *)(*(int *)v10->field_20c + 312) = 10.0f;
-    return sub_48df90(v10->field_20c);
+    return CSprite::TurnOff(v10->field_20c);
 }
 

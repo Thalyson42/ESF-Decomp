@@ -27,7 +27,7 @@ st_52ce30_1 * MultiTouch__12CBaseTriggerP11CBaseEntity(st_52ce30_1 **a0, st_52ce
     {
         if (*a0->field_1a0 & 4)
         {
-            v1 = sub_488af0(v0->field_0 + gpGlobals->field_98, "func_pushable");
+            v1 = strcmp@GLIBC_2.0(v0->field_0 + gpGlobals->field_98, "func_pushable");
             if (v1)
                 return v1;
         }
@@ -36,6 +36,6 @@ st_52ce30_1 * MultiTouch__12CBaseTriggerP11CBaseEntity(st_52ce30_1 **a0, st_52ce
             return *a0;
         }
     }
-    return sub_48b770(a0, a1);
+    return CBaseTrigger::ActivateMultiTrigger(a0, a1);
 }
 

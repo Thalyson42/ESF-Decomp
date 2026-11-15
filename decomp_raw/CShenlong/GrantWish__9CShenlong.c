@@ -51,8 +51,8 @@ unsigned int GrantWish__9CShenlong(st_5181f0_1 *a0)
     a0->field_c = _INSERT(v2, 0, 0) | 0xffff0000;
     a0->field_10 = &WishGrantThink__9CShenlong;
     *(float *)&a0->field_0->field_104 = *(float *)gpGlobals;
-    sub_487b90(a0->field_2a8);
-    v4 = sub_487b90(a0->field_2ac);
+    CSprite::TurnOn(a0->field_2a8);
+    v4 = CSprite::TurnOn(a0->field_2ac);
     a0->field_2b0 = 0;
     a0->field_2b4 = 1;
     a0->field_2b8 = 6;

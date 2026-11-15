@@ -14,18 +14,18 @@ unsigned int UpdateBeamJumpStatus__15CControlledBeam(float a0)
     else if (*(char *)(*(int *)*(int *)(*(unsigned int *)&a0 + 128) + 384) & 2)
     {
         if (!*(int *)(*(unsigned int *)&a0 + 516))
-            sub_48a080(a0);
+            CControlledBeam::EnableBeamJump(a0);
         if (*(int *)(*(unsigned int *)&a0 + 520))
         {
-            sub_488640();
+            UTIL_WeaponTimeBase();
             if (v4 <= *(float *)(*(unsigned int *)&a0 + 164))
                 return v5;
             v1 = __fnstcw();
             v0 = v1 | 0xc00;
             v2 = (int)((double)*(int *)(*(unsigned int *)&a0 + 228) * 0.33);
-            if (sub_48c980(*(int *)(*(unsigned int *)&a0 + 128), v2))
+            if (CBasePlayer::UseKi(*(int *)(*(unsigned int *)&a0 + 128), v2))
                 return v5;
-            v5 = sub_48c650(a0);
+            v5 = CControlledBeam::DisableBeamJump(a0);
             return v5;
         }
         else if (!*(int *)(*(int *)(*(unsigned int *)&a0 + 200) + 716))
@@ -34,7 +34,7 @@ unsigned int UpdateBeamJumpStatus__15CControlledBeam(float a0)
         }
         else if (!*(int *)(*(unsigned int *)&a0 + 520))
         {
-            sub_48d1c0(a0);
+            CControlledBeam::StartBeamJump(a0);
             return v5;
         }
         else
@@ -46,7 +46,7 @@ unsigned int UpdateBeamJumpStatus__15CControlledBeam(float a0)
     {
         if (!*(int *)(*(unsigned int *)&a0 + 516))
             return v5;
-        sub_48c650(a0);
+        CControlledBeam::DisableBeamJump(a0);
         return v5;
     }
 }

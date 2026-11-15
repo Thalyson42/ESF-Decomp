@@ -57,8 +57,8 @@ typedef struct st_4c2690_4 {
 } st_4c2690_4;
 
 extern unsigned int g_vecAttackDir;
-extern unsigned int g_616784;
-extern unsigned int g_616788;
+extern unsigned int g_vecAttackDir+4;
+extern unsigned int g_vecAttackDir+8;
 
 unsigned int TakeDamage__10CBreakableP9entvars_sT1fi(st_4c2690_4 *a0, st_4c2690_0 *a1, st_4c2690_0 *a2, float a3, unsigned int a4)
 {
@@ -139,7 +139,7 @@ unsigned int TakeDamage__10CBreakableP9entvars_sT1fi(st_4c2690_4 *a0, st_4c2690_
         v15 = v1;
         v16 = v2;
     }
-    if (!sub_48c7c0(a0))
+    if (!CBreakable::IsBreakable(a0))
         return 0;
     if ((char)a4 < 0)
         a3 += a3;
@@ -148,7 +148,7 @@ unsigned int TakeDamage__10CBreakableP9entvars_sT1fi(st_4c2690_4 *a0, st_4c2690_
     v29 = v14 * v14 + v15 * v15 + v16 * v16;
     v30 = sqrt(v29);
     if (isnan(v30))
-        sub_487dc0(*(unsigned int *)&v29);
+        sqrt(*(unsigned int *)&v29);
     else
         v29 = v30;
     v6 = (float)v29;
@@ -166,16 +166,16 @@ unsigned int TakeDamage__10CBreakableP9entvars_sT1fi(st_4c2690_4 *a0, st_4c2690_
         v2 = (float)(v31 * v16);
     }
     *(float *)&g_vecAttackDir = v0;
-    *(float *)&g_616784 = v1;
-    *(float *)&g_616788 = v2;
+    *(float *)&g_vecAttackDir+4 = v1;
+    *(float *)&g_vecAttackDir+8 = v2;
     *(float *)&a0->field_0->field_160 = *(float *)&a0->field_0->field_160 - a3;
     if (0.0 < *(float *)&a0->field_0->field_160)
     {
-        sub_48cba0(a0);
+        CBreakable::DamageSound(a0);
         return 1;
     }
     a0->field_60->field_3c(a0, a2, 0);
-    sub_48cb40(a0);
+    CBreakable::Die(a0);
     return 0;
 }
 

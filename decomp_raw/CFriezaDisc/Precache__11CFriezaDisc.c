@@ -4,14 +4,14 @@ typedef struct st_4c0c20_0 {
 } st_4c0c20_0;
 
 extern st_4c0c20_0 *g_engfuncs;
-extern st_4c0c20_0 *g_6167c4;
+extern st_4c0c20_0 *g_engfuncs.pfnPrecacheSound;
 
 int Precache__11CFriezaDisc(void)
 {
     g_engfuncs("models/w_friezadisc.mdl");
-    g_6167c4("weapons/rotating.wav");
-    g_6167c4("weapons/disc_fire.wav");
-    g_6167c4("weapons/miscdisc_charge.wav");
-    return g_6167c4("weapons/disckill.wav");
+    g_engfuncs.pfnPrecacheSound("weapons/rotating.wav");
+    g_engfuncs.pfnPrecacheSound("weapons/disc_fire.wav");
+    g_engfuncs.pfnPrecacheSound("weapons/miscdisc_charge.wav");
+    return g_engfuncs.pfnPrecacheSound("weapons/disckill.wav");
 }
 

@@ -8,7 +8,7 @@ unsigned int FixPlayerCrouchStuck__FP7edict_s(float a0)
 
     for (i = 0; i <= 0x11; i += 1)
     {
-        v4 = sub_488460(*(unsigned int *)&a0 + 0x88, *(unsigned int *)&a0 + 0x88, 0, 3, a0, &v1);
+        v4 = UTIL_TraceHull(*(unsigned int *)&a0 + 0x88, *(unsigned int *)&a0 + 0x88, 0, 3, a0, &v1);
         if (!v2)
             return v4;
         *(float *)(*(unsigned int *)&a0 + 144) = (float)(1.0 + *(float *)(*(unsigned int *)&a0 + 144));

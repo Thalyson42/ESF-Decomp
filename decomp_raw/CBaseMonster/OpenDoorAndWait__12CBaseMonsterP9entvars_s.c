@@ -52,9 +52,9 @@ typedef struct st_4d5da0_8 {
     unsigned int field_98;
 } st_4d5da0_8;
 
-extern st_4d5da0_1 *g_6167f8;
-extern st_4d5da0_1 *g_6168d4;
-extern st_4d5da0_1 *g_6168d8;
+extern st_4d5da0_1 *g_engfuncs.pfnFindEntityByString;
+extern st_4d5da0_1 *g_engfuncs.pfnPEntityOfEntOffset;
+extern st_4d5da0_1 *g_engfuncs.pfnEntOffsetOfPEntity;
 extern st_4d5da0_8 *gpGlobals;
 
 float OpenDoorAndWait__12CBaseMonsterP9entvars_s(unsigned int a0, st_4d5da0_5 *a1)
@@ -72,7 +72,7 @@ float OpenDoorAndWait__12CBaseMonsterP9entvars_s(unsigned int a0, st_4d5da0_5 *a
 
     v1 = 0;
     v2 = a1->field_208;
-    if (a1->field_208 || (v2 = g_6168d4(0), v2))
+    if (a1->field_208 || (v2 = g_engfuncs.pfnPEntityOfEntOffset(0), v2))
         v3 = v2->field_7c;
     else
         v3 = NULL;
@@ -88,23 +88,23 @@ float OpenDoorAndWait__12CBaseMonsterP9entvars_s(unsigned int a0, st_4d5da0_5 *a
             {
                 do
                 {
-                    v4 = g_6167f8(v4, "targetname", v0->field_0->field_1cc + gpGlobals->field_98);
+                    v4 = g_engfuncs.pfnFindEntityByString(v4, "targetname", v0->field_0->field_1cc + gpGlobals->field_98);
                     i = &v4->field_80;
                     if (!v4)
                         i = NULL;
                 } while (i == v0->field_0);
                 v6 = 0;
-                if (!v4 || !g_6168d8(v4))
+                if (!v4 || !g_engfuncs.pfnEntOffsetOfPEntity(v4))
                     v6 = 1;
                 if (v6)
                     break;
                 v7 = &v4->field_80;
                 if (!v4)
                     v7 = NULL;
-                if (!sub_488af0(*v7 + gpGlobals->field_98, gpGlobals->field_98 + v0->field_0->field_0))
+                if (!strcmp@GLIBC_2.0(*v7 + gpGlobals->field_98, gpGlobals->field_98 + v0->field_0->field_0))
                 {
                     v8 = v4;
-                    if (v8 || (v8 = g_6168d4(0), v8))
+                    if (v8 || (v8 = g_engfuncs.pfnPEntityOfEntOffset(0), v8))
                         v9 = v8->field_7c;
                     else
                         v9 = NULL;

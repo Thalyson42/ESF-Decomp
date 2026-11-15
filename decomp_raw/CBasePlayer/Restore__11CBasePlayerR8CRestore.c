@@ -58,7 +58,7 @@ typedef struct st_4fb740_4 {
 
 extern int _11CBasePlayer.m_playerSaveData;
 extern st_4fb740_6 g_engfuncs;
-extern st_4fb740_5 *g_6168b4;
+extern st_4fb740_5 *g_engfuncs.pfnAlertMessage;
 extern st_4fb740_4 *gpGlobals;
 
 unsigned int Restore__11CBasePlayerR8CRestore(st_4fb740_0 *a0, int a1)
@@ -86,13 +86,13 @@ unsigned int Restore__11CBasePlayerR8CRestore(st_4fb740_0 *a0, int a1)
     float v12;  // [bp-0x20]
     float v13;  // [bp-0x1c]
 
-    if (!sub_48a3e0(a0, a1))
+    if (!CBaseMonster::Restore(a0, a1))
         return 0;
-    v4 = sub_48a980(a1, "PLAYER", a0, &_11CBasePlayer.m_playerSaveData, 0x22);
+    v4 = CRestore::ReadFields(a1, "PLAYER", a0, &_11CBasePlayer.m_playerSaveData, 0x22);
     if (!gpGlobals->field_9c->field_52c)
     {
-        g_6168b4(1, "No Landmark:%s\n", gpGlobals->field_9c + 1);
-        v14 = sub_48db30(a0);
+        g_engfuncs.pfnAlertMessage(1, "No Landmark:%s\n", gpGlobals->field_9c + 1);
+        v14 = EntSelectSpawnPoint(a0);
         v15 = a0->field_0;
         v16 = (!v14 ? NULL : (struct st_4fb740_2 *)&v14[1].padding_14[16]);
         v5 = 0;
@@ -124,7 +124,7 @@ unsigned int Restore__11CBasePlayerR8CRestore(st_4fb740_0 *a0, int a1)
     v8 = -4.0f;
     v9 = -4.0f;
     v10 = -9.0f;
-    sub_48a0d0(a0->field_0, &v8, &v5);
+    UTIL_SetSize(a0->field_0, &v8, &v5);
     v3 = &g_engfuncs.padding_0[0];
     v3->field_1e0(a0->field_0->field_208, "hl", "1");
     if (a0->field_91c)
@@ -142,7 +142,7 @@ unsigned int Restore__11CBasePlayerR8CRestore(st_4fb740_0 *a0, int a1)
         v0 = a0->field_0->field_208;
     }
     v21->field_1e0(v0, v1, v2);
-    sub_48d570(a0);
+    CBasePlayer::RenewItems(a0);
     return v4;
 }
 

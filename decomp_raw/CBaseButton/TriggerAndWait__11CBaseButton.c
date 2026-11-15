@@ -15,8 +15,8 @@ unsigned int TriggerAndWait__11CBaseButton(float idx)
     unsigned int v0;  // [bp-0x24]
     unsigned int v1;  // [bp-0x20]
 
-    v3 = sub_488810(*(unsigned int *)&idx + 212);
-    v4 = sub_488a80(*(int *)(*(unsigned int *)&idx + 0x100), v3);
+    v3 = EHANDLE::__opP11CBaseEntity(*(unsigned int *)&idx + 212);
+    v4 = UTIL_IsMasterTriggered(*(int *)(*(unsigned int *)&idx + 0x100), v3);
     if (!v4)
         return v4;
     *(unsigned int *)(*(unsigned int *)&idx + 128) = 0;
@@ -40,6 +40,6 @@ unsigned int TriggerAndWait__11CBaseButton(float idx)
     *(unsigned int *)(*(int *)idx + 304) = 0x3f800000;
     v1 = 0;
     v0 = 3;
-    return sub_48d150(idx, sub_488810(*(unsigned int *)&idx + 212));
+    return CBaseDelay::SUB_UseTargets(idx, EHANDLE::__opP11CBaseEntity(*(unsigned int *)&idx + 212));
 }
 

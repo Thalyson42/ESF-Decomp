@@ -6,6 +6,6 @@ typedef struct st_51fd50_0 {
 
 int RemoveChargeSprite__18CSpecialBeamCannon(st_51fd50_0 *a0)
 {
-    return sub_48cc00(a0->field_1d4);
+    return UTIL_Remove(a0->field_1d4);
 }
 

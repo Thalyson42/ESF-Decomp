@@ -15,7 +15,7 @@ typedef struct st_4ad5a0_2 {
 } st_4ad5a0_2;
 
 extern char _GLOBAL_OFFSET_TABLE_;
-extern st_4ad5a0_2 *g_6168cc;
+extern st_4ad5a0_2 *g_engfuncs.pfnAllocString;
 
 st_4ad5a0_0 * Precache__14CMomentaryDoor(st_4ad5a0_1 *a0)
 {
@@ -24,7 +24,7 @@ st_4ad5a0_0 * Precache__14CMomentaryDoor(st_4ad5a0_1 *a0)
 
     if (a0->field_104 > 8)
     {
-        v0 = g_6168cc("common/null.wav");
+        v0 = g_engfuncs.pfnAllocString("common/null.wav");
         v1 = a0->field_0;
         v1->field_1ec = v0;
         return v1;

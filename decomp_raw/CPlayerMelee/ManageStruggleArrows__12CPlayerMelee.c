@@ -7,10 +7,10 @@ typedef struct st_50b270_1 {
     unsigned int field_0;
 } st_50b270_1;
 
-extern float g_5bd270;
-extern float g_5bd284;
-extern float g_5bd2ac;
-extern st_50b270_1 *g_616928;
+extern float melee_struggle_maxarrows+12;
+extern float melee_struggle_arrowtime+12;
+extern float melee_struggle_enddelay+12;
+extern st_50b270_1 *g_engfuncs.pfnRandomLong;
 extern st_50b270_0 *gpGlobals;
 
 unsigned int ManageStruggleArrows__12CPlayerMelee(float idx)
@@ -21,30 +21,30 @@ unsigned int ManageStruggleArrows__12CPlayerMelee(float idx)
     if (*(int *)(*(unsigned int *)&idx + 312) && *(float *)gpGlobals > *(float *)(*(unsigned int *)&idx + 112))
     {
         if (*(int *)(*(unsigned int *)&idx + 116))
-            return sub_487fd0(idx);
+            return CPlayerMelee::CheckStruggleArrows(idx);
         *(unsigned int *)(*(unsigned int *)&idx + 108) = *(int *)(*(unsigned int *)&idx + 108) + 1;
-        if ((double)*(int *)(*(unsigned int *)&idx + 108) >= g_5bd270)
+        if ((double)*(int *)(*(unsigned int *)&idx + 108) >= melee_struggle_maxarrows+12)
         {
-            *(float *)(*(unsigned int *)&idx + 112) = *(float *)gpGlobals + g_5bd2ac;
+            *(float *)(*(unsigned int *)&idx + 112) = *(float *)gpGlobals + melee_struggle_enddelay+12;
             *(unsigned int *)(*(unsigned int *)&idx + 116) = 1;
         }
         else
         {
-            *(float *)(*(unsigned int *)&idx + 112) = *(float *)gpGlobals + g_5bd284;
+            *(float *)(*(unsigned int *)&idx + 112) = *(float *)gpGlobals + melee_struggle_arrowtime+12;
         }
         *(unsigned int *)(*(unsigned int *)&idx + 120) = 1;
         *(unsigned int *)(*(int *)(*(unsigned int *)&idx + 304) + 120) = 1;
-        sub_48d920(idx, sub_48ddc0(idx, g_616928(0, 7)));
-        sub_48d690(idx, *(int *)(*(unsigned int *)&idx + 328));
-        v2 = sub_48ddc0(idx, g_616928(0, 7));
-        sub_48d920(*(int *)(*(unsigned int *)&idx + 304), v2);
-        sub_48d690(*(int *)(*(unsigned int *)&idx + 304), *(int *)(*(int *)(*(unsigned int *)&idx + 304) + 328));
+        CPlayerMelee::AddDirection(idx, CPlayerMelee::DirectionsToFlags(idx, g_engfuncs.pfnRandomLong(0, 7)));
+        CPlayerMelee::LetGoDirection(idx, *(int *)(*(unsigned int *)&idx + 328));
+        v2 = CPlayerMelee::DirectionsToFlags(idx, g_engfuncs.pfnRandomLong(0, 7));
+        CPlayerMelee::AddDirection(*(int *)(*(unsigned int *)&idx + 304), v2);
+        CPlayerMelee::LetGoDirection(*(int *)(*(unsigned int *)&idx + 304), *(int *)(*(int *)(*(unsigned int *)&idx + 304) + 328));
         *(unsigned int *)(*(unsigned int *)&idx + 120) = 0;
         *(unsigned int *)(*(int *)(*(unsigned int *)&idx + 304) + 120) = 0;
     }
     *(unsigned int *)(*(unsigned int *)&idx + 120) = 0;
     *(unsigned int *)(*(unsigned int *)&idx + 124) = 1;
-    v3 = sub_48ca30(idx);
+    v3 = CPlayerMelee::SetBlockingDirections(idx);
     *(unsigned int *)(*(unsigned int *)&idx + 124) = 0;
     return v3;
 }

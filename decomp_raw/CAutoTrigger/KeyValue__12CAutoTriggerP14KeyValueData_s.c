@@ -10,20 +10,20 @@ typedef struct st_52aad0_1 {
     unsigned int field_0;
 } st_52aad0_1;
 
-extern st_52aad0_1 *g_6168cc;
+extern st_52aad0_1 *g_engfuncs.pfnAllocString;
 
 unsigned int KeyValue__12CAutoTriggerP14KeyValueData_s(unsigned int *a0, st_52aad0_0 *a1)
 {
     unsigned int v0;  // eax
 
-    if (!sub_488af0(a1->field_4, "globalstate"))
+    if (!strcmp@GLIBC_2.0(a1->field_4, "globalstate"))
     {
-        v0 = g_6168cc(a1->field_8);
+        v0 = g_engfuncs.pfnAllocString(a1->field_8);
         a0[27] = v0;
     }
-    else if (!sub_488af0(a1->field_4, "triggerstate"))
+    else if (!strcmp@GLIBC_2.0(a1->field_4, "triggerstate"))
     {
-        v0 = sub_48b500(a1->field_8, 0, 10, 0);
+        v0 = __strtol_internal@GLIBC_2.0(a1->field_8, 0, 10, 0);
         switch (v0)
         {
         case 0:
@@ -39,7 +39,7 @@ unsigned int KeyValue__12CAutoTriggerP14KeyValueData_s(unsigned int *a0, st_52aa
     }
     else
     {
-        return sub_48b920(a0, a1);
+        return CBaseDelay::KeyValue(a0, a1);
     }
     a1->field_c = 1;
     return v0;

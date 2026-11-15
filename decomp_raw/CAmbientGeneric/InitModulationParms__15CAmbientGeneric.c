@@ -33,7 +33,7 @@ typedef struct st_51aed0_0 {
     unsigned int field_160;
 } st_51aed0_0;
 
-extern char g_5c5b1c;
+extern char __vt_11CSolarFlare+252;
 
 st_51aed0_1 * InitModulationParms__15CAmbientGeneric(st_51aed0_1 *a0)
 {
@@ -72,7 +72,7 @@ st_51aed0_1 * InitModulationParms__15CAmbientGeneric(st_51aed0_1 *a0)
     if (v5->field_68 && v5->field_68 <= 27)
     {
         iter = &v5->field_68;
-        i = &(&g_5c5b1c)[100 * v5->field_68];
+        i = &(&__vt_11CSolarFlare+252)[100 * v5->field_68];
         for (v8 = 25; v8; i += 1)
         {
             v8 -= 1;

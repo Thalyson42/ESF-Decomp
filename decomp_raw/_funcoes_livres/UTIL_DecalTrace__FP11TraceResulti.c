@@ -35,14 +35,14 @@ typedef struct st_533920_0 {
     unsigned int field_c;
 } st_533920_0;
 
-extern st_533920_0 g_5cae44;
-extern st_533920_2 *g_616878;
-extern st_533920_2 *g_61687c;
-extern st_533920_2 *g_616880;
-extern st_533920_2 *g_616888;
-extern st_533920_2 *g_616894;
-extern st_533920_2 *g_6168d4;
-extern st_533920_2 *g_6168dc;
+extern st_533920_0 gDecals+4;
+extern st_533920_2 *g_engfuncs.pfnMessageBegin;
+extern st_533920_2 *g_engfuncs.pfnMessageEnd;
+extern st_533920_2 *g_engfuncs.pfnWriteByte;
+extern st_533920_2 *g_engfuncs.pfnWriteShort;
+extern st_533920_2 *g_engfuncs.pfnWriteCoord;
+extern st_533920_2 *g_engfuncs.pfnPEntityOfEntOffset;
+extern st_533920_2 *g_engfuncs.pfnIndexOfEdict;
 
 unsigned int UTIL_DecalTrace__FP11TraceResulti(st_533920_5 *a0, int idx)
 {
@@ -56,7 +56,7 @@ unsigned int UTIL_DecalTrace__FP11TraceResulti(st_533920_5 *a0, int idx)
 
     if (idx < 0)
         return v6;
-    v2 = (&g_5cae44.field_0)[2 * idx];
+    v2 = (&gDecals+4.field_0)[2 * idx];
     if (v2 < 0)
     {
         return v6;
@@ -66,13 +66,13 @@ unsigned int UTIL_DecalTrace__FP11TraceResulti(st_533920_5 *a0, int idx)
         if (a0->field_30)
         {
             v3 = a0->field_30;
-            if (a0->field_30 || (v3 = g_6168d4(0), v3))
+            if (a0->field_30 || (v3 = g_engfuncs.pfnPEntityOfEntOffset(0), v3))
                 v4 = v3->field_7c;
             else
                 v4 = NULL;
             if (v4 && !v4->field_60->field_90(v4))
                 return v5;
-            v1 = g_6168dc(a0->field_30);
+            v1 = g_engfuncs.pfnIndexOfEdict(a0->field_30);
         }
         else
         {
@@ -97,15 +97,15 @@ LABEL_533a1c:
             }
         }
 LABEL_533a22:
-        g_616878(0, 23, 0, 0);
-        g_616880(v0);
-        g_616894(a0->field_14);
-        g_616894(a0->field_18);
-        g_616894(a0->field_1c);
-        g_616880(v2);
+        g_engfuncs.pfnMessageBegin(0, 23, 0, 0);
+        g_engfuncs.pfnWriteByte(v0);
+        g_engfuncs.pfnWriteCoord(a0->field_14);
+        g_engfuncs.pfnWriteCoord(a0->field_18);
+        g_engfuncs.pfnWriteCoord(a0->field_1c);
+        g_engfuncs.pfnWriteByte(v2);
         if (v1)
-            g_616888(v1);
-        v6 = g_61687c();
+            g_engfuncs.pfnWriteShort(v1);
+        v6 = g_engfuncs.pfnMessageEnd();
         return v6;
     }
     else

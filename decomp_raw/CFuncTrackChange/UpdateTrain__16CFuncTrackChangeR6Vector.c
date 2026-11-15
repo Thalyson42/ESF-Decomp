@@ -110,7 +110,7 @@ double UpdateTrain__16CFuncTrackChangeR6Vector(st_4ed3c0_2 *a0, float *a1)
     v19->field_5c = v20->field_5c;
     v19->field_60 = v20->field_60;
     v19->field_64 = v20->field_64;
-    sub_4885e0(a0->field_12c, v0 + *(float *)(*(int *)a0->field_12c + 0x100), 0);
+    CFuncTrackTrain::NextThink(a0->field_12c, v0 + *(float *)(*(int *)a0->field_12c + 0x100), 0);
     if (0.0 >= v0)
         return 0.0;
     v21 = *(int *)a0->field_12c + 8;
@@ -123,7 +123,7 @@ double UpdateTrain__16CFuncTrackChangeR6Vector(st_4ed3c0_2 *a0, float *a1)
     v11 = *a1 - v22->field_50;
     v12 = a1[1] - *(float *)&v24[1];
     v13 = a1[2] - *(float *)&v24[2];
-    sub_488cc0(&v11, gpGlobals);
+    UTIL_MakeInvVectors(&v11, gpGlobals);
     v25 = &gpGlobals->field_28;
     v26 = v14;
     v27 = v15;

@@ -22,7 +22,7 @@ typedef struct st_4b4a00_1 {
 } st_4b4a00_1;
 
 extern char _GLOBAL_OFFSET_TABLE_;
-extern st_4b4a00_1 *g_6168cc;
+extern st_4b4a00_1 *g_engfuncs.pfnAllocString;
 
 st_4b4a00_2 * KeyValue__11CEnvShooterP14KeyValueData_s(st_4b4a00_3 *a0, st_4b4a00_0 *a1)
 {
@@ -30,17 +30,17 @@ st_4b4a00_2 * KeyValue__11CEnvShooterP14KeyValueData_s(st_4b4a00_3 *a0, st_4b4a0
     st_4b4a00_2 *v1;  // eax
     st_4b4a00_2 *v2;  // eax
 
-    if (!sub_488af0(a1->field_4, "shootmodel"))
+    if (!strcmp@GLIBC_2.0(a1->field_4, "shootmodel"))
     {
-        v0 = g_6168cc(a1->field_8);
+        v0 = g_engfuncs.pfnAllocString(a1->field_8);
         v1 = a0->field_0;
         v1->field_b8 = v0;
         a1->field_c = 1;
         return v1;
     }
-    if (sub_488af0(a1->field_4, "shootsounds"))
-        return sub_48b570(a0, a1);
-    v2 = sub_48b500(a1->field_8, 0, 10, 0);
+    if (strcmp@GLIBC_2.0(a1->field_4, "shootsounds"))
+        return CGibShooter::KeyValue(a0, a1);
+    v2 = __strtol_internal@GLIBC_2.0(a1->field_8, 0, 10, 0);
     a1->field_c = 1;
     if (&v2->padding_0[1] > 0x5)
     {

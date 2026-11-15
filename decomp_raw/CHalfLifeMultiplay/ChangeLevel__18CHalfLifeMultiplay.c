@@ -38,15 +38,15 @@ typedef struct st_4de5e0_0 {
 } st_4de5e0_0;
 
 extern unsigned int g_fGameOver;
-extern st_4de5e0_3 *g_6167d8;
-extern st_4de5e0_3 *g_61685c;
-extern st_4de5e0_3 *g_6168a8;
-extern st_4de5e0_3 *g_6168b4;
-extern st_4de5e0_3 *g_616978;
+extern st_4de5e0_3 *g_engfuncs.pfnChangeLevel;
+extern st_4de5e0_3 *g_engfuncs.pfnServerCommand;
+extern st_4de5e0_3 *g_engfuncs.pfnCVarGetString;
+extern st_4de5e0_3 *g_engfuncs.pfnAlertMessage;
+extern st_4de5e0_3 *g_engfuncs.pfnIsMapValid;
 extern st_4de5e0_0 *gpGlobals;
 extern int szPreviousMapCycleFile.1898;
 extern st_4de5e0_2 mapcycle.1899;
-extern st_4de5e0_1 *g_616b44;
+extern st_4de5e0_1 *mapcycle.1899+4;
 
 unsigned int * ChangeLevel__18CHalfLifeMultiplay(void)
 {
@@ -81,17 +81,17 @@ unsigned int * ChangeLevel__18CHalfLifeMultiplay(void)
     v9 = 49;
     v2 = 1;
     v0 = "mapcyclefile";
-    v12 = g_6168a8(v0);
+    v12 = g_engfuncs.pfnCVarGetString(v0);
     v7 = 0;
     v6 = 0;
-    v3 = sub_48c5e0(v0);
-    if (sub_48cac0(v12, &szPreviousMapCycleFile.1898))
+    v3 = CountPlayers(v0);
+    if (strcasecmp@GLIBC_2.0(v12, &szPreviousMapCycleFile.1898))
     {
-        sub_48e110(&szPreviousMapCycleFile.1898, v12);
-        sub_48b020(&mapcycle.1899.field_0);
-        if (!sub_48cf70(v12, &mapcycle.1899.field_0) || !mapcycle.1899.field_0)
+        strcpy@GLIBC_2.0(&szPreviousMapCycleFile.1898, v12);
+        DestroyMapCycle(&mapcycle.1899.field_0);
+        if (!ReloadMapCycleFile(v12, &mapcycle.1899.field_0) || !mapcycle.1899.field_0)
         {
-            g_6168b4(1, "Unable to load map cycle file %s\n", v12);
+            g_engfuncs.pfnAlertMessage(1, "Unable to load map cycle file %s\n", v12);
             v2 = 0;
         }
     }
@@ -101,9 +101,9 @@ unsigned int * ChangeLevel__18CHalfLifeMultiplay(void)
         if (mapcycle.1899.field_0)
         {
             v13 = 0;
-            sub_48e110(&v10, gpGlobals->field_c + gpGlobals->field_98);
-            sub_48e110(v8, gpGlobals->field_c + gpGlobals->field_98);
-            for (i = v1->field_4; i->field_0 != g_616b44; i = i->field_0)
+            strcpy@GLIBC_2.0(&v10, gpGlobals->field_c + gpGlobals->field_98);
+            strcpy@GLIBC_2.0(v8, gpGlobals->field_c + gpGlobals->field_98);
+            for (i = v1->field_4; i->field_0 != mapcycle.1899+4; i = i->field_0)
             {
                 v15 = 0;
                 if (i->field_24)
@@ -137,20 +137,20 @@ unsigned int * ChangeLevel__18CHalfLifeMultiplay(void)
                 }
             }
             if (!v13)
-                i = g_616b44;
-            g_616b44 = i->field_0;
-            sub_48e110(&v10, &i->field_4);
+                i = mapcycle.1899+4;
+            mapcycle.1899+4 = i->field_0;
+            strcpy@GLIBC_2.0(&v10, &i->field_4);
             v16 = i + 1;
-            sub_4883c0(v16, &v7);
-            sub_48e110(&v6, v16);
+            ExtractCommandString(v16, &v7);
+            strcpy@GLIBC_2.0(&v6, v16);
         }
     }
-    if (!g_616978(&v10))
-        sub_48e110(&v10, v8);
+    if (!g_engfuncs.pfnIsMapValid(&v10))
+        strcpy@GLIBC_2.0(&v10, v8);
     g_fGameOver = 1;
-    g_6168b4(1, "CHANGE LEVEL: %s\n", &v10);
+    g_engfuncs.pfnAlertMessage(1, "CHANGE LEVEL: %s\n", &v10);
     if (v5 || v4)
-        g_6168b4(1, "PLAYER COUNT:  min %i max %i current %i\n", v5, v4, v3);
+        g_engfuncs.pfnAlertMessage(1, "PLAYER COUNT:  min %i max %i current %i\n", v5, v4, v3);
     v17 = &v6;
     v18 = 0xffffffff;
     do
@@ -158,8 +158,8 @@ unsigned int * ChangeLevel__18CHalfLifeMultiplay(void)
         v19 = v17;
     } while (v18 && (v18 -= 1, v17 = v19 + 1, *v19));
     if (v18 != 0xfffffffe)
-        g_6168b4(1, "RULES:  %s\n", &v6);
-    g_6167d8(&v10, 0);
+        g_engfuncs.pfnAlertMessage(1, "RULES:  %s\n", &v6);
+    g_engfuncs.pfnChangeLevel(&v10, 0);
     v20 = &v7;
     v21 = 0xffffffff;
     do
@@ -167,11 +167,11 @@ unsigned int * ChangeLevel__18CHalfLifeMultiplay(void)
         v22 = v20;
     } while (v21 && (v21 -= 1, v20 = v22 + 1, *v22));
     if (v21 != 0xfffffffe)
-        g_61685c(&v7);
+        g_engfuncs.pfnServerCommand(&v7);
     iter = 1;
     while (iter <= gpGlobals->field_90)
     {
-        v24 = sub_48a500(iter);
+        v24 = UTIL_PlayerByIndex(iter);
         if (!v24)
         {
             iter += 1;

@@ -20,10 +20,10 @@ st_57f520_0 ** UTIL_GetLastAttackFromPlayer__FP11CBasePlayer(st_57f520_1 **a0)
     v0 = *a0->field_208;
     while (1)
     {
-        v1 = sub_48bd10(v1, "globalname", "magic_attack");
+        v1 = UTIL_FindEntityByString(v1, "globalname", "magic_attack");
         if (!v1)
             break;
-        if (!(char)sub_48b140(v1) && *v1->field_198 == v0)
+        if (!(char)IsNull(v1) && *v1->field_198 == v0)
             v2 = v1;
     }
     return v2;

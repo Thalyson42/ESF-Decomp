@@ -15,9 +15,9 @@ typedef struct st_53f700_1 {
 } st_53f700_1;
 
 extern unsigned int g_pGameRules;
-extern st_53f700_1 *g_6168a4;
-extern st_53f700_1 *g_6168d4;
-extern st_53f700_1 *g_61698c;
+extern st_53f700_1 *g_engfuncs.pfnCVarGetFloat;
+extern st_53f700_1 *g_engfuncs.pfnPEntityOfEntOffset;
+extern st_53f700_1 *g_engfuncs.pfnIsDedicatedServer;
 extern st_53f700_0 *gpGlobals;
 
 double BotFillThink__11CBotManager(float idx)
@@ -44,15 +44,15 @@ double BotFillThink__11CBotManager(float idx)
     }
     else if (g_pGameRules)
     {
-        if (!g_61698c() && !*(char *)(*(unsigned int *)&idx + 37))
+        if (!g_engfuncs.pfnIsDedicatedServer() && !*(char *)(*(unsigned int *)&idx + 37))
         {
-            if (!g_61698c() && !(v9 = *(int *)(*(unsigned int *)&idx + 12), !*(int *)(*(unsigned int *)&idx + 12) && !(v9 = g_6168d4(0), v9)))
+            if (!g_engfuncs.pfnIsDedicatedServer() && !(v9 = *(int *)(*(unsigned int *)&idx + 12), !*(int *)(*(unsigned int *)&idx + 12) && !(v9 = g_engfuncs.pfnPEntityOfEntOffset(0), v9)))
                 v10 = v9->field_7c;
             else
                 v10 = 0;
             *(unsigned short *)&v5 = 0;
             *(unsigned short *)&v4 = 1;
-            if ((char)sub_489a70(v10, v4, v5))
+            if ((char)UTIL_IsValidPlayer(v10, v4, v5))
             {
                 *(char *)(*(unsigned int *)&idx + 37) = 1;
                 if (1.0 <= *(float *)(*(unsigned int *)&idx + 32))
@@ -79,7 +79,7 @@ double BotFillThink__11CBotManager(float idx)
                 }
             }
         }
-        sub_489aa0(idx);
+        CBotManager::RestoreBots(idx);
         if (*(char *)(*(unsigned int *)&idx + 36))
             return v8;
         v13 = *(float *)(*(unsigned int *)&idx + 16);
@@ -89,18 +89,18 @@ double BotFillThink__11CBotManager(float idx)
         {
             if (*(char *)(*(unsigned int *)&idx + 3396) < (int)(gpGlobals->field_90 - 1))
             {
-                g_6168a4("sv_numbots");
+                g_engfuncs.pfnCVarGetFloat("sv_numbots");
                 v6 = *(char *)(*(unsigned int *)&idx + 4);
                 v13 = (double)(int)v6;
                 if (v13 < v14)
                 {
-                    sub_4892c0(idx, -0x1, -0x1, 0, -0x1, -0x1);
+                    CBotManager::CreateBot(idx, -0x1, -0x1, 0, -0x1, -0x1);
                     return v13;
                 }
             }
             *(char *)(*(unsigned int *)&idx + 3364) = 0;
         }
-        if ((char)sub_48aa10(idx))
+        if ((char)CBotManager::IsAddingMultipleBots(idx))
         {
             if (*(char *)(*(unsigned int *)&idx + 24) && *(char *)(*(unsigned int *)&idx + 3396) < (int)(gpGlobals->field_90 - 1))
             {
@@ -120,7 +120,7 @@ double BotFillThink__11CBotManager(float idx)
                     v1 = 0xffffffff;
                     v0 = 0xffffffff;
                 }
-                sub_4892c0(idx);
+                CBotManager::CreateBot(idx);
                 *(char *)(*(unsigned int *)&idx + 24) = *(char *)(*(unsigned int *)&idx + 24) - 1;
                 return v13;
             }
@@ -128,7 +128,7 @@ double BotFillThink__11CBotManager(float idx)
         }
         if (*(char *)(*(unsigned int *)&idx + 3396) >= *(short *)(*(unsigned int *)&idx + 28) || *(short *)(*(unsigned int *)&idx + 28) == 0xffff)
             return v13;
-        sub_4892c0(idx, -0x1, -0x1, 0, -0x1, -0x1);
+        CBotManager::CreateBot(idx, -0x1, -0x1, 0, -0x1, -0x1);
         return v13;
     }
     else

@@ -55,7 +55,7 @@ typedef struct st_4dca30_4 {
     struct st_4dca30_2 *field_4;
 } st_4dca30_4;
 
-extern float g_5bd02c;
+extern float plcatchup+12;
 
 st_4dca30_0 * PlayerSpawn__18CHalfLifeMultiplayP11CBasePlayer(st_4dca30_7 *a0, st_4dca30_5 *a1)
 {
@@ -70,12 +70,12 @@ st_4dca30_0 * PlayerSpawn__18CHalfLifeMultiplayP11CBasePlayer(st_4dca30_7 *a0, s
 
     a1->field_0->field_16b = a1->field_0->field_16b | 128;
     a0->field_44->field_f0(a0);
-    if (g_5bd02c == 1.0f)
+    if (plcatchup+12 == 1.0f)
     {
         v4 = a1->field_764->field_4->field_14(a1->field_764);
         if (a0->field_4)
         {
-            v5 = sub_48ced0(a1);
+            v5 = CBasePlayer::GetPotentialPL(a1);
             v3 = a0->field_4 - v5;
             v2 = __fnstcw();
             v1 = v2 | 0xc00;
@@ -87,20 +87,20 @@ st_4dca30_0 * PlayerSpawn__18CHalfLifeMultiplayP11CBasePlayer(st_4dca30_7 *a0, s
                 v4 = a1->field_748;
             }
         }
-        sub_48b8d0(a1, v4);
+        CBasePlayer::SetMaxPowerLevel(a1, v4);
     }
     else
     {
         v4 = a1->field_748;
     }
     a1->field_750 = 0xffffffff;
-    sub_487b40(a1, v4);
+    CBasePlayer::SetPowerLevel(a1, v4);
     v0 = a1->field_764->field_4->field_c(a1->field_764);
     v6 = a1->field_764->field_4->field_10(a1->field_764);
     *(float *)&a1->field_0[1].padding_0[244] = 1000.0f;
     a1->field_74c = v0;
     a1->field_24c = v6;
-    sub_48c420(a1, v6);
+    CBasePlayer::SetMaxHealth(a1, v6);
     v7 = a1->field_0;
     v3 = v6;
     v7->field_160 = (float)v3;

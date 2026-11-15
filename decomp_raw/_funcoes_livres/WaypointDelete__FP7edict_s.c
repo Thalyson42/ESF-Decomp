@@ -8,11 +8,11 @@ typedef struct st_5897e0_1 {
     unsigned int field_0;
 } st_5897e0_1;
 
-extern st_5897e0_1 *g_616834;
+extern st_5897e0_1 *g_engfuncs.pfnEmitSound;
 extern void waypoints;
-extern char g_626821[4];
-extern char g_626822[4];
-extern float g_626824[4];
+extern char waypoints+1[4];
+extern char waypoints+2[4];
+extern float waypoints+4[4];
 extern int num_waypoints;
 extern unsigned int paths[4];
 extern unsigned int wp_display_time;
@@ -50,23 +50,23 @@ double WaypointDelete__FP7edict_s(float a0)
 
     if (num_waypoints <= 0)
         return v28;
-    index = sub_48e090(a0, 50.0f, -0x1);
+    index = WaypointFindNearest(a0, 50.0f, -0x1);
     if (index == 0xffffffff)
         return 50.0;
     v14 = index * 16;
-    if (g_626821[v14] & 4 || *(short *)&(&waypoints)[v14] < 0 || g_626822[v14] & 1 || g_626822[v14] & 4)
+    if (waypoints+1[v14] & 4 || *(short *)&(&waypoints)[v14] < 0 || waypoints+2[v14] & 1 || waypoints+2[v14] & 4)
     {
         v2 = -0x1;
         v1 = 9999;
         v15 = 0;
         if (0 < num_waypoints)
         {
-            v0 = &g_626824[0];
-            v16 = &g_626824[4 * index];
+            v0 = &waypoints+4[0];
+            v16 = &waypoints+4[4 * index];
             do
             {
                 v17 = v15 * 16;
-                if (*(int *)&(&waypoints)[v17] >= 0 && g_626821[v17] & 64)
+                if (*(int *)&(&waypoints)[v17] >= 0 && waypoints+1[v17] & 64)
                 {
                     idx2 = v17 + (char *)v0;
                     v19 = *(float *)idx2 - *v16;
@@ -78,7 +78,7 @@ double WaypointDelete__FP7edict_s(float a0)
                     v22 = v19 * v19 + v20 * v20 + v21 * v21;
                     v23 = sqrt(v22);
                     if (isnan(v23))
-                        sub_487dc0(*(unsigned int *)&v22);
+                        sqrt(*(unsigned int *)&v22);
                     else
                         v22 = v23;
                     v9 = (float)v22;
@@ -99,13 +99,13 @@ double WaypointDelete__FP7edict_s(float a0)
             v6 = 0;
             v7 = 0;
             v8 = 0;
-            *(unsigned int *)((char *)&g_626824[0] + idx) = v6;
-            *(unsigned int *)((char *)&g_626824[0] + idx + 4) = v7;
-            *(unsigned int *)((char *)&g_626824[0] + idx + 8) = v8;
+            *(unsigned int *)((char *)&waypoints+4[0] + idx) = v6;
+            *(unsigned int *)((char *)&waypoints+4[0] + idx + 4) = v7;
+            *(unsigned int *)((char *)&waypoints+4[0] + idx + 8) = v8;
             (&wp_display_time)[v2] = 0;
         }
     }
-    sub_489b90((short)index);
+    WaypointDeletePath((short)index);
     v25 = index * 4;
     if (*(int *)(v25 + (char *)&paths[0]))
     {
@@ -114,7 +114,7 @@ double WaypointDelete__FP7edict_s(float a0)
         {
             do
             {
-                sub_48cf10(iter);
+                free@GLIBC_2.0(iter);
                 iter = iter->field_8;
             } while (iter);
         }
@@ -125,11 +125,11 @@ double WaypointDelete__FP7edict_s(float a0)
     v6 = 0;
     v7 = 0;
     v8 = 0;
-    *(unsigned int *)((char *)&g_626824[0] + idx1) = v6;
-    *(unsigned int *)((char *)&g_626824[0] + idx1 + 4) = v7;
-    *(unsigned int *)((char *)&g_626824[0] + idx1 + 8) = v8;
+    *(unsigned int *)((char *)&waypoints+4[0] + idx1) = v6;
+    *(unsigned int *)((char *)&waypoints+4[0] + idx1 + 4) = v7;
+    *(unsigned int *)((char *)&waypoints+4[0] + idx1 + 8) = v8;
     (&wp_display_time)[index] = 0;
-    g_616834(a0, 1, "weapons/mine_activate.wav", 0x3f800000, 0.800000011920929f, 0, 100);
+    g_engfuncs.pfnEmitSound(a0, 1, "weapons/mine_activate.wav", 0x3f800000, 0.800000011920929f, 0, 100);
     return 50.0;
 }
 

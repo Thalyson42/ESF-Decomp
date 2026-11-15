@@ -80,7 +80,7 @@ double Think__28CSwoopCloseToEnemyComboEntry(st_55c670_3 *a0)
         v14 = v11 * v11 + v12 * v12 + v13 * v13;
         v15 = sqrt(v14);
         if (isnan(v15))
-            sub_487dc0(*(unsigned int *)&v14);
+            sqrt(*(unsigned int *)&v14);
         else
             v14 = v15;
         v1 = (float)v14;
@@ -90,7 +90,7 @@ double Think__28CSwoopCloseToEnemyComboEntry(st_55c670_3 *a0)
             a0->field_0 = 2;
             if (!a0->field_4->field_320)
                 return v16;
-            sub_48c5a0(a0->field_4);
+            CBasePlayer::StopFly(a0->field_4);
             a0->field_4->field_a10 = 0;
             v17 = *(float *)gpGlobals + 0.5;
             a0->field_4->field_a14 = (float)v17;
@@ -98,16 +98,16 @@ double Think__28CSwoopCloseToEnemyComboEntry(st_55c670_3 *a0)
         }
         else
         {
-            sub_48b720(a0->field_4, a0->field_4->field_b6c);
+            CBot::AimAtEnemy(a0->field_4, a0->field_4->field_b6c);
             v18 = a0->field_4;
             if (*(int *)(*(int *)v18->field_b6c + 264) == 11)
             {
                 v16 = (!v18->field_ff0 ? v18->field_c14 + 30.0 : a0->field_4->field_c14 - 30.0);
-                sub_48d430((float)v16);
+                UTIL_WrapAngle((float)v16);
                 a0->field_4->field_c14 = (float)v16;
             }
-            sub_48d0d0(a0->field_4);
-            sub_488e30(a0->field_4, 16);
+            CBot::ResetMoveSpeed(a0->field_4);
+            CBot::SetMoveDir(a0->field_4, 16);
             return v16;
         }
     }

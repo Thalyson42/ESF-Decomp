@@ -17,11 +17,11 @@ unsigned int PrimaryAttack__12CKameTorpedo(st_4cac10_1 *a0)
     unsigned int v0;  // eax
 
     if (a0->field_80->field_334)
-        return sub_48a400(a0);
-    v0 = sub_48c470(a0);
+        return CChargedAttack::PrimaryAttack(a0);
+    v0 = CKameTorpedo::UpdateTorpedoList(a0);
     if (a0->field_1f4 > 5)
         return v0;
     a0->field_1f8 = 0;
-    return sub_48a400(a0);
+    return CChargedAttack::PrimaryAttack(a0);
 }
 

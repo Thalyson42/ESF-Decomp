@@ -71,8 +71,8 @@ typedef struct st_591ad0_0 {
 } st_591ad0_0;
 
 extern float vec3_origin;
-extern float g_5ccd84;
-extern float g_5ccd88;
+extern float vec3_origin+4;
+extern float vec3_origin+8;
 extern st_591ad0_0 *pmove;
 
 double PM_SpectatorMove(void)
@@ -106,12 +106,12 @@ double PM_SpectatorMove(void)
 
     if (pmove->field_1fc == 3)
     {
-        sub_48c330(&pmove->field_5c);
+        Length(&pmove->field_5c);
         if (1.0 > v11)
         {
             pmove->field_5c = vec3_origin;
-            pmove->field_60 = g_5ccd84;
-            pmove->field_64 = g_5ccd88;
+            pmove->field_60 = vec3_origin+4;
+            pmove->field_64 = vec3_origin+8;
         }
         else
         {
@@ -123,12 +123,12 @@ double PM_SpectatorMove(void)
             v15 = v14 - (0.0 + v2 * v13 * pmove->field_10);
             if (0.0 > v15)
                 v15 = 0.0;
-            sub_48d230(&pmove->field_5c, (float)(v15 / v14), &pmove->field_5c);
+            VectorScale(&pmove->field_5c, (float)(v15 / v14), &pmove->field_5c);
         }
         v1 = pmove->field_45468;
         v0 = pmove->field_4546c;
-        sub_489290(&pmove->field_14);
-        sub_489290(&pmove->field_20);
+        VectorNormalize(&pmove->field_14);
+        VectorNormalize(&pmove->field_20);
         idx = 0;
         do
         {
@@ -140,10 +140,10 @@ double PM_SpectatorMove(void)
         v3 = v7;
         v4 = v8;
         v5 = (float)v17;
-        sub_489290(&v3);
+        VectorNormalize(&v3);
         if (v17 > pmove->field_4f4f0->field_c)
         {
-            sub_48d230(&v6, (float)(pmove->field_4f4f0->field_c / v17), &v6);
+            VectorScale(&v6, (float)(pmove->field_4f4f0->field_c / v17), &v6);
             v17 = pmove->field_4f4f0->field_c;
         }
         v18 = v17 - (pmove->field_5c * v3 + pmove->field_60 * v4 + pmove->field_64 * v5);
@@ -161,7 +161,7 @@ double PM_SpectatorMove(void)
             *(float *)(v21 + v22) = (float)v23;
             j += 1;
         } while (j <= 2);
-        sub_48c590(&pmove->field_38, pmove->field_10, &pmove->field_5c, &pmove->field_38);
+        VectorMA(&pmove->field_38, pmove->field_10, &pmove->field_5c, &pmove->field_38);
         return v23;
     }
     else if (pmove->field_200 > 0)
@@ -175,7 +175,7 @@ double PM_SpectatorMove(void)
             } while (v24 < pmove->field_24c && (&pmove->field_2a0)[56 * v24] != pmove->field_200);
         }
         if (v24 == pmove->field_24c)
-            return g_5ccd88;
+            return vec3_origin+8;
         v25 = v24 * 224;
         *(float *)&pmove->field_44 = *(float *)&pmove->padding_2a4[v25];
         *(float *)&pmove->field_48 = *(float *)&pmove->padding_2a4[4 + v25];
@@ -184,9 +184,9 @@ double PM_SpectatorMove(void)
         *(float *)&pmove->field_3c = *(float *)&pmove->padding_250[40 + v25];
         *(float *)&pmove->field_40 = *(float *)&pmove->padding_250[44 + v25];
         pmove->field_5c = vec3_origin;
-        pmove->field_60 = g_5ccd84;
-        pmove->field_64 = g_5ccd88;
-        return g_5ccd88;
+        pmove->field_60 = vec3_origin+4;
+        pmove->field_64 = vec3_origin+8;
+        return vec3_origin+8;
     }
     else
     {

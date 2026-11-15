@@ -23,14 +23,14 @@ typedef struct st_5891f0_2 {
 
 extern char g_waypoint_on;
 extern char g_path_waypoint_enable;
-extern st_5891f0_2 *g_616834;
+extern st_5891f0_2 *g_engfuncs.pfnEmitSound;
 extern st_5891f0_1 *gpGlobals;
 extern void waypoints;
-extern char g_626821[4];
-extern unsigned int g_626824[4];
+extern char waypoints+1[4];
+extern unsigned int waypoints+4[4];
 extern unsigned int last_waypoint;
-extern unsigned int g_62a824;
-extern unsigned int g_62a828;
+extern unsigned int last_waypoint+4;
+extern unsigned int last_waypoint+8;
 extern int num_waypoints;
 extern unsigned int wp_display_time;
 
@@ -78,12 +78,12 @@ int * WaypointAdd__FP7edict_s(float a0)
     idx = idx1 * 16;
     *(unsigned int *)&(&waypoints)[idx] = 0;
     v20 = (st_5891f0_0 *)a0;
-    *(float *)((char *)&g_626824[0] + idx) = v20->field_88;
-    *(float *)((char *)&g_626824[0] + idx + 4) = v20->field_8c;
-    *(float *)((char *)&g_626824[0] + idx + 8) = v20->field_90;
+    *(float *)((char *)&waypoints+4[0] + idx) = v20->field_88;
+    *(float *)((char *)&waypoints+4[0] + idx + 4) = v20->field_8c;
+    *(float *)((char *)&waypoints+4[0] + idx + 8) = v20->field_90;
     *(float *)&last_waypoint = v20->field_88;
-    *(float *)&g_62a824 = v20->field_8c;
-    *(float *)&g_62a828 = v20->field_90;
+    *(float *)&last_waypoint+4 = v20->field_8c;
+    *(float *)&last_waypoint+8 = v20->field_90;
     *(float *)&(&wp_display_time)[idx1] = *(float *)gpGlobals;
     v3 = 0;
     v4 = 0;
@@ -112,9 +112,9 @@ int * WaypointAdd__FP7edict_s(float a0)
     v6 = v12;
     v7 = v13;
     v8 = v14;
-    sub_48a5d0(a0, &v3, &v6, 30, 0, 0, 0, 0xff, 250, 5);
+    WaypointDrawBeam(a0, &v3, &v6, 30, 0, 0, 0, 0xff, 250, 5);
     if (g_waypoint_on)
-        g_616834(a0, 1, "weapons/xbow_hit1.wav", 0x3f800000, 0.800000011920929f, 0, 100);
+        g_engfuncs.pfnEmitSound(a0, 1, "weapons/xbow_hit1.wav", 0x3f800000, 0.800000011920929f, 0, 100);
     if (idx1 == num_waypoints)
         num_waypoints = num_waypoints + 1;
     v22 = 0;
@@ -126,23 +126,23 @@ int * WaypointAdd__FP7edict_s(float a0)
         if (v22 != idx1)
         {
             v24 = v22 * 16;
-            if (!(g_626821[v24] & 64))
+            if (!(waypoints+1[v24] & 64))
             {
                 v1 = 0;
                 v25 = (st_5891f0_3 *)a0;
                 v3 = v25->field_88;
                 *(float *)&v4 = *(float *)&v23[1];
                 *(float *)&v5 = *(float *)&v23[2];
-                index = v24 + (char *)&g_626824[0];
+                index = v24 + (char *)&waypoints+4[0];
                 v6 = *(float *)index;
                 v7 = *(float *)(index + 4);
                 v8 = *(float *)(index + 8);
-                if ((char)sub_48c5f0(&v3, &v6, v25))
+                if ((char)WaypointReachable(&v3, &v6, v25))
                     v1 = g_path_waypoint_enable != 0;
                 if (v1)
-                    sub_48bc80((short)idx1, (short)v22);
+                    WaypointAddPath((short)idx1, (short)v22);
                 v0 = 0;
-                v27 = &g_626824[4 * v22];
+                v27 = &waypoints+4[4 * v22];
                 v3 = *v27;
                 v4 = v27[1];
                 v5 = v27[2];
@@ -150,10 +150,10 @@ int * WaypointAdd__FP7edict_s(float a0)
                 v6 = v28->field_88;
                 *(float *)&v7 = *(float *)&v23[1];
                 *(float *)&v8 = *(float *)&v23[2];
-                if ((char)sub_48c5f0(&v3, &v6, v28))
+                if ((char)WaypointReachable(&v3, &v6, v28))
                     v0 = g_path_waypoint_enable != 0;
                 if (v0)
-                    sub_48bc80((short)v22, (short)idx1);
+                    WaypointAddPath((short)v22, (short)idx1);
             }
         }
     } while ((v22 += 1, v22 < num_waypoints));

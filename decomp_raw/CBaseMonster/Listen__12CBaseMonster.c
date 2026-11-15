@@ -26,14 +26,14 @@ unsigned int Listen__12CBaseMonster(float idx)
     v0 = (*(int *)(*(int *)(*(unsigned int *)&idx + 96) + 432))(idx);
     if (*(int *)(*(unsigned int *)&idx + 396))
         v0 &= *(int *)(*(int *)(*(unsigned int *)&idx + 396) + 12);
-    v1 = sub_48c950();
+    v1 = CSoundEnt::ActiveList();
     *(unsigned int *)(*(unsigned int *)&idx + 260) = *(int *)(*(unsigned int *)&idx + 260) & 0xfff9ffbf;
     v11 = (*(int *)(*(int *)(*(unsigned int *)&idx + 96) + 444))(idx);
     if (v1 == -0x1)
         return v11;
     do
     {
-        v12 = sub_488470(v1);
+        v12 = CSoundEnt::SoundPointerForIndex(v1);
         if (v12 && v0 & (int)v12[12])
         {
             (*(int *)(*(int *)(*(unsigned int *)&idx + 96) + 212))(&v3, idx);
@@ -46,14 +46,14 @@ unsigned int Listen__12CBaseMonster(float idx)
             v16 = v13 * v13 + v14 * v14 + v15 * v15;
             v17 = sqrt(v16);
             if (isnan(v17))
-                sub_487dc0(*(unsigned int *)&v16);
+                sqrt(*(unsigned int *)&v16);
             else
                 v16 = v17;
             v2 = (float)v16;
             if ((double)(int)v12[16] * (float)v18 >= v2)
             {
                 *(int *)&v12[28] = *(int *)(*(unsigned int *)&idx + 560);
-                if (sub_4884a0(v12))
+                if (CSound::FIsSound(v12))
                 {
                     *(char *)(*(unsigned int *)&idx + 262) = *(char *)(*(unsigned int *)&idx + 262) | 2;
                 }

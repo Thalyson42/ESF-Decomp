@@ -79,7 +79,7 @@ double TaskThink__22CShootScatterShotsTask(float idx)
             {
                 if (!v17->field_b6c)
                 {
-                    sub_48d7b0(v17);
+                    CBot::GoToAnPreviousLocation(v17);
                     return v16;
                 }
                 goto LABEL_5506b0;
@@ -89,10 +89,10 @@ double TaskThink__22CShootScatterShotsTask(float idx)
         {
 LABEL_5506b0:
             v0 = *(int *)(*(unsigned int *)&idx + 8);
-            sub_48bfd0(v0);
+            CBot::BotCombatMovement(v0);
             v0 = _INSERT(CONCAT(v0, 0), 4, *(int *)(*(int *)(*(unsigned int *)&idx + 8) + 2924));
             v1 = *(int *)(*(unsigned int *)&idx + 8);
-            if (!(char)sub_48bf70(v1, *(unsigned int *)((void*)&v0 + 4)))
+            if (!(char)CBot::CanAttackPlayer(v1, *(unsigned int *)((void*)&v0 + 4)))
                 return v16;
             *(char *)(*(int *)(*(unsigned int *)&idx + 12) + 0x200) = *(char *)(*(int *)(*(unsigned int *)&idx + 12) + 0x200) | 1;
             if (*(char *)(*(unsigned int *)&idx + 32))
@@ -103,12 +103,12 @@ LABEL_550870:
                     return v16;
                 v0 = _INSERT((unsigned long long)v1, 4, 1);
                 *(int *)&v0 = *(int *)(*(unsigned int *)&idx + 8);
-                sub_48ab70(v0, *(unsigned int *)((void*)&v0 + 4));
+                CBot::ToggleTurbo(v0, *(unsigned int *)((void*)&v0 + 4));
                 *(float *)(*(int *)(*(unsigned int *)&idx + 8) + 2740) = (float)(1.5 + *(float *)gpGlobals);
                 return v16;
             }
             v18 = (isunordered(*(float *)(*(unsigned int *)&idx + 28) + 0.550000011920929, *(float *)gpGlobals) ? 0x4500 : *(float *)(*(unsigned int *)&idx + 28) + 0.550000011920929 == *(float *)gpGlobals ? 0x4000 : *(float *)(*(unsigned int *)&idx + 28) + 0.550000011920929 < *(float *)gpGlobals ? 0x100 : 0);
-            if (((char)((0x3800 | (unsigned short)v18 & 0x4700) >> 8) & 69) - 1 >= 64 || !(v1 = (st_550600_3 *)idx, v19 = sub_488650(v1), v19))
+            if (((char)((0x3800 | (unsigned short)v18 & 0x4700) >> 8) & 69) - 1 >= 64 || !(v1 = (st_550600_3 *)idx, v19 = CShootScatterShotsTask::GetFurthestScatterShot(v1), v19))
                 goto LABEL_550870;
             v20 = &*v19->field_8;
             v9 = *v19->field_8;
@@ -126,7 +126,7 @@ LABEL_550870:
             if (isnan(v26))
             {
                 v1 = (st_550600_3 *)v25;
-                sub_487dc0((unsigned long long)v1);
+                sqrt((unsigned long long)v1);
             }
             else
             {
@@ -150,7 +150,7 @@ LABEL_550870:
             if (isnan(v34))
             {
                 v1 = (st_550600_3 *)v33;
-                sub_487dc0((unsigned long long)v1);
+                sqrt((unsigned long long)v1);
             }
             else
             {

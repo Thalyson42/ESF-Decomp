@@ -6,6 +6,6 @@ typedef struct st_4d9de0_0 {
 
 int SentenceStop__12CBaseMonster(st_4d9de0_0 **a0)
 {
-    return sub_489390(*a0->field_208, 2, "common/null.wav", 0x3f800000, 2.0f, 0, 100);
+    return EMIT_SOUND_DYN(*a0->field_208, 2, "common/null.wav", 0x3f800000, 2.0f, 0, 100);
 }
 

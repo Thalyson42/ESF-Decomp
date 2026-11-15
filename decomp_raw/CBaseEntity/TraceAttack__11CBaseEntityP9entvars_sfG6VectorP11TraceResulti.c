@@ -46,14 +46,14 @@ unsigned int TraceAttack__11CBaseEntityP9entvars_sfG6VectorP11TraceResulti(st_4a
     v5 = *(float *)&v8[2] - v2;
     if (a0->field_0->field_16c == 0.0f)
         return v11;
-    sub_48da60(a1, a0, a2, a5);
+    AddMultiDamage(a1, a0, a2, a5);
     v9 = a0->field_60->field_40(a0);
     if (v9 == -0x1 && !((char)a5 & 2))
         return v10;
     v0 = v3;
     v1 = v4;
     v2 = v5;
-    sub_489690(&v0, v9, a2);
+    SpawnBlood(&v0, v9, a2);
     v0 = *a3;
     v1 = a3[1];
     v2 = a3[2];

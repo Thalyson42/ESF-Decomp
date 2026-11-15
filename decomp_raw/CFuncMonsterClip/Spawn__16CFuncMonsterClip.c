@@ -8,14 +8,14 @@ typedef struct st_491670_0 {
     unsigned int field_0;
 } st_491670_0;
 
-extern st_491670_0 *g_6168a4;
+extern st_491670_0 *g_engfuncs.pfnCVarGetFloat;
 
 int Spawn__16CFuncMonsterClip(double a0, float a1)
 {
     st_491670_1 *v1;  // eax
 
-    sub_48cfb0(a1);
-    g_6168a4("showtriggers");
+    CFuncWall::Spawn(a1);
+    g_engfuncs.pfnCVarGetFloat("showtriggers");
     if (a0 == 0.0)
         *(unsigned int *)(*(int *)a1 + 280) = 128;
     v1 = *(int *)a1;

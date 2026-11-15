@@ -39,6 +39,6 @@ int SetToggleState__8CRotDoori(st_4ad230_1 *a0, unsigned int a1)
         v1 = a0->field_bc;
     }
     v0->field_58 = v1;
-    return sub_48db50(a0->field_0, &a0->field_0->field_8);
+    return UTIL_SetOrigin(a0->field_0, &a0->field_0->field_8);
 }
 

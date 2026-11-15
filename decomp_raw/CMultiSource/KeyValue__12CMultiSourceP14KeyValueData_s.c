@@ -15,39 +15,39 @@ typedef struct st_495930_2 {
     unsigned int field_0;
 } st_495930_2;
 
-extern st_495930_2 *g_6168cc;
+extern st_495930_2 *g_engfuncs.pfnAllocString;
 
 st_495930_1 * KeyValue__12CMultiSourceP14KeyValueData_s(st_495930_1 *a0, st_495930_0 *a1)
 {
     st_495930_1 *v0;  // eax
     st_495930_1 *v1;  // eax
 
-    v0 = sub_488af0(a1->field_4, "style");
+    v0 = strcmp@GLIBC_2.0(a1->field_4, "style");
     if (v0)
     {
-        v0 = sub_488af0(a1->field_4, "height");
+        v0 = strcmp@GLIBC_2.0(a1->field_4, "height");
         if (v0)
         {
-            v0 = sub_488af0(a1->field_4, "killtarget");
+            v0 = strcmp@GLIBC_2.0(a1->field_4, "killtarget");
             if (v0)
             {
-                v0 = sub_488af0(a1->field_4, "value1");
+                v0 = strcmp@GLIBC_2.0(a1->field_4, "value1");
                 if (v0)
                 {
-                    v0 = sub_488af0(a1->field_4, "value2");
+                    v0 = strcmp@GLIBC_2.0(a1->field_4, "value2");
                     if (v0)
                     {
-                        v0 = sub_488af0(a1->field_4, "value3");
+                        v0 = strcmp@GLIBC_2.0(a1->field_4, "value3");
                         if (v0)
                         {
-                            v1 = sub_488af0(a1->field_4, "globalstate");
+                            v1 = strcmp@GLIBC_2.0(a1->field_4, "globalstate");
                             if (v1)
                             {
                                 a1->field_c = 0;
                                 return v1;
                             }
                             v0 = a0;
-                            v0->field_1e8 = g_6168cc(a1->field_8);
+                            v0->field_1e8 = g_engfuncs.pfnAllocString(a1->field_8);
                         }
                     }
                 }

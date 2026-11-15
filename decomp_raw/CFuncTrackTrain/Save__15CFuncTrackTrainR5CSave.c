@@ -3,6 +3,6 @@ extern int _15CFuncTrackTrain.m_SaveData;
 
 unsigned int Save__15CFuncTrackTrainR5CSave(int a0, int a1)
 {
-    return (!sub_48d900(a0, a1) ? 0 : sub_48db60(a1, "CFuncTrackTrain", a0, &_15CFuncTrackTrain.m_SaveData, 12));
+    return (!CBaseEntity::Save(a0, a1) ? 0 : CSave::WriteFields(a1, "CFuncTrackTrain", a0, &_15CFuncTrackTrain.m_SaveData, 12));
 }
 

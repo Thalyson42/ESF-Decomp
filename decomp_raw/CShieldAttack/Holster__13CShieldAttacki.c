@@ -24,7 +24,7 @@ unsigned int * Holster__13CShieldAttacki(st_5195a0_0 *a0)
 
     if (a0->field_d4 <= 0)
         return v1;
-    sub_48d080(a0);
+    CShieldAttack::RemoveShield(a0);
     a0->field_d4 = 0;
     a0->field_80->field_33c = 0;
     a0->field_80->field_334 = 0;

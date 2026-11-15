@@ -54,9 +54,9 @@ typedef struct st_529520_4 {
 } st_529520_4;
 
 extern char RotateThink__5CRock;
-extern st_529520_2 *g_6167c8;
-extern st_529520_2 *g_616928;
-extern st_529520_2 *g_61692c;
+extern st_529520_2 *g_engfuncs.pfnSetModel;
+extern st_529520_2 *g_engfuncs.pfnRandomLong;
+extern st_529520_2 *g_engfuncs.pfnRandomFloat;
 extern st_529520_4 *gpGlobals;
 
 st_529520_3 * CreateRock__5CRockG6VectorP9entvars_sff(float *a0, st_529520_5 *a1, float a2, float a3)
@@ -74,14 +74,14 @@ st_529520_3 * CreateRock__5CRockG6VectorP9entvars_sff(float *a0, st_529520_5 *a1
     float v6;  // [bp-0x20]
     float v7;  // [bp-0x1c]
 
-    v8 = sub_48cb00(0);
+    v8 = GetClassPtr__H1Z5CRock_PX01_PX01(0);
     v8->field_60->field_8(v8);
     v8->field_0->field_108 = 5;
     v8->field_0->field_10c = 0;
-    g_6167c8(v8->field_0->field_208, "models/rocks.mdl");
-    g_61692c(0.5f, 1.5f);
+    g_engfuncs.pfnSetModel(v8->field_0->field_208, "models/rocks.mdl");
+    g_engfuncs.pfnRandomFloat(0.5f, 1.5f);
     *(float *)&v8->field_0->padding_118[44] = 0.5f;
-    v9 = g_616928(0, 6);
+    v9 = g_engfuncs.pfnRandomLong(0, 6);
     v8->field_0->field_114 = v9;
     v8->field_0->field_0 = -1 * gpGlobals->field_98 + 5938505;
     v8->field_0->field_198 = a1->field_208;
@@ -89,20 +89,20 @@ st_529520_3 * CreateRock__5CRockG6VectorP9entvars_sff(float *a0, st_529520_5 *a1
     v8->field_2d0 = 80;
     v1 = (float)(3.141592653589793 * a2 + 3.141592653589793 * a2);
     v0 = v1 + v1;
-    sub_48aeb0(*(unsigned int *)&v0);
+    sin(*(unsigned int *)&v0);
     v10 = v0 * 15.0;
     v5 = (float)v10;
-    sub_48a9e0(*(unsigned int *)&v0, *(unsigned int *)((void*)&v0 + 4));
+    cos(*(unsigned int *)&v0, *(unsigned int *)((void*)&v0 + 4));
     v6 = (float)(v10 * 15.0);
     v7 = 0;
     v2 = *a0 + v5;
     v3 = a0[1] + v6;
     v4 = a0[2] + v7;
-    sub_48db50(v8->field_0, &v2);
-    sub_48a9e0(*(unsigned int *)&v0, *(unsigned int *)((void*)&v0 + 4));
+    UTIL_SetOrigin(v8->field_0, &v2);
+    cos(*(unsigned int *)&v0, *(unsigned int *)((void*)&v0 + 4));
     v11 = v4 * 30.0;
     v8->field_0->field_20 = (float)v11;
-    sub_48aeb0(*(unsigned int *)&v0, *(unsigned int *)((void*)&v0 + 4));
+    sin(*(unsigned int *)&v0, *(unsigned int *)((void*)&v0 + 4));
     v8->field_0->field_24 = (float)(-v11 * 30.0);
     v8->field_0->field_28 = a3;
     *(float *)&v8->field_2dc = v1;

@@ -9,8 +9,8 @@ typedef struct st_4c8b00_0 {
 } st_4c8b00_0;
 
 extern char ItemTouch__5CItemP11CBaseEntity;
-extern st_4c8b00_0 *g_616828;
-extern st_4c8b00_0 *g_6168b4;
+extern st_4c8b00_0 *g_engfuncs.pfnDropToFloor;
+extern st_4c8b00_0 *g_engfuncs.pfnAlertMessage;
 extern st_4c8b00_1 *gpGlobals;
 
 unsigned int Spawn__5CItem(float idx)
@@ -28,22 +28,22 @@ unsigned int Spawn__5CItem(float idx)
 
     *(unsigned int *)(*(int *)idx + 264) = 6;
     *(unsigned int *)(*(int *)idx + 268) = 1;
-    sub_48db50(*(int *)idx, *(int *)idx + 8);
+    UTIL_SetOrigin(*(int *)idx, *(int *)idx + 8);
     v5 = 16.0f;
     v6 = 16.0f;
     v7 = 16.0f;
     v2 = -16.0f;
     v3 = -16.0f;
     v4 = 0;
-    *(unsigned int *)(*(unsigned int *)&idx + 20) = _INSERT(sub_48a0d0(*(int *)idx, &v2, &v5), 0, 0) | 0xffff0000;
+    *(unsigned int *)(*(unsigned int *)&idx + 20) = _INSERT(UTIL_SetSize(*(int *)idx, &v2, &v5), 0, 0) | 0xffff0000;
     *(char **)(*(unsigned int *)&idx + 24) = &ItemTouch__5CItemP11CBaseEntity;
-    v10 = g_616828(*(int *)(*(int *)idx + 520));
+    v10 = g_engfuncs.pfnDropToFloor(*(int *)(*(int *)idx + 520));
     if (v10)
         return v10;
     v11 = *(int *)idx;
     v1 = *(float *)&v11[4];
     v0 = *(float *)&v11[3];
-    g_6168b4(4, "Item %s fell out of level at %f,%f,%f", *v11 + gpGlobals->field_98, (unsigned int)(*(float *)&v11[2] >> 0));
-    return sub_48cc00(idx);
+    g_engfuncs.pfnAlertMessage(4, "Item %s fell out of level at %f,%f,%f", *v11 + gpGlobals->field_98, (unsigned int)(*(float *)&v11[2] >> 0));
+    return UTIL_Remove(idx);
 }
 

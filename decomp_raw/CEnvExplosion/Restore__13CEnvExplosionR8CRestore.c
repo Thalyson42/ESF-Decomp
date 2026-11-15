@@ -3,6 +3,6 @@ extern int _13CEnvExplosion.m_SaveData;
 
 unsigned int Restore__13CEnvExplosionR8CRestore(int a0, int a1)
 {
-    return (!sub_48a3e0(a0, a1) ? 0 : sub_48a980(a1, "CEnvExplosion", a0, &_13CEnvExplosion.m_SaveData, 2));
+    return (!CBaseMonster::Restore(a0, a1) ? 0 : CRestore::ReadFields(a1, "CEnvExplosion", a0, &_13CEnvExplosion.m_SaveData, 2));
 }
 

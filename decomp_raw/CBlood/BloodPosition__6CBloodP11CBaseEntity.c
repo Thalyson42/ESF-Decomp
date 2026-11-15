@@ -51,8 +51,8 @@ typedef struct st_4b55d0_1 {
     float field_8;
 } st_4b55d0_1;
 
-extern st_4b55d0_5 *g_6168e0;
-extern st_4b55d0_5 *g_61692c;
+extern st_4b55d0_5 *g_engfuncs.pfnPEntityOfEntIndex;
+extern st_4b55d0_5 *g_engfuncs.pfnRandomFloat;
 
 st_4b55d0_1 * BloodPosition__6CBloodP11CBaseEntity(void)
 {
@@ -79,7 +79,7 @@ st_4b55d0_1 * BloodPosition__6CBloodP11CBaseEntity(void)
         if (v11 && v11->field_60->field_a0(v11))
             v12 = v11->field_0->field_208;
         else
-            v12 = g_6168e0(1);
+            v12 = g_engfuncs.pfnPEntityOfEntIndex(1);
         if (!v12)
             goto LABEL_4b56f4;
         v13 = v12 + 0x22;
@@ -88,11 +88,11 @@ st_4b55d0_1 * BloodPosition__6CBloodP11CBaseEntity(void)
         v8 = *(float *)&v13[2] + v12[127];
         v3 = 10.0f;
         v2 = -10.0f;
-        g_61692c(-10.0f, 10.0f);
+        g_engfuncs.pfnRandomFloat(-10.0f, 10.0f);
         v1 = -10.0f;
-        g_61692c(v2, v3);
+        g_engfuncs.pfnRandomFloat(v2, v3);
         v0 = -10.0f;
-        g_61692c(v2, v3);
+        g_engfuncs.pfnRandomFloat(v2, v3);
         v4 = v1;
         v5 = v0;
         v15 = v8 + (float)v14;

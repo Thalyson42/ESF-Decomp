@@ -41,9 +41,9 @@ typedef struct st_5708a0_3 {
 } st_5708a0_3;
 
 extern unsigned int g_teamplay;
-extern st_5708a0_3 *g_616928;
+extern st_5708a0_3 *g_engfuncs.pfnRandomLong;
 extern st_5708a0_2 *gpGlobals;
-extern unsigned int g_626824[4];
+extern unsigned int waypoints+4[4];
 
 double FindWaypoint__4CBot(st_5708a0_1 *a0)
 {
@@ -95,12 +95,12 @@ double FindWaypoint__4CBot(st_5708a0_1 *a0)
     } while (i <= 2);
     while (1)
     {
-        v21 = sub_48d720(&v3, &v4, a0->field_1008, v2);
+        v21 = WaypointFindPath(&v3, &v4, a0->field_1008, v2);
         if (v21 == -0x1)
             break;
         if (v21 != a0->field_1008 && v21 != a0->field_100c && v21 != a0->field_1010 && v21 != a0->field_1014 && v21 != a0->field_1018 && v21 != a0->field_101c)
         {
-            v22 = &g_626824[4 * v21];
+            v22 = &waypoints+4[4 * v21];
             v9 = *v22;
             v10 = v22[1];
             v11 = v22[2];
@@ -114,7 +114,7 @@ double FindWaypoint__4CBot(st_5708a0_1 *a0)
             v27 = v24 * v24 + v25 * v25 + v26 * v26;
             v28 = sqrt(v27);
             if (isnan(v28))
-                sub_487dc0(*(unsigned int *)&v27);
+                sqrt(*(unsigned int *)&v27);
             else
                 v27 = v28;
             v5 = (float)v27;
@@ -142,7 +142,7 @@ double FindWaypoint__4CBot(st_5708a0_1 *a0)
             }
         }
     }
-    if ((int)g_616928(1, 100) > 20 || (v20 = a0->field_1020, v20 > *(float *)gpGlobals))
+    if ((int)g_engfuncs.pfnRandomLong(1, 100) > 20 || (v20 = a0->field_1020, v20 > *(float *)gpGlobals))
     {
         v31 = v12;
 LABEL_570b08:
@@ -155,9 +155,9 @@ LABEL_570b08:
             a0->field_100c = a0->field_1008;
             a0->field_1008 = v31;
             v32 = v31 * 16;
-            a0->field_ff8 = *(int *)((char *)&g_626824[0] + v32);
-            a0->field_ffc = *(int *)((char *)&g_626824[0] + v32 + 4);
-            a0->field_1000 = *(int *)((char *)&g_626824[0] + v32 + 8);
+            a0->field_ff8 = *(int *)((char *)&waypoints+4[0] + v32);
+            a0->field_ffc = *(int *)((char *)&waypoints+4[0] + v32 + 4);
+            a0->field_1000 = *(int *)((char *)&waypoints+4[0] + v32 + 8);
             v33 = *(float *)gpGlobals;
             *(float *)&a0->field_1004 = v33;
             return v33;
@@ -170,7 +170,7 @@ LABEL_570b08:
     {
         v1 = 2;
         v0 = 0;
-        v29 = g_616928;
+        v29 = g_engfuncs.pfnRandomLong;
         goto LABEL_570aef;
     }
     else
@@ -179,7 +179,7 @@ LABEL_570b08:
         {
             v1 = 1;
             v0 = 0;
-            v29 = g_616928;
+            v29 = g_engfuncs.pfnRandomLong;
 LABEL_570aef:
             idx = v29(v0, v1);
         }

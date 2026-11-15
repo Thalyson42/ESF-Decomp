@@ -10,6 +10,6 @@ char Update__13CVoiceGameMgrd(st_58bff0_0 *a0, double a1)
 
     v0 = a1 + a0->field_10;
     a0->field_10 = v0;
-    return sub_48cf20(a0);
+    return CVoiceGameMgr::UpdateMasks(a0);
 }
 

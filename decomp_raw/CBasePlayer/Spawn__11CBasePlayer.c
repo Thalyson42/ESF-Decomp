@@ -21,11 +21,11 @@ typedef struct st_4fae80_3 {
     struct st_4fae80_2 *field_44;
 } st_4fae80_3;
 
-extern float g_5bd324;
+extern float spawn_invulnerable_time+12;
 extern st_4fae80_3 *g_pGameRules;
-extern st_4fae80_1 *g_6168b4;
-extern st_4fae80_1 *g_616958;
-extern st_4fae80_1 *g_6169a0;
+extern st_4fae80_1 *g_engfuncs.pfnAlertMessage;
+extern st_4fae80_1 *g_engfuncs.pfnSetClientMaxspeed;
+extern st_4fae80_1 *g_engfuncs.pfnSetPhysicsKeyValue;
 extern st_4fae80_0 *gpGlobals;
 
 int Spawn__11CBasePlayer(float idx)
@@ -71,8 +71,8 @@ int Spawn__11CBasePlayer(float idx)
     *(unsigned int *)(*(unsigned int *)&idx + 616) = 0;
     *(unsigned int *)(*(unsigned int *)&idx + 784) = 0;
     *(unsigned int *)(*(unsigned int *)&idx + 2332) = 0;
-    g_6169a0(*(int *)(*(int *)idx + 520), "slj", "0");
-    g_6169a0(*(int *)(*(int *)idx + 520), "hl", "1");
+    g_engfuncs.pfnSetPhysicsKeyValue(*(int *)(*(int *)idx + 520), "slj", "0");
+    g_engfuncs.pfnSetPhysicsKeyValue(*(int *)(*(int *)idx + 520), "hl", "1");
     v12 = *(int *)idx;
     *(unsigned int *)(*(unsigned int *)&idx + 2360) = 0;
     v12[133] = 0;
@@ -82,33 +82,33 @@ int Spawn__11CBasePlayer(float idx)
     *(unsigned int *)(*(unsigned int *)&idx + 2268) = 0;
     *(float *)(*(unsigned int *)&idx + 360) = 0.5f;
     *(unsigned int *)(*(unsigned int *)&idx + 632) = 247;
-    sub_488640();
+    UTIL_WeaponTimeBase();
     *(float *)(*(unsigned int *)&idx + 612) = 0.5f;
     (*(int *)(*(int *)(*(unsigned int *)&idx + 96) + 124))(idx);
     *(unsigned int *)(*(unsigned int *)&idx + 732) = 0;
     *(char *)(*(unsigned int *)&idx + 2352) = *(char *)(*(unsigned int *)&idx + 2352) & 246;
     if (!*(int *)(*(unsigned int *)&idx + 1892))
     {
-        v13 = sub_48d6a0(8);
+        v13 = __builtin_new(8);
         v0 = 1;
         v0 = 0;
-        *(unsigned int *)(*(unsigned int *)&idx + 1892) = sub_48b790(v13, idx);
+        *(unsigned int *)(*(unsigned int *)&idx + 1892) = __10CBaseClassP11CBasePlayer(v13, idx);
         if (v0)
-            sub_48d4e0(v13);
+            __builtin_delete(v13);
         (*(int *)(*(int *)(*(int *)(*(unsigned int *)&idx + 1892) + 4) + 44))(*(int *)(*(unsigned int *)&idx + 1892));
         *(float *)(*(unsigned int *)&idx + 880) = 0.5f;
-        sub_487b40(idx, 0);
-        sub_48b8d0(idx, 0);
+        CBasePlayer::SetPowerLevel(idx, 0);
+        CBasePlayer::SetMaxPowerLevel(idx, 0);
         *(unsigned int *)(*(unsigned int *)&idx + 588) = 0;
         *(unsigned int *)(*(unsigned int *)&idx + 1868) = 0;
         *(unsigned int *)(*(unsigned int *)&idx + 1940) = 0;
-        sub_489800(*(int *)(*(unsigned int *)&idx + 1892));
+        CBaseClass::SetModel(*(int *)(*(unsigned int *)&idx + 1892));
     }
     v14 = (*(int *)(*(int *)(*(int *)(*(unsigned int *)&idx + 1892) + 4) + 52))(*(int *)(*(unsigned int *)&idx + 1892));
     *(unsigned int *)(*(int *)idx + 524) = v14;
     if ((*(int *)(*(int *)(*(int *)(*(unsigned int *)&idx + 1892) + 4) + 52))(*(int *)(*(unsigned int *)&idx + 1892)))
     {
-        *(float *)(*(unsigned int *)&idx + 1852) = gpGlobals->field_0 + g_5bd324;
+        *(float *)(*(unsigned int *)&idx + 1852) = gpGlobals->field_0 + spawn_invulnerable_time+12;
         *(unsigned int *)(*(unsigned int *)&idx + 844) = 1;
         *(unsigned int *)(*(unsigned int *)&idx + 848) = 1;
         *(unsigned int *)(*(int *)idx + 348) = 11;
@@ -167,19 +167,19 @@ int Spawn__11CBasePlayer(float idx)
     *(unsigned int *)(*(unsigned int *)&idx + 1696) = 0;
     *(unsigned int *)(*(unsigned int *)&idx + 1736) = 0;
     v17 = *(unsigned int *)&idx + 896;
-    sub_48b000(v17);
-    sub_487b50(v17, idx);
-    sub_48aea0(*(unsigned int *)&idx + 1284);
+    CPlayerMelee::Reset(v17);
+    CPlayerMelee::SetAttacker(v17, idx);
+    CSwoop::Reset(*(unsigned int *)&idx + 1284);
     *(float *)(*(unsigned int *)&idx + 1404) = idx;
     *(unsigned int *)(*(unsigned int *)&idx + 1744) = 0;
     *(unsigned int *)(*(unsigned int *)&idx + 1828) = 0;
-    sub_48d0e0(*(unsigned int *)&idx + 1748, 0, 80);
+    memset@GLIBC_2.0(*(unsigned int *)&idx + 1748, 0, 80);
     *(char *)(*(int *)idx + 280) = *(char *)(*(int *)idx + 280) & 127;
     *(unsigned int *)(*(unsigned int *)&idx + 1912) = 0;
     *(unsigned int *)(*(unsigned int *)&idx + 1916) = 0;
-    sub_48d960(*(unsigned int *)&idx + 1928, 0);
+    EHANDLE::__as(*(unsigned int *)&idx + 1928, 0);
     g_pGameRules->field_44->field_58(g_pGameRules, idx);
-    v18 = sub_488bc0(idx, 1);
+    v18 = CBaseAnimating::LookupActivity(idx, 1);
     *(unsigned int *)(*(int *)idx + 296) = v18;
     v3 = 4.0f;
     v5 = 4.0f;
@@ -187,7 +187,7 @@ int Spawn__11CBasePlayer(float idx)
     v8 = -4.0f;
     v9 = -4.0f;
     v10 = -9.0f;
-    sub_48a0d0(*(int *)idx, &v8, &v3);
+    UTIL_SetSize(*(int *)idx, &v8, &v3);
     v19 = *(int *)idx;
     v2 = 0;
     v4 = 0;
@@ -203,7 +203,7 @@ int Spawn__11CBasePlayer(float idx)
     *(float *)(*(unsigned int *)&idx + 664) = v5;
     *(unsigned int *)(*(unsigned int *)&idx + 668) = v7;
     if (*(int *)(*(unsigned int *)&idx + 684) == 0xffffffff)
-        g_6168b4(1, "Couldn't alloc player sound slot!\n");
+        g_engfuncs.pfnAlertMessage(1, "Couldn't alloc player sound slot!\n");
     *(unsigned int *)(*(unsigned int *)&idx + 2328) = 0;
     *(unsigned int *)(*(unsigned int *)&idx + 2416) = 0;
     *(unsigned int *)(*(unsigned int *)&idx + 2300) = 1;
@@ -212,8 +212,8 @@ int Spawn__11CBasePlayer(float idx)
     *(unsigned int *)(*(unsigned int *)&idx + 2412) = 0;
     *(unsigned int *)(*(unsigned int *)&idx + 2348) = 0xffffffff;
     *(unsigned int *)(*(unsigned int *)&idx + 1856) = 0;
-    v1 = sub_48a780(idx);
-    g_616958(*(int *)(*(int *)idx + 520), (float)v1);
+    v1 = CBasePlayer::GetMaxSpeed(idx);
+    g_engfuncs.pfnSetClientMaxspeed(*(int *)(*(int *)idx + 520), (float)v1);
     *(unsigned int *)(*(unsigned int *)&idx + 2448) = 0;
     *(unsigned int *)(*(unsigned int *)&idx + 2444) = 0;
     *(float *)(*(unsigned int *)&idx + 2524) = gpGlobals->field_0;

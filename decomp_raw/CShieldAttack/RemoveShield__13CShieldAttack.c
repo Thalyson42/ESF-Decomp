@@ -17,7 +17,7 @@ st_519540_0 * RemoveShield__13CShieldAttack(st_519540_1 *a0)
 
     if (a0->field_c4)
     {
-        sub_48b9c0(a0->field_c4);
+        CShield::Remove(a0->field_c4);
         a0->field_c4 = 0;
     }
     v0 = a0->field_80;

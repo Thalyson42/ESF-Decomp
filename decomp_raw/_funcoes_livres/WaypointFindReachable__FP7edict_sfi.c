@@ -20,8 +20,8 @@ typedef struct st_58a4b0_0 {
 } st_58a4b0_0;
 
 extern void waypoints;
-extern char g_626821[4];
-extern st_58a4b0_1 g_626824;
+extern char waypoints+1[4];
+extern st_58a4b0_1 waypoints+4;
 extern int num_waypoints;
 
 int WaypointFindReachable__FP7edict_sfi(st_58a4b0_0 *a0, float a1, unsigned int a2)
@@ -64,9 +64,9 @@ int WaypointFindReachable__FP7edict_sfi(st_58a4b0_0 *a0, float a1, unsigned int 
         do
         {
             v17 = v4 * 16;
-            if (*(int *)&(&waypoints)[v17] >= 0 && !(g_626821[v17] & 64) && (a2 == 0xffffffff || !((&waypoints)[v17] & 4) || (*(int *)&(&waypoints)[v17] & 3) == a2))
+            if (*(int *)&(&waypoints)[v17] >= 0 && !(waypoints+1[v17] & 64) && (a2 == 0xffffffff || !((&waypoints)[v17] & 4) || (*(int *)&(&waypoints)[v17] & 3) == a2))
             {
-                v18 = &(&g_626824.field_0)[4 * v4];
+                v18 = &(&waypoints+4.field_0)[4 * v4];
                 v19 = &a0->field_88;
                 v20 = *v18 - a0->field_88;
                 v12 = v20;
@@ -77,7 +77,7 @@ int WaypointFindReachable__FP7edict_sfi(st_58a4b0_0 *a0, float a1, unsigned int 
                 v23 = v20 * v20 + v21 * v21 + v22 * v22;
                 v24 = sqrt(v23);
                 if (isnan(v24))
-                    sub_487dc0(*(unsigned int *)&v23);
+                    sqrt(*(unsigned int *)&v23);
                 else
                     v23 = v24;
                 v1 = (float)v23;
@@ -89,8 +89,8 @@ int WaypointFindReachable__FP7edict_sfi(st_58a4b0_0 *a0, float a1, unsigned int 
                     v7 = *(float *)&v25[1] + v26->field_1f8;
                     v8 = *(float *)&v25[2] + v26->field_1fc;
                     v0 = &v6;
-                    v27 = &(&g_626824.field_0)[4 * v4];
-                    sub_487b80(v0, v27, 1, a0->field_288, &v15);
+                    v27 = &(&waypoints+4.field_0)[4 * v4];
+                    UTIL_TraceLine(v0, v27, 1, a0->field_288, &v15);
                     if (1.0 <= v16)
                     {
                         v28 = a0;
@@ -100,7 +100,7 @@ int WaypointFindReachable__FP7edict_sfi(st_58a4b0_0 *a0, float a1, unsigned int 
                         v9 = v27->field_0;
                         v10 = v27->field_4;
                         v11 = v27->field_8;
-                        if ((char)sub_48c5f0(v0, &v9, v28))
+                        if ((char)WaypointReachable(v0, &v9, v28))
                         {
                             v3 = v4;
                             v2 = v1;

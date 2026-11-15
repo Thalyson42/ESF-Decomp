@@ -70,9 +70,9 @@ typedef struct st_4976e0_2 {
 
 extern char ButtonSpark__11CBaseButton;
 extern char ButtonTouch__11CBaseButtonP11CBaseEntity;
-extern st_4976e0_5 *g_6167f8;
-extern st_4976e0_5 *g_6168d4;
-extern st_4976e0_5 *g_6168d8;
+extern st_4976e0_5 *g_engfuncs.pfnFindEntityByString;
+extern st_4976e0_5 *g_engfuncs.pfnPEntityOfEntOffset;
+extern st_4976e0_5 *g_engfuncs.pfnEntOffsetOfPEntity;
 extern st_4976e0_2 *gpGlobals;
 
 unsigned int * ButtonBackHome__11CBaseButton(float a0)
@@ -99,23 +99,23 @@ unsigned int * ButtonBackHome__11CBaseButton(float a0)
     {
         v4 = 0;
         v3 = 3;
-        sub_48d150(a0, sub_488810(*(unsigned int *)&a0 + 212));
+        CBaseDelay::SUB_UseTargets(a0, EHANDLE::__opP11CBaseEntity(*(unsigned int *)&a0 + 212));
     }
     if (*(int *)(*(int *)a0 + 456))
     {
         v5 = NULL;
         while (1)
         {
-            v5 = g_6167f8(v5, "targetname", *(int *)(*(int *)a0 + 456) + gpGlobals->field_98);
+            v5 = g_engfuncs.pfnFindEntityByString(v5, "targetname", *(int *)(*(int *)a0 + 456) + gpGlobals->field_98);
             v9 = 0;
-            if (!v5 || !g_6168d8(v5))
+            if (!v5 || !g_engfuncs.pfnEntOffsetOfPEntity(v5))
                 v9 = 1;
             if (v9)
                 break;
-            if (!sub_488af0((!v5 ? NULL : v5 + 1)->field_0 + gpGlobals->field_98, "multisource"))
+            if (!strcmp@GLIBC_2.0((!v5 ? NULL : v5 + 1)->field_0 + gpGlobals->field_98, "multisource"))
             {
                 v10 = v5;
-                if (v10 || (v10 = g_6168d4(0), v10))
+                if (v10 || (v10 = g_engfuncs.pfnPEntityOfEntOffset(0), v10))
                     v11 = v10->field_7c;
                 else
                     v11 = NULL;
@@ -124,7 +124,7 @@ unsigned int * ButtonBackHome__11CBaseButton(float a0)
                     v2 = 0;
                     v1 = 3;
                     v0 = a0;
-                    v12 = sub_488810(*(unsigned int *)&a0 + 212);
+                    v12 = EHANDLE::__opP11CBaseEntity(*(unsigned int *)&a0 + 212);
                     v11->field_60->field_b8(v11, v12);
                 }
             }

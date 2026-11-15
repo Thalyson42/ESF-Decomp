@@ -10,7 +10,7 @@ unsigned int Remove__14CQueuePriorityRf(unsigned int *a0, unsigned int *a1)
     v1 = a0[2 + 2 * *a0];
     a0[1] = a0[1 + 2 * *a0];
     a0[2] = v1;
-    sub_48de60(a0, 0);
+    CQueuePriority::Heap_SiftDown(a0, 0);
     return v0;
 }
 

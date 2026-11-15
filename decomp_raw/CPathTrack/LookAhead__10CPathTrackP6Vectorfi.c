@@ -77,7 +77,7 @@ st_4e7200_0 ** LookAhead__10CPathTrackP6Vectorfi(st_4e7200_0 **a0, unsigned int 
             v26 = v23 * v23 + v24 * v24 + v25 * v25;
             v27 = sqrt(v26);
             if (isnan(v27))
-                sub_487dc0(*(unsigned int *)&v26);
+                sqrt(*(unsigned int *)&v26);
             else
                 v26 = v27;
             v8 = (float)v26;
@@ -85,7 +85,7 @@ st_4e7200_0 ** LookAhead__10CPathTrackP6Vectorfi(st_4e7200_0 **a0, unsigned int 
             if (v28 == 0.0)
             {
                 v3 = a3;
-                if (!sub_48a830(a0, sub_487d40(v20)))
+                if (!CPathTrack::ValidPath(a0, CPathTrack::GetPrevious(v20)))
                     break;
             }
             else if (v28 <= iter)
@@ -99,7 +99,7 @@ st_4e7200_0 ** LookAhead__10CPathTrackP6Vectorfi(st_4e7200_0 **a0, unsigned int 
                 *(float *)&a1[1] = v17;
                 *(float *)&a1[2] = v18;
                 v3 = a3;
-                if (!sub_48a830(a0, sub_487d40(v20)))
+                if (!CPathTrack::ValidPath(a0, CPathTrack::GetPrevious(v20)))
                     return NULL;
             }
             else
@@ -116,7 +116,7 @@ st_4e7200_0 ** LookAhead__10CPathTrackP6Vectorfi(st_4e7200_0 **a0, unsigned int 
                 *(float *)&a1[2] = v7;
                 return v20;
             }
-            v20 = sub_487d40(v20);
+            v20 = CPathTrack::GetPrevious(v20);
             if (0.0 >= iter)
             {
                 *(float *)a1 = v16;
@@ -130,7 +130,7 @@ st_4e7200_0 ** LookAhead__10CPathTrackP6Vectorfi(st_4e7200_0 **a0, unsigned int 
             v2 = iter;
             v1 = a1;
             v0 = v20;
-            v30 = sub_48d550(v20);
+            v30 = CPathTrack::GetNext(v20);
             goto LABEL_4e7470;
         }
     }
@@ -147,9 +147,9 @@ st_4e7200_0 ** LookAhead__10CPathTrackP6Vectorfi(st_4e7200_0 **a0, unsigned int 
                 return v20;
             }
             v3 = a3;
-            if (!sub_48a830(a0, sub_48d550(v20)))
+            if (!CPathTrack::ValidPath(a0, CPathTrack::GetNext(v20)))
                 break;
-            v33 = sub_48d550(v20);
+            v33 = CPathTrack::GetNext(v20);
             v34 = &*v33->field_8;
             v35 = *v33->field_8 - v16;
             v5 = v35;
@@ -160,14 +160,14 @@ st_4e7200_0 ** LookAhead__10CPathTrackP6Vectorfi(st_4e7200_0 **a0, unsigned int 
             v38 = v35 * v35 + v36 * v36 + v37 * v37;
             v39 = sqrt(v38);
             if (isnan(v39))
-                sub_487dc0(*(unsigned int *)&v38);
+                sqrt(*(unsigned int *)&v38);
             else
                 v38 = v39;
             v4 = (float)v38;
             if (v4 == 0.0f)
             {
                 v3 = a3;
-                if (!sub_48a830(a0, sub_48d550(sub_48d550(v20))))
+                if (!CPathTrack::ValidPath(a0, CPathTrack::GetNext(CPathTrack::GetNext(v20))))
                 {
                     if (a2 == iter)
                         return NULL;
@@ -189,11 +189,11 @@ st_4e7200_0 ** LookAhead__10CPathTrackP6Vectorfi(st_4e7200_0 **a0, unsigned int 
                 return v20;
             }
             iter -= v4;
-            v40 = *(int *)sub_48d550(v20);
+            v40 = *(int *)CPathTrack::GetNext(v20);
             *(unsigned int *)&v16 = v40[2];
             *(unsigned int *)&v17 = v40[3];
             *(unsigned int *)&v18 = v40[4];
-            v20 = sub_48d550(v20);
+            v20 = CPathTrack::GetNext(v20);
             *(float *)a1 = v16;
             *(float *)&a1[1] = v17;
             *(float *)&a1[2] = v18;
@@ -203,9 +203,9 @@ st_4e7200_0 ** LookAhead__10CPathTrackP6Vectorfi(st_4e7200_0 **a0, unsigned int 
             v2 = iter;
             v1 = a1;
             v0 = v20;
-            v30 = sub_487d40(v20);
+            v30 = CPathTrack::GetPrevious(v20);
 LABEL_4e7470:
-            sub_48b450(a0, v30);
+            CPathTrack::Project(a0, v30);
         }
     }
     return NULL;

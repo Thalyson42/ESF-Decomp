@@ -30,7 +30,7 @@ st_5716f0_0 * SetSwoopButton__4CBot(st_5716f0_1 *a0)
     {
         v1 = 16;
         v0 = a0;
-        return sub_488e30(v2);
+        return CBot::SetMoveDir(v2);
     }
 }
 

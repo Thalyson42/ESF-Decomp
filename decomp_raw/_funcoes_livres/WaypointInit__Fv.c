@@ -4,10 +4,10 @@ extern unsigned int f_path_time;
 extern unsigned int shortest_path[4];
 extern unsigned int from_to[4];
 extern unsigned int waypoints;
-extern unsigned int g_626824;
+extern unsigned int waypoints+4;
 extern unsigned int last_waypoint;
-extern unsigned int g_62a824;
-extern unsigned int g_62a828;
+extern unsigned int last_waypoint+4;
+extern unsigned int last_waypoint+8;
 extern unsigned int num_waypoints;
 extern unsigned int paths;
 extern unsigned int wp_display_time;
@@ -29,16 +29,16 @@ unsigned int * WaypointInit__Fv(void)
     unsigned int v4;  // [bp-0x1c]
 
     if (g_waypoint_paths)
-        sub_4889c0(v0, v1);
+        WaypointFree(v0, v1);
     i = 0;
     do
     {
         v7 = i * 4;
         if (*(int *)(v7 + (char *)&shortest_path[0]))
-            sub_48cf10(*(int *)(v7 + (char *)&shortest_path[0]));
+            free@GLIBC_2.0(*(int *)(v7 + (char *)&shortest_path[0]));
         v8 = i * 4;
         if (*(int *)(v8 + (char *)&from_to[0]))
-            sub_48cf10(*(int *)(v8 + (char *)&from_to[0]));
+            free@GLIBC_2.0(*(int *)(v8 + (char *)&from_to[0]));
         i += 1;
     } while (i <= 3);
     j = 0;
@@ -49,9 +49,9 @@ unsigned int * WaypointInit__Fv(void)
         v2 = 0;
         v3 = 0;
         v4 = 0;
-        *(unsigned int *)((char *)&g_626824 + index) = v2;
-        *(unsigned int *)((char *)&g_626824 + index + 4) = v3;
-        *(unsigned int *)((char *)&g_626824 + index + 8) = v4;
+        *(unsigned int *)((char *)&waypoints+4 + index) = v2;
+        *(unsigned int *)((char *)&waypoints+4 + index + 4) = v3;
+        *(unsigned int *)((char *)&waypoints+4 + index + 8) = v4;
         idx = j * 4;
         *(unsigned int *)(idx + (char *)&wp_display_time) = 0;
         *(unsigned int *)(idx + (char *)&paths) = 0;
@@ -63,8 +63,8 @@ unsigned int * WaypointInit__Fv(void)
     v3 = 0;
     v4 = 0;
     last_waypoint = v2;
-    g_62a824 = v3;
-    g_62a828 = v4;
+    last_waypoint+4 = v3;
+    last_waypoint+8 = v4;
     k = 0;
     do
     {

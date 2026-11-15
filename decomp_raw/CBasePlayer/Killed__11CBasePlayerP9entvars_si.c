@@ -156,13 +156,13 @@ extern st_4f3e40_2 *g_pGameRules;
 extern unsigned int gmsgCurWeapon;
 extern unsigned int gmsgHealth;
 extern unsigned int gmsgSetFOV;
-extern st_4f3e40_0 *g_616878;
-extern st_4f3e40_0 *g_61687c;
-extern st_4f3e40_0 *g_616880;
-extern st_4f3e40_0 *g_6168d4;
-extern st_4f3e40_0 *g_6168e0;
-extern st_4f3e40_0 *g_616928;
-extern st_4f3e40_0 *g_61692c;
+extern st_4f3e40_0 *g_engfuncs.pfnMessageBegin;
+extern st_4f3e40_0 *g_engfuncs.pfnMessageEnd;
+extern st_4f3e40_0 *g_engfuncs.pfnWriteByte;
+extern st_4f3e40_0 *g_engfuncs.pfnPEntityOfEntOffset;
+extern st_4f3e40_0 *g_engfuncs.pfnPEntityOfEntIndex;
+extern st_4f3e40_0 *g_engfuncs.pfnRandomLong;
+extern st_4f3e40_0 *g_engfuncs.pfnRandomFloat;
 extern st_4f3e40_13 *gpGlobals;
 extern st_4f3e40_9 *g_pevLastInflictor;
 extern int ChatClass;
@@ -204,29 +204,29 @@ double Killed__11CBasePlayerP9entvars_si(st_4f3e40_6 *a0, st_4f3e40_3 *a1, unsig
     a0->field_34c = 0;
     a0->field_350 = 0;
     a0->field_930 = 9;
-    v11 = g_6168e0(0);
+    v11 = g_engfuncs.pfnPEntityOfEntIndex(0);
     if (a1 == (!v11 ? 0 : v11 + 128) || a1 == a0->field_0)
         a0->field_794 = 1;
     g_pGameRules->field_44->field_6c(g_pGameRules, a0, a1, g_pevLastInflictor);
     v12 = &a0->field_90c;
-    if (sub_48d8b0(v12))
+    if (EHANDLE::__opi(v12))
     {
-        v13 = sub_489fd0(v12);
+        v13 = EHANDLE::__rf(v12);
         v13->field_60->field_b8(v13, a0, a0, 0, 0);
-        sub_48d960(v12, 0);
+        EHANDLE::__as(v12, 0);
     }
-    v14 = sub_488470(sub_48a340(a0->field_0->field_208));
+    v14 = CSoundEnt::SoundPointerForIndex(CSoundEnt::ClientSoundIndex(a0->field_0->field_208));
     if (v14)
-        sub_48bf50(v14);
-    sub_48aee0(a0);
+        CSound::Reset(v14);
+    CBasePlayer::RemoveSpecialModes(a0);
     v0 = a0;
-    sub_487b50(&a0->field_380, v0);
-    sub_48a800(&a0->field_0->field_74);
+    CPlayerMelee::SetAttacker(&a0->field_380, v0);
+    UTIL_MakeVectors(&a0->field_0->field_74);
     v15 = &a0->field_0->field_20;
     v16 = *(float *)&a0->field_0->field_20 * *(float *)&a0->field_0->field_20 + *(float *)&v15[1] * *(float *)&v15[1] + *(float *)&v15[2] * *(float *)&v15[2];
     v17 = sqrt(v16);
     if (isnan(v17))
-        sub_487dc0(*(unsigned int *)&v16);
+        sqrt(*(unsigned int *)&v16);
     else
         v16 = v17;
     v7 = (float)v16;
@@ -257,7 +257,7 @@ double Killed__11CBasePlayerP9entvars_si(st_4f3e40_6 *a0, st_4f3e40_3 *a1, unsig
         v20 = &gpGlobals->field_0;
     }
     *(unsigned short *)&v0 = 1;
-    sub_48b670(&a0->field_380, v0, *v20);
+    CPlayerMelee::AddAnimation(&a0->field_380, v0, *v20);
     a0->field_988 = 0;
     a0->field_0->field_170 = 1;
     a0->field_0->field_108 = 6;
@@ -268,35 +268,35 @@ double Killed__11CBasePlayerP9entvars_si(st_4f3e40_6 *a0, st_4f3e40_3 *a1, unsig
     v21 = 10.0;
     if (10.0 > *(float *)&a0->field_0->field_28)
     {
-        g_61692c(0, 300.0f);
+        g_engfuncs.pfnRandomFloat(0, 300.0f);
         v21 = 300.0 + *(float *)&a0->field_0->field_28;
         *(float *)&a0->field_0->field_28 = (float)v21;
     }
-    sub_489ad0(a0, 0, 0, 0);
+    CBasePlayer::SetSuitUpdate(a0, 0, 0, 0);
     a0->field_928 = 0;
-    g_616878(1, gmsgHealth, 0, a0->field_0->field_208);
+    g_engfuncs.pfnMessageBegin(1, gmsgHealth, 0, a0->field_0->field_208);
     v2 = a0->field_928;
-    g_616880(v2);
-    g_61687c(v2);
-    g_616878(1, gmsgCurWeapon, 0, a0->field_0->field_208);
-    g_616880(0);
-    g_616880(0xff);
+    g_engfuncs.pfnWriteByte(v2);
+    g_engfuncs.pfnMessageEnd(v2);
+    g_engfuncs.pfnMessageBegin(1, gmsgCurWeapon, 0, a0->field_0->field_208);
+    g_engfuncs.pfnWriteByte(0);
+    g_engfuncs.pfnWriteByte(0xff);
     v2 = 0xff;
-    g_616880(v2);
-    g_61687c(v2);
+    g_engfuncs.pfnWriteByte(v2);
+    g_engfuncs.pfnMessageEnd(v2);
     v22 = a0->field_0;
     a0->field_93c = 0;
     a0->field_938 = 0;
     v22->field_214 = 0;
     v3 = gmsgSetFOV;
-    g_616878(1, v3, 0, a0->field_0->field_208);
+    g_engfuncs.pfnMessageBegin(1, v3, 0, a0->field_0->field_208);
     v2 = 0;
-    g_616880(v2);
-    g_61687c(v2);
+    g_engfuncs.pfnWriteByte(v2);
+    g_engfuncs.pfnMessageEnd(v2);
     if (g_pevLastInflictor)
     {
         v23 = g_pevLastInflictor->field_208;
-        if (g_pevLastInflictor->field_208 || (v23 = g_6168d4(0), v23))
+        if (g_pevLastInflictor->field_208 || (v23 = g_engfuncs.pfnPEntityOfEntOffset(0), v23))
             v24 = v23->field_7c;
         else
             v24 = NULL;
@@ -305,7 +305,7 @@ double Killed__11CBasePlayerP9entvars_si(st_4f3e40_6 *a0, st_4f3e40_3 *a1, unsig
         {
             a0->field_0->field_10c = 0;
             *(unsigned short *)&v3 = 0;
-            sub_48c7d0(a0->field_0, v3);
+            CBodySlice::SpawnBodySlices(a0->field_0, v3);
             a0->field_0->field_118 = a0->field_0->field_118 | 128;
             return v21;
         }
@@ -314,12 +314,12 @@ double Killed__11CBasePlayerP9entvars_si(st_4f3e40_6 *a0, st_4f3e40_3 *a1, unsig
         {
             v6 = v25;
         }
-        else if (!(char)sub_48b960(g_pevLastInflictor->field_198))
+        else if (!(char)IsNull(g_pevLastInflictor->field_198))
         {
             v26 = g_pevLastInflictor->field_198;
             if (v26->field_224 & 8)
             {
-                if (v26 || (v26 = g_6168d4(0), v26))
+                if (v26 || (v26 = g_engfuncs.pfnPEntityOfEntOffset(0), v26))
                     v27 = v26->field_7c;
                 else
                     v27 = NULL;
@@ -333,9 +333,9 @@ double Killed__11CBasePlayerP9entvars_si(st_4f3e40_6 *a0, st_4f3e40_3 *a1, unsig
                 v5 = (v6->field_0->field_1a5 & 32) != 0;
             if (v5)
             {
-                v28 = g_616928(1, 100);
+                v28 = g_engfuncs.pfnRandomLong(1, 100);
                 if ((int)v28 <= v6->field_a04->field_1a)
-                    sub_489a30(&ChatClass, v6, a0);
+                    CChatClass::LetBotTaunt(&ChatClass, v6, a0);
             }
             v4 = 0;
             if (!a0->field_60->field_a4(a0))

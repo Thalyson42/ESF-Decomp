@@ -35,7 +35,7 @@ unsigned int FEntIsVisible__FP9entvars_sT0(st_5234b0_0 *a0, float *a1)
     v4 = a1[2] + a1[93];
     v5 = *(float *)&v11[1] + a1[94];
     v6 = *(float *)&v11[2] + a1[95];
-    sub_487b80(&v7, &v4, 1, a0->field_208, &v0);
+    UTIL_TraceLine(&v7, &v4, 1, a0->field_208, &v0);
     if ((!v1 || !v2) && v3 == 1.0f)
         return 1;
     return 0;

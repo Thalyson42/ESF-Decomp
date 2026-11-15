@@ -34,26 +34,26 @@ unsigned int StopGrabbedAttack__12CPlayerMelee(st_50a130_1 *a0)
 
     if (a0->field_11c == 5)
     {
-        sub_48c680(a0->field_124, 0);
+        CBasePlayer::DrawChargeBar(a0->field_124, 0);
         a0->field_11c = 0;
         a0->field_9c = 0;
         a0->field_98 = 0;
         a0->field_e4 = 0;
-        sub_4887c0(a0);
+        CPlayerMelee::RemoveAllAnims(a0);
         if (!a0->field_e8)
-            return sub_48a9c0(a0->field_130);
+            return CPlayerMelee::StopGrabbedAttack(a0->field_130);
         a0->field_e8 = 0;
-        sub_489390(*(int *)(*(int *)a0->field_124 + 520), 1, "weapons/spin.wav", 0, 0, 32, 100);
-        return sub_48a9c0(a0->field_130);
+        EMIT_SOUND_DYN(*(int *)(*(int *)a0->field_124 + 520), 1, "weapons/spin.wav", 0, 0, 32, 100);
+        return CPlayerMelee::StopGrabbedAttack(a0->field_130);
     }
     else if (a0->field_11c == 6)
     {
         a0->field_11c = 0;
         a0->field_8c = 0;
-        v0 = sub_4887c0(a0);
+        v0 = CPlayerMelee::RemoveAllAnims(a0);
         if (!a0->field_38)
             return v0;
-        return sub_48a130(a0);
+        return CPlayerMelee::RemoveStruggleBar(a0);
     }
     else
     {

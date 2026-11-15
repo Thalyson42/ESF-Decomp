@@ -9,6 +9,6 @@ int Killed__11CBaseEntityP9entvars_si(st_49d290_0 **a0)
 {
     *a0->field_16c = 0;
     *a0->field_170 = 2;
-    return sub_48cc00(a0);
+    return UTIL_Remove(a0);
 }
 

@@ -10,7 +10,7 @@ float __30CHalfLifeCaptureTheDragonBalls(float idx)
 {
     int index;  // eax
 
-    sub_48a710(idx);
+    __17CHalfLifeTeamplay(idx);
     *(char **)(*(unsigned int *)&idx + 0x44) = &__vt_30CHalfLifeCaptureTheDragonBalls;
     *(unsigned int *)(*(unsigned int *)&idx + 612) = 0;
     *(unsigned int *)(*(unsigned int *)&idx + 628) = 0;

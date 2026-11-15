@@ -28,10 +28,10 @@ typedef struct st_515c70_0 {
     unsigned int field_98;
 } st_515c70_0;
 
-extern st_515c70_1 *g_6167f8;
-extern st_515c70_1 *g_6168d4;
-extern st_515c70_1 *g_6168d8;
-extern st_515c70_1 *g_6168e8;
+extern st_515c70_1 *g_engfuncs.pfnFindEntityByString;
+extern st_515c70_1 *g_engfuncs.pfnPEntityOfEntOffset;
+extern st_515c70_1 *g_engfuncs.pfnEntOffsetOfPEntity;
+extern st_515c70_1 *g_engfuncs.pfnGetModelPtr;
 extern st_515c70_0 *gpGlobals;
 
 st_515c70_4 * Activate__12CCineMonster(unsigned int *a0)
@@ -50,18 +50,18 @@ st_515c70_4 * Activate__12CCineMonster(unsigned int *a0)
     unsigned int v2;  // [bp-0x24]
     st_515c70_5 **v3;  // [bp-0x8]
 
-    i = g_6167f8(0, "targetname", a0[172] + gpGlobals->field_98);
-    for (v3 = NULL; !v3; i = g_6167f8(i, "targetname", a0[172] + gpGlobals->field_98))
+    i = g_engfuncs.pfnFindEntityByString(0, "targetname", a0[172] + gpGlobals->field_98);
+    for (v3 = NULL; !v3; i = g_engfuncs.pfnFindEntityByString(i, "targetname", a0[172] + gpGlobals->field_98))
     {
         v5 = 0;
-        if (!i || !g_6168d8(i))
+        if (!i || !g_engfuncs.pfnEntOffsetOfPEntity(i))
             v5 = 1;
         if (!v5)
         {
             if (*(char *)((!i ? 0 : i + 1) + 420) & 32)
             {
                 v6 = i;
-                if (v6 || (v6 = g_6168d4(0), v6))
+                if (v6 || (v6 = g_engfuncs.pfnPEntityOfEntOffset(0), v6))
                     v7 = v6->field_7c;
                 else
                     v7 = NULL;
@@ -75,17 +75,17 @@ st_515c70_4 * Activate__12CCineMonster(unsigned int *a0)
             v0 = NULL;
             while (1)
             {
-                v8 = g_6167f8(v0, v1, v2);
+                v8 = g_engfuncs.pfnFindEntityByString(v0, v1, v2);
                 v0 = v8;
                 if (v3)
                     break;
                 v9 = 0;
-                if (!v0 || (v8 = g_6168d8(v0), !v8))
+                if (!v0 || (v8 = g_engfuncs.pfnEntOffsetOfPEntity(v0), !v8))
                     v9 = 1;
                 if (!v9)
                 {
                     v10 = v0;
-                    if (v10 || (v10 = g_6168d4(0), v10))
+                    if (v10 || (v10 = g_engfuncs.pfnPEntityOfEntOffset(0), v10))
                         v11 = v10->field_7c;
                     else
                         v11 = NULL;
@@ -102,10 +102,10 @@ st_515c70_4 * Activate__12CCineMonster(unsigned int *a0)
             }
         }
     }
-    v12 = g_6168e8(*v3->field_208);
+    v12 = g_engfuncs.pfnGetModelPtr(*v3->field_208);
     if (!v12)
         return v12;
-    sub_48a5a0(v12, a0[0xaa] + gpGlobals->field_98);
-    return sub_48a5a0(v12, a0[171] + gpGlobals->field_98);
+    SequencePrecache(v12, a0[0xaa] + gpGlobals->field_98);
+    return SequencePrecache(v12, a0[171] + gpGlobals->field_98);
 }
 

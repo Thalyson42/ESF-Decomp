@@ -6,7 +6,7 @@ int Holster__12CKameTorpedoi(int *a0, int a1)
     unsigned int v1;  // [bp-0x20]
     float v2;  // [bp-0x1c]
 
-    sub_48c470(a0);
+    CKameTorpedo::UpdateTorpedoList(a0);
     i = 0;
     if (0 < a0[125])
     {
@@ -15,10 +15,10 @@ int Holster__12CKameTorpedoi(int *a0, int a1)
             v0 = 0;
             v1 = 0;
             v2 = 1000.0f;
-            sub_489c90(a0[117 + i], &v0, 0);
+            CKameTorpedoAttack::Fire(a0[117 + i], &v0, 0);
             i += 1;
         } while (i < a0[125]);
     }
-    return sub_48b470(a0, a1);
+    return CChargedAttack::Holster(a0, a1);
 }
 

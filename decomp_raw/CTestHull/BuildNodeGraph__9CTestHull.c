@@ -41,17 +41,17 @@ typedef struct st_4e20c0_3 {
 extern char ShowBadNode__9CTestHull;
 extern char SUB_Remove__11CBaseEntity;
 extern unsigned int _GLOBAL_OFFSET_TABLE_;
-extern st_4e20c0_3 *g_61682c;
-extern st_4e20c0_3 *g_6168b4;
-extern st_4e20c0_3 *g_61694c;
+extern st_4e20c0_3 *g_engfuncs.pfnWalkMove;
+extern st_4e20c0_3 *g_engfuncs.pfnAlertMessage;
+extern st_4e20c0_3 *g_engfuncs.pfnGetGameDir;
 extern st_4e20c0_0 *gpGlobals;
 extern unsigned int WorldGraph;
-extern unsigned int g_617164;
-extern unsigned int g_617168;
-extern st_4e20c0_1 *g_61716c;
-extern unsigned int g_617170;
-extern int g_617178;
-extern unsigned int g_61717c;
+extern unsigned int WorldGraph+4;
+extern unsigned int WorldGraph+8;
+extern st_4e20c0_1 *WorldGraph+12;
+extern unsigned int WorldGraph+16;
+extern int WorldGraph+24;
+extern unsigned int WorldGraph+28;
 extern int g_pBodyQueueHead;
 
 unsigned int BuildNodeGraph__9CTestHull(st_4e20c0_2 *a0)
@@ -187,86 +187,86 @@ unsigned int BuildNodeGraph__9CTestHull(st_4e20c0_2 *a0)
     v66->field_c = _INSERT(0, 0, 0) | 0xffff0000;
     v66->field_10 = &SUB_Remove__11CBaseEntity;
     *(float *)&v66->field_0[260] = gpGlobals->field_0;
-    v19 = sub_48ccc0(24, g_617178 * 128);
+    v19 = calloc@GLIBC_2.0(24, WorldGraph+24 * 128);
     if (!v19)
-        return g_6168b4(2, "**Could not malloc TempPool!\n");
-    g_61694c(&v63);
-    sub_48c150(&v63, "/maps");
-    sub_487e20(&v63, 0x1ff);
-    sub_48c150(&v63, "/graphs");
-    sub_487e20(&v63, 0x1ff);
-    sub_48c150(&v63, "/");
-    sub_48c150(&v63, gpGlobals->field_c + gpGlobals->field_98);
-    sub_48c150(&v63, ".nrp");
-    v20 = sub_48d440(&v63, "w+");
+        return g_engfuncs.pfnAlertMessage(2, "**Could not malloc TempPool!\n");
+    g_engfuncs.pfnGetGameDir(&v63);
+    strcat@GLIBC_2.0(&v63, "/maps");
+    mkdir@GLIBC_2.0(&v63, 0x1ff);
+    strcat@GLIBC_2.0(&v63, "/graphs");
+    mkdir@GLIBC_2.0(&v63, 0x1ff);
+    strcat@GLIBC_2.0(&v63, "/");
+    strcat@GLIBC_2.0(&v63, gpGlobals->field_c + gpGlobals->field_98);
+    strcat@GLIBC_2.0(&v63, ".nrp");
+    v20 = fopen@GLIBC_2.1(&v63, "w+");
     if (!v20)
     {
-        v67 = g_6168b4(2, "Couldn't create %s!\n", &v63);
-        return sub_48cf10(v19);
+        v67 = g_engfuncs.pfnAlertMessage(2, "Couldn't create %s!\n", &v63);
+        return free@GLIBC_2.0(v19);
     }
-    sub_488d60(v20, "Node Graph Report for map:  %s.bsp\n", gpGlobals->field_c + gpGlobals->field_98);
-    sub_488d60(v20, "%d Total Nodes\n\n", g_617178);
+    fprintf@GLIBC_2.0(v20, "Node Graph Report for map:  %s.bsp\n", gpGlobals->field_c + gpGlobals->field_98);
+    fprintf@GLIBC_2.0(v20, "%d Total Nodes\n\n", WorldGraph+24);
     i = 0;
-    if (i < g_617178)
+    if (i < WorldGraph+24)
     {
         do
         {
             v68 = i * 88;
-            *(unsigned int *)((char *)g_61716c + v68 + 32) = 0;
-            *(unsigned int *)((char *)g_61716c + v68 + 36) = 0;
-            sub_48d0e0(v68 + (char *)g_61716c + 40, 0, 32);
-            sub_488d60(v20, "Node#         %4d\n", i);
+            *(unsigned int *)((char *)WorldGraph+12 + v68 + 32) = 0;
+            *(unsigned int *)((char *)WorldGraph+12 + v68 + 36) = 0;
+            memset@GLIBC_2.0(v68 + (char *)WorldGraph+12 + 40, 0, 32);
+            fprintf@GLIBC_2.0(v20, "Node#         %4d\n", i);
             v59 = __fnstcw();
             v58 = v59 | 0xc00;
-            v57 = (int)*(float *)((char *)g_61716c + v68 + 8);
+            v57 = (int)*(float *)((char *)WorldGraph+12 + v68 + 8);
             v59 = __fnstcw();
             v58 = v59 | 0xc00;
-            v56 = (int)*(float *)((char *)g_61716c + v68 + 4);
+            v56 = (int)*(float *)((char *)WorldGraph+12 + v68 + 4);
             v59 = __fnstcw();
             v58 = v59 | 0xc00;
-            v55 = (int)*(float *)((char *)g_61716c + v68);
-            sub_488d60(v20, "Location      %4d,%4d,%4d\n", v55, v56, v57);
-            sub_488d60(v20, "HintType:     %4d\n", *(short *)((char *)g_61716c + v68 + 80));
-            sub_488d60(v20, "HintActivity: %4d\n", *(short *)((char *)g_61716c + v68 + 82));
-            sub_488d60(v20, "HintYaw:      %4f\n", (unsigned int)(*(float *)((char *)g_61716c + v68 + 84) >> 0));
-            sub_488d60(v20, "-------------------------------------------------------------------------------\n");
+            v55 = (int)*(float *)((char *)WorldGraph+12 + v68);
+            fprintf@GLIBC_2.0(v20, "Location      %4d,%4d,%4d\n", v55, v56, v57);
+            fprintf@GLIBC_2.0(v20, "HintType:     %4d\n", *(short *)((char *)WorldGraph+12 + v68 + 80));
+            fprintf@GLIBC_2.0(v20, "HintActivity: %4d\n", *(short *)((char *)WorldGraph+12 + v68 + 82));
+            fprintf@GLIBC_2.0(v20, "HintYaw:      %4f\n", (unsigned int)(*(float *)((char *)WorldGraph+12 + v68 + 84) >> 0));
+            fprintf@GLIBC_2.0(v20, "-------------------------------------------------------------------------------\n");
             i += 1;
-        } while (i < g_617178);
+        } while (i < WorldGraph+24);
     }
-    sub_488d60(v20, "\n\n");
+    fprintf@GLIBC_2.0(v20, "\n\n");
     i = 0;
-    if (i < g_617178)
+    if (i < WorldGraph+24)
     {
         v9 = &v35;
         do
         {
             v69 = i * 88;
-            if (!(*((char *)g_61716c + v69 + 28) & 2))
+            if (!(*((char *)WorldGraph+12 + v69 + 28) & 2))
             {
-                if (sub_48ae20((char *)g_61716c + v69) == 0xfffffffd)
+                if (UTIL_PointContents((char *)WorldGraph+12 + v69) == 0xfffffffd)
                 {
-                    *((char *)g_61716c + v69 + 28) = *((char *)g_61716c + v69 + 28) | 4;
+                    *((char *)WorldGraph+12 + v69 + 28) = *((char *)WorldGraph+12 + v69 + 28) | 4;
                 }
                 else
                 {
                     v70 = i * 88;
-                    *((char *)g_61716c + v70 + 28) = *((char *)g_61716c + v70 + 28) | 1;
+                    *((char *)WorldGraph+12 + v70 + 28) = *((char *)WorldGraph+12 + v70 + 28) | 1;
                     *(unsigned int *)&v35 = 0;
                     *(unsigned int *)((char *)&v35 + 4) = 0;
                     v38 = 384.0f;
-                    v71 = v70 + (char *)g_61716c;
+                    v71 = v70 + (char *)WorldGraph+12;
                     v46 = *v71 - *(unsigned int *)&v35;
                     v47 = v71[1] - *(unsigned int *)((void*)&v35 + 4);
                     v48 = v71[2] - *(unsigned int *)((void*)&v35 + 8);
-                    sub_487b80(v70 + (char *)g_61716c, &v46, 1, g_pBodyQueueHead, &v50);
+                    UTIL_TraceLine(v70 + (char *)WorldGraph+12, &v46, 1, g_pBodyQueueHead, &v50);
                     v23 = 0;
                     v24 = 0;
                     v25 = 384.0f;
-                    v72 = v70 + (char *)g_61716c;
+                    v72 = v70 + (char *)WorldGraph+12;
                     v29 = *v72 - (unsigned int)v23;
                     v30 = v72[1] - v24;
                     v31 = v72[2] - v25;
-                    sub_487b80(v70 + (char *)g_61716c, &v29, 0, g_pBodyQueueHead, v9);
+                    UTIL_TraceLine(v70 + (char *)WorldGraph+12, &v29, 0, g_pBodyQueueHead, v9);
                     if (v40 < v51 && v49 && v49->field_227 & 2)
                     {
                         v52 = v41;
@@ -275,44 +275,44 @@ unsigned int BuildNodeGraph__9CTestHull(st_4e20c0_2 *a0)
                     }
                     v73 = i * 88;
                     v74 = v54 + 8.0;
-                    *(float *)((char *)g_61716c + v73 + 8) = (float)v74;
-                    *(float *)((char *)g_61716c + v73 + 20) = (float)v74;
+                    *(float *)((char *)WorldGraph+12 + v73 + 8) = (float)v74;
+                    *(float *)((char *)WorldGraph+12 + v73 + 20) = (float)v74;
                 }
             }
-        } while ((i += 1, i < g_617178));
+        } while ((i += 1, i < WorldGraph+24));
     }
-    iter2 = sub_48ca10(&WorldGraph, v19, v20, &v22);
+    iter2 = CGraph::LinkVisibleNodes(&WorldGraph, v19, v20, &v22);
     if (!iter2)
     {
         v76 = a0;
-        v76->field_c = _INSERT(g_6168b4(2, "**ConnectVisibleNodes FAILED!\n"), 0, 0) | 0xffff0000;
+        v76->field_c = _INSERT(g_engfuncs.pfnAlertMessage(2, "**ConnectVisibleNodes FAILED!\n"), 0, 0) | 0xffff0000;
         v76->field_10 = &ShowBadNode__9CTestHull;
         v77 = v76->field_0;
         v78 = v22 * 88;
-        *(int *)&v77[8] = *(int *)((char *)g_61716c + v78);
-        *(int *)&v77[12] = *(int *)((char *)g_61716c + v78 + 4);
-        v79 = *(int *)((char *)g_61716c + v78 + 8);
+        *(int *)&v77[8] = *(int *)((char *)WorldGraph+12 + v78);
+        *(int *)&v77[12] = *(int *)((char *)WorldGraph+12 + v78 + 4);
+        v79 = *(int *)((char *)WorldGraph+12 + v78 + 8);
         *(unsigned int *)&v77[16] = v79;
         if (v19)
-            v79 = sub_48cf10(v19);
+            v79 = free@GLIBC_2.0(v19);
         if (!v20)
             return v79;
-        return sub_48c560(v20);
+        return fclose@GLIBC_2.1(v20);
     }
     else
     {
-        sub_488d60(v20, "----------------------------------------------------------------------------\n");
-        sub_488d60(v20, "Walk Rejection:\n");
+        fprintf@GLIBC_2.0(v20, "----------------------------------------------------------------------------\n");
+        fprintf@GLIBC_2.0(v20, "Walk Rejection:\n");
         i = 0;
-        if (i < g_617178)
+        if (i < WorldGraph+24)
         {
             v4 = &v32;
             do
             {
-                v18 = &g_61716c[22 * i];
+                v18 = &WorldGraph+12[22 * i];
                 v80 = v20;
-                sub_488d60(v80, "-------------------------------------------------------------------------------\n");
-                sub_488d60(v80, "Node %4d:\n\n", i);
+                fprintf@GLIBC_2.0(v80, "-------------------------------------------------------------------------------\n");
+                fprintf@GLIBC_2.0(v80, "Node %4d:\n\n", i);
                 node = 0;
                 if (node < v18->field_20)
                 {
@@ -330,19 +330,19 @@ unsigned int BuildNodeGraph__9CTestHull(st_4e20c0_2 *a0)
                             if ((unsigned int)v13 <= 3)
                                 goto *((void *)((unsigned int *)((char *)&_GLOBAL_OFFSET_TABLE_ - *(int *)((char *)&(&_GLOBAL_OFFSET_TABLE_)[v13] - 1249836))));
                             v81 = a0;
-                            sub_48db50(v81->field_0, v18);
+                            UTIL_SetOrigin(v81->field_0, v18);
                             if (!((char)v81->field_0[421] & 2))
-                                g_6168b4(2, "OFFGROUND!\n");
+                                g_engfuncs.pfnAlertMessage(2, "OFFGROUND!\n");
                             if (node < 0)
                             {
-                                v113 = g_6168b4(2, "**** j = %d ****\n", node);
+                                v113 = g_engfuncs.pfnAlertMessage(2, "**** j = %d ****\n", node);
                                 if (v19)
-                                    v113 = sub_48cf10(v19);
+                                    v113 = free@GLIBC_2.0(v19);
                                 if (!v20)
                                     return v113;
-                                return sub_48c560(v20);
+                                return fclose@GLIBC_2.1(v20);
                             }
-                            v82 = &g_61716c[22 * *(int *)(v19 + (node + v18->field_24) * 24 + 4)];
+                            v82 = &WorldGraph+12[22 * *(int *)(v19 + (node + v18->field_24) * 24 + 4)];
                             v60 = *v82;
                             v61 = v82[1];
                             v62 = v82[2];
@@ -361,7 +361,7 @@ unsigned int BuildNodeGraph__9CTestHull(st_4e20c0_2 *a0)
                                 v23 = *v82 - (float)v84->field_0[8];
                                 v24 = v82[1] - (float)v85[4];
                                 v25 = v82[2] - (float)v85[8];
-                                sub_48c2d0(v8);
+                                UTIL_VecToYaw(v8);
                                 v11 = v25;
                                 v86 = v84->field_0 + 8;
                                 v87 = v60 - (float)v84->field_0[8];
@@ -372,7 +372,7 @@ unsigned int BuildNodeGraph__9CTestHull(st_4e20c0_2 *a0)
                                 v89 = v87 * v87 + v88 * v88;
                                 v90 = sqrt(v89);
                                 if (isnan(v90))
-                                    sub_487dc0(*(unsigned int *)&v89);
+                                    sqrt(*(unsigned int *)&v89);
                                 else
                                     v89 = v90;
                                 v10 = (float)v89;
@@ -387,7 +387,7 @@ unsigned int BuildNodeGraph__9CTestHull(st_4e20c0_2 *a0)
                                         v94 = (double)v55;
                                         if ((isunordered(v10 - 1.0, v94 + 16.0) ? 0x44 : v10 - 1.0 == v94 + 16.0 ? 63 : v10 - 1.0 < v94 + 16.0 ? 0 : 0xff) < 64)
                                             v93 = __double_as_longlong((double)v10 - v94 - 1.0);
-                                        if (!g_61682c((int)a0->field_0[520], v11, v93, v5))
+                                        if (!g_engfuncs.pfnWalkMove((int)a0->field_0[520], v11, v93, v5))
                                             goto LABEL_4e2d38;
                                     } while ((v92 += 16, v55 = v92, (double)v55 < v10));
                                 }
@@ -401,7 +401,7 @@ unsigned int BuildNodeGraph__9CTestHull(st_4e20c0_2 *a0)
                                 v100 = v97 * v97 + v98 * v98 + v99 * v99;
                                 v101 = sqrt(v100);
                                 if (isnan(v101))
-                                    sub_487dc0(*(unsigned int *)&v100);
+                                    sqrt(*(unsigned int *)&v100);
                                 else
                                     v100 = v101;
                                 v28 = (float)v100;
@@ -412,7 +412,7 @@ unsigned int BuildNodeGraph__9CTestHull(st_4e20c0_2 *a0)
 LABEL_4e2d38:
                                 if (v13 == 1)
                                 {
-                                    sub_488d60(v20, "NODE_HUMAN_HULL step %f\n", v92);
+                                    fprintf@GLIBC_2.0(v20, "NODE_HUMAN_HULL step %f\n", v92);
                                     v104 = node + v18->field_24;
                                     *(char *)(v19 + v104 * 24 + 16) = *(char *)(v19 + v104 * 24 + 16) & 249;
                                     v17 = 1;
@@ -421,7 +421,7 @@ LABEL_4e2d38:
                                 {
                                     if (v13)
                                         goto LABEL_4e2e1a;
-                                    sub_488d60(v20, "NODE_SMALL_HULL step %f\n", v92);
+                                    fprintf@GLIBC_2.0(v20, "NODE_SMALL_HULL step %f\n", v92);
                                     v102 = node + v18->field_24;
                                     *(char *)(v19 + v102 * 24 + 16) = *(char *)(v19 + v102 * 24 + 16) & 248;
                                     v17 = 1;
@@ -430,7 +430,7 @@ LABEL_4e2d38:
                                 {
                                     if (v13 != 2)
                                         goto LABEL_4e2e1a;
-                                    sub_488d60(v20, "NODE_LARGE_HULL step %f\n", v92);
+                                    fprintf@GLIBC_2.0(v20, "NODE_LARGE_HULL step %f\n", v92);
                                     v103 = node + v18->field_24;
                                     *(char *)(v19 + v103 * 24 + 16) = *(char *)(v19 + v103 * 24 + 16) & 251;
                                 }
@@ -454,7 +454,7 @@ LABEL_4e2e1a:
                                 v40 = v106->field_0 + v45;
                                 v42 = v106->field_4 + v46;
                                 v44 = (float)(32.0 + v106->field_8);
-                                sub_488460(&v40, v4, 1, 2, (int)a0->field_0[520], v8);
+                                UTIL_TraceHull(&v40, v4, 1, 2, (int)a0->field_0[520], v8);
                                 if (*(unsigned int *)&v24 || 1.0 > v27)
                                 {
                                     v107 = node + v18->field_24;
@@ -466,7 +466,7 @@ LABEL_4e2e1a:
                         v109 = (node + v108->field_24) * 24;
                         if (!*(int *)(v19 + v109 + 16))
                         {
-                            sub_488d60(v20, "Rejected Node %3d - Unreachable by ", *(int *)(v19 + v109 + 4));
+                            fprintf@GLIBC_2.0(v20, "Rejected Node %3d - Unreachable by ", *(int *)(v19 + v109 + 4));
                             iter = v19 + (node + v108->field_24) * 24;
                             l = v19 + (v108->field_24 + v108->field_20) * 24 - 24;
                             for (v112 = 6; v112; l += 1)
@@ -475,7 +475,7 @@ LABEL_4e2e1a:
                                 *iter = *l;
                                 iter += 1;
                             }
-                            sub_488d60(v20, "Any Hull\n");
+                            fprintf@GLIBC_2.0(v20, "Any Hull\n");
                             v18->field_20 = v18->field_20 - 1;
                             iter2 -= 1;
                             node -= 1;
@@ -483,37 +483,37 @@ LABEL_4e2e1a:
                         node += 1;
                     } while (node < v18->field_20);
                 }
-            } while ((i += 1, i < g_617178));
+            } while ((i += 1, i < WorldGraph+24));
         }
-        sub_488d60(v20, "-------------------------------------------------------------------------------\n\n\n");
-        iter2 -= sub_489d80(&WorldGraph, v19, v20);
-        g_617170 = sub_48ccc0(24, iter2);
-        if (!g_617170)
+        fprintf@GLIBC_2.0(v20, "-------------------------------------------------------------------------------\n\n\n");
+        iter2 -= CGraph::RejectInlineLinks(&WorldGraph, v19, v20);
+        WorldGraph+16 = calloc@GLIBC_2.0(24, iter2);
+        if (!WorldGraph+16)
         {
-            v114 = g_6168b4(2, "Couldn't malloc LinkPool!\n");
+            v114 = g_engfuncs.pfnAlertMessage(2, "Couldn't malloc LinkPool!\n");
             if (v19)
-                v114 = sub_48cf10(v19);
+                v114 = free@GLIBC_2.0(v19);
             if (!v20)
                 return v114;
-            return sub_48c560(v20);
+            return fclose@GLIBC_2.1(v20);
         }
         else
         {
-            g_61717c = iter2;
+            WorldGraph+28 = iter2;
             v3 = 0;
-            for (i = 0; i < g_617178; i += 1)
+            for (i = 0; i < WorldGraph+24; i += 1)
             {
                 v115 = i * 4;
                 v116 = (i + (v115 + i) * 2) * 8;
-                v2 = *(int *)((char *)g_61716c + v116 + 36);
-                *(unsigned int *)((char *)g_61716c + v116 + 36) = v3;
+                v2 = *(int *)((char *)WorldGraph+12 + v116 + 36);
+                *(unsigned int *)((char *)WorldGraph+12 + v116 + 36) = v3;
                 node = 0;
-                if (node < *(int *)((char *)g_61716c + v116 + 32))
+                if (node < *(int *)((char *)WorldGraph+12 + v116 + 32))
                 {
                     v1 = (i + (i + v115) * 2) * 8;
                     do
                     {
-                        iter1 = v3 * 24 + g_617170;
+                        iter1 = v3 * 24 + WorldGraph+16;
                         m = v19 + (v2 + node) * 24;
                         for (v119 = 6; v119; m += 1)
                         {
@@ -523,69 +523,69 @@ LABEL_4e2e1a:
                         }
                         v3 += 1;
                         node += 1;
-                    } while (node < *(int *)((char *)g_61716c + v1 + 32));
+                    } while (node < *(int *)((char *)WorldGraph+12 + v1 + 32));
                 }
             }
-            sub_488c90(&WorldGraph);
-            sub_48b4f0(&WorldGraph);
+            CGraph::SortNodes(&WorldGraph);
+            CGraph::BuildLinkLookups(&WorldGraph);
             v16 = 1;
-            sub_488d60(v20, "\n\n-------------------------------------------------------------------------------\n");
-            sub_488d60(v20, "Link Pairings:\n");
+            fprintf@GLIBC_2.0(v20, "\n\n-------------------------------------------------------------------------------\n");
+            fprintf@GLIBC_2.0(v20, "Link Pairings:\n");
             i = 0;
-            if (i < g_617178)
+            if (i < WorldGraph+24)
             {
                 do
                 {
                     node = 0;
-                    v120 = g_61716c;
+                    v120 = WorldGraph+12;
                     k = i * 5;
                     for (v123 = i; node < (int)*(unsigned int *)&v120[8 + 4 * k + 2 * v123]; k = i + i * 4)
                     {
                         v124 = i;
                         v125 = (i + (v124 + v121) * 2) * 8;
-                        sub_48d800(&WorldGraph, *(int *)(g_617170 + (node + *(int *)(v125 + (char *)g_61716c + 36)) * 24 + 4), v124, &v21);
+                        CGraph::HashSearch(&WorldGraph, *(int *)(WorldGraph+16 + (node + *(int *)(v125 + (char *)WorldGraph+12 + 36)) * 24 + 4), v124, &v21);
                         if ((int)v21 < 0)
                         {
                             v16 = 0;
-                            sub_488d60(v20, "WARNING: Node %3d does not connect back to Node %3d\n", *(int *)(g_617170 + (node + *(int *)(v125 + (char *)g_61716c + 36)) * 24 + 4), i);
+                            fprintf@GLIBC_2.0(v20, "WARNING: Node %3d does not connect back to Node %3d\n", *(int *)(WorldGraph+16 + (node + *(int *)(v125 + (char *)WorldGraph+12 + 36)) * 24 + 4), i);
                         }
                         node += 1;
-                        v120 = g_61716c;
+                        v120 = WorldGraph+12;
                     }
                     i += 1;
-                } while (i < g_617178);
+                } while (i < WorldGraph+24);
             }
             if (v16)
-                sub_488d60(v20, "\nAll Connections are Paired!\n");
+                fprintf@GLIBC_2.0(v20, "\nAll Connections are Paired!\n");
             v126 = v20;
-            sub_488d60(v126, "-------------------------------------------------------------------------------\n");
-            sub_488d60(v126, "\n\n-------------------------------------------------------------------------------\n");
-            sub_488d60(v126, "Total Number of Connections in Pool: %d\n", iter2);
-            sub_488d60(v126, "-------------------------------------------------------------------------------\n");
-            sub_488d60(v126, "Connection Pool: %d bytes\n", iter2 * 24);
-            sub_488d60(v126, "-------------------------------------------------------------------------------\n");
-            g_6168b4(2, "%d Nodes, %d Connections\n", g_617178, iter2);
-            sub_48c4a0(&WorldGraph);
+            fprintf@GLIBC_2.0(v126, "-------------------------------------------------------------------------------\n");
+            fprintf@GLIBC_2.0(v126, "\n\n-------------------------------------------------------------------------------\n");
+            fprintf@GLIBC_2.0(v126, "Total Number of Connections in Pool: %d\n", iter2);
+            fprintf@GLIBC_2.0(v126, "-------------------------------------------------------------------------------\n");
+            fprintf@GLIBC_2.0(v126, "Connection Pool: %d bytes\n", iter2 * 24);
+            fprintf@GLIBC_2.0(v126, "-------------------------------------------------------------------------------\n");
+            g_engfuncs.pfnAlertMessage(2, "%d Nodes, %d Connections\n", WorldGraph+24, iter2);
+            CGraph::BuildRegionTables(&WorldGraph);
             i = 0;
-            if (i < g_617178)
+            if (i < WorldGraph+24)
             {
                 do
                 {
                     v127 = i * 88;
-                    if (*((char *)g_61716c + v127 + 28) & 1)
-                        *(float *)((char *)g_61716c + v127 + 8) = (float)(*(float *)((char *)g_61716c + v127 + 8) - 8.0);
-                } while ((i += 1, i < g_617178));
+                    if (*((char *)WorldGraph+12 + v127 + 28) & 1)
+                        *(float *)((char *)WorldGraph+12 + v127 + 8) = (float)(*(float *)((char *)WorldGraph+12 + v127 + 8) - 8.0);
+                } while ((i += 1, i < WorldGraph+24));
             }
             if (v19)
-                sub_48cf10(v19);
+                free@GLIBC_2.0(v19);
             if (v20)
-                sub_48c560(v20);
+                fclose@GLIBC_2.1(v20);
             WorldGraph = 1;
-            g_617164 = 1;
-            g_617168 = 0;
-            sub_4884b0(&WorldGraph);
-            sub_48ce50(&WorldGraph, gpGlobals->field_c + gpGlobals->field_98);
-            return g_6168b4(1, "Done.\n");
+            WorldGraph+4 = 1;
+            WorldGraph+8 = 0;
+            CGraph::ComputeStaticRoutingTables(&WorldGraph);
+            CGraph::FSaveGraph(&WorldGraph, gpGlobals->field_c + gpGlobals->field_98);
+            return g_engfuncs.pfnAlertMessage(1, "Done.\n");
         }
     }
 }

@@ -57,7 +57,7 @@ typedef struct st_49c6a0_8 {
     unsigned int field_98;
 } st_49c6a0_8;
 
-extern st_49c6a0_4 *g_6168b4;
+extern st_49c6a0_4 *g_engfuncs.pfnAlertMessage;
 extern st_49c6a0_8 *gpGlobals;
 extern int gGlobalState;
 
@@ -95,30 +95,30 @@ unsigned int DispatchRestore__FP7edict_sP13saverestore_si(st_49c6a0_1 *a0, unsig
     v21 = (!a0 ? NULL : a0->field_7c);
     if (!v21 || !a1)
         return 0;
-    sub_48de70(&v16);
-    sub_489c20(&v10, a1);
+    __9entvars_s(&v16);
+    __18CSaveRestoreBufferP13saverestore_s(&v10, a1);
     v11 = 0;
     v12 = 1;
     if (a2)
     {
-        sub_489c20(&v7, a1);
+        __18CSaveRestoreBufferP13saverestore_s(&v7, a1);
         v8 = 0;
         v9 = 0;
-        sub_4896a0(&v7, "ENTVARS", &v16);
+        CRestore::ReadEntVars(&v7, "ENTVARS", &v16);
         v22 = *(int *)(a1[10] + a1[7] * 24 + 8);
         a1[2] = v22;
         a1[1] = v22 + *a1;
-        if (sub_488af0(a1 + 341, sub_48b360(&gGlobalState, v17) + 64))
+        if (strcmp@GLIBC_2.0(a1 + 341, CGlobalState::EntityFromTable(&gGlobalState, v17) + 64))
         {
-            sub_48c990(&v7, 2);
-            sub_48c990(&v10, 2);
+            _._18CSaveRestoreBuffer(&v7, 2);
+            _._18CSaveRestoreBuffer(&v10, 2);
         }
         else
         {
             v13 = a1[337];
             v14 = a1[338];
             v15 = a1[339];
-            v23 = sub_4887e0(v16, v17);
+            v23 = FindGlobalEntity(v16, v17);
             if (v23)
             {
                 v11 = 1;
@@ -134,14 +134,14 @@ unsigned int DispatchRestore__FP7edict_sP13saverestore_si(st_49c6a0_1 *a0, unsig
                 *(float *)&a1[339] = v6;
                 v21 = v23;
                 a0 = v21->field_0->field_208;
-                sub_48cd00(&gGlobalState, v21->field_0->field_4, gpGlobals->field_c);
-                sub_48c990(&v7, 2);
+                CGlobalState::EntityUpdate(&gGlobalState, v21->field_0->field_4, gpGlobals->field_c);
+                _._18CSaveRestoreBuffer(&v7, 2);
                 goto LABEL_49c939;
             }
             else
             {
-                sub_48c990(&v7, 2);
-                sub_48c990(&v10, 2);
+                _._18CSaveRestoreBuffer(&v7, 2);
+                _._18CSaveRestoreBuffer(&v10, 2);
             }
         }
     }
@@ -169,29 +169,29 @@ LABEL_49c939:
             a1[339] = v15;
             if (v26)
             {
-                sub_48db50(v26->field_0, &v26->field_0->field_8);
+                UTIL_SetOrigin(v26->field_0, &v26->field_0->field_8);
                 v26->field_60->field_70(v26);
             }
         }
         else if (v26 && v26->field_0->field_4)
         {
-            v27 = sub_48b360(&gGlobalState, v26->field_0->field_4);
+            v27 = CGlobalState::EntityFromTable(&gGlobalState, v26->field_0->field_4);
             if (!v27)
             {
-                g_6168b4(4, "Global Entity %s (%s) not in table!!!\n", v26->field_0->field_4 + gpGlobals->field_98, v26->field_0->field_0 + gpGlobals->field_98);
-                sub_48aad0(&gGlobalState, v26->field_0->field_4, gpGlobals->field_c, 1);
+                g_engfuncs.pfnAlertMessage(4, "Global Entity %s (%s) not in table!!!\n", v26->field_0->field_4 + gpGlobals->field_98, v26->field_0->field_0 + gpGlobals->field_98);
+                CGlobalState::EntityAdd(&gGlobalState, v26->field_0->field_4, gpGlobals->field_c, 1);
             }
             else if (v27->field_60 == 2)
             {
-                sub_48c990(&v10, 2);
+                _._18CSaveRestoreBuffer(&v10, 2);
                 return 0xffffffff;
             }
-            else if (sub_488af0(gpGlobals->field_c + gpGlobals->field_98, &v27->padding_0[64]))
+            else if (strcmp@GLIBC_2.0(gpGlobals->field_c + gpGlobals->field_98, &v27->padding_0[64]))
             {
-                sub_48a320(v26);
+                CBaseEntity::MakeDormant(v26);
             }
         }
-        sub_48c990(&v10, 2);
+        _._18CSaveRestoreBuffer(&v10, 2);
     }
     return 0;
 }

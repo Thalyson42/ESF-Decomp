@@ -16,15 +16,15 @@ typedef struct st_56b6a0_0 {
 } st_56b6a0_0;
 
 extern unsigned int g_vecZero;
-extern unsigned int g_616790;
-extern unsigned int g_616794;
+extern unsigned int g_vecZero+4;
+extern unsigned int g_vecZero+8;
 extern st_56b6a0_0 *gpGlobals;
 extern unsigned int GatherSpotsForTeamGood;
-extern char g_625c4c;
+extern char GatherSpotsForTeamGood+12;
 extern unsigned int GatherSpotsForTeamEvil;
-extern char g_625cec;
+extern char GatherSpotsForTeamEvil+12;
 extern unsigned int cout;
-extern st_56b6a0_1 *g_625f80;
+extern st_56b6a0_1 *cout+512;
 
 int InitCustomGatherDBSpots__11CBotManager(void)
 {
@@ -49,48 +49,48 @@ int InitCustomGatherDBSpots__11CBotManager(void)
     {
         idx = i * 16;
         *(unsigned int *)((char *)&GatherSpotsForTeamGood + idx) = g_vecZero;
-        *(unsigned int *)((char *)&GatherSpotsForTeamGood + idx + 4) = g_616790;
-        *(unsigned int *)((char *)&GatherSpotsForTeamGood + idx + 8) = g_616794;
-        (&g_625c4c)[idx] = 1;
+        *(unsigned int *)((char *)&GatherSpotsForTeamGood + idx + 4) = g_vecZero+4;
+        *(unsigned int *)((char *)&GatherSpotsForTeamGood + idx + 8) = g_vecZero+8;
+        (&GatherSpotsForTeamGood+12)[idx] = 1;
         *(unsigned int *)((char *)&GatherSpotsForTeamEvil + idx) = g_vecZero;
-        *(unsigned int *)((char *)&GatherSpotsForTeamEvil + idx + 4) = g_616790;
-        *(unsigned int *)((char *)&GatherSpotsForTeamEvil + idx + 8) = g_616794;
-        (&g_625cec)[idx] = 1;
+        *(unsigned int *)((char *)&GatherSpotsForTeamEvil + idx + 4) = g_vecZero+4;
+        *(unsigned int *)((char *)&GatherSpotsForTeamEvil + idx + 8) = g_vecZero+8;
+        (&GatherSpotsForTeamEvil+12)[idx] = 1;
         i += 1;
     } while (i <= 9);
     v7 = 0;
-    sub_48d0e0(&v8, 0, 31);
+    memset@GLIBC_2.0(&v8, 0, 31);
     v5 = 0;
-    sub_48d0e0(&v6, 0, 0xff);
-    sub_48e110(&v7, gpGlobals->field_c + gpGlobals->field_98);
-    sub_48c150(&v7, ".dbg");
-    sub_489050(&v5, "dragonball", &v7);
-    g_625f80->field_14(&cout, "Reading dragonball info file...");
-    v12 = sub_48d440(&v5, "rb");
+    memset@GLIBC_2.0(&v6, 0, 0xff);
+    strcpy@GLIBC_2.0(&v7, gpGlobals->field_c + gpGlobals->field_98);
+    strcat@GLIBC_2.0(&v7, ".dbg");
+    BuildBotFileName(&v5, "dragonball", &v7);
+    cout+512->field_14(&cout, "Reading dragonball info file...");
+    v12 = fopen@GLIBC_2.1(&v5, "rb");
     if (!v12)
     {
-        v13 = g_625f80;
+        v13 = cout+512;
         v1 = " file not found, db spawnpoints will be used as gather spots.\n";
         v0 = &cout;
         return v13->field_14(v0, v1);
     }
-    sub_48a160(&v2, 36, 1, v12);
-    if (v3 != 1.0f || sub_488af0(gpGlobals->field_c + gpGlobals->field_98, &v4))
-        return sub_48c560(v12);
+    fread@GLIBC_2.0(&v2, 36, 1, v12);
+    if (v3 != 1.0f || strcmp@GLIBC_2.0(gpGlobals->field_c + gpGlobals->field_98, &v4))
+        return fclose@GLIBC_2.1(v12);
     j = 0;
     do
     {
-        sub_48a160(&(&GatherSpotsForTeamGood)[4 * j], 16, 1, v12);
+        fread@GLIBC_2.0(&(&GatherSpotsForTeamGood)[4 * j], 16, 1, v12);
         j += 1;
     } while (j <= 9);
     k = 0;
     do
     {
-        sub_48a160(&(&GatherSpotsForTeamEvil)[4 * k], 16, 1, v12);
+        fread@GLIBC_2.0(&(&GatherSpotsForTeamEvil)[4 * k], 16, 1, v12);
         k += 1;
     } while (k <= 9);
-    sub_48c560(v12);
-    return g_625f80->field_14(&cout, " Done\n");
-    return sub_48c560(v12);
+    fclose@GLIBC_2.1(v12);
+    return cout+512->field_14(&cout, " Done\n");
+    return fclose@GLIBC_2.1(v12);
 }
 

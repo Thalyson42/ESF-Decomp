@@ -49,7 +49,7 @@ typedef struct st_55ab50_7 {
 } st_55ab50_7;
 
 extern unsigned int FindSelection__t12TMultiChoice1Z10EComboTypePQ2t12TMultiChoice1Z10EComboType12SMultiChoicei;
-extern st_55ab50_7 *g_616928;
+extern st_55ab50_7 *g_engfuncs.pfnRandomLong;
 
 char MakeTeleMelee__4CBotP11CBasePlayer(st_55ab50_2 *a0, st_55ab50_0 **a1)
 {
@@ -193,21 +193,21 @@ char MakeTeleMelee__4CBotP11CBasePlayer(st_55ab50_2 *a0, st_55ab50_0 **a1)
     v57 = v54 * v54 + v55 * v55 + v56 * v56;
     v58 = sqrt(v57);
     if (isnan(v58))
-        sub_487dc0(*(unsigned int *)&v57);
+        sqrt(*(unsigned int *)&v57);
     else
         v57 = v58;
     v42 = (float)v57;
     v41 = a0->field_0->field_208;
     iter1 = 0;
-    v59 = sub_48d6a0(8);
+    v59 = __builtin_new(8);
     *v59 = NULL;
     v59[1] = NULL;
     v45 = v59;
     if (v42 > 450.0f)
     {
-        if (!(char)sub_487c70(v41, 2, 650.0f))
+        if (!(char)CheckForCollide(v41, 2, 650.0f))
         {
-            v60 = sub_48d6a0(12);
+            v60 = __builtin_new(12);
             *v60 = 0;
             v60[1] = 0;
             v40 = v60;
@@ -217,15 +217,15 @@ char MakeTeleMelee__4CBotP11CBasePlayer(st_55ab50_2 *a0, st_55ab50_0 **a1)
             v61 = v45;
             if (!*v61)
             {
-                v62 = sub_48d6a0(12);
+                v62 = __builtin_new(12);
                 v39 = 1;
                 v62->field_4 = NULL;
                 v62->field_8 = NULL;
-                sub_48d0e0(v62, 0, 4);
+                memset@GLIBC_2.0(v62, 0, 4);
                 v39 = 0;
                 *v61 = v62;
                 if (v39)
-                    sub_48d4e0(v62);
+                    __builtin_delete(v62);
                 *v61->field_0 = v40;
                 *v61->field_4 = NULL;
                 *v61->field_8 = NULL;
@@ -234,15 +234,15 @@ char MakeTeleMelee__4CBotP11CBasePlayer(st_55ab50_2 *a0, st_55ab50_0 **a1)
             else
             {
                 v38 = v61[1];
-                v63 = sub_48d6a0(12);
+                v63 = __builtin_new(12);
                 v37 = 1;
                 v63->field_4 = NULL;
                 v63->field_8 = NULL;
-                sub_48d0e0(v63, 0, 4);
+                memset@GLIBC_2.0(v63, 0, 4);
                 v37 = 0;
                 v38->field_4 = v63;
                 if (v37)
-                    sub_48d4e0(v63);
+                    __builtin_delete(v63);
                 v61[1]->field_4->field_8 = v61[1];
                 v64 = v61[1]->field_4;
                 v61[1] = v64;
@@ -251,9 +251,9 @@ char MakeTeleMelee__4CBotP11CBasePlayer(st_55ab50_2 *a0, st_55ab50_0 **a1)
             }
             iter1 += 40;
         }
-        if (!(char)sub_487c70(v41, 4, 650.0f))
+        if (!(char)CheckForCollide(v41, 4, 650.0f))
         {
-            v65 = sub_48d6a0(12);
+            v65 = __builtin_new(12);
             *v65 = 0;
             v65[1] = 0;
             v36 = v65;
@@ -263,15 +263,15 @@ char MakeTeleMelee__4CBotP11CBasePlayer(st_55ab50_2 *a0, st_55ab50_0 **a1)
             v66 = v45;
             if (!*v66)
             {
-                v67 = sub_48d6a0(12);
+                v67 = __builtin_new(12);
                 v35 = 1;
                 v67->field_4 = NULL;
                 v67->field_8 = NULL;
-                sub_48d0e0(v67, 0, 4);
+                memset@GLIBC_2.0(v67, 0, 4);
                 v35 = 0;
                 *v66 = v67;
                 if (v35)
-                    sub_48d4e0(v67);
+                    __builtin_delete(v67);
                 *v66->field_0 = v36;
                 *v66->field_4 = NULL;
                 *v66->field_8 = NULL;
@@ -280,15 +280,15 @@ char MakeTeleMelee__4CBotP11CBasePlayer(st_55ab50_2 *a0, st_55ab50_0 **a1)
             else
             {
                 v34 = v66[1];
-                v68 = sub_48d6a0(12);
+                v68 = __builtin_new(12);
                 v33 = 1;
                 v68->field_4 = NULL;
                 v68->field_8 = NULL;
-                sub_48d0e0(v68, 0, 4);
+                memset@GLIBC_2.0(v68, 0, 4);
                 v33 = 0;
                 v34->field_4 = v68;
                 if (v33)
-                    sub_48d4e0(v68);
+                    __builtin_delete(v68);
                 v66[1]->field_4->field_8 = v66[1];
                 v69 = v66[1]->field_4;
                 v66[1] = v69;
@@ -297,9 +297,9 @@ char MakeTeleMelee__4CBotP11CBasePlayer(st_55ab50_2 *a0, st_55ab50_0 **a1)
             }
             iter1 += 40;
         }
-        if (!(char)sub_487c70(v41, 8, 650.0f))
+        if (!(char)CheckForCollide(v41, 8, 650.0f))
         {
-            v70 = sub_48d6a0(12);
+            v70 = __builtin_new(12);
             *v70 = 0;
             v70[1] = 0;
             v32 = v70;
@@ -309,15 +309,15 @@ char MakeTeleMelee__4CBotP11CBasePlayer(st_55ab50_2 *a0, st_55ab50_0 **a1)
             v71 = v45;
             if (!*v71)
             {
-                v72 = sub_48d6a0(12);
+                v72 = __builtin_new(12);
                 v31 = 1;
                 v72->field_4 = NULL;
                 v72->field_8 = NULL;
-                sub_48d0e0(v72, 0, 4);
+                memset@GLIBC_2.0(v72, 0, 4);
                 v31 = 0;
                 *v71 = v72;
                 if (v31)
-                    sub_48d4e0(v72);
+                    __builtin_delete(v72);
                 *v71->field_0 = v32;
                 *v71->field_4 = NULL;
                 *v71->field_8 = NULL;
@@ -326,15 +326,15 @@ char MakeTeleMelee__4CBotP11CBasePlayer(st_55ab50_2 *a0, st_55ab50_0 **a1)
             else
             {
                 v30 = v71[1];
-                v73 = sub_48d6a0(12);
+                v73 = __builtin_new(12);
                 v29 = 1;
                 v73->field_4 = NULL;
                 v73->field_8 = NULL;
-                sub_48d0e0(v73, 0, 4);
+                memset@GLIBC_2.0(v73, 0, 4);
                 v29 = 0;
                 v30->field_4 = v73;
                 if (v29)
-                    sub_48d4e0(v73);
+                    __builtin_delete(v73);
                 v71[1]->field_4->field_8 = v71[1];
                 v74 = v71[1]->field_4;
                 v71[1] = v74;
@@ -344,9 +344,9 @@ char MakeTeleMelee__4CBotP11CBasePlayer(st_55ab50_2 *a0, st_55ab50_0 **a1)
             iter1 += 40;
         }
     }
-    if (!(char)sub_487c70(v41, 32, 650.0f))
+    if (!(char)CheckForCollide(v41, 32, 650.0f))
     {
-        v75 = sub_48d6a0(12);
+        v75 = __builtin_new(12);
         *v75 = 0;
         v75[1] = 0;
         v28 = v75;
@@ -356,15 +356,15 @@ char MakeTeleMelee__4CBotP11CBasePlayer(st_55ab50_2 *a0, st_55ab50_0 **a1)
         v76 = v45;
         if (!*v76)
         {
-            v77 = sub_48d6a0(12);
+            v77 = __builtin_new(12);
             v27 = 1;
             v77->field_4 = NULL;
             v77->field_8 = NULL;
-            sub_48d0e0(v77, 0, 4);
+            memset@GLIBC_2.0(v77, 0, 4);
             v27 = 0;
             *v76 = v77;
             if (v27)
-                sub_48d4e0(v77);
+                __builtin_delete(v77);
             *v76->field_0 = v28;
             *v76->field_4 = NULL;
             *v76->field_8 = NULL;
@@ -373,15 +373,15 @@ char MakeTeleMelee__4CBotP11CBasePlayer(st_55ab50_2 *a0, st_55ab50_0 **a1)
         else
         {
             v26 = v76[1];
-            v78 = sub_48d6a0(12);
+            v78 = __builtin_new(12);
             v25 = 1;
             v78->field_4 = NULL;
             v78->field_8 = NULL;
-            sub_48d0e0(v78, 0, 4);
+            memset@GLIBC_2.0(v78, 0, 4);
             v25 = 0;
             v26->field_4 = v78;
             if (v25)
-                sub_48d4e0(v78);
+                __builtin_delete(v78);
             v76[1]->field_4->field_8 = v76[1];
             v79 = v76[1]->field_4;
             v76[1] = v79;
@@ -390,9 +390,9 @@ char MakeTeleMelee__4CBotP11CBasePlayer(st_55ab50_2 *a0, st_55ab50_0 **a1)
         }
         iter1 += 75;
     }
-    if (!(char)sub_487c70(v41, 64, 650.0f))
+    if (!(char)CheckForCollide(v41, 64, 650.0f))
     {
-        v80 = sub_48d6a0(12);
+        v80 = __builtin_new(12);
         *v80 = 0;
         v80[1] = 0;
         v24 = v80;
@@ -402,15 +402,15 @@ char MakeTeleMelee__4CBotP11CBasePlayer(st_55ab50_2 *a0, st_55ab50_0 **a1)
         v81 = v45;
         if (!*v81)
         {
-            v82 = sub_48d6a0(12);
+            v82 = __builtin_new(12);
             v23 = 1;
             v82->field_4 = NULL;
             v82->field_8 = NULL;
-            sub_48d0e0(v82, 0, 4);
+            memset@GLIBC_2.0(v82, 0, 4);
             v23 = 0;
             *v81 = v82;
             if (v23)
-                sub_48d4e0(v82);
+                __builtin_delete(v82);
             *v81->field_0 = v24;
             *v81->field_4 = NULL;
             *v81->field_8 = NULL;
@@ -419,15 +419,15 @@ char MakeTeleMelee__4CBotP11CBasePlayer(st_55ab50_2 *a0, st_55ab50_0 **a1)
         else
         {
             v22 = v81[1];
-            v83 = sub_48d6a0(12);
+            v83 = __builtin_new(12);
             v21 = 1;
             v83->field_4 = NULL;
             v83->field_8 = NULL;
-            sub_48d0e0(v83, 0, 4);
+            memset@GLIBC_2.0(v83, 0, 4);
             v21 = 0;
             v22->field_4 = v83;
             if (v21)
-                sub_48d4e0(v83);
+                __builtin_delete(v83);
             v81[1]->field_4->field_8 = v81[1];
             v84 = v81[1]->field_4;
             v81[1] = v84;
@@ -436,9 +436,9 @@ char MakeTeleMelee__4CBotP11CBasePlayer(st_55ab50_2 *a0, st_55ab50_0 **a1)
         }
         iter1 += 75;
     }
-    if (!(char)sub_487c70(v41, 0x40000, 650.0f))
+    if (!(char)CheckForCollide(v41, 0x40000, 650.0f))
     {
-        v85 = sub_48d6a0(12);
+        v85 = __builtin_new(12);
         *v85 = 0;
         v85[1] = 0;
         v20 = v85;
@@ -448,15 +448,15 @@ char MakeTeleMelee__4CBotP11CBasePlayer(st_55ab50_2 *a0, st_55ab50_0 **a1)
         v86 = v45;
         if (!*v86)
         {
-            v87 = sub_48d6a0(12);
+            v87 = __builtin_new(12);
             v19 = 1;
             v87->field_4 = NULL;
             v87->field_8 = NULL;
-            sub_48d0e0(v87, 0, 4);
+            memset@GLIBC_2.0(v87, 0, 4);
             v19 = 0;
             *v86 = v87;
             if (v19)
-                sub_48d4e0(v87);
+                __builtin_delete(v87);
             *v86->field_0 = v20;
             *v86->field_4 = NULL;
             *v86->field_8 = NULL;
@@ -465,15 +465,15 @@ char MakeTeleMelee__4CBotP11CBasePlayer(st_55ab50_2 *a0, st_55ab50_0 **a1)
         else
         {
             v18 = v86[1];
-            v88 = sub_48d6a0(12);
+            v88 = __builtin_new(12);
             v17 = 1;
             v88->field_4 = NULL;
             v88->field_8 = NULL;
-            sub_48d0e0(v88, 0, 4);
+            memset@GLIBC_2.0(v88, 0, 4);
             v17 = 0;
             v18->field_4 = v88;
             if (v17)
-                sub_48d4e0(v88);
+                __builtin_delete(v88);
             v86[1]->field_4->field_8 = v86[1];
             v89 = v86[1]->field_4;
             v86[1] = v89;
@@ -482,9 +482,9 @@ char MakeTeleMelee__4CBotP11CBasePlayer(st_55ab50_2 *a0, st_55ab50_0 **a1)
         }
         iter1 += 40;
     }
-    if (!(char)sub_487c70(v41, 0x80000, 650.0f))
+    if (!(char)CheckForCollide(v41, 0x80000, 650.0f))
     {
-        v90 = sub_48d6a0(12);
+        v90 = __builtin_new(12);
         *v90 = 0;
         v90[1] = 0;
         v16 = v90;
@@ -494,15 +494,15 @@ char MakeTeleMelee__4CBotP11CBasePlayer(st_55ab50_2 *a0, st_55ab50_0 **a1)
         v91 = v45;
         if (!*v91)
         {
-            v92 = sub_48d6a0(12);
+            v92 = __builtin_new(12);
             v15 = 1;
             v92->field_4 = NULL;
             v92->field_8 = NULL;
-            sub_48d0e0(v92, 0, 4);
+            memset@GLIBC_2.0(v92, 0, 4);
             v15 = 0;
             *v91 = v92;
             if (v15)
-                sub_48d4e0(v92);
+                __builtin_delete(v92);
             *v91->field_0 = v16;
             *v91->field_4 = NULL;
             *v91->field_8 = NULL;
@@ -511,15 +511,15 @@ char MakeTeleMelee__4CBotP11CBasePlayer(st_55ab50_2 *a0, st_55ab50_0 **a1)
         else
         {
             v14 = v91[1];
-            v93 = sub_48d6a0(12);
+            v93 = __builtin_new(12);
             v13 = 1;
             v93->field_4 = NULL;
             v93->field_8 = NULL;
-            sub_48d0e0(v93, 0, 4);
+            memset@GLIBC_2.0(v93, 0, 4);
             v13 = 0;
             v14->field_4 = v93;
             if (v13)
-                sub_48d4e0(v93);
+                __builtin_delete(v93);
             v91[1]->field_4->field_8 = v91[1];
             v94 = v91[1]->field_4;
             v91[1] = v94;
@@ -530,9 +530,9 @@ char MakeTeleMelee__4CBotP11CBasePlayer(st_55ab50_2 *a0, st_55ab50_0 **a1)
     }
     if (v42 < 600.0f)
     {
-        if (!(char)sub_487c70(v41, 0x40000, 650.0f))
+        if (!(char)CheckForCollide(v41, 0x40000, 650.0f))
         {
-            v95 = sub_48d6a0(12);
+            v95 = __builtin_new(12);
             *v95 = 0;
             v95[1] = 0;
             v12 = v95;
@@ -542,15 +542,15 @@ char MakeTeleMelee__4CBotP11CBasePlayer(st_55ab50_2 *a0, st_55ab50_0 **a1)
             v96 = v45;
             if (!*v96)
             {
-                v97 = sub_48d6a0(12);
+                v97 = __builtin_new(12);
                 v11 = 1;
                 v97->field_4 = NULL;
                 v97->field_8 = NULL;
-                sub_48d0e0(v97, 0, 4);
+                memset@GLIBC_2.0(v97, 0, 4);
                 v11 = 0;
                 *v96 = v97;
                 if (v11)
-                    sub_48d4e0(v97);
+                    __builtin_delete(v97);
                 *v96->field_0 = v12;
                 *v96->field_4 = NULL;
                 *v96->field_8 = NULL;
@@ -559,15 +559,15 @@ char MakeTeleMelee__4CBotP11CBasePlayer(st_55ab50_2 *a0, st_55ab50_0 **a1)
             else
             {
                 v10 = v96[1];
-                v98 = sub_48d6a0(12);
+                v98 = __builtin_new(12);
                 v9 = 1;
                 v98->field_4 = NULL;
                 v98->field_8 = NULL;
-                sub_48d0e0(v98, 0, 4);
+                memset@GLIBC_2.0(v98, 0, 4);
                 v9 = 0;
                 v10->field_4 = v98;
                 if (v9)
-                    sub_48d4e0(v98);
+                    __builtin_delete(v98);
                 v96[1]->field_4->field_8 = v96[1];
                 v99 = v96[1]->field_4;
                 v96[1] = v99;
@@ -576,9 +576,9 @@ char MakeTeleMelee__4CBotP11CBasePlayer(st_55ab50_2 *a0, st_55ab50_0 **a1)
             }
             iter1 += 45;
         }
-        if (!(char)sub_487c70(v41, 0x80000, 650.0f))
+        if (!(char)CheckForCollide(v41, 0x80000, 650.0f))
         {
-            v100 = sub_48d6a0(12);
+            v100 = __builtin_new(12);
             *v100 = 0;
             v100[1] = 0;
             v8 = v100;
@@ -588,15 +588,15 @@ char MakeTeleMelee__4CBotP11CBasePlayer(st_55ab50_2 *a0, st_55ab50_0 **a1)
             v101 = v45;
             if (!*v101)
             {
-                v102 = sub_48d6a0(12);
+                v102 = __builtin_new(12);
                 v7 = 1;
                 v102->field_4 = NULL;
                 v102->field_8 = NULL;
-                sub_48d0e0(v102, 0, 4);
+                memset@GLIBC_2.0(v102, 0, 4);
                 v7 = 0;
                 *v101 = v102;
                 if (v7)
-                    sub_48d4e0(v102);
+                    __builtin_delete(v102);
                 *v101->field_0 = v8;
                 *v101->field_4 = NULL;
                 *v101->field_8 = NULL;
@@ -605,15 +605,15 @@ char MakeTeleMelee__4CBotP11CBasePlayer(st_55ab50_2 *a0, st_55ab50_0 **a1)
             else
             {
                 v6 = v101[1];
-                v103 = sub_48d6a0(12);
+                v103 = __builtin_new(12);
                 v5 = 1;
                 v103->field_4 = NULL;
                 v103->field_8 = NULL;
-                sub_48d0e0(v103, 0, 4);
+                memset@GLIBC_2.0(v103, 0, 4);
                 v5 = 0;
                 v6->field_4 = v103;
                 if (v5)
-                    sub_48d4e0(v103);
+                    __builtin_delete(v103);
                 v101[1]->field_4->field_8 = v101[1];
                 v104 = v101[1]->field_4;
                 v101[1] = v104;
@@ -624,7 +624,7 @@ char MakeTeleMelee__4CBotP11CBasePlayer(st_55ab50_2 *a0, st_55ab50_0 **a1)
         }
     }
     v4 = &v43;
-    v3 = g_616928(0, iter1);
+    v3 = g_engfuncs.pfnRandomLong(0, iter1);
     v1 = _INSERT(v3, 0, 0) | 0xffff0000;
     v2 = &FindSelection__t12TMultiChoice1Z10EComboTypePQ2t12TMultiChoice1Z10EComboType12SMultiChoicei;
     v106 = *v45;
@@ -647,7 +647,7 @@ LABEL_55be1f:
         {
             v43 = v109[2];
             a0->field_b6c = a1;
-            sub_488720(a0, v43);
+            CBot::MakeCombo(a0, v43);
             while (*v45 && (v110 = v45, *v110))
             {
                 v111 = &*v110->field_0->field_0;
@@ -661,12 +661,12 @@ LABEL_55be1f:
                     if (v113)
                         v113->field_8 = NULL;
                     v112->field_4 = NULL;
-                    sub_48d4e0(v112);
+                    __builtin_delete(v112);
                 }
                 v114 = v111;
                 if (!v114)
                     break;
-                sub_48d4e0(v114);
+                __builtin_delete(v114);
             }
             if (v45)
             {
@@ -680,12 +680,12 @@ LABEL_55be1f:
                         node = node->field_4;
                         v117->field_4 = NULL;
                         v117->field_8 = NULL;
-                        sub_48d4e0(v117);
+                        __builtin_delete(v117);
                     } while (node);
                 }
                 v115[1] = NULL;
                 *v115 = NULL;
-                sub_48d4e0(v115);
+                __builtin_delete(v115);
             }
             v45 = 0;
             return 1;
@@ -704,12 +704,12 @@ LABEL_55be1f:
             if (v121)
                 v121->field_8 = NULL;
             v120->field_4 = NULL;
-            sub_48d4e0(v120);
+            __builtin_delete(v120);
         }
         v122 = v119;
         if (!v122)
             break;
-        sub_48d4e0(v122);
+        __builtin_delete(v122);
     }
     if (v45)
     {
@@ -723,12 +723,12 @@ LABEL_55be1f:
                 iter = iter->field_4;
                 v125->field_4 = NULL;
                 v125->field_8 = NULL;
-                sub_48d4e0(v125);
+                __builtin_delete(v125);
             } while (iter);
         }
         v123[1] = NULL;
         *v123 = NULL;
-        sub_48d4e0(v123);
+        __builtin_delete(v123);
     }
     v45 = 0;
     return 0;

@@ -69,12 +69,12 @@ unsigned int CreateBeam__15CControlledBeamG6VectorT1f(double a0, st_4a8380_0 *a1
     v2 = a1->field_1fc;
     v1 = a4;
     v0 = &a1->field_f4;
-    sub_48aef0(a1);
+    CBasePlayerWeapon::GetPowerRatio(a1);
     v14 = a1->field_e8 * a1->field_d8;
     v13 = __fnstcw();
     v12 = v13 | 0xc00;
     v14 = (int)(a0 * (double)(int)v14);
-    v21 = sub_4888f0(*(int *)a1->field_80, &v18, &v15, v14);
+    v21 = CGuidedAttack::ShootGuidedMagic(*(int *)a1->field_80, &v18, &v15, v14);
     a1->field_c8 = v21;
     return v21;
 }

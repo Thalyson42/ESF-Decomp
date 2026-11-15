@@ -152,11 +152,11 @@ typedef struct st_54ab40_4 {
 
 extern unsigned int FindSelection__t12TMultiChoice1ZiPQ2t12TMultiChoice1Zi12SMultiChoicei;
 extern st_54ab40_17 BotWeaponInfoTable;
-extern st_54ab40_4 *g_6168a4;
-extern st_54ab40_4 *g_616928;
-extern st_54ab40_4 *g_61692c;
+extern st_54ab40_4 *g_engfuncs.pfnCVarGetFloat;
+extern st_54ab40_4 *g_engfuncs.pfnRandomLong;
+extern st_54ab40_4 *g_engfuncs.pfnRandomFloat;
 extern st_54ab40_1 *gpGlobals;
-extern char g_6253c7;
+extern char BotManager+3399;
 
 double TaskThink__11CCombatTask(float idx)
 {
@@ -266,7 +266,7 @@ double TaskThink__11CCombatTask(float idx)
         *(unsigned int *)(*(unsigned int *)&idx + 4) = 2;
         return v40;
     }
-    sub_48bfd0(*(int *)(*(unsigned int *)&idx + 8));
+    CBot::BotCombatMovement(*(int *)(*(unsigned int *)&idx + 8));
     v41 = *(int *)*(int *)(*(unsigned int *)&idx + 16) + 8;
     *(float *)&v36 = *(float *)(*(int *)*(int *)(*(unsigned int *)&idx + 16) + 8);
     *(float *)&v37 = *(float *)&v41[1];
@@ -281,7 +281,7 @@ double TaskThink__11CCombatTask(float idx)
     v46 = v43 * v43 + v44 * v44 + v45 * v45;
     v47 = sqrt(v46);
     if (isnan(v47))
-        sub_487dc0(*(unsigned int *)&v46);
+        sqrt(*(unsigned int *)&v46);
     else
         v46 = v47;
     v19 = (float)v46;
@@ -290,34 +290,34 @@ double TaskThink__11CCombatTask(float idx)
     *(float *)&v26 = *(float *)(*(int *)(*(unsigned int *)&idx + 12) + 0x88);
     *(float *)&v27 = *(float *)&v48[1];
     *(float *)&v28 = *(float *)&v48[2];
-    if (!(char)sub_489330(*(int *)(*(unsigned int *)&idx + 8), *(int *)(*(unsigned int *)&idx + 16)))
+    if (!(char)EntIsInFieldOfView(*(int *)(*(unsigned int *)&idx + 8), *(int *)(*(unsigned int *)&idx + 16)))
     {
         v49 = (st_54ab40_0 *)idx;
         v1 = v49->field_8;
-        if (!(char)sub_489330(v49->field_10, v1))
+        if (!(char)EntIsInFieldOfView(v49->field_10, v1))
         {
-            sub_48d0d0(*(int *)(*(unsigned int *)&idx + 8));
+            CBot::ResetMoveSpeed(*(int *)(*(unsigned int *)&idx + 8));
             return *(float *)&v48[2];
         }
     }
     if (*(char *)(*(int *)(*(int *)(*(unsigned int *)&idx + 8) + 0xa00) + 62) && v19 < 800.0f)
     {
         *(unsigned short *)&v1 = 1;
-        sub_48ab70(*(int *)(*(unsigned int *)&idx + 8), v1);
+        CBot::ToggleTurbo(*(int *)(*(unsigned int *)&idx + 8), v1);
     }
     v50 = *(float *)(*(int *)(*(unsigned int *)&idx + 8) + 2932);
     if (v50 > *(float *)gpGlobals)
     {
         return v50;
     }
-    else if (g_6253c7)
+    else if (BotManager+3399)
     {
-        g_6168a4("mp_ceasefire");
+        g_engfuncs.pfnCVarGetFloat("mp_ceasefire");
         if (v51 == 1.0)
         {
             return 1.0;
         }
-        else if (sub_48a5f0(*(int *)(*(unsigned int *)&idx + 8)))
+        else if (CBasePlayer::HasWeapons(*(int *)(*(unsigned int *)&idx + 8)))
         {
             v52 = (st_54ab40_7 *)idx;
             if (v52->field_8->field_760)
@@ -337,11 +337,11 @@ double TaskThink__11CCombatTask(float idx)
                     v29 = (int)v47;
                     if (v29 > 150)
                     {
-                        v25 = sub_48a780(v53);
+                        v25 = CBasePlayer::GetMaxSpeed(v53);
                         v47 = (double)v25;
                         if (0.0 < v47 && !*(int *)(*(int *)(*(unsigned int *)&idx + 8) + 892))
                         {
-                            v54 = g_616928(1, 100);
+                            v54 = g_engfuncs.pfnRandomLong(1, 100);
                             if ((int)v54 <= *(short *)(*(int *)(*(int *)(*(unsigned int *)&idx + 8) + 2984) + 12))
                             {
                                 *(unsigned int *)(*(int *)(*(unsigned int *)&idx + 8) + 4200) = 32;
@@ -356,12 +356,12 @@ double TaskThink__11CCombatTask(float idx)
             if (*(int *)(*(int *)(*(unsigned int *)&idx + 12) + 652) == 7)
                 v55 = 2;
             v17 = 0;
-            sub_48dc10(idx, v55);
+            CCombatTask::GetMinDistForAttackById(idx, v55);
             if ((isunordered(v47, v19) ? 0x44 : v47 == v19 ? 63 : v47 < v19 ? 0 : 0xff) < 64)
             {
-                sub_48c770(idx, v55);
+                CCombatTask::GetMaxDistForAttackById(idx, v55);
                 if (v47 >= v19)
-                    v17 = sub_4897e0(*(int *)(*(unsigned int *)&idx + 8), *(int *)(*(unsigned int *)&idx + 16)) != 0;
+                    v17 = CBasePlayer::CanMelee(*(int *)(*(unsigned int *)&idx + 8), *(int *)(*(unsigned int *)&idx + 16)) != 0;
             }
             v57 = (st_54ab40_10 *)idx;
             if (*(short *)v57->field_8->field_a04 != 100)
@@ -371,15 +371,15 @@ double TaskThink__11CCombatTask(float idx)
                     v58 = NULL;
                     while (1)
                     {
-                        v58 = sub_487e80(v58, "Kame Torpedo");
+                        v58 = UTIL_FindEntityByClassname(v58, "Kame Torpedo");
                         if (!v58)
                             break;
-                        if (!(char)sub_48b140(v58) && (v59 = *v58, v59->field_198 == *(int *)(*(unsigned int *)&idx + 12)))
+                        if (!(char)IsNull(v58) && (v59 = *v58, v59->field_198 == *(int *)(*(unsigned int *)&idx + 12)))
                         {
                             v60 = v59->field_20 * v59->field_20 + v59->field_24 * v59->field_24 + v59->field_28 * v59->field_28;
                             v61 = sqrt(v60);
                             if (isnan(v61))
-                                sub_487dc0(*(unsigned int *)&v60);
+                                sqrt(*(unsigned int *)&v60);
                             else
                                 v60 = v61;
                             v32 = (float)v60;
@@ -403,28 +403,28 @@ double TaskThink__11CCombatTask(float idx)
                 if (!v17)
                     v16 = 0;
                 v64 = 100.0;
-                g_61692c(0x3f800000, 100.0f);
+                g_engfuncs.pfnRandomFloat(0x3f800000, 100.0f);
                 if ((isnan(v16) ? 0x44 : 100.0 == v16 ? 63 : 100.0 < v16 ? 0 : 0xff) < 64)
                 {
-                    sub_48db90(idx, v55, 2);
+                    CCombatTask::PrepareAttack(idx, v55, 2);
                     return 1.0;
                 }
                 v22 = NULL;
-                v66 = sub_48d6a0(8);
+                v66 = __builtin_new(8);
                 *v66 = NULL;
                 v66[1] = NULL;
                 v23 = v66;
                 idx1 = 0;
                 v14 = &BotWeaponInfoTable.field_0;
-                v67 = g_616928(1, 100);
+                v67 = g_engfuncs.pfnRandomLong(1, 100);
                 v13 = (int)v67 <= *(short *)(*(int *)(*(int *)(*(unsigned int *)&idx + 8) + 2564) + 38);
                 if (v14->field_0)
                 {
                     do
                     {
-                        if (!(char)sub_48dc50(*(int *)(*(unsigned int *)&idx + 8), *(int *)((char *)v14 + 84 * idx1)) || *(int *)((char *)v14 + 84 * idx1) == 8 && *(int *)(*(int *)(*(unsigned int *)&idx + 16) + 836) || !(v12 = sub_48d070(idx, *(int *)(*(unsigned int *)&idx + 16), *(int *)((char *)v14 + 84 * idx1)), v12))
+                        if (!(char)CBot::HasWeapon(*(int *)(*(unsigned int *)&idx + 8), *(int *)((char *)v14 + 84 * idx1)) || *(int *)((char *)v14 + 84 * idx1) == 8 && *(int *)(*(int *)(*(unsigned int *)&idx + 16) + 836) || !(v12 = CCombatTask::GetAttackPercent(idx, *(int *)(*(unsigned int *)&idx + 16), *(int *)((char *)v14 + 84 * idx1)), v12))
                             continue;
-                        sub_48a040(idx, idx1);
+                        CCombatTask::GetMinDistForAttackByTableIndex(idx, idx1);
                         if (v64 > v19)
                         {
                             if (!v13)
@@ -435,20 +435,20 @@ double TaskThink__11CCombatTask(float idx)
                             v25 = (int)v64;
                             v12 = v25;
                         }
-                        sub_48b8a0(idx, idx1);
+                        CCombatTask::GetMaxDistForAttackByTableIndex(idx, idx1);
                         if (v64 >= v19)
                         {
                             if (v18 == 1)
                                 v18 = 0;
-                            if (*(int *)((char *)v14 + 84 * idx1) != 12 || (v64 = 250.0, !(char)sub_487c70(*(int *)(*(unsigned int *)&idx + 12), 32, 250.0f)))
+                            if (*(int *)((char *)v14 + 84 * idx1) != 12 || (v64 = 250.0, !(char)CheckForCollide(*(int *)(*(unsigned int *)&idx + 12), 32, 250.0f)))
                             {
                                 v68 = idx1 * 84;
-                                if (*(int *)((char *)v14 + v68) != 3 && *(int *)((char *)v14 + v68) != 21 && *(int *)((char *)v14 + v68) != 30 || (v64 = 225.0, !(char)sub_487c70(*(int *)(*(unsigned int *)&idx + 12), 6, 225.0f)))
+                                if (*(int *)((char *)v14 + v68) != 3 && *(int *)((char *)v14 + v68) != 21 && *(int *)((char *)v14 + v68) != 30 || (v64 = 225.0, !(char)CheckForCollide(*(int *)(*(unsigned int *)&idx + 12), 6, 225.0f)))
                                 {
                                     v69 = *(int *)((char *)v14 + 84 * idx1);
                                     if (v12)
                                     {
-                                        v70 = sub_48d6a0(12);
+                                        v70 = __builtin_new(12);
                                         v70->field_0 = NULL;
                                         v70->field_4 = 0;
                                         v11 = v70;
@@ -458,15 +458,15 @@ double TaskThink__11CCombatTask(float idx)
                                         v71 = v23;
                                         if (!*v71)
                                         {
-                                            v72 = sub_48d6a0(12);
+                                            v72 = __builtin_new(12);
                                             v10 = 1;
                                             v72->field_4 = NULL;
                                             v72->field_8 = NULL;
-                                            sub_48d0e0(v72, 0, 4);
+                                            memset@GLIBC_2.0(v72, 0, 4);
                                             v10 = 0;
                                             *v71 = v72;
                                             if (v10)
-                                                sub_48d4e0(v72);
+                                                __builtin_delete(v72);
                                             *v71->field_0 = v11;
                                             *v71->field_4 = NULL;
                                             *v71->field_8 = NULL;
@@ -475,15 +475,15 @@ double TaskThink__11CCombatTask(float idx)
                                         else
                                         {
                                             v9 = v71[1];
-                                            v73 = sub_48d6a0(12);
+                                            v73 = __builtin_new(12);
                                             v8 = 1;
                                             v73->field_4 = NULL;
                                             v73->field_8 = NULL;
-                                            sub_48d0e0(v73, 0, 4);
+                                            memset@GLIBC_2.0(v73, 0, 4);
                                             v8 = 0;
                                             v9->field_4 = v73;
                                             if (v8)
-                                                sub_48d4e0(v73);
+                                                __builtin_delete(v73);
                                             v71[1]->field_4->field_8 = v71[1];
                                             v74 = v71[1]->field_4;
                                             v71[1] = v74;
@@ -500,7 +500,7 @@ double TaskThink__11CCombatTask(float idx)
                 v20 = 0;
                 v7 = &v20;
                 v1 = v22;
-                v6 = g_616928(0, v1);
+                v6 = g_engfuncs.pfnRandomLong(0, v1);
                 v4 = _INSERT(v6, 0, 0) | 0xffff0000;
                 v5 = &FindSelection__t12TMultiChoice1ZiPQ2t12TMultiChoice1Zi12SMultiChoicei;
                 v76 = *v23;
@@ -526,7 +526,7 @@ LABEL_54b56f:
                 if (v18)
                 {
                     *(unsigned short *)&v1 = 1;
-                    sub_48ab70(*(int *)(*(unsigned int *)&idx + 8), v1);
+                    CBot::ToggleTurbo(*(int *)(*(unsigned int *)&idx + 8), v1);
                     while (*v23 && (v80 = v23, *v80))
                     {
                         v81 = *v80->field_0;
@@ -540,12 +540,12 @@ LABEL_54b56f:
                             if (v83)
                                 v83->field_8 = NULL;
                             v82->field_4 = NULL;
-                            sub_48d4e0(v82);
+                            __builtin_delete(v82);
                         }
                         v84 = v81;
                         if (!v84)
                             break;
-                        sub_48d4e0(v84);
+                        __builtin_delete(v84);
                     }
                     if (v23)
                     {
@@ -559,12 +559,12 @@ LABEL_54b56f:
                                 iter = iter->field_4;
                                 v87->field_4 = NULL;
                                 v87->field_8 = NULL;
-                                sub_48d4e0(v87);
+                                __builtin_delete(v87);
                             } while (iter);
                         }
                         v85[1] = NULL;
                         *v85 = NULL;
-                        sub_48d4e0(v85);
+                        __builtin_delete(v85);
                     }
                 }
                 else
@@ -584,12 +584,12 @@ LABEL_54b56f:
                                 if (v91)
                                     v91->field_8 = NULL;
                                 v90->field_4 = NULL;
-                                sub_48d4e0(v90);
+                                __builtin_delete(v90);
                             }
                             v92 = v89;
                             if (!v92)
                                 break;
-                            sub_48d4e0(v92);
+                            __builtin_delete(v92);
                         }
                         if (v23)
                         {
@@ -603,17 +603,17 @@ LABEL_54b56f:
                                     node = node->field_4;
                                     v95->field_4 = NULL;
                                     v95->field_8 = NULL;
-                                    sub_48d4e0(v95);
+                                    __builtin_delete(v95);
                                 } while (node);
                             }
                             v93[1] = NULL;
                             *v93 = NULL;
-                            sub_48d4e0(v93);
+                            __builtin_delete(v93);
                         }
                     }
                     else
                     {
-                        sub_48dc10(idx, v20);
+                        CCombatTask::GetMinDistForAttackById(idx, v20);
                         if (v64 > v19)
                         {
                             v2 = 0;
@@ -626,7 +626,7 @@ LABEL_54b56f:
                             v1 = v20;
                             v0 = idx;
                         }
-                        sub_48db90(v0, v1, v2);
+                        CCombatTask::PrepareAttack(v0, v1, v2);
                         while (*v23 && (v96 = v23, *v96))
                         {
                             v97 = *v96->field_0;
@@ -640,12 +640,12 @@ LABEL_54b56f:
                                 if (v99)
                                     v99->field_8 = NULL;
                                 v98->field_4 = NULL;
-                                sub_48d4e0(v98);
+                                __builtin_delete(v98);
                             }
                             v100 = v97;
                             if (!v100)
                                 break;
-                            sub_48d4e0(v100);
+                            __builtin_delete(v100);
                         }
                         if (v23)
                         {
@@ -659,12 +659,12 @@ LABEL_54b56f:
                                     iter1 = iter1->field_4;
                                     v103->field_4 = NULL;
                                     v103->field_8 = NULL;
-                                    sub_48d4e0(v103);
+                                    __builtin_delete(v103);
                                 } while (iter1);
                             }
                             v101[1] = NULL;
                             *v101 = NULL;
-                            sub_48d4e0(v101);
+                            __builtin_delete(v101);
                         }
                     }
                 }
@@ -673,7 +673,7 @@ LABEL_54b56f:
             }
             else if (v17)
             {
-                sub_48db90(v57, v55, 2);
+                CCombatTask::PrepareAttack(v57, v55, 2);
                 return 1.0;
             }
             else

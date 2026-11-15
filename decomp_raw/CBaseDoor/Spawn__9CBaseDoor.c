@@ -18,7 +18,7 @@ typedef struct st_4abad0_1 {
 } st_4abad0_1;
 
 extern char DoorTouch__9CBaseDoorP11CBaseEntity;
-extern st_4abad0_1 *g_6167c8;
+extern st_4abad0_1 *g_engfuncs.pfnSetModel;
 extern st_4abad0_0 *gpGlobals;
 
 int Spawn__9CBaseDoor(float idx)
@@ -41,7 +41,7 @@ int Spawn__9CBaseDoor(float idx)
     float v6;  // [bp-0x1c]
 
     (*(int *)(*(int *)(*(unsigned int *)&idx + 96) + 12))(idx);
-    sub_48ccb0(*(int *)idx);
+    SetMovedir(*(int *)idx);
     v8 = *(int *)idx;
     if (v8->field_110)
     {
@@ -57,8 +57,8 @@ int Spawn__9CBaseDoor(float idx)
         *(unsigned int *)(*(int *)idx + 268) = 4;
     }
     *(unsigned int *)(*(int *)idx + 264) = 7;
-    sub_48db50(*(int *)idx, *(int *)idx + 8);
-    g_6167c8(*(int *)(*(int *)idx + 520), *(int *)(*(int *)idx + 184) + gpGlobals->field_98);
+    UTIL_SetOrigin(*(int *)idx, *(int *)idx + 8);
+    g_engfuncs.pfnSetModel(*(int *)(*(int *)idx + 520), *(int *)(*(int *)idx + 184) + gpGlobals->field_98);
     if (*(float *)(*(int *)idx + 504) == 0.0f)
         *(float *)(*(int *)idx + 504) = 100.0f;
     v9 = *(int *)idx;
@@ -81,7 +81,7 @@ int Spawn__9CBaseDoor(float idx)
     *(float *)(*(unsigned int *)&idx + 176) = v6;
     if (v11[1].padding_45[71] & 1)
     {
-        sub_48db50(v11, *(unsigned int *)&idx + 168);
+        UTIL_SetOrigin(v11, *(unsigned int *)&idx + 168);
         *(int *)(*(unsigned int *)&idx + 168) = *(int *)(*(unsigned int *)&idx + 156);
         *(int *)(*(unsigned int *)&idx + 172) = *(int *)(*(unsigned int *)&idx + 160);
         *(int *)(*(unsigned int *)&idx + 176) = *(int *)(*(unsigned int *)&idx + 164);

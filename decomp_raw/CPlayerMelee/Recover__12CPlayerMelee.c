@@ -39,12 +39,12 @@ unsigned int Recover__12CPlayerMelee(st_502180_1 *a0)
         a0->field_8 = (float)(0.5 * a0->field_8);
         *(float *)&a0->field_10 = *(float *)&a0->field_10 + *(float *)&a0->field_10;
         *(float *)&a0->field_b0 = *(float *)gpGlobals;
-        v0 = sub_489390(*(int *)(*(int *)a0->field_124 + 520), 1, "weapons/airrecover.wav", 0x3f800000, 0.800000011920929f, 0, 100);
+        v0 = EMIT_SOUND_DYN(*(int *)(*(int *)a0->field_124 + 520), 1, "weapons/airrecover.wav", 0x3f800000, 0.800000011920929f, 0, 100);
     }
     else
     {
         a0->field_34 = 0;
-        v0 = sub_489390(*(int *)(*(int *)a0->field_124 + 520), 1, "weapons/groundrecover.wav", 0x3f800000, 0.800000011920929f, 0, 100);
+        v0 = EMIT_SOUND_DYN(*(int *)(*(int *)a0->field_124 + 520), 1, "weapons/groundrecover.wav", 0x3f800000, 0.800000011920929f, 0, 100);
     }
     a0->field_64 = 6;
     return v0;

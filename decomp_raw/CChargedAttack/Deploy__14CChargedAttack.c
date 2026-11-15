@@ -16,6 +16,6 @@ typedef struct st_49eb60_2 {
 int Deploy__14CChargedAttack(st_49eb60_2 *a0)
 {
     a0->field_60->field_168(a0);
-    return sub_489360(a0, &a0[2].padding_0[12]);
+    return CBasePlayerWeapon::DefaultDeploy(a0, &a0[2].padding_0[12]);
 }
 

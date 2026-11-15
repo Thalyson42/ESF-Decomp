@@ -72,10 +72,10 @@ typedef struct st_522680_7 {
 } st_522680_7;
 
 extern char DelayThink__10CBaseDelay;
-extern st_522680_5 *g_6167f8;
-extern st_522680_5 *g_6168b4;
-extern st_522680_5 *g_6168d4;
-extern st_522680_5 *g_6168d8;
+extern st_522680_5 *g_engfuncs.pfnFindEntityByString;
+extern st_522680_5 *g_engfuncs.pfnAlertMessage;
+extern st_522680_5 *g_engfuncs.pfnPEntityOfEntOffset;
+extern st_522680_5 *g_engfuncs.pfnEntOffsetOfPEntity;
 extern st_522680_7 *gpGlobals;
 
 st_522680_2 * SUB_UseTargets__10CBaseDelayP11CBaseEntity8USE_TYPEf(st_522680_2 *a0, st_522680_6 *a1, int a2, float a3)
@@ -97,7 +97,7 @@ st_522680_2 * SUB_UseTargets__10CBaseDelayP11CBaseEntity8USE_TYPEf(st_522680_2 *
         return a0->field_0;
     if (a0->field_64 != 0.0f)
     {
-        v3 = sub_48dc90(0);
+        v3 = GetClassPtr__H1Z10CBaseDelay_PX01_PX01(0);
         v3->field_0->field_0 = -1 * gpGlobals->field_98 + 5935849;
         v4 = v3->field_0;
         v5 = a0;
@@ -122,25 +122,25 @@ st_522680_2 * SUB_UseTargets__10CBaseDelayP11CBaseEntity8USE_TYPEf(st_522680_2 *
     {
         if (a0->field_68)
         {
-            g_6168b4(2, "KillTarget: %s\n", a0->field_68 + gpGlobals->field_98);
+            g_engfuncs.pfnAlertMessage(2, "KillTarget: %s\n", a0->field_68 + gpGlobals->field_98);
             v2 = a0->field_68 + gpGlobals->field_98;
             v1 = "targetname";
             v0 = NULL;
             while (1)
             {
-                v0 = g_6167f8(v0, v1, v2);
+                v0 = g_engfuncs.pfnFindEntityByString(v0, v1, v2);
                 v9 = 0;
-                if (!v0 || !g_6168d8(v0))
+                if (!v0 || !g_engfuncs.pfnEntOffsetOfPEntity(v0))
                     v9 = 1;
                 if (v9)
                     break;
                 v10 = v0;
-                if (v10 || (v10 = g_6168d4(0), v10))
+                if (v10 || (v10 = g_engfuncs.pfnPEntityOfEntOffset(0), v10))
                     v11 = v10->field_7c;
                 else
                     v11 = 0;
-                sub_48cc00(v11);
-                g_6168b4(2, "killing %s\n", v0->field_80 + gpGlobals->field_98);
+                UTIL_Remove(v11);
+                g_engfuncs.pfnAlertMessage(2, "killing %s\n", v0->field_80 + gpGlobals->field_98);
                 v2 = a0->field_68 + gpGlobals->field_98;
                 v1 = "targetname";
             }
@@ -148,7 +148,7 @@ st_522680_2 * SUB_UseTargets__10CBaseDelayP11CBaseEntity8USE_TYPEf(st_522680_2 *
         v12 = a0;
         if (!v12->field_0->field_1c8)
             return v12;
-        sub_48c1b0(v12->field_0->field_1c8 + gpGlobals->field_98, a1, v12, a2, a3);
+        FireTargets(v12->field_0->field_1c8 + gpGlobals->field_98, a1, v12, a2, a3);
         return v12;
     }
 }

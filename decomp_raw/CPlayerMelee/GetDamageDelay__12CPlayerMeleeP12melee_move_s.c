@@ -6,7 +6,7 @@ double GetDamageDelay__12CPlayerMeleeP12melee_move_s(int a0, char *a1)
 
     if (a1[4] & 1)
     {
-        v0 = sub_48dbf0(a0, a1);
+        v0 = CPlayerMelee::GetMeleeStrength(a0, a1);
         if (v0 == 1)
             return 0.15000000596046448;
         if (v0 <= 1)
@@ -22,7 +22,7 @@ double GetDamageDelay__12CPlayerMeleeP12melee_move_s(int a0, char *a1)
     }
     else if (a1[5] & 8)
     {
-        v1 = sub_48dbf0(a0, a1);
+        v1 = CPlayerMelee::GetMeleeStrength(a0, a1);
         if (v1 == 1)
         {
             return 0.25;

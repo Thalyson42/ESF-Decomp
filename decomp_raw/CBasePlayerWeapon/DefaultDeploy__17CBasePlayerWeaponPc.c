@@ -32,10 +32,10 @@ double DefaultDeploy__17CBasePlayerWeaponPc(st_538b10_3 *a0, int a1)
     if (!a0->field_60->field_f8(a0))
         return v3;
     v0 = &a0->field_80[4].padding_0[12];
-    sub_48e110(v0, a1);
-    sub_488640(v0, a1);
+    strcpy@GLIBC_2.0(v0, a1);
+    UTIL_WeaponTimeBase(v0, a1);
     a0->field_80->field_264 = (float)(v1 + 0.5);
-    sub_488640();
+    UTIL_WeaponTimeBase();
     a0->field_a4 = (float)(v2 + 1.0);
     return 0.5;
 }

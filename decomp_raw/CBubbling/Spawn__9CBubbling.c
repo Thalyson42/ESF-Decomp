@@ -10,7 +10,7 @@ typedef struct st_4af2e0_1 {
 } st_4af2e0_1;
 
 extern char FizzThink__9CBubbling;
-extern st_4af2e0_1 *g_6167c8;
+extern st_4af2e0_1 *g_engfuncs.pfnSetModel;
 extern st_4af2e0_0 *gpGlobals;
 
 short Spawn__9CBubbling(float idx)
@@ -26,7 +26,7 @@ short Spawn__9CBubbling(float idx)
     unsigned short v2;  // [bp-0x6]
 
     (*(int *)(*(int *)(*(unsigned int *)&idx + 96) + 12))(idx);
-    g_6167c8(*(int *)(*(int *)idx + 520), *(int *)(*(int *)idx + 184) + gpGlobals->field_98);
+    g_engfuncs.pfnSetModel(*(int *)(*(int *)idx + 520), *(int *)(*(int *)idx + 184) + gpGlobals->field_98);
     *(unsigned int *)(*(int *)idx + 268) = 0;
     *(unsigned int *)(*(int *)idx + 332) = 0;
     *(unsigned int *)(*(int *)idx + 328) = 2;

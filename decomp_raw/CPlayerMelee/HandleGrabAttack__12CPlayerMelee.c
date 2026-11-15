@@ -35,7 +35,7 @@ int HandleGrabAttack__12CPlayerMelee(float idx)
     v3 = (float)v17;
     if (v17 < 0.333333)
         v4 = 1;
-    sub_48ce00(idx);
+    CPlayerMelee::SetGrabbedOrigin(idx);
     if (*(char *)(*(int *)*(int *)(*(unsigned int *)&idx + 292) + 385) & 8)
     {
         v2 = *(float *)gpGlobals - *(float *)(*(unsigned int *)&idx + 176);
@@ -48,7 +48,7 @@ int HandleGrabAttack__12CPlayerMelee(float idx)
                 v13 = __fnstcw();
                 v12 = v13 | 0xc00;
                 v11 = (int)(1.0 / v18 * v2 * 150.0);
-                if (sub_48c980(*(int *)(*(unsigned int *)&idx + 292), v11))
+                if (CBasePlayer::UseKi(*(int *)(*(unsigned int *)&idx + 292), v11))
                     goto LABEL_50a7b5;
                 v16 = 1;
             }
@@ -58,7 +58,7 @@ int HandleGrabAttack__12CPlayerMelee(float idx)
                 v13 = __fnstcw();
                 v12 = v13 | 0xc00;
                 v11 = (int)(1.0 / v18 * v2 * 100.0);
-                if (!sub_48c980(*(int *)(*(unsigned int *)&idx + 292), v11))
+                if (!CBasePlayer::UseKi(*(int *)(*(unsigned int *)&idx + 292), v11))
                     v16 = 1;
 LABEL_50a7b5:
                 if (!v16)
@@ -72,10 +72,10 @@ LABEL_50a7b5:
                             v13 = __fnstcw();
                             v12 = v13 | 0xc00;
                             v11 = (int)(1.0 / v19 * 75.0 * v2);
-                            if (sub_48c980(*(int *)(*(unsigned int *)&idx + 296), v11))
+                            if (CBasePlayer::UseKi(*(int *)(*(unsigned int *)&idx + 296), v11))
                             {
                                 v0 = (float)(!*(int *)(*(int *)(*(unsigned int *)&idx + 304) + 216) ? 0.6000000238418579 : 0.800000011920929);
-                                sub_48c080(*(int *)(*(unsigned int *)&idx + 304), *(int *)(*(unsigned int *)&idx + 292));
+                                CPlayerMelee::GetPowerRatio(*(int *)(*(unsigned int *)&idx + 304), *(int *)(*(unsigned int *)&idx + 292));
                                 v14 = (float)(v20 - 1.25);
                                 v14 = (float)(v14 / 1.25);
                                 v0 = (float)(v0 - v14 * 0.1);
@@ -102,7 +102,7 @@ LABEL_50a7b5:
         if (!v4 && !*(int *)(*(unsigned int *)&idx + 232))
         {
             *(unsigned int *)(*(unsigned int *)&idx + 232) = 1;
-            sub_489390(*(int *)(*(int *)*(int *)(*(unsigned int *)&idx + 292) + 520), 1, "weapons/spin.wav", 0x3f800000, 0.800000011920929f, 0, 100);
+            EMIT_SOUND_DYN(*(int *)(*(int *)*(int *)(*(unsigned int *)&idx + 292) + 520), 1, "weapons/spin.wav", 0x3f800000, 0.800000011920929f, 0, 100);
         }
         if (*(int *)(*(unsigned int *)&idx + 228) && *(float *)(*(unsigned int *)&idx + 152) + 2.5 < *(float *)gpGlobals)
             v16 = 1;
@@ -111,12 +111,12 @@ LABEL_50a7b5:
             v13 = __fnstcw();
             v12 = v13 | 0xc00;
             v11 = (int)(v3 * 100.0);
-            return sub_48c680(*(int *)(*(unsigned int *)&idx + 292), v11);
+            return CBasePlayer::DrawChargeBar(*(int *)(*(unsigned int *)&idx + 292), v11);
         }
     }
-    if (!sub_48e020(idx, 80, &v8) || v4)
-        return sub_489040(idx);
-    sub_48a700(idx, 0);
+    if (!CPlayerMelee::CanThrow(idx, 80, &v8) || v4)
+        return CPlayerMelee::StopMelee(idx);
+    CPlayerMelee::StopMelee(idx, 0);
     v5 = v8;
     v6 = v9;
     v7 = v10;
@@ -124,7 +124,7 @@ LABEL_50a7b5:
     v13 = __fnstcw();
     v12 = v13 | 0xc00;
     v11 = (int)(v3 * 500.0 + 1000.0);
-    return sub_489f40(idx, *(int *)(*(unsigned int *)&idx + 296), v11, v14, &v5);
-    return sub_489040(idx);
+    return CPlayerMelee::Throw(idx, *(int *)(*(unsigned int *)&idx + 296), v11, v14, &v5);
+    return CPlayerMelee::StopMelee(idx);
 }
 

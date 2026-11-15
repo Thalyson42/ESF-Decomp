@@ -57,7 +57,7 @@ double ShootAttack__16CFinishingBuster(float a0)
     float v27;  // [bp-0x20]
     float v28;  // [bp-0x1c]
 
-    sub_48a800(*(int *)*(int *)(*(unsigned int *)&a0 + 128) + 116);
+    UTIL_MakeVectors(*(int *)*(int *)(*(unsigned int *)&a0 + 128) + 116);
     (*(int *)(*(int *)(*(int *)(*(unsigned int *)&a0 + 128) + 96) + 480))(&v19, *(int *)(*(unsigned int *)&a0 + 128));
     v30 = &gpGlobals->field_40;
     v16 = (float)(10.0 * gpGlobals->field_40);
@@ -96,12 +96,12 @@ double ShootAttack__16CFinishingBuster(float a0)
     v2 = *(short *)(*(unsigned int *)&a0 + 470);
     v1 = *(short *)(*(unsigned int *)&a0 + 468);
     v0 = (float)((double)*(int *)(*(unsigned int *)&a0 + 196) / 30.0);
-    sub_48aef0(a0);
+    CBasePlayerWeapon::GetPowerRatio(a0);
     v6 = *(int *)(*(unsigned int *)&a0 + 196) * 3;
     v5 = __fnstcw();
     v4 = v5 | 0xc00;
     v7 = (int)(v42 * (double)(int)v6);
-    sub_4885d0(*(int *)*(int *)(*(unsigned int *)&a0 + 128), &v11, &v14, v7);
+    CFinishingBusterAttack::ShootFinishingBuster(*(int *)*(int *)(*(unsigned int *)&a0 + 128), &v11, &v14, v7);
     return (double)(int)v6;
 }
 

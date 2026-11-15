@@ -60,14 +60,12 @@ def owner(n):
     return m.group(2)[:int(m.group(1))] if m else None
 base = {}
 for c, e in VT.items():
-    best = None
-    for d, f in VT.items():
-        if d == c or len(f) > len(e) or not f: continue
-        if all(e[i] == f[i] or owner(e[i]) == c for i in range(len(f))):
-            # tem que ser realmente um ancestral: algum slot herdado aponta para a própria classe d ou ancestral dela
-            if best is None or len(f) > len(VT[best]): best = d
-            elif len(f) == len(VT[best]) and sum(owner(x) == d for x in e) > sum(owner(x) == best for x in e): best = d
-    base[c] = best
+    # base = classe (com vtable) dona de métodos herdados na vtable de c; a de vtable mais longa
+    own = {owner(x) for x in e} - {c, None}
+    cand = [d for d in own if d in VT and len(VT[d]) <= len(e) and not re.match(r'bad_|type_info|exception|__', d)]
+    # só ancestrais: d tem de ter a vtable de c como compatível nos slots em que c não sobrescreve
+    ok = [d for d in cand if all(e[i] == VT[d][i] or owner(e[i]) == c or owner(VT[d][i]) == d for i in range(len(VT[d])))]
+    base[c] = max(ok or cand, key=lambda d: len(VT[d])) if (ok or cand) else None
 SDKBASE = {}
 SDKDIR = os.environ.get('HLSDK')
 if SDKDIR:

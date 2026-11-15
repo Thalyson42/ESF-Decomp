@@ -140,11 +140,11 @@ st_583780_5 * TaskThink__10CBlockTask(st_583780_5 *a0)
     float v17;  // [bp-0x14]
     unsigned int v18;  // [bp-0x10], Other Possible Types: float
 
-    sub_48d0d0(a0->field_8);
+    CBot::ResetMoveSpeed(a0->field_8);
     if (a0->field_18 < *(float *)gpGlobals && !(v19 = a0->field_8, v19->field_358 || v19->field_49c == 2 || v19->field_a18 > 159) || (*(unsigned short *)((char *)&v13 + 2) = __fnstcw(), *(unsigned int *)&v14 = _INSERT(v13, 0, *(unsigned short *)((void*)&v13 + 2) | 0xc00), *(int *)&v12 = (int)a0->field_8->field_0->field_260, (int)*(unsigned int *)&v12 <= 1e-44))
     {
         if (a0->field_8->field_32c)
-            sub_4895a0(a0->field_8);
+            CBasePlayer::StopBlock(a0->field_8);
         v20 = a0;
         v20->field_4 = 2;
     }
@@ -156,13 +156,13 @@ st_583780_5 * TaskThink__10CBlockTask(st_583780_5 *a0)
             if (v21->field_a00->field_3e)
             {
                 *(unsigned short *)&v0 = 1;
-                sub_48ab70(v21, v0);
+                CBot::ToggleTurbo(v21, v0);
                 a0->field_8->field_ab4 = (float)(*(float *)gpGlobals + 1.5);
             }
             v22 = (!a0->field_8->field_ac0 ? NULL : *(int *)(*(int *)a0->field_8->field_ac0 + 520));
-            if (!(char)sub_48b960(v22) && (char)sub_4882c0(v22))
+            if (!(char)IsNull(v22) && (char)IsAttack(v22))
             {
-                if (!(char)sub_48b960(v22->field_218))
+                if (!(char)IsNull(v22->field_218))
                 {
                     v4 = v22->field_d4;
                     v3 = v22->field_d0;
@@ -175,13 +175,13 @@ st_583780_5 * TaskThink__10CBlockTask(st_583780_5 *a0)
                     v5 = v16 - a0->field_8->field_0->field_8;
                     v6 = v17 - *(float *)&v24[1];
                     v7 = v18 - *(float *)&v24[2];
-                    sub_488860(&v8, &v5);
-                    sub_489120(v2, &v8);
+                    UTIL_VecToAngles(&v8, &v5);
+                    WrapAngles(v2, &v8);
                     v25 = v4 + 180.0;
-                    sub_48d430((float)v25);
+                    UTIL_WrapAngle((float)v25);
                     v1 = (float)fabs(v25 - v14);
                     v26 = v3 + 180.0;
-                    sub_48d430((float)v26);
+                    UTIL_WrapAngle((float)v26);
                     if (20.0 > v1)
                     {
                         if (20.0 <= fabs(v26 - v12))
@@ -209,7 +209,7 @@ LABEL_583a54:
                         v5 = (float)v29;
                         v6 = (float)v30;
                         v7 = (float)v31;
-                        sub_48a170(&v8, v32, &v5);
+                        CBot::GetAimAngles(&v8, v32, &v5);
                         *(float *)&v32->field_c10 = v9;
                         *(float *)&v32->field_c14 = v10;
                         v32->field_c18 = v11;
@@ -231,7 +231,7 @@ LABEL_583a54:
         }
         v20 = a0->field_8;
         if (!v20->field_32c)
-            v20 = sub_489930(v20);
+            v20 = CBasePlayer::StartBlock(v20);
     }
     return v20;
 }

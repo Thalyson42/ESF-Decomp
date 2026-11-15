@@ -36,6 +36,6 @@ int Spawn__8CRenzoku(st_50e130_2 *a0)
     a0->field_cc = 0x3f800000;
     a0->field_d4 = 2054055282;
     a0->field_d8 = 7695215;
-    return sub_48cf50(a0);
+    return CBasePlayerItem::FallInit(a0);
 }
 

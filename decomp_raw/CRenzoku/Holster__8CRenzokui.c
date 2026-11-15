@@ -12,6 +12,6 @@ typedef struct st_50e330_0 {
 int Holster__8CRenzokui(st_50e330_1 *a0, int a1)
 {
     a0->field_80->field_33c = 0;
-    return sub_48b470(a0, a1);
+    return CChargedAttack::Holster(a0, a1);
 }
 

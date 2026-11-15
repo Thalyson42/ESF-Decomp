@@ -6,6 +6,6 @@ typedef struct st_521cf0_0 {
 
 int RemoveChargeSprite__11CSpiritBomb(st_521cf0_0 *a0)
 {
-    return sub_48cc00(a0->field_d4);
+    return UTIL_Remove(a0->field_d4);
 }
 

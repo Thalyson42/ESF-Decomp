@@ -7,8 +7,8 @@ typedef struct st_5228f0_0 {
 } st_5228f0_0;
 
 extern unsigned int g_vecZero;
-extern unsigned int g_616790;
-extern unsigned int g_616794;
+extern unsigned int g_vecZero+4;
+extern unsigned int g_vecZero+8;
 extern st_5228f0_0 *gpGlobals;
 
 int SetMovedir__FP9entvars_s(float idx)
@@ -64,7 +64,7 @@ int SetMovedir__FP9entvars_s(float idx)
         }
         else
         {
-            sub_48a800(*(unsigned int *)&idx + 80);
+            UTIL_MakeVectors(*(unsigned int *)&idx + 80);
             *(unsigned int *)(*(unsigned int *)&idx + 0x44) = gpGlobals->field_28;
             *(unsigned int *)(*(unsigned int *)&idx + 72) = gpGlobals->field_2c;
             v12 = *(float *)&gpGlobals->field_30;
@@ -72,8 +72,8 @@ int SetMovedir__FP9entvars_s(float idx)
     }
     *(float *)(*(unsigned int *)&idx + 76) = v12;
     *(unsigned int *)(*(unsigned int *)&idx + 80) = g_vecZero;
-    *(unsigned int *)(*(unsigned int *)&idx + 84) = g_616790;
-    *(unsigned int *)(*(unsigned int *)&idx + 88) = g_616794;
-    return g_616794;
+    *(unsigned int *)(*(unsigned int *)&idx + 84) = g_vecZero+4;
+    *(unsigned int *)(*(unsigned int *)&idx + 88) = g_vecZero+8;
+    return g_vecZero+8;
 }
 

@@ -33,7 +33,7 @@ typedef struct st_553540_3 {
     unsigned int field_0;
 } st_553540_3;
 
-extern st_553540_3 *g_61692c;
+extern st_553540_3 *g_engfuncs.pfnRandomFloat;
 
 int AimAtEnemy__4CBotP11CBasePlayer(st_553540_1 *a0, st_553540_0 **a1)
 {
@@ -85,7 +85,7 @@ int AimAtEnemy__4CBotP11CBasePlayer(st_553540_1 *a0, st_553540_0 **a1)
     v25 = v22 * v22 + v23 * v23 + v24 * v24;
     v26 = sqrt(v25);
     if (isnan(v26))
-        sub_487dc0(*(unsigned int *)&v25);
+        sqrt(*(unsigned int *)&v25);
     else
         v25 = v26;
     v2 = (float)v25;
@@ -93,7 +93,7 @@ int AimAtEnemy__4CBotP11CBasePlayer(st_553540_1 *a0, st_553540_0 **a1)
     v28 = *a1->field_20 * *a1->field_20 + *(float *)&v27[1] * *(float *)&v27[1] + *(float *)&v27[2] * *(float *)&v27[2];
     v29 = sqrt(v28);
     if (isnan(v29))
-        sub_487dc0(*(unsigned int *)&v28);
+        sqrt(*(unsigned int *)&v28);
     else
         v28 = v29;
     v8 = (float)v28;
@@ -124,16 +124,16 @@ int AimAtEnemy__4CBotP11CBasePlayer(st_553540_1 *a0, st_553540_0 **a1)
             v0 = 0.4000000059604645f;
             v30 = 0xa0000000;
         }
-        g_61692c(v30);
+        g_engfuncs.pfnRandomFloat(v30);
 LABEL_5536e2:
         if (0.0 < v31)
         {
             *(unsigned short *)&v1 = 1;
-            sub_48a640(&v3, a1, (float)v31, v1);
+            PredictEntityPos(&v3, a1, (float)v31, v1);
             v8 = v4;
             v9 = v5;
             v10 = v7;
-            sub_48a170(&v14, a0, &v8);
+            CBot::GetAimAngles(&v14, a0, &v8);
             a0->field_c10 = v14;
             a0->field_c14 = v15;
             a0->field_c18 = v16;
@@ -147,7 +147,7 @@ LABEL_5536e2:
     v8 = *a1->field_8;
     v9 = *(float *)&v33[1];
     v10 = *(float *)&v33[2];
-    sub_48a170(&v14, a0, &v8);
+    CBot::GetAimAngles(&v14, a0, &v8);
     a0->field_c10 = v14;
     a0->field_c14 = v15;
     a0->field_c18 = v16;

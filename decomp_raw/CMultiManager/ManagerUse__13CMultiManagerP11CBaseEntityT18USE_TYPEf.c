@@ -26,8 +26,8 @@ void* ManagerUse__13CMultiManagerP11CBaseEntityT18USE_TYPEf(st_52b740_0 *a0, int
     void* v0;  // eax
 
     if ((int)a0->field_0[416] >= 0 && (char)a0->field_0[416] & 1)
-        return sub_4891c0(sub_48d820(a0), a1, a2, a3, a4);
-    sub_48d960(&a0->field_d4, a1);
+        return CMultiManager::ManagerUse(CMultiManager::Clone(a0), a1, a2, a3, a4);
+    EHANDLE::__as(&a0->field_d4, a1);
     a0->field_108 = 0;
     *(float *)&a0->field_10c = *(float *)gpGlobals;
     a0->field_1c = 0;

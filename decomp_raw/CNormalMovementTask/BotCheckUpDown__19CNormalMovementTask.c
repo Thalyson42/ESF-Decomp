@@ -20,8 +20,8 @@ typedef struct st_5723c0_3 {
     unsigned int field_0;
 } st_5723c0_3;
 
-extern st_5723c0_3 *g_616928;
-extern st_5723c0_3 *g_61692c;
+extern st_5723c0_3 *g_engfuncs.pfnRandomLong;
+extern st_5723c0_3 *g_engfuncs.pfnRandomFloat;
 extern st_5723c0_2 *gpGlobals;
 
 double BotCheckUpDown__19CNormalMovementTask(st_5723c0_1 *a0)
@@ -40,15 +40,15 @@ double BotCheckUpDown__19CNormalMovementTask(st_5723c0_1 *a0)
     }
     v3 = 3.0 + *(float *)gpGlobals;
     a0->field_8->field_ff4 = (float)v3;
-    v2 = sub_487c70(a0->field_c, 0x100, 0x42c80000);
-    v4 = sub_487c70(a0->field_c, 0x200, 0x42c80000);
+    v2 = CheckForCollide(a0->field_c, 0x100, 0x42c80000);
+    v4 = CheckForCollide(a0->field_c, 0x200, 0x42c80000);
     if (v2)
     {
         if (!v4)
         {
             v1 = -35.0f;
             v0 = -25.0f;
-            g_61692c(v0);
+            g_engfuncs.pfnRandomFloat(v0);
             *(float *)&a0->field_8->padding_324[2284] = -25.0f;
             return -25.0;
         }
@@ -59,7 +59,7 @@ double BotCheckUpDown__19CNormalMovementTask(st_5723c0_1 *a0)
     {
         v1 = 35.0f;
         v0 = 25.0f;
-        g_61692c(v0);
+        g_engfuncs.pfnRandomFloat(v0);
         *(float *)&a0->field_8->padding_324[2284] = 25.0f;
         return 25.0;
     }
@@ -72,12 +72,12 @@ LABEL_572480:
         return v3;
     }
 LABEL_572488:
-    v6 = g_616928(1, 3);
+    v6 = g_engfuncs.pfnRandomLong(1, 3);
     if (v6 == 1)
     {
         v1 = -35.0f;
         v0 = -25.0f;
-        g_61692c(v0);
+        g_engfuncs.pfnRandomFloat(v0);
         *(float *)&a0->field_8->padding_324[2284] = -25.0f;
         return -25.0;
     }
@@ -85,7 +85,7 @@ LABEL_572488:
     {
         v1 = 35.0f;
         v0 = 25.0f;
-        g_61692c(v0);
+        g_engfuncs.pfnRandomFloat(v0);
         *(float *)&a0->field_8->padding_324[2284] = 25.0f;
         return 25.0;
     }

@@ -45,7 +45,7 @@ unsigned int FEnvSoundInRange__FP9entvars_sT0Pf(st_51c7f0_0 *a0, float *a1, unsi
     float v19;  // [bp-0x20]
     float v20;  // [bp-0x1c]
 
-    v0 = sub_48d010(a0);
+    v0 = GetClassPtr__H1Z9CEnvSound_PX01_PX01(a0);
     v21 = &a0->field_8;
     v18 = a0->field_8 + a0->field_174;
     v19 = *(float *)&v21[1] + a0->field_178;
@@ -54,7 +54,7 @@ unsigned int FEnvSoundInRange__FP9entvars_sT0Pf(st_51c7f0_0 *a0, float *a1, unsi
     v15 = a1[2] + a1[93];
     v16 = *(float *)&v22[1] + a1[94];
     v17 = *(float *)&v22[2] + a1[95];
-    sub_487b80(&v18, &v15, 1, a0->field_208, &v5);
+    UTIL_TraceLine(&v18, &v15, 1, a0->field_208, &v5);
     if (v6 && v7 || v8 != 1.0f)
         return 0;
     v1 = v9 - v18;
@@ -66,7 +66,7 @@ unsigned int FEnvSoundInRange__FP9entvars_sT0Pf(st_51c7f0_0 *a0, float *a1, unsi
     v23 = v12 * v12 + v13 * v13 + v14 * v14;
     v24 = sqrt(v23);
     if (isnan(v24))
-        sub_487dc0(*(unsigned int *)&v23);
+        sqrt(*(unsigned int *)&v23);
     else
         v23 = v24;
     v4 = (float)v23;

@@ -15,9 +15,9 @@ typedef struct st_4f5da0_2 {
 } st_4f5da0_2;
 
 extern unsigned int gmsgSensuBean;
-extern st_4f5da0_2 *g_616878;
-extern st_4f5da0_2 *g_61687c;
-extern st_4f5da0_2 *g_616880;
+extern st_4f5da0_2 *g_engfuncs.pfnMessageBegin;
+extern st_4f5da0_2 *g_engfuncs.pfnMessageEnd;
+extern st_4f5da0_2 *g_engfuncs.pfnWriteByte;
 
 unsigned int GiveBean__11CBasePlayeri(st_4f5da0_1 *a0, unsigned int a1)
 {
@@ -28,10 +28,10 @@ unsigned int GiveBean__11CBasePlayeri(st_4f5da0_1 *a0, unsigned int a1)
     a0->field_75c = a0->field_75c + a1;
     if (a0->field_75c > 5)
         a0->field_75c = 5;
-    g_616878(1, gmsgSensuBean, 0, a0->field_0->field_208);
+    g_engfuncs.pfnMessageBegin(1, gmsgSensuBean, 0, a0->field_0->field_208);
     v0 = a0->field_75c;
-    g_616880(v0);
-    g_61687c(v0);
+    g_engfuncs.pfnWriteByte(v0);
+    g_engfuncs.pfnMessageEnd(v0);
     return 1;
 }
 

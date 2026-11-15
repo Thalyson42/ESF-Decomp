@@ -19,11 +19,11 @@ typedef struct st_4b8a40_0 {
     unsigned int field_0;
 } st_4b8a40_0;
 
-extern st_4b8a40_0 *g_616878;
-extern st_4b8a40_0 *g_61687c;
-extern st_4b8a40_0 *g_616880;
-extern st_4b8a40_0 *g_616888;
-extern st_4b8a40_0 *g_616894;
+extern st_4b8a40_0 *g_engfuncs.pfnMessageBegin;
+extern st_4b8a40_0 *g_engfuncs.pfnMessageEnd;
+extern st_4b8a40_0 *g_engfuncs.pfnWriteByte;
+extern st_4b8a40_0 *g_engfuncs.pfnWriteShort;
+extern st_4b8a40_0 *g_engfuncs.pfnWriteCoord;
 extern char g_800000;
 
 int ExplodeTouch__9CEnvModelP11CBaseEntity(float a0)
@@ -89,12 +89,12 @@ int ExplodeTouch__9CEnvModelP11CBaseEntity(float a0)
     *(float *)&v25 = *(float *)&v36->field_8;
     *(float *)&v27 = *(float *)&v37[1];
     *(float *)&v30 = *(float *)&v37[2];
-    sub_48ab00(&v25, v36, v35, *(float *)&v36[1].padding_21[35], (float)(*(float *)&v36[1].padding_21[35] * 3.0), 0, &g_800000);
+    RadiusDamage(&v25, v36, v35, *(float *)&v36[1].padding_21[35], (float)(*(float *)&v36[1].padding_21[35] * 3.0), 0, &g_800000);
     v38 = *(int *)a0 + 32;
     v39 = *(float *)(*(int *)a0 + 32) * *(float *)(*(int *)a0 + 32) + *(float *)&v38->padding_0[4] * *(float *)&v38->padding_0[4] + *(float *)&v38->padding_0[8] * *(float *)&v38->padding_0[8];
     v40 = sqrt(v39);
     if (isnan(v40))
-        sub_487dc0(*(unsigned int *)&v39);
+        sqrt(*(unsigned int *)&v39);
     else
         v39 = v40;
     v11 = (float)v39;
@@ -118,7 +118,7 @@ int ExplodeTouch__9CEnvModelP11CBaseEntity(float a0)
     v43 = *(float *)(*(int *)a0 + 32) * *(float *)(*(int *)a0 + 32) + *(float *)&v42->padding_0[4] * *(float *)&v42->padding_0[4] + *(float *)&v42->padding_0[8] * *(float *)&v42->padding_0[8];
     v44 = sqrt(v43);
     if (isnan(v44))
-        sub_487dc0(*(unsigned int *)&v43);
+        sqrt(*(unsigned int *)&v43);
     else
         v43 = v44;
     v11 = (float)v43;
@@ -158,31 +158,31 @@ int ExplodeTouch__9CEnvModelP11CBaseEntity(float a0)
     v11 = (float)(v52 + v5);
     v13 = (float)(v53 + v6);
     v15 = v7 + v4;
-    sub_487b80(&v8, &v11, 1, *(int *)&v48[1].padding_21[75], &v17);
+    UTIL_TraceLine(&v8, &v11, 1, *(int *)&v48[1].padding_21[75], &v17);
     v12 = v19;
     v14 = v20;
     v16 = v21;
     if (1.0 <= v18)
-        return sub_48cc00(a0);
-    g_616878(2, 23, 0, 0);
-    g_616880(108);
-    g_616894(v12);
-    g_616894(v14);
-    g_616894(v16);
-    g_616894(0x42480000);
-    g_616894(0x42480000);
-    g_616894(0x42480000);
+        return UTIL_Remove(a0);
+    g_engfuncs.pfnMessageBegin(2, 23, 0, 0);
+    g_engfuncs.pfnWriteByte(108);
+    g_engfuncs.pfnWriteCoord(v12);
+    g_engfuncs.pfnWriteCoord(v14);
+    g_engfuncs.pfnWriteCoord(v16);
+    g_engfuncs.pfnWriteCoord(0x42480000);
+    g_engfuncs.pfnWriteCoord(0x42480000);
+    g_engfuncs.pfnWriteCoord(0x42480000);
     v1 = 200.0f;
-    g_616894((float)(200.0 * v22));
-    g_616894(v1 * v23);
-    g_616894(v1 * v24);
-    g_616880(30);
-    g_616888(*(short *)(*(unsigned int *)&a0 + 704));
-    g_616880(20);
-    g_616880(50);
+    g_engfuncs.pfnWriteCoord((float)(200.0 * v22));
+    g_engfuncs.pfnWriteCoord(v1 * v23);
+    g_engfuncs.pfnWriteCoord(v1 * v24);
+    g_engfuncs.pfnWriteByte(30);
+    g_engfuncs.pfnWriteShort(*(short *)(*(unsigned int *)&a0 + 704));
+    g_engfuncs.pfnWriteByte(20);
+    g_engfuncs.pfnWriteByte(50);
     v0 = 0;
-    g_616880(v0);
-    g_61687c(v0);
-    return sub_48cc00(a0);
+    g_engfuncs.pfnWriteByte(v0);
+    g_engfuncs.pfnMessageEnd(v0);
+    return UTIL_Remove(a0);
 }
 

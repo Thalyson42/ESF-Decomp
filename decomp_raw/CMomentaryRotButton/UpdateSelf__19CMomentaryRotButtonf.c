@@ -36,8 +36,8 @@ typedef struct st_498310_1 {
 
 extern char Off__19CMomentaryRotButton;
 extern unsigned int g_vecZero;
-extern unsigned int g_616790;
-extern unsigned int g_616794;
+extern unsigned int g_vecZero+4;
+extern unsigned int g_vecZero+8;
 
 unsigned int UpdateSelf__19CMomentaryRotButtonf(st_498310_0 *a0, float a1)
 {
@@ -69,8 +69,8 @@ unsigned int UpdateSelf__19CMomentaryRotButtonf(st_498310_0 *a0, float a1)
     {
         v4 = a0->field_0;
         v4[23] = g_vecZero;
-        v4[24] = g_616790;
-        v4[25] = g_616794;
+        v4[24] = g_vecZero+4;
+        v4[25] = g_vecZero+8;
         v5 = a0->field_0;
         v5[20] = a0->field_11c;
         v5[21] = a0->field_120;
@@ -82,8 +82,8 @@ unsigned int UpdateSelf__19CMomentaryRotButtonf(st_498310_0 *a0, float a1)
     {
         v7 = a0->field_0;
         v7[23] = g_vecZero;
-        v7[24] = g_616790;
-        v7[25] = g_616794;
+        v7[24] = g_vecZero+4;
+        v7[25] = g_vecZero+8;
         v8 = a0->field_0;
         v8[20] = a0->field_110;
         v8[21] = a0->field_114;
@@ -92,7 +92,7 @@ unsigned int UpdateSelf__19CMomentaryRotButtonf(st_498310_0 *a0, float a1)
         return v9;
     }
     if (v3)
-        sub_48c550(a0);
+        CMomentaryRotButton::PlaySound(a0);
     v10 = a0->field_0;
     if (*(float *)&v10[65] < *(float *)&v10[64])
         *(float *)&v10[65] = (float)(0.1 + *(float *)&v10[64]);

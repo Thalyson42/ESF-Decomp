@@ -6,6 +6,6 @@ typedef struct st_4c4390_0 {
 
 int EnableChargeSprite__10CGallitGun(st_4c4390_0 *a0)
 {
-    return sub_487b90(a0->field_20c);
+    return CSprite::TurnOn(a0->field_20c);
 }
 

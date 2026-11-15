@@ -14,6 +14,6 @@ int copy_reg(int a0, int a1, int a2)
     v5 = 4;
     if ((unsigned int)(a0 - 11) <= 7)
         v5 = 12;
-    return sub_48c4b0(v4, v3, v5);
+    return memcpy@GLIBC_2.0(v4, v3, v5);
 }
 

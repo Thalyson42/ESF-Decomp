@@ -21,8 +21,8 @@ typedef struct st_574ce0_0 {
 } st_574ce0_0;
 
 extern float g_vecZero;
-extern float g_616790;
-extern unsigned int g_616794;
+extern float g_vecZero+4;
+extern unsigned int g_vecZero+8;
 
 int BotCanBeamJump__4CBotb(st_574ce0_0 *a0, char a1)
 {
@@ -60,7 +60,7 @@ int BotCanBeamJump__4CBotb(st_574ce0_0 *a0, char a1)
     }
     else if (v17->field_33c)
     {
-        v18 = sub_489660(v17);
+        v18 = UTIL_GetLastAttackFromPlayer(v17);
         if (!v18)
             return _INSERT(CONCAT(v22, 0), 0, 0);
         v19 = v18->field_0;
@@ -76,17 +76,17 @@ int BotCanBeamJump__4CBotb(st_574ce0_0 *a0, char a1)
     v20 = v18;
     if (!v20)
         v20 = v17;
-    sub_489d70(&v10, v20);
+    GetNearestCollision(&v10, v20);
     v21 = 0;
     v22 = 0;
     if (g_vecZero == v11)
     {
         v22 = 0;
-        if (g_616790 == v12)
+        if (g_vecZero+4 == v12)
         {
             v23 = v13;
-            v22 = *(float *)&g_616794 == v23;
-            v21 = *(float *)&g_616794 == v23;
+            v22 = *(float *)&g_vecZero+8 == v23;
+            v21 = *(float *)&g_vecZero+8 == v23;
         }
     }
     if (!v21)
@@ -100,7 +100,7 @@ int BotCanBeamJump__4CBotb(st_574ce0_0 *a0, char a1)
         v1 = v7;
         v2 = v8;
         v3 = v9;
-        sub_48a170(&v4, v17, &v1);
+        CBot::GetAimAngles(&v4, v17, &v1);
         v17->field_c10 = v4;
         v17->field_c14 = v5;
         v17->field_c18 = v6;

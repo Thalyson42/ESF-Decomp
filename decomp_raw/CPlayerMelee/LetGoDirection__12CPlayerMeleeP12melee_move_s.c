@@ -60,18 +60,18 @@ int LetGoDirection__12CPlayerMeleeP12melee_move_s(st_505d20_3 *a0, st_505d20_4 *
         v5 = *(float *)gpGlobals;
         a1->field_c = v5;
         *(float *)&a0->field_ac = v5;
-        if (!sub_48c4f0(a0))
+        if (!CPlayerMelee::UseAttackerMoves(a0))
             return v4;
         if (!a0->field_78)
         {
-            sub_48bbe0(a0);
+            CPlayerMelee::TotalCmbTime(a0);
             v3 = v5;
-            sub_487b30(a0->field_130);
+            CPlayerMelee::GetStunTime(a0->field_130);
             v2 = v5;
             v6 = v3;
             if (v6 > v2)
             {
-                sub_488340(a0);
+                CPlayerMelee::TotalCmbTimeNC(a0);
                 v6 = v2 - v6 + *(float *)&a1->field_8;
                 a1->field_c = (float)v6;
                 v4 = 1;
@@ -83,10 +83,10 @@ int LetGoDirection__12CPlayerMeleeP12melee_move_s(st_505d20_3 *a0, st_505d20_4 *
                 if (v6 < *(float *)a0->field_180->field_c(a0))
                     v4 = 1;
             }
-            sub_48b4e0(a0, a1);
-            sub_48af80(a0, 5, a1->field_4, (float)v6);
+            CPlayerMelee::GetCmbTime(a0, a1);
+            CPlayerMelee::MeleeHudFlags(a0, 5, a1->field_4, (float)v6);
         }
-        if (sub_48cbe0(a0, a1->field_4))
+        if (CPlayerMelee::IsDirectionless(a0, a1->field_4))
             return v4;
         if (a0->field_ec)
         {
@@ -100,10 +100,10 @@ int LetGoDirection__12CPlayerMeleeP12melee_move_s(st_505d20_3 *a0, st_505d20_4 *
         }
         else
         {
-            sub_48a2b0(a0, a0->field_128, a1);
+            CPlayerMelee::SendBlockFlash(a0, a0->field_128, a1);
             return v4;
         }
-        sub_48a2b0(a0, v7);
+        CPlayerMelee::SendBlockFlash(a0, v7);
         return v4;
     }
     else

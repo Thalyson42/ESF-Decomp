@@ -4,7 +4,7 @@ unsigned int Insert__6CQueueif(unsigned int *a0, unsigned int a1, float a2)
     unsigned int v0;  // eax
 
     if (*a0 == 100)
-        return sub_48c360("Queue is full!\n");
+        return printf@GLIBC_2.0("Queue is full!\n");
     a0[202] = a0[202] + 1;
     if (a0[202] == 100)
         a0[202] = 0;

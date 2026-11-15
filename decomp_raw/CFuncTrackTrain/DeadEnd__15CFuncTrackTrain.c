@@ -36,9 +36,9 @@ typedef struct st_4ebca0_3 {
 } st_4ebca0_3;
 
 extern unsigned int g_vecZero;
-extern unsigned int g_616790;
-extern unsigned int g_616794;
-extern st_4ebca0_3 *g_6168b4;
+extern unsigned int g_vecZero+4;
+extern unsigned int g_vecZero+8;
+extern st_4ebca0_3 *g_engfuncs.pfnAlertMessage;
 extern st_4ebca0_2 *gpGlobals;
 
 int DeadEnd__15CFuncTrackTrain(float a0)
@@ -54,7 +54,7 @@ int DeadEnd__15CFuncTrackTrain(float a0)
 
     v2 = *(int *)(*(unsigned int *)&a0 + 100);
     v3 = (st_4ebca0_1 *)a0;
-    g_6168b4(2, "TRAIN(%s): Dead end ", v3->field_0->field_1cc + gpGlobals->field_98);
+    g_engfuncs.pfnAlertMessage(2, "TRAIN(%s): Dead end ", v3->field_0->field_1cc + gpGlobals->field_98);
     if (v2)
     {
         if (0.0 > v3->field_a4)
@@ -62,7 +62,7 @@ int DeadEnd__15CFuncTrackTrain(float a0)
             while (1)
             {
                 v0 = 1;
-                v4 = sub_48a830(v2, sub_487d40(v2));
+                v4 = CPathTrack::ValidPath(v2, CPathTrack::GetPrevious(v2));
                 if (!v4)
                     break;
                 v2 = v4;
@@ -73,7 +73,7 @@ int DeadEnd__15CFuncTrackTrain(float a0)
             while (1)
             {
                 v0 = 1;
-                v5 = sub_48a830(v2, sub_48d550(v2));
+                v5 = CPathTrack::ValidPath(v2, CPathTrack::GetNext(v2));
                 if (!v5)
                     break;
                 v2 = v5;
@@ -83,17 +83,17 @@ int DeadEnd__15CFuncTrackTrain(float a0)
     v6 = (st_4ebca0_4 **)a0;
     v7 = *v6;
     v7[8] = g_vecZero;
-    v7[9] = g_616790;
-    v7[10] = g_616794;
+    v7[9] = g_vecZero+4;
+    v7[10] = g_vecZero+8;
     v8 = *v6;
     v8[23] = g_vecZero;
-    v8[24] = g_616790;
-    v8[25] = g_616794;
+    v8[24] = g_vecZero+4;
+    v8[25] = g_vecZero+8;
     if (!v2)
-        return g_6168b4(2, "\n");
-    g_6168b4(2, "at %s\n", *(int *)&*v2->padding_0[460] + gpGlobals->field_98);
+        return g_engfuncs.pfnAlertMessage(2, "\n");
+    g_engfuncs.pfnAlertMessage(2, "at %s\n", *(int *)&*v2->padding_0[460] + gpGlobals->field_98);
     if (!*v2->field_1d0)
         return *v2;
-    return sub_48c1b0(*v2->field_1d0 + gpGlobals->field_98, a0, a0, 3, 0);
+    return FireTargets(*v2->field_1d0 + gpGlobals->field_98, a0, a0, 3, 0);
 }
 

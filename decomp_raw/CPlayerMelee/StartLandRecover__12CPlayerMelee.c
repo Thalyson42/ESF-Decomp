@@ -52,7 +52,7 @@ typedef struct st_502250_4 {
     unsigned int field_0;
 } st_502250_4;
 
-extern st_502250_4 *g_6168dc;
+extern st_502250_4 *g_engfuncs.pfnIndexOfEdict;
 extern st_502250_3 *gpGlobals;
 
 int StartLandRecover__12CPlayerMelee(st_502250_2 *a0)
@@ -90,6 +90,6 @@ int StartLandRecover__12CPlayerMelee(st_502250_2 *a0)
     *(float *)&v2 = *(float *)&v7->field_4;
     *(float *)&v3 = *(float *)&v7->field_8;
     v0 = &v1;
-    return sub_48da70(g_6168dc(v5->field_0->field_208));
+    return UTIL_Model_FixAngles(g_engfuncs.pfnIndexOfEdict(v5->field_0->field_208));
 }
 

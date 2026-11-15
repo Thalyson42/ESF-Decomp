@@ -8,8 +8,8 @@ unsigned int AddComboMoves__12CPlayerMelee(int a0)
     do
     {
         *(unsigned int *)(a0 + 336 + idx * 4) = 0;
-        sub_48b1a0(a0, idx, 1, 3, 0, 4, 0, 3, 0, 2);
-        v1 = sub_48b1a0(a0, idx, 2, 4, 0, 4, 0, 5, 0, 6, 1, 10);
+        CPlayerMelee::AddMove(a0, idx, 1, 3, 0, 4, 0, 3, 0, 2);
+        v1 = CPlayerMelee::AddMove(a0, idx, 2, 4, 0, 4, 0, 5, 0, 6, 1, 10);
         idx += 1;
     } while (idx <= 9);
     return v1;

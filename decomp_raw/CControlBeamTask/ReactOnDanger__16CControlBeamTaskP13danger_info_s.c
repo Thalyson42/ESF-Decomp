@@ -89,7 +89,7 @@ int ReactOnDanger__16CControlBeamTaskP13danger_info_s(st_5791c0_4 *a0, st_5791c0
 
     if (a1->field_18 > 59)
     {
-        v22 = sub_489660(a0->field_8);
+        v22 = UTIL_GetLastAttackFromPlayer(a0->field_8);
         if (!v22)
         {
             a0->field_c->field_201 = a0->field_c->field_201 | 8;
@@ -112,13 +112,13 @@ int ReactOnDanger__16CControlBeamTaskP13danger_info_s(st_5791c0_4 *a0, st_5791c0
         v28 = v25 * v25 + v26 * v26 + v27 * v27;
         v29 = sqrt(v28);
         if (isnan(v29))
-            sub_487dc0(*(unsigned int *)&v28);
+            sqrt(*(unsigned int *)&v28);
         else
             v28 = v29;
         v3 = (float)v28;
         v2 = (float)(*v22->field_1e0 * 12.5);
         v30 = a0->field_8;
-        if (v30->field_b6c && v30->field_a1c == 1 && !(v0 = v30->field_b6c, v31 = sub_489660(v0), !v31 || (v1 = _INSERT(CONCAT(v0, 0), 4, v31), v0 = v22, !(char)sub_489330(v0, *(unsigned int *)((void*)&v1 + 4)))))
+        if (v30->field_b6c && v30->field_a1c == 1 && !(v0 = v30->field_b6c, v31 = UTIL_GetLastAttackFromPlayer(v0), !v31 || (v1 = _INSERT(CONCAT(v0, 0), 4, v31), v0 = v22, !(char)EntIsInFieldOfView(v0, *(unsigned int *)((void*)&v1 + 4)))))
         {
             v32 = &*v31->field_8;
             v4 = *v31->field_8;
@@ -128,7 +128,7 @@ int ReactOnDanger__16CControlBeamTaskP13danger_info_s(st_5791c0_4 *a0, st_5791c0
             v7 = *v31->field_8;
             v8 = *(float *)&v32[1];
             v9 = *(float *)&v32[2];
-            sub_48a170(&v13, v33, &v7);
+            CBot::GetAimAngles(&v13, v33, &v7);
             v33->field_c10 = v13;
             v33->field_c14 = v14;
             v33->field_c18 = v15;
@@ -138,7 +138,7 @@ int ReactOnDanger__16CControlBeamTaskP13danger_info_s(st_5791c0_4 *a0, st_5791c0
         {
             v0 = _INSERT(CONCAT(v0, 0), 4, 1);
             *(struct st_5791c0_1 **)&v0 = a0->field_8;
-            if ((char)sub_48dc80(v0, *(unsigned int *)((void*)&v0 + 4)))
+            if ((char)CBot::BotCanBeamJump(v0, *(unsigned int *)((void*)&v0 + 4)))
             {
                 a0->field_8->field_1068 = 22;
                 a0->field_4 = 2;

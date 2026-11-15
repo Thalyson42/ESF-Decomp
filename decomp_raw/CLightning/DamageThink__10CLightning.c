@@ -17,9 +17,9 @@ void DamageThink__10CLightning(float a0)
     v3 = &v4;
     v2 = 0;
     v1 = 0;
-    v0 = sub_4882e0(a0);
-    sub_487b80(sub_487ce0(a0));
-    sub_48bfc0(a0, &v4);
+    v0 = CBeam::GetEndPos(a0);
+    UTIL_TraceLine(CBeam::GetStartPos(a0));
+    CBeam::BeamDamage(a0, &v4);
     return;
 }
 

@@ -24,7 +24,7 @@ unsigned int SetTrack__15CFuncTrackTrainP10CPathTrack(st_4ee460_0 *a0, int a1)
     *(float *)&v0 = *(float *)&a0->field_0->field_8;
     *(float *)&v1 = *(float *)&v3[1];
     *(float *)&v2 = *(float *)&v3[2];
-    v4 = sub_489b20(a1, &v0);
+    v4 = CPathTrack::Nearest(a1, &v0);
     a0->field_64 = v4;
     return v4;
 }

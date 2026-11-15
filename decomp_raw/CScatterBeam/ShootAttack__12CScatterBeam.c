@@ -46,7 +46,7 @@ double ShootAttack__12CScatterBeam(float a0)
     float v21;  // [bp-0x20]
     float v22;  // [bp-0x1c]
 
-    sub_48a800(*(int *)*(int *)(*(unsigned int *)&a0 + 128) + 116);
+    UTIL_MakeVectors(*(int *)*(int *)(*(unsigned int *)&a0 + 128) + 116);
     (*(int *)(*(int *)(*(int *)(*(unsigned int *)&a0 + 128) + 96) + 480))(&v16, *(int *)(*(unsigned int *)&a0 + 128));
     v24 = &gpGlobals->field_28;
     v25 = 10.0 * gpGlobals->field_28;
@@ -78,12 +78,12 @@ double ShootAttack__12CScatterBeam(float a0)
     v2 = *(short *)(*(unsigned int *)&a0 + 468);
     v1 = *(short *)(*(unsigned int *)&a0 + 472);
     v0 = *(short *)(*(unsigned int *)&a0 + 470);
-    sub_48aef0(a0);
+    CBasePlayerWeapon::GetPowerRatio(a0);
     v6 = *(int *)(*(unsigned int *)&a0 + 196) * 3;
     v5 = __fnstcw();
     v4 = v5 | 0xc00;
     v7 = (int)(v35 * (double)(int)v6);
-    sub_48cbc0(*(int *)*(int *)(*(unsigned int *)&a0 + 128), &v11, &v14, v7);
+    CScatterAttack::ShootScatterBeam(*(int *)*(int *)(*(unsigned int *)&a0 + 128), &v11, &v14, v7);
     return (double)(int)v6;
 }
 

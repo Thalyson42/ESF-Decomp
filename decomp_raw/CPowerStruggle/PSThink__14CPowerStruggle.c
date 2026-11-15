@@ -86,7 +86,7 @@ double PSThink__14CPowerStruggle(float idx)
             {
                 v24 = v23;
                 v25 = v24->field_4;
-                sub_488e40(&*v25->padding_0[80]);
+                UTIL_MakeAimVectors(&*v25->padding_0[80]);
                 v26 = *&*v25->field_1e0;
                 v27 = &gpGlobals->field_28;
                 v9 = __int_as_float(v26) * gpGlobals->field_28;
@@ -109,7 +109,7 @@ double PSThink__14CPowerStruggle(float idx)
         v28 = v19 * v19 + v20 * v20 + v21 * v21;
         v29 = sqrt(v28);
         if (isnan(v29))
-            sub_487dc0(*(unsigned int *)&v28);
+            sqrt(*(unsigned int *)&v28);
         else
             v28 = v29;
         v12 = (float)v28;
@@ -119,7 +119,7 @@ double PSThink__14CPowerStruggle(float idx)
         v31 = v19 * v19 + v20 * v20 + v21 * v21;
         v32 = sqrt(v31);
         if (isnan(v32))
-            sub_487dc0(*(unsigned int *)&v31);
+            sqrt(*(unsigned int *)&v31);
         else
             v31 = v32;
         v17 = (float)v31;
@@ -151,11 +151,11 @@ double PSThink__14CPowerStruggle(float idx)
                 *(float *)&v37->padding_0[36] = v10;
                 *(float *)&v37->padding_0[40] = v11;
                 v0 = v2;
-                sub_488e40(&*v36->padding_0[80]);
+                UTIL_MakeAimVectors(&*v36->padding_0[80]);
                 v38 = v9 * v9 + v10 * v10 + v11 * v11;
                 v39 = sqrt(v38);
                 if (isnan(v39))
-                    sub_487dc0(*(unsigned int *)&v38);
+                    sqrt(*(unsigned int *)&v38);
                 else
                     v38 = v39;
                 v17 = (float)v38;
@@ -174,7 +174,7 @@ double PSThink__14CPowerStruggle(float idx)
                 }
                 v41 = &gpGlobals->field_28;
                 v42 = v12 * gpGlobals->field_28 + v13 * *(float *)&v41[1] + v14 * *(float *)&v41[2];
-                sub_48db10((unsigned int)(v42 >> 0));
+                acos((unsigned int)(v42 >> 0));
                 v6 = v42;
                 if (v6 > 1.5707963267948966)
                     v0 = -v0;
@@ -185,7 +185,7 @@ double PSThink__14CPowerStruggle(float idx)
         v43 = v9 * v9 + v10 * v10 + v11 * v11;
         v44 = sqrt(v43);
         if (isnan(v44))
-            sub_487dc0(*(unsigned int *)&v43);
+            sqrt(*(unsigned int *)&v43);
         else
             v43 = v44;
         v15 = (float)v43;

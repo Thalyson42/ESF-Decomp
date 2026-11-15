@@ -3,10 +3,10 @@ typedef struct st_4e04b0_0 {
     unsigned int field_0;
 } st_4e04b0_0;
 
-extern st_4e04b0_0 *g_6168b4;
-extern st_4e04b0_0 *g_616918;
-extern st_4e04b0_0 *g_61691c;
-extern st_4e04b0_0 *g_616924;
+extern st_4e04b0_0 *g_engfuncs.pfnAlertMessage;
+extern st_4e04b0_0 *g_engfuncs.pfnCRC32_Init;
+extern st_4e04b0_0 *g_engfuncs.pfnCRC32_ProcessBuffer;
+extern st_4e04b0_0 *g_engfuncs.pfnCRC32_Final;
 
 unsigned int FindNearestNode__6CGraphRC6Vectori(void* a0, float *a1, unsigned int a2)
 {
@@ -89,9 +89,9 @@ unsigned int FindNearestNode__6CGraphRC6Vectori(void* a0, float *a1, unsigned in
 
     if (*(int *)a0 && (int)a0[4])
     {
-        g_616918(&v20);
-        g_61691c(&v20, a1, 12);
-        v18 = g_616924(v20) & 127;
+        g_engfuncs.pfnCRC32_Init(&v20);
+        g_engfuncs.pfnCRC32_ProcessBuffer(&v20, a1, 12);
+        v18 = g_engfuncs.pfnCRC32_Final(v20) & 127;
         v25 = a0 + v18 * 16 + 6268;
         v26 = 0;
         v27 = a1;
@@ -162,7 +162,7 @@ unsigned int FindNearestNode__6CGraphRC6Vectori(void* a0, float *a1, unsigned in
                             *(float *)&v21 = *v38;
                             v22 = v38[1];
                             *(float *)&v23 = v38[2];
-                            sub_48bae0(a0, &v21, *(int *)((char *)v17 + v16));
+                            CGraph::CheckNode(a0, &v21, *(int *)((char *)v17 + v16));
                         }
                     }
                 } while ((v33 += 1, (int)v33 <= (int)v5[iter]));
@@ -200,7 +200,7 @@ unsigned int FindNearestNode__6CGraphRC6Vectori(void* a0, float *a1, unsigned in
                                 *(float *)&v21 = *v45;
                                 v22 = v45[1];
                                 *(float *)&v23 = v45[2];
-                                sub_48bae0(a0, &v21, *(int *)((char *)v15 + v14 + 4));
+                                CGraph::CheckNode(a0, &v21, *(int *)((char *)v15 + v14 + 4));
                             }
                         }
                     } while ((v40 += 1, (int)v40 <= (int)v4[iter]));
@@ -239,7 +239,7 @@ unsigned int FindNearestNode__6CGraphRC6Vectori(void* a0, float *a1, unsigned in
                                 *(float *)&v21 = *v52;
                                 v22 = v52[1];
                                 *(float *)&v23 = v52[2];
-                                sub_48bae0(a0, &v21, *(int *)((char *)v13 + v12 + 8));
+                                CGraph::CheckNode(a0, &v21, *(int *)((char *)v13 + v12 + 8));
                             }
                         }
                     } while ((v47 += 1, (int)v47 <= (int)v3[iter]));
@@ -278,7 +278,7 @@ unsigned int FindNearestNode__6CGraphRC6Vectori(void* a0, float *a1, unsigned in
                                 *(float *)&v21 = *v59;
                                 v22 = v59[1];
                                 *(float *)&v23 = v59[2];
-                                sub_48bae0(a0, &v21, *(int *)((char *)v11 + v10));
+                                CGraph::CheckNode(a0, &v21, *(int *)((char *)v11 + v10));
                             }
                         }
                     } while ((v54 += 1, (int)v54 <= (int)v2[iter]));
@@ -317,7 +317,7 @@ unsigned int FindNearestNode__6CGraphRC6Vectori(void* a0, float *a1, unsigned in
                                 *(float *)&v21 = *v66;
                                 v22 = v66[1];
                                 *(float *)&v23 = v66[2];
-                                sub_48bae0(a0, &v21, *(int *)((char *)v9 + v8 + 4));
+                                CGraph::CheckNode(a0, &v21, *(int *)((char *)v9 + v8 + 4));
                             }
                         }
                     } while ((v61 += 1, (int)v61 <= (int)v1[iter]));
@@ -356,7 +356,7 @@ unsigned int FindNearestNode__6CGraphRC6Vectori(void* a0, float *a1, unsigned in
                                 *(float *)&v21 = *v73;
                                 v22 = v73[1];
                                 *(float *)&v23 = v73[2];
-                                sub_48bae0(a0, &v21, *(int *)((char *)v7 + v6 + 8));
+                                CGraph::CheckNode(a0, &v21, *(int *)((char *)v7 + v6 + 8));
                             }
                         }
                     } while ((v68 += 1, (int)v68 <= (int)v0[iter]));
@@ -372,7 +372,7 @@ unsigned int FindNearestNode__6CGraphRC6Vectori(void* a0, float *a1, unsigned in
         *(short *)(v74 + (char *)a0 + 6280) = (short)a0[6188];
         return (int)a0[6188];
     }
-    g_6168b4(2, "Graph not ready!\n");
+    g_engfuncs.pfnAlertMessage(2, "Graph not ready!\n");
     return 0xffffffff;
 }
 

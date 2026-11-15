@@ -47,10 +47,10 @@ typedef struct st_4f3890_5 {
 
 extern unsigned int gmsgCurWeapon;
 extern unsigned int gmsgWeaponUpdate;
-extern st_4f3890_1 *g_616878;
-extern st_4f3890_1 *g_61687c;
-extern st_4f3890_1 *g_616880;
-extern st_4f3890_1 *g_616884;
+extern st_4f3890_1 *g_engfuncs.pfnMessageBegin;
+extern st_4f3890_1 *g_engfuncs.pfnMessageEnd;
+extern st_4f3890_1 *g_engfuncs.pfnWriteByte;
+extern st_4f3890_1 *g_engfuncs.pfnWriteChar;
 
 int RemoveAllWeapons__11CBasePlayeri(st_4f3890_4 *a0, unsigned int a1)
 {
@@ -77,10 +77,10 @@ int RemoveAllWeapons__11CBasePlayeri(st_4f3890_4 *a0, unsigned int a1)
         {
             do
             {
-                g_616878(1, gmsgWeaponUpdate, 0, a0->field_0->field_208);
+                g_engfuncs.pfnMessageBegin(1, gmsgWeaponUpdate, 0, a0->field_0->field_208);
                 v0 = -a0->field_968->field_88;
-                g_616884(v0);
-                g_61687c(v0);
+                g_engfuncs.pfnWriteChar(v0);
+                g_engfuncs.pfnMessageEnd(v0);
                 v4 = a0->field_968;
                 i = v4->field_84;
                 v4->field_60->field_114(v4);
@@ -94,10 +94,10 @@ int RemoveAllWeapons__11CBasePlayeri(st_4f3890_4 *a0, unsigned int a1)
     if (a1)
         a0->field_0->field_168 = 0;
     a0->field_60->field_204(a0);
-    g_616878(1, gmsgCurWeapon, 0, a0->field_0->field_208);
-    g_616880(0);
-    g_616880(0);
-    g_616880(0);
-    return g_61687c(0);
+    g_engfuncs.pfnMessageBegin(1, gmsgCurWeapon, 0, a0->field_0->field_208);
+    g_engfuncs.pfnWriteByte(0);
+    g_engfuncs.pfnWriteByte(0);
+    g_engfuncs.pfnWriteByte(0);
+    return g_engfuncs.pfnMessageEnd(0);
 }
 

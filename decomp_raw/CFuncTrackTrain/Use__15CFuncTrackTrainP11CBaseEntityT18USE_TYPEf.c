@@ -36,9 +36,9 @@ typedef struct st_4eb0f0_3 {
 } st_4eb0f0_3;
 
 extern unsigned int g_vecZero;
-extern unsigned int g_616790;
-extern unsigned int g_616794;
-extern st_4eb0f0_3 *g_6168b4;
+extern unsigned int g_vecZero+4;
+extern unsigned int g_vecZero+8;
+extern st_4eb0f0_3 *g_engfuncs.pfnAlertMessage;
 extern st_4eb0f0_2 *gpGlobals;
 
 unsigned int Use__15CFuncTrackTrainP11CBaseEntityT18USE_TYPEf(st_4eb0f0_1 *a0, unsigned int a1, unsigned int a2, int a3, float a4)
@@ -57,7 +57,7 @@ unsigned int Use__15CFuncTrackTrainP11CBaseEntityT18USE_TYPEf(st_4eb0f0_1 *a0, u
 
     if (a3 != 2)
     {
-        v5 = sub_48ab90(a0, a3, 0.0 != a0->field_0->field_1f8);
+        v5 = CBaseEntity::ShouldToggle(a0, a3, 0.0 != a0->field_0->field_1f8);
         if (!v5)
         {
             return v5;
@@ -65,20 +65,20 @@ unsigned int Use__15CFuncTrackTrainP11CBaseEntityT18USE_TYPEf(st_4eb0f0_1 *a0, u
         else if (a0->field_0->field_1f8 == 0.0)
         {
             a0->field_0->field_1f8 = a0->field_70 * a0->field_74;
-            return sub_48b120(a0);
+            return CFuncTrackTrain::Next(a0);
         }
         else
         {
             a0->field_0->field_1f8 = 0;
             v6 = a0->field_0;
             v6->field_20 = g_vecZero;
-            v6->field_24 = g_616790;
-            v6->field_28 = g_616794;
+            v6->field_24 = g_vecZero+4;
+            v6->field_28 = g_vecZero+8;
             v7 = a0->field_0;
             v7->field_5c = g_vecZero;
-            v7->field_60 = g_616790;
-            v7->field_64 = g_616794;
-            v8 = sub_488070(a0);
+            v7->field_60 = g_vecZero+4;
+            v7->field_64 = g_vecZero+8;
+            v8 = CFuncTrackTrain::StopSound(a0);
             a0->field_c = 0;
             a0->field_10 = 0;
             return v8;
@@ -106,8 +106,8 @@ unsigned int Use__15CFuncTrackTrainP11CBaseEntityT18USE_TYPEf(st_4eb0f0_1 *a0, u
         if (a0->field_0->field_1a0 & 4 && 0.0 > v10)
             v10 = 0.0;
         a0->field_0->field_1f8 = (float)(v10 * a0->field_70);
-        sub_48b120(a0);
-        return g_6168b4(2, "TRAIN(%s), speed to %.2f\n", a0->field_0->field_1cc + gpGlobals->field_98, (unsigned int)(a0->field_0->field_1f8 >> 0));
+        CFuncTrackTrain::Next(a0);
+        return g_engfuncs.pfnAlertMessage(2, "TRAIN(%s), speed to %.2f\n", a0->field_0->field_1cc + gpGlobals->field_98, (unsigned int)(a0->field_0->field_1f8 >> 0));
     }
 }
 

@@ -12,8 +12,8 @@ char UTIL_DBsAreActive__Fv(void)
     char v2;  // dl
     unsigned int *v3;  // eax
 
-    v1 = sub_487e80(0, "dragonball");
-    if ((char)sub_48b140(v1))
+    v1 = UTIL_FindEntityByClassname(0, "dragonball");
+    if ((char)IsNull(v1))
         return 0;
     v2 = 0;
     v3 = *v1;

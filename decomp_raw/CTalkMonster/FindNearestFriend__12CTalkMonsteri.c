@@ -106,7 +106,7 @@ st_525bb0_3 * FindNearestFriend__12CTalkMonsteri(st_525bb0_3 *a0, unsigned int a
         {
             while (1)
             {
-                v22 = sub_487e80(v22, v27);
+                v22 = UTIL_FindEntityByClassname(v22, v27);
                 if (!v22)
                     break;
                 if (v22 != a0 && v22->field_60->field_8c(v22) && (v28 = v22->field_60->field_4c(v22), v28 && v28->field_180 != 6 && v28->field_180 != 5))
@@ -125,11 +125,11 @@ st_525bb0_3 * FindNearestFriend__12CTalkMonsteri(st_525bb0_3 *a0, unsigned int a
                     v33 = v30 * v30 + v31 * v31 + v32 * v32;
                     v34 = sqrt(v33);
                     if (isnan(v34))
-                        sub_487dc0(*(unsigned int *)&v33);
+                        sqrt(*(unsigned int *)&v33);
                     else
                         v33 = v34;
                     v7 = (float)v33;
-                    if (v7 < v2 && (sub_487b80(&v17, &v14, 1, a0->field_0->field_208, &v20), v21 == 1.0f))
+                    if (v7 < v2 && (UTIL_TraceLine(&v17, &v14, 1, a0->field_0->field_208, &v20), v21 == 1.0f))
                     {
                         v35 = *(float *)&v17 - *(float *)&v14;
                         v4 = v35;
@@ -140,7 +140,7 @@ st_525bb0_3 * FindNearestFriend__12CTalkMonsteri(st_525bb0_3 *a0, unsigned int a
                         v38 = v35 * v35 + v36 * v36 + v37 * v37;
                         v39 = sqrt(v38);
                         if (isnan(v39))
-                            sub_487dc0(*(unsigned int *)&v38);
+                            sqrt(*(unsigned int *)&v38);
                         else
                             v38 = v39;
                         v10 = (float)v38;
@@ -156,7 +156,7 @@ st_525bb0_3 * FindNearestFriend__12CTalkMonsteri(st_525bb0_3 *a0, unsigned int a
                             v43 = v40 * v40 + v41 * v41 + v42 * v42;
                             v44 = sqrt(v43);
                             if (isnan(v44))
-                                sub_487dc0(*(unsigned int *)&v43);
+                                sqrt(*(unsigned int *)&v43);
                             else
                                 v43 = v44;
                             v2 = (float)v43;

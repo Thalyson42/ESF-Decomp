@@ -68,11 +68,11 @@ unsigned int BlobTouch__5CBlobP11CBaseEntity(st_4cb4e0_6 *a0, st_4cb4e0_3 *a1)
     }
     else if (!a1->field_2cc)
     {
-        if (!sub_488af0(a1->field_0->field_0 + gpGlobals->field_98, "kiblast"))
+        if (!strcmp@GLIBC_2.0(a1->field_0->field_0 + gpGlobals->field_98, "kiblast"))
         {
-            sub_48b5c0(a0, 25);
+            CBlob::SizeInc(a0, 25);
         }
-        else if (sub_488af0(a1->field_0->field_0 + gpGlobals->field_98, "scattershot") && sub_488af0(a1->field_0->field_0 + gpGlobals->field_98, "rock"))
+        else if (strcmp@GLIBC_2.0(a1->field_0->field_0 + gpGlobals->field_98, "scattershot") && strcmp@GLIBC_2.0(a1->field_0->field_0 + gpGlobals->field_98, "rock"))
         {
             a0->field_0->field_1e0 = (float)(a0->field_0->field_1e0 + a1->field_0->field_1e0 / 1.5);
             a1->field_60->field_204(a1);
@@ -80,9 +80,9 @@ unsigned int BlobTouch__5CBlobP11CBaseEntity(st_4cb4e0_6 *a0, st_4cb4e0_3 *a1)
             v0 = v1 | 0xc00;
             v2 = (int)((double)a0->field_64 + v4 * 0.5);
             a0->field_64 = v2;
-            sub_48ae80(a0);
+            CBlob::Remove(a0);
         }
-        return sub_488520(a1);
+        return CExplodingAttack::Vaporize(a1);
     }
     else
     {

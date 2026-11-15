@@ -28,20 +28,20 @@ unsigned int PrimaryAttack__13CRegeneration(double a0, st_50def0_2 *a1)
     st_50def0_1 *v0;  // edx
     unsigned int v1;  // eax
 
-    if (sub_48c980(a1->field_80, 20))
+    if (CBasePlayer::UseKi(a1->field_80, 20))
     {
         if (!a1->field_80->field_334)
         {
             a1->field_80->field_334 = 1;
             a1->field_80->field_754 = 0;
-            sub_489390(a1->field_80->field_0->field_208, 1, "weapons/regen.wav", 0x3f800000, 0.800000011920929f, 0, 100);
+            EMIT_SOUND_DYN(a1->field_80->field_0->field_208, 1, "weapons/regen.wav", 0x3f800000, 0.800000011920929f, 0, 100);
         }
         a1->field_80->field_0->field_160 = (float)(1.0 + a1->field_80->field_0->field_160);
         v0 = a1->field_80;
         if ((double)v0->field_24c < v0->field_0->field_160)
             v0->field_0->field_160 = (float)v0->field_24c;
     }
-    v1 = sub_488640();
+    v1 = UTIL_WeaponTimeBase();
     a1->field_9c = (float)(a0 + 0.6);
     return v1;
 }

@@ -1,7 +1,7 @@
 // CWallJumpTask.h -- reconstruído automaticamente (vtable + offsets). REVISAR.
 #pragma once
 
-class CWallJumpTask {
+class CWallJumpTask : public CBaseTask {  // base: heuristica
 public:
     virtual void _._13CWallJumpTask();  // vtable[0] _._13CWallJumpTask
     virtual void GetNesserelyChecks();  // vtable[1] GetNesserelyChecks__13CWallJumpTask
@@ -11,9 +11,7 @@ public:
     virtual void TaskThink();  // vtable[5] TaskThink__13CWallJumpTask
     virtual void TaskIdentify();  // vtable[6] TaskIdentify__13CWallJumpTask
     virtual void ShouldManageEnemies();  // vtable[7] ShouldManageEnemies__13CWallJumpTask
-    virtual void ManageEnemies();  // vtable[8] ManageEnemies__9CBaseTask
     virtual void ReactOnDanger();  // vtable[9] ReactOnDanger__13CWallJumpTaskP13danger_info_s
-    virtual void 0();  // vtable[10] 0
     // campos observados (offset em bytes a partir de `this`; inclui os herdados)
     int f_004;  // +0x4 (4)
     void* f_008;  // +0x8 (8)

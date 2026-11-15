@@ -29,7 +29,7 @@ typedef struct st_549780_1 {
 
 extern unsigned int PrintChatSentence__10CChatClassPQ210CChatClass13CChatSentence;
 extern unsigned int cout;
-extern st_549780_4 *g_625f80;
+extern st_549780_4 *cout+512;
 
 int PrintChatNode__10CChatClassPQ210CChatClass9CChatNode(unsigned int a0, st_549780_1 *a1)
 {
@@ -46,33 +46,33 @@ int PrintChatNode__10CChatClassPQ210CChatClass9CChatNode(unsigned int a0, st_549
 
     if (!a1->field_8)
     {
-        g_625f80->field_14(&cout, "Node using keyword: ");
-        g_625f80->field_14(&cout, a1->field_4);
-        v6 = g_625f80;
+        cout+512->field_14(&cout, "Node using keyword: ");
+        cout+512->field_14(&cout, a1->field_4);
+        v6 = cout+512;
         v1 = "\n";
         v0 = &cout;
     }
     else if (a1->field_8 == 1)
     {
-        g_625f80->field_14(&cout, "Node using keyword2: ");
-        g_625f80->field_14(&cout, a1->field_4);
-        v6 = g_625f80;
+        cout+512->field_14(&cout, "Node using keyword2: ");
+        cout+512->field_14(&cout, a1->field_4);
+        v6 = cout+512;
         v1 = "\n";
         v0 = &cout;
     }
     else
     {
-        g_625f80->field_14(&cout, "Node using key token: ");
+        cout+512->field_14(&cout, "Node using key token: ");
         v4 = 0;
-        sub_48d0e0(&v5, 0, 24);
-        sub_48d990(&v4, "%d", *(char *)a1->field_4);
-        g_625f80->field_14(&cout, &v4);
-        v6 = g_625f80;
+        memset@GLIBC_2.0(&v5, 0, 24);
+        sprintf@GLIBC_2.0(&v4, "%d", *(char *)a1->field_4);
+        cout+512->field_14(&cout, &v4);
+        v6 = cout+512;
         v1 = "\n";
         v0 = &cout;
     }
     v6->field_14(v0, v1);
-    v2 = _INSERT(g_625f80->field_14(&cout, "Sentences of this node: \n\n"), 0, 0) | 0xffff0000;
+    v2 = _INSERT(cout+512->field_14(&cout, "Sentences of this node: \n\n"), 0, 0) | 0xffff0000;
     v3 = &PrintChatSentence__10CChatClassPQ210CChatClass13CChatSentence;
     v8 = *(int *)a1->field_0;
     if (*(int *)a1->field_0)
@@ -85,6 +85,6 @@ int PrintChatNode__10CChatClassPQ210CChatClass9CChatNode(unsigned int a0, st_549
             v8 = v10;
         } while (v9->field_4);
     }
-    return g_625f80->field_14(&cout, "\nEnd node\n");
+    return cout+512->field_14(&cout, "\nEnd node\n");
 }
 

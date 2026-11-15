@@ -65,7 +65,7 @@ double LinearMove__11CBaseToggleG6Vectorf(st_522f80_0 *a0, float *a1, float a2)
     }
     if (v8)
     {
-        sub_48aa70(a0);
+        CBaseToggle::LinearMoveDone(a0);
         return v9;
     }
     v10 = &a0->field_0->field_8;
@@ -78,7 +78,7 @@ double LinearMove__11CBaseToggleG6Vectorf(st_522f80_0 *a0, float *a1, float a2)
     v14 = v11 * v11 + v12 * v12 + v13 * v13;
     v15 = sqrt(v14);
     if (isnan(v15))
-        sub_487dc0(*(unsigned int *)&v14);
+        sqrt(*(unsigned int *)&v14);
     else
         v14 = v15;
     v3 = (float)v14;

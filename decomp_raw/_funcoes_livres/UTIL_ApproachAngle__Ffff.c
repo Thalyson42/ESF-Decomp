@@ -4,8 +4,8 @@ double UTIL_ApproachAngle__Ffff(double a0, double a1, int a2, unsigned int a3, f
     double v0;  // mm7
     double iter;  // mm7
 
-    sub_48d0c0(a2);
-    sub_48d0c0((float)v0);
+    UTIL_AngleMod(a2);
+    UTIL_AngleMod((float)v0);
     iter = (float)v0 - a0;
     if (0.0 > a4)
         a4 = -a4;

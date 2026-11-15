@@ -65,7 +65,7 @@ typedef struct st_502f60_4 {
     unsigned int field_0;
 } st_502f60_4;
 
-extern st_502f60_4 *g_6168dc;
+extern st_502f60_4 *g_engfuncs.pfnIndexOfEdict;
 extern st_502f60_3 *gpGlobals;
 
 unsigned int StopThrow__12CPlayerMeleei(st_502f60_2 *a0, unsigned int a1)
@@ -77,7 +77,7 @@ unsigned int StopThrow__12CPlayerMeleei(st_502f60_2 *a0, unsigned int a1)
     unsigned int v3;  // [bp-0x2c]
 
     if (a0->field_64 - 4 <= 1)
-        sub_48b090(g_6168dc(a0->field_124->field_0->field_208));
+        UTIL_Model_RemoveAll(g_engfuncs.pfnIndexOfEdict(a0->field_124->field_0->field_208));
     v0 = 1;
     if (a0->field_64 == 3)
     {
@@ -85,8 +85,8 @@ unsigned int StopThrow__12CPlayerMeleei(st_502f60_2 *a0, unsigned int a1)
     }
     else if (!a1)
     {
-        sub_48c610(&a0->field_124->field_504);
-        sub_489d40(&a0->field_124->field_504);
+        CSwoop::AddAllToNullKeyset(&a0->field_124->field_504);
+        CSwoop::ResetAllDT(&a0->field_124->field_504);
     }
     if (a0->field_3c && !a1)
     {
@@ -94,8 +94,8 @@ unsigned int StopThrow__12CPlayerMeleei(st_502f60_2 *a0, unsigned int a1)
         a0->field_120 = a0->field_68;
         a0->field_b4 = (float)(1.0 + *(float *)gpGlobals);
     }
-    sub_48a130(a0);
-    sub_4887c0(a0);
+    CPlayerMelee::RemoveStruggleBar(a0);
+    CPlayerMelee::RemoveAllAnims(a0);
     a0->field_68 = 0;
     a0->field_2c = 0;
     a0->field_28 = 0;
@@ -123,7 +123,7 @@ unsigned int StopThrow__12CPlayerMeleei(st_502f60_2 *a0, unsigned int a1)
     if (!v0 || a0->field_124->field_0->field_1a5 & 2)
         a0->field_124->field_0->field_108 = 3;
     else
-        sub_488d40(a0->field_124);
+        CBasePlayer::StartFly(a0->field_124);
     v5 = a0->field_124->field_0;
     v1 = 0;
     v2 = 0;

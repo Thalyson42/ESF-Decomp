@@ -65,10 +65,10 @@ typedef struct st_4a3da0_4 {
 } st_4a3da0_4;
 
 extern unsigned int g_Language;
-extern st_4a3da0_3 *g_616804;
-extern st_4a3da0_3 *g_6168d4;
-extern st_4a3da0_3 *g_616928;
-extern st_4a3da0_3 *g_61692c;
+extern st_4a3da0_3 *g_engfuncs.pfnFindClientInPVS;
+extern st_4a3da0_3 *g_engfuncs.pfnPEntityOfEntOffset;
+extern st_4a3da0_3 *g_engfuncs.pfnRandomLong;
+extern st_4a3da0_3 *g_engfuncs.pfnRandomFloat;
 
 int SpawnHeadGib__4CGibP9entvars_s(st_4a3da0_6 *a0)
 {
@@ -119,7 +119,7 @@ int SpawnHeadGib__4CGibP9entvars_s(st_4a3da0_6 *a0)
     float v19;  // [bp-0x14]
     float v20;  // [bp-0x10]
 
-    v4 = sub_48a010(0);
+    v4 = GetClassPtr__H1Z4CGib_PX01_PX01(0);
     if (g_Language == 1)
     {
         v1 = "models/germangibs.mdl";
@@ -130,10 +130,10 @@ int SpawnHeadGib__4CGibP9entvars_s(st_4a3da0_6 *a0)
         v1 = "models/hgibs.mdl";
         v0 = v4;
     }
-    sub_48d700(v0, v1);
+    CGib::Spawn(v0, v1);
     v4->field_0->field_114 = 0;
     if (!a0)
-        return sub_487e00(v4);
+        return CGib::LimitVelocity(v4);
     v21 = v4->field_0;
     v22 = &a0->field_8;
     v23 = *(float *)&v22->field_8 + a0->field_17c;
@@ -143,8 +143,8 @@ int SpawnHeadGib__4CGibP9entvars_s(st_4a3da0_6 *a0)
     *(float *)&v21[2] = v15;
     *(float *)&v21[3] = v16;
     *(float *)&v21[4] = v17;
-    v24 = g_616804(v4->field_0->field_208);
-    if ((int)g_616928(0, 100) <= 5 && v24)
+    v24 = g_engfuncs.pfnFindClientInPVS(v4->field_0->field_208);
+    if ((int)g_engfuncs.pfnRandomLong(0, 100) <= 5 && v24)
     {
         v25 = v4;
         v26 = v25->field_0;
@@ -162,7 +162,7 @@ int SpawnHeadGib__4CGibP9entvars_s(st_4a3da0_6 *a0)
         v32 = v29 * v29 + v30 * v30 + v31 * v31;
         v33 = sqrt(v32);
         if (isnan(v33))
-            sub_487dc0(*(unsigned int *)&v32);
+            sqrt(*(unsigned int *)&v32);
         else
             v32 = v33;
         v8 = (float)v32;
@@ -190,11 +190,11 @@ int SpawnHeadGib__4CGibP9entvars_s(st_4a3da0_6 *a0)
     else
     {
         v35 = v4->field_0;
-        g_61692c(0xc2c80000, 0x42c80000);
+        g_engfuncs.pfnRandomFloat(0xc2c80000, 0x42c80000);
         v3 = v23;
-        g_61692c(0xc2c80000, 0x42c80000);
+        g_engfuncs.pfnRandomFloat(0xc2c80000, 0x42c80000);
         v2 = v23;
-        g_61692c(200.0f, 300.0f);
+        g_engfuncs.pfnRandomFloat(200.0f, 300.0f);
         v5 = v3;
         v6 = v2;
         v7 = (float)v36;
@@ -202,12 +202,12 @@ int SpawnHeadGib__4CGibP9entvars_s(st_4a3da0_6 *a0)
         *(float *)&v35[9] = v6;
         *(float *)&v35[10] = v7;
     }
-    g_61692c(0x42c80000, 200.0f);
+    g_engfuncs.pfnRandomFloat(0x42c80000, 200.0f);
     *(float *)&v4->field_0->padding_2c[48] = 200.0f;
-    g_61692c(0x42c80000, 300.0f);
+    g_engfuncs.pfnRandomFloat(0x42c80000, 300.0f);
     *(float *)&v4->field_0->padding_2c[52] = 300.0f;
     v37 = a0->field_208;
-    if (a0->field_208 || (v37 = g_6168d4(0), v37))
+    if (a0->field_208 || (v37 = g_engfuncs.pfnPEntityOfEntOffset(0), v37))
         v38 = v37->field_7c;
     else
         v38 = NULL;
@@ -243,6 +243,6 @@ LABEL_4a4191:
     *(float *)&v40[8] = v5;
     *(float *)&v40[9] = v6;
     *(float *)&v40[10] = v7;
-    return sub_487e00(v4);
+    return CGib::LimitVelocity(v4);
 }
 

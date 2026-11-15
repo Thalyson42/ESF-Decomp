@@ -23,10 +23,10 @@ int PM_MakeJump(double a0)
         (&v1)[idx] = (&pmove->field_5c)[idx];
         idx += 1;
     } while (idx <= 2);
-    sub_489290(&v0);
+    VectorNormalize(&v0);
     pmove->field_5c = (float)(pmove->field_5c + 0.0 * v1);
     pmove->field_60 = (float)(pmove->field_60 + 0.0 * v2);
     *(float *)&pmove->padding_64[0] = 1000.0f;
-    return sub_489950(&v0);
+    return PM_FixupGravityVelocity(&v0);
 }
 

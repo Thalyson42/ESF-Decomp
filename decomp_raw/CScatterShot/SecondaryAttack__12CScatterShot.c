@@ -82,8 +82,8 @@ double SecondaryAttack__12CScatterShot(float idx)
     float v16;  // [bp-0x20]
     float v17;  // [bp-0x1c]
 
-    sub_4883e0(idx);
-    sub_48a800(*(int *)*(int *)(*(unsigned int *)&idx + 128) + 116);
+    CScatterShot::CleanUpShotList(idx);
+    UTIL_MakeVectors(*(int *)*(int *)(*(unsigned int *)&idx + 128) + 116);
     (*(int *)(*(int *)(*(int *)(*(unsigned int *)&idx + 128) + 96) + 480))(&v14, *(int *)(*(unsigned int *)&idx + 128));
     v19 = &gpGlobals->field_28;
     v11 = gpGlobals->field_28;
@@ -97,7 +97,7 @@ double SecondaryAttack__12CScatterShot(float idx)
     v4 = (float)(v20 + v15);
     v5 = (float)(v21 + v16);
     v6 = v17 + v3;
-    sub_487b80(&v14, &v4, 0, *(int *)(*(int *)idx + 408), &v7);
+    UTIL_TraceLine(&v14, &v4, 0, *(int *)(*(int *)idx + 408), &v7);
     v0 = 0;
     if ((int)v0 < *(int *)(*(unsigned int *)&idx + 228))
     {
@@ -123,7 +123,7 @@ double SecondaryAttack__12CScatterShot(float idx)
                     v29 = v26 * v26 + v27 * v27 + v28 * v28;
                     v30 = sqrt(v29);
                     if (isnan(v30))
-                        sub_487dc0(*(unsigned int *)&v29);
+                        sqrt(*(unsigned int *)&v29);
                     else
                         v29 = v30;
                     v31 = v0 * 4;
@@ -136,12 +136,12 @@ double SecondaryAttack__12CScatterShot(float idx)
                     v33->field_10 = &ContractThink__18CScatterShotAttack;
                     *(float *)(*(int *)*(int *)(v31 + v22) + 260) = gpGlobals->field_0;
                 }
-                sub_489300(idx, v22[v0]);
+                CScatterShot::FreeShot(idx, v22[v0]);
             }
         } while ((v0 += 1, (int)v0 < *(int *)(*(unsigned int *)&idx + 228)));
     }
     *(unsigned int *)(*(unsigned int *)&idx + 228) = 0;
-    sub_488640();
+    UTIL_WeaponTimeBase();
     *(float *)(*(unsigned int *)&idx + 160) = (float)(v35 + 0.3);
     return 0.3;
 }

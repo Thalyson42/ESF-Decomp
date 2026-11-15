@@ -14,7 +14,7 @@ typedef struct st_51a9d0_1 {
     unsigned int field_0;
 } st_51a9d0_1;
 
-extern st_51a9d0_1 *g_6167c4;
+extern st_51a9d0_1 *g_engfuncs.pfnPrecacheSound;
 extern st_51a9d0_0 *gpGlobals;
 
 unsigned int * Precache__15CAmbientGeneric(float a0)
@@ -38,16 +38,16 @@ unsigned int * Precache__15CAmbientGeneric(float a0)
             v6 = v5;
         } while (v4 && (v4 -= 1, v5 = v6 + 1, *v6));
         if (~v4 - 1 > 1 && *v3 != 33)
-            g_6167c4(v3);
+            g_engfuncs.pfnPrecacheSound(v3);
     }
-    sub_48a760(a0);
+    CAmbientGeneric::InitModulationParms(a0);
     v7 = *(int *)a0;
     if (!(v7->padding_0[416] & 16) && *(int *)(*(unsigned int *)&a0 + 208))
         *(unsigned int *)(*(unsigned int *)&a0 + 0xcc) = 1;
     if (!*(int *)(*(unsigned int *)&a0 + 0xcc))
         return v7;
     v1 = (float)((double)*(int *)(*(unsigned int *)&a0 + 180) * 0.01);
-    sub_4897b0(*(int *)(*(int *)a0 + 520), *(int *)a0 + 8, v0, v1, *(float *)(*(unsigned int *)&a0 + 100), 0x100, *(int *)(*(unsigned int *)&a0 + 164));
+    UTIL_EmitAmbientSound(*(int *)(*(int *)a0 + 520), *(int *)a0 + 8, v0, v1, *(float *)(*(unsigned int *)&a0 + 100), 0x100, *(int *)(*(unsigned int *)&a0 + 164));
     *(float *)(*(int *)a0 + 260) = (float)(0.1 + gpGlobals->field_0);
     return gpGlobals;
 }

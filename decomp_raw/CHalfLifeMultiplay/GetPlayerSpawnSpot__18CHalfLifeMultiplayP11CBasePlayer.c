@@ -29,12 +29,12 @@ st_4dda80_3 * GetPlayerSpawnSpot__18CHalfLifeMultiplayP11CBasePlayer(st_4dda80_2
 {
     st_4dda80_3 *v0;  // edi
 
-    v0 = sub_4898d0(a0, a1);
+    v0 = CGameRules::GetPlayerSpawnSpot(a0, a1);
     if (!a0->field_44->field_18(a0))
         return v0;
     if (!v0->field_248)
         return v0;
-    sub_48c1b0(v0->field_248 + gpGlobals->field_98, a1, a1, 3, 0);
+    FireTargets(v0->field_248 + gpGlobals->field_98, a1, a1, 3, 0);
     return v0;
 }
 

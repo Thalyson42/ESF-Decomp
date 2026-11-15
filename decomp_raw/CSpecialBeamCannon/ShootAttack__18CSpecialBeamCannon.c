@@ -49,7 +49,7 @@ double ShootAttack__18CSpecialBeamCannon(float a0)
     float v24;  // [bp-0x20]
     float v25;  // [bp-0x1c]
 
-    sub_48a800(*(int *)*(int *)(*(unsigned int *)&a0 + 128) + 116);
+    UTIL_MakeVectors(*(int *)*(int *)(*(unsigned int *)&a0 + 128) + 116);
     (*(int *)(*(int *)(*(int *)(*(unsigned int *)&a0 + 128) + 96) + 480))(&v19, *(int *)(*(unsigned int *)&a0 + 128));
     v27 = &gpGlobals->field_28;
     v28 = 10.0 * gpGlobals->field_28;
@@ -84,12 +84,12 @@ double ShootAttack__18CSpecialBeamCannon(float a0)
     v2 = *(short *)(*(unsigned int *)&a0 + 478);
     v1 = *(short *)(*(unsigned int *)&a0 + 476);
     v0 = *(short *)(*(unsigned int *)&a0 + 472);
-    sub_48aef0(a0);
+    CBasePlayerWeapon::GetPowerRatio(a0);
     v9 = *(int *)(*(unsigned int *)&a0 + 196) * 6;
     v8 = __fnstcw();
     v7 = v8 | 0xc00;
     v10 = (int)(v38 * (double)(int)v9);
-    sub_48c030(*(int *)*(int *)(*(unsigned int *)&a0 + 128), &v14, &v17, v10);
+    CSpecialBeamCannonAttack::ShootSbc(*(int *)*(int *)(*(unsigned int *)&a0 + 128), &v14, &v17, v10);
     return (double)(int)v9;
 }
 

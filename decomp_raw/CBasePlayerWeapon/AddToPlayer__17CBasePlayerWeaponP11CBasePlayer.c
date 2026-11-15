@@ -16,25 +16,25 @@ typedef struct st_538810_1 {
 } st_538810_1;
 
 extern unsigned int gmsgWeaponUpdate;
-extern st_538810_1 *g_616878;
-extern st_538810_1 *g_61687c;
-extern st_538810_1 *g_616884;
-extern st_538810_2 g_62f728;
-extern st_538810_2 g_62f730;
+extern st_538810_1 *g_engfuncs.pfnMessageBegin;
+extern st_538810_1 *g_engfuncs.pfnMessageEnd;
+extern st_538810_1 *g_engfuncs.pfnWriteChar;
+extern st_538810_2 _15CBasePlayerItem.ItemInfoArray+8;
+extern st_538810_2 _15CBasePlayerItem.ItemInfoArray+16;
 
 unsigned int AddToPlayer__17CBasePlayerWeaponP11CBasePlayer(unsigned int *a0, st_538810_0 **a1)
 {
     unsigned int v0;  // [bp-0x2c]
 
-    sub_48c570(a0, a1);
-    g_616878(1, gmsgWeaponUpdate, 0, *a1->field_208);
+    CBasePlayerItem::AddToPlayer(a0, a1);
+    g_engfuncs.pfnMessageBegin(1, gmsgWeaponUpdate, 0, *a1->field_208);
     v0 = a0[0x22];
-    g_616884(v0);
-    g_61687c(v0);
+    g_engfuncs.pfnWriteChar(v0);
+    g_engfuncs.pfnMessageEnd(v0);
     if (!a0[42])
     {
-        a0[42] = sub_48a7e0((&g_62f728.field_0)[11 * a0[0x22]]);
-        a0[43] = sub_48a7e0((&g_62f730.field_0)[11 * a0[0x22]]);
+        a0[42] = CBasePlayer::GetAmmoIndex((&_15CBasePlayerItem.ItemInfoArray+8.field_0)[11 * a0[0x22]]);
+        a0[43] = CBasePlayer::GetAmmoIndex((&_15CBasePlayerItem.ItemInfoArray+16.field_0)[11 * a0[0x22]]);
     }
     return 1;
 }

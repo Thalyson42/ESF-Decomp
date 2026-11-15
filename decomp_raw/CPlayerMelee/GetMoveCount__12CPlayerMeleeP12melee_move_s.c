@@ -19,7 +19,7 @@ unsigned int GetMoveCount__12CPlayerMeleeP12melee_move_s(int a0, st_506130_0 *a1
     do
     {
         v2 = v1;
-        if (!sub_48cbe0(a0, v2->field_4))
+        if (!CPlayerMelee::IsDirectionless(a0, v2->field_4))
             v0 += 1;
     } while ((v1 = v2->field_1c, v2->field_1c));
     return v0;

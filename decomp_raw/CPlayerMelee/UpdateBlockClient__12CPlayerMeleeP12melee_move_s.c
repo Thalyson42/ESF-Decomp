@@ -46,10 +46,10 @@ typedef struct st_506aa0_5 {
 } st_506aa0_5;
 
 extern unsigned int gmsgMeleeAtkHud;
-extern st_506aa0_5 *g_616878;
-extern st_506aa0_5 *g_61687c;
-extern st_506aa0_5 *g_616880;
-extern st_506aa0_5 *g_6168b4;
+extern st_506aa0_5 *g_engfuncs.pfnMessageBegin;
+extern st_506aa0_5 *g_engfuncs.pfnMessageEnd;
+extern st_506aa0_5 *g_engfuncs.pfnWriteByte;
+extern st_506aa0_5 *g_engfuncs.pfnAlertMessage;
 
 st_506aa0_3 * UpdateBlockClient__12CPlayerMeleeP12melee_move_s(st_506aa0_3 *a0, st_506aa0_2 *a1)
 {
@@ -76,7 +76,7 @@ LABEL_506af3:
     }
     else
     {
-        v3 = g_6168b4(1, "ERROR: NON-VALID UPDATE BLOCK\n");
+        v3 = g_engfuncs.pfnAlertMessage(1, "ERROR: NON-VALID UPDATE BLOCK\n");
     }
     if (!iter)
     {
@@ -111,20 +111,20 @@ LABEL_506af3:
         {
             if (!node)
                 return v3;
-            v3 = sub_48cbe0(a0, node->field_4);
+            v3 = CPlayerMelee::IsDirectionless(a0, node->field_4);
             if (!v3 && (v1 = &v1->field_1, v3 = v2, v1 == v3))
                 break;
             node = node->field_20;
         }
         v6 = 2;
-        if (sub_48b240(a0, node->field_4, iter->field_4))
+        if (CPlayerMelee::Block(a0, node->field_4, iter->field_4))
             v6 = 1;
-        g_616878(1, gmsgMeleeAtkHud, 0, *(int *)(*(int *)a0->field_124 + 520));
-        g_616880(3);
-        g_616880(v6);
+        g_engfuncs.pfnMessageBegin(1, gmsgMeleeAtkHud, 0, *(int *)(*(int *)a0->field_124 + 520));
+        g_engfuncs.pfnWriteByte(3);
+        g_engfuncs.pfnWriteByte(v6);
         v0 = a1->field_0;
-        g_616880(v0);
-        return g_61687c(v0);
+        g_engfuncs.pfnWriteByte(v0);
+        return g_engfuncs.pfnMessageEnd(v0);
     }
     else
     {

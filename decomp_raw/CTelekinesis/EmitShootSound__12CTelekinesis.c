@@ -15,7 +15,7 @@ typedef struct st_52a120_0 {
 
 int EmitShootSound__12CTelekinesis(st_52a120_1 *a0)
 {
-    sub_489390(*(int *)(*(int *)a0->field_80 + 520), 1, "weapons/telekinesis_fire.wav", 0x3f800000, 0.800000011920929f, 0, 100);
-    return sub_48d4f0(a0->field_80, "telekinesis.wav");
+    EMIT_SOUND_DYN(*(int *)(*(int *)a0->field_80 + 520), 1, "weapons/telekinesis_fire.wav", 0x3f800000, 0.800000011920929f, 0, 100);
+    return CBasePlayer::EmitClassSound(a0->field_80, "telekinesis.wav");
 }
 

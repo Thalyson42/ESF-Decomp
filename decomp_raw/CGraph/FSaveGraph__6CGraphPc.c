@@ -25,8 +25,8 @@ typedef struct st_4e3fd0_2 {
 } st_4e3fd0_2;
 
 extern st_4e3fd0_0 g_engfuncs;
-extern st_4e3fd0_1 *g_6168b4;
-extern st_4e3fd0_1 *g_61694c;
+extern st_4e3fd0_1 *g_engfuncs.pfnAlertMessage;
+extern st_4e3fd0_1 *g_engfuncs.pfnGetGameDir;
 
 unsigned int FSaveGraph__6CGraphPc(st_4e3fd0_2 *a0, int a1)
 {
@@ -46,20 +46,20 @@ unsigned int FSaveGraph__6CGraphPc(st_4e3fd0_2 *a0, int a1)
     {
         v1 = "Graph not ready!\n";
         v0 = 2;
-        v7 = g_6168b4;
+        v7 = g_engfuncs.pfnAlertMessage;
     }
     else
     {
         v3 = &g_engfuncs.padding_0[0];
-        g_61694c(&v5);
-        sub_48c150(&v5, "/maps");
-        sub_487e20(&v5, 0x1ff);
-        sub_48c150(&v5, "/graphs");
-        sub_487e20(&v5, 0x1ff);
-        sub_48c150(&v5, "/");
-        sub_48c150(&v5, a1);
-        sub_48c150(&v5, ".nod");
-        v6 = sub_48d440(&v5, "wb");
+        g_engfuncs.pfnGetGameDir(&v5);
+        strcat@GLIBC_2.0(&v5, "/maps");
+        mkdir@GLIBC_2.0(&v5, 0x1ff);
+        strcat@GLIBC_2.0(&v5, "/graphs");
+        mkdir@GLIBC_2.0(&v5, 0x1ff);
+        strcat@GLIBC_2.0(&v5, "/");
+        strcat@GLIBC_2.0(&v5, a1);
+        strcat@GLIBC_2.0(&v5, ".nod");
+        v6 = fopen@GLIBC_2.1(&v5, "wb");
         v3->field_f4(2, "Created: %s\n", &v5);
         if (!v6)
         {
@@ -70,18 +70,18 @@ unsigned int FSaveGraph__6CGraphPc(st_4e3fd0_2 *a0, int a1)
         }
         else
         {
-            sub_48d9f0(&v4, 4, 1, v6);
-            sub_48d9f0(a0, 8396, 1, v6);
-            sub_48d9f0(a0->field_c, 88, a0->field_18, v6);
-            sub_48d9f0(a0->field_10, 24, a0->field_1c, v6);
-            sub_48d9f0(a0->field_24, 16, a0->field_18, v6);
+            fwrite@GLIBC_2.0(&v4, 4, 1, v6);
+            fwrite@GLIBC_2.0(a0, 8396, 1, v6);
+            fwrite@GLIBC_2.0(a0->field_c, 88, a0->field_18, v6);
+            fwrite@GLIBC_2.0(a0->field_10, 24, a0->field_1c, v6);
+            fwrite@GLIBC_2.0(a0->field_24, 16, a0->field_18, v6);
             v8 = a0;
             if (v8->field_14 && v8->field_20)
-                sub_48d9f0(a0->field_14, 1, v8->field_20, v6);
+                fwrite@GLIBC_2.0(a0->field_14, 1, v8->field_20, v6);
             v9 = a0;
             if (v9->field_20bc && v9->field_20c0)
-                sub_48d9f0(a0->field_20bc, 2, v9->field_20c0, v6);
-            sub_48c560(v6);
+                fwrite@GLIBC_2.0(a0->field_20bc, 2, v9->field_20c0, v6);
+            fclose@GLIBC_2.1(v6);
             return 1;
         }
     }

@@ -13,13 +13,13 @@ typedef struct st_4ddbf0_0 {
     unsigned int field_0;
 } st_4ddbf0_0;
 
-extern float g_5bd158;
+extern float mp_chattime+12;
 extern unsigned int g_flIntermissionStartTime;
 extern unsigned int g_fGameOver;
-extern st_4ddbf0_0 *g_616878;
-extern st_4ddbf0_0 *g_61687c;
-extern st_4ddbf0_0 *g_6168a4;
-extern st_4ddbf0_0 *g_6168b0;
+extern st_4ddbf0_0 *g_engfuncs.pfnMessageBegin;
+extern st_4ddbf0_0 *g_engfuncs.pfnMessageEnd;
+extern st_4ddbf0_0 *g_engfuncs.pfnCVarGetFloat;
+extern st_4ddbf0_0 *g_engfuncs.pfnCVarSetString;
 extern st_4ddbf0_2 *gpGlobals;
 
 float GoToIntermission__18CHalfLifeMultiplay(st_4ddbf0_1 *a0)
@@ -33,24 +33,24 @@ float GoToIntermission__18CHalfLifeMultiplay(st_4ddbf0_1 *a0)
 
     if (g_fGameOver)
         return v5;
-    g_616878(2, 30, 0, 0);
-    g_61687c();
-    g_6168a4("mp_chattime");
+    g_engfuncs.pfnMessageBegin(2, 30, 0, 0);
+    g_engfuncs.pfnMessageEnd();
+    g_engfuncs.pfnCVarGetFloat("mp_chattime");
     v2 = __fnstcw();
     v1 = v2 | 0xc00;
     v0 = (int)v3;
     if (v0 <= 0)
     {
-        g_6168b0("mp_chattime", "1");
+        g_engfuncs.pfnCVarSetString("mp_chattime", "1");
     }
     else if (v0 > 120)
     {
-        v4 = sub_48a560(120);
-        g_6168b0("mp_chattime", v4);
+        v4 = UTIL_dtos1(120);
+        g_engfuncs.pfnCVarSetString("mp_chattime", v4);
     }
     v2 = __fnstcw();
     v1 = v2 | 0xc00;
-    v0 = (int)g_5bd158;
+    v0 = (int)mp_chattime+12;
     a0->field_48 = (float)((double)v0 + *(float *)gpGlobals);
     *(float *)&g_flIntermissionStartTime = *(float *)gpGlobals;
     g_fGameOver = 1;

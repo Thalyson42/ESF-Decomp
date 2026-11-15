@@ -13,6 +13,6 @@ extern st_4d3610_1 *gpGlobals;
 
 int Precache__13CMonsterMaker(st_4d3610_0 *a0)
 {
-    return sub_488de0(a0->field_2a8 + gpGlobals->field_98);
+    return UTIL_PrecacheOther(a0->field_2a8 + gpGlobals->field_98);
 }
 

@@ -28,12 +28,12 @@ typedef struct st_539640_3 {
 } st_539640_3;
 
 extern char SUB_Remove__11CBaseEntity;
-extern st_539640_3 *g_616878;
-extern st_539640_3 *g_61687c;
-extern st_539640_3 *g_616880;
-extern st_539640_3 *g_616888;
-extern st_539640_3 *g_616894;
-extern st_539640_3 *g_6168dc;
+extern st_539640_3 *g_engfuncs.pfnMessageBegin;
+extern st_539640_3 *g_engfuncs.pfnMessageEnd;
+extern st_539640_3 *g_engfuncs.pfnWriteByte;
+extern st_539640_3 *g_engfuncs.pfnWriteShort;
+extern st_539640_3 *g_engfuncs.pfnWriteCoord;
+extern st_539640_3 *g_engfuncs.pfnIndexOfEdict;
 extern st_539640_0 *gpGlobals;
 
 short TriggerDecal__6CDecalP11CBaseEntityT18USE_TYPEf(st_539640_2 *a0)
@@ -70,18 +70,18 @@ short TriggerDecal__6CDecalP11CBaseEntityT18USE_TYPEf(st_539640_2 *a0)
     v3 = *(float *)&v14->field_8 - v0;
     v4 = *(float *)&v15[1] - v1;
     v5 = *(float *)&v15[2] - v2;
-    sub_487b80(&v3, &v9, 1, v14->field_208, &v12);
-    g_616878(0, 23, 0, 0);
-    g_616880(13);
-    g_616894(*(float *)&a0->field_0->field_8);
-    g_616894(*(float *)&a0->field_0->field_c);
-    g_616894(*(float *)&a0->field_0->field_10);
-    g_616888(a0->field_0->field_110);
-    v16 = (short)g_6168dc(v13);
-    g_616888(v16);
+    UTIL_TraceLine(&v3, &v9, 1, v14->field_208, &v12);
+    g_engfuncs.pfnMessageBegin(0, 23, 0, 0);
+    g_engfuncs.pfnWriteByte(13);
+    g_engfuncs.pfnWriteCoord(*(float *)&a0->field_0->field_8);
+    g_engfuncs.pfnWriteCoord(*(float *)&a0->field_0->field_c);
+    g_engfuncs.pfnWriteCoord(*(float *)&a0->field_0->field_10);
+    g_engfuncs.pfnWriteShort(a0->field_0->field_110);
+    v16 = (short)g_engfuncs.pfnIndexOfEdict(v13);
+    g_engfuncs.pfnWriteShort(v16);
     if (v16)
-        g_616888(*(int *)((!v13 ? 0 : v13 + 128) + 180));
-    a0->field_c = _INSERT(g_61687c(), 0, 0) | 0xffff0000;
+        g_engfuncs.pfnWriteShort(*(int *)((!v13 ? 0 : v13 + 128) + 180));
+    a0->field_c = _INSERT(g_engfuncs.pfnMessageEnd(), 0, 0) | 0xffff0000;
     a0->field_10 = &SUB_Remove__11CBaseEntity;
     a0->field_0->field_104 = (float)(0.1 + *(float *)gpGlobals);
     return (unsigned short)gpGlobals;

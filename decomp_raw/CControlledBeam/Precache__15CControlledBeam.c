@@ -3,11 +3,11 @@ typedef struct st_4a74b0_0 {
     unsigned int field_0;
 } st_4a74b0_0;
 
-extern st_4a74b0_0 *g_6167c4;
+extern st_4a74b0_0 *g_engfuncs.pfnPrecacheSound;
 
 int Precache__15CControlledBeam(void)
 {
-    g_6167c4("weapons/beamhead.wav");
-    return g_6167c4("weapons/beamfire.wav");
+    g_engfuncs.pfnPrecacheSound("weapons/beamhead.wav");
+    return g_engfuncs.pfnPrecacheSound("weapons/beamfire.wav");
 }
 

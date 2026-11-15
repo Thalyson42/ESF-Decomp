@@ -34,8 +34,8 @@ int ExplosionCreate__FRC6VectorT0P7edict_sii(int a0, int a1, int a2, int a3, uns
     unsigned int v5;  // [bp-0x20]
     char *v6;  // [bp-0x1c]
 
-    v7 = sub_48a0f0("env_explosion", a0, a1, a2, v0, v1, v2);
-    sub_48d990(&v3, "%3d", a3);
+    v7 = CBaseEntity::Create("env_explosion", a0, a1, a2, v0, v1, v2);
+    sprintf@GLIBC_2.0(&v3, "%3d", a3);
     v5 = "iMagnitude";
     v6 = &v3;
     v7->field_60->field_10(v7, &v4);

@@ -7,10 +7,10 @@ int RestoreGlobalState__FP13saverestore_s(int a0)
     unsigned int v1;  // [bp-0x20]
     unsigned int v2;  // [bp-0x1c]
 
-    sub_489c20(&v0, a0);
+    __18CSaveRestoreBufferP13saverestore_s(&v0, a0);
     v1 = 0;
     v2 = 1;
-    sub_48ae50(&gGlobalState, &v0);
-    return sub_48c990(&v0, 2);
+    CGlobalState::Restore(&gGlobalState, &v0);
+    return _._18CSaveRestoreBuffer(&v0, 2);
 }
 

@@ -73,7 +73,7 @@ typedef struct st_550070_8 {
     unsigned int field_0;
 } st_550070_8;
 
-extern st_550070_8 *g_616928;
+extern st_550070_8 *g_engfuncs.pfnRandomLong;
 extern st_550070_8 *gpGlobals;
 
 double TaskThink__15CShootCandyTask(st_550070_7 *a0)
@@ -124,7 +124,7 @@ double TaskThink__15CShootCandyTask(st_550070_7 *a0)
         if (a0->field_8->field_b6c)
         {
             v24 = a0->field_8;
-            if ((char)sub_48bf70(v24, CONCAT(v24->field_b6c, v24) >> 32))
+            if ((char)CBot::CanAttackPlayer(v24, CONCAT(v24->field_b6c, v24) >> 32))
             {
                 v25 = a0->field_8;
                 v26 = *(int *)v25->field_b6c + 8;
@@ -143,7 +143,7 @@ double TaskThink__15CShootCandyTask(st_550070_7 *a0)
                 if (isnan(v32))
                 {
                     v0 = v31;
-                    sub_487dc0(*(unsigned int *)&v0);
+                    sqrt(*(unsigned int *)&v0);
                 }
                 else
                 {
@@ -158,9 +158,9 @@ double TaskThink__15CShootCandyTask(st_550070_7 *a0)
                         if (a0->field_1c <= *(float *)gpGlobals)
                         {
                             a0->field_1c = (float)(0.2 + *(float *)gpGlobals);
-                            v33 = g_616928(1, 100);
+                            v33 = g_engfuncs.pfnRandomLong(1, 100);
                             if ((int)v33 <= a0->field_8->field_a04->field_26)
-                                sub_488180(a0->field_8);
+                                CBasePlayer::Teleport(a0->field_8);
                         }
                         else
                         {
@@ -171,7 +171,7 @@ double TaskThink__15CShootCandyTask(st_550070_7 *a0)
                             {
                                 *(unsigned short *)((char *)&v0 + 4) = 1;
                                 *(struct st_550070_3 **)&v0 = a0->field_8;
-                                sub_48ab70(v0, *(unsigned int *)((void*)&v0 + 4));
+                                CBot::ToggleTurbo(v0, *(unsigned int *)((void*)&v0 + 4));
                             }
                         }
                     }
@@ -192,10 +192,10 @@ double TaskThink__15CShootCandyTask(st_550070_7 *a0)
                     {
                         v34 = a0->field_20;
                         if (v34 > *(float *)gpGlobals)
-                            sub_488e30(a0->field_8, 8);
+                            CBot::SetMoveDir(a0->field_8, 8);
                         v35 = a0->field_8;
                         if (v35->field_968 && v35->field_968->field_88 != 20)
-                            sub_48ce10(v35, "weapon_candy");
+                            CBasePlayer::SelectItem(v35, "weapon_candy");
                         a0->field_c->field_200 = a0->field_c->field_200 | 1;
                         return v34;
                     }
@@ -213,10 +213,10 @@ LABEL_55011b:
             v14 = NULL;
             while (1)
             {
-                v14 = sub_487e80(v14, "candy");
+                v14 = UTIL_FindEntityByClassname(v14, "candy");
                 if (v14)
                 {
-                    if ((char)sub_48b140(v14))
+                    if ((char)IsNull(v14))
                         continue;
                     v15 = &*v14->field_8;
                     v8 = *v14->field_8;
@@ -232,7 +232,7 @@ LABEL_55011b:
                     v20 = v17 * v17 + v18 * v18 + v19 * v19;
                     v21 = sqrt(v20);
                     if (isnan(v21))
-                        sub_487dc0(*(unsigned int *)&v20);
+                        sqrt(*(unsigned int *)&v20);
                     else
                         v20 = v21;
                     v4 = (float)v20;
@@ -255,7 +255,7 @@ LABEL_550225:
                     v1 = *v14->field_8;
                     v2 = *(float *)&v22[1];
                     v3 = *(float *)&v22[2];
-                    sub_48a170(&v5, v23, &v1);
+                    CBot::GetAimAngles(&v5, v23, &v1);
                     *(float *)&v23->field_c10 = v5;
                     *(float *)&v23->field_c14 = v6;
                     *(float *)&v23->field_c18 = v7;

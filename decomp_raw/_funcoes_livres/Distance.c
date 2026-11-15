@@ -8,6 +8,6 @@ int Distance(float *a0, float *a1)
     v0 = *a1 - *a0;
     v1 = a1[1] - a0[1];
     v2 = a1[2] - a0[2];
-    return sub_48c330(&v0);
+    return Length(&v0);
 }
 

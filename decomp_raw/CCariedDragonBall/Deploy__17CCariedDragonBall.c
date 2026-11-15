@@ -16,11 +16,11 @@ int Deploy__17CCariedDragonBall(double a0, float idx)
     float v3;  // [bp-0x8]
 
     *(unsigned int *)(*(int *)*(int *)(*(unsigned int *)&idx + 128) + 192) = *(int *)((char *)&dragonball_pmodels[*(int *)(*(int *)(*(unsigned int *)&idx + 128) + 1888)] - 4) - gpGlobals->field_98;
-    sub_488640(v0, v1, v2);
+    UTIL_WeaponTimeBase(v0, v1, v2);
     v3 = (float)(a0 + 0.75);
     v5 = v3;
     *(float *)(*(unsigned int *)&idx + 160) = (float)v5;
     *(float *)(*(unsigned int *)&idx + 156) = (float)v5;
-    return sub_489360(idx, "dragonball");
+    return CBasePlayerWeapon::DefaultDeploy(idx, "dragonball");
 }
 

@@ -102,8 +102,8 @@ typedef struct st_53fa50_10 {
     float field_0;
 } st_53fa50_10;
 
-extern st_53fa50_6 *g_6168ac;
-extern st_53fa50_6 *g_6168d4;
+extern st_53fa50_6 *g_engfuncs.pfnCVarSetFloat;
+extern st_53fa50_6 *g_engfuncs.pfnPEntityOfEntOffset;
 extern st_53fa50_10 *gpGlobals;
 
 st_53fa50_8 * DisconnectPlayer__11CBotManagerP7edict_s(st_53fa50_3 *a0, st_53fa50_9 *a1)
@@ -144,7 +144,7 @@ st_53fa50_8 * DisconnectPlayer__11CBotManagerP7edict_s(st_53fa50_3 *a0, st_53fa5
 
     a0->field_d44 = a0->field_d44 - 1;
     v10 = a1;
-    if (v10 || (v10 = g_6168d4(0), v10))
+    if (v10 || (v10 = g_engfuncs.pfnPEntityOfEntOffset(0), v10))
         v11 = v10->field_7c;
     else
         v11 = NULL;
@@ -172,7 +172,7 @@ st_53fa50_8 * DisconnectPlayer__11CBotManagerP7edict_s(st_53fa50_3 *a0, st_53fa5
         v16 = _ccall(5, v14, 0, 0);
         v17 = _ccall(4, 19, v15 - 1, 0, v16);
         if (v17 & 1)
-            g_6168ac("mp_plcatchup", *(float *)&a0->field_28);
+            g_engfuncs.pfnCVarSetFloat("mp_plcatchup", *(float *)&a0->field_28);
     }
     v18 = v8;
     if (!v18->field_a08)
@@ -201,7 +201,7 @@ st_53fa50_8 * DisconnectPlayer__11CBotManagerP7edict_s(st_53fa50_3 *a0, st_53fa5
                 }
             }
         }
-        v21 = sub_48d6a0(52);
+        v21 = __builtin_new(52);
         v5 = 1;
         v22 = v8;
         v23 = v22->field_9f0;
@@ -214,24 +214,24 @@ st_53fa50_8 * DisconnectPlayer__11CBotManagerP7edict_s(st_53fa50_3 *a0, st_53fa5
         v21->field_4 = v0;
         v21->field_28 = v24;
         *(float *)&v21->field_30 = *(float *)gpGlobals;
-        sub_48d360(&v21->field_6, v4, 31);
+        strncpy@GLIBC_2.0(&v21->field_6, v4, 31);
         v21->field_26 = 0;
         v5 = 0;
         v6 = v21;
         if (v5)
-            sub_48d4e0(v6);
+            __builtin_delete(v6);
         v25 = a0->field_0;
         if (!*v25)
         {
-            v26 = sub_48d6a0(12);
+            v26 = __builtin_new(12);
             v3 = 1;
             v26->field_4 = NULL;
             v26->field_8 = 0;
-            sub_48d0e0(v26, 0, 4);
+            memset@GLIBC_2.0(v26, 0, 4);
             v3 = 0;
             *v25 = v26;
             if (v3)
-                sub_48d4e0(v26);
+                __builtin_delete(v26);
             *v25->field_0 = v6;
             *v25->field_4 = NULL;
             *v25->field_8 = 0;
@@ -240,15 +240,15 @@ st_53fa50_8 * DisconnectPlayer__11CBotManagerP7edict_s(st_53fa50_3 *a0, st_53fa5
         else
         {
             v2 = v25[1];
-            v27 = sub_48d6a0(12);
+            v27 = __builtin_new(12);
             v1 = 1;
             v27->field_4 = 0;
             v27->field_8 = NULL;
-            sub_48d0e0(v27, 0, 4);
+            memset@GLIBC_2.0(v27, 0, 4);
             v1 = 0;
             v2->field_4 = v27;
             if (v1)
-                sub_48d4e0(v27);
+                __builtin_delete(v27);
             v25[1]->field_4->field_8 = v25[1];
             v28 = v25[1]->field_4;
             v25[1] = v28;
@@ -257,8 +257,8 @@ st_53fa50_8 * DisconnectPlayer__11CBotManagerP7edict_s(st_53fa50_3 *a0, st_53fa5
         }
     }
     v29 = v8;
-    sub_48c9f0(v29);
-    sub_487cc0(v29);
+    CBot::DeleteCombos(v29);
+    CBot::KillCurrentTask(v29);
     v30 = &v29->field_b84;
     iter = v29->field_b84;
     if (v29->field_b84)
@@ -269,11 +269,11 @@ st_53fa50_8 * DisconnectPlayer__11CBotManagerP7edict_s(st_53fa50_3 *a0, st_53fa5
             iter = iter->field_4;
             v32->field_4 = NULL;
             v32->field_8 = 0;
-            sub_48d4e0(v32);
+            __builtin_delete(v32);
         } while (iter);
     }
     v30->field_4 = 0;
     v30->field_0 = NULL;
-    return sub_48c6c0(v8);
+    return CBot::ClearMeleeComboList(v8);
 }
 

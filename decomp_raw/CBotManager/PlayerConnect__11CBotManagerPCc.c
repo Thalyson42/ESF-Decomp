@@ -61,7 +61,7 @@ char * PlayerConnect__11CBotManagerPCc(st_53f9d0_0 *a0, char *a1)
             if (v11->field_1a != -0x1)
             {
                 *(unsigned short *)&v0 = 0;
-                v1 = sub_48b870(v11, v0);
+                v1 = CBotManager::KickLastBot(v11, v0);
             }
         }
     }

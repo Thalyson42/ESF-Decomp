@@ -7,7 +7,7 @@ extern st_4b35e0_0 *gpGlobals;
 
 unsigned int * Think__5CGlow(float a0)
 {
-    sub_48a290(a0, (*(float *)gpGlobals - *(float *)(*(unsigned int *)&a0 + 100)) * *(float *)(*(int *)a0 + 312));
+    CGlow::Animate(a0, (*(float *)gpGlobals - *(float *)(*(unsigned int *)&a0 + 100)) * *(float *)(*(int *)a0 + 312));
     *(float *)(*(int *)a0 + 260) = (float)(0.1 + *(float *)gpGlobals);
     *(float *)(*(unsigned int *)&a0 + 100) = *(float *)gpGlobals;
     return gpGlobals;

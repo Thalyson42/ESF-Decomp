@@ -40,7 +40,7 @@ unsigned int EnableChargeSprite__14CDestructoDisc(st_4aa410_3 *a0)
     v2 = v5;
     v3 = v6;
     v0 = (float)((double)a0->field_c4 * 0.5 / (double)a0->field_c8);
-    v7 = sub_48a1e0(a0->field_80->field_0, &v1, v0);
+    v7 = CDestructoDiscAttack::ChargeDestructoDisc(a0->field_80->field_0, &v1, v0);
     a0->field_1d4 = v7;
     return v7;
 }

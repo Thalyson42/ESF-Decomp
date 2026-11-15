@@ -3,6 +3,6 @@ extern int _12CMultiSource.m_SaveData;
 
 unsigned int Restore__12CMultiSourceR8CRestore(int a0, int a1)
 {
-    return (!sub_48be60(a0, a1) ? 0 : sub_48a980(a1, "CMultiSource", a0, &_12CMultiSource.m_SaveData, 4));
+    return (!CBaseEntity::Restore(a0, a1) ? 0 : CRestore::ReadFields(a1, "CMultiSource", a0, &_12CMultiSource.m_SaveData, 4));
 }
 

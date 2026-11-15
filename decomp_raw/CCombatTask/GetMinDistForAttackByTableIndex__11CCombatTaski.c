@@ -21,7 +21,7 @@ typedef struct st_54d050_0 {
     unsigned int field_c;
 } st_54d050_0;
 
-extern st_54d050_0 g_5cb76c;
+extern st_54d050_0 BotWeaponInfoTable+76;
 
 float GetMinDistForAttackByTableIndex__11CCombatTaski(st_54d050_3 *a0, unsigned int idx)
 {
@@ -30,7 +30,7 @@ float GetMinDistForAttackByTableIndex__11CCombatTaski(st_54d050_3 *a0, unsigned 
     double v3;  // mm6
     float v0;  // [bp-0x8]
 
-    v1 = (&g_5cb76c.field_0)[21 * idx];
+    v1 = (&BotWeaponInfoTable+76.field_0)[21 * idx];
     v2 = a0->field_8->field_a04->field_34;
     if (v2 == 1)
         return v1;

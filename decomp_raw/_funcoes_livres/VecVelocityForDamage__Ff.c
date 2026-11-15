@@ -3,7 +3,7 @@ typedef struct st_4efbd0_0 {
     unsigned int field_0;
 } st_4efbd0_0;
 
-extern st_4efbd0_0 *g_61692c;
+extern st_4efbd0_0 *g_engfuncs.pfnRandomFloat;
 
 float * VecVelocityForDamage__Ff(void)
 {
@@ -21,9 +21,9 @@ float * VecVelocityForDamage__Ff(void)
     float *idx;  // [bp+0x4]
     float v7;  // [bp+0x8]
 
-    g_61692c(0xc2c80000, 0x42c80000);
-    g_61692c(0xc2c80000, 0x42c80000);
-    g_61692c(200.0f, 300.0f);
+    g_engfuncs.pfnRandomFloat(0xc2c80000, 0x42c80000);
+    g_engfuncs.pfnRandomFloat(0xc2c80000, 0x42c80000);
+    g_engfuncs.pfnRandomFloat(200.0f, 300.0f);
     v3 = (float)v8;
     v4 = (float)v8;
     v5 = (float)v9;

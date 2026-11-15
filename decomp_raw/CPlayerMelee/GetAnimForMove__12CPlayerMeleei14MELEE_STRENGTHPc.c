@@ -28,7 +28,7 @@ unsigned int GetAnimForMove__12CPlayerMeleei14MELEE_STRENGTHPc(unsigned int a0, 
         }
         v0 = "right_";
     }
-    sub_48c150(a3, v0);
+    strcat@GLIBC_2.0(a3, v0);
     if (a2 == 1)
     {
         v2 = "medium_";
@@ -41,7 +41,7 @@ unsigned int GetAnimForMove__12CPlayerMeleei14MELEE_STRENGTHPc(unsigned int a0, 
     {
         v2 = "strong_";
     }
-    sub_48c150(a3, v2);
-    return (!(a1 & 0x800) ? sub_48c150(a3, "attack1") : sub_48c150(a3, "attack2"));
+    strcat@GLIBC_2.0(a3, v2);
+    return (!(a1 & 0x800) ? strcat@GLIBC_2.0(a3, "attack1") : strcat@GLIBC_2.0(a3, "attack2"));
 }
 

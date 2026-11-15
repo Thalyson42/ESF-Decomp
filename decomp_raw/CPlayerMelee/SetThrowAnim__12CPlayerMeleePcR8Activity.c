@@ -24,7 +24,7 @@ unsigned int SetThrowAnim__12CPlayerMeleePcR8Activity(st_500ea0_0 *a0, unsigned 
         if (v1)
         {
             v0 = a0;
-            v3 = sub_48d400(v2);
+            v3 = CPlayerMelee::StopThrow(v2);
         }
         return v3;
     }

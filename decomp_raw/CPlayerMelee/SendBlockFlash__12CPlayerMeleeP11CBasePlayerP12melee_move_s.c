@@ -43,7 +43,7 @@ typedef struct st_506340_3 {
     struct st_506340_2 *field_8;
 } st_506340_3;
 
-extern st_506340_5 *g_616928;
+extern st_506340_5 *g_engfuncs.pfnRandomLong;
 
 st_506340_2 * SendBlockFlash__12CPlayerMeleeP11CBasePlayerP12melee_move_s(st_506340_0 *a0, st_506340_6 *a1, st_506340_1 *a2)
 {
@@ -73,27 +73,27 @@ st_506340_2 * SendBlockFlash__12CPlayerMeleeP11CBasePlayerP12melee_move_s(st_506
     char v8;  // [bp-0x6]
     char v9;  // [bp-0x5]
 
-    if (!sub_48dbf0(a0, a2))
+    if (!CPlayerMelee::GetMeleeStrength(a0, a2))
     {
         v10 = 15;
     }
     else
     {
         v10 = 35;
-        if (sub_48dbf0(a0, a2) == 1)
+        if (CPlayerMelee::GetMeleeStrength(a0, a2) == 1)
             v10 = 25;
     }
-    v0 = sub_48bb90(a0->field_124);
-    v11 = v10 + v0 / sub_48bb90(a1) * 10;
+    v0 = CBasePlayer::GetPowerLevel(a0->field_124);
+    v11 = v10 + v0 / CBasePlayer::GetPowerLevel(a1) * 10;
     v12 = v11;
     v13 = v12 - v10;
     if (v12 - v10 < NULL)
         v13 = -v13;
     if (v13 > 10)
         v11 = (v11 <= v10 ? v10 - 10 : v10 + 10);
-    if ((int)g_616928(0, 100) < v11)
+    if ((int)g_engfuncs.pfnRandomLong(0, 100) < v11)
     {
-        sub_4889d0(&a1->field_380, 2, 16);
+        CPlayerMelee::MeleeHud(&a1->field_380, 2, 16);
         v9 = 0;
         v14 = a1->field_60->field_a4(a1);
         if (!v14)
@@ -110,29 +110,29 @@ st_506340_2 * SendBlockFlash__12CPlayerMeleeP11CBasePlayerP12melee_move_s(st_506
             v15 = &a1->field_b84;
             if (!a1->field_b84)
             {
-                v16 = sub_48d6a0(12);
+                v16 = __builtin_new(12);
                 v8 = 1;
                 v16->field_4 = NULL;
                 v16->field_8 = 0;
-                sub_48d0e0(v16, 0, 4);
+                memset@GLIBC_2.0(v16, 0, 4);
                 v8 = 0;
                 a1->field_b84 = v16;
                 if (v8)
-                    sub_48d4e0(v16);
+                    __builtin_delete(v16);
                 *v15->field_0 = 0;
             }
             else
             {
                 v7 = v15[1];
-                v17 = sub_48d6a0(12);
+                v17 = __builtin_new(12);
                 v6 = 1;
                 v17->field_4 = 0;
                 v17->field_8 = NULL;
-                sub_48d0e0(v17, 0, 4);
+                memset@GLIBC_2.0(v17, 0, 4);
                 v6 = 0;
                 v7->field_4 = v17;
                 if (v6)
-                    sub_48d4e0(v17);
+                    __builtin_delete(v17);
                 v15[1]->field_4->field_8 = v15[1];
                 v18 = v15[1]->field_4;
                 v15[1] = v18;
@@ -149,7 +149,7 @@ st_506340_2 * SendBlockFlash__12CPlayerMeleeP11CBasePlayerP12melee_move_s(st_506
     }
     else
     {
-        sub_4889d0(&a1->field_380, 2, sub_488390(a0, a2->field_4));
+        CPlayerMelee::MeleeHud(&a1->field_380, 2, CPlayerMelee::FlagsToDirections(a0, a2->field_4));
         v5 = 0;
         v20 = a1->field_60->field_a4(a1);
         if (!v20)
@@ -167,29 +167,29 @@ st_506340_2 * SendBlockFlash__12CPlayerMeleeP11CBasePlayerP12melee_move_s(st_506
             v4 = a2->field_4;
             if (!a1->field_b84)
             {
-                v21 = sub_48d6a0(12);
+                v21 = __builtin_new(12);
                 v3 = 1;
                 v21->field_4 = NULL;
                 v21->field_8 = 0;
-                sub_48d0e0(v21, 0, 4);
+                memset@GLIBC_2.0(v21, 0, 4);
                 v3 = 0;
                 a1->field_b84 = v21;
                 if (v3)
-                    sub_48d4e0(v21);
+                    __builtin_delete(v21);
                 *v15->field_0 = v4;
             }
             else
             {
                 v2 = v15[1];
-                v23 = sub_48d6a0(12);
+                v23 = __builtin_new(12);
                 v1 = 1;
                 v23->field_4 = 0;
                 v23->field_8 = NULL;
-                sub_48d0e0(v23, 0, 4);
+                memset@GLIBC_2.0(v23, 0, 4);
                 v1 = 0;
                 v2->field_4 = v23;
                 if (v1)
-                    sub_48d4e0(v23);
+                    __builtin_delete(v23);
                 v15[1]->field_4->field_8 = v15[1];
                 v24 = v15[1]->field_4;
                 v15[1] = v24;

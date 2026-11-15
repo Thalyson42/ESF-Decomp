@@ -26,12 +26,12 @@ st_49a9e0_1 * WeaponIdle__12CCandyAttack(st_49a9e0_2 *a0)
 {
     st_49a9e0_1 *v0;  // eax
 
-    sub_48df90(a0->field_c8);
+    CSprite::TurnOff(a0->field_c8);
     v0 = *(int *)a0->field_c4;
     v0->field_118 = v0->field_118 | 128;
     if (!a0->field_cc)
         return v0;
     a0->field_cc = 0;
-    return sub_489390(*(int *)(*(int *)a0->field_80 + 520), 1, "common/null.wav", 0x3f800000, 0.800000011920929f, 0, 100);
+    return EMIT_SOUND_DYN(*(int *)(*(int *)a0->field_80 + 520), 1, "common/null.wav", 0x3f800000, 0.800000011920929f, 0, 100);
 }
 

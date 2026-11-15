@@ -6,6 +6,6 @@ typedef struct st_4bed50_0 {
 
 int EmitChargeSound__16CFinishingBuster(st_4bed50_0 *a0)
 {
-    return sub_48d4f0(a0->field_80, "buster_charge.wav");
+    return CBasePlayer::EmitClassSound(a0->field_80, "buster_charge.wav");
 }
 

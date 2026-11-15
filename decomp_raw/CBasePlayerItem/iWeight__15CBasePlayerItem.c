@@ -4,10 +4,10 @@ typedef struct st_539320_0 {
     unsigned int field_88;
 } st_539320_0;
 
-extern unsigned int g_62f748[4];
+extern unsigned int _15CBasePlayerItem.ItemInfoArray+40[4];
 
 int iWeight__15CBasePlayerItem(st_539320_0 *a0)
 {
-    return g_62f748[11 * a0->field_88];
+    return _15CBasePlayerItem.ItemInfoArray+40[11 * a0->field_88];
 }
 

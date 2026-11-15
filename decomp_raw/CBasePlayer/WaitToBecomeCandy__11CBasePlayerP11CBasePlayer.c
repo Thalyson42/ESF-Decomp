@@ -28,9 +28,9 @@ typedef struct st_4f0250_4 {
 } st_4f0250_4;
 
 extern unsigned int gmsgVGUIMenu;
-extern st_4f0250_4 *g_616878;
-extern st_4f0250_4 *g_61687c;
-extern st_4f0250_4 *g_616880;
+extern st_4f0250_4 *g_engfuncs.pfnMessageBegin;
+extern st_4f0250_4 *g_engfuncs.pfnMessageEnd;
+extern st_4f0250_4 *g_engfuncs.pfnWriteByte;
 extern st_4f0250_3 *gpGlobals;
 
 st_4f0250_1 * WaitToBecomeCandy__11CBasePlayerP11CBasePlayer(st_4f0250_1 *a0, st_4f0250_2 *a1)
@@ -45,10 +45,10 @@ st_4f0250_1 * WaitToBecomeCandy__11CBasePlayerP11CBasePlayer(st_4f0250_1 *a0, st
     }
     else if (!a0->field_364)
     {
-        g_616878(1, gmsgVGUIMenu, 0, a1->field_0->field_208);
+        g_engfuncs.pfnMessageBegin(1, gmsgVGUIMenu, 0, a1->field_0->field_208);
         v0 = 32;
-        g_616880(v0);
-        g_61687c(v0);
+        g_engfuncs.pfnWriteByte(v0);
+        g_engfuncs.pfnMessageEnd(v0);
         a1->field_728 = a0;
         *(float *)&a1->field_72c = *(float *)gpGlobals;
         v1 = a0->field_0;

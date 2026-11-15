@@ -21,13 +21,13 @@ int Deploy__9CEyelaser(st_4bc730_1 *a0)
     unsigned int v0;  // eax
     unsigned int v1;  // eax
 
-    a0->field_c4 = sub_48aa60(a0, 2);
-    a0->field_c8 = sub_48aa60(a0, 3);
+    a0->field_c4 = CEyelaser::CreateLaser(a0, 2);
+    a0->field_c8 = CEyelaser::CreateLaser(a0, 3);
     v0 = _INSERT(*(int *)(*(int *)a0->field_c4 + 296) & 0xfff, 1, (char)((*(int *)(*(int *)a0->field_c4 + 296) & 0xfff) >> 8) | 48);
     *(unsigned int *)(*(int *)a0->field_c4 + 296) = v0;
     v1 = _INSERT(*(int *)(*(int *)a0->field_c8 + 296) & 0xfff, 1, (char)((*(int *)(*(int *)a0->field_c8 + 296) & 0xfff) >> 8) | 32);
     *(unsigned int *)(*(int *)a0->field_c8 + 296) = v1;
     a0->field_d0 = 0;
-    return sub_489360(a0, "eyelaser");
+    return CBasePlayerWeapon::DefaultDeploy(a0, "eyelaser");
 }
 

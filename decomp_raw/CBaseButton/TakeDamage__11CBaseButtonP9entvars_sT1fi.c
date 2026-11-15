@@ -34,7 +34,7 @@ typedef struct st_496910_4 {
     unsigned int field_0;
 } st_496910_4;
 
-extern st_496910_4 *g_6168d4;
+extern st_496910_4 *g_engfuncs.pfnPEntityOfEntOffset;
 extern st_496910_5 *gpGlobals;
 
 unsigned int TakeDamage__11CBaseButtonP9entvars_sT1fi(st_496910_1 *a0, unsigned int a1, st_496910_3 *a2)
@@ -46,37 +46,37 @@ unsigned int TakeDamage__11CBaseButtonP9entvars_sT1fi(st_496910_1 *a0, unsigned 
     unsigned int v1;  // [bp-0x20]
     unsigned int v2;  // [bp-0x8]
 
-    v2 = sub_48b3b0(a0);
+    v2 = CBaseButton::ButtonResponseToTouch(a0);
     if (!v2)
         return 0;
     a0->field_14 = 0;
     a0->field_18 = 0;
     v3 = a2->field_208;
-    if (a2->field_208 || (v3 = g_6168d4(0), v3))
+    if (a2->field_208 || (v3 = g_engfuncs.pfnPEntityOfEntOffset(0), v3))
         v4 = v3->field_7c;
     else
         v4 = 0;
     v5 = &a0[7].padding_4[12];
-    sub_48d960(v5, v4);
-    if (!sub_48d8b0(v5))
+    EHANDLE::__as(v5, v4);
+    if (!EHANDLE::__opi(v5))
     {
         return 0;
     }
     else if (v2 == 2)
     {
-        sub_489390(a0->field_0->field_208, 2, a0->field_0->field_1e8 + gpGlobals->field_98, 0x3f800000, 0.800000011920929f, 0, 100);
+        EMIT_SOUND_DYN(a0->field_0->field_208, 2, a0->field_0->field_1e8 + gpGlobals->field_98, 0x3f800000, 0.800000011920929f, 0, 100);
         if (!(a0->field_0->field_1a0 & 32))
         {
             v1 = 0;
             v0 = 3;
-            sub_48d150(a0, sub_488810(&a0[7].padding_4[12]));
+            CBaseDelay::SUB_UseTargets(a0, EHANDLE::__opP11CBaseEntity(&a0[7].padding_4[12]));
         }
-        sub_48cc60(a0);
+        CBaseButton::ButtonReturn(a0);
         return 0;
     }
     else
     {
-        sub_48b650(a0);
+        CBaseButton::ButtonActivate(a0);
         return 0;
     }
 }

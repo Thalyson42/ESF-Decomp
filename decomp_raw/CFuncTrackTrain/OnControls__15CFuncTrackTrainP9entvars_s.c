@@ -64,7 +64,7 @@ unsigned int OnControls__15CFuncTrackTrainP9entvars_s(st_4ebed0_1 *a0, float *a1
     v5 = *(float *)&v6[2] - *(float *)&v8[2];
     if (v7->field_1a0 & 2)
         return 0;
-    sub_48a800(&a0->field_0->field_50);
+    UTIL_MakeVectors(&a0->field_0->field_50);
     v9 = &gpGlobals->field_28;
     v10 = v3;
     v11 = v4;

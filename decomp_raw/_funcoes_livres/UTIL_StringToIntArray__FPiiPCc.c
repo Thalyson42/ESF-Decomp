@@ -12,7 +12,7 @@ st_534090_0 ** UTIL_StringToIntArray__FPiiPCc(st_534090_0 **a0, int a1, int a2)
     char v1;  // [bp-0x84]
 
     iter = &v1;
-    sub_48e110(&v1, a2);
+    strcpy@GLIBC_2.0(&v1, a2);
     v3 = &v1;
     node = 0;
     if (0 < a1)
@@ -20,7 +20,7 @@ st_534090_0 ** UTIL_StringToIntArray__FPiiPCc(st_534090_0 **a0, int a1, int a2)
         while (1)
         {
             v0 = &v1;
-            v3 = sub_48b500(v3, 0, 10, 0);
+            v3 = __strtol_internal@GLIBC_2.0(v3, 0, 10, 0);
             a0[node] = v3;
             while (1)
             {

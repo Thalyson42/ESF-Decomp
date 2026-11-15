@@ -12,7 +12,7 @@ typedef struct st_51e470_1 {
 extern char ToggleUse__15CAmbientGenericP11CBaseEntityT18USE_TYPEf;
 extern char SpeakerThink__8CSpeaker;
 extern char SUB_Remove__11CBaseEntity;
-extern st_51e470_1 *g_6168b4;
+extern st_51e470_1 *g_engfuncs.pfnAlertMessage;
 extern st_51e470_0 *gpGlobals;
 
 unsigned int Spawn__8CSpeaker(float idx)
@@ -65,7 +65,7 @@ unsigned int Spawn__8CSpeaker(float idx)
     v6 = *(int *)idx;
     v1 = *(float *)&v6[4];
     v0 = *(float *)&v6[3];
-    g_6168b4(4, "SPEAKER with no Level/Sentence! at: %f, %f, %f\n", (unsigned int)(*(float *)&v6[2] >> 0));
+    g_engfuncs.pfnAlertMessage(4, "SPEAKER with no Level/Sentence! at: %f, %f, %f\n", (unsigned int)(*(float *)&v6[2] >> 0));
     *(float *)(*(int *)idx + 260) = (float)(0.1 + gpGlobals->field_0);
     v7 = _INSERT(gpGlobals, 0, 0);
     *(unsigned int *)(*(unsigned int *)&idx + 12) = v7 | 0xffff0000;

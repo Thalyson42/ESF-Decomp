@@ -12,16 +12,16 @@ int RunTask__12CTalkMonsterP6Task_t(int a0, unsigned int *a1)
     }
     else
     {
-        if (sub_48bb60(a0) && !(v0 = a0 + 784, !sub_48d8b0(v0)))
+        if (CTalkMonster::IsTalking(a0) && !(v0 = a0 + 784, !EHANDLE::__opi(v0)))
         {
-            v1 = sub_489fd0(v0);
-            sub_487e70(a0, *v1 + 8);
+            v1 = EHANDLE::__rf(v0);
+            CTalkMonster::IdleHeadTurn(a0, *v1 + 8);
         }
         else
         {
-            sub_489b40(a0, 0, 0);
+            CBaseAnimating::SetBoneController(a0, 0, 0);
         }
-        return sub_48e150(a0, a1);
+        return CBaseMonster::RunTask(a0, a1);
     }
 }
 

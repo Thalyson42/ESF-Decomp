@@ -28,7 +28,7 @@ typedef struct st_527290_2 {
     unsigned int field_314;
 } st_527290_2;
 
-extern st_527290_1 *g_61692c;
+extern st_527290_1 *g_engfuncs.pfnRandomFloat;
 
 int StartFollowing__12CTalkMonsterP11CBaseEntity(double a0, st_527290_2 *a1, int a2)
 {
@@ -39,20 +39,20 @@ int StartFollowing__12CTalkMonsterP11CBaseEntity(double a0, st_527290_2 *a1, int
     float v3;  // [bp-0x3c]
 
     if (a1->field_2a4)
-        sub_48a100(a1->field_2a4);
-    if (sub_48d8b0(&a1->field_108))
+        CCineMonster::CancelScript(a1->field_2a4);
+    if (EHANDLE::__opi(&a1->field_108))
         a1->field_184 = 3;
-    sub_48d960(&a1->field_110, a2);
+    EHANDLE::__as(&a1->field_110, a2);
     v3 = 2.0f;
     v2 = 0x3f800000;
     strncpy(&v0, "333@", 4);
-    g_61692c(v0, 3.200000047683716f);
+    g_engfuncs.pfnRandomFloat(v0, 3.200000047683716f);
     strncpy(&v1, "333@", 4);
     a1->field_60->field_168(a1, a1->field_2c4, v1);
     v4 = a1->field_114;
     a1->field_310 = a1->field_110;
     a1->field_314 = v4;
     a1->field_107 = a1->field_107 & 239;
-    return sub_489f60(a1);
+    return CBaseMonster::ClearSchedule(a1);
 }
 

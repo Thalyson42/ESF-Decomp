@@ -21,8 +21,8 @@ typedef struct st_49db10_1 {
     unsigned int field_0;
 } st_49db10_1;
 
-extern st_49db10_1 *g_6168b4;
-extern st_49db10_1 *g_6168e8;
+extern st_49db10_1 *g_engfuncs.pfnAlertMessage;
+extern st_49db10_1 *g_engfuncs.pfnGetModelPtr;
 
 int SetModelCollisionBox__11CBaseEntity(st_49db10_0 **a0)
 {
@@ -35,9 +35,9 @@ int SetModelCollisionBox__11CBaseEntity(st_49db10_0 **a0)
     unsigned int v1;  // [bp-0x20]
     unsigned int v2;  // [bp-0x1c]
 
-    v3 = g_6168e8(*a0->field_208);
+    v3 = g_engfuncs.pfnGetModelPtr(*a0->field_208);
     if (!v3)
-        return g_6168b4(1, "Unable to fetch model pointer!\n");
+        return g_engfuncs.pfnAlertMessage(1, "Unable to fetch model pointer!\n");
     v0 = 0;
     v1 = 0;
     v2 = 0;
@@ -49,8 +49,8 @@ int SetModelCollisionBox__11CBaseEntity(st_49db10_0 **a0)
     {
         v6 = &v3->padding_0[v3->field_a8];
         v7 = *a0;
-        return sub_48a0d0(v7, 176 * v7[74] + (char *)v6 + 96, 176 * v7[74] + (char *)v6 + 108);
+        return UTIL_SetSize(v7, 176 * v7[74] + (char *)v6 + 96, 176 * v7[74] + (char *)v6 + 108);
     }
-    return sub_48a0d0(*a0, &v3->field_58, &v3->field_64);
+    return UTIL_SetSize(*a0, &v3->field_58, &v3->field_64);
 }
 

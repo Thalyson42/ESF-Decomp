@@ -13,7 +13,7 @@ typedef struct st_518c30_2 {
     unsigned int field_0;
 } st_518c30_2;
 
-extern st_518c30_2 *g_6168d4;
+extern st_518c30_2 *g_engfuncs.pfnPEntityOfEntOffset;
 
 unsigned int GetOwner__7CShieldP9entvars_s(unsigned int a0, st_518c30_1 *a1)
 {
@@ -22,7 +22,7 @@ unsigned int GetOwner__7CShieldP9entvars_s(unsigned int a0, st_518c30_1 *a1)
     v0 = a1->field_208;
     if (!a1->field_208)
     {
-        v0 = g_6168d4(0);
+        v0 = g_engfuncs.pfnPEntityOfEntOffset(0);
         if (!v0)
             return 0;
     }

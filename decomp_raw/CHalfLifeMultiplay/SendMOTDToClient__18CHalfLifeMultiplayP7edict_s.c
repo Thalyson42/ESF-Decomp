@@ -5,13 +5,13 @@ typedef struct st_4de970_0 {
 
 extern unsigned int gmsgMOTD;
 extern unsigned int gmsgServerName;
-extern st_4de970_0 *g_616878;
-extern st_4de970_0 *g_61687c;
-extern st_4de970_0 *g_616880;
-extern st_4de970_0 *g_616898;
-extern st_4de970_0 *g_6168a8;
-extern st_4de970_0 *g_61693c;
-extern st_4de970_0 *g_616940;
+extern st_4de970_0 *g_engfuncs.pfnMessageBegin;
+extern st_4de970_0 *g_engfuncs.pfnMessageEnd;
+extern st_4de970_0 *g_engfuncs.pfnWriteByte;
+extern st_4de970_0 *g_engfuncs.pfnWriteString;
+extern st_4de970_0 *g_engfuncs.pfnCVarGetString;
+extern st_4de970_0 *g_engfuncs.pfnLoadFileForMe;
+extern st_4de970_0 *g_engfuncs.pfnFreeFile;
 
 int SendMOTDToClient__18CHalfLifeMultiplayP7edict_s(unsigned int a0, unsigned int a1)
 {
@@ -34,15 +34,15 @@ int SendMOTDToClient__18CHalfLifeMultiplayP7edict_s(unsigned int a0, unsigned in
 
     v3 = 0;
     v0 = &v4;
-    v7 = g_6168a8("motdfile");
-    v8 = g_61693c(v7);
+    v7 = g_engfuncs.pfnCVarGetString("motdfile");
+    v8 = g_engfuncs.pfnLoadFileForMe(v7);
     v2 = v8;
-    g_616878(1, gmsgServerName, 0, a1);
-    v9 = g_6168a8("hostname");
-    g_616898(v9);
-    g_61687c();
+    g_engfuncs.pfnMessageBegin(1, gmsgServerName, 0, a1);
+    v9 = g_engfuncs.pfnCVarGetString("hostname");
+    g_engfuncs.pfnWriteString(v9);
+    g_engfuncs.pfnMessageEnd();
     if (!v2 || !*v2)
-        return g_616940(v2);
+        return g_engfuncs.pfnFreeFile(v2);
     v1 = &v5;
     do
     {
@@ -54,11 +54,11 @@ int SendMOTDToClient__18CHalfLifeMultiplayP7edict_s(unsigned int a0, unsigned in
         } while (v10 && (v10 -= 1, v11 = v12 + 1, *v12));
         if (~v10 - 1 <= 59)
         {
-            sub_48e110(v1, v8);
+            strcpy@GLIBC_2.0(v1, v8);
         }
         else
         {
-            sub_48d360(v1, v8, 60);
+            strncpy@GLIBC_2.0(v1, v8, 60);
             v6 = 0;
         }
         v13 = &v5;
@@ -72,11 +72,11 @@ int SendMOTDToClient__18CHalfLifeMultiplayP7edict_s(unsigned int a0, unsigned in
             v8 = &v2[v3];
         else
             *v8 = 0;
-        g_616878(1, gmsgMOTD, 0, a1);
-        g_616880(!*v8);
-        g_616898(v1);
-        g_61687c();
+        g_engfuncs.pfnMessageBegin(1, gmsgMOTD, 0, a1);
+        g_engfuncs.pfnWriteByte(!*v8);
+        g_engfuncs.pfnWriteString(v1);
+        g_engfuncs.pfnMessageEnd();
     } while (v8 && *v8 && v3 <= 0x5ff);
-    return g_616940(v2);
+    return g_engfuncs.pfnFreeFile(v2);
 }
 

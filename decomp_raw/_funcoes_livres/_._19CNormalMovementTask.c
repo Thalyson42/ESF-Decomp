@@ -9,6 +9,6 @@ extern char __vt_19CNormalMovementTask;
 int _._19CNormalMovementTask(st_5727f0_0 *a0, int a1)
 {
     a0->field_14 = &__vt_19CNormalMovementTask;
-    return sub_488170(a0, a1);
+    return _._9CBaseTask(a0, a1);
 }
 

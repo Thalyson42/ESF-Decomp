@@ -27,7 +27,7 @@ int _._16CShootLaser1Task(st_585fa0_3 *a0, int a1)
     a0->field_14 = &__vt_16CShootLaser1Task;
     if (a0->field_8->field_b6c)
         *(char *)(*(int *)a0->field_8->field_b6c + 421) = *(char *)(*(int *)a0->field_8->field_b6c + 421) & 239;
-    sub_48bf00(a0->field_8);
-    return sub_488170(a0, a1);
+    CBot::AddShootDelay(a0->field_8);
+    return _._9CBaseTask(a0, a1);
 }
 

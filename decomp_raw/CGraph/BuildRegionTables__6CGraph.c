@@ -79,7 +79,7 @@ typedef struct st_4e4b60_1 {
     unsigned int field_0;
 } st_4e4b60_1;
 
-extern st_4e4b60_1 *g_6168b4;
+extern st_4e4b60_1 *g_engfuncs.pfnAlertMessage;
 
 int BuildRegionTables__6CGraph(float idx)
 {
@@ -149,11 +149,11 @@ int BuildRegionTables__6CGraph(float idx)
     unsigned short v19;  // [bp-0x6]
 
     if (*(int *)(*(unsigned int *)&idx + 36))
-        sub_48cf10(*(int *)(*(unsigned int *)&idx + 36));
-    v21 = sub_48ccc0(16, *(int *)(*(unsigned int *)&idx + 24));
+        free@GLIBC_2.0(*(int *)(*(unsigned int *)&idx + 36));
+    v21 = calloc@GLIBC_2.0(16, *(int *)(*(unsigned int *)&idx + 24));
     *(unsigned int *)(*(unsigned int *)&idx + 36) = v21;
     if (!v21)
-        return g_6168b4(2, "Couldn't allocated node ordering array.\n");
+        return g_engfuncs.pfnAlertMessage(2, "Couldn't allocated node ordering array.\n");
     iter = 0;
     do
     {
@@ -314,7 +314,7 @@ int BuildRegionTables__6CGraph(float idx)
     } while (iter <= 2);
     iter = 0;
     if ((int)iter >= *(int *)(*(unsigned int *)&idx + 24))
-        return sub_48d0e0(*(unsigned int *)&idx + 6268, 0, 0x800);
+        return memset@GLIBC_2.0(*(unsigned int *)&idx + 6268, 0, 0x800);
     v1 = *(unsigned int *)&idx + 40;
     do
     {
@@ -350,6 +350,6 @@ int BuildRegionTables__6CGraph(float idx)
             *(unsigned int *)(v63 + v64) = iter;
         iter += 1;
     } while ((int)iter < *(int *)(*(unsigned int *)&idx + 24));
-    return sub_48d0e0(*(unsigned int *)&idx + 6268, 0, 0x800);
+    return memset@GLIBC_2.0(*(unsigned int *)&idx + 6268, 0, 0x800);
 }
 

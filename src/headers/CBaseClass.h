@@ -1,7 +1,7 @@
 // CBaseClass.h -- reconstruído automaticamente (vtable + offsets). REVISAR.
 #pragma once
 
-class CBaseClass : public CSSJTrunks {  // base: heuristica
+class CBaseClass {
 public:
     virtual void GetSoundDir();  // vtable[0] GetSoundDir__10CBaseClass
     virtual void GetStartSpeed();  // vtable[1] GetStartSpeed__10CBaseClass
@@ -18,8 +18,10 @@ public:
     virtual void GetAuraSkin();  // vtable[12] GetAuraSkin__10CBaseClass
     virtual void GetModelName();  // vtable[13] GetModelName__10CBaseClass
     virtual void GetKiEfficiency();  // vtable[14] GetKiEfficiency__10CBaseClass
+    virtual void CanTeleportWhileCharging();  // vtable[15] CanTeleportWhileCharging__10CBaseClass
     virtual void GetNumBodySlices();  // vtable[16] GetNumBodySlices__10CBaseClass
     virtual void HasSword();  // vtable[17] HasSword__10CBaseClass
+    virtual void 0();  // vtable[18] 0
     // campos observados (offset em bytes a partir de `this`; inclui os herdados)
     void* f_004;  // +0x4 (4)
 };

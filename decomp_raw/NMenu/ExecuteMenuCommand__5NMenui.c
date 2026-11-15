@@ -13,7 +13,7 @@ unsigned int * ExecuteMenuCommand__5NMenui(unsigned int a0)
 
     if (!_5NMenu.pCurrentMenuFunction || !_5NMenu.CurrentMenuText || a0 == 0xffffffff)
     {
-        sub_48c740(0);
+        NMenu::SetNewMenu(0);
     }
     else
     {
@@ -22,7 +22,7 @@ unsigned int * ExecuteMenuCommand__5NMenui(unsigned int a0)
     }
     v0 = &_5NMenu.CurrentMenuText;
     if (_5NMenu.CurrentMenuText)
-        v0 = sub_488400();
+        v0 = NMenu::ShowMenu();
     return v0;
 }
 

@@ -29,45 +29,45 @@ double KeyValue__15CFuncTrackTrainP14KeyValueData_s(st_4ea7a0_1 *a0, st_4ea7a0_0
     double v7;  // mm7
     int v0;  // [bp-0xc]
 
-    if (!sub_488af0(a1->field_4, "wheels"))
+    if (!strcmp@GLIBC_2.0(a1->field_4, "wheels"))
     {
-        sub_487fc0(a1->field_8, 0, 0);
+        __strtod_internal@GLIBC_2.0(a1->field_8, 0, 0);
         a0->field_68 = (float)v1;
         a1->field_c = 1;
         return v1;
     }
-    else if (!sub_488af0(a1->field_4, "height"))
+    else if (!strcmp@GLIBC_2.0(a1->field_4, "height"))
     {
-        sub_487fc0(a1->field_8, 0, 0);
+        __strtod_internal@GLIBC_2.0(a1->field_8, 0, 0);
         a0->field_6c = (float)v2;
         a1->field_c = 1;
         return v2;
     }
-    else if (!sub_488af0(a1->field_4, "startspeed"))
+    else if (!strcmp@GLIBC_2.0(a1->field_4, "startspeed"))
     {
-        sub_487fc0(a1->field_8, 0, 0);
+        __strtod_internal@GLIBC_2.0(a1->field_8, 0, 0);
         a0->field_78 = (float)v3;
         a1->field_c = 1;
         return v3;
     }
-    else if (!sub_488af0(a1->field_4, "sounds"))
+    else if (!strcmp@GLIBC_2.0(a1->field_4, "sounds"))
     {
-        a0->field_98 = sub_48b500(a1->field_8, 0, 10, 0);
+        a0->field_98 = __strtol_internal@GLIBC_2.0(a1->field_8, 0, 10, 0);
         a1->field_c = 1;
         return v4;
     }
-    else if (!sub_488af0(a1->field_4, "volume"))
+    else if (!strcmp@GLIBC_2.0(a1->field_4, "volume"))
     {
-        v0 = sub_48b500(a1->field_8, 0, 10, 0);
+        v0 = __strtol_internal@GLIBC_2.0(a1->field_8, 0, 10, 0);
         a0->field_9c = (float)v0;
         v5 = 0.1 * a0->field_9c;
         a0->field_9c = (float)v5;
         a1->field_c = 1;
         return v5;
     }
-    else if (!sub_488af0(a1->field_4, "bank"))
+    else if (!strcmp@GLIBC_2.0(a1->field_4, "bank"))
     {
-        sub_487fc0(a1->field_8, 0, 0);
+        __strtod_internal@GLIBC_2.0(a1->field_8, 0, 0);
         a0->field_a0 = (float)v6;
         a1->field_c = 1;
         return v6;

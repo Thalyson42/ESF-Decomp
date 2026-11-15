@@ -24,17 +24,17 @@ unsigned int * StartPowerStruggle__16CExplodingAttackP16CExplodingAttack(st_4bb7
 
     if (!a1->field_2ac)
     {
-        sub_489280(a0, a1);
+        CPowerStruggle::CreatePowerStruggle(a0, a1);
     }
     else
     {
         v0 = a1->field_2c0;
         if (v0)
         {
-            v1 = sub_48bd80(v0);
+            v1 = CPowerStruggle::IsFull(v0);
             if (v1)
                 return v1;
-            sub_489ab0(v0, a0);
+            CPowerStruggle::AddAttack(v0, a0);
         }
     }
     *(float *)&*a0->field_104 = *(float *)gpGlobals;

@@ -15,9 +15,9 @@ unsigned int KeyValue__10CFuncTrainP14KeyValueData_s(st_4e9aa0_1 *a0, st_4e9aa0_
 {
     unsigned int v0;  // eax
 
-    if (sub_488af0(a1->field_4, "sounds"))
-        return sub_48d840(a0, a1);
-    v0 = sub_48b500(a1->field_8, 0, 10, 0);
+    if (strcmp@GLIBC_2.0(a1->field_4, "sounds"))
+        return CBasePlatTrain::KeyValue(a0, a1);
+    v0 = __strtol_internal@GLIBC_2.0(a1->field_8, 0, 10, 0);
     a0->field_110 = v0;
     a1->field_c = 1;
     return v0;

@@ -28,7 +28,7 @@ typedef struct st_52e640_4 {
     unsigned int field_98;
 } st_52e640_4;
 
-extern st_52e640_1 *g_6167c8;
+extern st_52e640_1 *g_engfuncs.pfnSetModel;
 extern st_52e640_4 *gpGlobals;
 
 unsigned int * Spawn__7CLadder(st_52e640_2 *a0)
@@ -36,7 +36,7 @@ unsigned int * Spawn__7CLadder(st_52e640_2 *a0)
     unsigned int *v0;  // eax
 
     a0->field_60->field_c(a0);
-    g_6167c8(a0->field_0->field_208, a0->field_0->field_b8 + gpGlobals->field_98);
+    g_engfuncs.pfnSetModel(a0->field_0->field_208, a0->field_0->field_b8 + gpGlobals->field_98);
     v0 = a0->field_0;
     v0[66] = 7;
     return v0;

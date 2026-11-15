@@ -6,6 +6,6 @@ typedef struct st_4c6180_0 {
 
 int RemoveChargeSprite__12CGenericBeam(st_4c6180_0 *a0)
 {
-    return sub_48cc00(a0->field_20c);
+    return UTIL_Remove(a0->field_20c);
 }
 

@@ -125,7 +125,7 @@ LABEL_4d63e6:
     v48 = v45 * v45 + v46 * v46 + v47 * v47;
     v49 = sqrt(v48);
     if (isnan(v49))
-        sub_487dc0(*(unsigned int *)&v48);
+        sqrt(*(unsigned int *)&v48);
     else
         v48 = v49;
     v7 = (float)v48;

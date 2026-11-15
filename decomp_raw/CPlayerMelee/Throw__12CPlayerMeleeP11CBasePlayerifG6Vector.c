@@ -51,9 +51,9 @@ unsigned int * Throw__12CPlayerMeleeP11CBasePlayerifG6Vector(st_50a4d0_4 *a0, st
     float v7;  // [bp-0x8]
 
     *(unsigned short *)&v0 = 0;
-    sub_48b670(a0, v0, gpGlobals->field_0, 1, "ref_swinger_letgo");
-    sub_489390(a0->field_124->field_0->field_208, 1, "weapons/throw.wav", 0x3f800000, 1061997773, 0, 100);
-    sub_489390(*a1->field_208, 1, "weapons/swoophit.wav", 0x3f800000, 1061997773, 0, 100);
+    CPlayerMelee::AddAnimation(a0, v0, gpGlobals->field_0, 1, "ref_swinger_letgo");
+    EMIT_SOUND_DYN(a0->field_124->field_0->field_208, 1, "weapons/throw.wav", 0x3f800000, 1061997773, 0, 100);
+    EMIT_SOUND_DYN(*a1->field_208, 1, "weapons/swoophit.wav", 0x3f800000, 1061997773, 0, 100);
     if (a0->field_124->field_968)
     {
         v8 = a0->field_124->field_968;
@@ -69,7 +69,7 @@ unsigned int * Throw__12CPlayerMeleeP11CBasePlayerifG6Vector(st_50a4d0_4 *a0, st
     v1 = (int)(1717986919 * a2 >> 33) - v10;
     v2 = a2 - v10 >> 1;
     v3 = a2;
-    sub_48c240(a1 + 224, a0->field_124, 1, &v4, (float)v3, (float)v2, (float)v1, a3);
+    CPlayerMelee::StartToss(a1 + 224, a0->field_124, 1, &v4, (float)v3, (float)v2, (float)v1, a3);
     a0->field_10c = 1;
     a0->field_120 = 0;
     a0->field_b4 = (float)(1.0 + gpGlobals->field_0);

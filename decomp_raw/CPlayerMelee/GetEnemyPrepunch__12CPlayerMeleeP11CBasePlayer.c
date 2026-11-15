@@ -65,7 +65,7 @@ st_5084c0_2 * GetEnemyPrepunch__12CPlayerMeleeP11CBasePlayer(st_5084c0_4 *a0, st
     v0 = 96.0f;
     while (1)
     {
-        v15 = sub_48bba0(v15, &a0->field_124->field_0->field_8, 95.0f);
+        v15 = UTIL_FindEntityInSphere(v15, &a0->field_124->field_0->field_8, 95.0f);
         if (!v15)
             return v4;
         v16 = &v15->field_0->field_8;
@@ -79,7 +79,7 @@ st_5084c0_2 * GetEnemyPrepunch__12CPlayerMeleeP11CBasePlayer(st_5084c0_4 *a0, st
         v21 = v18 * v18 + v19 * v19 + v20 * v20;
         v22 = sqrt(v21);
         if (isnan(v22))
-            sub_487dc0(*(unsigned int *)&v21);
+            sqrt(*(unsigned int *)&v21);
         else
             v21 = v22;
         v1 = (float)v21;
@@ -96,7 +96,7 @@ st_5084c0_2 * GetEnemyPrepunch__12CPlayerMeleeP11CBasePlayer(st_5084c0_4 *a0, st
             v25 = v12 * v12 + v13 * v13 + v14 * v14;
             v26 = sqrt(v25);
             if (isnan(v26))
-                sub_487dc0(*(unsigned int *)&v25);
+                sqrt(*(unsigned int *)&v25);
             else
                 v25 = v26;
             v8 = (float)v25;
@@ -116,7 +116,7 @@ st_5084c0_2 * GetEnemyPrepunch__12CPlayerMeleeP11CBasePlayer(st_5084c0_4 *a0, st
             v12 = v5;
             v13 = v6;
             v14 = v7;
-            sub_489b10(&v5, &a0->field_124[1].padding_4[56]);
+            CSwoop::GetCurrentDirection(&v5, &a0->field_124[1].padding_4[56]);
             if (__float_as_int(v12 * v5) + __float_as_int(v13 * v6) + v14 * v7 > *(float *)v2)
             {
                 v4 = v15;

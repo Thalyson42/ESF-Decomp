@@ -62,12 +62,12 @@ typedef struct st_4a41e0_5 {
 } st_4a41e0_5;
 
 extern float g_vecAttackDir;
-extern float g_616784;
-extern float g_616788;
+extern float g_vecAttackDir+4;
+extern float g_vecAttackDir+8;
 extern unsigned int g_Language;
 extern st_4a41e0_3 g_engfuncs;
-extern st_4a41e0_2 *g_616928;
-extern st_4a41e0_2 *g_61692c;
+extern st_4a41e0_2 *g_engfuncs.pfnRandomLong;
+extern st_4a41e0_2 *g_engfuncs.pfnRandomFloat;
 
 int SpawnRandomGibs__4CGibP9entvars_sii(st_4a41e0_7 *a0, int a1, unsigned int a2)
 {
@@ -110,14 +110,14 @@ int SpawnRandomGibs__4CGibP9entvars_sii(st_4a41e0_7 *a0, int a1, unsigned int a2
         return a1;
     do
     {
-        v14 = sub_48a010(0);
+        v14 = GetClassPtr__H1Z4CGib_PX01_PX01(0);
         if (g_Language == 1)
         {
             v15 = "models/germangibs.mdl";
         }
         else if (a2)
         {
-            sub_48d700(v14, "models/hgibs.mdl");
+            CGib::Spawn(v14, "models/hgibs.mdl");
             v1 = 5;
             v0 = 1;
             goto LABEL_4a4272;
@@ -126,16 +126,16 @@ int SpawnRandomGibs__4CGibP9entvars_sii(st_4a41e0_7 *a0, int a1, unsigned int a2
         {
             v15 = "models/agibs.mdl";
         }
-        sub_48d700(v14, v15);
+        CGib::Spawn(v14, v15);
         v1 = 3;
         v0 = 0;
 LABEL_4a4272:
-        v16 = g_616928(v0, v1);
+        v16 = g_engfuncs.pfnRandomLong(v0, v1);
         v14->field_0->field_114 = v16;
         if (!a0)
             continue;
         v2 = &g_engfuncs.padding_0[0];
-        g_61692c(0, 0x3f800000);
+        g_engfuncs.pfnRandomFloat(0, 0x3f800000);
         v17 = v13 * a0->field_f4 + a0->field_c4;
         v14->field_0->field_8 = (float)v17;
         v2->field_16c(0, 0x3f800000);
@@ -145,8 +145,8 @@ LABEL_4a4272:
         v14->field_0->field_10 = (float)(v18 * a0->field_fc + a0->field_cc + 1.0);
         v19 = v14->field_0;
         v4 = (float)(-1.0 * g_vecAttackDir);
-        v20 = -1.0 * g_616788;
-        v6 = (float)(-1.0 * g_616784);
+        v20 = -1.0 * g_vecAttackDir+8;
+        v6 = (float)(-1.0 * g_vecAttackDir+4);
         v8 = (float)v20;
         v19->field_20 = v4;
         v19->field_24 = v6;
@@ -215,8 +215,8 @@ LABEL_4a4525:
         v10 = 0;
         v11 = 0;
         v12 = 0;
-        sub_48a0d0(v14->field_0, &v10, &v5);
-    } while ((v32 = sub_487e00(v14), v3 += 1, v3 < a1));
-    return sub_487e00(v14);
+        UTIL_SetSize(v14->field_0, &v10, &v5);
+    } while ((v32 = CGib::LimitVelocity(v14), v3 += 1, v3 < a1));
+    return CGib::LimitVelocity(v14);
 }
 

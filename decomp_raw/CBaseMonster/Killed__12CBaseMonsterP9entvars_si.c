@@ -49,7 +49,7 @@ typedef struct st_4a4e40_2 {
     struct st_4a4e40_0 *field_60;
 } st_4a4e40_2;
 
-extern st_4a4e40_1 *g_6168d4;
+extern st_4a4e40_1 *g_engfuncs.pfnPEntityOfEntOffset;
 
 char Killed__12CBaseMonsterP9entvars_si(st_4a4e40_6 *a0, unsigned int a1, int a2)
 {
@@ -61,17 +61,17 @@ char Killed__12CBaseMonsterP9entvars_si(st_4a4e40_6 *a0, unsigned int a1, int a2
     if (!(a0->field_248 & 128))
     {
         a0->field_248 = a0->field_248 | 128;
-        sub_489390(a0->field_0->field_208, 1, "common/null.wav", 0x3f800000, 0.800000011920929f, 0, 100);
+        EMIT_SOUND_DYN(a0->field_0->field_208, 1, "common/null.wav", 0x3f800000, 0.800000011920929f, 0, 100);
         a0->field_184 = 8;
         a0->field_105 = a0->field_105 | 1;
         v1 = a0->field_0->field_198;
-        if (a0->field_0->field_198 || (v1 = g_6168d4(0), v1))
+        if (a0->field_0->field_198 || (v1 = g_engfuncs.pfnPEntityOfEntOffset(0), v1))
             v2 = v1->field_7c;
         else
             v2 = NULL;
         if (v2)
             v2->field_60->field_2c(v2, a0->field_0);
-        if (!sub_48d790(a0, a2))
+        if (!CBaseMonster::ShouldGibMonster(a0, a2))
         {
             if (a0->field_0->field_1a4 & 32)
             {
@@ -85,11 +85,11 @@ char Killed__12CBaseMonsterP9entvars_si(st_4a4e40_6 *a0, unsigned int a1, int a2
             return v3;
         }
     }
-    else if (!sub_48d790(a0, a2))
+    else if (!CBaseMonster::ShouldGibMonster(a0, a2))
     {
         return v0;
     }
-    v3 = sub_48af90(a0);
+    v3 = CBaseMonster::CallGibMonster(a0);
     return v3;
 }
 

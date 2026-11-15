@@ -62,7 +62,7 @@ st_529c90_1 * ExplodeTouch__5CRockP11CBaseEntity(st_529c90_6 *a0, st_529c90_4 *a
         return v2;
     if (v2 == v1 && v1)
         return v2;
-    if (!a1->field_60->field_a0(a1) || !sub_48b6d0(a0, a1) || a1->field_358)
+    if (!a1->field_60->field_a0(a1) || !CMagicAttack::BlocksAttack(a0, a1) || a1->field_358)
         return a0->field_60->field_200(a0);
     a0->field_60->field_1f8(a0, a1, 1);
     return a0->field_60->field_200(a0);

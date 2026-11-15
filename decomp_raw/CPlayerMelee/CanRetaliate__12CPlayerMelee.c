@@ -19,8 +19,8 @@ unsigned int CanRetaliate__12CPlayerMelee(st_5038e0_0 *a0)
     unsigned int v1;  // [bp-0x8]
 
     v1 = 0;
-    v2 = sub_48cc50(a0);
-    sub_487fe0(a0, &v1);
+    v2 = CPlayerMelee::GetCurrentDirection(a0);
+    CPlayerMelee::SetAttackFlags(a0, &v1);
     v0 = 0;
     if (!a0->field_ec)
     {
@@ -32,8 +32,8 @@ unsigned int CanRetaliate__12CPlayerMelee(st_5038e0_0 *a0)
         {
             if (!((char)v1 & 1) && !(*(char *)((void*)&v1 + 1) & 8))
                 return v0;
-            v3 = sub_48dfc0(a0);
-            if (v3 != sub_48dfc0(a0->field_134))
+            v3 = CPlayerMelee::GetMoveCount(a0);
+            if (v3 != CPlayerMelee::GetMoveCount(a0->field_134))
                 return v0;
         }
         else

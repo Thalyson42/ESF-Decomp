@@ -14,11 +14,11 @@ typedef struct st_53ec10_0 {
     unsigned int field_0;
 } st_53ec10_0;
 
-extern float g_5cb324;
-extern st_53ec10_0 *g_6168b4;
-extern st_53ec10_0 *g_6168c4;
-extern st_53ec10_0 *g_6168d8;
-extern st_53ec10_0 *g_61695c;
+extern float _11CBotManager.sv_bot_skill+12;
+extern st_53ec10_0 *g_engfuncs.pfnAlertMessage;
+extern st_53ec10_0 *g_engfuncs.pfnFreeEntPrivateData;
+extern st_53ec10_0 *g_engfuncs.pfnEntOffsetOfPEntity;
+extern st_53ec10_0 *g_engfuncs.pfnCreateFakeClient;
 extern st_53ec10_1 *gpGlobals;
 extern int BotManager;
 
@@ -56,12 +56,12 @@ unsigned int * CreateBot__11CBotManagerssPCcss(unsigned int a0, unsigned int a1,
     v2 = *(unsigned int *)((void*)&v10 + 92);
     if (v11 && *v11)
     {
-        sub_48d360(&v10, v11, 31);
+        strncpy@GLIBC_2.0(&v10, v11, 31);
         (&v10)[32] = 0;
     }
     else if (*(short *)(*(unsigned int *)((void*)&v10 + 72) + 62) > 0)
     {
-        sub_4898f0(&BotManager, &v10);
+        CBotManager::PickBotName(&BotManager, &v10);
     }
     else
     {
@@ -71,7 +71,7 @@ unsigned int * CreateBot__11CBotManagerssPCcss(unsigned int a0, unsigned int a1,
     {
         v9 = __fnstcw();
         v8 = v9 | 0xc00;
-        v7 = (int)(1.0 + g_5cb324);
+        v7 = (int)(1.0 + _11CBotManager.sv_bot_skill+12);
         v3 = v7;
     }
     v12 = &v10;
@@ -107,9 +107,9 @@ unsigned int * CreateBot__11CBotManagerssPCcss(unsigned int a0, unsigned int a1,
             }
         } while ((v1 += 1, v1 < iter));
     }
-    v18 = g_61695c(&v10);
+    v18 = g_engfuncs.pfnCreateFakeClient(&v10);
     v19 = 0;
-    if (!v18 || !g_6168d8(v18))
+    if (!v18 || !g_engfuncs.pfnEntOffsetOfPEntity(v18))
         v19 = 1;
     if (v19)
     {
@@ -117,16 +117,16 @@ unsigned int * CreateBot__11CBotManagerssPCcss(unsigned int a0, unsigned int a1,
     }
     else
     {
-        g_6168b4(1, "Creating bot...\n");
-        g_6168c4(v18);
+        g_engfuncs.pfnAlertMessage(1, "Creating bot...\n");
+        g_engfuncs.pfnFreeEntPrivateData(v18);
         v18[31] = 0;
-        v21 = sub_48ceb0((!v18 ? 0 : v18 + 32));
+        v21 = GetClassPtr__H1Z4CBot_PX01_PX01((!v18 ? 0 : v18 + 32));
         if (v21)
         {
             v18[121] = 0;
-            sub_48a0a0(v18, &v10, "127.0.0.1", &v6);
-            sub_48d410(v18);
-            sub_48bde0(v21, v5, v4, v3, v2, -0x1);
+            ClientConnect(v18, &v10, "127.0.0.1", &v6);
+            ClientPutInServer(v18);
+            CBot::CreateInit(v21, v5, v4, v3, v2, -0x1);
             v22 = *(unsigned int *)((void*)&v10 + 72);
             v22->field_4 = v22->field_4 + 1;
             v22->field_10 = (float)(5.0 + *(float *)gpGlobals);
@@ -134,6 +134,6 @@ unsigned int * CreateBot__11CBotManagerssPCcss(unsigned int a0, unsigned int a1,
         }
         v20 = "Error ! Couldn't create bot\n";
     }
-    return g_6168b4(1, v20);
+    return g_engfuncs.pfnAlertMessage(1, v20);
 }
 

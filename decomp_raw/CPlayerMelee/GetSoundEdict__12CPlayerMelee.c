@@ -17,7 +17,7 @@ int GetSoundEdict__12CPlayerMelee(st_4ffab0_1 *a0)
 {
     st_4ffab0_0 **v0;  // eax
 
-    v0 = sub_48b510(a0);
+    v0 = CPlayerMelee::GetOrigDefender(a0);
     if (!v0)
         v0 = a0->field_124;
     return *v0->field_208;

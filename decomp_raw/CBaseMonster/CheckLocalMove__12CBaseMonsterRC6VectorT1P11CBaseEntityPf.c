@@ -26,8 +26,8 @@ typedef struct st_4d5b70_1 {
     unsigned int field_0;
 } st_4d5b70_1;
 
-extern st_4d5b70_1 *g_616828;
-extern st_4d5b70_1 *g_61682c;
+extern st_4d5b70_1 *g_engfuncs.pfnDropToFloor;
+extern st_4d5b70_1 *g_engfuncs.pfnWalkMove;
 extern st_4d5b70_3 *gpGlobals;
 
 unsigned int CheckLocalMove__12CBaseMonsterRC6VectorT1P11CBaseEntityPf(st_4d5b70_0 **a0, float *a1, float *a2, st_4d5b70_2 **a3, float *a4)
@@ -60,7 +60,7 @@ unsigned int CheckLocalMove__12CBaseMonsterRC6VectorT1P11CBaseEntityPf(st_4d5b70
     v3 = *v10 - *a1;
     v4 = v10[1] - a1[1];
     v5 = v10[2] - a1[2];
-    sub_48c2d0(&v3);
+    UTIL_VecToYaw(&v3);
     v2 = v5;
     v11 = a2;
     v12 = *v11 - *a1;
@@ -71,14 +71,14 @@ unsigned int CheckLocalMove__12CBaseMonsterRC6VectorT1P11CBaseEntityPf(st_4d5b70
     v14 = v12 * v12 + v13 * v13;
     v15 = sqrt(v14);
     if (isnan(v15))
-        sub_487dc0(*(unsigned int *)&v14);
+        sqrt(*(unsigned int *)&v14);
     else
         v14 = v15;
     v1 = (float)v14;
     v16 = 2;
-    sub_48db50(*a0, a1);
+    UTIL_SetOrigin(*a0, a1);
     if (!(*a0->field_1a4 & 3))
-        g_616828(*a0->field_208);
+        g_engfuncs.pfnDropToFloor(*a0->field_208);
     v0 = 0;
     if (v0 < v1)
     {
@@ -87,7 +87,7 @@ unsigned int CheckLocalMove__12CBaseMonsterRC6VectorT1P11CBaseEntityPf(st_4d5b70
             v17 = 0;
             if ((isunordered(v1 - 1.0, v0 + 16.0) ? 0x44 : v1 - 1.0 == v0 + 16.0 ? 63 : v1 - 1.0 < v0 + 16.0 ? 0 : 0xff) < 64)
                 v17 = __double_as_longlong((double)(v1 - v0) - 1.0);
-            if (!g_61682c(*a0->field_208, v2, v17, 2))
+            if (!g_engfuncs.pfnWalkMove(*a0->field_208, v2, v17, 2))
             {
                 if (a4)
                     *a4 = v0;
@@ -102,7 +102,7 @@ unsigned int CheckLocalMove__12CBaseMonsterRC6VectorT1P11CBaseEntityPf(st_4d5b70
     }
     if (v16 == 2 && !(*a0->field_1a4 & 3) && (!a3 || *a3->field_1a5 & 2) && fabs(a2[2] - *a0->field_10) > 64.0)
         v16 = 1;
-    sub_48db50(*a0, &v6);
+    UTIL_SetOrigin(*a0, &v6);
     return v16;
 }
 

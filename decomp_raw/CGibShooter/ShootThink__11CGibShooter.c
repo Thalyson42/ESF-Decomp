@@ -37,7 +37,7 @@ typedef struct st_4b45a0_3 {
 } st_4b45a0_3;
 
 extern char SUB_Remove__11CBaseEntity;
-extern st_4b45a0_3 *g_61692c;
+extern st_4b45a0_3 *g_engfuncs.pfnRandomFloat;
 extern st_4b45a0_0 *gpGlobals;
 
 double ShootThink__11CGibShooter(float idx)
@@ -91,7 +91,7 @@ double ShootThink__11CGibShooter(float idx)
     *(unsigned int *)&v17 = v22[0x11];
     *(unsigned int *)&v18 = v22[18];
     *(unsigned int *)&v19 = v22[19];
-    g_61692c(0xbf800000, 0x3f800000);
+    g_engfuncs.pfnRandomFloat(0xbf800000, 0x3f800000);
     v23 = &gpGlobals->field_40;
     v3 = v21 * gpGlobals->field_40;
     v4 = v21 * *(float *)&v23[1];
@@ -107,7 +107,7 @@ double ShootThink__11CGibShooter(float idx)
     v17 = v14;
     v18 = v15;
     v19 = v16;
-    g_61692c(0xbf800000, 0x3f800000);
+    g_engfuncs.pfnRandomFloat(0xbf800000, 0x3f800000);
     v26 = &gpGlobals->field_28;
     v9 = v25 * gpGlobals->field_28;
     v10 = v25 * *(float *)&v26[1];
@@ -123,7 +123,7 @@ double ShootThink__11CGibShooter(float idx)
     v17 = v3;
     v18 = v4;
     v19 = v5;
-    g_61692c(0xbf800000, 0x3f800000);
+    g_engfuncs.pfnRandomFloat(0xbf800000, 0x3f800000);
     v29 = &gpGlobals->field_34;
     v9 = v28 * gpGlobals->field_34;
     v10 = v28 * *(float *)&v29[1];
@@ -141,7 +141,7 @@ double ShootThink__11CGibShooter(float idx)
     v31 = v17 * v17 + v18 * v18 + v19 * v19;
     v32 = sqrt(v31);
     if (isnan(v32))
-        sub_487dc0(*(unsigned int *)&v31);
+        sqrt(*(unsigned int *)&v31);
     else
         v31 = v32;
     v9 = (float)v31;
@@ -180,14 +180,14 @@ double ShootThink__11CGibShooter(float idx)
         *(float *)&v38->field_24 = v4;
         *(float *)&v38->field_28 = v5;
         v0 = 0x42c80000;
-        g_61692c(v0, 200.0f);
+        g_engfuncs.pfnRandomFloat(v0, 200.0f);
         *(float *)&v35->field_0->padding_2c[48] = 200.0f;
-        g_61692c(0x42c80000, 300.0f);
+        g_engfuncs.pfnRandomFloat(0x42c80000, 300.0f);
         *(float *)&v35->field_0->padding_2c[52] = 300.0f;
         v1 = &gpGlobals;
         v2 = v35->field_0->field_104 - gpGlobals->field_0;
         strncpy(v0, "33s?", 4);
-        g_61692c(v0, 1.0499999523162842f);
+        g_engfuncs.pfnRandomFloat(v0, 1.0499999523162842f);
         v33 = 0.949999988079071 * *(float *)(*(unsigned int *)&idx + 132);
         *(float *)&v35->field_2b4 = (float)v33;
         if (v33 < v2)

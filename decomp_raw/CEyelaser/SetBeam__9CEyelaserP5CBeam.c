@@ -7,6 +7,6 @@ typedef struct st_4bcc40_0 {
 int SetBeam__9CEyelaserP5CBeam(unsigned int a0, st_4bcc40_0 **a1)
 {
     *a1->field_148 = *a1->field_148 & 240 | 1;
-    return sub_48bc90(a1);
+    return CBeam::RelinkBeam(a1);
 }
 

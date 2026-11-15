@@ -33,33 +33,33 @@ st_52bab0_3 * KeyValue__12CBaseTriggerP14KeyValueData_s(st_52bab0_2 *a0, st_52ba
     unsigned short v0;  // [bp-0xc]
     unsigned short v1;  // [bp-0xa]
 
-    if (!sub_488af0(a1->field_4, "damage"))
+    if (!strcmp@GLIBC_2.0(a1->field_4, "damage"))
     {
-        sub_487fc0(a1->field_8, 0, 0);
+        __strtod_internal@GLIBC_2.0(a1->field_8, 0, 0);
         v2 = a0->field_0;
         v2->field_1e0 = (float)v3;
         a1->field_c = 1;
         return v2;
     }
-    else if (!sub_488af0(a1->field_4, "count"))
+    else if (!strcmp@GLIBC_2.0(a1->field_4, "count"))
     {
-        sub_487fc0(a1->field_8, 0, 0);
+        __strtod_internal@GLIBC_2.0(a1->field_8, 0, 0);
         v1 = __fnstcw();
         v0 = v1 | 0xc00;
         a0->field_cc = (int)v4;
         a1->field_c = 1;
         return (int)v4;
     }
-    else if (!sub_488af0(a1->field_4, "damagetype"))
+    else if (!strcmp@GLIBC_2.0(a1->field_4, "damagetype"))
     {
-        v5 = sub_48b500(a1->field_8, 0, 10, 0);
+        v5 = __strtol_internal@GLIBC_2.0(a1->field_8, 0, 10, 0);
         a0->field_fc = v5;
         a1->field_c = 1;
         return v5;
     }
     else
     {
-        return sub_48ba40(a0, a1);
+        return CBaseToggle::KeyValue(a0, a1);
     }
 }
 

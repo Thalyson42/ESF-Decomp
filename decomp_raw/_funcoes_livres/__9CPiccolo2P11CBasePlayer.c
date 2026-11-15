@@ -8,7 +8,7 @@ extern char __vt_9CPiccolo2;
 
 st_4e7b60_0 * __9CPiccolo2P11CBasePlayer(st_4e7b60_0 *a0, int a1)
 {
-    sub_48ba30(a0, a1);
+    __8CPiccoloP11CBasePlayer(a0, a1);
     a0->field_4 = &__vt_9CPiccolo2;
     return a0;
 }

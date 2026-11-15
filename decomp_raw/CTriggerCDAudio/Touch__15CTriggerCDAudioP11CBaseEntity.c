@@ -20,6 +20,6 @@ unsigned int Touch__15CTriggerCDAudioP11CBaseEntity(int a0, st_52c080_2 *a1)
     v0 = a1->field_60->field_a0(a1);
     if (!v0)
         return v0;
-    return sub_4896f0(a0);
+    return CTriggerCDAudio::PlayTrack(a0);
 }
 

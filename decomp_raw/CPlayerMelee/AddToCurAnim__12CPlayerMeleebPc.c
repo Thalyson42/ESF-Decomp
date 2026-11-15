@@ -10,12 +10,12 @@ st_5003b0_0 * AddToCurAnim__12CPlayerMeleebPc(int a0, char a1, int a2)
 {
     st_5003b0_0 *v0;  // esi
 
-    v0 = sub_487fb0(a0);
+    v0 = CPlayerMelee::GetCurrentAnim(a0);
     if (!v0)
         return v0;
     if (v0->field_284 > 15)
         return v0;
-    sub_48e110(&v0->padding_0[32 * v0->field_284], a2);
+    strcpy@GLIBC_2.0(&v0->padding_0[32 * v0->field_284], a2);
     v0->field_290 = a1;
     v0->field_284 = v0->field_284 + 1;
     return v0;

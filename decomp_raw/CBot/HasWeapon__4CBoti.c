@@ -15,7 +15,7 @@ typedef struct st_5534b0_2 {
     unsigned short field_264;
 } st_5534b0_2;
 
-extern char g_6253c9;
+extern char BotManager+3401;
 
 char HasWeapon__4CBoti(st_5534b0_0 *a0, unsigned int a1)
 {
@@ -24,7 +24,7 @@ char HasWeapon__4CBoti(st_5534b0_0 *a0, unsigned int a1)
     st_5534b0_2 *v2;  // esi
     st_5534b0_1 **v3;  // eax
 
-    if ((a0->field_ba4 > 0 || a1 != 128) && (g_6253c9 || a1 != 7 && a1 != 10))
+    if ((a0->field_ba4 > 0 || a1 != 128) && (BotManager+3401 || a1 != 7 && a1 != 10))
     {
         iter = NULL;
         v1 = 0;

@@ -93,25 +93,25 @@ int DoorGoUp__9CBaseDoor(float a0)
     v20 = (st_4ac530_0 **)a0;
     v21 = *v20;
     if (v21->field_1a0 >= 0)
-        v20 = sub_489390(v21->field_208, 6, v21->field_1ec + gpGlobals->field_98, 0x3f800000, 0.800000011920929f, 0, 100);
+        v20 = EMIT_SOUND_DYN(v21->field_208, 6, v21->field_1ec + gpGlobals->field_98, 0x3f800000, 0.800000011920929f, 0, 100);
     *(unsigned int *)(*(unsigned int *)&a0 + 128) = 2;
     v23 = (st_4ac530_2 *)a0;
     v23->field_dc = _INSERT(v20, 0, 0) | 0xffff0000;
     v23->field_e0 = &DoorHitTop__9CBaseDoor;
-    if (sub_488af0(*(int *)v23->field_0 + gpGlobals->field_98, "func_door_rotating"))
+    if (strcmp@GLIBC_2.0(*(int *)v23->field_0 + gpGlobals->field_98, "func_door_rotating"))
     {
         v39 = *(unsigned int *)&a0 + 168;
         v40 = (st_4ac530_6 *)a0;
         v2 = v40->field_a8;
         *(float *)&v4 = *(float *)&v39[1];
         *(float *)&v6 = *(float *)&v39[2];
-        return sub_488220(v40, &v2, v40->field_0->field_1f8);
+        return CBaseToggle::LinearMove(v40, &v2, v40->field_0->field_1f8);
     }
     v0 = 1.0;
     v24 = *(unsigned int *)&a0 + 212;
-    if (sub_48d8b0(v24))
+    if (EHANDLE::__opi(v24))
     {
-        v1 = *(int *)sub_489fd0(v24);
+        v1 = *(int *)EHANDLE::__rf(v24);
         v25 = *(int *)a0;
         if (!(*(char *)(v25 + 416) & 16) && *(float *)(v25 + 72) != 0.0f)
         {
@@ -126,8 +126,8 @@ int DoorGoUp__9CBaseDoor(float a0)
             *(float *)&v14 = *(float *)&v29[1];
             v13 = 0;
             v15 = 0;
-            sub_48a800(&v13);
-            sub_48a800(v29);
+            UTIL_MakeVectors(&v13);
+            UTIL_MakeVectors(v29);
             v30 = &gpGlobals->field_28;
             v31 = 10.0 * gpGlobals->field_28;
             v2 = (float)v31;
@@ -153,6 +153,6 @@ int DoorGoUp__9CBaseDoor(float a0)
     v2 = v0 * v38->field_c0;
     v3 = v0 * *(float *)(index + 4);
     v5 = v0 * *(float *)(index + 8);
-    return sub_488a40(v38, &v2, v38->field_0->field_1f8);
+    return CBaseToggle::AngularMove(v38, &v2, v38->field_0->field_1f8);
 }
 

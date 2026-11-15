@@ -37,7 +37,7 @@ double FLSoundVolume__12CBaseMonsterP6CSound(st_4d3ec0_0 **a0, st_4d3ec0_1 *a1)
     v8 = v5 * v5 + v6 * v6 + v7 * v7;
     v9 = sqrt(v8);
     if (isnan(v9))
-        sub_487dc0(*(unsigned int *)&v8);
+        sqrt(*(unsigned int *)&v8);
     else
         v8 = v9;
     v0 = (float)v8;

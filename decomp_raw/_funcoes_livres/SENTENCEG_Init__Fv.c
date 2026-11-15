@@ -5,12 +5,12 @@ typedef struct st_51d210_0 {
 
 extern unsigned int fSentencesInit;
 extern int gcallsentences;
-extern st_51d210_0 *g_6168b4;
-extern st_51d210_0 *g_61693c;
-extern st_51d210_0 *g_616940;
+extern st_51d210_0 *g_engfuncs.pfnAlertMessage;
+extern st_51d210_0 *g_engfuncs.pfnLoadFileForMe;
+extern st_51d210_0 *g_engfuncs.pfnFreeFile;
 extern int gszallsentencenames;
 extern unsigned int rgsentenceg;
-extern unsigned int g_61f3b0[4];
+extern unsigned int rgsentenceg+16[4];
 
 unsigned int * SENTENCEG_Init__Fv(void)
 {
@@ -41,14 +41,14 @@ unsigned int * SENTENCEG_Init__Fv(void)
 
     if (fSentencesInit)
         return &fSentencesInit;
-    sub_48d0e0(&gszallsentencenames, 0, 0x6000);
+    memset@GLIBC_2.0(&gszallsentencenames, 0, 0x6000);
     gcallsentences = 0;
-    sub_48d0e0(&rgsentenceg, 0, 10400);
-    sub_48d0e0(&v10 + 2, 0, 0x200);
-    sub_48d0e0(&v9, 0, 64);
+    memset@GLIBC_2.0(&rgsentenceg, 0, 10400);
+    memset@GLIBC_2.0(&v10 + 2, 0, 0x200);
+    memset@GLIBC_2.0(&v9, 0, 64);
     idx = -0x1;
     v7 = 0;
-    v4 = g_61693c("sound/sentences.txt", &v8);
+    v4 = g_engfuncs.pfnLoadFileForMe("sound/sentences.txt", &v8);
     if (!v4)
         return v4;
     v3 = &v10 + 2;
@@ -63,7 +63,7 @@ unsigned int * SENTENCEG_Init__Fv(void)
             } while (*(char *)(iter + &v10 + 2) == 32);
         }
         v13 = iter;
-        if (!*(char *)(v13 + &v10 + 2) || *(char *)(v13 + &v10 + 2) == 47 || !sub_48cbf0(*(char *)(v13 + &v10 + 2)) || !(v14 = iter, *(char *)(v14 + &v10 + 2)))
+        if (!*(char *)(v13 + &v10 + 2) || *(char *)(v13 + &v10 + 2) == 47 || !isalpha@GLIBC_2.0(*(char *)(v13 + &v10 + 2)) || !(v14 = iter, *(char *)(v14 + &v10 + 2)))
             continue;
         if (*(char *)(v14 + &v10 + 2) != 32)
         {
@@ -92,18 +92,18 @@ unsigned int * SENTENCEG_Init__Fv(void)
                 v19 = v18;
             } while (v17 && (v17 -= 1, v18 = v19 + 1, *v19));
             if (~v17 - 1 > 15)
-                g_6168b4(3, "Sentence %s longer than %d letters\n", v16, 15);
+                g_engfuncs.pfnAlertMessage(3, "Sentence %s longer than %d letters\n", v16, 15);
             v0 = &(&gszallsentencenames)[4 * gcallsentences];
             gcallsentences = gcallsentences + 1;
-            sub_48e110(v0, v2);
+            strcpy@GLIBC_2.0(v0, v2);
             v20 = v14 - 1;
-            if (v20 <= iter || !sub_48c670(v20[v3]))
+            if (v20 <= iter || !isdigit@GLIBC_2.0(v20[v3]))
                 continue;
             while (1)
             {
                 if (v20 <= iter)
                     continue;
-                if (!sub_48c670(*(char *)(v20 + &v10 + 2)))
+                if (!isdigit@GLIBC_2.0(*(char *)(v20 + &v10 + 2)))
                     break;
                 v20 -= 1;
             }
@@ -111,7 +111,7 @@ unsigned int * SENTENCEG_Init__Fv(void)
                 continue;
             v21 = v3;
             v20[1 + v21] = 0;
-            if (sub_488af0(&v9, &iter[v21]))
+            if (strcmp@GLIBC_2.0(&v9, &iter[v21]))
             {
                 idx += 1;
                 if (idx > 199)
@@ -122,34 +122,34 @@ unsigned int * SENTENCEG_Init__Fv(void)
                 {
                     v1 = &iter[v3];
                     v22 = idx * 52;
-                    sub_48e110((char *)&rgsentenceg + v22, v1);
-                    *(unsigned int *)(v22 + (char *)&g_61f3b0[0]) = 1;
-                    sub_48e110(&v9, v1);
+                    strcpy@GLIBC_2.0((char *)&rgsentenceg + v22, v1);
+                    *(unsigned int *)(v22 + (char *)&rgsentenceg+16[0]) = 1;
+                    strcpy@GLIBC_2.0(&v9, v1);
                     continue;
                 }
 LABEL_51d4d1:
-                g_6168b4(4, v23);
+                g_engfuncs.pfnAlertMessage(4, v23);
                 break;
             }
             else if (idx >= 0)
             {
-                g_61f3b0[13 * idx] = g_61f3b0[13 * idx] + 1;
+                rgsentenceg+16[13 * idx] = rgsentenceg+16[13 * idx] + 1;
             }
         }
     }
-    g_616940(v4);
+    g_engfuncs.pfnFreeFile(v4);
     fSentencesInit = 1;
     iter = 0;
     v24 = &rgsentenceg;
-    if (!g_61f3b0)
+    if (!rgsentenceg+16)
         return &rgsentenceg;
     while (1)
     {
         v25 = v24;
-        sub_48de00(&v25[13 * iter + 5], g_61f3b0[13 * iter]);
+        USENTENCEG_InitLRU(&v25[13 * iter + 5], rgsentenceg+16[13 * iter]);
         iter += 1;
         v24 = v25;
-        if (!g_61f3b0[13 * iter])
+        if (!rgsentenceg+16[13 * iter])
         {
             return iter * 13;
         }

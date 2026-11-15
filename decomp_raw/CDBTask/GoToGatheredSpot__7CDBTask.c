@@ -25,7 +25,7 @@ typedef struct st_56c4c0_0 {
     unsigned int field_0;
 } st_56c4c0_0;
 
-extern st_56c4c0_0 *g_616928;
+extern st_56c4c0_0 *g_engfuncs.pfnRandomLong;
 
 int GoToGatheredSpot__7CDBTask(float idx)
 {
@@ -66,7 +66,7 @@ int GoToGatheredSpot__7CDBTask(float idx)
     v23 = *(int *)(*(unsigned int *)&idx + 8);
     if (!*(char *)(*(int *)(*(unsigned int *)&idx + 8) + 2873))
     {
-        v23 = sub_48b140(*(int *)(*(int *)(*(unsigned int *)&idx + 8) + 2864));
+        v23 = IsNull(*(int *)(*(int *)(*(unsigned int *)&idx + 8) + 2864));
         if (!(char)v23)
         {
             v24 = *(int *)(*(unsigned int *)&idx + 8);
@@ -94,15 +94,15 @@ int GoToGatheredSpot__7CDBTask(float idx)
                 v30 = v27 * v27 + v28 * v28 + v29 * v29;
                 v31 = sqrt(v30);
                 if (isnan(v31))
-                    sub_487dc0(*(unsigned int *)&v30);
+                    sqrt(*(unsigned int *)&v30);
                 else
                     v30 = v31;
                 v9 = (float)v30;
                 if (v9 < 100.0f)
                 {
-                    if ((int)g_616928(1, 100) <= 50)
+                    if ((int)g_engfuncs.pfnRandomLong(1, 100) <= 50)
                         *(char *)(*(int *)(*(unsigned int *)&idx + 12) + 0x200) = *(char *)(*(int *)(*(unsigned int *)&idx + 12) + 0x200) | 32;
-                    v32 = sub_48d0d0(*(int *)(*(unsigned int *)&idx + 8));
+                    v32 = CBot::ResetMoveSpeed(*(int *)(*(unsigned int *)&idx + 8));
                 }
                 else
                 {
@@ -113,7 +113,7 @@ int GoToGatheredSpot__7CDBTask(float idx)
                     v0 = v6;
                     v1 = v7;
                     v2 = v8;
-                    sub_48a170(&v3, v33, &v0);
+                    CBot::GetAimAngles(&v3, v33, &v0);
                     *(unsigned int *)&v33->padding_b3a[214] = v3;
                     *(unsigned int *)&v33->padding_b3a[218] = v4;
                     v32 = v5;
@@ -125,7 +125,7 @@ int GoToGatheredSpot__7CDBTask(float idx)
             {
                 v23 = *(int *)(*(unsigned int *)&idx + 8);
                 if (*(int *)(*(int *)(*(unsigned int *)&idx + 8) + 4132) != 0xffffffff)
-                    return sub_48bf80(idx);
+                    return CDBTask::HeadToNextDBWP(idx);
             }
         }
     }

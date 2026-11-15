@@ -20,6 +20,6 @@ unsigned int _._9type_info(st_597f34_1 *a0, char a1)
     a0->field_4 = v2;
     if (!(a1 & 1))
         return v2;
-    return sub_48d4e0(a0);
+    return __builtin_delete(a0);
 }
 

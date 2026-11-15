@@ -50,7 +50,7 @@ double ShootAttack__10CDeathBall(float a0)
     float v24;  // [bp-0x20]
     float v25;  // [bp-0x1c]
 
-    sub_48a800(*(int *)*(int *)(*(unsigned int *)&a0 + 128) + 116);
+    UTIL_MakeVectors(*(int *)*(int *)(*(unsigned int *)&a0 + 128) + 116);
     (*(int *)(*(int *)(*(int *)(*(unsigned int *)&a0 + 128) + 96) + 480))(&v16, *(int *)(*(unsigned int *)&a0 + 128));
     v13 = 0;
     v14 = 0;
@@ -86,12 +86,12 @@ double ShootAttack__10CDeathBall(float a0)
     v13 = (float)v37;
     v1 = *(short *)(*(unsigned int *)&a0 + 472);
     *(float *)&v0 = *(float *)(*(int *)*(int *)(*(unsigned int *)&a0 + 468) + 324);
-    sub_48aef0(a0);
+    CBasePlayerWeapon::GetPowerRatio(a0);
     v38 = (double)*(int *)(*(unsigned int *)&a0 + 196);
     v3 = __fnstcw();
     v2 = v3 | 0xc00;
     v4 = (int)(v39 * v38 * 4.0);
-    sub_48a590(*(int *)*(int *)(*(unsigned int *)&a0 + 128), &v8, &v11, v4);
+    CDeathBallAttack::ShootDeathBall(*(int *)*(int *)(*(unsigned int *)&a0 + 128), &v8, &v11, v4);
     return v38;
 }
 

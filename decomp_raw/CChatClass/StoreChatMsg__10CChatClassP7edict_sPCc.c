@@ -29,7 +29,7 @@ char * StoreChatMsg__10CChatClassP7edict_sPCc(void* a0, st_548d70_1 *a1, char *a
     {
         if (a0 != 0xffffffdf && (char)a0[33])
         {
-            v1 = sub_488af0(a2, a0 + 33);
+            v1 = strcmp@GLIBC_2.0(a2, a0 + 33);
             if (!v1)
                 return v1;
         }
@@ -47,8 +47,8 @@ char * StoreChatMsg__10CChatClassP7edict_sPCc(void* a0, st_548d70_1 *a1, char *a
             i -= 1;
         } while (i > 0);
         *(float *)&a0[164] = gpGlobals->field_0;
-        sub_48e110(a0 + 33, a2);
-        return sub_48e110(a0, a1->field_250 + gpGlobals->field_98);
+        strcpy@GLIBC_2.0(a0 + 33, a2);
+        return strcpy@GLIBC_2.0(a0, a1->field_250 + gpGlobals->field_98);
     }
     else
     {

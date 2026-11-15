@@ -35,9 +35,9 @@ typedef struct st_4eb660_1 {
 extern char Next__10CFuncTrain;
 extern char DeadEnd__15CFuncTrackTrain;
 extern unsigned int g_vecZero;
-extern unsigned int g_616790;
-extern unsigned int g_616794;
-extern st_4eb660_1 *g_6168b4;
+extern unsigned int g_vecZero+4;
+extern unsigned int g_vecZero+8;
+extern st_4eb660_1 *g_engfuncs.pfnAlertMessage;
 extern st_4eb660_0 *gpGlobals;
 
 double Next__15CFuncTrackTrain(float idx)
@@ -117,7 +117,7 @@ double Next__15CFuncTrackTrain(float idx)
     }
     else
     {
-        sub_48c9a0(idx);
+        CFuncTrackTrain::UpdateSound(idx);
         v32 = *(int *)idx;
         v33 = &v32->field_8;
         *(float *)&v26 = *(float *)&v32->field_8;
@@ -125,7 +125,7 @@ double Next__15CFuncTrackTrain(float idx)
         *(float *)&v29 = *(float *)&v33[2];
         v28 = *(float *)&v33[2] - *(float *)(*(unsigned int *)&idx + 108);
         v25 = (float)(0.1 * *(float *)&v32->field_1f8);
-        v7 = sub_48c0e0(*(int *)(*(unsigned int *)&idx + 100), &v26, v25, 1);
+        v7 = CPathTrack::LookAhead(*(int *)(*(unsigned int *)&idx + 100), &v26, v25, 1);
         v28 += *(float *)(*(unsigned int *)&idx + 108);
         v34 = *(int *)idx;
         v35 = &v34->field_8;
@@ -155,13 +155,13 @@ double Next__15CFuncTrackTrain(float idx)
             v4 = 100.0f;
             v3 = &v10;
         }
-        sub_48c0e0(*(int *)(*(unsigned int *)&idx + 100));
+        CPathTrack::LookAhead(*(int *)(*(unsigned int *)&idx + 100));
         v13 += *(float *)(*(unsigned int *)&idx + 108);
         v37 = *(int *)idx + 8;
         v15 = *(float *)&v10 - *(float *)(*(int *)idx + 8);
         v16 = *(float *)&v12 - *(float *)&v37[1];
         v17 = v13 - *(float *)&v37[2];
-        sub_488860(&v18, &v15);
+        UTIL_VecToAngles(&v18, &v15);
         v19 = (float)(v19 + 180.0);
         FixupAngles__FR6Vector(&v18);
         FixupAngles__FR6Vector(*(int *)idx + 80);
@@ -179,14 +179,14 @@ LABEL_4eb89c:
         }
         if (!(*(char *)(*(int *)idx + 416) & 1))
         {
-            sub_489110(v18, *(float *)(*(int *)idx + 80));
+            UTIL_AngleDistance(v18, *(float *)(*(int *)idx + 80));
             v6 = v18;
         }
         else
         {
             v6 = 0;
         }
-        sub_489110(v19, *(float *)(*(int *)idx + 84));
+        UTIL_AngleDistance(v19, *(float *)(*(int *)idx + 84));
         *(float *)(*(int *)idx + 96) = (float)(v39 * 10.0);
         *(float *)(*(int *)idx + 92) = (float)(10.0 * *(float *)&v6);
         v40 = *(float *)(*(unsigned int *)&idx + 160);
@@ -215,16 +215,16 @@ LABEL_4eb89c:
                     v41 = *(float *)&v44->field_58;
                     v0 = (float)v41;
 LABEL_4eb9b0:
-                    sub_48bd30((float)v43);
-                    sub_489110((float)v43);
+                    UTIL_ApproachAngle((float)v43);
+                    UTIL_AngleDistance((float)v43);
                     v45 = *(int *)idx;
                 }
                 else
                 {
                     *(float *)&v2 = *(float *)(*(int *)idx + 88);
                     v46 = *(float *)(*(int *)idx + 88);
-                    sub_48bd30(0, (float)v46, (float)(4.0 * *(float *)(*(unsigned int *)&idx + 160)));
-                    sub_489110((float)v46);
+                    UTIL_ApproachAngle(0, (float)v46, (float)(4.0 * *(float *)(*(unsigned int *)&idx + 160)));
+                    UTIL_AngleDistance((float)v46);
                     v45 = *(int *)idx;
                     v43 = v46 * 4.0;
                 }
@@ -241,7 +241,7 @@ LABEL_4eb9b0:
                 *(st_4eb660_2 ***)(*(unsigned int *)&idx + 100) = v7;
                 if (*v48->field_1d4)
                 {
-                    sub_48c1b0(*v48->field_1d4 + gpGlobals->field_98, idx, idx, 3, 0);
+                    FireTargets(*v48->field_1d4 + gpGlobals->field_98, idx, idx, 3, 0);
                     if (*v48->field_1a0 & 2)
                         *v48->field_1d4 = 0;
                 }
@@ -255,14 +255,14 @@ LABEL_4eb9b0:
                         *(float *)(*(int *)idx + 504) = (float)v49;
                 }
             }
-            v51 = _INSERT(g_6168b4(2, "TrackTrain %s speed to %4.2f\n", *(int *)(*(int *)idx + 460) + gpGlobals->field_98, (unsigned int)(*(float *)(*(int *)idx + 504) >> 0)), 0, 0);
+            v51 = _INSERT(g_engfuncs.pfnAlertMessage(2, "TrackTrain %s speed to %4.2f\n", *(int *)(*(int *)idx + 460) + gpGlobals->field_98, (unsigned int)(*(float *)(*(int *)idx + 504) >> 0)), 0, 0);
             *(unsigned int *)(*(unsigned int *)&idx + 12) = v51 | 0xffff0000;
             *(char **)(*(unsigned int *)&idx + 16) = &Next__10CFuncTrain;
             v3 = 1;
         }
         else
         {
-            sub_488070(idx);
+            CFuncTrackTrain::StopSound(idx);
             v52 = *(int *)idx;
             v53 = &v52->field_8;
             v21 = *(float *)&v26 - *(float *)&v52->field_8;
@@ -273,14 +273,14 @@ LABEL_4eb9b0:
             *(float *)&v52->padding_21[7] = v23;
             v54 = *(int *)idx;
             *(unsigned int *)&v54->padding_5c[0] = g_vecZero;
-            *(unsigned int *)&v54->padding_5c[4] = g_616790;
-            *(unsigned int *)&v54->padding_5c[8] = g_616794;
+            *(unsigned int *)&v54->padding_5c[4] = g_vecZero+4;
+            *(unsigned int *)&v54->padding_5c[8] = g_vecZero+8;
             v55 = *(int *)idx + 32;
             v56 = *(float *)(*(int *)idx + 32);
             v57 = v56 * v56 + *(float *)&v55[1] * *(float *)&v55[1] + *(float *)&v55[2] * *(float *)&v55[2];
             v58 = sqrt(v57);
             if (isnan(v58))
-                sub_487dc0(*(unsigned int *)&v57);
+                sqrt(*(unsigned int *)&v57);
             else
                 v57 = v58;
             v24 = (float)v57;
@@ -290,7 +290,7 @@ LABEL_4eb9b0:
             v60->field_1f8 = 0;
             if (0.0 >= v59)
             {
-                sub_489860(idx);
+                CFuncTrackTrain::DeadEnd(idx);
                 return 0.0;
             }
             v8 = (float)(v59 / *(float *)(*(unsigned int *)&idx + 164));
@@ -308,11 +308,11 @@ LABEL_4eb9b0:
             *(char **)(*(unsigned int *)&idx + 16) = &DeadEnd__15CFuncTrackTrain;
             v3 = 0;
         }
-        sub_4885e0(idx, v8 + *(float *)(*(int *)idx + 0x100));
+        CFuncTrackTrain::NextThink(idx, v8 + *(float *)(*(int *)idx + 0x100));
         return v41;
     }
-    g_6168b4(2, v31);
-    sub_488070(idx);
+    g_engfuncs.pfnAlertMessage(2, v31);
+    CFuncTrackTrain::StopSound(idx);
     return *(float *)(*(int *)idx + 504);
 }
 

@@ -67,12 +67,12 @@ double PM_CheckWaterJump(void)
         v11 = pmove->field_5c;
         v12 = pmove->field_60;
         v13 = 0;
-        sub_489290(&v11);
+        VectorNormalize(&v11);
         v6 = pmove->field_60;
         v14 = pmove->field_14;
         v15 = pmove->field_18;
         v16 = 0;
-        sub_489290(&v14);
+        VectorNormalize(&v14);
         if (v6 != 0.0f && __float_as_int(v11 * v14) + __float_as_int(v12 * v15) + v13 * v16 < 0.0f)
             return 0.0;
         v18 = pmove->field_38;
@@ -83,7 +83,7 @@ double PM_CheckWaterJump(void)
         v3 = &v17;
         v2 = &v14;
         v1 = 24.0f;
-        sub_48c590(&v18, 24.0f, &v14, &v17);
+        VectorMA(&v18, 24.0f, &v14, &v17);
         idx = pmove->field_bc;
         pmove->field_bc = 2;
         v0 = &v7;
@@ -95,8 +95,8 @@ double PM_CheckWaterJump(void)
             if (v22 < 0.10000000149011612)
             {
                 v20 += (&pmove->field_4f52c)[3 * idx] - v4;
-                sub_48c590(&v18, v1, v2, v3);
-                sub_48c590(&vec3_origin, -50.0f, &v9, &pmove->field_68);
+                VectorMA(&v18, v1, v2, v3);
+                VectorMA(&vec3_origin, -50.0f, &v9, &pmove->field_68);
                 pmove->field_4f580(v0, &v18, v3, 0, 0xffffffff);
                 v22 = v8;
                 if (v22 == 1.0)

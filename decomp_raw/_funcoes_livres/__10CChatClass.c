@@ -34,9 +34,9 @@ st_544530_2 * __10CChatClass(st_544530_2 *a0)
     char v2;  // [bp-0x9]
     st_544530_0 *v3;  // [bp-0x8]
 
-    v3 = sub_48d6a0(20);
+    v3 = __builtin_new(20);
     v2 = 1;
-    v4 = sub_48d6a0(8);
+    v4 = __builtin_new(8);
     *v4 = 0;
     v4[1] = 0;
     v3->field_0 = v4;
@@ -47,20 +47,20 @@ st_544530_2 * __10CChatClass(st_544530_2 *a0)
     v2 = 0;
     a0->field_348 = v3;
     if (v2)
-        sub_48d4e0(v3);
-    v5 = sub_48d6a0(8);
+        __builtin_delete(v3);
+    v5 = __builtin_new(8);
     *v5 = 0;
     v5[1] = 0;
     a0->field_34c = v5;
-    v6 = sub_48d6a0(8);
+    v6 = __builtin_new(8);
     *v6 = 0;
     v6[1] = 0;
     a0->field_350 = v6;
-    v7 = sub_48d6a0(8);
+    v7 = __builtin_new(8);
     *v7 = 0;
     v7[1] = 0;
     a0->field_354 = v7;
-    sub_48d0e0(a0, 0, 840);
+    memset@GLIBC_2.0(a0, 0, 840);
     v8 = 0;
     v1 = a0 + 1;
     v0 = &a0[1].padding_0[40];

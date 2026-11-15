@@ -3,7 +3,7 @@ typedef struct st_533800_0 {
     unsigned int field_0;
 } st_533800_0;
 
-extern st_533800_0 *g_61692c;
+extern st_533800_0 *g_engfuncs.pfnRandomFloat;
 
 unsigned int * UTIL_RandomBloodVector__Fv(void)
 {
@@ -13,11 +13,11 @@ unsigned int * UTIL_RandomBloodVector__Fv(void)
     unsigned int *idx;  // [bp+0x4]
 
     v0 = -1.0f;
-    g_61692c(-1.0f, 0x3f800000);
+    g_engfuncs.pfnRandomFloat(-1.0f, 0x3f800000);
     v1 = -1.0f;
-    g_61692c(v0, 0x3f800000);
+    g_engfuncs.pfnRandomFloat(v0, 0x3f800000);
     v2 = -1.0f;
-    g_61692c(0, 0x3f800000);
+    g_engfuncs.pfnRandomFloat(0, 0x3f800000);
     *(float *)idx = v1;
     *(float *)&idx[1] = v2;
     *(float *)&idx[2] = -1.0f;

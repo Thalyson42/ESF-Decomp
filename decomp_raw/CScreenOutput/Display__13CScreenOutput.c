@@ -29,15 +29,15 @@ typedef struct st_56ce30_1 {
 } st_56ce30_1;
 
 extern int g_5aeddc;
-extern st_56ce30_1 *g_616878;
-extern st_56ce30_1 *g_61687c;
-extern st_56ce30_1 *g_616880;
-extern st_56ce30_1 *g_616888;
-extern st_56ce30_1 *g_616898;
-extern st_56ce30_1 *g_6168b4;
-extern st_56ce30_1 *g_6168d4;
-extern st_56ce30_1 *g_61698c;
-extern st_56ce30_3 *g_62468c;
+extern st_56ce30_1 *g_engfuncs.pfnMessageBegin;
+extern st_56ce30_1 *g_engfuncs.pfnMessageEnd;
+extern st_56ce30_1 *g_engfuncs.pfnWriteByte;
+extern st_56ce30_1 *g_engfuncs.pfnWriteShort;
+extern st_56ce30_1 *g_engfuncs.pfnWriteString;
+extern st_56ce30_1 *g_engfuncs.pfnAlertMessage;
+extern st_56ce30_1 *g_engfuncs.pfnPEntityOfEntOffset;
+extern st_56ce30_1 *g_engfuncs.pfnIsDedicatedServer;
+extern st_56ce30_3 *BotManager+12;
 
 unsigned int Display__13CScreenOutput(st_56ce30_0 *a0)
 {
@@ -49,45 +49,45 @@ unsigned int Display__13CScreenOutput(st_56ce30_0 *a0)
     unsigned int v5;  // eax
     unsigned int v6;  // eax
 
-    v0 = sub_488af0(a0, &g_5aeddc);
+    v0 = strcmp@GLIBC_2.0(a0, &g_5aeddc);
     if (!v0)
         return v0;
-    if (!g_61698c())
+    if (!g_engfuncs.pfnIsDedicatedServer())
     {
-        if (!g_61698c() && !(v1 = g_62468c, !g_62468c && !(v1 = g_6168d4(0), v1)))
+        if (!g_engfuncs.pfnIsDedicatedServer() && !(v1 = BotManager+12, !BotManager+12 && !(v1 = g_engfuncs.pfnPEntityOfEntOffset(0), v1)))
             v2 = v1->field_7c;
         else
             v2 = NULL;
         if (!v2)
             goto LABEL_56cead;
-        if (!g_61698c() && !(v3 = g_62468c, !g_62468c && !(v3 = g_6168d4(0), v3)))
+        if (!g_engfuncs.pfnIsDedicatedServer() && !(v3 = BotManager+12, !BotManager+12 && !(v3 = g_engfuncs.pfnPEntityOfEntOffset(0), v3)))
             v4 = v3->field_7c;
         else
             v4 = NULL;
-        g_616878(1, 23, 0, *v4->field_208);
-        g_616880(29);
-        g_616880(a0->field_20e);
-        g_616888(a0->field_204);
-        g_616888(a0->field_206);
-        g_616880(0);
-        g_616880(a0->field_208);
-        g_616880(a0->field_20a);
-        g_616880(a0->field_20c);
-        g_616880(1);
-        g_616880(0);
-        g_616880(0);
-        g_616880(0xff);
-        g_616880(1);
-        g_616888(1);
-        g_616888(1);
-        g_616888(0x400);
-        g_616898(a0);
-        v5 = g_61687c(a0);
+        g_engfuncs.pfnMessageBegin(1, 23, 0, *v4->field_208);
+        g_engfuncs.pfnWriteByte(29);
+        g_engfuncs.pfnWriteByte(a0->field_20e);
+        g_engfuncs.pfnWriteShort(a0->field_204);
+        g_engfuncs.pfnWriteShort(a0->field_206);
+        g_engfuncs.pfnWriteByte(0);
+        g_engfuncs.pfnWriteByte(a0->field_208);
+        g_engfuncs.pfnWriteByte(a0->field_20a);
+        g_engfuncs.pfnWriteByte(a0->field_20c);
+        g_engfuncs.pfnWriteByte(1);
+        g_engfuncs.pfnWriteByte(0);
+        g_engfuncs.pfnWriteByte(0);
+        g_engfuncs.pfnWriteByte(0xff);
+        g_engfuncs.pfnWriteByte(1);
+        g_engfuncs.pfnWriteShort(1);
+        g_engfuncs.pfnWriteShort(1);
+        g_engfuncs.pfnWriteShort(0x400);
+        g_engfuncs.pfnWriteString(a0);
+        v5 = g_engfuncs.pfnMessageEnd(a0);
     }
     else
     {
 LABEL_56cead:
-        v5 = g_6168b4(1, a0);
+        v5 = g_engfuncs.pfnAlertMessage(1, a0);
     }
     v6 = _INSERT(v5, 0, 0);
     a0->field_0 = 0;

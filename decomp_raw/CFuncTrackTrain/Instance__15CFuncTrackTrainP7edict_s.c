@@ -8,6 +8,6 @@ extern st_4ec540_0 *gpGlobals;
 
 unsigned int Instance__15CFuncTrackTrainP7edict_s(unsigned int *a0)
 {
-    return (!sub_488af0(*(!a0 ? NULL : a0 + 32) + gpGlobals->field_98, "func_tracktrain") ? (!a0 ? 0 : a0[31]) : 0);
+    return (!strcmp@GLIBC_2.0(*(!a0 ? NULL : a0 + 32) + gpGlobals->field_98, "func_tracktrain") ? (!a0 ? 0 : a0[31]) : 0);
 }
 

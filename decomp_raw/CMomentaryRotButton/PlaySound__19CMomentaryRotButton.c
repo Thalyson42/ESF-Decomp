@@ -15,6 +15,6 @@ extern st_498120_1 *gpGlobals;
 
 int PlaySound__19CMomentaryRotButton(st_498120_0 **a0)
 {
-    return sub_489390(*a0->field_208, 2, *a0->field_1e8 + gpGlobals->field_98, 0x3f800000, 0.800000011920929f, 0, 100);
+    return EMIT_SOUND_DYN(*a0->field_208, 2, *a0->field_1e8 + gpGlobals->field_98, 0x3f800000, 0.800000011920929f, 0, 100);
 }
 

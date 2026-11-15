@@ -26,38 +26,38 @@ unsigned int KeyValue__11CGibShooterP14KeyValueData_s(st_4b3f30_1 *a0, st_4b3f30
     unsigned int v5;  // eax
     double v6;  // mm7
 
-    if (!sub_488af0(a1->field_4, "m_iGibs"))
+    if (!strcmp@GLIBC_2.0(a1->field_4, "m_iGibs"))
     {
-        v0 = sub_48b500(a1->field_8, 0, 10, 0);
+        v0 = __strtol_internal@GLIBC_2.0(a1->field_8, 0, 10, 0);
         a0->field_70 = v0;
         a0->field_6c = v0;
         a1->field_c = 1;
         return v0;
     }
-    else if (!sub_488af0(a1->field_4, "m_flVelocity"))
+    else if (!strcmp@GLIBC_2.0(a1->field_4, "m_flVelocity"))
     {
-        v1 = sub_487fc0(a1->field_8, 0, 0);
+        v1 = __strtod_internal@GLIBC_2.0(a1->field_8, 0, 0);
         a0->field_7c = (float)v2;
         a1->field_c = 1;
         return v1;
     }
-    else if (!sub_488af0(a1->field_4, "m_flVariance"))
+    else if (!strcmp@GLIBC_2.0(a1->field_4, "m_flVariance"))
     {
-        v3 = sub_487fc0(a1->field_8, 0, 0);
+        v3 = __strtod_internal@GLIBC_2.0(a1->field_8, 0, 0);
         a0->field_80 = (float)v4;
         a1->field_c = 1;
         return v3;
     }
-    else if (!sub_488af0(a1->field_4, "m_flGibLife"))
+    else if (!strcmp@GLIBC_2.0(a1->field_4, "m_flGibLife"))
     {
-        v5 = sub_487fc0(a1->field_8, 0, 0);
+        v5 = __strtod_internal@GLIBC_2.0(a1->field_8, 0, 0);
         a0->field_84 = (float)v6;
         a1->field_c = 1;
         return v5;
     }
     else
     {
-        return sub_48b920(a0, a1);
+        return CBaseDelay::KeyValue(a0, a1);
     }
 }
 

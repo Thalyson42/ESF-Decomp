@@ -39,15 +39,15 @@ extern st_4a0b90_4 *g_pGameRules;
 extern unsigned int g_teamplay;
 extern unsigned int gmsgSayText;
 extern st_4a0b90_0 g_engfuncs;
-extern st_4a0b90_1 *g_616878;
-extern st_4a0b90_1 *g_61687c;
-extern st_4a0b90_1 *g_616880;
-extern st_4a0b90_1 *g_616898;
-extern st_4a0b90_1 *g_6168dc;
-extern st_4a0b90_1 *g_61696c;
-extern st_4a0b90_1 *g_616974;
-extern st_4a0b90_1 *g_616984;
-extern st_4a0b90_1 *g_6169fc;
+extern st_4a0b90_1 *g_engfuncs.pfnMessageBegin;
+extern st_4a0b90_1 *g_engfuncs.pfnMessageEnd;
+extern st_4a0b90_1 *g_engfuncs.pfnWriteByte;
+extern st_4a0b90_1 *g_engfuncs.pfnWriteString;
+extern st_4a0b90_1 *g_engfuncs.pfnIndexOfEdict;
+extern st_4a0b90_1 *g_engfuncs.pfnInfoKeyValue;
+extern st_4a0b90_1 *g_engfuncs.pfnSetClientKeyValue;
+extern st_4a0b90_1 *g_engfuncs.pfnGetPlayerUserId;
+extern st_4a0b90_1 *g_engfuncs.pfnSequenceGet;
 extern st_4a0b90_2 *gpGlobals;
 
 st_4a0b90_5 * ClientUserInfoChanged__FP7edict_sPc(st_4a0b90_5 *a0, unsigned int a1)
@@ -83,10 +83,10 @@ st_4a0b90_5 * ClientUserInfoChanged__FP7edict_sPc(st_4a0b90_5 *a0, unsigned int 
     if (a0->field_250 && *(char *)&a0->field_250[gpGlobals->field_98])
     {
         v10 = &g_engfuncs.padding_0[0];
-        v14 = g_61696c(a1, "name");
-        if (sub_488af0(&a0->field_250[gpGlobals->field_98], v14))
+        v14 = g_engfuncs.pfnInfoKeyValue(a1, "name");
+        if (strcmp@GLIBC_2.0(&a0->field_250[gpGlobals->field_98], v14))
         {
-            sub_48d360(&v12, v10->field_1ac(a1, "name"), 0xff);
+            strncpy@GLIBC_2.0(&v12, v10->field_1ac(a1, "name"), 0xff);
             v13 = 0;
             v16 = &v12;
             if (*&v12)
@@ -102,39 +102,39 @@ st_4a0b90_5 * ClientUserInfoChanged__FP7edict_sPc(st_4a0b90_5 *a0, unsigned int 
             v9 = "name";
             v6 = "name";
             v5 = a1;
-            v21 = g_6168dc(a0);
-            g_616974(v21);
-            v22 = g_61696c(a1, v9);
+            v21 = g_engfuncs.pfnIndexOfEdict(a0);
+            g_engfuncs.pfnSetClientKeyValue(v21);
+            v22 = g_engfuncs.pfnInfoKeyValue(a1, v9);
             v8 = &gpGlobals;
-            sub_48d990(&v11, "* %s changed name to %s\n", &a0->field_250[gpGlobals->field_98], v22);
-            g_616878(2, gmsgSayText, 0, 0);
-            v23 = g_6168dc(a0);
-            g_616880(v23);
-            g_616898(&v11);
-            g_61687c();
+            sprintf@GLIBC_2.0(&v11, "* %s changed name to %s\n", &a0->field_250[gpGlobals->field_98], v22);
+            g_engfuncs.pfnMessageBegin(2, gmsgSayText, 0, 0);
+            v23 = g_engfuncs.pfnIndexOfEdict(a0);
+            g_engfuncs.pfnWriteByte(v23);
+            g_engfuncs.pfnWriteString(&v11);
+            g_engfuncs.pfnMessageEnd();
             if (g_teamplay)
             {
-                v4 = g_61696c(a1, v9);
-                v3 = g_61696c(a1, "model");
-                v2 = g_6169fc(a0);
-                v1 = g_616984(a0);
+                v4 = g_engfuncs.pfnInfoKeyValue(a1, v9);
+                v3 = g_engfuncs.pfnInfoKeyValue(a1, "model");
+                v2 = g_engfuncs.pfnSequenceGet(a0);
+                v1 = g_engfuncs.pfnGetPlayerUserId(a0);
                 v0 = &a0->field_250[*v8->field_98];
                 v24 = "\"%s<%i><%s><%s>\" changed name to \"%s\"\n";
             }
             else
             {
-                v4 = g_61696c(a1, "name");
-                v3 = g_616984(a0);
-                v2 = g_6169fc(a0);
-                v1 = g_616984(a0);
+                v4 = g_engfuncs.pfnInfoKeyValue(a1, "name");
+                v3 = g_engfuncs.pfnGetPlayerUserId(a0);
+                v2 = g_engfuncs.pfnSequenceGet(a0);
+                v1 = g_engfuncs.pfnGetPlayerUserId(a0);
                 v0 = &a0->field_250[gpGlobals->field_98];
                 v24 = "\"%s<%i><%s><%i>\" changed name to \"%s\"\n";
             }
-            sub_488680(v24);
+            UTIL_LogPrintf(v24);
         }
     }
     v6 = a1;
-    v25 = sub_48c260(&a0->field_80);
+    v25 = GetClassPtr__H1Z11CBasePlayer_PX01_PX01(&a0->field_80);
     return g_pGameRules->field_44->field_64(g_pGameRules, v25);
 }
 

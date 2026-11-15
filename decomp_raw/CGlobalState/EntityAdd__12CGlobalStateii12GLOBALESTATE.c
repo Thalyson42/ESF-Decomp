@@ -23,11 +23,11 @@ int EntityAdd__12CGlobalStateii12GLOBALESTATE(st_539d70_1 *a0, unsigned int a1, 
 {
     st_539d70_0 *v0;  // edi
 
-    v0 = sub_48ccc0(104, 1);
+    v0 = calloc@GLIBC_2.0(104, 1);
     v0->field_64 = a0->field_0;
     a0->field_0 = v0;
-    sub_48e110(v0, a1 + gpGlobals->field_98);
-    sub_48e110(&v0->field_40, a2 + gpGlobals->field_98);
+    strcpy@GLIBC_2.0(v0, a1 + gpGlobals->field_98);
+    strcpy@GLIBC_2.0(&v0->field_40, a2 + gpGlobals->field_98);
     v0->field_60 = a3;
     a0->field_4 = a0->field_4 + 1;
     return a3;

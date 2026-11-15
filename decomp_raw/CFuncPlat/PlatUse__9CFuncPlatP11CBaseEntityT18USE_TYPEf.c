@@ -30,7 +30,7 @@ unsigned int PlatUse__9CFuncPlatP11CBaseEntityT18USE_TYPEf(st_4e9040_2 *a0, unsi
         a0->field_20 = 0;
         return a0->field_60->field_f4(a0);
     }
-    v0 = sub_48ab90(a0, a3, a0->field_80 == 1);
+    v0 = CBaseEntity::ShouldToggle(a0, a3, a0->field_80 == 1);
     if (!v0)
     {
         return v0;

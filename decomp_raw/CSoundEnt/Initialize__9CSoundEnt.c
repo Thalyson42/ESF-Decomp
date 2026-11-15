@@ -8,8 +8,8 @@ typedef struct st_51f150_1 {
     unsigned int field_0;
 } st_51f150_1;
 
-extern st_51f150_1 *g_6168a4;
-extern st_51f150_1 *g_6168b4;
+extern st_51f150_1 *g_engfuncs.pfnCVarGetFloat;
+extern st_51f150_1 *g_engfuncs.pfnAlertMessage;
 extern st_51f150_0 *gpGlobals;
 extern int pSoundEnt;
 
@@ -33,7 +33,7 @@ unsigned int Initialize__9CSoundEnt(float idx)
     do
     {
         v3 = i * 32;
-        sub_489e80(*(unsigned int *)&idx + (char *)v3 + 116);
+        CSound::Clear(*(unsigned int *)&idx + (char *)v3 + 116);
         v4 = i + 1;
         *(int *)((char *)v3 + *(unsigned int *)&v0) = v4;
         i = v4;
@@ -41,15 +41,15 @@ unsigned int Initialize__9CSoundEnt(float idx)
     *(unsigned int *)((i - 1) * 32 + *(unsigned int *)&idx + 140) = 0xffffffff;
     for (j = 0; j < gpGlobals->field_90; j += 1)
     {
-        index = sub_489ed0(pSoundEnt);
+        index = CSoundEnt::IAllocSound(pSoundEnt);
         if (index == 0xffffffff)
         {
-            v10 = g_6168b4(1, "Could not AllocSound() for Client Reserve! (DLL)\n");
+            v10 = g_engfuncs.pfnAlertMessage(1, "Could not AllocSound() for Client Reserve! (DLL)\n");
             return v10;
         }
         *(float *)(index * 32 + pSoundEnt + 0x88) = -1.0f;
     }
-    g_6168a4("displaysoundlist");
+    g_engfuncs.pfnCVarGetFloat("displaysoundlist");
     if (v7 != 1.0)
     {
         *(unsigned int *)(*(unsigned int *)&idx + 112) = 0;

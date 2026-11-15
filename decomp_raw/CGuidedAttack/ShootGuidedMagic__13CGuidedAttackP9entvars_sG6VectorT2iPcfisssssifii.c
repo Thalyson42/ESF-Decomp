@@ -79,9 +79,9 @@ typedef struct st_4c7930_8 {
 
 extern char ExplodeTouch__16CExplodingAttackP11CBaseEntity;
 extern char FollowThink__13CGuidedAttack;
-extern st_4c7930_5 *g_6167c8;
-extern st_4c7930_5 *g_6168d4;
-extern st_4c7930_5 *g_6168dc;
+extern st_4c7930_5 *g_engfuncs.pfnSetModel;
+extern st_4c7930_5 *g_engfuncs.pfnPEntityOfEntOffset;
+extern st_4c7930_5 *g_engfuncs.pfnIndexOfEdict;
 extern st_4c7930_8 *gpGlobals;
 
 st_4c7930_6 * ShootGuidedMagic__13CGuidedAttackP9entvars_sG6VectorT2iPcfisssssifii(st_4c7930_7 *a0, float *a1, float *a2, int a3, unsigned int a4, float a5, unsigned int a6, short a7, short a8, short a9, short a10, short a11, unsigned int a12, float a13, unsigned int a14, unsigned int a15)
@@ -133,11 +133,11 @@ st_4c7930_6 * ShootGuidedMagic__13CGuidedAttackP9entvars_sG6VectorT2iPcfisssssif
     float v26;  // [bp-0x14]
     float v27;  // [bp-0x10]
 
-    v28 = sub_48da40(0);
+    v28 = GetClassPtr__H1Z13CGuidedAttack_PX01_PX01(0);
     v28->field_60->field_8(v28);
     v28->field_0->field_108 = 5;
     v28->field_0->field_10c = 1;
-    g_6167c8(v28->field_0->field_208, "sprites/null.spr");
+    g_engfuncs.pfnSetModel(v28->field_0->field_208, "sprites/null.spr");
     if (a3 > 9999)
         a3 = 9999;
     v21 = a3;
@@ -146,7 +146,7 @@ st_4c7930_6 * ShootGuidedMagic__13CGuidedAttackP9entvars_sG6VectorT2iPcfisssssif
     v29 = *a2 * *a2 + a2[1] * a2[1] + a2[2] * a2[2];
     v30 = sqrt(v29);
     if (isnan(v30))
-        sub_487dc0(*(unsigned int *)&v29);
+        sqrt(*(unsigned int *)&v29);
     else
         v29 = v30;
     v20 = (float)v29;
@@ -172,7 +172,7 @@ st_4c7930_6 * ShootGuidedMagic__13CGuidedAttackP9entvars_sG6VectorT2iPcfisssssif
     v26 = v33[1] + v23;
     v27 = v33[2] + v24;
     v10 = &v25;
-    sub_487b80(a1, v10, 1, a0->field_208, &v15);
+    UTIL_TraceLine(a1, v10, 1, a0->field_208, &v15);
     v34 = v16;
     v17 = v34 * v22;
     v18 = v34 * v23;
@@ -184,7 +184,7 @@ st_4c7930_6 * ShootGuidedMagic__13CGuidedAttackP9entvars_sG6VectorT2iPcfisssssif
     *v35 = v25;
     v35[1] = v26;
     v35[2] = v27;
-    sub_48db50(v28->field_0, v35);
+    UTIL_SetOrigin(v28->field_0, v35);
     v36 = v11;
     v25 = v36;
     v26 = v36;
@@ -193,7 +193,7 @@ st_4c7930_6 * ShootGuidedMagic__13CGuidedAttackP9entvars_sG6VectorT2iPcfisssssif
     v17 = (float)v37;
     v18 = (float)v37;
     v19 = (float)v37;
-    sub_48a0d0(v28->field_0, &v17, v10);
+    UTIL_SetSize(v28->field_0, &v17, v10);
     v38 = v28->field_0;
     v39 = a2;
     *(float *)&v38->field_20 = *v39;
@@ -202,12 +202,12 @@ st_4c7930_6 * ShootGuidedMagic__13CGuidedAttackP9entvars_sG6VectorT2iPcfisssssif
     v40 = *v39 * *v39 + v39[1] * v39[1] + v39[2] * v39[2];
     v41 = sqrt(v40);
     if (isnan(v41))
-        sub_487dc0(*(unsigned int *)&v40);
+        sqrt(*(unsigned int *)&v40);
     else
         v40 = v41;
     v28->field_2a8 = (float)v40;
     v9 = v28->field_0;
-    sub_488860(&v25, a2);
+    UTIL_VecToAngles(&v25, a2);
     *(float *)&v9->field_50 = v25;
     *(float *)&v9->field_54 = v26;
     *(float *)&v9->field_58 = v27;
@@ -237,16 +237,16 @@ st_4c7930_6 * ShootGuidedMagic__13CGuidedAttackP9entvars_sG6VectorT2iPcfisssssif
     v1 = a8;
     v0 = a14;
     v45 = a0->field_208;
-    if (a0->field_208 || (v45 = g_6168d4(0), v45))
+    if (a0->field_208 || (v45 = g_engfuncs.pfnPEntityOfEntOffset(0), v45))
         v46 = v45->field_7c;
     else
         v46 = NULL;
-    v28->field_c = _INSERT(sub_4891b0(v28, g_6168dc(*v46->field_208)), 0, 0) | 0xffff0000;
+    v28->field_c = _INSERT(CBeamAttack::AddEntEntTrail(v28, g_engfuncs.pfnIndexOfEdict(*v46->field_208)), 0, 0) | 0xffff0000;
     v28->field_10 = &FollowThink__13CGuidedAttack;
     v28->field_2d0 = a12;
     v28->field_2d4 = a6;
     v28->field_2e0 = a13;
-    sub_489390(v28->field_0->field_208, 1, "weapons/beamhead.wav", 0x3f800000, 0.800000011920929f, 0, 100);
+    EMIT_SOUND_DYN(v28->field_0->field_208, 1, "weapons/beamhead.wav", 0x3f800000, 0.800000011920929f, 0, 100);
     *(float *)&v28->field_0->field_104 = gpGlobals->field_0;
     return v28;
 }

@@ -44,7 +44,7 @@ int Use__5CFadeP11CBaseEntityT18USE_TYPEf(st_4b6170_0 **a0, st_4b6170_3 *a1)
         v2 = __fnstcw();
         v1 = v2 | 0xc00;
         v0 = (int)v5->field_14c;
-        sub_48b130(&v5->field_150, v5->field_1d8, v5->field_1dc, v0, v3);
+        UTIL_ScreenFadeAll(&v5->field_150, v5->field_1d8, v5->field_1dc, v0, v3);
     }
     else if (a1->field_60->field_a4(a1))
     {
@@ -52,12 +52,12 @@ int Use__5CFadeP11CBaseEntityT18USE_TYPEf(st_4b6170_0 **a0, st_4b6170_3 *a1)
         v2 = __fnstcw();
         v1 = v2 | 0xc00;
         v0 = (int)v4->field_14c;
-        sub_48df50(a1, &v4->field_150, v4->field_1d8, v4->field_1dc, v0, v3);
+        UTIL_ScreenFade(a1, &v4->field_150, v4->field_1d8, v4->field_1dc, v0, v3);
     }
     else
     {
-        return sub_48df80(a0, a0, 3, 0);
+        return CBaseEntity::SUB_UseTargets(a0, a0, 3, 0);
     }
-    return sub_48df80(a0, a0, 3, 0);
+    return CBaseEntity::SUB_UseTargets(a0, a0, 3, 0);
 }
 

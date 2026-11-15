@@ -72,7 +72,7 @@ typedef struct st_4b97a0_4 {
     unsigned int field_0;
 } st_4b97a0_4;
 
-extern st_4b97a0_4 *g_6168b4;
+extern st_4b97a0_4 *g_engfuncs.pfnAlertMessage;
 extern st_4b97a0_3 *gpGlobals;
 
 double RotateThink__9CEnvModel(st_4b97a0_1 **a0)
@@ -117,11 +117,11 @@ double RotateThink__9CEnvModel(st_4b97a0_1 **a0)
 
     if (!*a0->field_198)
     {
-        g_6168b4(1, "Invalid owner for envmodel");
+        g_engfuncs.pfnAlertMessage(1, "Invalid owner for envmodel");
         return v36;
     }
     v22 = (!*a0->field_198 ? NULL : (struct st_4b97a0_0 *)&*a0->field_198->field_80);
-    sub_48a800(&v22->field_74);
+    UTIL_MakeVectors(&v22->field_74);
     v23 = &gpGlobals->field_28;
     v19 = gpGlobals->field_28;
     v20 = *(float *)&v23[1];
@@ -138,7 +138,7 @@ double RotateThink__9CEnvModel(st_4b97a0_1 **a0)
     v8 = (float)(v25 + v16);
     v9 = (float)(v26 + v17);
     v10 = v18 + v2;
-    sub_487b80(&v16, &v8, 0, *a0->field_208, &v12);
+    UTIL_TraceLine(&v16, &v8, 0, *a0->field_208, &v12);
     v27 = &*a0->field_8;
     v0 = v13 - *a0->field_8;
     v1 = v14 - *(float *)&v27[1];
@@ -149,7 +149,7 @@ double RotateThink__9CEnvModel(st_4b97a0_1 **a0)
     v28 = v19 * v19 + v20 * v20 + v21 * v21;
     v29 = sqrt(v28);
     if (isnan(v29))
-        sub_487dc0(*(unsigned int *)&v28);
+        sqrt(*(unsigned int *)&v28);
     else
         v28 = v29;
     v6 = (float)v28;
@@ -169,7 +169,7 @@ double RotateThink__9CEnvModel(st_4b97a0_1 **a0)
     v19 = v0;
     v20 = v1;
     v21 = v2;
-    sub_488860(&v0, &v19);
+    UTIL_VecToAngles(&v0, &v19);
     v3 = v0;
     v31 = v1 - 90.0;
     v4 = (float)v31;

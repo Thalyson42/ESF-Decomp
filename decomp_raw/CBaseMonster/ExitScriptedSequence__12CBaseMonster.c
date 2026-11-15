@@ -21,7 +21,7 @@ unsigned int ExitScriptedSequence__12CBaseMonster(st_515840_1 *a0)
     }
     if (!a0->field_2a4)
         return 1;
-    sub_48a100(a0->field_2a4);
+    CCineMonster::CancelScript(a0->field_2a4);
     return 1;
 }
 

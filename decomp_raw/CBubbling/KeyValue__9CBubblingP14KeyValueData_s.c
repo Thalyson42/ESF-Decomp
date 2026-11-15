@@ -25,29 +25,29 @@ st_4af510_2 * KeyValue__9CBubblingP14KeyValueData_s(st_4af510_1 **a0, st_4af510_
     st_4af510_1 *v5;  // eax
     int v0;  // [bp-0x8]
 
-    if (!sub_488af0(a1->field_4, "density"))
+    if (!strcmp@GLIBC_2.0(a1->field_4, "density"))
     {
-        v1 = sub_48b500(a1->field_8, 0, 10, 0);
+        v1 = __strtol_internal@GLIBC_2.0(a1->field_8, 0, 10, 0);
         a0[25] = v1;
         a1->field_c = 1;
         return v1;
     }
-    else if (!sub_488af0(a1->field_4, "frequency"))
+    else if (!strcmp@GLIBC_2.0(a1->field_4, "frequency"))
     {
-        v2 = sub_48b500(a1->field_8, 0, 10, 0);
+        v2 = __strtol_internal@GLIBC_2.0(a1->field_8, 0, 10, 0);
         a0[26] = v2;
         a1->field_c = 1;
         return v2;
     }
     else
     {
-        v3 = sub_488af0(a1->field_4, "current");
+        v3 = strcmp@GLIBC_2.0(a1->field_4, "current");
         if (v3)
         {
             a1->field_c = 0;
             return v3;
         }
-        v4 = sub_48b500(a1->field_8, 0, 10, 0);
+        v4 = __strtol_internal@GLIBC_2.0(a1->field_8, 0, 10, 0);
         v5 = *a0;
         v0 = v4;
         v5->field_1f8 = (float)v0;

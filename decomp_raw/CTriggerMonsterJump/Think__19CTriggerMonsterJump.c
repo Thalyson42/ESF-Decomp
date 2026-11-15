@@ -16,7 +16,7 @@ unsigned int Think__19CTriggerMonsterJump(st_52bf60_1 *a0)
     unsigned int v0;  // eax
 
     a0->field_0->field_10c = 0;
-    v0 = sub_48db50(a0->field_0, &a0->field_0->padding_0[8]);
+    v0 = UTIL_SetOrigin(a0->field_0, &a0->field_0->padding_0[8]);
     a0->field_c = 0;
     a0->field_10 = 0;
     return v0;

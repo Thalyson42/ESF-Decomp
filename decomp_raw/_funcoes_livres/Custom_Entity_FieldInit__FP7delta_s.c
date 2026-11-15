@@ -3,36 +3,36 @@ typedef struct st_4a2b60_0 {
     unsigned int field_0;
 } st_4a2b60_0;
 
-extern unsigned int g_5b83c0;
-extern char g_5b83c4;
-extern unsigned int g_5b83e4;
-extern char g_5b83e8;
-extern unsigned int g_5b8408;
-extern char g_5b840c;
-extern unsigned int g_5b842c;
-extern char g_5b8430;
-extern unsigned int g_5b8450;
-extern char g_5b8454;
-extern unsigned int g_5b8474;
-extern char g_5b8478;
-extern unsigned int g_5b8498;
-extern char g_5b849c;
-extern unsigned int g_5b84bc;
-extern char g_5b84c0;
-extern unsigned int g_5b84e0;
-extern st_4a2b60_0 *g_6169d0;
+extern unsigned int custom_entity_field_alias+32;
+extern char custom_entity_field_alias+36;
+extern unsigned int custom_entity_field_alias+68;
+extern char custom_entity_field_alias+72;
+extern unsigned int custom_entity_field_alias+104;
+extern char custom_entity_field_alias+108;
+extern unsigned int custom_entity_field_alias+140;
+extern char custom_entity_field_alias+144;
+extern unsigned int custom_entity_field_alias+176;
+extern char custom_entity_field_alias+180;
+extern unsigned int custom_entity_field_alias+212;
+extern char custom_entity_field_alias+216;
+extern unsigned int custom_entity_field_alias+248;
+extern char custom_entity_field_alias+252;
+extern unsigned int custom_entity_field_alias+284;
+extern char custom_entity_field_alias+288;
+extern unsigned int custom_entity_field_alias+320;
+extern st_4a2b60_0 *g_engfuncs.pfnDeltaSetFieldByIndex;
 
 int Custom_Entity_FieldInit__FP7delta_s(unsigned int a0)
 {
-    g_5b83c0 = g_6169d0(a0, "origin[0]");
-    g_5b83e4 = g_6169d0(a0, &g_5b83c4);
-    g_5b8408 = g_6169d0(a0, &g_5b83e8);
-    g_5b842c = g_6169d0(a0, &g_5b840c);
-    g_5b8450 = g_6169d0(a0, &g_5b8430);
-    g_5b8474 = g_6169d0(a0, &g_5b8454);
-    g_5b8498 = g_6169d0(a0, &g_5b8478);
-    g_5b84bc = g_6169d0(a0, &g_5b849c);
-    g_5b84e0 = g_6169d0(a0, &g_5b84c0);
-    return g_5b84e0;
+    custom_entity_field_alias+32 = g_engfuncs.pfnDeltaSetFieldByIndex(a0, "origin[0]");
+    custom_entity_field_alias+68 = g_engfuncs.pfnDeltaSetFieldByIndex(a0, &custom_entity_field_alias+36);
+    custom_entity_field_alias+104 = g_engfuncs.pfnDeltaSetFieldByIndex(a0, &custom_entity_field_alias+72);
+    custom_entity_field_alias+140 = g_engfuncs.pfnDeltaSetFieldByIndex(a0, &custom_entity_field_alias+108);
+    custom_entity_field_alias+176 = g_engfuncs.pfnDeltaSetFieldByIndex(a0, &custom_entity_field_alias+144);
+    custom_entity_field_alias+212 = g_engfuncs.pfnDeltaSetFieldByIndex(a0, &custom_entity_field_alias+180);
+    custom_entity_field_alias+248 = g_engfuncs.pfnDeltaSetFieldByIndex(a0, &custom_entity_field_alias+216);
+    custom_entity_field_alias+284 = g_engfuncs.pfnDeltaSetFieldByIndex(a0, &custom_entity_field_alias+252);
+    custom_entity_field_alias+320 = g_engfuncs.pfnDeltaSetFieldByIndex(a0, &custom_entity_field_alias+288);
+    return custom_entity_field_alias+320;
 }
 

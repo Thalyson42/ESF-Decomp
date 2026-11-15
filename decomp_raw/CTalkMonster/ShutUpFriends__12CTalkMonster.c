@@ -23,7 +23,7 @@ st_5258c0_2 * ShutUpFriends__12CTalkMonster(int a0)
     v1 = 0;
     while (1)
     {
-        v0 = sub_489900(a0, v0, v1, 1);
+        v0 = CTalkMonster::EnumFriends(a0, v0, v1, 1);
         if (v0)
         {
             v2 = v0->field_60->field_4c(v0);

@@ -155,7 +155,7 @@ double Blocked__15CFuncTrackTrainP11CBaseEntity(st_4eaee0_6 **a0, st_4eaee0_4 *a
     v21 = v18 * v18 + v19 * v19 + v20 * v20;
     v22 = sqrt(v21);
     if (isnan(v22))
-        sub_487dc0(*(unsigned int *)&v21);
+        sqrt(*(unsigned int *)&v21);
     else
         v21 = v22;
     v1 = (float)v21;

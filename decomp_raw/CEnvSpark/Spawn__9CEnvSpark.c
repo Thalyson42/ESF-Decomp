@@ -10,7 +10,7 @@ typedef struct st_4988c0_0 {
 extern char SparkThink__9CEnvSpark;
 extern char SparkStart__9CEnvSparkP11CBaseEntityT18USE_TYPEf;
 extern char SparkStop__9CEnvSparkP11CBaseEntityT18USE_TYPEf;
-extern st_4988c0_0 *g_61692c;
+extern st_4988c0_0 *g_engfuncs.pfnRandomFloat;
 extern st_4988c0_1 *gpGlobals;
 
 int Spawn__9CEnvSpark(double a0, float idx)
@@ -43,7 +43,7 @@ int Spawn__9CEnvSpark(double a0, float idx)
         *(char **)(*(unsigned int *)&idx + 32) = &SparkStart__9CEnvSparkP11CBaseEntityT18USE_TYPEf;
     }
     v0 = 1.5f;
-    g_61692c(0, 1.5f);
+    g_engfuncs.pfnRandomFloat(0, 1.5f);
     *(float *)(*(int *)idx + 260) = (float)(a0 + 0.1 + *(float *)gpGlobals);
     if (0.0 >= *(float *)(*(unsigned int *)&idx + 100))
         *(float *)(*(unsigned int *)&idx + 100) = v0;

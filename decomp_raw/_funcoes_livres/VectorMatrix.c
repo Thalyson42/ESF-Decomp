@@ -18,10 +18,10 @@ double VectorMatrix(float *a0, unsigned int *a1, unsigned int *a2)
     v0 = 0;
     v1 = 0;
     v2 = 0x3f800000;
-    sub_4883f0(a0, &v0, a1);
-    sub_489290(a1);
-    sub_4883f0(a1, a0, a2);
-    sub_489290(a2);
+    CrossProduct(a0, &v0, a1);
+    VectorNormalize(a1);
+    CrossProduct(a1, a0, a2);
+    VectorNormalize(a2);
     return 0.0;
 }
 

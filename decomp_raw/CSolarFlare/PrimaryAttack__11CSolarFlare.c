@@ -75,16 +75,16 @@ unsigned int PrimaryAttack__11CSolarFlare(float idx)
     }
     v8 = v13;
     v1 = (float)((double)v8 / 750.0);
-    sub_48c980(*(int *)(*(unsigned int *)&idx + 128), v13);
-    sub_48d680(*(int *)(*(unsigned int *)&idx + 128), 5);
-    sub_48cc70(idx);
+    CBasePlayer::UseKi(*(int *)(*(unsigned int *)&idx + 128), v13);
+    CBasePlayer::SetAnimation(*(int *)(*(unsigned int *)&idx + 128), 5);
+    CSolarFlare::EmitShootSound(idx);
     v14 = *(int *)*(int *)(*(unsigned int *)&idx + 128);
     v15 = &v14->padding_0[116];
     v16 = &v14->padding_0[104];
     v2 = *(float *)&v14->padding_0[116] + *(float *)&v14->padding_0[104];
     v3 = *(float *)&v15->padding_0[4] + *(float *)&v16->padding_0[4];
     v4 = *(float *)&v15->padding_0[8] + *(float *)&v16->padding_0[8];
-    sub_48a800(&v2);
+    UTIL_MakeVectors(&v2);
     v17 = v1 * 325.0;
     v18 = *(int *)(*(unsigned int *)&idx + 128);
     v0 = 0.5f;
@@ -99,13 +99,13 @@ unsigned int PrimaryAttack__11CSolarFlare(float idx)
     v2 = (float)(v21 + *(float *)&v18->field_0->padding_0[8]);
     v3 = (float)(v22 + *(float *)&v23->padding_0[4]);
     v4 = *(float *)&v23->padding_0[8] + v7;
-    sub_48ab00(&v2, v18->field_0, v18->field_0, 0, (float)v17, 0, 2);
+    RadiusDamage(&v2, v18->field_0, v18->field_0, 0, (float)v17, 0, 2);
     if (*(int *)(*(int *)(*(unsigned int *)&idx + 128) + 836))
         return v24;
     v2 = 255.0f;
     v3 = 255.0f;
     v4 = 255.0f;
-    v24 = sub_48df50(*(int *)(*(unsigned int *)&idx + 128), &v2, 0x3f800000, v0, 0xff, 0);
+    v24 = UTIL_ScreenFade(*(int *)(*(unsigned int *)&idx + 128), &v2, 0x3f800000, v0, 0xff, 0);
     return v24;
 }
 

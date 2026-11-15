@@ -96,12 +96,12 @@ typedef struct st_507eb0_6 {
     float field_0;
 } st_507eb0_6;
 
-extern float g_5bd180;
+extern float nomeleehittime+12;
 extern unsigned int gmsgMeleeFX;
-extern st_507eb0_2 *g_616878;
-extern st_507eb0_2 *g_61687c;
-extern st_507eb0_2 *g_616880;
-extern st_507eb0_2 *g_6168dc;
+extern st_507eb0_2 *g_engfuncs.pfnMessageBegin;
+extern st_507eb0_2 *g_engfuncs.pfnMessageEnd;
+extern st_507eb0_2 *g_engfuncs.pfnWriteByte;
+extern st_507eb0_2 *g_engfuncs.pfnIndexOfEdict;
 extern st_507eb0_6 *gpGlobals;
 
 double PushAwayOtherPlayers__12CPlayerMelee(st_507eb0_3 **a0)
@@ -160,20 +160,20 @@ double PushAwayOtherPlayers__12CPlayerMelee(st_507eb0_3 **a0)
     *(float *)&v21 = v23->field_10;
     while (1)
     {
-        v22 = sub_48bba0(v22, &v19, 350.0f);
+        v22 = UTIL_FindEntityInSphere(v22, &v19, 350.0f);
         if (!v22)
             break;
         if (v22->field_60->field_a0(v22) && v22 != a0[73] && v22 != a0[74])
         {
             v24 = v22;
             if (v22->field_330)
-                sub_48ba60(v22);
-            if (!v24->field_3e4 && !v24->field_354 && !v24->field_358 && !v24->field_35c && !v24->field_770 && !v24->field_6bc && !v24->field_350 && v24->field_60->field_8c(v24) && !v24->field_4c4 && *(float *)gpGlobals - g_5bd180 >= v24->field_3a4)
+                CBasePlayer::StopPowerUp(v22);
+            if (!v24->field_3e4 && !v24->field_354 && !v24->field_358 && !v24->field_35c && !v24->field_770 && !v24->field_6bc && !v24->field_350 && v24->field_60->field_8c(v24) && !v24->field_4c4 && *(float *)gpGlobals - nomeleehittime+12 >= v24->field_3a4)
             {
                 if (v24->field_320)
-                    sub_48c5a0(v24);
+                    CBasePlayer::StopFly(v24);
                 if (v24->field_32c)
-                    sub_4895a0(v24);
+                    CBasePlayer::StopBlock(v24);
                 v25 = &v24->field_0->field_8;
                 v26 = v24->field_0->field_8 - *(float *)&v19;
                 v16 = v26;
@@ -184,7 +184,7 @@ double PushAwayOtherPlayers__12CPlayerMelee(st_507eb0_3 **a0)
                 v29 = v26 * v26 + v27 * v27 + v28 * v28;
                 v30 = sqrt(v29);
                 if (isnan(v30))
-                    sub_487dc0(*(unsigned int *)&v29);
+                    sqrt(*(unsigned int *)&v29);
                 else
                     v29 = v30;
                 v13 = (float)v29;
@@ -200,7 +200,7 @@ double PushAwayOtherPlayers__12CPlayerMelee(st_507eb0_3 **a0)
                     v35 = v32 * v32 + v33 * v33 + v34 * v34;
                     v36 = sqrt(v35);
                     if (isnan(v36))
-                        sub_487dc0(*(unsigned int *)&v35);
+                        sqrt(*(unsigned int *)&v35);
                     else
                         v35 = v36;
                     v5 = (float)v35;
@@ -217,7 +217,7 @@ double PushAwayOtherPlayers__12CPlayerMelee(st_507eb0_3 **a0)
                         v11 = (float)(v37 * v14);
                         v12 = (float)(v37 * v15);
                     }
-                    sub_48c240(&v24->field_380, a0[73], 0, &v10, 1500.0f, 800.0f, 250.0f, 2.0f);
+                    CPlayerMelee::StartToss(&v24->field_380, a0[73], 0, &v10, 1500.0f, 800.0f, 250.0f, 2.0f);
                 }
                 else
                 {
@@ -232,7 +232,7 @@ double PushAwayOtherPlayers__12CPlayerMelee(st_507eb0_3 **a0)
                     v43 = v40 * v40 + v41 * v41 + v42 * v42;
                     v44 = sqrt(v43);
                     if (isnan(v44))
-                        sub_487dc0(*(unsigned int *)&v43);
+                        sqrt(*(unsigned int *)&v43);
                     else
                         v43 = v44;
                     v1 = (float)v43;
@@ -259,12 +259,12 @@ double PushAwayOtherPlayers__12CPlayerMelee(st_507eb0_3 **a0)
             }
         }
     }
-    g_616878(4, gmsgMeleeFX, &a0[73]->field_0->field_8, 0);
-    g_616880(3);
-    v0 = g_6168dc(a0[73]->field_0->field_208);
-    g_616880(v0);
-    g_61687c(v0);
-    sub_489390(a0[73]->field_0->field_208, 1, "weapons/meleeflash.wav", 0x3f800000, 0.800000011920929f, 0, 100);
+    g_engfuncs.pfnMessageBegin(4, gmsgMeleeFX, &a0[73]->field_0->field_8, 0);
+    g_engfuncs.pfnWriteByte(3);
+    v0 = g_engfuncs.pfnIndexOfEdict(a0[73]->field_0->field_208);
+    g_engfuncs.pfnWriteByte(v0);
+    g_engfuncs.pfnMessageEnd(v0);
+    EMIT_SOUND_DYN(a0[73]->field_0->field_208, 1, "weapons/meleeflash.wav", 0x3f800000, 0.800000011920929f, 0, 100);
     return 0.800000011920929;
 }
 

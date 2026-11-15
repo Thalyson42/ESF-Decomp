@@ -30,7 +30,7 @@ int EmitClassSound__11CBasePlayerPCc(st_4f01d0_4 *a0, unsigned int a1)
     unsigned int v0;  // [bp-0x24]
 
     v0 = a1;
-    v1 = sub_488b00("%s/%s", a0->field_764->field_4->field_8(a0->field_764));
-    return sub_489390(a0->field_0->field_208, 2, v1, 0x3f800000, 0.800000011920929f, 0, 100);
+    v1 = UTIL_VarArgs("%s/%s", a0->field_764->field_4->field_8(a0->field_764));
+    return EMIT_SOUND_DYN(a0->field_0->field_208, 2, v1, 0x3f800000, 0.800000011920929f, 0, 100);
 }
 

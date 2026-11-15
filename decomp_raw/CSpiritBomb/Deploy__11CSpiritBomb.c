@@ -26,6 +26,6 @@ int Deploy__11CSpiritBomb(st_520cc0_2 *a0)
     a0->field_d8 = 0;
     a0->field_c8 = 0;
     a0->field_60->field_15c(a0);
-    return sub_489360(a0, "spiritbomb");
+    return CBasePlayerWeapon::DefaultDeploy(a0, "spiritbomb");
 }
 

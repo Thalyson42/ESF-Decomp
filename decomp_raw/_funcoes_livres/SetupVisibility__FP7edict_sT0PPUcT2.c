@@ -59,9 +59,9 @@ typedef struct st_4a1cc0_5 {
     unsigned int field_0;
 } st_4a1cc0_5;
 
-extern st_4a1cc0_5 *g_6168d4;
-extern st_4a1cc0_5 *g_6169b0;
-extern st_4a1cc0_5 *g_6169b4;
+extern st_4a1cc0_5 *g_engfuncs.pfnPEntityOfEntOffset;
+extern st_4a1cc0_5 *g_engfuncs.pfnSetFatPVS;
+extern st_4a1cc0_5 *g_engfuncs.pfnSetFatPAS;
 
 st_4a1cc0_2 ** SetupVisibility__FP7edict_sT0PPUcT2(st_4a1cc0_1 *a0, st_4a1cc0_1 *a1, unsigned int *a2, st_4a1cc0_2 **a3)
 {
@@ -83,16 +83,16 @@ st_4a1cc0_2 ** SetupVisibility__FP7edict_sT0PPUcT2(st_4a1cc0_1 *a0, st_4a1cc0_1 
     if (a0)
         v6 = a0;
     v7 = a1;
-    if (v7 || (v7 = g_6168d4(0), v7))
+    if (v7 || (v7 = g_engfuncs.pfnPEntityOfEntOffset(0), v7))
         v8 = v7->field_7c;
     else
         v8 = NULL;
     if (*v8->field_248)
     {
         v9 = v8 + 482;
-        if (sub_48d8b0(v9))
+        if (EHANDLE::__opi(v9))
         {
-            v10 = sub_489fd0(v9);
+            v10 = EHANDLE::__rf(v9);
             v6 = *v10->field_208;
         }
     }
@@ -105,8 +105,8 @@ st_4a1cc0_2 ** SetupVisibility__FP7edict_sT0PPUcT2(st_4a1cc0_1 *a0, st_4a1cc0_1 
         v3 = v0;
         v4 = v1;
         v5 = v2;
-        *a2 = g_6169b0(&v3);
-        v12 = g_6169b4(&v3);
+        *a2 = g_engfuncs.pfnSetFatPVS(&v3);
+        v12 = g_engfuncs.pfnSetFatPAS(&v3);
         *a3 = v12;
         return v12;
     }

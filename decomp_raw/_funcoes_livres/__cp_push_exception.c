@@ -32,7 +32,7 @@ st_59578c_0 * __cp_push_exception(unsigned int a0, unsigned int a1, unsigned int
 
     sub_595788(v1, v2, v3);
     v0 = 36;
-    v4 = sub_48df10(v0);
+    v4 = __eh_alloc(v0);
     v4->field_8 = a0;
     v4->field_10 = a2;
     v4->field_14 = 0;
@@ -43,7 +43,7 @@ st_59578c_0 * __cp_push_exception(unsigned int a0, unsigned int a1, unsigned int
     v4->field_0 = v6;
     v4->field_4 = 4;
     v4->field_6 = 1;
-    v7 = sub_4895f0(v0);
+    v7 = __get_eh_info(v0);
     v8 = *v7;
     v4->field_18 = v8;
     *v7 = v4;

@@ -25,9 +25,9 @@ unsigned int HandleRecover__12CPlayerMelee(float idx)
                 v0 = 150;
                 v2 = *(int *)(*(unsigned int *)&idx + 292);
             }
-            if (sub_48c980(v2, v0))
+            if (CBasePlayer::UseKi(v2, v0))
             {
-                sub_48b800(idx);
+                CPlayerMelee::Recover(idx);
                 return 1;
             }
         }
@@ -36,8 +36,8 @@ unsigned int HandleRecover__12CPlayerMelee(float idx)
     {
         if (*(int *)(*(unsigned int *)&idx + 52))
         {
-            sub_488d30(idx);
-            sub_48d8d0(idx);
+            CPlayerMelee::DeaccelerateToss(idx);
+            CPlayerMelee::ApplyVelocity(idx);
         }
     }
     return 0;

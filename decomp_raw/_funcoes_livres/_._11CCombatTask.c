@@ -9,6 +9,6 @@ extern char __vt_11CCombatTask;
 int _._11CCombatTask(st_559b10_0 *a0, int a1)
 {
     a0->field_14 = &__vt_11CCombatTask;
-    return sub_488170(a0, a1);
+    return _._9CBaseTask(a0, a1);
 }
 

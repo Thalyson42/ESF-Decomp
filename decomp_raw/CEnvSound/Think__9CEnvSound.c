@@ -27,11 +27,11 @@ typedef struct st_51c990_4 {
     unsigned int field_0;
 } st_51c990_4;
 
-extern st_51c990_4 *g_616804;
-extern st_51c990_4 *g_616878;
-extern st_51c990_4 *g_61687c;
-extern st_51c990_4 *g_616888;
-extern st_51c990_4 *g_6168d8;
+extern st_51c990_4 *g_engfuncs.pfnFindClientInPVS;
+extern st_51c990_4 *g_engfuncs.pfnMessageBegin;
+extern st_51c990_4 *g_engfuncs.pfnMessageEnd;
+extern st_51c990_4 *g_engfuncs.pfnWriteShort;
+extern st_51c990_4 *g_engfuncs.pfnEntOffsetOfPEntity;
 extern st_51c990_0 *gpGlobals;
 
 unsigned int * Think__9CEnvSound(st_51c990_2 *a0)
@@ -47,31 +47,31 @@ unsigned int * Think__9CEnvSound(st_51c990_2 *a0)
     unsigned short v7;  // [bp-0x8]
     unsigned short v8;  // [bp-0x6]
 
-    v9 = g_616804(a0->field_0->field_208);
+    v9 = g_engfuncs.pfnFindClientInPVS(a0->field_0->field_208);
     v3 = 0;
-    if (!v9 || !g_6168d8(v9))
+    if (!v9 || !g_engfuncs.pfnEntOffsetOfPEntity(v9))
         v3 = 1;
     if (!v3)
     {
-        v10 = sub_48c260((!v9 ? 0 : v9 + 128));
+        v10 = GetClassPtr__H1Z11CBasePlayer_PX01_PX01((!v9 ? 0 : v9 + 128));
         v2 = 0;
-        if (!v10->field_2d0 || !g_6168d8(v10->field_2d0))
+        if (!v10->field_2d0 || !g_engfuncs.pfnEntOffsetOfPEntity(v10->field_2d0))
             v2 = 1;
         if (v2 || v10->field_2d0 != a0->field_0->field_208)
         {
             v1 = &v4;
-            if (sub_488b60(a0->field_0, (!v9 ? 0 : v9 + 128)) && (v4 < v10->field_2d8 || v10->field_2d8 == 0.0f))
+            if (FEnvSoundInRange(a0->field_0, (!v9 ? 0 : v9 + 128)) && (v4 < v10->field_2d8 || v10->field_2d8 == 0.0f))
             {
                 v10->field_2d0 = a0->field_0->field_208;
                 *(float *)&v10->field_2d4 = a0->field_68;
                 *(unsigned int *)&v10->field_2d8 = v4;
-                g_616878(1, 37, 0, v9);
+                g_engfuncs.pfnMessageBegin(1, 37, 0, v9);
                 v8 = __fnstcw();
                 v7 = v8 | 0xc00;
                 v6 = (int)a0->field_68;
                 v0 = (short)v6;
-                g_616888(v0);
-                g_61687c(v0);
+                g_engfuncs.pfnWriteShort(v0);
+                g_engfuncs.pfnMessageEnd(v0);
             }
             a0->field_0->field_104 = (float)(0.25 + *(float *)gpGlobals);
             return gpGlobals;
@@ -79,7 +79,7 @@ unsigned int * Think__9CEnvSound(st_51c990_2 *a0)
         else if (*(float *)&v10->field_2d4 != 0.0 && v10->field_2d8 != 0.0f)
         {
             v1 = &v4;
-            if (sub_488b60(a0->field_0, (!v9 ? 0 : v9 + 128)))
+            if (FEnvSoundInRange(a0->field_0, (!v9 ? 0 : v9 + 128)))
             {
                 *(unsigned int *)&v10->field_2d8 = v4;
                 a0->field_0->field_104 = (float)(0.25 + *(float *)gpGlobals);

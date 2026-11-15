@@ -14,12 +14,12 @@ typedef struct st_53f6b0_1 {
 } st_53f6b0_1;
 
 extern char cout;
-extern st_53f6b0_1 *g_625f80;
+extern st_53f6b0_1 *cout+512;
 
 st_53f6b0_0 * SetMaxBots__11CBotManagers(st_53f6b0_0 *a0, unsigned short a1)
 {
     if (a1 + 1 > 32)
-        return g_625f80->field_14(&cout, "Invalid max_bots argument, should be between -1 and 31\n");
+        return cout+512->field_14(&cout, "Invalid max_bots argument, should be between -1 and 31\n");
     a0->field_1c = a1;
     return a0;
 }

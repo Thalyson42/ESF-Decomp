@@ -50,7 +50,7 @@ typedef struct st_4dec20_0 {
 } st_4dec20_0;
 
 extern int g_5a2bdc;
-extern float g_5bd07c;
+extern float characterlimit+12;
 extern st_4dec20_0 *gpGlobals;
 
 unsigned int IsValidClass__18CHalfLifeMultiplayPCcP11CBasePlayer(unsigned int a0, int a1, st_4dec20_7 *a2)
@@ -63,13 +63,13 @@ unsigned int IsValidClass__18CHalfLifeMultiplayPCcP11CBasePlayer(unsigned int a0
 
     v2 = __fnstcw();
     v1 = v2 | 0xc00;
-    v0 = (int)g_5bd07c;
+    v0 = (int)characterlimit+12;
     if (v0 <= 0)
         return 1;
     iter = 1;
     while (iter <= gpGlobals->field_90)
     {
-        v4 = sub_48a500(iter);
+        v4 = UTIL_PlayerByIndex(iter);
         if (!v4)
         {
             iter += 1;
@@ -90,7 +90,7 @@ unsigned int IsValidClass__18CHalfLifeMultiplayPCcP11CBasePlayer(unsigned int a0
         {
             iter += 1;
         }
-        else if (!sub_488af0(v4->field_0->field_1d0 + gpGlobals->field_98, &g_5a2bdc))
+        else if (!strcmp@GLIBC_2.0(v4->field_0->field_1d0 + gpGlobals->field_98, &g_5a2bdc))
         {
             iter += 1;
         }
@@ -98,7 +98,7 @@ unsigned int IsValidClass__18CHalfLifeMultiplayPCcP11CBasePlayer(unsigned int a0
         {
             iter += 1;
         }
-        else if (!sub_488af0(a1, sub_488ef0(v4->field_764->field_4->field_34(v4->field_764))))
+        else if (!strcmp@GLIBC_2.0(a1, CBaseClass::GetName(v4->field_764->field_4->field_34(v4->field_764))))
         {
             v0 -= 1;
             iter += 1;

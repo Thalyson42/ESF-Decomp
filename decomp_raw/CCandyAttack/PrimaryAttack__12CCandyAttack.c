@@ -59,7 +59,7 @@ typedef struct st_49aa70_3 {
     float field_30;
 } st_49aa70_3;
 
-extern st_49aa70_5 *g_6168d4;
+extern st_49aa70_5 *g_engfuncs.pfnPEntityOfEntOffset;
 extern st_49aa70_3 *gpGlobals;
 
 double PrimaryAttack__12CCandyAttack(float idx)
@@ -98,9 +98,9 @@ double PrimaryAttack__12CCandyAttack(float idx)
     float v18;  // [bp-0x20]
     float v19;  // [bp-0x1c]
 
-    if (!sub_48c980(*(int *)(*(unsigned int *)&idx + 128), 15))
+    if (!CBasePlayer::UseKi(*(int *)(*(unsigned int *)&idx + 128), 15))
     {
-        sub_48df90(*(int *)(*(unsigned int *)&idx + 200));
+        CSprite::TurnOff(*(int *)(*(unsigned int *)&idx + 200));
         *(char *)(*(int *)*(int *)(*(unsigned int *)&idx + 196) + 280) = *(char *)(*(int *)*(int *)(*(unsigned int *)&idx + 196) + 280) | 128;
         return v21;
     }
@@ -108,10 +108,10 @@ double PrimaryAttack__12CCandyAttack(float idx)
     if (!v22->field_cc)
     {
         v22->field_cc = 1;
-        sub_489390(*(int *)(*(int *)v22->field_80 + 520), 1, "weapons/candyattack.wav", 0x3f800000, 0.800000011920929f, 0, 100);
+        EMIT_SOUND_DYN(*(int *)(*(int *)v22->field_80 + 520), 1, "weapons/candyattack.wav", 0x3f800000, 0.800000011920929f, 0, 100);
     }
-    sub_48d680(*(int *)(*(unsigned int *)&idx + 128), 5);
-    sub_48a800(*(int *)*(int *)(*(unsigned int *)&idx + 128) + 116);
+    CBasePlayer::SetAnimation(*(int *)(*(unsigned int *)&idx + 128), 5);
+    UTIL_MakeVectors(*(int *)*(int *)(*(unsigned int *)&idx + 128) + 116);
     v23 = &gpGlobals->field_28;
     v17 = gpGlobals->field_28;
     v18 = *(float *)&v23[1];
@@ -126,9 +126,9 @@ double PrimaryAttack__12CCandyAttack(float idx)
     v5 = (float)(v24 + v14);
     v6 = (float)(v25 + v15);
     v7 = (float)v26;
-    sub_487b80(&v13, &v5, 0, *(int *)(*(int *)idx + 520), &v8);
+    UTIL_TraceLine(&v13, &v5, 0, *(int *)(*(int *)idx + 520), &v8);
     v27 = v12;
-    if (v27 || (v27 = g_6168d4(0), v27))
+    if (v27 || (v27 = g_engfuncs.pfnPEntityOfEntOffset(0), v27))
         v28 = v27->field_7c;
     else
         v28 = NULL;
@@ -143,16 +143,16 @@ double PrimaryAttack__12CCandyAttack(float idx)
         v1 = (float)v26;
     }
     v0 = 0x100000;
-    sub_48aef0(idx);
+    CBasePlayerWeapon::GetPowerRatio(idx);
     v29->field_60->field_34(v29, *(int *)*(int *)(*(unsigned int *)&idx + 128), *(int *)*(int *)(*(unsigned int *)&idx + 128), (float)(v26 * 6.0 * v1));
-    sub_487b90(*(int *)(*(unsigned int *)&idx + 200));
+    CSprite::TurnOn(*(int *)(*(unsigned int *)&idx + 200));
     v31 = (st_49aa70_9 *)idx;
     *(char *)(*(int *)v31->field_c4 + 280) = *(char *)(*(int *)v31->field_c4 + 280) & 127;
     v32 = *(int *)v31->field_c4;
     v32->field_8 = v9;
     v32->field_c = v10;
     v32->field_10 = v11;
-    sub_488640();
+    UTIL_WeaponTimeBase();
     *(float *)(*(unsigned int *)&idx + 156) = (float)(v33 + 0.2);
     return 0.2;
 }

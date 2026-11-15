@@ -5,8 +5,8 @@ int SaveGlobalState__FP13saverestore_s(int a0)
 {
     char v0;  // [bp-0x8]
 
-    sub_489c20(&v0, a0);
-    sub_489a20(&gGlobalState, &v0);
-    return sub_48c990(&v0, 2);
+    __18CSaveRestoreBufferP13saverestore_s(&v0, a0);
+    CGlobalState::Save(&gGlobalState, &v0);
+    return _._18CSaveRestoreBuffer(&v0, 2);
 }
 

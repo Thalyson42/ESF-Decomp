@@ -10,7 +10,7 @@ typedef struct st_4a7fc0_1 {
     unsigned int field_0;
 } st_4a7fc0_1;
 
-extern st_4a7fc0_1 *g_6168dc;
+extern st_4a7fc0_1 *g_engfuncs.pfnIndexOfEdict;
 extern st_4a7fc0_0 *gpGlobals;
 
 int Shoot__15CControlledBeam(float idx)
@@ -41,23 +41,23 @@ int Shoot__15CControlledBeam(float idx)
     float v16;  // [bp-0x20]
     float v17;  // [bp-0x1c]
 
-    sub_48c680(*(int *)(*(unsigned int *)&idx + 128), 0);
-    sub_489390(*(int *)(*(int *)*(int *)(*(unsigned int *)&idx + 128) + 520), 1, "common/null.wav", 0x3f800000, 0.800000011920929f, 0, 100);
+    CBasePlayer::DrawChargeBar(*(int *)(*(unsigned int *)&idx + 128), 0);
+    EMIT_SOUND_DYN(*(int *)(*(int *)*(int *)(*(unsigned int *)&idx + 128) + 520), 1, "common/null.wav", 0x3f800000, 0.800000011920929f, 0, 100);
     *(unsigned int *)(*(int *)(*(unsigned int *)&idx + 128) + 820) = 0;
     if (*(int *)(*(unsigned int *)&idx + 216) < *(int *)(*(unsigned int *)&idx + 220) / 3)
     {
         *(unsigned int *)(*(unsigned int *)&idx + 196) = 0;
         *(unsigned int *)(*(int *)(*(unsigned int *)&idx + 128) + 1876) = 0x3f800000;
-        return sub_489390(*(int *)(*(int *)*(int *)(*(unsigned int *)&idx + 128) + 520), 2, "common/null.wav", 0x3f800000, 0.800000011920929f, 0, 100);
+        return EMIT_SOUND_DYN(*(int *)(*(int *)*(int *)(*(unsigned int *)&idx + 128) + 520), 2, "common/null.wav", 0x3f800000, 0.800000011920929f, 0, 100);
     }
     *(unsigned int *)(*(unsigned int *)&idx + 196) = 2;
     if (!(*(char *)(*(int *)*(int *)(*(unsigned int *)&idx + 128) + 421) & 2))
-        sub_488d40(*(int *)(*(unsigned int *)&idx + 128));
+        CBasePlayer::StartFly(*(int *)(*(unsigned int *)&idx + 128));
     *(unsigned int *)(*(int *)(*(unsigned int *)&idx + 128) + 828) = 1;
     (*(int *)(*(int *)(*(unsigned int *)&idx + 96) + 372))(idx);
     (*(int *)(*(int *)(*(unsigned int *)&idx + 96) + 360))(idx);
     (*(int *)(*(int *)(*(unsigned int *)&idx + 96) + 352))(idx);
-    sub_48a800(*(int *)*(int *)(*(unsigned int *)&idx + 128) + 116);
+    UTIL_MakeVectors(*(int *)*(int *)(*(unsigned int *)&idx + 128) + 116);
     (*(int *)(*(int *)(*(int *)(*(unsigned int *)&idx + 128) + 96) + 480))(&v14, *(int *)(*(unsigned int *)&idx + 128));
     v19 = &gpGlobals->field_28;
     v0 = 10.0f * gpGlobals->field_28;
@@ -66,7 +66,7 @@ int Shoot__15CControlledBeam(float idx)
     v8 = v15 + v0;
     v9 = v16 + v1;
     v10 = v17 + v2;
-    sub_487b80(&v14, &v8, 1, *(int *)(*(int *)*(int *)(*(unsigned int *)&idx + 128) + 520), &v12);
+    UTIL_TraceLine(&v14, &v8, 1, *(int *)(*(int *)*(int *)(*(unsigned int *)&idx + 128) + 520), &v12);
     v20 = &gpGlobals->field_28;
     v9 = 10.0f * gpGlobals->field_28;
     v10 = 10.0f * *(float *)&v20[1];
@@ -99,6 +99,6 @@ int Shoot__15CControlledBeam(float idx)
     v7 = v1;
     v8 = v2;
     (*(int *)(*(int *)(*(unsigned int *)&idx + 96) + 348))(idx, &v3, &v6, (float)((double)*(int *)(*(unsigned int *)&idx + 216) / (double)*(int *)(*(unsigned int *)&idx + 220)));
-    return sub_48c6b0(g_6168dc(*(int *)(*(int *)*(int *)(*(unsigned int *)&idx + 128) + 520)));
+    return UTIL_Model_FixAngles(g_engfuncs.pfnIndexOfEdict(*(int *)(*(int *)*(int *)(*(unsigned int *)&idx + 128) + 520)));
 }
 

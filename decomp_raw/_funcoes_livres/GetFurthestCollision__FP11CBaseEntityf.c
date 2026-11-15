@@ -23,8 +23,8 @@ typedef struct st_57fb20_2 {
 
 extern unsigned int _GLOBAL_OFFSET_TABLE_;
 extern float g_vecZero;
-extern float g_616790;
-extern float g_616794;
+extern float g_vecZero+4;
+extern float g_vecZero+8;
 extern st_57fb20_2 *gpGlobals;
 
 unsigned int * GetFurthestCollision__FP11CBaseEntityf(void)
@@ -94,8 +94,8 @@ unsigned int * GetFurthestCollision__FP11CBaseEntityf(void)
     float v42;  // [bp+0xc]
 
     v37 = g_vecZero;
-    v38 = g_616790;
-    v39 = g_616794;
+    v38 = g_vecZero+4;
+    v39 = g_vecZero+8;
     v5 = 0;
     v2 = 0;
     v3 = 0;
@@ -119,16 +119,16 @@ unsigned int * GetFurthestCollision__FP11CBaseEntityf(void)
                 v8 = (float)v43;
                 v9 = v44->field_4;
                 v10 = v44->field_8;
-                sub_489120(v1, &v8);
+                WrapAngles(v1, &v8);
                 v33 = v15;
                 v35 = v16;
                 v36 = v17;
                 v45 = v2 + v35;
-                sub_48d430((float)v45);
+                UTIL_WrapAngle((float)v45);
                 v35 = (float)v45;
-                sub_48d430(v3);
+                UTIL_WrapAngle(v3);
                 v34 = (float)v45;
-                sub_48a800(&v34);
+                UTIL_MakeVectors(&v34);
                 v46 = &gpGlobals->field_28;
                 v11 = v42 * gpGlobals->field_28;
                 v12 = v42 * *(float *)&v46[1];
@@ -151,8 +151,8 @@ unsigned int * GetFurthestCollision__FP11CBaseEntityf(void)
                 v27 = v8;
                 v28 = v9;
                 v29 = v10;
-                sub_488460(v48, &v30, 1, 1, v47[130], &v22);
-                sub_488460(&v41->field_0->field_8, &v27, 1, 1, v41->field_0->field_208, &v18);
+                UTIL_TraceHull(v48, &v30, 1, 1, v47[130], &v22);
+                UTIL_TraceHull(&v41->field_0->field_8, &v27, 1, 1, v41->field_0->field_208, &v18);
                 v50 = &v41->field_0->field_8;
                 v51 = v24 - v41->field_0->field_8;
                 v8 = v51;
@@ -163,7 +163,7 @@ unsigned int * GetFurthestCollision__FP11CBaseEntityf(void)
                 v54 = v51 * v51 + v52 * v52 + v53 * v53;
                 v55 = sqrt(v54);
                 if (isnan(v55))
-                    sub_487dc0(*(unsigned int *)&v54);
+                    sqrt(*(unsigned int *)&v54);
                 else
                     v54 = v55;
                 v4 = (float)v54;
@@ -177,7 +177,7 @@ unsigned int * GetFurthestCollision__FP11CBaseEntityf(void)
                 v60 = v57 * v57 + v58 * v58 + v59 * v59;
                 v61 = sqrt(v60);
                 if (isnan(v61))
-                    sub_487dc0(*(unsigned int *)&v60);
+                    sqrt(*(unsigned int *)&v60);
                 else
                     v60 = v61;
                 v14 = (float)v60;

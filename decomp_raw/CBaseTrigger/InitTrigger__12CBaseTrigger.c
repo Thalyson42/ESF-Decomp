@@ -56,10 +56,10 @@ typedef struct st_52b9c0_3 {
 } st_52b9c0_3;
 
 extern unsigned int g_vecZero;
-extern unsigned int g_616790;
-extern unsigned int g_616794;
-extern st_52b9c0_3 *g_6167c8;
-extern st_52b9c0_3 *g_6168a4;
+extern unsigned int g_vecZero+4;
+extern unsigned int g_vecZero+8;
+extern st_52b9c0_3 *g_engfuncs.pfnSetModel;
+extern st_52b9c0_3 *g_engfuncs.pfnCVarGetFloat;
 extern st_52b9c0_2 *gpGlobals;
 
 st_52b9c0_0 * InitTrigger__12CBaseTrigger(double a0, st_52b9c0_1 **a1)
@@ -70,14 +70,14 @@ st_52b9c0_0 * InitTrigger__12CBaseTrigger(double a0, st_52b9c0_1 **a1)
 
     v0 = &*a1->field_50;
     v1 = 0;
-    if (*(float *)&g_vecZero == *a1->field_50 && *(float *)&g_616790 == *(float *)&v0->field_4)
-        v1 = *(float *)&g_616794 == *(float *)&v0->field_8;
+    if (*(float *)&g_vecZero == *a1->field_50 && *(float *)&g_vecZero+4 == *(float *)&v0->field_4)
+        v1 = *(float *)&g_vecZero+8 == *(float *)&v0->field_8;
     if (!v1)
-        sub_48ccb0(*a1);
+        SetMovedir(*a1);
     *a1->field_10c = 1;
     *a1->field_108 = 0;
-    g_6167c8(*a1->field_208, *a1->field_b8 + gpGlobals->field_98);
-    g_6168a4("showtriggers");
+    g_engfuncs.pfnSetModel(*a1->field_208, *a1->field_b8 + gpGlobals->field_98);
+    g_engfuncs.pfnCVarGetFloat("showtriggers");
     if (a0 == 0.0)
     {
         v2 = *a1;

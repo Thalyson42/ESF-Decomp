@@ -52,9 +52,9 @@ unsigned int ShootHealthBeam__4CBotP11CBasePlayer(st_554910_3 *a0, st_554910_4 *
     if (a0->field_bb8 < *(float *)gpGlobals)
     {
         a0->field_bb8 = (float)(0.1 + *(float *)gpGlobals);
-        sub_48c980(a0, 110);
+        CBasePlayer::UseKi(a0, 110);
         a0->field_0->field_160 = (float)(a0->field_0->field_160 + 2.0);
-        sub_488be0(a0, a1, "Super bot laser", 2.0f);
+        UTIL_DamagePlayer(a0, a1, "Super bot laser", 2.0f);
     }
     if (a0->field_bb4 > *(float *)gpGlobals)
         return v7;
@@ -63,7 +63,7 @@ unsigned int ShootHealthBeam__4CBotP11CBasePlayer(st_554910_3 *a0, st_554910_4 *
     v3 = *a1->field_8;
     v4 = *(float *)&v6[1];
     v5 = *(float *)&v6[2];
-    v7 = sub_48e0f0(&v0, &v3, 40, 20, 125, 0xff, 0xff, 250, 0);
+    v7 = UTIL_DrawBeamToAll(&v0, &v3, 40, 20, 125, 0xff, 0xff, 250, 0);
     return v7;
 }
 

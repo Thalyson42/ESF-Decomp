@@ -31,7 +31,7 @@ typedef struct st_58bd60_0 {
     unsigned int field_98;
 } st_58bd60_0;
 
-extern st_58bd60_1 *g_6168e0;
+extern st_58bd60_1 *g_engfuncs.pfnPEntityOfEntIndex;
 extern st_58bd60_0 *gpGlobals;
 
 st_58bd60_4 * FindPlayerByName__FPCc(int a0)
@@ -43,7 +43,7 @@ st_58bd60_4 * FindPlayerByName__FPCc(int a0)
     iter = 1;
     while (iter <= gpGlobals->field_90)
     {
-        v1 = g_6168e0(iter);
+        v1 = g_engfuncs.pfnPEntityOfEntIndex(iter);
         if (v1)
         {
             v2 = v1->field_7c;
@@ -53,7 +53,7 @@ st_58bd60_4 * FindPlayerByName__FPCc(int a0)
             }
             else if (v2->field_60->field_a0(v2))
             {
-                if (!sub_48cac0(v2->field_0->field_1d0 + gpGlobals->field_98, a0))
+                if (!strcasecmp@GLIBC_2.0(v2->field_0->field_1d0 + gpGlobals->field_98, a0))
                     return v2;
                 iter += 1;
             }

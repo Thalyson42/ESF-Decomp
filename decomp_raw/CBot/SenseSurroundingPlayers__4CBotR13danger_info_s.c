@@ -132,7 +132,7 @@ double SenseSurroundingPlayers__4CBotR13danger_info_s(st_575e80_4 *a0, st_575e80
 
     v7 = 0;
     if (!a0->field_a20)
-        sub_48bf40(a0);
+        CBot::MakePlayerList(a0);
     if (!a0->field_aac)
         return v29;
     v1 = 75;
@@ -183,12 +183,12 @@ LABEL_575f55:
             v36 = v33 * v33 + v34 * v34 + v35 * v35;
             v37 = sqrt(v36);
             if (isnan(v37))
-                sub_487dc0(*(unsigned int *)&v36);
+                sqrt(*(unsigned int *)&v36);
             else
                 v36 = v37;
             v9 = (float)v36;
             v29 = v9;
-            if (v29 > 2000.0 || !(v8 = sub_48aab0(a0, v10), (char)sub_489330(a0, v10) && (char)sub_48bf70(a0, v10)))
+            if (v29 > 2000.0 || !(v8 = UTIL_GetHeadingPercentage(a0, v10), (char)EntIsInFieldOfView(a0, v10) && (char)CBot::CanAttackPlayer(a0, v10)))
                 continue;
             iter = 0;
             v39 = a0->field_a04;
@@ -359,7 +359,7 @@ LABEL_57657d:
                 v2 = (float)(v42 * v2);
                 goto LABEL_57649c;
             }
-            else if ((char)sub_489330(a0, v10))
+            else if ((char)EntIsInFieldOfView(a0, v10))
             {
                 if (v9 < 50.0f)
                 {
@@ -554,7 +554,7 @@ LABEL_576a68:
     v53 = v50 * v50 + v51 * v51 + v52 * v52;
     v54 = sqrt(v53);
     if (isnan(v54))
-        sub_487dc0(*(unsigned int *)&v53);
+        sqrt(*(unsigned int *)&v53);
     else
         v53 = v54;
     v9 = (float)v53;

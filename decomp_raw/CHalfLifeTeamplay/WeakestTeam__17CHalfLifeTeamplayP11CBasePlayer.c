@@ -37,7 +37,7 @@ typedef struct st_528b00_0 {
 } st_528b00_0;
 
 extern int num_teams;
-extern st_528b00_3 *g_61692c;
+extern st_528b00_3 *g_engfuncs.pfnRandomFloat;
 extern st_528b00_0 *gpGlobals;
 extern char team_names;
 
@@ -66,15 +66,15 @@ unsigned int WeakestTeam__17CHalfLifeTeamplayP11CBasePlayer(st_528b00_6 *a0, st_
     v4 = 0;
     v3 = 100;
     v2 = 0;
-    sub_48d0e0(&v10, 0, 128);
-    sub_48d0e0(&v9, 0, 128);
+    memset@GLIBC_2.0(&v10, 0, 128);
+    memset@GLIBC_2.0(&v9, 0, 128);
     iter = 1;
     if (iter <= gpGlobals->field_90)
     {
         v1 = &v9;
         do
         {
-            v12 = sub_48a500(iter);
+            v12 = UTIL_PlayerByIndex(iter);
             if (v12)
             {
                 v13 = v12->field_60->field_a8(v12);
@@ -114,7 +114,7 @@ unsigned int WeakestTeam__17CHalfLifeTeamplayP11CBasePlayer(st_528b00_6 *a0, st_
             if (*(int *)(v17 + &v9) >= (&v9)[v4])
             {
                 v18 = iter * 4;
-                if (*(int *)(v18 + &v9) != (&v9)[v4] || !(g_61692c(0, 0x3f800000), v11 > 0.5))
+                if (*(int *)(v18 + &v9) != (&v9)[v4] || !(g_engfuncs.pfnRandomFloat(0, 0x3f800000), v11 > 0.5))
                     continue;
                 v3 = *(int *)(v18 + v0);
             }

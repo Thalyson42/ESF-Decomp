@@ -37,7 +37,7 @@ int FInViewCone__13CScatterSplitP11CBaseEntity(st_50f600_0 *a0, st_50f600_1 **a1
     float v5;  // [bp-0x20]
     float v6;  // [bp-0x1c]
 
-    sub_48a800(a0->field_0 + 4);
+    UTIL_MakeVectors(a0->field_0 + 4);
     v7 = &*a1->field_8;
     v8 = &a0->field_0->field_8;
     v1 = *a1->field_8 - a0->field_0->field_8;
@@ -49,7 +49,7 @@ int FInViewCone__13CScatterSplitP11CBaseEntity(st_50f600_0 *a0, st_50f600_1 **a1
     v9 = v4 * v4 + v5 * v5 + v6 * v6;
     v10 = sqrt(v9);
     if (isnan(v10))
-        sub_487dc0(*(unsigned int *)&v9);
+        sqrt(*(unsigned int *)&v9);
     else
         v9 = v10;
     v0 = (float)v9;

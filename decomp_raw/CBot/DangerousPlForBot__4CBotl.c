@@ -15,7 +15,7 @@ typedef struct st_574bc0_2 {
     unsigned int field_0;
 } st_574bc0_2;
 
-extern st_574bc0_2 *g_616928;
+extern st_574bc0_2 *g_engfuncs.pfnRandomLong;
 
 char DangerousPlForBot__4CBotl(st_574bc0_1 *a0, int a1)
 {
@@ -42,7 +42,7 @@ char DangerousPlForBot__4CBotl(st_574bc0_1 *a0, int a1)
     {
         return a0->field_744 < a1;
     }
-    v2 = a1 - g_616928(v0, v1);
+    v2 = a1 - g_engfuncs.pfnRandomLong(v0, v1);
     return a0->field_744 < v2;
 }
 

@@ -32,7 +32,7 @@ typedef struct st_525690_1 {
     struct st_525690_0 *field_208;
 } st_525690_1;
 
-extern st_525690_3 *g_6168d4;
+extern st_525690_3 *g_engfuncs.pfnPEntityOfEntOffset;
 
 int Killed__12CTalkMonsterP9entvars_si(st_525690_4 *a0, st_525690_1 *a1, int a2)
 {
@@ -42,19 +42,19 @@ int Killed__12CTalkMonsterP9entvars_si(st_525690_4 *a0, st_525690_1 *a1, int a2)
 
     if (a1->field_1a4 & 8 && a0->field_180 != 5)
     {
-        sub_489de0(a0);
+        CTalkMonster::AlertFriends(a0);
         v0 = 0;
         v1 = a1->field_208;
-        if (a1->field_208 || (v1 = g_6168d4(0), v1))
+        if (a1->field_208 || (v1 = g_engfuncs.pfnPEntityOfEntOffset(0), v1))
             v2 = v1->field_7c;
         else
             v2 = 0;
-        sub_48b200(a0, v2);
+        CTalkMonster::LimitFollowers(a0, v2);
     }
-    sub_48d960(&a0->field_110, 0);
+    EHANDLE::__as(&a0->field_110, 0);
     a0->field_60->field_170(a0);
     a0->field_1c = 0;
     a0->field_20 = 0;
-    return sub_4885f0(a0, a1, a2);
+    return CBaseMonster::Killed(a0, a1, a2);
 }
 

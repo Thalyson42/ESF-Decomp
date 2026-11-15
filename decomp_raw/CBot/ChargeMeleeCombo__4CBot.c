@@ -51,7 +51,7 @@ typedef struct st_556040_1 {
 } st_556040_1;
 
 extern unsigned int FindSelection__t12TMultiChoice1Z14MELEE_STRENGTHPQ2t12TMultiChoice1Z14MELEE_STRENGTH12SMultiChoicei;
-extern st_556040_1 *g_616928;
+extern st_556040_1 *g_engfuncs.pfnRandomLong;
 extern st_556040_0 *gpGlobals;
 
 double ChargeMeleeCombo__4CBot(float idx)
@@ -131,7 +131,7 @@ double ChargeMeleeCombo__4CBot(float idx)
         if (v35 < *(float *)gpGlobals)
         {
             v23 = 0;
-            v36 = g_616928(1, 2);
+            v36 = g_engfuncs.pfnRandomLong(1, 2);
             if (v36 != 1)
             {
                 if (v36 == 2)
@@ -142,7 +142,7 @@ double ChargeMeleeCombo__4CBot(float idx)
                 v23 = 1;
             }
             node = 0;
-            v37 = sub_48d6a0(8);
+            v37 = __builtin_new(8);
             *v37 = NULL;
             v37[1] = NULL;
             v29 = v37;
@@ -159,15 +159,15 @@ double ChargeMeleeCombo__4CBot(float idx)
                 v19 = 0;
                 if (*(int *)(*(unsigned int *)&idx + 1192))
                 {
-                    sub_487b30(*(int *)(*(unsigned int *)&idx + 1192) + 896);
+                    CPlayerMelee::GetStunTime(*(int *)(*(unsigned int *)&idx + 1192) + 896);
                     v19 = v35;
                 }
                 if (0.0 < v19)
                 {
                     v38 = *(unsigned int *)&idx + 896;
-                    sub_48bbe0(v38);
+                    CPlayerMelee::TotalCmbTime(v38);
                     v18 = (float)(v19 - 0.0);
-                    if (v18 <= *(float *)(sub_48cc40(v38) + 12))
+                    if (v18 <= *(float *)(CPlayerMelee::GetSkillValues(v38) + 12))
                         v20 = 150;
                 }
             }
@@ -190,7 +190,7 @@ double ChargeMeleeCombo__4CBot(float idx)
             }
             if (v22)
             {
-                v39 = sub_48d6a0(12);
+                v39 = __builtin_new(12);
                 *v39 = 0;
                 v39[1] = 0;
                 v17 = v39;
@@ -200,15 +200,15 @@ double ChargeMeleeCombo__4CBot(float idx)
                 v40 = v29;
                 if (!*v40)
                 {
-                    v41 = sub_48d6a0(12);
+                    v41 = __builtin_new(12);
                     v16 = 1;
                     v41->field_4 = NULL;
                     v41->field_8 = NULL;
-                    sub_48d0e0(v41, 0, 4);
+                    memset@GLIBC_2.0(v41, 0, 4);
                     v16 = 0;
                     *v40 = v41;
                     if (v16)
-                        sub_48d4e0(v41);
+                        __builtin_delete(v41);
                     *v40->field_0 = v17;
                     *v40->field_4 = NULL;
                     *v40->field_8 = NULL;
@@ -217,15 +217,15 @@ double ChargeMeleeCombo__4CBot(float idx)
                 else
                 {
                     v15 = v40[1];
-                    v42 = sub_48d6a0(12);
+                    v42 = __builtin_new(12);
                     v14 = 1;
                     v42->field_4 = NULL;
                     v42->field_8 = NULL;
-                    sub_48d0e0(v42, 0, 4);
+                    memset@GLIBC_2.0(v42, 0, 4);
                     v14 = 0;
                     v15->field_4 = v42;
                     if (v14)
-                        sub_48d4e0(v42);
+                        __builtin_delete(v42);
                     v40[1]->field_4->field_8 = v40[1];
                     v43 = v40[1]->field_4;
                     v40[1] = v43;
@@ -236,7 +236,7 @@ double ChargeMeleeCombo__4CBot(float idx)
             }
             if (v21)
             {
-                v44 = sub_48d6a0(12);
+                v44 = __builtin_new(12);
                 *v44 = 0;
                 v44[1] = 0;
                 v13 = v44;
@@ -246,15 +246,15 @@ double ChargeMeleeCombo__4CBot(float idx)
                 v45 = v29;
                 if (!*v45)
                 {
-                    v46 = sub_48d6a0(12);
+                    v46 = __builtin_new(12);
                     v12 = 1;
                     v46->field_4 = NULL;
                     v46->field_8 = NULL;
-                    sub_48d0e0(v46, 0, 4);
+                    memset@GLIBC_2.0(v46, 0, 4);
                     v12 = 0;
                     *v45 = v46;
                     if (v12)
-                        sub_48d4e0(v46);
+                        __builtin_delete(v46);
                     *v45->field_0 = v13;
                     *v45->field_4 = NULL;
                     *v45->field_8 = NULL;
@@ -263,15 +263,15 @@ double ChargeMeleeCombo__4CBot(float idx)
                 else
                 {
                     v11 = v45[1];
-                    v47 = sub_48d6a0(12);
+                    v47 = __builtin_new(12);
                     v10 = 1;
                     v47->field_4 = NULL;
                     v47->field_8 = NULL;
-                    sub_48d0e0(v47, 0, 4);
+                    memset@GLIBC_2.0(v47, 0, 4);
                     v10 = 0;
                     v11->field_4 = v47;
                     if (v10)
-                        sub_48d4e0(v47);
+                        __builtin_delete(v47);
                     v45[1]->field_4->field_8 = v45[1];
                     v48 = v45[1]->field_4;
                     v45[1] = v48;
@@ -282,7 +282,7 @@ double ChargeMeleeCombo__4CBot(float idx)
             }
             if (v20)
             {
-                v49 = sub_48d6a0(12);
+                v49 = __builtin_new(12);
                 *v49 = 0;
                 v49[1] = 0;
                 v9 = v49;
@@ -292,15 +292,15 @@ double ChargeMeleeCombo__4CBot(float idx)
                 v50 = v29;
                 if (!*v50)
                 {
-                    v51 = sub_48d6a0(12);
+                    v51 = __builtin_new(12);
                     v8 = 1;
                     v51->field_4 = NULL;
                     v51->field_8 = NULL;
-                    sub_48d0e0(v51, 0, 4);
+                    memset@GLIBC_2.0(v51, 0, 4);
                     v8 = 0;
                     *v50 = v51;
                     if (v8)
-                        sub_48d4e0(v51);
+                        __builtin_delete(v51);
                     *v50->field_0 = v9;
                     *v50->field_4 = NULL;
                     *v50->field_8 = NULL;
@@ -309,15 +309,15 @@ double ChargeMeleeCombo__4CBot(float idx)
                 else
                 {
                     v7 = v50[1];
-                    v52 = sub_48d6a0(12);
+                    v52 = __builtin_new(12);
                     v6 = 1;
                     v52->field_4 = NULL;
                     v52->field_8 = NULL;
-                    sub_48d0e0(v52, 0, 4);
+                    memset@GLIBC_2.0(v52, 0, 4);
                     v6 = 0;
                     v7->field_4 = v52;
                     if (v6)
-                        sub_48d4e0(v52);
+                        __builtin_delete(v52);
                     v50[1]->field_4->field_8 = v50[1];
                     v53 = v50[1]->field_4;
                     v50[1] = v53;
@@ -328,7 +328,7 @@ double ChargeMeleeCombo__4CBot(float idx)
             }
             v24 = 0;
             v5 = &v24;
-            v4 = g_616928(0, node);
+            v4 = g_engfuncs.pfnRandomLong(0, node);
             v2 = _INSERT(v4, 0, 0) | 0xffff0000;
             v3 = &FindSelection__t12TMultiChoice1Z14MELEE_STRENGTHPQ2t12TMultiChoice1Z14MELEE_STRENGTH12SMultiChoicei;
             v55 = *v29;
@@ -350,7 +350,7 @@ LABEL_556824:
                 if (v58)
                     v24 = v58[2];
             }
-            v59 = g_616928(0, 2);
+            v59 = g_engfuncs.pfnRandomLong(0, 2);
             if (!v59)
             {
                 v23 |= 8;
@@ -364,7 +364,7 @@ LABEL_556824:
                 v0 = 1;
             else
                 v0 = 2;
-            v60 = g_616928(0);
+            v60 = g_engfuncs.pfnRandomLong(0);
             if (!v60)
             {
                 *((char *)&v23 + 1) = *(char *)((void*)&v23 + 1) | 2;
@@ -374,7 +374,7 @@ LABEL_556824:
                 if (v60 == 1)
                     *((char *)&v23 + 1) = *(char *)((void*)&v23 + 1) | 4;
             }
-            sub_48ded0(idx, v24, v23);
+            CBot::SetComboChargeButton(idx, v24, v23);
             while (*v29 && (v61 = v29, *v61))
             {
                 v62 = &*v61->field_0->field_0;
@@ -388,12 +388,12 @@ LABEL_556824:
                     if (v64)
                         v64->field_8 = NULL;
                     v63->field_4 = NULL;
-                    sub_48d4e0(v63);
+                    __builtin_delete(v63);
                 }
                 v65 = v62;
                 if (!v65)
                     break;
-                sub_48d4e0(v65);
+                __builtin_delete(v65);
             }
             if (v29)
             {
@@ -407,12 +407,12 @@ LABEL_556824:
                         iter = iter->field_4;
                         v68->field_4 = NULL;
                         v68->field_8 = NULL;
-                        sub_48d4e0(v68);
+                        __builtin_delete(v68);
                     } while (iter);
                 }
                 v66[1] = NULL;
                 *v66 = NULL;
-                sub_48d4e0(v66);
+                __builtin_delete(v66);
             }
             v29 = 0;
         }
@@ -437,11 +437,11 @@ LABEL_556824:
                 if (v34)
                     v34->field_8 = 0;
                 v33->field_4 = NULL;
-                sub_48d4e0(v33);
+                __builtin_delete(v33);
             }
         }
-        sub_48ded0(idx, *v32, v32[1]);
-        sub_48d4e0(v32);
+        CBot::SetComboChargeButton(idx, *v32, v32[1]);
+        __builtin_delete(v32);
     }
     *(int *)(*(int *)idx + 384) = *(int *)(*(unsigned int *)&idx + 2972);
     v69 = *(float *)(*(unsigned int *)&idx + 2976);

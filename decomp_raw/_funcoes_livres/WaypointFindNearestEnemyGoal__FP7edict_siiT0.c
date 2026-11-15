@@ -1,7 +1,7 @@
 // WaypointFindNearestEnemyGoal__FP7edict_siiT0 @0x188820 size=359
 extern void waypoints;
-extern char g_626821[4];
-extern unsigned int g_626824[4];
+extern char waypoints+1[4];
+extern unsigned int waypoints+4[4];
 extern int num_waypoints;
 
 int WaypointFindNearestEnemyGoal__FP7edict_siiT0(float *a0, int a1, unsigned int a2, unsigned int a3)
@@ -37,10 +37,10 @@ int WaypointFindNearestEnemyGoal__FP7edict_siiT0(float *a0, int a1, unsigned int
             if (v8 != a1)
             {
                 v10 = v8 * 16;
-                if (*(int *)&(&waypoints)[v10] >= 0 && !(g_626821[v10] & 64) && (a2 == 0xffffffff || !((&waypoints)[v10] & 4) || (*(int *)&(&waypoints)[v10] & 3) == a2))
+                if (*(int *)&(&waypoints)[v10] >= 0 && !(waypoints+1[v10] & 64) && (a2 == 0xffffffff || !((&waypoints)[v10] & 4) || (*(int *)&(&waypoints)[v10] & 3) == a2))
                 {
-                    sub_48dd70(a1, v8, a2);
-                    v11 = &g_626824[4 * v8];
+                    WaypointDistanceFromTo(a1, v8, a2);
+                    v11 = &waypoints+4[4 * v8];
                     v12 = *v11 - a0[0x22];
                     v5 = v12;
                     v13 = v11[1] - *(float *)&v9[1];
@@ -50,7 +50,7 @@ int WaypointFindNearestEnemyGoal__FP7edict_siiT0(float *a0, int a1, unsigned int
                     v15 = v12 * v12 + v13 * v13 + v14 * v14;
                     v16 = sqrt(v15);
                     if (isnan(v16))
-                        sub_487dc0(*(unsigned int *)&v15);
+                        sqrt(*(unsigned int *)&v15);
                     else
                         v15 = v16;
                     v4 = (float)v15;

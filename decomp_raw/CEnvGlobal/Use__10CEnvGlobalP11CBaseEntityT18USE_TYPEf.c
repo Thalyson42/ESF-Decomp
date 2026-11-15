@@ -20,7 +20,7 @@ int Use__10CEnvGlobalP11CBaseEntityT18USE_TYPEf(st_495760_0 *a0)
     v2 = v3;
     v1 = v4;
     v0 = v5;
-    sub_488f10(&gGlobalState, a0->field_64);
+    CGlobalState::EntityGetState(&gGlobalState, a0->field_64);
     if (a0->field_68 > 3)
         goto LABEL_0x4957d0;
     goto *((void *)(&(&_GLOBAL_OFFSET_TABLE_)[-1 * *(int *)(&(&_GLOBAL_OFFSET_TABLE_)[4 * a0->field_68] - 1565484)]));

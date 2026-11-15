@@ -67,7 +67,7 @@ typedef struct st_515180_0 {
 } st_515180_0;
 
 extern char _GLOBAL_OFFSET_TABLE_;
-extern st_515180_1 *g_6168b4;
+extern st_515180_1 *g_engfuncs.pfnAlertMessage;
 extern st_515180_0 *gpGlobals;
 
 st_515180_7 * PossessEntity__7CCineAI(st_515180_4 *a0)
@@ -82,7 +82,7 @@ st_515180_7 * PossessEntity__7CCineAI(st_515180_4 *a0)
     st_515180_7 *v8;  // eax
     unsigned int v0;  // [bp-0x54]
 
-    v1 = sub_488810(&a0->field_110);
+    v1 = EHANDLE::__opP11CBaseEntity(&a0->field_110);
     v2 = v1;
     v3 = NULL;
     if (v2)
@@ -95,11 +95,11 @@ st_515180_7 * PossessEntity__7CCineAI(st_515180_4 *a0)
     v0 = 2;
     v4 = a0->field_60->field_200(a0);
     if (!v3->field_60->field_160(v3, v4))
-        return g_6168b4(2, "(AI)Can't possess entity %s\n", v3->field_0->field_0 + gpGlobals->field_98);
+        return g_engfuncs.pfnAlertMessage(2, "(AI)Can't possess entity %s\n", v3->field_0->field_0 + gpGlobals->field_98);
     v5 = a0;
     v3->field_4 = v5;
     v3->field_2a4 = v5;
-    sub_48d960(&v3->field_110, v5);
+    EHANDLE::__as(&v3->field_110, v5);
     v6 = a0;
     v6->field_2cc = v3->field_0->field_108;
     v6->field_2d0 = v3->field_0->field_10c;
@@ -112,12 +112,12 @@ st_515180_7 * PossessEntity__7CCineAI(st_515180_4 *a0)
     }
     else
     {
-        g_6168b4(2, "aiscript:  invalid Move To Position value!");
-        v8 = g_6168b4(2, "\"%s\" found and used\n", v3->field_0->field_1cc + gpGlobals->field_98);
+        g_engfuncs.pfnAlertMessage(2, "aiscript:  invalid Move To Position value!");
+        v8 = g_engfuncs.pfnAlertMessage(2, "\"%s\" found and used\n", v3->field_0->field_1cc + gpGlobals->field_98);
         v3->field_184 = 6;
         if (v3->field_180 != 6)
             return v8;
-        return sub_48b250(v3, v3->field_60->field_154(v3, 40));
+        return CBaseMonster::ChangeSchedule(v3, v3->field_60->field_154(v3, 40));
     }
 }
 

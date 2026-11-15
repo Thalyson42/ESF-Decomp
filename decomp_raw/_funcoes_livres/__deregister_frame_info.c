@@ -40,11 +40,11 @@ unsigned int * __deregister_frame_info(unsigned int a0)
                 *(unsigned int *)v4 = v5->field_14;
                 if (!v5->field_0)
                     return v5;
-                sub_48cf10(v5->field_c);
+                free@GLIBC_2.0(v5->field_c);
                 return v5;
             }
         } while ((v4 = &v5->field_14, v5->field_14));
     }
-    return sub_48a650();
+    return abort@GLIBC_2.0();
 }
 

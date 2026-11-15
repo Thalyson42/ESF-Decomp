@@ -9,15 +9,15 @@ int CustomBotClassMenu__5NMenuv(void)
 {
     if (_5NMenu.SBotType > 0)
     {
-        sub_48e120(&BotManager, _5NMenu.CurrentMenuChoice, 0, -0x1, _5NMenu.SBotType);
+        CBotManager::CreateSuperBot(&BotManager, _5NMenu.CurrentMenuChoice, 0, -0x1, _5NMenu.SBotType);
         _5NMenu.SBotType = 0;
     }
     else
     {
-        sub_4892c0(&BotManager, _5NMenu.BotTeam, _5NMenu.CurrentMenuChoice, 0, _5NMenu.BotSkill, -0x1);
+        CBotManager::CreateBot(&BotManager, _5NMenu.BotTeam, _5NMenu.CurrentMenuChoice, 0, _5NMenu.BotSkill, -0x1);
         _5NMenu.BotTeam = 0;
         _5NMenu.BotSkill = 0;
     }
-    return sub_48d6f0();
+    return NMenu::ResetMenu();
 }
 

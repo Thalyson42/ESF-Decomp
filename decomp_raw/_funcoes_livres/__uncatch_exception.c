@@ -11,10 +11,10 @@ st_5958b0_0 * __uncatch_exception(void)
     int v0;  // [bp-0x1c]
 
     sub_5958ac(v0);
-    v2 = sub_4895f0(v0);
+    v2 = __get_eh_info(v0);
     v3 = *v2;
     if (!*v2)
-        v3 = sub_48a720();
+        v3 = terminate();
     v3->field_14 = 0;
     return v3;
 }

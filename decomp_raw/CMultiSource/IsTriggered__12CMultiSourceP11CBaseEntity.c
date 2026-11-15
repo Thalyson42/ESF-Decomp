@@ -34,7 +34,7 @@ unsigned int IsTriggered__12CMultiSourceP11CBaseEntity(st_495bc0_1 *a0)
                 } while (v0 < a0->field_1e4 && v1[v0]);
             }
         }
-        if (v0 == a0->field_1e4 && (!a0->field_1e8 || sub_488f10(&gGlobalState, a0->field_1e8) == 1))
+        if (v0 == a0->field_1e4 && (!a0->field_1e8 || CGlobalState::EntityGetState(&gGlobalState, a0->field_1e8) == 1))
             return 1;
     }
     return 0;

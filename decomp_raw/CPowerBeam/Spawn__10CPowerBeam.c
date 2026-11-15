@@ -19,6 +19,6 @@ int Spawn__10CPowerBeam(float idx)
     *(unsigned int *)(*(unsigned int *)&idx + 508) = 4;
     *(unsigned int *)(*(unsigned int *)&idx + 504) = 1;
     *(float *)(*(unsigned int *)&idx + 500) = 0.11999999731779099f;
-    return sub_48cf50(idx);
+    return CBasePlayerItem::FallInit(idx);
 }
 

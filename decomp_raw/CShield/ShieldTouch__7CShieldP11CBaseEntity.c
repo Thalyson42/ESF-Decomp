@@ -90,7 +90,7 @@ typedef struct st_519120_8 {
 } st_519120_8;
 
 extern st_519120_8 *g_pGameRules;
-extern st_519120_5 *g_6168dc;
+extern st_519120_5 *g_engfuncs.pfnIndexOfEdict;
 extern st_519120_10 *gpGlobals;
 
 float ShieldTouch__7CShieldP11CBaseEntity(st_519120_1 *a0, st_519120_6 *a1)
@@ -138,9 +138,9 @@ float ShieldTouch__7CShieldP11CBaseEntity(st_519120_1 *a0, st_519120_6 *a1)
 
     if (a1->field_60->field_a0(a1))
     {
-        v13 = sub_489e40(a0, (!a0->field_0->field_198 ? 0 : a0->field_0->field_198 + 128));
-        v14 = g_6168dc(*v13->field_208);
-        if (v14 == g_6168dc(a1->field_0->field_208))
+        v13 = CShield::GetOwner(a0, (!a0->field_0->field_198 ? 0 : a0->field_0->field_198 + 128));
+        v14 = g_engfuncs.pfnIndexOfEdict(*v13->field_208);
+        if (v14 == g_engfuncs.pfnIndexOfEdict(a1->field_0->field_208))
             return v31;
         v15 = a1;
         if (v15->field_354)
@@ -168,7 +168,7 @@ float ShieldTouch__7CShieldP11CBaseEntity(st_519120_1 *a0, st_519120_6 *a1)
                     v23 = v20 * v20 + v21 * v21 + v22 * v22;
                     v24 = sqrt(v23);
                     if (isnan(v24))
-                        sub_487dc0(*(unsigned int *)&v23);
+                        sqrt(*(unsigned int *)&v23);
                     else
                         v23 = v24;
                     v3 = (float)v23;
@@ -210,7 +210,7 @@ float ShieldTouch__7CShieldP11CBaseEntity(st_519120_1 *a0, st_519120_6 *a1)
     }
     else if (a1->field_60->field_28(a1) == 1)
     {
-        v32 = sub_489e40(a0, (!a0->field_0->field_198 ? 0 : a0->field_0->field_198 + 128));
+        v32 = CShield::GetOwner(a0, (!a0->field_0->field_198 ? 0 : a0->field_0->field_198 + 128));
         v33 = a1;
         if (v33->field_2b0)
         {
@@ -225,17 +225,17 @@ float ShieldTouch__7CShieldP11CBaseEntity(st_519120_1 *a0, st_519120_6 *a1)
             v2 = __fnstcw();
             v1 = v2 | 0xc00;
             v0 = (int)(3.5 * v33->field_0->field_1e0);
-            if (!sub_48c980(v32, v0))
+            if (!CBasePlayer::UseKi(v32, v0))
             {
                 *v32->field_260 = 0;
                 a0->field_6c = 1;
                 return v34;
             }
-            if (!sub_488af0(v33->field_0->field_0 + gpGlobals->field_98, "kiblast"))
+            if (!strcmp@GLIBC_2.0(v33->field_0->field_0 + gpGlobals->field_98, "kiblast"))
                 a0->field_0->field_1e0 = a0->field_0->field_1e0 + v33->field_0->field_1e0;
             else
                 a0->field_0->field_1e0 = (float)(a1->field_0->field_1e0 * 0.25 + a0->field_0->field_1e0);
-            sub_488520(v33);
+            CExplodingAttack::Vaporize(v33);
             return v35;
         }
         else

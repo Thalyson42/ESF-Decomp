@@ -3,8 +3,8 @@ typedef struct st_50b5a0_0 {
     unsigned int field_0;
 } st_50b5a0_0;
 
-extern st_50b5a0_0 *g_6168dc;
-extern st_50b5a0_0 *g_616928;
+extern st_50b5a0_0 *g_engfuncs.pfnIndexOfEdict;
+extern st_50b5a0_0 *g_engfuncs.pfnRandomLong;
 
 int WinStruggle__12CPlayerMelee(float idx)
 {
@@ -21,12 +21,12 @@ int WinStruggle__12CPlayerMelee(float idx)
     float v8;  // [bp-0x10]
 
     *(unsigned int *)(*(unsigned int *)&idx + 260) = 1;
-    sub_489610(idx, 7);
-    sub_48b090(g_6168dc(*(int *)(*(int *)*(int *)(*(unsigned int *)&idx + 292) + 520)));
-    sub_48b090(g_6168dc(*(int *)(*(int *)*(int *)(*(unsigned int *)&idx + 296) + 520)));
+    CPlayerMelee::SetMode(idx, 7);
+    UTIL_Model_RemoveAll(g_engfuncs.pfnIndexOfEdict(*(int *)(*(int *)*(int *)(*(unsigned int *)&idx + 292) + 520)));
+    UTIL_Model_RemoveAll(g_engfuncs.pfnIndexOfEdict(*(int *)(*(int *)*(int *)(*(unsigned int *)&idx + 296) + 520)));
     v2 = 11;
-    v1 = g_6168dc(*(int *)(*(int *)*(int *)(*(unsigned int *)&idx + 296) + 520));
-    sub_48dc20(g_6168dc(*(int *)(*(int *)*(int *)(*(unsigned int *)&idx + 292) + 520)));
+    v1 = g_engfuncs.pfnIndexOfEdict(*(int *)(*(int *)*(int *)(*(unsigned int *)&idx + 296) + 520));
+    UTIL_Model_Connect(g_engfuncs.pfnIndexOfEdict(*(int *)(*(int *)*(int *)(*(unsigned int *)&idx + 292) + 520)));
     if (*(int *)(*(unsigned int *)&idx + 320))
     {
         v13 = *(unsigned int *)&idx + 272;
@@ -38,19 +38,19 @@ int WinStruggle__12CPlayerMelee(float idx)
         v8 = -*(float *)(*(unsigned int *)&idx + 280);
         v13 = &v6;
     }
-    sub_488860(&v5, v13);
+    UTIL_VecToAngles(&v5, v13);
     v0 = &v5;
-    sub_487b20(g_6168dc(*(int *)(*(int *)*(int *)(*(unsigned int *)&idx + 292) + 520)));
+    UTIL_Model_MeleeStruggle_Anglefix(g_engfuncs.pfnIndexOfEdict(*(int *)(*(int *)*(int *)(*(unsigned int *)&idx + 292) + 520)));
     *(unsigned int *)(*(unsigned int *)&idx + 376) = 0;
     *(unsigned int *)(*(unsigned int *)&idx + 380) = 0;
-    *(unsigned int *)(sub_48abd0(idx, sub_48d910(idx, 1)) + 84) = 2;
+    *(unsigned int *)(CPlayerMelee::AddExeMove(idx, CPlayerMelee::SetupCombo(idx, 1)) + 84) = 2;
     v3 = 0x800;
-    v3 = (!g_616928(0, 1) ? _INSERT(v3, 1, *(char *)((void*)&v3 + 1) | 1) : 2176);
-    sub_48dad0(idx, v3, 2, &v4);
-    v15 = sub_48abd0(idx, sub_488230(idx, v3, 0, 0.3499999940395355f, 1, 0, 2, &v4));
+    v3 = (!g_engfuncs.pfnRandomLong(0, 1) ? _INSERT(v3, 1, *(char *)((void*)&v3 + 1) | 1) : 2176);
+    CPlayerMelee::GetAnimForMove(idx, v3, 2, &v4);
+    v15 = CPlayerMelee::AddExeMove(idx, CPlayerMelee::CreateExeMove(idx, v3, 0, 0.3499999940395355f, 1, 0, 2, &v4));
     v15[21] = 2;
     v15[18] = 0;
     *(int *)(*(unsigned int *)&idx + 380) = *(int *)(*(unsigned int *)&idx + 376);
-    return sub_488190(idx);
+    return CPlayerMelee::NewExeMovePost(idx);
 }
 

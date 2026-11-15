@@ -24,8 +24,8 @@ typedef struct st_5665c0_0 {
     unsigned int field_0;
 } st_5665c0_0;
 
-extern st_5665c0_0 *g_6168d4;
-extern st_5665c0_0 *g_61698c;
+extern st_5665c0_0 *g_engfuncs.pfnPEntityOfEntOffset;
+extern st_5665c0_0 *g_engfuncs.pfnIsDedicatedServer;
 
 char HandleBotCommands__11CBotManagerP7edict_s(st_5665c0_4 *a0, unsigned int a1)
 {
@@ -34,16 +34,16 @@ char HandleBotCommands__11CBotManagerP7edict_s(st_5665c0_4 *a0, unsigned int a1)
     unsigned int v0;  // [bp-0x1c]
     unsigned int v1;  // [bp-0x18]
 
-    if (!g_61698c(v0, v1))
+    if (!g_engfuncs.pfnIsDedicatedServer(v0, v1))
     {
-        if (!g_61698c() && !(v2 = a0->field_c, !a0->field_c && !(v2 = g_6168d4(0), v2)))
+        if (!g_engfuncs.pfnIsDedicatedServer() && !(v2 = a0->field_c, !a0->field_c && !(v2 = g_engfuncs.pfnPEntityOfEntOffset(0), v2)))
             v3 = v2->field_7c;
         else
             v3 = NULL;
         if (!v3 || *v3->field_208 == a1)
         {
-            sub_489850(a0);
-            if (a0->field_d45 || !(sub_48c3d0(), !a0->field_d45))
+            CBotManager::HandleNonDedBotCommands(a0);
+            if (a0->field_d45 || !(HandleNormalBotCommands(), !a0->field_d45))
             {
                 a0->field_d45 = 0;
                 return 1;

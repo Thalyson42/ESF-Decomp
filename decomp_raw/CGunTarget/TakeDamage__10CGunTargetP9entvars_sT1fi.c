@@ -42,7 +42,7 @@ unsigned int TakeDamage__10CGunTargetP9entvars_sT1fi(st_4ee300_3 *a0, unsigned i
             a0->field_60->field_134(a0);
             if (!a0->field_0->field_1d4)
                 return 0;
-            sub_48c1b0(a0->field_0->field_1d4 + gpGlobals->field_98, a0, a0, 3, 0);
+            FireTargets(a0->field_0->field_1d4 + gpGlobals->field_98, a0, a0, 3, 0);
             return 0;
         }
     }

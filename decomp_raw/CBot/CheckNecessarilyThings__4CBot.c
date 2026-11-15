@@ -55,7 +55,7 @@ typedef struct st_581830_5 {
 } st_581830_5;
 
 extern st_581830_0 BotManager;
-extern char g_6253cb;
+extern char BotManager+3403;
 
 st_581830_0 * CheckNecessarilyThings__4CBot(st_581830_5 *a0)
 {
@@ -68,7 +68,7 @@ st_581830_0 * CheckNecessarilyThings__4CBot(st_581830_5 *a0)
 
     v1 = 0;
     if (a0->field_32c && (!a0->field_1064 ? 1 : a0->field_1064->field_14->field_20(a0->field_1064) != 2))
-        sub_4895a0(a0);
+        CBasePlayer::StopBlock(a0);
     if (a0->field_344)
     {
         v0 = 11;
@@ -104,7 +104,7 @@ LABEL_581910:
             else
             {
                 v3 = &BotManager.padding_0[0];
-                if (g_6253cb || a0->field_364)
+                if (BotManager+3403 || a0->field_364)
                 {
                     v0 = 20;
                 }
@@ -118,7 +118,7 @@ LABEL_581a82:
                     else
                     {
                         if (a0->field_330 && (!a0->field_1064 || (v3 = a0->field_1064->field_14->field_20(a0->field_1064), v3 && !(v3 = a0->field_1064->field_14->field_20(a0->field_1064), v3 == 0xc))))
-                            v3 = sub_48ba60(a0);
+                            v3 = CBasePlayer::StopPowerUp(a0);
                         if (!a0->field_33c)
                             return v3;
                         if (!a0->field_35c)
@@ -141,7 +141,7 @@ LABEL_581a82:
                                 }
                                 else
                                 {
-                                    return sub_48acb0(a0, 15);
+                                    return CBot::MakeTask(a0, 15);
                                 }
                             }
                         }
@@ -202,6 +202,6 @@ LABEL_581a82:
             }
         }
     }
-    return sub_48acb0(a0);
+    return CBot::MakeTask(a0);
 }
 

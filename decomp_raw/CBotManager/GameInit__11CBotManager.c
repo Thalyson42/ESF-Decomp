@@ -7,20 +7,20 @@ extern char ShowInGameBotHelpWindow__Fv;
 extern char HandleNormalBotCommands__Fv;
 extern char _11CBotManager.sv_num_bots;
 extern char _11CBotManager.sv_bot_skill;
-extern st_543260_0 *g_6168a0;
-extern st_543260_0 *g_6169f0;
+extern st_543260_0 *g_engfuncs.pfnCVarRegister;
+extern st_543260_0 *g_engfuncs.pfnVoice_GetClientListening;
 extern int ChatClass;
 
 int GameInit__11CBotManager(int a0)
 {
-    g_6168a0(&_11CBotManager.sv_num_bots);
-    g_6168a0(&_11CBotManager.sv_bot_skill);
-    sub_48c180(a0);
-    sub_48e0c0(&ChatClass);
-    sub_48ae40(a0);
-    sub_48a2e0(a0);
-    sub_48d270(a0);
-    g_6169f0("esf_bot", &HandleNormalBotCommands__Fv);
-    return g_6169f0("bot_help", &ShowInGameBotHelpWindow__Fv);
+    g_engfuncs.pfnCVarRegister(&_11CBotManager.sv_num_bots);
+    g_engfuncs.pfnCVarRegister(&_11CBotManager.sv_bot_skill);
+    CBotManager::LoadBotNames(a0);
+    CChatClass::ReadChatFile(&ChatClass);
+    CBotManager::CreateBotPersonalities(a0);
+    CBotManager::CreateSuperbotSettings(a0);
+    CBotManager::CreateSkillData(a0);
+    g_engfuncs.pfnVoice_GetClientListening("esf_bot", &HandleNormalBotCommands__Fv);
+    return g_engfuncs.pfnVoice_GetClientListening("bot_help", &ShowInGameBotHelpWindow__Fv);
 }
 

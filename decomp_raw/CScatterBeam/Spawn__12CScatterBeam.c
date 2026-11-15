@@ -38,6 +38,6 @@ int Spawn__12CScatterBeam(st_510300_2 *a0)
     a0->field_d4 = 1952539507;
     a0->field_d8 = 1651664244;
     a0->field_dc = 7168357;
-    return sub_48cf50(a0);
+    return CBasePlayerItem::FallInit(a0);
 }
 

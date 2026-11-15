@@ -15,16 +15,16 @@ int KickMenu__5NMenuv(void)
         if (_5NMenu.CurrentMenuChoice == 1)
             v0 = 0xffffffff;
         else
-            return sub_48d6f0();
+            return NMenu::ResetMenu();
     }
     else
     {
         if (_5NMenu.CurrentMenuChoice == 3)
             v0 = 2;
         else
-            return sub_48d6f0();
+            return NMenu::ResetMenu();
     }
-    sub_488aa0(&BotManager);
-    return sub_48d6f0();
+    CBotManager::KickBots(&BotManager);
+    return NMenu::ResetMenu();
 }
 

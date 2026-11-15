@@ -36,11 +36,11 @@ char ReactOnDanger__13CBeamJumpTaskP13danger_info_s(st_579420_2 *a0, st_579420_3
         }
         else if (a0->field_c->field_28c == 7)
         {
-            sub_48ce10(a0->field_8, "weapon_sword");
+            CBasePlayer::SelectItem(a0->field_8, "weapon_sword");
         }
         else
         {
-            sub_48ce10(a0->field_8, "weapon_melee");
+            CBasePlayer::SelectItem(a0->field_8, "weapon_melee");
         }
         return 1;
     }

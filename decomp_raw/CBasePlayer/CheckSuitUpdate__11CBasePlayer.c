@@ -77,12 +77,12 @@ int CheckSuitUpdate__11CBasePlayer(st_4f9a40_0 *a0)
         if ((int)v6 > 0)
         {
             v0 = 33;
-            sub_48c150(&v0, &(&gszallsentencenames)[16 * v6]);
-            sub_48d8f0(a0->field_0->field_208, &v0);
+            strcat@GLIBC_2.0(&v0, &(&gszallsentencenames)[16 * v6]);
+            EMIT_SOUND_SUIT(a0->field_0->field_208, &v0);
         }
         else
         {
-            sub_48db00(a0->field_0->field_208, -v6);
+            EMIT_GROUPID_SUIT(a0->field_0->field_208, -v6);
         }
         a0->field_7bc = (float)(3.5 + *(float *)gpGlobals);
         return v3;

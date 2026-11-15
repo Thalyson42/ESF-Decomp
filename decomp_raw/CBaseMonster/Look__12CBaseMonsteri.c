@@ -83,7 +83,7 @@ typedef struct st_4d3f60_7 {
 } st_4d3f60_7;
 
 extern char _GLOBAL_OFFSET_TABLE_;
-extern st_4d3f60_2 *g_6168b4;
+extern st_4d3f60_2 *g_engfuncs.pfnAlertMessage;
 extern st_4d3f60_7 *gpGlobals;
 
 st_4d3f60_3 * Look__12CBaseMonsteri(st_4d3f60_3 *a0, int a1)
@@ -131,7 +131,7 @@ st_4d3f60_3 * Look__12CBaseMonsteri(st_4d3f60_3 *a0, int a1)
         v5 = *(float *)&v16->field_8 - v11;
         v6 = *(float *)&v18->field_4 - v12;
         v7 = *(float *)&v18->field_8 - v13;
-        v15 = sub_48dfd0(&v14, 100, &v5, &v8, 40);
+        v15 = UTIL_EntitiesInBox(&v14, 100, &v5, &v8, 40);
         v3 = v15;
         v2 = NULL;
         if (v4 < v15)
@@ -155,7 +155,7 @@ st_4d3f60_3 * Look__12CBaseMonsteri(st_4d3f60_3 *a0, int a1)
                 v21 = a0;
                 *(int *)&v19->padding_2[3] = *(int *)&v21->padding_2[3];
                 *(st_4d3f60_3 **)&v21->padding_2[3] = v19;
-                if (v19 == sub_488810(&v21->field_104))
+                if (v19 == EHANDLE::__opP11CBaseEntity(&v21->field_104))
                     v4 |= 16;
                 v22 = a0;
                 v23 = *(int *)&v22->padding_c[80];
@@ -165,7 +165,7 @@ st_4d3f60_3 * Look__12CBaseMonsteri(st_4d3f60_3 *a0, int a1)
                 if (v23->field_100(v0, v1) + 2 <= 5)
                     goto *((void *)(&(&_GLOBAL_OFFSET_TABLE_)[-1 * *(int *)(&(&_GLOBAL_OFFSET_TABLE_)[4 * v23->field_100(v0, v1)] - 1308932)]));
                 else
-                    g_6168b4(2, "%s can't assess %s\n", a0->field_0->field_0 + gpGlobals->field_98, v19->field_0->field_0 + gpGlobals->field_98);
+                    g_engfuncs.pfnAlertMessage(2, "%s can't assess %s\n", a0->field_0->field_0 + gpGlobals->field_98, v19->field_0->field_0 + gpGlobals->field_98);
             } while ((v2 = (char *)&v2->field_0 + 1, v15 = v3, v2 < v15));
         }
     }

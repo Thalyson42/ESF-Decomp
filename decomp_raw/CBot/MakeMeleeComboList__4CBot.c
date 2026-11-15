@@ -30,7 +30,7 @@ typedef struct st_554fc0_5 {
     unsigned int field_0;
 } st_554fc0_5;
 
-extern st_554fc0_5 *g_616928;
+extern st_554fc0_5 *g_engfuncs.pfnRandomLong;
 
 char MakeMeleeComboList__4CBot(st_554fc0_3 *a0)
 {
@@ -104,30 +104,30 @@ char MakeMeleeComboList__4CBot(st_554fc0_3 *a0)
     unsigned int *v33;  // [bp-0xc]
     unsigned int *v34;  // [bp-0x8]
 
-    sub_48c6c0(a0);
-    v35 = sub_48d6a0(8);
+    CBot::ClearMeleeComboList(a0);
+    v35 = __builtin_new(8);
     *v35 = NULL;
     v35[1] = NULL;
     a0->field_b8c = v35;
-    v36 = g_616928(1, 2);
+    v36 = g_engfuncs.pfnRandomLong(1, 2);
     if (v36 == 1)
     {
-        v34 = sub_48d6a0(8);
+        v34 = __builtin_new(8);
         *v34 = 0;
         v34[1] = 0x11;
         v56 = a0->field_b8c;
         v33 = v34;
         if (!*v56)
         {
-            v57 = sub_48d6a0(12);
+            v57 = __builtin_new(12);
             v32 = 1;
             v57->field_4 = NULL;
             v57->field_8 = 0;
-            sub_48d0e0(v57, 0, 4);
+            memset@GLIBC_2.0(v57, 0, 4);
             v32 = 0;
             *v56 = v57;
             if (v32)
-                sub_48d4e0(v57);
+                __builtin_delete(v57);
             *v56->field_0 = v33;
             *v56->field_4 = NULL;
             *v56->field_8 = 0;
@@ -136,37 +136,37 @@ char MakeMeleeComboList__4CBot(st_554fc0_3 *a0)
         else
         {
             v31 = v56[1];
-            v58 = sub_48d6a0(12);
+            v58 = __builtin_new(12);
             v30 = 1;
             v58->field_4 = 0;
             v58->field_8 = NULL;
-            sub_48d0e0(v58, 0, 4);
+            memset@GLIBC_2.0(v58, 0, 4);
             v30 = 0;
             v31->field_4 = v58;
             if (v30)
-                sub_48d4e0(v58);
+                __builtin_delete(v58);
             v56[1]->field_4->field_8 = v56[1];
             v59 = v56[1]->field_4;
             v56[1] = v59;
             v59->field_0 = v33;
             v56[1]->field_4 = NULL;
         }
-        v29 = sub_48d6a0(8);
+        v29 = __builtin_new(8);
         *v29 = 0;
         v29[1] = 529;
         v60 = a0->field_b8c;
         v28 = v29;
         if (!*v60)
         {
-            v61 = sub_48d6a0(12);
+            v61 = __builtin_new(12);
             v27 = 1;
             v61->field_4 = NULL;
             v61->field_8 = 0;
-            sub_48d0e0(v61, 0, 4);
+            memset@GLIBC_2.0(v61, 0, 4);
             v27 = 0;
             *v60 = v61;
             if (v27)
-                sub_48d4e0(v61);
+                __builtin_delete(v61);
             *v60->field_0 = v28;
             *v60->field_4 = NULL;
             *v60->field_8 = 0;
@@ -175,22 +175,22 @@ char MakeMeleeComboList__4CBot(st_554fc0_3 *a0)
         else
         {
             v26 = v60[1];
-            v62 = sub_48d6a0(12);
+            v62 = __builtin_new(12);
             v25 = 1;
             v62->field_4 = 0;
             v62->field_8 = NULL;
-            sub_48d0e0(v62, 0, 4);
+            memset@GLIBC_2.0(v62, 0, 4);
             v25 = 0;
             v26->field_4 = v62;
             if (v25)
-                sub_48d4e0(v62);
+                __builtin_delete(v62);
             v60[1]->field_4->field_8 = v60[1];
             v63 = v60[1]->field_4;
             v60[1] = v63;
             v63->field_0 = v28;
             v60[1]->field_4 = NULL;
         }
-        v24 = sub_48d6a0(8);
+        v24 = __builtin_new(8);
         *v24 = 0;
         v64 = v24;
         v64[1] = 513;
@@ -198,15 +198,15 @@ char MakeMeleeComboList__4CBot(st_554fc0_3 *a0)
         v23 = v64;
         if (!*v65)
         {
-            v66 = sub_48d6a0(12);
+            v66 = __builtin_new(12);
             v22 = 1;
             v66->field_4 = NULL;
             v66->field_8 = 0;
-            sub_48d0e0(v66, 0, 4);
+            memset@GLIBC_2.0(v66, 0, 4);
             v22 = 0;
             *v65 = v66;
             if (v22)
-                sub_48d4e0(v66);
+                __builtin_delete(v66);
             *v65->field_0 = v23;
             *v65->field_4 = NULL;
             *v65->field_8 = 0;
@@ -216,15 +216,15 @@ char MakeMeleeComboList__4CBot(st_554fc0_3 *a0)
         else
         {
             v21 = v65[1];
-            v68 = sub_48d6a0(12);
+            v68 = __builtin_new(12);
             v20 = 1;
             v68->field_4 = 0;
             v68->field_8 = NULL;
-            sub_48d0e0(v68, 0, 4);
+            memset@GLIBC_2.0(v68, 0, 4);
             v20 = 0;
             v21->field_4 = v68;
             if (v20)
-                sub_48d4e0(v68);
+                __builtin_delete(v68);
             v65[1]->field_4->field_8 = v65[1];
             v69 = v65[1]->field_4;
             v65[1] = v69;
@@ -236,22 +236,22 @@ char MakeMeleeComboList__4CBot(st_554fc0_3 *a0)
     }
     else if (v36 == 2)
     {
-        v19 = sub_48d6a0(8);
+        v19 = __builtin_new(8);
         *v19 = 0;
         v19[1] = 0x11;
         v37 = a0->field_b8c;
         v18 = v19;
         if (!*v37)
         {
-            v38 = sub_48d6a0(12);
+            v38 = __builtin_new(12);
             v17 = 1;
             v38->field_4 = NULL;
             v38->field_8 = 0;
-            sub_48d0e0(v38, 0, 4);
+            memset@GLIBC_2.0(v38, 0, 4);
             v17 = 0;
             *v37 = v38;
             if (v17)
-                sub_48d4e0(v38);
+                __builtin_delete(v38);
             *v37->field_0 = v18;
             *v37->field_4 = NULL;
             *v37->field_8 = 0;
@@ -260,37 +260,37 @@ char MakeMeleeComboList__4CBot(st_554fc0_3 *a0)
         else
         {
             v16 = v37[1];
-            v39 = sub_48d6a0(12);
+            v39 = __builtin_new(12);
             v15 = 1;
             v39->field_4 = 0;
             v39->field_8 = NULL;
-            sub_48d0e0(v39, 0, 4);
+            memset@GLIBC_2.0(v39, 0, 4);
             v15 = 0;
             v16->field_4 = v39;
             if (v15)
-                sub_48d4e0(v39);
+                __builtin_delete(v39);
             v37[1]->field_4->field_8 = v37[1];
             v40 = v37[1]->field_4;
             v37[1] = v40;
             v40->field_0 = v18;
             v37[1]->field_4 = NULL;
         }
-        v14 = sub_48d6a0(8);
+        v14 = __builtin_new(8);
         *v14 = 0;
         v14[1] = 1041;
         v41 = a0->field_b8c;
         v13 = v14;
         if (!*v41)
         {
-            v42 = sub_48d6a0(12);
+            v42 = __builtin_new(12);
             v12 = 1;
             v42->field_4 = NULL;
             v42->field_8 = 0;
-            sub_48d0e0(v42, 0, 4);
+            memset@GLIBC_2.0(v42, 0, 4);
             v12 = 0;
             *v41 = v42;
             if (v12)
-                sub_48d4e0(v42);
+                __builtin_delete(v42);
             *v41->field_0 = v13;
             *v41->field_4 = NULL;
             *v41->field_8 = 0;
@@ -299,37 +299,37 @@ char MakeMeleeComboList__4CBot(st_554fc0_3 *a0)
         else
         {
             v11 = v41[1];
-            v43 = sub_48d6a0(12);
+            v43 = __builtin_new(12);
             v10 = 1;
             v43->field_4 = 0;
             v43->field_8 = NULL;
-            sub_48d0e0(v43, 0, 4);
+            memset@GLIBC_2.0(v43, 0, 4);
             v10 = 0;
             v11->field_4 = v43;
             if (v10)
-                sub_48d4e0(v43);
+                __builtin_delete(v43);
             v41[1]->field_4->field_8 = v41[1];
             v44 = v41[1]->field_4;
             v41[1] = v44;
             v44->field_0 = v13;
             v41[1]->field_4 = NULL;
         }
-        v9 = sub_48d6a0(8);
+        v9 = __builtin_new(8);
         *v9 = 0;
         v9[1] = 1025;
         v45 = a0->field_b8c;
         v8 = v9;
         if (!*v45)
         {
-            v46 = sub_48d6a0(12);
+            v46 = __builtin_new(12);
             v7 = 1;
             v46->field_4 = NULL;
             v46->field_8 = 0;
-            sub_48d0e0(v46, 0, 4);
+            memset@GLIBC_2.0(v46, 0, 4);
             v7 = 0;
             *v45 = v46;
             if (v7)
-                sub_48d4e0(v46);
+                __builtin_delete(v46);
             *v45->field_0 = v8;
             *v45->field_4 = NULL;
             *v45->field_8 = 0;
@@ -338,22 +338,22 @@ char MakeMeleeComboList__4CBot(st_554fc0_3 *a0)
         else
         {
             v6 = v45[1];
-            v47 = sub_48d6a0(12);
+            v47 = __builtin_new(12);
             v5 = 1;
             v47->field_4 = 0;
             v47->field_8 = NULL;
-            sub_48d0e0(v47, 0, 4);
+            memset@GLIBC_2.0(v47, 0, 4);
             v5 = 0;
             v6->field_4 = v47;
             if (v5)
-                sub_48d4e0(v47);
+                __builtin_delete(v47);
             v45[1]->field_4->field_8 = v45[1];
             v48 = v45[1]->field_4;
             v45[1] = v48;
             v48->field_0 = v8;
             v45[1]->field_4 = NULL;
         }
-        v4 = sub_48d6a0(8);
+        v4 = __builtin_new(8);
         *v4 = 1;
         v49 = v4;
         v49[1] = 0xa00;
@@ -361,15 +361,15 @@ char MakeMeleeComboList__4CBot(st_554fc0_3 *a0)
         v3 = v49;
         if (!*v50)
         {
-            v51 = sub_48d6a0(12);
+            v51 = __builtin_new(12);
             v2 = 1;
             v51->field_4 = NULL;
             v51->field_8 = 0;
-            sub_48d0e0(v51, 0, 4);
+            memset@GLIBC_2.0(v51, 0, 4);
             v2 = 0;
             *v50 = v51;
             if (v2)
-                sub_48d4e0(v51);
+                __builtin_delete(v51);
             *v50->field_0 = v3;
             *v50->field_4 = NULL;
             *v50->field_8 = 0;
@@ -379,15 +379,15 @@ char MakeMeleeComboList__4CBot(st_554fc0_3 *a0)
         else
         {
             v1 = v50[1];
-            v53 = sub_48d6a0(12);
+            v53 = __builtin_new(12);
             v0 = 1;
             v53->field_4 = 0;
             v53->field_8 = NULL;
-            sub_48d0e0(v53, 0, 4);
+            memset@GLIBC_2.0(v53, 0, 4);
             v0 = 0;
             v1->field_4 = v53;
             if (v0)
-                sub_48d4e0(v53);
+                __builtin_delete(v53);
             v50[1]->field_4->field_8 = v50[1];
             v54 = v50[1]->field_4;
             v50[1] = v54;

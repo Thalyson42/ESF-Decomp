@@ -13,11 +13,11 @@ typedef struct st_49b9b0_2 {
 } st_49b9b0_2;
 
 extern unsigned int gmsgDragonBallEnt;
-extern st_49b9b0_2 *g_616878;
-extern st_49b9b0_2 *g_61687c;
-extern st_49b9b0_2 *g_616880;
-extern st_49b9b0_2 *g_616888;
-extern st_49b9b0_2 *g_6168dc;
+extern st_49b9b0_2 *g_engfuncs.pfnMessageBegin;
+extern st_49b9b0_2 *g_engfuncs.pfnMessageEnd;
+extern st_49b9b0_2 *g_engfuncs.pfnWriteByte;
+extern st_49b9b0_2 *g_engfuncs.pfnWriteShort;
+extern st_49b9b0_2 *g_engfuncs.pfnIndexOfEdict;
 
 int DragonBallDrop__30CHalfLifeCaptureTheDragonBallsiP11CDragonBall(unsigned int a0, unsigned int a1, st_49b9b0_0 **a2)
 {
@@ -33,10 +33,10 @@ int DragonBallDrop__30CHalfLifeCaptureTheDragonBallsiP11CDragonBall(unsigned int
     v2 = v3 * 4;
     v1 = a0 + 632;
     *(st_49b9b0_0 ***)((char *)v2 + v1) = a2;
-    g_616878(2, gmsgDragonBallEnt, 0, 0);
-    g_616880(v3);
-    v0 = g_6168dc(*(int *)(*(int *)*(int *)((char *)v2 + v1) + 520));
-    g_616888(v0);
-    return g_61687c(v0);
+    g_engfuncs.pfnMessageBegin(2, gmsgDragonBallEnt, 0, 0);
+    g_engfuncs.pfnWriteByte(v3);
+    v0 = g_engfuncs.pfnIndexOfEdict(*(int *)(*(int *)*(int *)((char *)v2 + v1) + 520));
+    g_engfuncs.pfnWriteShort(v0);
+    return g_engfuncs.pfnMessageEnd(v0);
 }
 

@@ -69,7 +69,7 @@ typedef struct st_52caa0_8 {
 } st_52caa0_8;
 
 extern st_52caa0_8 *g_pGameRules;
-extern st_52caa0_2 *g_6168dc;
+extern st_52caa0_2 *g_engfuncs.pfnIndexOfEdict;
 extern st_52caa0_2 *gpGlobals;
 
 st_52caa0_6 * HurtTouch__12CBaseTriggerP11CBaseEntity(st_52caa0_5 *a0, st_52caa0_3 *a1)
@@ -99,7 +99,7 @@ st_52caa0_6 * HurtTouch__12CBaseTriggerP11CBaseEntity(st_52caa0_5 *a0, st_52caa0
             a0->field_0->field_184 = 0;
             if (a1->field_60->field_a0(a1))
             {
-                v7 = g_6168dc(a1->field_0->field_208);
+                v7 = g_engfuncs.pfnIndexOfEdict(a1->field_0->field_208);
                 a0->field_0->field_184 = a0->field_0->field_184 | 1 << (v7 - 1 & 31);
             }
         }
@@ -107,7 +107,7 @@ st_52caa0_6 * HurtTouch__12CBaseTriggerP11CBaseEntity(st_52caa0_5 *a0, st_52caa0
         {
             if (a1->field_60->field_a0(a1))
             {
-                v3 = 1 << ((char)((g_6168dc(a1->field_0->field_208) & 0xff) - 1) & 31);
+                v3 = 1 << ((char)((g_engfuncs.pfnIndexOfEdict(a1->field_0->field_208) & 0xff) - 1) & 31);
                 v4 = a0->field_0;
                 if (v3 & v4->field_184)
                     return v5;
@@ -135,7 +135,7 @@ st_52caa0_6 * HurtTouch__12CBaseTriggerP11CBaseEntity(st_52caa0_5 *a0, st_52caa0
         return v10;
     if (a0->field_0->field_1a0 & 16 && !a1->field_60->field_a0(a1))
         return v9;
-    sub_48d150(a0, a1, 3, 0);
+    CBaseDelay::SUB_UseTargets(a0, a1, 3, 0);
     v10 = a0->field_0;
     if (!(v10->field_1a0 & 1))
         return v10;

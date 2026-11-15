@@ -57,7 +57,7 @@ unsigned int BestVisibleEnemy__12CBaseMonster(float a0)
                 v22 = v19 * v19 + v20 * v20 + v21 * v21;
                 v23 = sqrt(v22);
                 if (isnan(v23))
-                    sub_487dc0(*(unsigned int *)&v22);
+                    sqrt(*(unsigned int *)&v22);
                 else
                     v22 = v23;
                 v9 = (float)v22;
@@ -79,7 +79,7 @@ unsigned int BestVisibleEnemy__12CBaseMonster(float a0)
                 v29 = v26 * v26 + v27 * v27 + v28 * v28;
                 v30 = sqrt(v29);
                 if (isnan(v30))
-                    sub_487dc0(*(unsigned int *)&v29);
+                    sqrt(*(unsigned int *)&v29);
                 else
                     v29 = v30;
                 v10 = (float)v29;

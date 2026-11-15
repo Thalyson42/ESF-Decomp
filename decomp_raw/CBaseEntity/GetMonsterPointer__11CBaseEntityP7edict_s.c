@@ -18,7 +18,7 @@ typedef struct st_49e2a0_2 {
     struct st_49e2a0_0 *field_60;
 } st_49e2a0_2;
 
-extern st_49e2a0_1 *g_6168d4;
+extern st_49e2a0_1 *g_engfuncs.pfnPEntityOfEntOffset;
 
 unsigned int GetMonsterPointer__11CBaseEntityP7edict_s(unsigned int a0, st_49e2a0_3 *a1)
 {
@@ -26,7 +26,7 @@ unsigned int GetMonsterPointer__11CBaseEntityP7edict_s(unsigned int a0, st_49e2a
     st_49e2a0_2 *v1;  // edx
 
     v0 = a1;
-    if (v0 || (v0 = g_6168d4(0), v0))
+    if (v0 || (v0 = g_engfuncs.pfnPEntityOfEntOffset(0), v0))
         v1 = v0->field_7c;
     else
         v1 = NULL;

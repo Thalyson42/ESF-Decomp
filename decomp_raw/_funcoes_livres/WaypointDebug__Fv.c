@@ -3,8 +3,8 @@ extern int fp;
 
 int WaypointDebug__Fv(void)
 {
-    fp = sub_48d440("ESF_bot.txt", "a");
-    sub_488d60(fp, "WaypointDebug: LINKED LIST ERROR!!!\n");
-    return sub_48c560(fp);
+    fp = fopen@GLIBC_2.1("ESF_bot.txt", "a");
+    fprintf@GLIBC_2.0(fp, "WaypointDebug: LINKED LIST ERROR!!!\n");
+    return fclose@GLIBC_2.1(fp);
 }
 

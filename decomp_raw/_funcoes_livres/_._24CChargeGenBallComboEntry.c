@@ -15,7 +15,7 @@ unsigned int _._24CChargeGenBallComboEntry(st_565e30_0 *a0, char a1)
     v0 = &__vt_18CBaseBotComboEntry;
     a0->field_10 = &__vt_18CBaseBotComboEntry;
     if (a1 & 1)
-        v0 = sub_48d4e0(a0);
+        v0 = __builtin_delete(a0);
     return v0;
 }
 

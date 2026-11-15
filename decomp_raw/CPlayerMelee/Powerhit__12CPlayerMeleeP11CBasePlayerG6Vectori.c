@@ -53,7 +53,7 @@ typedef struct st_50c5f0_5 {
     struct st_50c5f0_3 *field_60;
 } st_50c5f0_5;
 
-extern st_50c5f0_4 *g_6168d4;
+extern st_50c5f0_4 *g_engfuncs.pfnPEntityOfEntOffset;
 
 int Powerhit__12CPlayerMeleeP11CBasePlayerG6Vectori(st_50c5f0_1 *a0, st_50c5f0_7 *a1, float *a2, int a3)
 {
@@ -86,11 +86,11 @@ int Powerhit__12CPlayerMeleeP11CBasePlayerG6Vectori(st_50c5f0_1 *a0, st_50c5f0_7
         v7 = *v14->field_8 + v4;
         v8 = *(float *)&v15->field_4 + v5;
         v9 = *(float *)&v15->field_8 + v6;
-        sub_488460(&*v14->field_8, &v7, 0, 1, *v14->field_208, &v10);
+        UTIL_TraceHull(&*v14->field_8, &v7, 0, 1, *v14->field_208, &v10);
         if (1.0 > v11)
         {
             v16 = v12;
-            if (v16 || (v16 = g_6168d4(0), v16))
+            if (v16 || (v16 = g_engfuncs.pfnPEntityOfEntOffset(0), v16))
                 v17 = v16->field_7c;
             else
                 v17 = NULL;
@@ -106,10 +106,10 @@ int Powerhit__12CPlayerMeleeP11CBasePlayerG6Vectori(st_50c5f0_1 *a0, st_50c5f0_7
                 if (!a1->field_3a8)
                 {
                     v4 = v4;
-                    return sub_48ad90(a0, a1, &v4, a3, 0);
+                    return CPlayerMelee::Powerhit(a0, a1, &v4, a3, 0);
                 }
                 v4 = v4;
-                return sub_48ad90(a0, a1, &v4, a3, 0);
+                return CPlayerMelee::Powerhit(a0, a1, &v4, a3, 0);
             }
         }
         v4 = 0;
@@ -130,9 +130,9 @@ int Powerhit__12CPlayerMeleeP11CBasePlayerG6Vectori(st_50c5f0_1 *a0, st_50c5f0_7
     if (!a1->field_3a8)
     {
         v4 = v4;
-        return sub_48ad90(a0, a1, &v4, v13, 0);
+        return CPlayerMelee::Powerhit(a0, a1, &v4, v13, 0);
     }
     v4 = v4;
-    return sub_48ad90(a0, a1, &v4, v13, 0);
+    return CPlayerMelee::Powerhit(a0, a1, &v4, v13, 0);
 }
 

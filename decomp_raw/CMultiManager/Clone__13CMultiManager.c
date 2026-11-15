@@ -34,7 +34,7 @@ st_52b6a0_1 * Clone__13CMultiManager(st_52b6a0_1 *a0)
     unsigned int *k;  // esi
     st_52b6a0_1 *v0;  // [bp-0x8]
 
-    v1 = sub_487fa0(0);
+    v1 = GetClassPtr__H1Z13CMultiManager_PX01_PX01(0);
     v0 = v1;
     iter = v1->field_0;
     v3 = v1->field_0->field_208;

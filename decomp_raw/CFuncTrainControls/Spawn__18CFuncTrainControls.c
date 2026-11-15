@@ -34,7 +34,7 @@ typedef struct st_4ecaa0_3 {
 } st_4ecaa0_3;
 
 extern char Find__18CFuncTrainControls;
-extern st_4ecaa0_3 *g_6167c8;
+extern st_4ecaa0_3 *g_engfuncs.pfnSetModel;
 extern st_4ecaa0_2 *gpGlobals;
 
 short Spawn__18CFuncTrainControls(st_4ecaa0_1 *a0)
@@ -46,10 +46,10 @@ short Spawn__18CFuncTrainControls(st_4ecaa0_1 *a0)
     a0->field_0->field_10c = 0;
     a0->field_0->field_108 = 0;
     v0 = &gpGlobals;
-    g_6167c8(a0->field_0->field_208, a0->field_0->field_b8 + gpGlobals->field_98);
+    g_engfuncs.pfnSetModel(a0->field_0->field_208, a0->field_0->field_b8 + gpGlobals->field_98);
     v1 = a0->field_0;
-    sub_48a0d0(v1, &v1->field_dc, &v1->field_e8);
-    a0->field_c = _INSERT(sub_48db50(a0->field_0, &a0->field_0->field_8), 0, 0) | 0xffff0000;
+    UTIL_SetSize(v1, &v1->field_dc, &v1->field_e8);
+    a0->field_c = _INSERT(UTIL_SetOrigin(a0->field_0, &a0->field_0->field_8), 0, 0) | 0xffff0000;
     a0->field_10 = &Find__18CFuncTrainControls;
     v3 = *v0;
     *(float *)&a0->field_0->field_104 = v3->field_0;

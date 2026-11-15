@@ -28,7 +28,7 @@ st_4edf60_0 ** Activate__10CGunTarget(float a0)
     v10 = (*(int *)(*(int *)(*(unsigned int *)&a0 + 96) + 172))(a0);
     if (!v10)
         return v10;
-    sub_48d960(*(unsigned int *)&a0 + 272, v10);
+    EHANDLE::__as(*(unsigned int *)&a0 + 272, v10);
     idx = *(int *)a0;
     index = idx + 220;
     idx1 = idx + 232;
@@ -44,6 +44,6 @@ st_4edf60_0 ** Activate__10CGunTarget(float a0)
     v6 = (float)(*v10->field_8 - v14);
     v7 = (float)(*(float *)&v16[1] - v15);
     v8 = *(float *)&v16[2] - v5;
-    return sub_48db50(idx, &v6);
+    return UTIL_SetOrigin(idx, &v6);
 }
 

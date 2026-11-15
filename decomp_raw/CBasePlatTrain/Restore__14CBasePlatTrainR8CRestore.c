@@ -3,6 +3,6 @@ extern int _14CBasePlatTrain.m_SaveData;
 
 unsigned int Restore__14CBasePlatTrainR8CRestore(int a0, int a1)
 {
-    return (!sub_489eb0(a0, a1) ? 0 : sub_48a980(a1, "CBasePlatTrain", a0, &_14CBasePlatTrain.m_SaveData, 3));
+    return (!CBaseToggle::Restore(a0, a1) ? 0 : CRestore::ReadFields(a1, "CBasePlatTrain", a0, &_14CBasePlatTrain.m_SaveData, 3));
 }
 

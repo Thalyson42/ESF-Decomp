@@ -14,9 +14,9 @@ st_4afc30_0 ** BeamCreate__5CBeamPCci(int a0, int a1)
 {
     st_4afc30_0 **v0;  // edi
 
-    v0 = sub_48a470(0);
+    v0 = GetClassPtr__H1Z5CBeam_PX01_PX01(0);
     *(char **)*v0 = -1 * gpGlobals->field_98 + 5887624;
-    sub_48af10(v0, a0, a1);
+    CBeam::BeamInit(v0, a0, a1);
     return v0;
 }
 

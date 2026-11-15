@@ -25,7 +25,7 @@ unsigned int Use__10CGameScoreP11CBaseEntityT18USE_TYPEf(void* *a0, st_4cf200_2 
     unsigned short v1;  // [bp-0x20]
     unsigned short v2;  // [bp-0x1e]
 
-    v3 = sub_48aa30(a0, a1);
+    v3 = CRuleEntity::CanFireForActivator(a0, a1);
     if (!v3)
         return v3;
     v4 = a1->field_60->field_a0(a1);

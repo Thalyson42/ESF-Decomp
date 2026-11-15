@@ -17,12 +17,12 @@ typedef struct st_527750_0 {
     char field_0;
 } st_527750_0;
 
-extern float g_5bd054;
-extern st_527750_0 *g_5bd100;
-extern float g_5bd11c;
+extern float allowspectator+12;
+extern st_527750_0 *teamlist+4;
+extern float teamoverride+12;
 extern unsigned int num_teams;
 extern char __vt_17CHalfLifeTeamplay;
-extern st_527750_1 *g_6168e0;
+extern st_527750_1 *g_engfuncs.pfnPEntityOfEntIndex;
 extern st_527750_3 *gpGlobals;
 extern int team_names;
 extern int team_scores;
@@ -40,19 +40,19 @@ float __17CHalfLifeTeamplay(float idx)
     char *v0;  // [bp-0x28], Other Possible Types: int
     char *v1;  // [bp-0x8]
 
-    sub_48d540(idx);
+    __18CHalfLifeMultiplay(idx);
     *(char **)(*(unsigned int *)&idx + 0x44) = &__vt_17CHalfLifeTeamplay;
     *(unsigned int *)(*(unsigned int *)&idx + 88) = 0;
     *(unsigned int *)(*(unsigned int *)&idx + 92) = 0;
-    sub_48d0e0(&team_names, 0, 0x200);
-    sub_48d0e0(&team_scores, 0, 128);
+    memset@GLIBC_2.0(&team_names, 0, 0x200);
+    memset@GLIBC_2.0(&team_scores, 0, 128);
     num_teams = 0;
     *(char *)(*(unsigned int *)&idx + 100) = 0;
-    v0 = g_5bd100;
+    v0 = teamlist+4;
     v1 = *(unsigned int *)&idx + 100;
-    sub_48d360(v1, v0, 0x200);
-    v3 = g_6168e0(0);
-    if (v3 && v3->field_22c && g_5bd11c != 0.0f)
+    strncpy@GLIBC_2.0(v1, v0, 0x200);
+    v3 = g_engfuncs.pfnPEntityOfEntIndex(0);
+    if (v3 && v3->field_22c && teamoverride+12 != 0.0f)
     {
         v4 = v3->field_22c + gpGlobals->field_98;
         if (v4)
@@ -66,11 +66,11 @@ float __17CHalfLifeTeamplay(float idx)
             if (v5 != 0xfffffffe)
             {
                 v0 = v4;
-                sub_48d360(v1, v0, 0x200);
+                strncpy@GLIBC_2.0(v1, v0, 0x200);
             }
         }
     }
-    *(float *)(*(unsigned int *)&idx + 80) = g_5bd054;
+    *(float *)(*(unsigned int *)&idx + 80) = allowspectator+12;
     v8 = *(unsigned int *)&idx + 100;
     v9 = 0xffffffff;
     do
@@ -82,7 +82,7 @@ float __17CHalfLifeTeamplay(float idx)
     else
         *(unsigned int *)(*(unsigned int *)&idx + 96) = 0;
     *(unsigned short *)&v0 = 0;
-    sub_48c940(idx, v0);
+    CHalfLifeTeamplay::RecountTeams(idx, v0);
     return idx;
 }
 

@@ -57,12 +57,12 @@ typedef struct st_549c40_1 {
 
 extern char __vt_16CFinishMeleeTask;
 extern unsigned int g_vecZero;
-extern unsigned int g_616790;
-extern unsigned int g_616794;
+extern unsigned int g_vecZero+4;
+extern unsigned int g_vecZero+8;
 extern st_549c40_5 g_engfuncs;
-extern st_549c40_6 *g_6168a4;
-extern st_549c40_6 *g_616928;
-extern st_549c40_6 *g_61692c;
+extern st_549c40_6 *g_engfuncs.pfnCVarGetFloat;
+extern st_549c40_6 *g_engfuncs.pfnRandomLong;
+extern st_549c40_6 *g_engfuncs.pfnRandomFloat;
 
 st_549c40_4 * __16CFinishMeleeTaskP4CBot(st_549c40_4 *a0, int a1)
 {
@@ -86,7 +86,7 @@ st_549c40_4 * __16CFinishMeleeTaskP4CBot(st_549c40_4 *a0, int a1)
     unsigned short v12;  // [bp-0x20]
     unsigned short v13;  // [bp-0x1e]
 
-    sub_48ce80(a0, a1);
+    __9CBaseTaskP4CBot(a0, a1);
     a0->field_14 = &__vt_16CFinishMeleeTask;
     v14 = a0->field_8;
     v15 = v14->field_a04->field_14;
@@ -108,7 +108,7 @@ st_549c40_4 * __16CFinishMeleeTaskP4CBot(st_549c40_4 *a0, int a1)
     }
     v5 = &g_engfuncs.padding_0[0];
     v0 = 1;
-    if ((int)g_616928(v0, 100) <= v15)
+    if ((int)g_engfuncs.pfnRandomLong(v0, 100) <= v15)
     {
         a0->field_28 = 1;
         v5->field_16c(4.300000190734863f, 6.099999904632568f);
@@ -120,38 +120,38 @@ st_549c40_4 * __16CFinishMeleeTaskP4CBot(st_549c40_4 *a0, int a1)
     {
         a0->field_28 = 2;
         strncpy(v0, "33s@", 4);
-        g_61692c(v0, 4.599999904632568f);
+        g_engfuncs.pfnRandomFloat(v0, 4.599999904632568f);
         a0->field_24 = (float)(3.799999952316284 + *(float *)&a0->field_0);
     }
-    g_61692c(1.5f, 2.4000000953674316f);
+    g_engfuncs.pfnRandomFloat(1.5f, 2.4000000953674316f);
     v16 = 1.5 + *(float *)&a0->field_0;
     a0->field_20 = (float)v16;
     a0->field_18 = 1;
     a0->field_1c = 0;
-    g_6168a4("am_prepunch_maxstun");
+    g_engfuncs.pfnCVarGetFloat("am_prepunch_maxstun");
     v8 = __fnstcw();
     v7 = v8 | 0xc00;
     v10 = (int)v16;
     v4 = v10;
-    g_6168a4("am_prepunch_mincombo");
+    g_engfuncs.pfnCVarGetFloat("am_prepunch_mincombo");
     v8 = __fnstcw();
     v7 = v8 | 0xc00;
     v10 = (int)v16;
     v3 = v10;
-    g_6168a4("am_prepunch_max");
+    g_engfuncs.pfnCVarGetFloat("am_prepunch_max");
     v8 = __fnstcw();
     v7 = v8 | 0xc00;
     v10 = (int)v16;
     v2 = v10;
     v2 -= 1;
-    v1 = v4 - (char)g_616928(0, (char)(a0->field_8->field_9fc + 1) >> 1);
+    v1 = v4 - (char)g_engfuncs.pfnRandomLong(0, (char)(a0->field_8->field_9fc + 1) >> 1);
     if (v6)
     {
-        v17 = v4 + (char)g_616928(0, (char)(a0->field_8->field_9fc + 1) >> 1);
+        v17 = v4 + (char)g_engfuncs.pfnRandomLong(0, (char)(a0->field_8->field_9fc + 1) >> 1);
     }
     else
     {
-        v18 = g_616928(0, a0->field_8->field_9fc);
+        v18 = g_engfuncs.pfnRandomLong(0, a0->field_8->field_9fc);
         v17 = v2 - v18 - a0->field_8->field_a04->field_34;
     }
     if (v1 <= v3)
@@ -160,15 +160,15 @@ st_549c40_4 * __16CFinishMeleeTaskP4CBot(st_549c40_4 *a0, int a1)
         v17 = v3 + 1;
     if (a0->field_28 == 2 && v17 > 6)
         v17 = 6;
-    a0->field_2a = g_616928(v1, v17);
+    a0->field_2a = g_engfuncs.pfnRandomLong(v1, v17);
     a0->field_2c = 0;
     a0->field_30 = g_vecZero;
-    a0->field_34 = g_616790;
-    a0->field_38 = g_616794;
+    a0->field_34 = g_vecZero+4;
+    a0->field_38 = g_vecZero+8;
     a0->field_3c = 0;
     if (!v6)
         return a0;
-    sub_4898b0(a0->field_8);
+    CBot::MakeMeleeComboList(a0->field_8);
     return a0;
 }
 

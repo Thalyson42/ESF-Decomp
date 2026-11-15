@@ -27,9 +27,9 @@ unsigned int PopEnemy__12CBaseMonster(unsigned int *a0)
     {
         v1 = v0;
         v2 = &a0[2 * v1 + 70];
-        if (sub_48d8b0(v2))
+        if (EHANDLE::__opi(v2))
         {
-            v3 = sub_489fd0(v2);
+            v3 = EHANDLE::__rf(v2);
             if (v3->field_60->field_8c(v3))
             {
                 v4 = a0[71 + 2 * v1];
@@ -41,7 +41,7 @@ unsigned int PopEnemy__12CBaseMonster(unsigned int *a0)
                 a0[150] = v5[80];
                 return 1;
             }
-            sub_48d960(&a0[2 * v1 + 70], 0);
+            EHANDLE::__as(&a0[2 * v1 + 70], 0);
         }
         v0 = v1 - 1;
         if (v1 - 1 < 0)

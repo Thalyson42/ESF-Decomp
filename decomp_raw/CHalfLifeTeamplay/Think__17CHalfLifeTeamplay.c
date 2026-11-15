@@ -35,25 +35,25 @@ typedef struct st_5278c0_2 {
 
 extern char fragsleft;
 extern char timeleft;
-extern float g_5bcfa0;
-extern float g_5bd054;
-extern float g_5bd07c;
-extern float g_5bd090;
+extern float timeleft+12;
+extern float allowspectator+12;
+extern float characterlimit+12;
+extern float fraglimit+12;
 extern unsigned int gmsgAllowSpec;
 extern int num_teams;
 extern float flLastSBotTeamCheck.1736;
 extern char _GLOBAL_OFFSET_TABLE_;
 extern unsigned int g_fGameOver;
-extern st_5278c0_1 *g_616878;
-extern st_5278c0_1 *g_61687c;
-extern st_5278c0_1 *g_616880;
-extern st_5278c0_1 *g_6168a4;
-extern st_5278c0_1 *g_6169e4;
+extern st_5278c0_1 *g_engfuncs.pfnMessageBegin;
+extern st_5278c0_1 *g_engfuncs.pfnMessageEnd;
+extern st_5278c0_1 *g_engfuncs.pfnWriteByte;
+extern st_5278c0_1 *g_engfuncs.pfnCVarGetFloat;
+extern st_5278c0_1 *g_engfuncs.pfnForceUnmodified;
 extern st_5278c0_2 *gpGlobals;
 extern int g_VoiceGameMgr;
 extern unsigned int last_frags.1734;
 extern int last_time.1735;
-extern char g_6246ac;
+extern char BotManager+44;
 
 double Think__17CHalfLifeTeamplay(float idx)
 {
@@ -77,30 +77,30 @@ double Think__17CHalfLifeTeamplay(float idx)
     unsigned short v8;  // [bp-0x6]
 
     v5 = 0;
-    if (*(float *)(*(unsigned int *)&idx + 80) != g_5bd054)
+    if (*(float *)(*(unsigned int *)&idx + 80) != allowspectator+12)
     {
-        g_616878(2, gmsgAllowSpec, 0, 0);
+        g_engfuncs.pfnMessageBegin(2, gmsgAllowSpec, 0, 0);
         v8 = __fnstcw();
         v7 = v8 | 0xc00;
-        v6 = (int)g_5bd054;
+        v6 = (int)allowspectator+12;
         v2 = v6;
-        g_616880(v2);
-        g_61687c(v2);
-        *(float *)(*(unsigned int *)&idx + 80) = g_5bd054;
+        g_engfuncs.pfnWriteByte(v2);
+        g_engfuncs.pfnMessageEnd(v2);
+        *(float *)(*(unsigned int *)&idx + 80) = allowspectator+12;
     }
-    if (*(float *)(*(unsigned int *)&idx + 84) != g_5bd07c)
+    if (*(float *)(*(unsigned int *)&idx + 84) != characterlimit+12)
     {
         (*(int *)(*(int *)(*(unsigned int *)&idx + 0x44) + 56))(idx, 0);
-        *(float *)(*(unsigned int *)&idx + 84) = g_5bd07c;
+        *(float *)(*(unsigned int *)&idx + 84) = characterlimit+12;
     }
     v10 = *(float *)&gpGlobals->field_4;
-    sub_488ca0(&g_VoiceGameMgr, (unsigned int)(v10 >> 0));
+    CVoiceGameMgr::Update(&g_VoiceGameMgr, (unsigned int)(v10 >> 0));
     if (g_fGameOver)
     {
-        sub_48e0e0(idx);
+        CHalfLifeMultiplay::Think(idx);
         return v10;
     }
-    g_6168a4("mp_timelimit");
+    g_engfuncs.pfnCVarGetFloat("mp_timelimit");
     v11 = v10 * 60.0;
     if (v11 != 0.0)
     {
@@ -118,7 +118,7 @@ double Think__17CHalfLifeTeamplay(float idx)
         (*(int *)(*(int *)(*(unsigned int *)&idx + 0x44) + 272))(v2);
         return v11;
     }
-    if (g_5bd090 != 0.0f)
+    if (fraglimit+12 != 0.0f)
     {
         v13 = 9999;
         i = 0;
@@ -126,16 +126,16 @@ double Think__17CHalfLifeTeamplay(float idx)
         {
             do
             {
-                if ((double)*(int *)&(&_GLOBAL_OFFSET_TABLE_)[0xffa4 + 4 * i] >= g_5bd090)
+                if ((double)*(int *)&(&_GLOBAL_OFFSET_TABLE_)[0xffa4 + 4 * i] >= fraglimit+12)
                 {
                     v15 = (st_5278c0_0 *)idx;
                     v2 = v15;
                     (*(int *)(v15->field_44 + 272))(v2);
-                    return g_5bd090;
+                    return fraglimit+12;
                 }
                 v8 = __fnstcw();
                 v7 = v8 | 0xc00;
-                v6 = (int)(g_5bd090 - (double)*(int *)&(&_GLOBAL_OFFSET_TABLE_)[0xffa4 + 4 * i]);
+                v6 = (int)(fraglimit+12 - (double)*(int *)&(&_GLOBAL_OFFSET_TABLE_)[0xffa4 + 4 * i]);
                 if (v6 < v13)
                     v13 = v6;
                 i += 1;
@@ -146,14 +146,14 @@ double Think__17CHalfLifeTeamplay(float idx)
     if (v5 != last_frags.1734)
     {
         v1 = "%i";
-        v0 = sub_488b00(v1, v5);
-        g_6169e4(&fragsleft, v0);
+        v0 = UTIL_VarArgs(v1, v5);
+        g_engfuncs.pfnForceUnmodified(&fragsleft, v0);
     }
-    if (g_5bcfa0 != (double)last_time.1735)
+    if (timeleft+12 != (double)last_time.1735)
     {
         v1 = "%i";
-        v0 = sub_488b00(v1, v4);
-        g_6169e4(&timeleft, v0);
+        v0 = UTIL_VarArgs(v1, v4);
+        g_engfuncs.pfnForceUnmodified(&timeleft, v0);
     }
     last_frags.1734 = v5;
     last_time.1735 = v4;
@@ -162,7 +162,7 @@ double Think__17CHalfLifeTeamplay(float idx)
     {
         return v16;
     }
-    else if (g_6246ac)
+    else if (BotManager+44)
     {
         v17 = *(float *)&gpGlobals->field_0 + 0.75;
         flLastSBotTeamCheck.1736 = (float)v17;
@@ -171,10 +171,10 @@ double Think__17CHalfLifeTeamplay(float idx)
             return v17;
         do
         {
-            v19 = sub_48a500((short)v18);
+            v19 = UTIL_PlayerByIndex((short)v18);
             *(unsigned short *)&v1 = 0;
             *(unsigned short *)&v0 = 1;
-            if ((char)sub_489a70(v19, v0, v1))
+            if ((char)UTIL_IsValidPlayer(v19, v0, v1))
             {
                 v3 = 0;
                 if (!v19->field_60->field_a4(v19))

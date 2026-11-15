@@ -9,7 +9,7 @@ typedef struct st_4c1c30_1 {
 } st_4c1c30_1;
 
 extern char BreakTouch__10CBreakableP11CBaseEntity;
-extern st_4c1c30_1 *g_6167c8;
+extern st_4c1c30_1 *g_engfuncs.pfnSetModel;
 extern st_4c1c30_0 *gpGlobals;
 
 unsigned int Spawn__10CBreakable(float idx)
@@ -30,14 +30,14 @@ unsigned int Spawn__10CBreakable(float idx)
     v1[21] = 0;
     if (!*(int *)(*(unsigned int *)&idx + 108))
         *(unsigned int *)(*(int *)idx + 524) = 1;
-    *(unsigned int *)(*(unsigned int *)&idx + 20) = _INSERT(g_6167c8(*(int *)(*(int *)idx + 520), *(int *)(*(int *)idx + 184) + gpGlobals->field_98), 0, 0) | 0xffff0000;
+    *(unsigned int *)(*(unsigned int *)&idx + 20) = _INSERT(g_engfuncs.pfnSetModel(*(int *)(*(int *)idx + 520), *(int *)(*(int *)idx + 184) + gpGlobals->field_98), 0, 0) | 0xffff0000;
     *(char **)(*(unsigned int *)&idx + 24) = &BreakTouch__10CBreakableP11CBaseEntity;
     if (*(char *)(*(int *)idx + 416) & 1)
     {
         *(unsigned int *)(*(unsigned int *)&idx + 20) = 0;
         *(unsigned int *)(*(unsigned int *)&idx + 24) = 0;
     }
-    v3 = sub_48c7c0(idx);
+    v3 = CBreakable::IsBreakable(idx);
     if (v3)
         return v3;
     v4 = *(int *)idx;

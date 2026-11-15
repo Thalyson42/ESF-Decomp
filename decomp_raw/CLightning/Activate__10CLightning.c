@@ -6,6 +6,6 @@ unsigned int Activate__10CLightning(float a0)
     v1 = 0;
     if (*(float *)(*(unsigned int *)&a0 + 112) == 0.0f)
         v1 = !(*(char *)(*(int *)a0 + 416) & 8);
-    return sub_48bc50(a0);
+    return CLightning::BeamUpdateVars(a0);
 }
 

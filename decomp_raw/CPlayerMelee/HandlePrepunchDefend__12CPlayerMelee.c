@@ -27,8 +27,8 @@ typedef struct st_509740_0 {
     unsigned int field_0;
 } st_509740_0;
 
-extern float g_5bd20c;
-extern st_509740_0 *g_6168dc;
+extern float melee_prepunch_driftspeed+12;
+extern st_509740_0 *g_engfuncs.pfnIndexOfEdict;
 extern st_509740_1 *gpGlobals;
 
 int HandlePrepunchDefend__12CPlayerMelee(float idx)
@@ -78,7 +78,7 @@ int HandlePrepunchDefend__12CPlayerMelee(float idx)
         v13 = (float)(v23 + *(float *)&*v22->field_8);
         v14 = (float)(v24 + *(float *)&v25[1]);
         v15 = *(float *)&v25[2] + v7;
-        sub_488460(&*v22->field_8, &v13, 1, 1, *(int *)&*v22->padding_9[0x1ff], &v16);
+        UTIL_TraceHull(&*v22->field_8, &v13, 1, 1, *(int *)&*v22->padding_9[0x1ff], &v16);
         if (1.0 > v17)
         {
             *(unsigned int *)(*(unsigned int *)&idx + 208) = 1;
@@ -89,7 +89,7 @@ int HandlePrepunchDefend__12CPlayerMelee(float idx)
             *(float *)&v26->field_288 = v33;
             v26->field_28c = v6;
             v26->field_290 = v7;
-            sub_488860(&v33, &v18);
+            UTIL_VecToAngles(&v33, &v18);
             v5 = __fnstcw();
             v4 = v5 | 0xc00;
             v3 = (int)v33;
@@ -102,18 +102,18 @@ int HandlePrepunchDefend__12CPlayerMelee(float idx)
                 v6 = v19;
                 v7 = v20;
                 *(unsigned int *)&v7 = -v7;
-                sub_488860(&v11, &v33);
+                UTIL_VecToAngles(&v11, &v33);
                 v8 = v11;
                 v9 = v12;
                 v10 = v13;
                 v1 = &v11;
                 v0 = *(int *)(*(int *)*(int *)(*(unsigned int *)&idx + 300) + 520);
-                sub_487b20(g_6168dc(v0));
+                UTIL_Model_MeleeStruggle_Anglefix(g_engfuncs.pfnIndexOfEdict(v0));
             }
             if (!*(int *)(*(unsigned int *)&idx + 212) && !*(int *)(*(unsigned int *)&idx + 216))
             {
                 *(unsigned short *)&v0 = 1;
-                sub_48b670(idx, v0, *(float *)gpGlobals, 1, "wall_autopunched");
+                CPlayerMelee::AddAnimation(idx, v0, *(float *)gpGlobals, 1, "wall_autopunched");
             }
         }
         else
@@ -123,7 +123,7 @@ int HandlePrepunchDefend__12CPlayerMelee(float idx)
             v30 = *(float *)(*(unsigned int *)&idx + 272) * *(float *)(*(unsigned int *)&idx + 272) + *(float *)(*(unsigned int *)&idx + 276) * *(float *)(*(unsigned int *)&idx + 276) + *(float *)(*(unsigned int *)&idx + 280) * *(float *)(*(unsigned int *)&idx + 280);
             v31 = sqrt(v30);
             if (isnan(v31))
-                sub_487dc0(*(unsigned int *)&v30);
+                sqrt(*(unsigned int *)&v30);
             else
                 v30 = v31;
             v14 = (float)v30;
@@ -140,9 +140,9 @@ int HandlePrepunchDefend__12CPlayerMelee(float idx)
                 v9 = (float)(v32 * *(float *)&v29->padding_0[4]);
                 v10 = (float)(v32 * *(float *)&v29->padding_0[8]);
             }
-            v33 = g_5bd20c * v8;
-            v6 = g_5bd20c * v9;
-            v7 = g_5bd20c * v10;
+            v33 = melee_prepunch_driftspeed+12 * v8;
+            v6 = melee_prepunch_driftspeed+12 * v9;
+            v7 = melee_prepunch_driftspeed+12 * v10;
 LABEL_509a41:
             *(float *)&v2->field_288 = v33;
             *(float *)&v2->field_28c = v6;
@@ -157,6 +157,6 @@ LABEL_509a41:
         v7 = 0;
         goto LABEL_509a41;
     }
-    return sub_48ca60(idx);
+    return CPlayerMelee::CheckStunTime(idx);
 }
 

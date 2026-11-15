@@ -92,7 +92,7 @@ typedef struct st_5509d0_10 {
     unsigned int field_0;
 } st_5509d0_10;
 
-extern st_5509d0_10 *g_616928;
+extern st_5509d0_10 *g_engfuncs.pfnRandomLong;
 extern st_5509d0_9 *gpGlobals;
 
 double TaskThink__17CChargeAttackTask(st_5509d0_8 *a0)
@@ -136,15 +136,15 @@ double TaskThink__17CChargeAttackTask(st_5509d0_8 *a0)
         if (v15 == 16 || v15 == 22 || v15 == 12 || v15 == 15 || v15 == 13 || v15 == 24 || v15 == 19)
         {
             v0 = a0->field_8;
-            sub_48d0d0(v0);
+            CBot::ResetMoveSpeed(v0);
         }
         else if (!a0->field_8->field_b6c)
         {
-            sub_48d7b0(a0->field_8);
+            CBot::GoToAnPreviousLocation(a0->field_8);
         }
         else
         {
-            sub_48bfd0(a0->field_8);
+            CBot::BotCombatMovement(a0->field_8);
         }
         v16 = a0->field_8;
         if (v16->field_b6c)
@@ -164,7 +164,7 @@ double TaskThink__17CChargeAttackTask(st_5509d0_8 *a0)
             if (isnan(sqrt(v22)))
             {
                 v0 = (st_5509d0_5 *)v22;
-                sub_487dc0((unsigned long long)v0);
+                sqrt((unsigned long long)v0);
             }
             v23 = &a0->field_8->field_b6c->field_0->field_20;
             v24 = *(float *)&a0->field_8->field_b6c->field_0->field_20 * *(float *)&a0->field_8->field_b6c->field_0->field_20 + *(float *)&v23[1] * *(float *)&v23[1] + *(float *)&v23[2] * *(float *)&v23[2];
@@ -172,7 +172,7 @@ double TaskThink__17CChargeAttackTask(st_5509d0_8 *a0)
             if (isnan(v25))
             {
                 v0 = (st_5509d0_5 *)v24;
-                sub_487dc0((unsigned long long)v0);
+                sqrt((unsigned long long)v0);
             }
             else
             {
@@ -199,14 +199,14 @@ double TaskThink__17CChargeAttackTask(st_5509d0_8 *a0)
                 {
                     v1 = _INSERT((unsigned long long)v0, 4, v26->field_b6c);
                     v0 = v26;
-                    if ((short)sub_48aab0(v0, *(unsigned int *)((void*)&v1 + 4)) <= 74)
+                    if ((short)UTIL_GetHeadingPercentage(v0, *(unsigned int *)((void*)&v1 + 4)) <= 74)
                         goto LABEL_550d80;
                 }
                 else
                 {
                     v1 = _INSERT((unsigned long long)v0, 4, a0->field_8->field_b6c);
                     v0 = a0->field_8;
-                    if (!(char)sub_48bf70(v0, *(unsigned int *)((void*)&v1 + 4)))
+                    if (!(char)CBot::CanAttackPlayer(v0, *(unsigned int *)((void*)&v1 + 4)))
                         v3 = 0;
                 }
             }
@@ -223,7 +223,7 @@ LABEL_550d80:
             {
                 v0 = _INSERT(v1, 4, 0);
                 v1 = _INSERT(v0, 0, v27);
-                sub_48ab70(v1, *(unsigned int *)((void*)&v1 + 4));
+                CBot::ToggleTurbo(v1, *(unsigned int *)((void*)&v1 + 4));
             }
             else if (v15 != 7 && v15 != 10 && v15 != 33)
             {
@@ -237,7 +237,7 @@ LABEL_550d80:
                     {
                         v0 = _INSERT(v1, 4, 1);
                         v1 = _INSERT(v0, 0, v28);
-                        sub_48ab70(v1, *(unsigned int *)((void*)&v1 + 4));
+                        CBot::ToggleTurbo(v1, *(unsigned int *)((void*)&v1 + 4));
                     }
                 }
             }
@@ -248,14 +248,14 @@ LABEL_550d80:
         else
         {
 LABEL_550c4d:
-            sub_48bf00(a0->field_8);
+            CBot::AddShootDelay(a0->field_8);
             v30 = a0->field_8;
             if (v30->field_b6c && v30->field_b6c->field_770 && !v30->field_a04->field_38)
             {
                 if (a0->field_c->field_28c == 7)
-                    sub_48ce10(v30, "weapon_sword");
+                    CBasePlayer::SelectItem(v30, "weapon_sword");
                 else
-                    sub_48ce10(a0->field_8, "weapon_melee");
+                    CBasePlayer::SelectItem(a0->field_8, "weapon_melee");
             }
             else
             {
@@ -266,12 +266,12 @@ LABEL_550c4d:
                 else if (a0->field_8->field_6d0 > NULL)
                 {
                     v2 = 100;
-                    v31 = g_616928(1, v2);
+                    v31 = g_engfuncs.pfnRandomLong(1, v2);
                     if ((int)v31 <= a0->field_8->field_a04->field_2a)
                         a0->field_8->field_b14 = 1;
                     else
                         a0->field_8->field_b14 = 0;
-                    if (!a0->field_8->field_b6c && !(*(unsigned short *)&v2 = 0, !(char)sub_48dc80(a0->field_8, v2) || !a0->field_8->field_b80->field_46))
+                    if (!a0->field_8->field_b6c && !(*(unsigned short *)&v2 = 0, !(char)CBot::BotCanBeamJump(a0->field_8, v2) || !a0->field_8->field_b80->field_46))
                         a0->field_8->field_1068 = 22;
                     else
                         a0->field_8->field_1068 = 15;

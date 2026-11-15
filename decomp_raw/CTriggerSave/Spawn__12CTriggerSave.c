@@ -27,7 +27,7 @@ typedef struct st_52ec60_2 {
 
 extern char SaveTouch__12CTriggerSaveP11CBaseEntity;
 extern st_52ec60_2 *g_pGameRules;
-extern st_52ec60_1 *g_616818;
+extern st_52ec60_1 *g_engfuncs.pfnRemoveEntity;
 
 unsigned int Spawn__12CTriggerSave(st_52ec60_4 *a0)
 {
@@ -35,11 +35,11 @@ unsigned int Spawn__12CTriggerSave(st_52ec60_4 *a0)
 
     if (!g_pGameRules->field_44->field_1c(g_pGameRules))
     {
-        v0 = _INSERT(sub_489e50(a0), 0, 0);
+        v0 = _INSERT(CBaseTrigger::InitTrigger(a0), 0, 0);
         a0->field_14 = v0 | 0xffff0000;
         a0->field_18 = &SaveTouch__12CTriggerSaveP11CBaseEntity;
         return v0 | 0xffff0000;
     }
-    return g_616818(a0->field_0->field_208);
+    return g_engfuncs.pfnRemoveEntity(a0->field_0->field_208);
 }
 

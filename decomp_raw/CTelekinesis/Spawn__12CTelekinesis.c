@@ -38,6 +38,6 @@ int Spawn__12CTelekinesis(st_529da0_2 *a0)
     a0->field_d4 = 1701602676;
     a0->field_d8 = 1701734763;
     a0->field_dc = 7563635;
-    return sub_48cf50(a0);
+    return CBasePlayerItem::FallInit(a0);
 }
 

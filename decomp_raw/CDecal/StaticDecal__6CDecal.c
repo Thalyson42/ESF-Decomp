@@ -3,8 +3,8 @@ typedef struct st_539830_0 {
     unsigned int field_0;
 } st_539830_0;
 
-extern st_539830_0 *g_6168dc;
-extern st_539830_0 *g_61697c;
+extern st_539830_0 *g_engfuncs.pfnIndexOfEdict;
+extern st_539830_0 *g_engfuncs.pfnStaticDecal;
 
 int StaticDecal__6CDecal(float a0)
 {
@@ -41,13 +41,13 @@ int StaticDecal__6CDecal(float a0)
     v3 = *(float *)(index + 8) - v0;
     v4 = *(float *)(idx + 4) - v1;
     v5 = *(float *)(idx + 8) - v2;
-    sub_487b80(&v3, &v9, 1, *(int *)(index + 520), &v12);
-    v17 = (short)g_6168dc(v13);
+    UTIL_TraceLine(&v3, &v9, 1, *(int *)(index + 520), &v12);
+    v17 = (short)g_engfuncs.pfnIndexOfEdict(v13);
     if (v17)
         v18 = *(int *)((!v13 ? 0 : v13 + 128) + 180);
     else
         v18 = 0;
-    g_61697c(*(int *)a0 + 8, *(int *)(*(int *)a0 + 272), v17, v18);
-    return sub_48a2c0(a0);
+    g_engfuncs.pfnStaticDecal(*(int *)a0 + 8, *(int *)(*(int *)a0 + 272), v17, v18);
+    return CBaseEntity::SUB_Remove(a0);
 }
 

@@ -28,7 +28,7 @@ double GetDmgPerPunch__12CPlayerMelee(double a0, float a1)
     v2 = v3 * v0;
     v0 = (float)v2;
 LABEL_508feb:
-    sub_48c080(a1, *(int *)(*(unsigned int *)&a1 + 296));
+    CPlayerMelee::GetPowerRatio(a1, *(int *)(*(unsigned int *)&a1 + 296));
     v0 = (float)(v2 * v0);
     v4 = 1.0;
     if (1.0 <= v0)

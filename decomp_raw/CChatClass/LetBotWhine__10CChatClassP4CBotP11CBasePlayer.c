@@ -63,8 +63,8 @@ typedef struct st_547ad0_5 {
 extern unsigned int KeyWordIsInNodeList__10CChatClassPQ210CChatClass9CChatNodePCc;
 extern unsigned int MakeSentenceChoiceList__10CChatClassPQ210CChatClass13CChatSentencePt12TMultiChoice1ZPQ210CChatClass13CChatSentencePPQ210CChatClass13CChatSentence;
 extern unsigned int FindSelection__t12TMultiChoice1ZPQ210CChatClass13CChatSentencePQ2t12TMultiChoice1ZPQ210CChatClass13CChatSentence12SMultiChoicei;
-extern st_547ad0_5 *g_616928;
-extern st_547ad0_5 *g_61692c;
+extern st_547ad0_5 *g_engfuncs.pfnRandomLong;
+extern st_547ad0_5 *g_engfuncs.pfnRandomFloat;
 extern st_547ad0_10 *gpGlobals;
 
 st_547ad0_6 * LetBotWhine__10CChatClassP4CBotP11CBasePlayer(st_547ad0_3 *a0, st_547ad0_9 *a1, st_547ad0_8 **a2)
@@ -142,9 +142,9 @@ st_547ad0_6 * LetBotWhine__10CChatClassP4CBotP11CBasePlayer(st_547ad0_3 *a0, st_
     if (!v24)
         return v26;
     v10 = 1;
-    v9 = sub_48d6a0(8);
+    v9 = __builtin_new(8);
     v9->field_0 = 0;
-    v27 = sub_48d6a0(8);
+    v27 = __builtin_new(8);
     v27->field_0 = NULL;
     v27->field_4 = NULL;
     v9->field_4 = v27;
@@ -152,7 +152,7 @@ st_547ad0_6 * LetBotWhine__10CChatClassP4CBotP11CBasePlayer(st_547ad0_3 *a0, st_
     v28 = v9;
     v11 = v28;
     if (v10)
-        v28 = sub_48d4e0(v9);
+        v28 = __builtin_delete(v9);
     v7 = _INSERT(v28, 0, 0) | 0xffff0000;
     v8 = &MakeSentenceChoiceList__10CChatClassPQ210CChatClass13CChatSentencePt12TMultiChoice1ZPQ210CChatClass13CChatSentencePPQ210CChatClass13CChatSentence;
     v6 = &a0[1].padding_0[20];
@@ -170,7 +170,7 @@ st_547ad0_6 * LetBotWhine__10CChatClassP4CBotP11CBasePlayer(st_547ad0_3 *a0, st_
     v16 = NULL;
     v5 = &v16;
     v33 = v11;
-    v4 = g_616928(0, v33->field_0);
+    v4 = g_engfuncs.pfnRandomLong(0, v33->field_0);
     iter = _INSERT(v4, 0, 0) | 0xffff0000;
     v2 = iter;
     v3 = &FindSelection__t12TMultiChoice1ZPQ210CChatClass13CChatSentencePQ2t12TMultiChoice1ZPQ210CChatClass13CChatSentence12SMultiChoicei;
@@ -214,12 +214,12 @@ LABEL_547ce3:
                 if (v43)
                     v43->field_8 = 0;
                 v42->field_4 = NULL;
-                sub_48d4e0(v42);
+                __builtin_delete(v42);
             }
             v44 = v41;
             if (!v44)
                 break;
-            sub_48d4e0(v44);
+            __builtin_delete(v44);
         }
         if (v11->field_4)
         {
@@ -233,33 +233,33 @@ LABEL_547ce3:
                     node = node->field_4;
                     v47->field_4 = NULL;
                     v47->field_8 = 0;
-                    sub_48d4e0(v47);
+                    __builtin_delete(v47);
                 } while (node);
             }
             v45->field_4 = NULL;
             v45->field_0 = NULL;
-            sub_48d4e0(v45);
+            __builtin_delete(v45);
         }
         v48 = v11;
         v48->field_4 = NULL;
-        iter = sub_48d4e0(v48);
+        iter = __builtin_delete(v48);
     }
     if (!v16)
         return iter;
-    sub_488d20(a0, &a0[1].padding_0[20], v16);
+    CChatClass::StoreRecentUsedSentence(a0, &a0[1].padding_0[20], v16);
     a1->field_c44 = 1;
-    g_61692c(0, 5.0f);
+    g_engfuncs.pfnRandomFloat(0, 5.0f);
     a1->field_c48 = (float)(v49 + 5.0 + gpGlobals->field_0);
     v0 = 0;
     v19 = 0;
-    sub_48d0e0(&v20, 0, 0xff);
+    memset@GLIBC_2.0(&v20, 0, 0xff);
     v17 = v0;
-    sub_48d0e0(&v18, 0, 32);
-    sub_48a7c0(a0, a1->field_a04, *a2->field_1d0 + gpGlobals->field_98, &v17);
+    memset@GLIBC_2.0(&v18, 0, 32);
+    CChatClass::HumanizeName(a0, a1->field_a04, *a2->field_1d0 + gpGlobals->field_98, &v17);
     if (v16->field_28)
-        sub_48c290(a0, a1->field_a04, v16->field_24, &v19);
+        CChatClass::MakeChatSentence(a0, a1->field_a04, v16->field_24, &v19);
     else
-        sub_48e110(&v19, v16->field_24);
-    return sub_48c5d0(a0, a1, &v19, a1 + 1, &v17, gpGlobals->field_98 + a1->field_0->field_1d0);
+        strcpy@GLIBC_2.0(&v19, v16->field_24);
+    return CChatClass::FillInNames(a0, a1, &v19, a1 + 1, &v17, gpGlobals->field_98 + a1->field_0->field_1d0);
 }
 

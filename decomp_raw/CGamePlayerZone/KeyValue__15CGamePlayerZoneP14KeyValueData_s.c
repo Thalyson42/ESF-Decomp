@@ -10,7 +10,7 @@ typedef struct st_4d0510_1 {
     unsigned int field_0;
 } st_4d0510_1;
 
-extern st_4d0510_1 *g_6168cc;
+extern st_4d0510_1 *g_engfuncs.pfnAllocString;
 
 unsigned int KeyValue__15CGamePlayerZoneP14KeyValueData_s(unsigned int *a0, st_4d0510_0 *a1)
 {
@@ -19,37 +19,37 @@ unsigned int KeyValue__15CGamePlayerZoneP14KeyValueData_s(unsigned int *a0, st_4
     unsigned int v2;  // eax
     unsigned int v3;  // eax
 
-    if (!sub_488af0(a1->field_4, "intarget"))
+    if (!strcmp@GLIBC_2.0(a1->field_4, "intarget"))
     {
-        v0 = g_6168cc(a1->field_8);
+        v0 = g_engfuncs.pfnAllocString(a1->field_8);
         a0[26] = v0;
         a1->field_c = 1;
         return v0;
     }
-    else if (!sub_488af0(a1->field_4, "outtarget"))
+    else if (!strcmp@GLIBC_2.0(a1->field_4, "outtarget"))
     {
-        v1 = g_6168cc(a1->field_8);
+        v1 = g_engfuncs.pfnAllocString(a1->field_8);
         a0[27] = v1;
         a1->field_c = 1;
         return v1;
     }
-    else if (!sub_488af0(a1->field_4, "incount"))
+    else if (!strcmp@GLIBC_2.0(a1->field_4, "incount"))
     {
-        v2 = g_6168cc(a1->field_8);
+        v2 = g_engfuncs.pfnAllocString(a1->field_8);
         a0[28] = v2;
         a1->field_c = 1;
         return v2;
     }
-    else if (!sub_488af0(a1->field_4, "outcount"))
+    else if (!strcmp@GLIBC_2.0(a1->field_4, "outcount"))
     {
-        v3 = g_6168cc(a1->field_8);
+        v3 = g_engfuncs.pfnAllocString(a1->field_8);
         a0[29] = v3;
         a1->field_c = 1;
         return v3;
     }
     else
     {
-        return sub_489590(a0, a1);
+        return CRuleEntity::KeyValue(a0, a1);
     }
 }
 

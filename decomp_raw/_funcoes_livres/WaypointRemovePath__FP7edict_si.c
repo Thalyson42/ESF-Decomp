@@ -5,7 +5,7 @@ typedef struct st_589c30_0 {
 
 extern void waypoint1.2804;
 extern void waypoint2.2805;
-extern st_589c30_0 *g_616834;
+extern st_589c30_0 *g_engfuncs.pfnEmitSound;
 
 unsigned int WaypointRemovePath__FP7edict_si(int a0, unsigned int a1)
 {
@@ -17,7 +17,7 @@ unsigned int WaypointRemovePath__FP7edict_si(int a0, unsigned int a1)
 
     if (a1 == 1)
     {
-        *(unsigned int *)&waypoint1.2804 = sub_48e090(a0, 50.0f, -0x1);
+        *(unsigned int *)&waypoint1.2804 = WaypointFindNearest(a0, 50.0f, -0x1);
         if (*(int *)&waypoint1.2804 == 0xffffffff)
         {
             v3 = 100;
@@ -37,11 +37,11 @@ unsigned int WaypointRemovePath__FP7edict_si(int a0, unsigned int a1)
     }
     else if (a1 == 2)
     {
-        *(unsigned int *)&waypoint2.2805 = sub_48e090(a0, 50.0f, -0x1);
+        *(unsigned int *)&waypoint2.2805 = WaypointFindNearest(a0, 50.0f, -0x1);
         if (*(int *)&waypoint1.2804 != 0xffffffff && *(int *)&waypoint2.2805 != 0xffffffff)
         {
-            sub_488f30(*(short *)&waypoint1.2804, *(short *)&waypoint2.2805);
-            return g_616834(a0, 1, "common/wpn_hudon.wav", 0x3f800000, 0.800000011920929f, 0, 100);
+            WaypointDeletePath(*(short *)&waypoint1.2804, *(short *)&waypoint2.2805);
+            return g_engfuncs.pfnEmitSound(a0, 1, "common/wpn_hudon.wav", 0x3f800000, 0.800000011920929f, 0, 100);
         }
         v3 = 100;
         v2 = 0;
@@ -53,6 +53,6 @@ unsigned int WaypointRemovePath__FP7edict_si(int a0, unsigned int a1)
     {
         return a1;
     }
-    return g_616834(a0, 1, v4);
+    return g_engfuncs.pfnEmitSound(a0, 1, v4);
 }
 

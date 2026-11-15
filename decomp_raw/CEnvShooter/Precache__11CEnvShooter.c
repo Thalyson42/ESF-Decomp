@@ -26,6 +26,6 @@ extern st_4b4c20_2 *gpGlobals;
 int Precache__11CEnvShooter(st_4b4c20_1 *a0)
 {
     a0->field_78 = g_engfuncs(a0->field_0->field_b8 + gpGlobals->field_98);
-    return sub_48d5e0(a0->field_74);
+    return CBreakable::MaterialSoundPrecache(a0->field_74);
 }
 

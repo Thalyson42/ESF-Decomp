@@ -3,7 +3,7 @@ typedef struct st_5488a0_0 {
     unsigned int field_0;
 } st_5488a0_0;
 
-extern st_5488a0_0 *g_616928;
+extern st_5488a0_0 *g_engfuncs.pfnRandomLong;
 
 char * SwapChars__10CChatClassPCcPc(unsigned int a0, int a1, char *a2)
 {
@@ -19,7 +19,7 @@ char * SwapChars__10CChatClassPCcPc(unsigned int a0, int a1, char *a2)
     int v1;  // [bp-0x8]
 
     v1 = 0;
-    sub_48e110(a2, a1);
+    strcpy@GLIBC_2.0(a2, a1);
     v2 = 0xffffffff;
     v3 = a2;
     do
@@ -27,10 +27,10 @@ char * SwapChars__10CChatClassPCcPc(unsigned int a0, int a1, char *a2)
         v4 = v3;
     } while (v2 && (v2 -= 1, v3 = v4 + 1, *v4));
     v5 = ~v2;
-    v6 = g_616928(1, v5 - 3);
+    v6 = g_engfuncs.pfnRandomLong(1, v5 - 3);
     v0 = 0;
-    v7 = sub_48cbf0(*(char *)(v6 + a2));
-    if (!v7 || (v7 = sub_48cbf0(*(char *)(a2 + v6 + 1)), !v7 || (v7 = a2, *(char *)(v7 + v6 - 1) == 37)))
+    v7 = isalpha@GLIBC_2.0(*(char *)(v6 + a2));
+    if (!v7 || (v7 = isalpha@GLIBC_2.0(*(char *)(a2 + v6 + 1)), !v7 || (v7 = a2, *(char *)(v7 + v6 - 1) == 37)))
         v0 = 1;
     if (v0)
     {
@@ -38,10 +38,10 @@ char * SwapChars__10CChatClassPCcPc(unsigned int a0, int a1, char *a2)
         {
             do
             {
-                v6 = g_616928(1, v5 - 3);
+                v6 = g_engfuncs.pfnRandomLong(1, v5 - 3);
                 v0 = 0;
-                v7 = sub_48cbf0(*(char *)(v6 + a2));
-                if (!v7 || (v7 = sub_48cbf0(*(char *)(a2 + v6 + 1)), !v7 || (v7 = a2, *(char *)(v7 + v6 - 1) == 37)))
+                v7 = isalpha@GLIBC_2.0(*(char *)(v6 + a2));
+                if (!v7 || (v7 = isalpha@GLIBC_2.0(*(char *)(a2 + v6 + 1)), !v7 || (v7 = a2, *(char *)(v7 + v6 - 1) == 37)))
                     v0 = 1;
             } while ((v1 += 1, v0 && v1 <= 19));
         }

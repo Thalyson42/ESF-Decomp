@@ -41,7 +41,7 @@ typedef struct st_5015b0_5 {
     unsigned int field_0;
 } st_5015b0_5;
 
-extern st_5015b0_5 *g_6168d4;
+extern st_5015b0_5 *g_engfuncs.pfnPEntityOfEntOffset;
 
 float MakeCreater__12CPlayerMelee(st_5015b0_1 *a0)
 {
@@ -97,7 +97,7 @@ float MakeCreater__12CPlayerMelee(st_5015b0_1 *a0)
         v24 = *(float *)(*(int *)a0->field_124 + 32) * *(float *)(*(int *)a0->field_124 + 32) + *(float *)&v23[1] * *(float *)&v23[1] + *(float *)&v23[2] * *(float *)&v23[2];
         v25 = sqrt(v24);
         if (isnan(v25))
-            sub_487dc0(*(unsigned int *)&v24);
+            sqrt(*(unsigned int *)&v24);
         else
             v24 = v25;
         v6 = (float)v24;
@@ -126,7 +126,7 @@ float MakeCreater__12CPlayerMelee(st_5015b0_1 *a0)
         v30 = v27 * v27 + v28 * v28 + v29 * v29;
         v31 = sqrt(v30);
         if (isnan(v31))
-            sub_487dc0(*(unsigned int *)&v30);
+            sqrt(*(unsigned int *)&v30);
         else
             v30 = v31;
         v1 = (float)v30;
@@ -157,17 +157,17 @@ float MakeCreater__12CPlayerMelee(st_5015b0_1 *a0)
     v8 = (float)(v34 + *v33->field_8);
     v9 = (float)(v35 + *(float *)&v36[1]);
     v10 = *(float *)&v36[2] + v13;
-    sub_487b80(&*v33->field_8, &v8, 1, *v33->field_208, &v0);
+    UTIL_TraceLine(&*v33->field_8, &v8, 1, *v33->field_208, &v0);
     if (v2 == 1.0f)
         return v2;
     v37 = v7;
-    if (v37 || (v37 = g_6168d4(0), v37))
+    if (v37 || (v37 = g_engfuncs.pfnPEntityOfEntOffset(0), v37))
         v38 = v37->field_7c;
     else
         v38 = NULL;
     if (*v38->field_10c != 4)
         return v2;
-    sub_48d7a0(&v0, 36);
+    UTIL_DecalTrace(&v0, 36);
     return v2;
 }
 

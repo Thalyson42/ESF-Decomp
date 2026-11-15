@@ -73,7 +73,7 @@ typedef struct st_539ae0_2 {
     unsigned int field_0;
 } st_539ae0_2;
 
-extern st_539ae0_2 *g_6168dc;
+extern st_539ae0_2 *g_engfuncs.pfnIndexOfEdict;
 extern st_539ae0_0 *g_pBodyQueueHead;
 
 st_539ae0_0 * CopyToBodyQue__FP9entvars_s(float idx)
@@ -99,13 +99,13 @@ st_539ae0_0 * CopyToBodyQue__FP9entvars_s(float idx)
     v2->field_1a4 = 0;
     v2->field_170 = *(int *)(*(unsigned int *)&idx + 368);
     v2->field_15c = 0x11;
-    v0 = g_6168dc(*(int *)(*(unsigned int *)&idx + 520));
+    v0 = g_engfuncs.pfnIndexOfEdict(*(int *)(*(unsigned int *)&idx + 520));
     v2->field_14c = (float)v0;
     v2->field_118 = *(int *)(*(unsigned int *)&idx + 280) | 32;
     v2->field_128 = *(int *)(*(unsigned int *)&idx + 296);
     *(float *)&v2->field_134 = *(float *)(*(unsigned int *)&idx + 308);
-    sub_48db50(v2, *(unsigned int *)&idx + 8);
-    sub_48a0d0(v2, *(unsigned int *)&idx + 220, *(unsigned int *)&idx + 232);
+    UTIL_SetOrigin(v2, *(unsigned int *)&idx + 8);
+    UTIL_SetSize(v2, *(unsigned int *)&idx + 220, *(unsigned int *)&idx + 232);
     g_pBodyQueueHead = v2->field_198;
     return g_pBodyQueueHead;
 }

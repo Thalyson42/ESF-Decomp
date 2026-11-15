@@ -22,11 +22,11 @@ unsigned int PrimaryAttack__10CSensuBean(st_5179d0_1 *a0)
 
     if (a0->field_c4)
         return v1;
-    v0 = sub_48daf0(a0->field_80);
+    v0 = CBasePlayer::TakeBean(a0->field_80);
     if (v0)
     {
-        sub_48d680(a0->field_80, 5);
-        v0 = sub_489390(*(int *)(*(int *)a0->field_80 + 520), 1, "weapons/sensu.wav", 0x3f800000, 0.800000011920929f, 0, 100);
+        CBasePlayer::SetAnimation(a0->field_80, 5);
+        v0 = EMIT_SOUND_DYN(*(int *)(*(int *)a0->field_80 + 520), 1, "weapons/sensu.wav", 0x3f800000, 0.800000011920929f, 0, 100);
     }
     a0->field_c4 = 1;
     return v0;

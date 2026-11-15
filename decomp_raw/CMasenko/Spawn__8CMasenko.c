@@ -18,6 +18,6 @@ int Spawn__8CMasenko(float idx)
     *(unsigned int *)(*(unsigned int *)&idx + 508) = 4;
     *(unsigned int *)(*(unsigned int *)&idx + 504) = 1;
     *(float *)(*(unsigned int *)&idx + 500) = 0.10000000149011612f;
-    return sub_48cf50(idx);
+    return CBasePlayerItem::FallInit(idx);
 }
 

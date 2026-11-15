@@ -13,12 +13,12 @@ unsigned int HandleGrabDefend__12CPlayerMelee(float a0)
         v2 = __fnstcw();
         v1 = v2 | 0xc00;
         v0 = (int)(100.0 * -(3.0000030994415283 * v4));
-        v5 = sub_48bcc0(a0, v0);
+        v5 = CPlayerMelee::UpdateStruggleBar(a0, v0);
         return v5;
     }
     if (!*(int *)(*(unsigned int *)&a0 + 56))
         return v5;
-    sub_48a130(a0);
+    CPlayerMelee::RemoveStruggleBar(a0);
     return v5;
 }
 

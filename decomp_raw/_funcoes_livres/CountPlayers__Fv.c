@@ -15,7 +15,7 @@ unsigned int CountPlayers__Fv(void)
     iter = 1;
     while (iter <= gpGlobals->field_90)
     {
-        if (sub_48a500(iter))
+        if (UTIL_PlayerByIndex(iter))
         {
             v1 += 1;
             iter += 1;

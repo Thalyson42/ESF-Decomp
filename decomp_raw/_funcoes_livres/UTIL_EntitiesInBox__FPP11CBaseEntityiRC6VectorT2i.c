@@ -23,8 +23,8 @@ typedef struct st_531880_0 {
     unsigned int field_0;
 } st_531880_0;
 
-extern st_531880_0 *g_6168d4;
-extern st_531880_0 *g_6168e0;
+extern st_531880_0 *g_engfuncs.pfnPEntityOfEntOffset;
+extern st_531880_0 *g_engfuncs.pfnPEntityOfEntIndex;
 extern st_531880_1 *gpGlobals;
 
 int UTIL_EntitiesInBox__FPP11CBaseEntityiRC6VectorT2i(unsigned int *a0, int a1, unsigned int *a2, unsigned int *a3, unsigned int a4)
@@ -36,14 +36,14 @@ int UTIL_EntitiesInBox__FPP11CBaseEntityiRC6VectorT2i(unsigned int *a0, int a1, 
     int v0;  // [bp-0x8]
 
     idx = 0;
-    if (!g_6168e0(1))
+    if (!g_engfuncs.pfnPEntityOfEntIndex(1))
         return 0;
     for (v0 = 1; v0 < gpGlobals->field_94; i = &i[1].padding_80[124])
     {
         if (!i->field_0 && (!a4 || a4 & i->field_224) && *(float *)a2 <= i->field_150 && *(float *)&a2[1] <= i->field_154 && *(float *)&a2[2] <= i->field_158 && *(float *)a3 >= i->field_144 && *(float *)&a3[1] >= i->field_148 && *(float *)&a3[2] >= i->field_14c)
         {
             v3 = i;
-            if (v3 || (v3 = g_6168d4(0), v3))
+            if (v3 || (v3 = g_engfuncs.pfnPEntityOfEntOffset(0), v3))
                 v4 = v3->field_7c;
             else
                 v4 = 0;

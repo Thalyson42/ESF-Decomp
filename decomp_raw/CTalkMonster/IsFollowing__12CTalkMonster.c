@@ -19,9 +19,9 @@ unsigned int IsFollowing__12CTalkMonster(int a0)
     st_527670_2 *v1;  // edx
 
     v0 = a0 + 272;
-    if (!sub_48d8b0(v0))
+    if (!EHANDLE::__opi(v0))
         return 0;
-    v1 = sub_489fd0(v0);
+    v1 = EHANDLE::__rf(v0);
     return v1->field_60->field_a0(v1) != 0;
 }
 

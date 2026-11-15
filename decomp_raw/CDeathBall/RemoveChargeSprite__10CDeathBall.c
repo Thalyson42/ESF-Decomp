@@ -6,6 +6,6 @@ typedef struct st_4a9370_0 {
 
 int RemoveChargeSprite__10CDeathBall(st_4a9370_0 *a0)
 {
-    return sub_48cc00(a0->field_1d4);
+    return UTIL_Remove(a0->field_1d4);
 }
 

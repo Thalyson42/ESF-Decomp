@@ -11,18 +11,18 @@ unsigned int KeyValue__8CNodeEntP14KeyValueData_s(unsigned short *a0, st_4e1a00_
     unsigned int v0;  // eax
     unsigned int v1;  // eax
 
-    if (!sub_488af0(a1->field_4, "hinttype"))
+    if (!strcmp@GLIBC_2.0(a1->field_4, "hinttype"))
     {
-        a0[50] = sub_48b500(a1->field_8, 0, 10, 0);
+        a0[50] = __strtol_internal@GLIBC_2.0(a1->field_8, 0, 10, 0);
         a1->field_c = 1;
     }
-    v0 = sub_488af0(a1->field_4, "activity");
+    v0 = strcmp@GLIBC_2.0(a1->field_4, "activity");
     if (v0)
     {
         a1->field_c = 0;
         return v0;
     }
-    v1 = sub_48b500(a1->field_8, 0, 10, 0);
+    v1 = __strtol_internal@GLIBC_2.0(a1->field_8, 0, 10, 0);
     a0[0x33] = v1;
     a1->field_c = 1;
     return v1;

@@ -23,8 +23,8 @@ typedef struct st_495f60_2 {
 } st_495f60_2;
 
 extern char _GLOBAL_OFFSET_TABLE_;
-extern st_495f60_2 *g_6167c4;
-extern st_495f60_2 *g_6168cc;
+extern st_495f60_2 *g_engfuncs.pfnPrecacheSound;
+extern st_495f60_2 *g_engfuncs.pfnAllocString;
 
 st_495f60_1 * Precache__11CBaseButton(st_495f60_1 *a0)
 {
@@ -33,24 +33,24 @@ st_495f60_1 * Precache__11CBaseButton(st_495f60_1 *a0)
 
     if (a0->field_0->field_1a0 & 64)
     {
-        g_6167c4("buttons/spark1.wav");
-        g_6167c4("buttons/spark2.wav");
-        g_6167c4("buttons/spark3.wav");
-        g_6167c4("buttons/spark4.wav");
-        g_6167c4("buttons/spark5.wav");
-        g_6167c4("buttons/spark6.wav");
+        g_engfuncs.pfnPrecacheSound("buttons/spark1.wav");
+        g_engfuncs.pfnPrecacheSound("buttons/spark2.wav");
+        g_engfuncs.pfnPrecacheSound("buttons/spark3.wav");
+        g_engfuncs.pfnPrecacheSound("buttons/spark4.wav");
+        g_engfuncs.pfnPrecacheSound("buttons/spark5.wav");
+        g_engfuncs.pfnPrecacheSound("buttons/spark6.wav");
     }
     if (a0->field_134)
     {
-        v0 = sub_487cb0(a0->field_134);
-        g_6167c4(v0);
-        a0->field_110 = g_6168cc(v0);
+        v0 = ButtonSound(a0->field_134);
+        g_engfuncs.pfnPrecacheSound(v0);
+        a0->field_110 = g_engfuncs.pfnAllocString(v0);
     }
     if (a0->field_136)
     {
-        v1 = sub_487cb0(a0->field_136);
-        g_6167c4(v1);
-        a0->field_118 = g_6168cc(v1);
+        v1 = ButtonSound(a0->field_136);
+        g_engfuncs.pfnPrecacheSound(v1);
+        a0->field_118 = g_engfuncs.pfnAllocString(v1);
     }
     if (a0->field_135 - 1 <= 8)
     {

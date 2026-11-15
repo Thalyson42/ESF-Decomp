@@ -17,7 +17,7 @@ typedef struct st_51ee60_3 {
     unsigned int field_0;
 } st_51ee60_3;
 
-extern st_51ee60_3 *g_6168b4;
+extern st_51ee60_3 *g_engfuncs.pfnAlertMessage;
 extern st_51ee60_0 *gpGlobals;
 
 int * Think__9CSoundEnt(float a0)
@@ -51,7 +51,7 @@ int * Think__9CSoundEnt(float a0)
             v2 = gpGlobals;
             if ((isunordered(*(float *)((char *)v9 + v3), *v2) ? 0x44 : *(float *)((char *)v9 + v3) == *v2 ? 63 : *(float *)((char *)v9 + v3) < *v2 ? 0 : 0xff) < 64 && *(float *)((char *)v9 + v3) != -1.0f)
             {
-                v6 = sub_48ce20(i, v4);
+                v6 = CSoundEnt::FreeSound(i, v4);
                 i = *(int *)((char *)v9 + v8);
                 continue;
             }
@@ -63,13 +63,13 @@ int * Think__9CSoundEnt(float a0)
     v11 = (st_51ee60_1 *)a0;
     if (!v11->field_70)
         return v6;
-    v12 = sub_488780(v11, 2);
+    v12 = CSoundEnt::ISoundsInList(v11, 2);
     v13 = (st_51ee60_2 *)a0;
     v1 = v12 - v13->field_6c;
-    v0 = sub_488780(v13, 1);
-    v14 = sub_488780(a0, 2);
-    g_6168b4(2, "Soundlist: %d / %d  (%d)\n", v14);
-    v15 = sub_488780(a0, 2);
+    v0 = CSoundEnt::ISoundsInList(v13, 1);
+    v14 = CSoundEnt::ISoundsInList(a0, 2);
+    g_engfuncs.pfnAlertMessage(2, "Soundlist: %d / %d  (%d)\n", v14);
+    v15 = CSoundEnt::ISoundsInList(a0, 2);
     *(int **)(*(unsigned int *)&a0 + 108) = v15;
     return v15;
 }

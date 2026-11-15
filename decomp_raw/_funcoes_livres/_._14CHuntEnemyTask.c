@@ -25,6 +25,6 @@ int _._14CHuntEnemyTask(st_55a3f0_1 *a0, int a1)
     a0->field_14 = &__vt_14CHuntEnemyTask;
     a0->field_8->field_1034 = 0;
     a0->field_8->field_1058 = (float)(*(float *)gpGlobals + 3.0);
-    return sub_488170(a0, a1);
+    return _._9CBaseTask(a0, a1);
 }
 

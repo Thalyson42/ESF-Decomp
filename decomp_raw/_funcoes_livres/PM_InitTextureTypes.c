@@ -74,27 +74,27 @@ int PM_InitTextureTypes(void)
     {
         for (l = NULL; *(char *)(l + &v7); l += 1)
         {
-            v15 = sub_48dba0();
+            v15 = __ctype_b_loc@GLIBC_2.3();
             if (!(*(char *)(*v15 + *(char *)(l + &v7) * 2 + 1) & 32))
             {
                 if (*(char *)(l + &v7) && *(char *)(l + &v7) != 47)
                 {
-                    v16 = sub_48dba0();
+                    v16 = __ctype_b_loc@GLIBC_2.3();
                     v1 = *(char *)(l + &v7);
                     if (*(char *)(*v16 + v1 * 2 + 1) & 4)
                     {
-                        v17 = sub_48c580();
+                        v17 = __ctype_toupper_loc@GLIBC_2.3();
                         l += 1;
                         for (*(gcTextures + (char *)&grgchTextureType) = *(int *)&(*v17)[v1]; *(char *)(l + &v7); l += 1)
                         {
-                            v18 = sub_48dba0();
+                            v18 = __ctype_b_loc@GLIBC_2.3();
                             if (!(*(char *)(*v18 + *(char *)(iter + &v7) * 2 + 1) & 32))
                             {
                                 if (*(char *)(iter + v2))
                                 {
                                     for (iter = l; *(char *)(iter + &v7); iter += 1)
                                     {
-                                        v20 = sub_48dba0();
+                                        v20 = __ctype_b_loc@GLIBC_2.3();
                                         if (*(char *)(*v20 + *(char *)(iter + &v7) * 2 + 1) & 32)
                                         {
                                             if (*(char *)(iter + v2))
@@ -105,7 +105,7 @@ int PM_InitTextureTypes(void)
                                                 *(char *)(v21 + v2) = 0;
                                                 v0 = 13 * gcTextures + (char *)&grgszTextureName;
                                                 gcTextures = gcTextures + 1;
-                                                sub_48e110(v0, v2 + l);
+                                                strcpy@GLIBC_2.0(v0, v2 + l);
                                                 break;
                                             }
                                         }
@@ -120,7 +120,7 @@ int PM_InitTextureTypes(void)
     }
     v0 = v4;
     pmove->field_4f5a8(v0);
-    v22 = sub_48cc80(v0);
+    v22 = PM_SortTextures(v0);
     bTextureTypeInit.204 = 1;
     return v22;
 }

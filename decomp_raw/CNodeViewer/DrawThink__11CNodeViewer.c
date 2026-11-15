@@ -7,13 +7,13 @@ typedef struct st_4e6350_1 {
     unsigned int field_0;
 } st_4e6350_1;
 
-extern st_4e6350_1 *g_616878;
-extern st_4e6350_1 *g_61687c;
-extern st_4e6350_1 *g_616880;
-extern st_4e6350_1 *g_616888;
-extern st_4e6350_1 *g_616894;
+extern st_4e6350_1 *g_engfuncs.pfnMessageBegin;
+extern st_4e6350_1 *g_engfuncs.pfnMessageEnd;
+extern st_4e6350_1 *g_engfuncs.pfnWriteByte;
+extern st_4e6350_1 *g_engfuncs.pfnWriteShort;
+extern st_4e6350_1 *g_engfuncs.pfnWriteCoord;
 extern st_4e6350_0 *gpGlobals;
-extern st_4e6350_0 *g_61716c;
+extern st_4e6350_0 *WorldGraph+12;
 extern short g_sModelIndexLaser;
 
 unsigned int DrawThink__11CNodeViewer(float idx)
@@ -32,40 +32,40 @@ unsigned int DrawThink__11CNodeViewer(float idx)
     v0 = *(unsigned int *)&idx + 624;
     while (*(int *)(*(unsigned int *)&idx + 104) != *(int *)(*(unsigned int *)&idx + 108))
     {
-        g_616878(0, 23, 0, 0);
-        g_616880(0);
-        g_616894(*(float *)&g_61716c[22 * v1[*(int *)(*(unsigned int *)&idx + 104)]]);
-        g_616894(*(float *)&g_61716c[1 + 22 * v1[*(int *)(*(unsigned int *)&idx + 104)]]);
-        g_616894((float)(8.0 + *(float *)&g_61716c[2 + 22 * v1[*(int *)(*(unsigned int *)&idx + 104)]]));
-        g_616894(*(float *)&g_61716c[22 * v0[*(int *)(*(unsigned int *)&idx + 104)]]);
-        g_616894(*(float *)&g_61716c[1 + 22 * v0[*(int *)(*(unsigned int *)&idx + 104)]]);
-        g_616894((float)(8.0 + *(float *)&g_61716c[2 + 22 * v0[*(int *)(*(unsigned int *)&idx + 104)]]));
-        g_616888(g_sModelIndexLaser);
-        g_616880(0);
-        g_616880(0);
-        g_616880(250);
-        g_616880(40);
-        g_616880(0);
+        g_engfuncs.pfnMessageBegin(0, 23, 0, 0);
+        g_engfuncs.pfnWriteByte(0);
+        g_engfuncs.pfnWriteCoord(*(float *)&WorldGraph+12[22 * v1[*(int *)(*(unsigned int *)&idx + 104)]]);
+        g_engfuncs.pfnWriteCoord(*(float *)&WorldGraph+12[1 + 22 * v1[*(int *)(*(unsigned int *)&idx + 104)]]);
+        g_engfuncs.pfnWriteCoord((float)(8.0 + *(float *)&WorldGraph+12[2 + 22 * v1[*(int *)(*(unsigned int *)&idx + 104)]]));
+        g_engfuncs.pfnWriteCoord(*(float *)&WorldGraph+12[22 * v0[*(int *)(*(unsigned int *)&idx + 104)]]);
+        g_engfuncs.pfnWriteCoord(*(float *)&WorldGraph+12[1 + 22 * v0[*(int *)(*(unsigned int *)&idx + 104)]]);
+        g_engfuncs.pfnWriteCoord((float)(8.0 + *(float *)&WorldGraph+12[2 + 22 * v0[*(int *)(*(unsigned int *)&idx + 104)]]));
+        g_engfuncs.pfnWriteShort(g_sModelIndexLaser);
+        g_engfuncs.pfnWriteByte(0);
+        g_engfuncs.pfnWriteByte(0);
+        g_engfuncs.pfnWriteByte(250);
+        g_engfuncs.pfnWriteByte(40);
+        g_engfuncs.pfnWriteByte(0);
         v5 = __fnstcw();
         v4 = v5 | 0xc00;
         v3 = (int)*(float *)(*(unsigned int *)&idx + 1144);
-        g_616880(v3);
+        g_engfuncs.pfnWriteByte(v3);
         v5 = __fnstcw();
         v4 = v5 | 0xc00;
         v3 = (int)*(float *)(*(unsigned int *)&idx + 1148);
-        g_616880(v3);
+        g_engfuncs.pfnWriteByte(v3);
         v5 = __fnstcw();
         v4 = v5 | 0xc00;
         v3 = (int)*(float *)(*(unsigned int *)&idx + 1152);
-        g_616880(v3);
-        g_616880(128);
-        g_616880(0);
-        v7 = g_61687c();
+        g_engfuncs.pfnWriteByte(v3);
+        g_engfuncs.pfnWriteByte(128);
+        g_engfuncs.pfnWriteByte(0);
+        v7 = g_engfuncs.pfnMessageEnd();
         *(unsigned int *)(*(unsigned int *)&idx + 104) = *(int *)(*(unsigned int *)&idx + 104) + 1;
         v2 += 1;
         if (v2 > 9)
             return v7;
     }
-    return sub_48cc00(idx);
+    return UTIL_Remove(idx);
 }
 

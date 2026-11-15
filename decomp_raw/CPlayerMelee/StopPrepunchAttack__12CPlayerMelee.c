@@ -67,14 +67,14 @@ float StopPrepunchAttack__12CPlayerMelee(float idx)
         *(unsigned int *)(*(unsigned int *)&idx + 140) = 0;
         *(unsigned int *)(*(unsigned int *)&idx + 144) = 0;
         *(unsigned int *)(*(unsigned int *)&idx + 284) = 0;
-        sub_4887c0(idx);
-        sub_489390(*(int *)(*(int *)*(int *)(*(unsigned int *)&idx + 296) + 520), 4, "common/null.wav", 0x3f800000, 0.800000011920929f, 0, 100);
+        CPlayerMelee::RemoveAllAnims(idx);
+        EMIT_SOUND_DYN(*(int *)(*(int *)*(int *)(*(unsigned int *)&idx + 296) + 520), 4, "common/null.wav", 0x3f800000, 0.800000011920929f, 0, 100);
         *(unsigned int *)(*(unsigned int *)&idx + 280) = 0;
         v13 = *(unsigned int *)&idx + 272;
         v14 = *(float *)(*(unsigned int *)&idx + 272) * *(float *)(*(unsigned int *)&idx + 272) + *(float *)(*(unsigned int *)&idx + 276) * *(float *)(*(unsigned int *)&idx + 276) + 0.0;
         v15 = sqrt(v14);
         if (isnan(v15))
-            sub_487dc0(*(unsigned int *)&v14);
+            sqrt(*(unsigned int *)&v14);
         else
             v14 = v15;
         v6 = (float)v14;
@@ -118,14 +118,14 @@ float StopPrepunchAttack__12CPlayerMelee(float idx)
         *(float *)&v19[2] = v0;
         *(float *)&v19[3] = v2;
         *(float *)&v19[4] = v4;
-        sub_48db50(*(int *)*(int *)(*(unsigned int *)&idx + 292), *(int *)*(int *)(*(unsigned int *)&idx + 292) + 8);
-        sub_489880(*(int *)(*(unsigned int *)&idx + 304));
+        UTIL_SetOrigin(*(int *)*(int *)(*(unsigned int *)&idx + 292), *(int *)*(int *)(*(unsigned int *)&idx + 292) + 8);
+        CPlayerMelee::StopPrepunchAttack(*(int *)(*(unsigned int *)&idx + 304));
         return v4;
     }
     else if (*(int *)(*(unsigned int *)&idx + 284) == 2)
     {
         *(unsigned int *)(*(unsigned int *)&idx + 284) = 0;
-        sub_4887c0(idx);
+        CPlayerMelee::RemoveAllAnims(idx);
         v23 = *(int *)*(int *)(*(unsigned int *)&idx + 292);
         v1 = 0;
         v3 = 0;
@@ -138,7 +138,7 @@ float StopPrepunchAttack__12CPlayerMelee(float idx)
             v24 = *(unsigned int *)&*(float *)(*(unsigned int *)&idx + 0x88);
             if (__int_as_float(v24) != 0.0)
             {
-                sub_48b280(idx, v24);
+                CPlayerMelee::SetActiveStunTime(idx, v24);
                 return __int_as_float(v24);
             }
             else if (!*(int *)(*(unsigned int *)&idx + 220))
@@ -147,7 +147,7 @@ float StopPrepunchAttack__12CPlayerMelee(float idx)
             }
         }
         v25 = *(float *)(*(unsigned int *)&idx + 0x88) - *(float *)gpGlobals;
-        sub_489020(idx, v25);
+        CPlayerMelee::SetTotalStunTime(idx, v25);
         return v25;
     }
     else

@@ -41,7 +41,7 @@ float ShieldThink__7CShield(float a0)
     float v3;  // [bp-0x20]
     float v4;  // [bp-0x1c]
 
-    v6 = sub_489e40(a0, (!*(int *)(*(int *)a0 + 408) ? 0 : *(int *)(*(int *)a0 + 408) + 128));
+    v6 = CShield::GetOwner(a0, (!*(int *)(*(int *)a0 + 408) ? 0 : *(int *)(*(int *)a0 + 408) + 128));
     v0 = v6;
     v7 = &*v6->field_8;
     v8 = *(int *)a0 + 8;
@@ -54,7 +54,7 @@ float ShieldThink__7CShield(float a0)
     v12 = v9 * v9 + v10 * v10 + v11 * v11;
     v13 = sqrt(v12);
     if (isnan(v13))
-        sub_487dc0(*(unsigned int *)&v12);
+        sqrt(*(unsigned int *)&v12);
     else
         v12 = v13;
     v1 = (float)v12;
@@ -65,7 +65,7 @@ float ShieldThink__7CShield(float a0)
         *(float *)&v14->padding_0[8] = v15[2];
         *(float *)&v14->padding_0[12] = v15[3];
         *(float *)&v14->padding_0[16] = v15[4];
-        sub_48db50(*(int *)a0, *(int *)a0 + 8);
+        UTIL_SetOrigin(*(int *)a0, *(int *)a0 + 8);
     }
     if (*(float *)(*(unsigned int *)&a0 + 104) < *(float *)gpGlobals)
     {

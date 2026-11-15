@@ -31,7 +31,7 @@ unsigned int DispatchKeyValue__FP7edict_sP14KeyValueData_s(st_49c260_3 *a0, unsi
     }
     else if (a0)
     {
-        v0 = sub_48a970(a0 + 1, a1);
+        v0 = EntvarsKeyvalue(a0 + 1, a1);
         if (a1[3])
         {
             return v0;

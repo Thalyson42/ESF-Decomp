@@ -10,7 +10,7 @@ int SpectatorDisconnect__FP7edict_s(st_4a1c40_0 *a0)
 
     v0 = (!a0 ? 0 : a0->field_7c);
     if (v0)
-        v0 = sub_48beb0(v0);
+        v0 = CBaseSpectator::SpectatorDisconnect(v0);
     return v0;
 }
 

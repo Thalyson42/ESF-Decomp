@@ -3,6 +3,6 @@ extern int _11CBaseEntity.m_SaveData;
 
 unsigned int Save__11CBaseEntityR5CSave(int *a0, int a1)
 {
-    return (!sub_48e130(a1, "ENTVARS", *a0) ? 0 : sub_48db60(a1, "BASE", a0, &_11CBaseEntity.m_SaveData, 5));
+    return (!CSave::WriteEntVars(a1, "ENTVARS", *a0) ? 0 : CSave::WriteFields(a1, "BASE", a0, &_11CBaseEntity.m_SaveData, 5));
 }
 

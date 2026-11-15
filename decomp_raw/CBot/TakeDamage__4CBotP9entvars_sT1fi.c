@@ -12,7 +12,7 @@ unsigned int TakeDamage__4CBotP9entvars_sT1fi(unsigned int *a0, int a1, int a2, 
     unsigned short v1;  // [bp-0x8]
     unsigned short v2;  // [bp-0x6]
 
-    v3 = sub_488550(a0, a1, a2, a3, a4);
+    v3 = CBasePlayer::TakeDamage(a0, a1, a2, a3, a4);
     if (v3)
     {
         v2 = __fnstcw();

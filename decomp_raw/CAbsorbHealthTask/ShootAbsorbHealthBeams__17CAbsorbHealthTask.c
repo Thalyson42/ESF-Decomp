@@ -82,7 +82,7 @@ char ShootAbsorbHealthBeams__17CAbsorbHealthTask(st_54fd40_4 *a0)
     int v14;  // [bp-0x8]
 
     if (!a0->field_8->field_a20)
-        sub_48bf40(a0->field_8);
+        CBot::MakePlayerList(a0->field_8);
     if (!a0->field_8->field_aac)
         return 0;
     v3 = 0;
@@ -93,7 +93,7 @@ char ShootAbsorbHealthBeams__17CAbsorbHealthTask(st_54fd40_4 *a0)
         do
         {
             v16 = (&v15->field_a24)[idx];
-            if (g_teamplay && a0->field_c->field_22c == *(int *)(*v16 + 428) || !(char)sub_48bf70(a0->field_8, v16))
+            if (g_teamplay && a0->field_c->field_22c == *(int *)(*v16 + 428) || !(char)CBot::CanAttackPlayer(a0->field_8, v16))
                 continue;
             strncpy(&v1, "33s?", 4);
             v17 = a0->field_8->field_744 - v16[465];
@@ -125,7 +125,7 @@ LABEL_54fe80:
                     v21 = *(float *)(v19 + 32) * *(float *)(v19 + 32) + *(float *)(v20 + 4) * *(float *)(v20 + 4) + *(float *)(v20 + 8) * *(float *)(v20 + 8);
                     v22 = sqrt(v21);
                     if (isnan(v22))
-                        sub_487dc0(*(unsigned int *)&v21);
+                        sqrt(*(unsigned int *)&v21);
                     else
                         v21 = v22;
                     v4 = (float)v21;
@@ -146,7 +146,7 @@ LABEL_54fe80:
                     v25 = *(float *)(*v16 + 32) * *(float *)(*v16 + 32) + *(float *)(v24 + 4) * *(float *)(v24 + 4) + *(float *)(v24 + 8) * *(float *)(v24 + 8);
                     v26 = sqrt(v25);
                     if (isnan(v26))
-                        sub_487dc0(*(unsigned int *)&v25);
+                        sqrt(*(unsigned int *)&v25);
                     else
                         v25 = v26;
                     v4 = (float)v25;
@@ -161,7 +161,7 @@ LABEL_54fe80:
                     *(float *)(idx1 + 32) = v11;
                     *(float *)(idx1 + 36) = v12;
                     *(float *)(idx1 + 40) = v13;
-                    sub_4888e0(a0->field_8, v16);
+                    CBot::ShootHealthBeam(a0->field_8, v16);
                     if (!v3)
                         v3 = 1;
                     if ((double)a0->field_8->field_24c <= a0->field_c->field_1e0)

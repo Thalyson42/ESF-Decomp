@@ -29,7 +29,7 @@ st_4a88c0_2 * ReleaseAttack__15CControlledBeam(st_4a88c0_3 *a0)
     st_4a88c0_2 *v1;  // edx
     st_4a88c0_2 *v2;  // eax
 
-    v0 = sub_48bd60(a0);
+    v0 = CControlledBeam::StopAiming(a0);
     if (!a0->field_c8)
         return v0;
     v1 = a0->field_c8;

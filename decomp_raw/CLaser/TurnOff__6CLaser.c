@@ -20,7 +20,7 @@ st_4b31a0_0 * TurnOff__6CLaser(st_4b31a0_1 *a0)
     v0 = a0->field_0;
     v0->field_104 = 0;
     if (a0->field_64)
-        v0 = sub_48df90(a0->field_64);
+        v0 = CSprite::TurnOff(a0->field_64);
     return v0;
 }
 

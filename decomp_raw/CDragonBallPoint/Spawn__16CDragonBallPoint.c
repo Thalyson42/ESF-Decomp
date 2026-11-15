@@ -13,20 +13,20 @@ typedef struct st_49be20_0 {
 } st_49be20_0;
 
 extern unsigned int g_vecZero;
-extern unsigned int g_616790;
-extern unsigned int g_616794;
+extern unsigned int g_vecZero+4;
+extern unsigned int g_vecZero+8;
 
 int Spawn__16CDragonBallPoint(st_49be20_0 **a0)
 {
     st_49be20_0 *v0;  // ecx
 
-    sub_48db50(*a0, &*a0->field_8);
+    UTIL_SetOrigin(*a0, &*a0->field_8);
     *a0->field_10c = 0;
     *a0->field_118 = 128;
     v0 = *a0;
     v0->field_74 = g_vecZero;
-    v0->field_78 = g_616790;
-    v0->field_7c = g_616794;
-    return g_616794;
+    v0->field_78 = g_vecZero+4;
+    v0->field_7c = g_vecZero+8;
+    return g_vecZero+8;
 }
 

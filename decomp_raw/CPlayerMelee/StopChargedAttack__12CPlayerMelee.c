@@ -20,16 +20,16 @@ unsigned int StopChargedAttack__12CPlayerMelee(st_509d00_0 *a0)
     if (a0->field_11c == 3)
     {
         a0->field_11c = 0;
-        sub_4887c0(a0);
-        sub_48b4c0(a0);
+        CPlayerMelee::RemoveAllAnims(a0);
+        CPlayerMelee::MeleeHudDisable(a0);
         a0->field_f0 = 0;
-        return sub_48b380(a0->field_130);
+        return CPlayerMelee::StopChargedAttack(a0->field_130);
     }
     else if (a0->field_11c == 4)
     {
         a0->field_11c = 0;
-        sub_4887c0(a0);
-        v0 = sub_48bbe0(a0->field_134);
+        CPlayerMelee::RemoveAllAnims(a0);
+        v0 = CPlayerMelee::TotalCmbTime(a0->field_134);
         a0->field_8c = (float)v1;
         return v0;
     }

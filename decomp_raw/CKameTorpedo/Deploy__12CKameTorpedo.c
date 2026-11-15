@@ -3,6 +3,6 @@ int Deploy__12CKameTorpedo(unsigned int *a0)
 {
     a0[126] = 0;
     a0[125] = 0;
-    return sub_48a3a0(a0);
+    return CChargedAttack::Deploy(a0);
 }
 

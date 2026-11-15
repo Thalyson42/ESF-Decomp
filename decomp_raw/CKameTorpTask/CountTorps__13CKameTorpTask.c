@@ -26,15 +26,15 @@ int CountTorps__13CKameTorpTask(st_552600_1 *a0)
     v2 = 0;
     while (1)
     {
-        v1 = sub_487e80(v1, "Kame Torpedo");
+        v1 = UTIL_FindEntityByClassname(v1, "Kame Torpedo");
         if (!v1)
             break;
-        if (!(char)sub_48b140(v1) && (v3 = *v1, v3->field_198 == a0->field_c))
+        if (!(char)IsNull(v1) && (v3 = *v1, v3->field_198 == a0->field_c))
         {
             v4 = v3->field_20 * v3->field_20 + v3->field_24 * v3->field_24 + v3->field_28 * v3->field_28;
             v5 = sqrt(v4);
             if (isnan(v5))
-                sub_487dc0(*(unsigned int *)&v4);
+                sqrt(*(unsigned int *)&v4);
             else
                 v4 = v5;
             v0 = (float)v4;

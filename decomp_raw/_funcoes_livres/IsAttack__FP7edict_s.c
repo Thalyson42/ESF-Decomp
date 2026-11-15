@@ -8,10 +8,10 @@ char IsAttack__FP7edict_s(st_57cb50_0 *a0)
 {
     char v0;  // [bp-0x5]
 
-    if (a0 && !(char)sub_48b960(a0) && a0->field_80)
+    if (a0 && !(char)IsNull(a0) && a0->field_80)
     {
         v0 = 0;
-        if ((char)sub_48ccf0(a0) || (char)sub_48ab40(a0) || (char)sub_48ba20(a0) || (char)sub_48cee0(a0))
+        if ((char)IsBeamAttack(a0) || (char)IsNonBeamAttack(a0) || (char)IsKiBall(a0) || (char)IsOtherAttack(a0))
             v0 = 1;
         return v0;
     }

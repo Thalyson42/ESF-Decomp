@@ -13,7 +13,7 @@ st_595690_0 * __start_cp_handler(void)
     int v0;  // [bp-0x1c]
 
     sub_59568c(v0);
-    v2 = sub_4895f0(v0);
+    v2 = __get_eh_info(v0);
     v3 = *v2;
     v3->field_14 = 1;
     v3->field_1c = v3->field_1c + 1;

@@ -29,7 +29,7 @@ char FInViewCone__FP6VectorP7edict_s(float *a0, float *a1)
     float v12;  // [bp-0x1c]
     float v13;  // [bp-0x18]
 
-    sub_48a800(a1 + 52);
+    UTIL_MakeVectors(a1 + 52);
     v14 = a1 + 0x22;
     v10 = *a0 - a1[0x22];
     v11 = a0[1] - *(float *)&v14[1];
@@ -41,7 +41,7 @@ char FInViewCone__FP6VectorP7edict_s(float *a0, float *a1)
     v15 = v6 * v6 + v7 * v7;
     v16 = sqrt(v15);
     if (isnan(v16))
-        sub_487dc0(*(unsigned int *)&v15);
+        sqrt(*(unsigned int *)&v15);
     else
         v15 = v16;
     v13 = (float)v15;

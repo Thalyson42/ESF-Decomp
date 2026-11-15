@@ -15,8 +15,8 @@ typedef struct st_4d3cc0_0 {
 } st_4d3cc0_0;
 
 extern unsigned int g_vecZero;
-extern unsigned int g_616790;
-extern unsigned int g_616794;
+extern unsigned int g_vecZero+4;
+extern unsigned int g_vecZero+8;
 
 unsigned int * BarnacleVictimReleased__12CBaseMonster(st_4d3cc0_0 *a0)
 {
@@ -26,8 +26,8 @@ unsigned int * BarnacleVictimReleased__12CBaseMonster(st_4d3cc0_0 *a0)
     a0->field_184 = 1;
     v0 = a0->field_0;
     v0[8] = g_vecZero;
-    v0[9] = g_616790;
-    v0[10] = g_616794;
+    v0[9] = g_vecZero+4;
+    v0[10] = g_vecZero+8;
     v1 = a0->field_0;
     v1[66] = 4;
     return v1;

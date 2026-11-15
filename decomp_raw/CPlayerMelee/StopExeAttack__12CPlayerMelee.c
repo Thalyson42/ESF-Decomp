@@ -42,16 +42,16 @@ unsigned int StopExeAttack__12CPlayerMelee(st_503a60_2 *a0)
         a0->field_11c = 0;
         if (a0->field_fc)
         {
-            v0 = sub_487fb0(a0);
+            v0 = CPlayerMelee::GetCurrentAnim(a0);
             if (v0)
                 v0->field_294 = 0;
         }
         else
         {
-            sub_4887c0(a0);
+            CPlayerMelee::RemoveAllAnims(a0);
         }
         if (!a0->field_130->field_ec)
-            sub_48c1e0(a0);
+            CPlayerMelee::DelAllDirections(a0);
         v1 = a0->field_178;
         if (a0->field_178)
         {
@@ -59,21 +59,21 @@ unsigned int StopExeAttack__12CPlayerMelee(st_503a60_2 *a0)
             {
                 v2 = v1;
                 v3 = v2->field_358;
-                sub_48d4e0(v2);
+                __builtin_delete(v2);
                 v1 = v3;
             } while (v2->field_358);
         }
         a0->field_178 = NULL;
         a0->field_17c = 0;
-        return sub_48a2f0(a0->field_130);
+        return CPlayerMelee::StopExeAttack(a0->field_130);
     }
     else if (a0->field_11c == 8)
     {
         a0->field_11c = 0;
-        v4 = sub_4887c0(a0);
+        v4 = CPlayerMelee::RemoveAllAnims(a0);
         if (a0->field_ec)
             return v4;
-        return sub_48c1e0(a0);
+        return CPlayerMelee::DelAllDirections(a0);
     }
     else
     {

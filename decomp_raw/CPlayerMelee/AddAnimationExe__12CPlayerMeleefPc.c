@@ -33,18 +33,18 @@ st_500000_2 * AddAnimationExe__12CPlayerMeleefPc(st_500000_1 *a0, int a1, int a2
     int v2;  // [bp-0x48]
     char v3;  // [bp-0x24]
 
-    v4 = sub_487fb0(a0);
+    v4 = CPlayerMelee::GetCurrentAnim(a0);
     if (v4 && v4->field_294)
-        sub_48b460(a0, v4);
+        CPlayerMelee::RemoveAnim(a0, v4);
     *(unsigned short *)&v0 = 0;
-    v5 = sub_48b670(a0, v0, a1, 1, a2);
+    v5 = CPlayerMelee::AddAnimation(a0, v0, a1, 1, a2);
     v5->field_294 = 1;
     if (!a0->field_17c)
         return NULL;
     a0->field_17c->field_34 = a1;
     if (!a0->field_130)
         return v5;
-    sub_48e110(&v3, a2);
+    strcpy@GLIBC_2.0(&v3, a2);
     if (a0->field_17c->field_54 == 1)
     {
         v2 = "_block";
@@ -55,9 +55,9 @@ st_500000_2 * AddAnimationExe__12CPlayerMeleefPc(st_500000_1 *a0, int a1, int a2
         v2 = "_hit";
         v1 = &v3;
     }
-    sub_48c150(v1, v2);
+    strcat@GLIBC_2.0(v1, v2);
     *(unsigned short *)&v0 = 1;
-    sub_48b670(a0->field_130, v0, *(float *)gpGlobals, 1, &v3);
+    CPlayerMelee::AddAnimation(a0->field_130, v0, *(float *)gpGlobals, 1, &v3);
     return v5;
 }
 

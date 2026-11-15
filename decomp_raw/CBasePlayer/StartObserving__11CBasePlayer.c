@@ -20,12 +20,12 @@ typedef struct st_4f0a00_3 {
 } st_4f0a00_3;
 
 extern unsigned int gmsgChangeView;
-extern st_4f0a00_3 *g_6167f8;
-extern st_4f0a00_3 *g_616878;
-extern st_4f0a00_3 *g_61687c;
-extern st_4f0a00_3 *g_616880;
-extern st_4f0a00_3 *g_6168d8;
-extern st_4f0a00_3 *g_616928;
+extern st_4f0a00_3 *g_engfuncs.pfnFindEntityByString;
+extern st_4f0a00_3 *g_engfuncs.pfnMessageBegin;
+extern st_4f0a00_3 *g_engfuncs.pfnMessageEnd;
+extern st_4f0a00_3 *g_engfuncs.pfnWriteByte;
+extern st_4f0a00_3 *g_engfuncs.pfnEntOffsetOfPEntity;
+extern st_4f0a00_3 *g_engfuncs.pfnRandomLong;
 
 unsigned int * StartObserving__11CBasePlayer(float a0)
 {
@@ -65,36 +65,36 @@ unsigned int * StartObserving__11CBasePlayer(float a0)
         v10 = 255.0f;
         v11 = 255.0f;
         v0 = 0;
-        sub_48df50(a0, &v9, 0, 0, 0xff, v0);
+        UTIL_ScreenFade(a0, &v9, 0, 0, 0xff, v0);
     }
     v17 = (st_4f0a00_0 *)a0;
     if (v17->field_770)
     {
         *(unsigned short *)&v0 = 1;
-        sub_4886c0(v17, v0);
+        CBasePlayer::Descend(v17, v0);
     }
     if (*(int *)(*(unsigned int *)&a0 + 816))
-        sub_48ba60(a0);
+        CBasePlayer::StopPowerUp(a0);
     if (*(int *)(*(unsigned int *)&a0 + 812))
-        sub_4895a0(a0);
+        CBasePlayer::StopBlock(a0);
     if (*(int *)(*(unsigned int *)&a0 + 800))
-        sub_48c5a0(a0);
+        CBasePlayer::StopFly(a0);
     if (*(int *)(*(unsigned int *)&a0 + 804))
-        sub_48dbc0(a0);
+        CBasePlayer::StopTurbo(a0);
     if (*(int *)(*(unsigned int *)&a0 + 892))
         *(unsigned int *)(*(unsigned int *)&a0 + 892) = 0;
     v18 = (st_4f0a00_2 *)a0;
     v18->field_328 = 1;
     v18->field_0->field_118 = v18->field_0->field_118 | 128;
-    sub_4880b0(a0, 0);
-    sub_48b9d0(a0, 1);
-    g_616878(1, gmsgChangeView, 0, *(int *)(*(int *)a0 + 520));
-    g_616880(1);
-    g_616880(1);
-    g_61687c();
-    v19 = g_6167f8(0, "classname", "info_intermission");
+    CBasePlayer::EnableControl(a0, 0);
+    CBasePlayer::RemoveAllItems(a0, 1);
+    g_engfuncs.pfnMessageBegin(1, gmsgChangeView, 0, *(int *)(*(int *)a0 + 520));
+    g_engfuncs.pfnWriteByte(1);
+    g_engfuncs.pfnWriteByte(1);
+    g_engfuncs.pfnMessageEnd();
+    v19 = g_engfuncs.pfnFindEntityByString(0, "classname", "info_intermission");
     v1 = 0;
-    if (!v19 || !g_6168d8(v19))
+    if (!v19 || !g_engfuncs.pfnEntOffsetOfPEntity(v19))
         v1 = 1;
     if (v1)
     {
@@ -106,7 +106,7 @@ unsigned int * StartObserving__11CBasePlayer(float a0)
         v9 = *(float *)(v24 + 8) + v12;
         v10 = *(float *)(index + 4) + v13;
         v11 = *(float *)(index + 8) + v14;
-        sub_487b80(index, &v9, 1, *(int *)(v24 + 520), &v5);
+        UTIL_TraceLine(index, &v9, 1, *(int *)(v24 + 520), &v5);
         v9 = v6;
         v10 = v7;
         v11 = v8;
@@ -114,15 +114,15 @@ unsigned int * StartObserving__11CBasePlayer(float a0)
         v2 = v6 - *(float *)(*(int *)a0 + 8);
         v3 = v7 - *(float *)(idx + 4);
         v4 = v8 - *(float *)(idx + 8);
-        sub_488860(&v12, &v2);
-        return sub_48cd20(a0, &v9, &v12);
+        UTIL_VecToAngles(&v12, &v2);
+        return CBasePlayer::StartObserver(a0, &v9, &v12);
     }
-    v20 = g_616928(0, 3);
+    v20 = g_engfuncs.pfnRandomLong(0, 3);
     if (v20 > 0)
     {
         do
         {
-            v21 = g_6167f8(v19, "classname", "info_intermission");
+            v21 = g_engfuncs.pfnFindEntityByString(v19, "classname", "info_intermission");
             if (v21)
                 v19 = v21;
         } while ((v20 -= 1, v20 > 0));
@@ -135,6 +135,6 @@ unsigned int * StartObserving__11CBasePlayer(float a0)
     v12 = v19[61];
     v13 = *(float *)&v23[1];
     v14 = *(float *)&v23[2];
-    return sub_48cd20(a0, &v9, &v12);
+    return CBasePlayer::StartObserver(a0, &v9, &v12);
 }
 

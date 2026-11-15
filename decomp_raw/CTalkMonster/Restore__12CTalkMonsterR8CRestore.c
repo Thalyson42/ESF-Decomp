@@ -3,6 +3,6 @@ extern int _12CTalkMonster.m_SaveData;
 
 unsigned int Restore__12CTalkMonsterR8CRestore(int a0, int a1)
 {
-    return (!sub_48a3e0(a0, a1) ? 0 : sub_48a980(a1, "CTalkMonster", a0, &_12CTalkMonster.m_SaveData, 8));
+    return (!CBaseMonster::Restore(a0, a1) ? 0 : CRestore::ReadFields(a1, "CTalkMonster", a0, &_12CTalkMonster.m_SaveData, 8));
 }
 

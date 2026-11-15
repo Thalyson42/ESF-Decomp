@@ -8,7 +8,7 @@ int Play__14CTargetCDAudio(float a0)
     v2 = __fnstcw();
     v1 = v2 | 0xc00;
     v0 = (int)*(float *)(*(int *)a0 + 352);
-    sub_488000(v0);
-    return sub_48cc00(a0);
+    PlayCDTrack(v0);
+    return UTIL_Remove(a0);
 }
 

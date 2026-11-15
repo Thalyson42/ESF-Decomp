@@ -70,8 +70,8 @@ int SearchGatheredSpot__4CBot(float a0)
     v5 = *(unsigned int *)((void*)&v1 + 72);
     if (!v5->field_b39)
     {
-        v0 = sub_487e80(0, "dragonball");
-        v6 = sub_48b140(v0);
+        v0 = UTIL_FindEntityByClassname(0, "dragonball");
+        v6 = IsNull(v0);
         if (!(char)v6)
         {
             v7 = &*v0->field_8;
@@ -90,7 +90,7 @@ int SearchGatheredSpot__4CBot(float a0)
                 v2 = *(unsigned int *)((void*)&v1 + 32);
                 v3 = *(unsigned int *)((void*)&v1 + 36);
                 v4 = *(unsigned int *)((void*)&v1 + 40);
-                v6 = sub_48a280(&v2, v5->field_0->field_208, 1750.0f, v5->field_0->field_1ac);
+                v6 = WaypointFindNearest(&v2, v5->field_0->field_208, 1750.0f, v5->field_0->field_1ac);
                 v1 = v2;
                 v9 = v6;
             }
@@ -101,11 +101,11 @@ int SearchGatheredSpot__4CBot(float a0)
                 v1 = _INSERT(CONCAT((unsigned int)v1, 0), 0, *(float *)&v10->field_8);
                 *(float *)((char *)&v1 + 4) = *(float *)&v11[1];
                 *(float *)((char *)&v1 + 8) = *(float *)&v11[2];
-                v6 = sub_48a280(&v1, v10->field_208, 1750.0f, v10->field_1ac);
+                v6 = WaypointFindNearest(&v1, v10->field_208, 1750.0f, v10->field_1ac);
                 v12 = v6;
                 if (v12 != 0xffffffff)
                 {
-                    v6 = sub_48cef0(v12, v9, v5->field_0->field_1ac);
+                    v6 = WaypointRouteFromTo(v12, v9, v5->field_0->field_1ac);
                     if ((unsigned short)v6 != 0xffff)
                     {
                         v5->field_1024 = v9;

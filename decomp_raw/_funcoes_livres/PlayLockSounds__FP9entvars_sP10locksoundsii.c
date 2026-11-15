@@ -57,14 +57,14 @@ unsigned int * PlayLockSounds__FP9entvars_sP10locksoundsii(st_4aac90_2 *a0, st_4
         if (v3)
         {
             v1 = a0->field_208;
-            sub_489390(v1, 3, a1->field_0 + gpGlobals->field_98, 0, 0.800000011920929f, 0, 100);
+            EMIT_SOUND_DYN(v1, 3, a1->field_0 + gpGlobals->field_98, 0, 0.800000011920929f, 0, 100);
             a1->field_18 = v2 + *(float *)&gpGlobals->field_0;
         }
         if (!v4)
             return gpGlobals;
         v6 = a1;
         v7 = v6->field_10;
-        v8 = sub_48c640(a0->field_208, v6->field_4 + gpGlobals->field_98, 0.8500000238418579f, 0.800000011920929f, 0, 100, v7, 0);
+        v8 = SENTENCEG_PlaySequentialSz(a0->field_208, v6->field_4 + gpGlobals->field_98, 0.8500000238418579f, 0.800000011920929f, 0, 100, v7, 0);
         v9 = a1;
         v9->field_10 = v8;
         v9->field_14 = 0;
@@ -82,14 +82,14 @@ unsigned int * PlayLockSounds__FP9entvars_sP10locksoundsii(st_4aac90_2 *a0, st_4
         if (v10)
         {
             v0 = a0->field_208;
-            sub_489390(v0, 3, a1->field_8 + gpGlobals->field_98, 0, 0.800000011920929f, 0, 100);
+            EMIT_SOUND_DYN(v0, 3, a1->field_8 + gpGlobals->field_98, 0, 0.800000011920929f, 0, 100);
             a1->field_18 = v2 + *(float *)&gpGlobals->field_0;
         }
         if (!v11)
             return gpGlobals;
         v13 = a1;
         v14 = v13->field_14;
-        v15 = sub_48c640(a0->field_208, v13->field_c + gpGlobals->field_98, 0.8500000238418579f, 0.800000011920929f, 0, 100, v14, 0);
+        v15 = SENTENCEG_PlaySequentialSz(a0->field_208, v13->field_c + gpGlobals->field_98, 0.8500000238418579f, 0.800000011920929f, 0, 100, v14, 0);
         v9 = a1;
         v9->field_14 = v15;
         v9->field_10 = 0;

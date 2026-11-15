@@ -21,8 +21,8 @@ typedef struct st_57f610_1 {
 
 extern unsigned int _GLOBAL_OFFSET_TABLE_;
 extern float g_vecZero;
-extern float g_616790;
-extern float g_616794;
+extern float g_vecZero+4;
+extern float g_vecZero+8;
 extern st_57f610_1 *gpGlobals;
 
 unsigned int * GetNearestCollision__FP11CBaseEntityf(void)
@@ -92,8 +92,8 @@ unsigned int * GetNearestCollision__FP11CBaseEntityf(void)
     float v42;  // [bp+0xc]
 
     v37 = g_vecZero;
-    v38 = g_616790;
-    v39 = g_616794;
+    v38 = g_vecZero+4;
+    v39 = g_vecZero+8;
     v4 = 9999.900390625f;
     v1 = 0;
     v2 = 0;
@@ -116,16 +116,16 @@ unsigned int * GetNearestCollision__FP11CBaseEntityf(void)
                 v7 = *v41->field_50;
                 v8 = *(float *)&v43[1];
                 v9 = *(float *)&v43[2];
-                sub_489120(v0, &v7);
+                WrapAngles(v0, &v7);
                 v33 = v14;
                 v35 = v15;
                 v36 = v16;
                 v44 = v1 + v35;
-                sub_48d430(v44);
+                UTIL_WrapAngle(v44);
                 v35 = v44;
-                sub_48d430(v2);
+                UTIL_WrapAngle(v2);
                 v34 = v35;
-                sub_48a800(&v34);
+                UTIL_MakeVectors(&v34);
                 v45 = &gpGlobals->field_28;
                 v10 = v42 * gpGlobals->field_28;
                 v11 = v42 * *(float *)&v45[1];
@@ -148,8 +148,8 @@ unsigned int * GetNearestCollision__FP11CBaseEntityf(void)
                 v27 = v7;
                 v28 = v8;
                 v29 = v9;
-                sub_488460(v47, &v30, 1, 1, v46->field_208, &v22);
-                sub_488460(&*v41->field_8, &v27, 1, 1, *v41->field_208, &v17);
+                UTIL_TraceHull(v47, &v30, 1, 1, v46->field_208, &v22);
+                UTIL_TraceHull(&*v41->field_8, &v27, 1, 1, *v41->field_208, &v17);
                 v49 = &*v41->field_8;
                 v50 = v24 - *v41->field_8;
                 v7 = v50;
@@ -160,7 +160,7 @@ unsigned int * GetNearestCollision__FP11CBaseEntityf(void)
                 v53 = v50 * v50 + v51 * v51 + v52 * v52;
                 v54 = sqrt(v53);
                 if (isnan(v54))
-                    sub_487dc0(*(unsigned int *)&v53);
+                    sqrt(*(unsigned int *)&v53);
                 else
                     v53 = v54;
                 v3 = (float)v53;
@@ -174,7 +174,7 @@ unsigned int * GetNearestCollision__FP11CBaseEntityf(void)
                 v59 = v56 * v56 + v57 * v57 + v58 * v58;
                 v60 = sqrt(v59);
                 if (isnan(v60))
-                    sub_487dc0(*(unsigned int *)&v59);
+                    sqrt(*(unsigned int *)&v59);
                 else
                     v59 = v60;
                 v13 = (float)v59;

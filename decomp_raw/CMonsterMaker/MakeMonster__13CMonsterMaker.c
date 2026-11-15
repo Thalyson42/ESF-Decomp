@@ -48,8 +48,8 @@ typedef struct st_4d3650_3 {
 } st_4d3650_3;
 
 extern st_4d3650_1 g_engfuncs;
-extern st_4d3650_2 *g_61681c;
-extern st_4d3650_2 *g_6168b4;
+extern st_4d3650_2 *g_engfuncs.pfnCreateNamedEntity;
+extern st_4d3650_2 *g_engfuncs.pfnAlertMessage;
 extern st_4d3650_3 *gpGlobals;
 
 unsigned int MakeMonster__13CMonsterMaker(float idx)
@@ -96,7 +96,7 @@ unsigned int MakeMonster__13CMonsterMaker(float idx)
         v13 = *(float *)&v19->field_8 - v3;
         v14 = *(float *)&v20[1] - v4;
         v15 = *(float *)&v20[2] - v5;
-        sub_487b80(v20, &v13, 1, *(int *)&v19[1].padding_14[32], &v16);
+        UTIL_TraceLine(v20, &v13, 1, *(int *)&v19[1].padding_14[32], &v16);
         *(unsigned int *)(*(unsigned int *)&idx + 696) = v17;
     }
     v7 = 34.0f;
@@ -115,18 +115,18 @@ unsigned int MakeMonster__13CMonsterMaker(float idx)
     v9 = *(float *)&v22[2] + v13;
     *(float *)&v10 = *(float *)&v21->field_10;
     *(float *)&v6 = *(float *)(*(unsigned int *)&idx + 696);
-    v23 = sub_48dfd0(&v2, 2, &v3, &v7, 40);
+    v23 = UTIL_EntitiesInBox(&v2, 2, &v3, &v7, 40);
     if (v23)
         return v23;
     v1 = &g_engfuncs.padding_0[0];
-    v24 = g_61681c(*(int *)(*(unsigned int *)&idx + 680));
+    v24 = g_engfuncs.pfnCreateNamedEntity(*(int *)(*(unsigned int *)&idx + 680));
     v0 = 0;
     if (!v24 || !v1->field_118(v24))
         v0 = 1;
     if (v0)
-        return g_6168b4(1, "NULL Ent in MonsterMaker!\n");
+        return g_engfuncs.pfnAlertMessage(1, "NULL Ent in MonsterMaker!\n");
     if (*(int *)(*(int *)idx + 456))
-        sub_48c1b0(*(int *)(*(int *)idx + 456) + gpGlobals->field_98, idx, idx, 3, 0);
+        FireTargets(*(int *)(*(int *)idx + 456) + gpGlobals->field_98, idx, idx, 3, 0);
     v25 = (!v24 ? NULL : (struct st_4d3650_0 *)&v24->field_80);
     v26 = *(int *)idx;
     v25->field_8 = *(int *)&v26->field_8;
@@ -139,7 +139,7 @@ unsigned int MakeMonster__13CMonsterMaker(float idx)
     v25->field_1a3 = v25->field_1a3 | 128;
     if (*(char *)(*(int *)idx + 416) & 8)
         v25->field_1a0 = v25->field_1a0 | 4;
-    sub_488ec0(v25->field_208);
+    DispatchSpawn(v25->field_208);
     v25->field_198 = *(int *)(*(int *)idx + 520);
     v28 = *(int *)(*(int *)idx + 464);
     if (v28)

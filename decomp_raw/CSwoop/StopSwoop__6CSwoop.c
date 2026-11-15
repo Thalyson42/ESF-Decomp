@@ -43,17 +43,17 @@ int StopSwoop__6CSwoop(float idx)
     v4[162] = v0;
     v4[163] = v1;
     v4[164] = v2;
-    sub_489d40(idx);
+    CSwoop::ResetAllDT(idx);
     v5 = *(int *)(*(unsigned int *)&idx + 120);
     if (v5->field_76c)
     {
         if (v5->field_324)
         {
-            sub_489390(*(int *)&v5->field_0->padding_120[232], 3, "weapons/aura.wav", 0x3f800000, 0.800000011920929f, 0, 100);
+            EMIT_SOUND_DYN(*(int *)&v5->field_0->padding_120[232], 3, "weapons/aura.wav", 0x3f800000, 0.800000011920929f, 0, 100);
         }
         else
         {
-            sub_48dd20(*(int *)(*(int *)(*(unsigned int *)&idx + 120) + 1900));
+            CAura::Destroy(*(int *)(*(int *)(*(unsigned int *)&idx + 120) + 1900));
             *(unsigned int *)(*(int *)(*(unsigned int *)&idx + 120) + 1900) = 0;
         }
     }
@@ -65,14 +65,14 @@ int StopSwoop__6CSwoop(float idx)
     }
     else
     {
-        sub_488d40(*(int *)(*(unsigned int *)&idx + 120));
+        CBasePlayer::StartFly(*(int *)(*(unsigned int *)&idx + 120));
     }
-    sub_48e0d0(*(int *)(*(unsigned int *)&idx + 120) + 896, *(unsigned int *)&idx + 12);
+    CPlayerMelee::SetMovementFlags(*(int *)(*(unsigned int *)&idx + 120) + 896, *(unsigned int *)&idx + 12);
     if (*(char *)(*(int *)*(int *)(*(unsigned int *)&idx + 120) + 384) & 2)
-        sub_488f60(idx, 2);
+        CSwoop::AddToNullKeyset(idx, 2);
     v6 = *(int *)*(int *)(*(unsigned int *)&idx + 120);
     if (*(char *)(*(int *)*(int *)(*(unsigned int *)&idx + 120) + 384) & 4)
-        v6 = sub_488f60(idx, 4);
+        v6 = CSwoop::AddToNullKeyset(idx, 4);
     return v6;
 }
 

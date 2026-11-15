@@ -51,10 +51,10 @@ st_5508c0_0 ** GetFurthestScatterShot__22CShootScatterShotsTask(st_5508c0_2 *a0)
     v0 = 0;
     while (1)
     {
-        v9 = sub_487e80(v9, "scattershot");
+        v9 = UTIL_FindEntityByClassname(v9, "scattershot");
         if (!v9)
             break;
-        if (!(char)sub_48b140(v9) && (v10 = *v9, v10[0x66] == a0->field_c))
+        if (!(char)IsNull(v9) && (v10 = *v9, v10[0x66] == a0->field_c))
         {
             v11 = v10 + 2;
             *(float *)&v6 = *(float *)&v10[2];
@@ -70,7 +70,7 @@ st_5508c0_0 ** GetFurthestScatterShot__22CShootScatterShotsTask(st_5508c0_2 *a0)
             v16 = v13 * v13 + v14 * v14 + v15 * v15;
             v17 = sqrt(v16);
             if (isnan(v17))
-                sub_487dc0(*(unsigned int *)&v16);
+                sqrt(*(unsigned int *)&v16);
             else
                 v16 = v17;
             v2 = (float)v16;

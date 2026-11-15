@@ -49,7 +49,7 @@ typedef struct st_4a6650_4 {
     float field_30;
 } st_4a6650_4;
 
-extern st_4a6650_2 *g_6168d4;
+extern st_4a6650_2 *g_engfuncs.pfnPEntityOfEntOffset;
 extern st_4a6650_4 *gpGlobals;
 
 st_4a6650_6 * CheckTraceHullAttack__12CBaseMonsterfii(st_4a6650_3 *a0, float a1, int a2, unsigned int a3)
@@ -72,9 +72,9 @@ st_4a6650_6 * CheckTraceHullAttack__12CBaseMonsterfii(st_4a6650_3 *a0, float a1,
     st_4a6650_7 *v10;  // [bp-0x14]
 
     if (a0->field_60->field_a0(a0))
-        sub_48a800(&a0->field_0->field_50);
+        UTIL_MakeVectors(&a0->field_0->field_50);
     else
-        sub_488e40(&a0->field_0->field_50);
+        UTIL_MakeAimVectors(&a0->field_0->field_50);
     v11 = a0->field_0;
     v12 = &v11->field_8;
     v6 = v11->field_8;
@@ -88,11 +88,11 @@ st_4a6650_6 * CheckTraceHullAttack__12CBaseMonsterfii(st_4a6650_3 *a0, float a1,
     v3 = v6 + v0;
     v4 = v7 + v1;
     v5 = v8 + v2;
-    sub_488460(&v6, &v3, 0, 3, v11->field_208, &v9);
+    UTIL_TraceHull(&v6, &v3, 0, 3, v11->field_208, &v9);
     if (!v10)
         return NULL;
     v14 = v10;
-    if (v14 || (v14 = g_6168d4(0), v14))
+    if (v14 || (v14 = g_engfuncs.pfnPEntityOfEntOffset(0), v14))
         v15 = v14->field_7c;
     else
         v15 = NULL;

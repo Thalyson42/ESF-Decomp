@@ -12,7 +12,7 @@ typedef struct st_48f880_1 {
     unsigned int field_0;
 } st_48f880_1;
 
-extern st_48f880_1 *g_6168b4;
+extern st_48f880_1 *g_engfuncs.pfnAlertMessage;
 
 int FindTransition__FPviiPi(st_48f880_0 *a0, unsigned int a1, int a2, int *a3)
 {
@@ -68,7 +68,7 @@ int FindTransition__FPviiPi(st_48f880_0 *a0, unsigned int a1, int a2, int *a3)
                         iter += 1;
                     }
                 }
-                g_6168b4(1, "error in transition graph");
+                g_engfuncs.pfnAlertMessage(1, "error in transition graph");
             }
         }
     }

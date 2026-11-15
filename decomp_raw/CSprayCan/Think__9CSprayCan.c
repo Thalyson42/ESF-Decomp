@@ -20,7 +20,7 @@ typedef struct st_4fbe20_1 {
     unsigned int field_0;
 } st_4fbe20_1;
 
-extern st_4fbe20_1 *g_6168dc;
+extern st_4fbe20_1 *g_engfuncs.pfnIndexOfEdict;
 extern st_4fbe20_0 *gpGlobals;
 
 unsigned int * Think__9CSprayCan(float a0)
@@ -46,10 +46,10 @@ unsigned int * Think__9CSprayCan(float a0)
     char v11;  // [bp-0x44]
 
     v13 = (!*(int *)(*(int *)a0 + 408) ? 0 : *(int *)(*(int *)(*(int *)a0 + 408) + 124));
-    v0 = (!v13 ? 0xffffffff : sub_48e0b0(v13));
+    v0 = (!v13 ? 0xffffffff : CBasePlayer::GetCustomDecalFrames(v13));
     v0 = v0;
-    v1 = g_6168dc(*(int *)(*(int *)a0 + 408));
-    sub_48a800(*(int *)a0 + 80);
+    v1 = g_engfuncs.pfnIndexOfEdict(*(int *)(*(int *)a0 + 408));
+    UTIL_MakeVectors(*(int *)a0 + 80);
     v14 = &gpGlobals->field_28;
     v15 = 128.0 * gpGlobals->field_28;
     v5 = (float)v15;
@@ -61,23 +61,23 @@ unsigned int * Think__9CSprayCan(float a0)
     v8 = (float)(v15 + *(float *)&v17->field_8);
     v9 = (float)(v16 + *(float *)&v18[1]);
     v10 = *(float *)&v18[2] + v7;
-    sub_487b80(v18, &v8, 1, v17->field_198, &v11);
+    UTIL_TraceLine(v18, &v8, 1, v17->field_198, &v11);
     if (v0 == 0xffffffff)
     {
-        sub_48d7a0(&v11, 10);
-        sub_48cc00(a0);
+        UTIL_DecalTrace(&v11, 10);
+        UTIL_Remove(a0);
     }
     else
     {
         v4 = __fnstcw();
         v3 = v4 | 0xc00;
         v2 = (int)*(float *)(*(int *)a0 + 304);
-        sub_489b60(&v11, v1, v2, 1);
+        UTIL_PlayerDecalTrace(&v11, v1, v2, 1);
         v19 = *(unsigned int *)&*(float *)(*(int *)a0 + 304);
         v2 = v0 - 1;
         *(float *)(*(int *)a0 + 304) = (float)(1.0 + __int_as_float(v19));
         if ((double)(int)v2 <= __int_as_float(v19))
-            sub_48cc00(a0);
+            UTIL_Remove(a0);
     }
     *(float *)(*(int *)a0 + 260) = (float)(0.1 + gpGlobals->field_0);
     return gpGlobals;

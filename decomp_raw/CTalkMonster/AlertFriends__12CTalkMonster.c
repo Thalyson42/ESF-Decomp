@@ -35,7 +35,7 @@ st_525840_2 * AlertFriends__12CTalkMonster(int a0)
     v0 = 0;
     while (1)
     {
-        v1 = sub_489900(a0, v1, v0, 1);
+        v1 = CTalkMonster::EnumFriends(a0, v1, v0, 1);
         if (v1)
         {
             v2 = v1->field_60->field_4c(v1);

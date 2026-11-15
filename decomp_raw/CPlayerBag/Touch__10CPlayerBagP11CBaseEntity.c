@@ -25,7 +25,7 @@ unsigned int Touch__10CPlayerBagP11CBaseEntity(st_4efa70_3 *a0, st_4efa70_2 *a1)
     v0 = a1->field_60->field_a0(a1);
     if (!v0)
         return v0;
-    sub_4887d0(a1, a0->field_64);
-    return sub_48cc00(a0);
+    CBasePlayer::GiveBean(a1, a0->field_64);
+    return UTIL_Remove(a0);
 }
 

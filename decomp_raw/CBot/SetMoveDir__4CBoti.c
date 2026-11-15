@@ -21,42 +21,42 @@ char * SetMoveDir__4CBoti(st_56fd20_0 *a0, unsigned int a1)
 
     if (a1 & 2)
     {
-        v0 = -sub_48a780(a0);
+        v0 = -CBasePlayer::GetMaxSpeed(a0);
         a0->field_d68 = (float)v0;
         v1 = &a0->field_0->padding_0[0];
         v1[385] = v1[385] | 2;
     }
     if (a1 & 4)
     {
-        v0 = sub_48a780(a0);
+        v0 = CBasePlayer::GetMaxSpeed(a0);
         a0->field_d68 = (float)v0;
         v1 = &a0->field_0->padding_0[0];
         v1[385] = v1[385] | 4;
     }
     if (a1 & 16)
     {
-        v0 = sub_48a780(a0);
+        v0 = CBasePlayer::GetMaxSpeed(a0);
         a0->field_d70 = (float)v0;
         v1 = &a0->field_0->padding_0[0];
         v1[384] = v1[384] | 8;
     }
     if (a1 & 8)
     {
-        v0 = -sub_48a780(a0);
+        v0 = -CBasePlayer::GetMaxSpeed(a0);
         a0->field_d70 = (float)v0;
         v1 = &a0->field_0->padding_0[0];
         v1[384] = v1[384] | 16;
     }
     if (a1 & 32)
     {
-        v0 = sub_48a780(a0);
+        v0 = CBasePlayer::GetMaxSpeed(a0);
         a0->field_d6c = (float)v0;
         v1 = &a0->field_0->padding_0[0];
         v1[384] = v1[384] | 2;
     }
     if (!(a1 & 64))
         return v1;
-    v0 = -sub_48a780(a0);
+    v0 = -CBasePlayer::GetMaxSpeed(a0);
     a0->field_d6c = (float)v0;
     v2 = &a0->field_0->padding_0[0];
     v2[384] = v2[384] | 4;

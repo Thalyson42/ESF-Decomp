@@ -12,11 +12,11 @@ typedef struct st_4d8df0_0 {
     unsigned int field_0;
 } st_4d8df0_0;
 
-extern st_4d8df0_0 *g_6168b4;
+extern st_4d8df0_0 *g_engfuncs.pfnAlertMessage;
 extern unsigned int WorldGraph;
-extern unsigned int g_61716c;
-extern unsigned int g_617178;
-extern unsigned int g_619224;
+extern unsigned int WorldGraph+12;
+extern unsigned int WorldGraph+24;
+extern unsigned int WorldGraph+8388;
 
 unsigned int FindHintNode__12CBaseMonster(float a0)
 {
@@ -40,22 +40,22 @@ unsigned int FindHintNode__12CBaseMonster(float a0)
 
     if (!WorldGraph)
     {
-        g_6168b4(2, "find_hintnode: graph not ready!\n");
+        g_engfuncs.pfnAlertMessage(2, "find_hintnode: graph not ready!\n");
     }
     else
     {
-        if ((int)g_619224 >= (int)g_617178)
-            g_619224 = 0;
+        if ((int)WorldGraph+8388 >= (int)WorldGraph+24)
+            WorldGraph+8388 = 0;
         v2 = 0;
-        if ((int)v2 < (int)g_617178)
+        if ((int)v2 < (int)WorldGraph+24)
         {
             v1 = &v7;
             v0 = &v3;
             do
             {
-                v14 = (v2 + g_619224) % g_617178;
-                v15 = g_61716c + v14 * 88;
-                if (v15->field_50 && (*(int *)(*(int *)(*(unsigned int *)&a0 + 96) + 424))(a0, v15->field_50) && (!v15->field_52 || sub_488bc0(a0, v15->field_52) != 0xffffffff))
+                v14 = (v2 + WorldGraph+8388) % WorldGraph+24;
+                v15 = WorldGraph+12 + v14 * 88;
+                if (v15->field_50 && (*(int *)(*(int *)(*(unsigned int *)&a0 + 96) + 424))(a0, v15->field_50) && (!v15->field_52 || CBaseAnimating::LookupActivity(a0, v15->field_52) != 0xffffffff))
                 {
                     idx = *(int *)a0;
                     v8 = v15->field_0 + *(float *)(idx + 372);
@@ -65,16 +65,16 @@ unsigned int FindHintNode__12CBaseMonster(float a0)
                     v4 = *(float *)(idx + 8) + *(float *)(idx + 372);
                     v5 = *(float *)(index + 4) + *(float *)(idx + 376);
                     v6 = *(float *)(index + 8) + *(float *)(idx + 380);
-                    sub_487b80(v0, v1, 1, *(int *)(idx + 520), &v11);
+                    UTIL_TraceLine(v0, v1, 1, *(int *)(idx + 520), &v11);
                     if (v12 == 1.0f)
                     {
-                        g_619224 = v14 + 1;
+                        WorldGraph+8388 = v14 + 1;
                         return v14;
                     }
                 }
-            } while ((v2 += 1, (int)v2 < (int)g_617178));
+            } while ((v2 += 1, (int)v2 < (int)WorldGraph+24));
         }
-        g_619224 = 0;
+        WorldGraph+8388 = 0;
     }
     return 0xffffffff;
 }

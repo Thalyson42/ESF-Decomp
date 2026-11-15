@@ -23,8 +23,8 @@ typedef struct st_5319d0_0 {
     unsigned int field_0;
 } st_5319d0_0;
 
-extern st_5319d0_0 *g_6168d4;
-extern st_5319d0_0 *g_6168e0;
+extern st_5319d0_0 *g_engfuncs.pfnPEntityOfEntOffset;
+extern st_5319d0_0 *g_engfuncs.pfnPEntityOfEntIndex;
 extern st_5319d0_1 *gpGlobals;
 
 int UTIL_MonstersInSphere__FPP11CBaseEntityiRC6Vectorf(unsigned int *a0, int a1, float *a2, float a3)
@@ -43,7 +43,7 @@ int UTIL_MonstersInSphere__FPP11CBaseEntityiRC6Vectorf(unsigned int *a0, int a1,
 
     idx = 0;
     v1 = a3 * a3;
-    if (!g_6168e0(1))
+    if (!g_engfuncs.pfnPEntityOfEntIndex(1))
         return 0;
     for (v0 = 1; v0 < gpGlobals->field_94; iter = &iter[1].padding_90[111])
     {
@@ -57,7 +57,7 @@ int UTIL_MonstersInSphere__FPP11CBaseEntityiRC6Vectorf(unsigned int *a0, int a1,
                 if (v8 + v2 * v2 <= v1)
                 {
                     v9 = iter;
-                    if (v9 || (v9 = g_6168d4(0), v9))
+                    if (v9 || (v9 = g_engfuncs.pfnPEntityOfEntOffset(0), v9))
                         v10 = v9->field_7c;
                     else
                         v10 = 0;

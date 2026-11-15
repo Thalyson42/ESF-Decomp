@@ -15,8 +15,8 @@ unsigned int SecondaryAttack__17CCariedDragonBall(float a0)
         return v2;
     if (*(float *)&v1[432] >= *(float *)gpGlobals)
         return v2;
-    sub_48d680(v1, 6);
-    sub_488ba0(a0);
+    CBasePlayer::SetAnimation(v1, 6);
+    CCariedDragonBall::DropBall(a0);
     v2 = (*(int *)(*(int *)(*(unsigned int *)&a0 + 96) + 332))(a0);
     return v2;
 }

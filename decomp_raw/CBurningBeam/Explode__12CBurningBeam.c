@@ -17,7 +17,7 @@ int Explode__12CBurningBeam(float a0)
     *(float *)&v0 = *(float *)&v5[2];
     *(float *)&v1 = *(float *)&v6[1];
     *(float *)&v2 = *(float *)&v6[2];
-    sub_48ab00(&v0, v5, v4, *(float *)&v5[120], (float)(*(float *)&v5[120] * 5.0), 0, 0x1000000);
-    return sub_4894b0(a0);
+    RadiusDamage(&v0, v5, v4, *(float *)&v5[120], (float)(*(float *)&v5[120] * 5.0), 0, 0x1000000);
+    return CExplodingAttack::Explode(a0);
 }
 

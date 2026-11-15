@@ -8,7 +8,7 @@ typedef struct st_5449d0_1 {
     unsigned int field_0;
 } st_5449d0_1;
 
-extern st_5449d0_1 *g_616904;
+extern st_5449d0_1 *g_engfuncs.pfnServerPrint;
 extern int server_cmd.2781;
 
 int ReadChatFile__10CChatClass(st_5449d0_0 *a0)
@@ -101,7 +101,7 @@ int ReadChatFile__10CChatClass(st_5449d0_0 *a0)
     char v35;  // [bp-0x104]
 
     v18 = 0;
-    sub_48d0e0(&v18 + 1, 0, 5);
+    memset@GLIBC_2.0(&v18 + 1, 0, 5);
     v12 = 0;
     v11 = 4;
     v10 = 3;
@@ -126,15 +126,15 @@ int ReadChatFile__10CChatClass(st_5449d0_0 *a0)
         (&v18)[k] = 0;
         k += 1;
     } while (k <= 5);
-    sub_489050(&v35, "esf_bot_chat.txt", 0);
-    g_616904("Reading bot_chat file... ");
-    l = sub_48d440(&v35, "r");
+    BuildBotFileName(&v35, "esf_bot_chat.txt", 0);
+    g_engfuncs.pfnServerPrint("Reading bot_chat file... ");
+    l = fopen@GLIBC_2.1(&v35, "r");
     if (!l)
-        return g_616904("file not found\n");
+        return g_engfuncs.pfnServerPrint("file not found\n");
     v14 = 0;
-    sub_48d0e0(&v14 + 1, 0, 79);
+    memset@GLIBC_2.0(&v14 + 1, 0, 79);
     if (!l)
-        return g_616904("done\n");
+        return g_engfuncs.pfnServerPrint("done\n");
     v2 = &v17;
     v1 = &v14;
     do
@@ -144,7 +144,7 @@ int ReadChatFile__10CChatClass(st_5449d0_0 *a0)
         v0 = l;
         while (1)
         {
-            v40 = sub_487f00(v0);
+            v40 = fgetc@GLIBC_2.0(v0);
             switch (v40)
             {
             case 9: case 32:
@@ -156,7 +156,7 @@ LABEL_544c18:
                     break;
             case 13:
 LABEL_544c1d:
-                v40 = sub_487f00(l);
+                v40 = fgetc@GLIBC_2.0(l);
                 break;
             default:
                 while (1)
@@ -164,12 +164,12 @@ LABEL_544c1d:
                     if (v40 == 9)
                         v40 = 32;
                     (&v17)[v9] = v40;
-                    v40 = sub_487f00(l);
+                    v40 = fgetc@GLIBC_2.0(l);
                     if ((&v17)[v9] == 32 && v40 == 32)
                     {
                         do
                         {
-                            v40 = sub_487f00(l);
+                            v40 = fgetc@GLIBC_2.0(l);
                         } while ((&v17)[v9] == 32 && v40 == 32);
                     }
                     v9 += 1;
@@ -186,21 +186,21 @@ LABEL_544c1d:
         }
         if (v40 == 0xffffffff)
         {
-            sub_48c560(l);
+            fclose@GLIBC_2.1(l);
             l = 0;
         }
         v2[v9] = 0;
-        sub_48e110(&server_cmd.2781, v2);
-        sub_48c150(&server_cmd.2781, "\n");
+        strcpy@GLIBC_2.0(&server_cmd.2781, v2);
+        strcat@GLIBC_2.0(&server_cmd.2781, "\n");
         v41 = &v16;
-        sub_48e110(&v16, v2);
-        sub_48d6b0(v2, " ,");
-        v8 = sub_48d6b0(0, " ,");
-        v7 = sub_48d6b0(0, " ,");
-        v6 = sub_48d6b0(0, " ,");
-        v5 = sub_48d6b0(0, " ,");
-        v4 = sub_48d6b0(0, " ,");
-        v3 = sub_48d6b0(0, " ,");
+        strcpy@GLIBC_2.0(&v16, v2);
+        strtok@GLIBC_2.0(v2, " ,");
+        v8 = strtok@GLIBC_2.0(0, " ,");
+        v7 = strtok@GLIBC_2.0(0, " ,");
+        v6 = strtok@GLIBC_2.0(0, " ,");
+        v5 = strtok@GLIBC_2.0(0, " ,");
+        v4 = strtok@GLIBC_2.0(0, " ,");
+        v3 = strtok@GLIBC_2.0(0, " ,");
         if (v16 == 35 || !v16)
             continue;
         v42 = "[bot_welcome]";
@@ -324,7 +324,7 @@ LABEL_544c1d:
                         }
                         else
                         {
-                            if (!sub_48d130(&v16, "keyword", 7) || !sub_48d130(&v16, "keyword2", 8))
+                            if (!strncasecmp@GLIBC_2.0(&v16, "keyword", 7) || !strncasecmp@GLIBC_2.0(&v16, "keyword2", 8))
                             {
                                 index = 0;
                                 do
@@ -332,38 +332,38 @@ LABEL_544c1d:
                                     *(char *)&(&v23)[16 * index] = 0;
                                     index += 1;
                                 } while (index <= 5);
-                                v10 = !sub_48d130(&v16, "keyword2", 8);
+                                v10 = !strncasecmp@GLIBC_2.0(&v16, "keyword2", 8);
                                 if (v8 && *v8)
                                 {
-                                    sub_48d360(&v23, v8, 63);
+                                    strncpy@GLIBC_2.0(&v23, v8, 63);
                                     v24 = 0;
                                 }
                                 if (v7 && *v7)
                                 {
-                                    sub_48d360(&v25, v7, 63);
+                                    strncpy@GLIBC_2.0(&v25, v7, 63);
                                     v26 = 0;
                                 }
                                 if (v6 && *v6)
                                 {
-                                    sub_48d360(&v27, v6, 63);
+                                    strncpy@GLIBC_2.0(&v27, v6, 63);
                                     v28 = 0;
                                 }
                                 if (v5 && *v5)
                                 {
-                                    sub_48d360(&v29, v5, 63);
+                                    strncpy@GLIBC_2.0(&v29, v5, 63);
                                     v30 = 0;
                                 }
                                 if (v4 && *v4)
                                 {
-                                    sub_48d360(&v31, v4, 63);
+                                    strncpy@GLIBC_2.0(&v31, v4, 63);
                                     v32 = 0;
                                 }
                                 if (!v3 || !*v3)
                                     continue;
-                                sub_48d360(&v33, v3, 63);
+                                strncpy@GLIBC_2.0(&v33, v3, 63);
                                 v34 = 0;
                             }
-                            else if (!sub_48d130(&v16, "keytoken", 8))
+                            else if (!strncasecmp@GLIBC_2.0(&v16, "keytoken", 8))
                             {
                                 n = 0;
                                 do
@@ -393,7 +393,7 @@ LABEL_544c1d:
                                 if (!v12)
                                     continue;
                                 v78 = &v14;
-                                sub_48d360(&v14, &v16, 79);
+                                strncpy@GLIBC_2.0(&v14, &v16, 79);
                                 v15 = 0;
                                 v79 = 0xffffffff;
                                 do
@@ -407,7 +407,7 @@ LABEL_544c1d:
                                     v10 = 0;
                                 if (!v11)
                                 {
-                                    sub_488b40(a0->field_348, v1);
+                                    AddSentence__Q210CChatClass9CChatNodePCc(a0->field_348, v1);
                                 }
                                 else if (v11 == 1)
                                 {
@@ -415,25 +415,25 @@ LABEL_544c1d:
                                     {
                                         if (!(char)v23)
                                             v23 = 7105601;
-                                        sub_48b310(a0, v1, &v23, v10);
+                                        CChatClass::AddNormalChatSentence(a0, v1, &v23, v10);
                                         v82 = 1;
                                         do
                                         {
                                             v83 = v82 * 64;
                                             if (*(v83 + (char *)&v23))
-                                                sub_48b310(a0, v1, v83 + (char *)&v23, v10);
+                                                CChatClass::AddNormalChatSentence(a0, v1, v83 + (char *)&v23, v10);
                                         } while ((v82 += 1, v82 <= 5));
                                     }
                                     else
                                     {
                                         if (!*&v18)
                                             v18 = 32;
-                                        sub_48b310(a0, v1, &v18, v10);
+                                        CChatClass::AddNormalChatSentence(a0, v1, &v18, v10);
                                         v84 = 1;
                                         do
                                         {
                                             if ((&v18)[v84])
-                                                sub_48b310(a0, v1, &(&v18)[v84], v10);
+                                                CChatClass::AddNormalChatSentence(a0, v1, &(&v18)[v84], v10);
                                         } while ((v84 += 1, v84 <= 5));
                                     }
                                 }
@@ -443,7 +443,7 @@ LABEL_544c1d:
                                     {
                                         if (!(char)v23)
                                             v23 = 7105601;
-                                        sub_4894d0(a0, v1, "All", v10);
+                                        CChatClass::AddTauntChatSentence(a0, v1, "All", v10);
                                     }
                                     else
                                     {
@@ -451,7 +451,7 @@ LABEL_544c1d:
                                             continue;
                                         if (!(char)v23)
                                             v23 = 7105601;
-                                        sub_489600(a0, v1, "All", v10);
+                                        CChatClass::AddWhineChatSentence(a0, v1, "All", v10);
                                     }
                                 }
                             }
@@ -462,6 +462,6 @@ LABEL_544c1d:
         }
 LABEL_5452bf:
     } while (l);
-    return g_616904("done\n");
+    return g_engfuncs.pfnServerPrint("done\n");
 }
 

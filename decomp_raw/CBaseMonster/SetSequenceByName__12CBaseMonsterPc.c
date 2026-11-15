@@ -29,7 +29,7 @@ typedef struct st_4d5ab0_4 {
     unsigned int field_98;
 } st_4d5ab0_4;
 
-extern st_4d5ab0_2 *g_6168b4;
+extern st_4d5ab0_2 *g_engfuncs.pfnAlertMessage;
 extern st_4d5ab0_4 *gpGlobals;
 
 unsigned int * SetSequenceByName__12CBaseMonsterPc(st_4d5ab0_3 *a0, int a1)
@@ -37,10 +37,10 @@ unsigned int * SetSequenceByName__12CBaseMonsterPc(st_4d5ab0_3 *a0, int a1)
     int v0;  // edx
     st_4d5ab0_0 *v1;  // eax
 
-    v0 = sub_48afe0(a0, a1);
+    v0 = CBaseAnimating::LookupSequence(a0, a1);
     if (v0 <= -0x1)
     {
-        g_6168b4(2, "%s has no sequence named:%f\n", a0->field_0->field_0 + gpGlobals->field_98, a1);
+        g_engfuncs.pfnAlertMessage(2, "%s has no sequence named:%f\n", a0->field_0->field_0 + gpGlobals->field_98, a1);
         v1 = a0->field_0;
         v1->field_128 = 0;
         return v1;
@@ -48,7 +48,7 @@ unsigned int * SetSequenceByName__12CBaseMonsterPc(st_4d5ab0_3 *a0, int a1)
     if (a0->field_0->field_128 != v0 || !a0->field_7c)
         a0->field_0->field_130 = 0;
     a0->field_0->field_128 = v0;
-    sub_488850(a0);
+    CBaseAnimating::ResetSequenceInfo(a0);
     return a0->field_60->field_188(a0);
 }
 

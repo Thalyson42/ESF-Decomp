@@ -32,9 +32,9 @@ typedef struct st_4c8090_0 {
 
 extern st_4c8090_0 *g_psv_gravity;
 extern float g_vecZero;
-extern float g_616790;
-extern float g_616794;
-extern st_4c8090_2 *g_61692c;
+extern float g_vecZero+4;
+extern float g_vecZero+8;
+extern st_4c8090_2 *g_engfuncs.pfnRandomFloat;
 extern st_4c8090_3 *gpGlobals;
 
 st_4c8090_4 * VecCheckToss__FP9entvars_sRC6VectorG6Vectorf(void)
@@ -109,10 +109,10 @@ st_4c8090_4 * VecCheckToss__FP9entvars_sRC6VectorG6Vectorf(void)
     v42 = v40[2] - v39[2];
     if (v42 <= 500.0f)
     {
-        sub_48a800(&v38->padding_0[80]);
-        g_61692c(0xc1000000, 0x41000000);
+        UTIL_MakeVectors(&v38->padding_0[80]);
+        g_engfuncs.pfnRandomFloat(0xc1000000, 0x41000000);
         v7 = v42;
-        g_61692c(0xc1800000, 0x41800000);
+        g_engfuncs.pfnRandomFloat(0xc1800000, 0x41800000);
         v44 = v43 + v7;
         v45 = &gpGlobals->field_40;
         v10 = (float)(v44 * gpGlobals->field_40);
@@ -126,9 +126,9 @@ st_4c8090_4 * VecCheckToss__FP9entvars_sRC6VectorG6Vectorf(void)
         *v46 = v18;
         v46[1] = v19;
         v46[2] = v20;
-        g_61692c(0xc1000000, 0x41000000);
+        g_engfuncs.pfnRandomFloat(0xc1000000, 0x41000000);
         v6 = (float)v47;
-        g_61692c(0xc1800000, 0x41800000);
+        g_engfuncs.pfnRandomFloat(0xc1800000, 0x41800000);
         v49 = v48 + v6;
         v50 = &gpGlobals->field_28;
         v13 = (float)(v49 * gpGlobals->field_28);
@@ -167,7 +167,7 @@ st_4c8090_4 * VecCheckToss__FP9entvars_sRC6VectorG6Vectorf(void)
         v2 = v38->field_208;
         v1 = 1;
         v0 = &v10;
-        sub_487b80(&v27);
+        UTIL_TraceLine(&v27);
         v28 = v34;
         v30 = v35;
         v31 = v36;
@@ -181,14 +181,14 @@ st_4c8090_4 * VecCheckToss__FP9entvars_sRC6VectorG6Vectorf(void)
         v57 = (v31 - v39[2]) / (0.5 * v8);
         v58 = sqrt(v57);
         if (isnan(v58))
-            sub_487dc0(*(unsigned int *)&v57);
+            sqrt(*(unsigned int *)&v57);
         else
             v57 = v58;
         v4 = (float)v57;
         v59 = v5 / (0.5 * v8);
         v60 = sqrt(v59);
         if (isnan(v60))
-            sub_487dc0(*(unsigned int *)&v59);
+            sqrt(*(unsigned int *)&v59);
         else
             v59 = v60;
         v9 = (float)v59;
@@ -218,8 +218,8 @@ st_4c8090_4 * VecCheckToss__FP9entvars_sRC6VectorG6Vectorf(void)
             v25 = v11;
             v26 = v12;
             v26 = v31;
-            sub_487b80(v63, &v24, 0, v38->field_208, &v32);
-            if (v33 != 1.0f || (sub_487b80(v40, &v24, 1, v38->field_208, &v32), v33 != 1.0f))
+            UTIL_TraceLine(v63, &v24, 0, v38->field_208, &v32);
+            if (v33 != 1.0f || (UTIL_TraceLine(v40, &v24, 1, v38->field_208, &v32), v33 != 1.0f))
                 goto LABEL_4c85dd;
             *(float *)&idx->field_0 = v21;
             *(float *)&idx->field_4 = v22;
@@ -230,8 +230,8 @@ st_4c8090_4 * VecCheckToss__FP9entvars_sRC6VectorG6Vectorf(void)
     {
 LABEL_4c85dd:
         *(float *)&idx->field_0 = g_vecZero;
-        *(float *)&idx->field_4 = g_616790;
-        v64 = g_616794;
+        *(float *)&idx->field_4 = g_vecZero+4;
+        v64 = g_vecZero+8;
     }
     idx->field_8 = (float)v64;
     return idx;

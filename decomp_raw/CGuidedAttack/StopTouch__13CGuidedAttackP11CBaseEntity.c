@@ -49,7 +49,7 @@ unsigned int StopTouch__13CGuidedAttackP11CBaseEntity(st_4c7830_0 *a0, st_4c7830
     if (v3 == a1->field_0)
         return v3;
     if (a1->field_60->field_28(a1) == 1 || a1->field_60->field_a0(a1))
-        return sub_48b1c0(a0, a1);
+        return CExplodingAttack::ExplodeTouch(a0, a1);
     v4 = a0->field_0;
     v0 = 0;
     v1 = 0;
@@ -61,6 +61,6 @@ unsigned int StopTouch__13CGuidedAttackP11CBaseEntity(st_4c7830_0 *a0, st_4c7830
     a0->field_c = 0;
     a0->field_10 = 0;
     return v2;
-    return sub_48b1c0(a0, a1);
+    return CExplodingAttack::ExplodeTouch(a0, a1);
 }
 

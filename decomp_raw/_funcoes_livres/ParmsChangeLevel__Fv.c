@@ -19,7 +19,7 @@ st_4a1080_1 * ParmsChangeLevel__Fv(void)
     v1 = gpGlobals->field_9c;
     if (!v1)
         return gpGlobals;
-    v2 = sub_48c520(&v1[1].padding_0[4], 16);
+    v2 = BuildChangeList(&v1[1].padding_0[4], 16);
     v1->field_24 = v2;
     return v2;
 }

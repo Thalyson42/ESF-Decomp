@@ -4,6 +4,6 @@ int __deregister_frame(int a0)
     int v0;  // [bp-0x1c]
 
     sub_5969ec(v0);
-    return sub_48cf10(sub_48a6b0(a0));
+    return free@GLIBC_2.0(__deregister_frame_info(a0));
 }
 

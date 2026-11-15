@@ -10,11 +10,11 @@ int Holster__12CScatterShoti(int *a0)
         v0 = a0 + 49;
         do
         {
-            sub_489300(a0, v0[i]);
+            CScatterShot::FreeShot(a0, v0[i]);
             i += 1;
         } while (i < a0[57]);
     }
-    sub_488e80(a0[32], 5);
-    return sub_488e80(a0[32], 6);
+    CBasePlayer::StopAniTrigger(a0[32], 5);
+    return CBasePlayer::StopAniTrigger(a0[32], 6);
 }
 

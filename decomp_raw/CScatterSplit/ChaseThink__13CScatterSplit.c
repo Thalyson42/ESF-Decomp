@@ -81,12 +81,12 @@ double ChaseThink__13CScatterSplit(float a0)
     float v16;  // [bp-0x1c]
 
     v18 = *(unsigned int *)&a0 + 732;
-    if (sub_48d8b0(v18))
+    if (EHANDLE::__opi(v18))
     {
-        v19 = sub_488810(v18);
+        v19 = EHANDLE::__opP11CBaseEntity(v18);
         if ((*(int *)(*(int *)(*(unsigned int *)&a0 + 96) + 280))(a0, v19))
         {
-            v20 = sub_489fd0(v18);
+            v20 = EHANDLE::__rf(v18);
             v21 = &*v20->field_8;
             index = *(int *)a0 + 8;
             v23 = *v20->field_8 - *(float *)(*(int *)a0 + 8);
@@ -98,7 +98,7 @@ double ChaseThink__13CScatterSplit(float a0)
             v26 = v23 * v23 + v24 * v24 + v25 * v25;
             v27 = sqrt(v26);
             if (isnan(v27))
-                sub_487dc0(*(unsigned int *)&v26);
+                sqrt(*(unsigned int *)&v26);
             else
                 v26 = v27;
             v3 = (float)v26;
@@ -144,7 +144,7 @@ double ChaseThink__13CScatterSplit(float a0)
             v37 = *(float *)(idx + 32) * *(float *)(idx + 32) + *(float *)(v36 + 4) * *(float *)(v36 + 4) + *(float *)(v36 + 8) * *(float *)(v36 + 8);
             v38 = sqrt(v37);
             if (isnan(v38))
-                sub_487dc0(*(unsigned int *)&v37);
+                sqrt(*(unsigned int *)&v37);
             else
                 v37 = v38;
             v9 = (float)v37;
@@ -170,13 +170,13 @@ double ChaseThink__13CScatterSplit(float a0)
             *(float *)(idx + 36) = v1;
             *(float *)(idx + 40) = v2;
             v42 = v40->field_0;
-            sub_488860(&v0, &v42->field_20);
+            UTIL_VecToAngles(&v0, &v42->field_20);
             *(float *)&v42->field_50 = v0;
             *(float *)&v42->field_54 = v1;
             *(float *)&v42->field_58 = v2;
         }
     }
-    sub_487d50(a0);
+    CMagicAttack::DrawBubbles(a0);
     v43 = 0.2 + *(float *)gpGlobals;
     *(float *)(*(int *)a0 + 260) = (float)v43;
     return v43;

@@ -10,8 +10,8 @@ typedef struct st_4dd820_1 {
     unsigned int field_88;
 } st_4dd820_1;
 
-extern float g_5bd0cc;
-extern char g_62f744[4];
+extern float weaponstay+12;
+extern char _15CBasePlayerItem.ItemInfoArray+36[4];
 
 unsigned int CanHavePlayerItem__18CHalfLifeMultiplayP11CBasePlayerP15CBasePlayerItem(int a0, st_4dd820_1 **a1, st_4dd820_0 *a2)
 {
@@ -20,7 +20,7 @@ unsigned int CanHavePlayerItem__18CHalfLifeMultiplayP11CBasePlayerP15CBasePlayer
     st_4dd820_1 *v2;  // edx
     st_4dd820_1 *v3;  // edx
 
-    if (0.0 < g_5bd0cc && !(g_62f744[44 * a2->field_88] & 8))
+    if (0.0 < weaponstay+12 && !(_15CBasePlayerItem.ItemInfoArray+36[44 * a2->field_88] & 8))
     {
         idx = 0;
         v1 = a1 + 592;
@@ -38,6 +38,6 @@ unsigned int CanHavePlayerItem__18CHalfLifeMultiplayP11CBasePlayerP15CBasePlayer
             }
         } while ((idx += 1, idx <= 9));
     }
-    return sub_48ada0(a0, a1, a2);
+    return CGameRules::CanHavePlayerItem(a0, a1, a2);
 }
 

@@ -26,28 +26,28 @@ unsigned int DoorActivate__9CBaseDoor(float a0)
     st_4ac430_2 *v5;  // ecx
     unsigned short v0;  // [bp-0x6]
 
-    v2 = sub_488810(*(unsigned int *)&a0 + 212);
-    if (!sub_488a80(*(int *)(*(unsigned int *)&a0 + 0x100), v2))
+    v2 = EHANDLE::__opP11CBaseEntity(*(unsigned int *)&a0 + 212);
+    if (!UTIL_IsMasterTriggered(*(int *)(*(unsigned int *)&a0 + 0x100), v2))
         return 0;
     if (*(char *)(*(int *)a0 + 416) & 32 && !*(int *)(*(unsigned int *)&a0 + 128))
     {
-        sub_489940(a0);
+        CBaseDoor::DoorGoDown(a0);
     }
     else
     {
         v3 = *(unsigned int *)&a0 + 212;
-        if (sub_48d8b0(v3))
+        if (EHANDLE::__opi(v3))
         {
-            v4 = sub_489fd0(v3);
+            v4 = EHANDLE::__rf(v3);
             if (v4->field_60->field_a0(v4))
             {
-                v5 = sub_489fd0(v3);
+                v5 = EHANDLE::__rf(v3);
                 v0 = *(char *)(*(unsigned int *)&a0 + 260);
                 (*(int *)&v5->field_60->padding_0[56])(v5, (float)v0, 0);
             }
         }
-        sub_48dfe0(*(int *)a0, *(unsigned int *)&a0 + 264, 0, 0);
-        sub_48bf20(a0);
+        PlayLockSounds(*(int *)a0, *(unsigned int *)&a0 + 264, 0, 0);
+        CBaseDoor::DoorGoUp(a0);
     }
     return 1;
 }

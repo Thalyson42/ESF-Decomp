@@ -4,7 +4,7 @@ unsigned int dcast__C16__user_type_infoRC9type_infoiPvPC9type_infoT3(int a0, int
     int v0;  // [bp-0x1c]
 
     sub_598078(v0);
-    if (!(char)sub_48be00(a0, a1))
+    if (!(char)type_info::__eq(a0, a1))
         return 0;
     return a3;
 }

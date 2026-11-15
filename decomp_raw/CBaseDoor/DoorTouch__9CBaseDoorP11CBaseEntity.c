@@ -31,15 +31,15 @@ unsigned int DoorTouch__9CBaseDoorP11CBaseEntity(st_4ac2f0_3 *a0, st_4ac2f0_0 **
     unsigned int v0;  // eax
     unsigned int v1;  // eax
 
-    v0 = sub_488af0(*(int *)*a1 + gpGlobals->field_98, "player");
+    v0 = strcmp@GLIBC_2.0(*(int *)*a1 + gpGlobals->field_98, "player");
     if (v0)
         return v0;
-    if (a0->field_100 && !sub_488a80(a0->field_100, a1))
-        sub_48dfe0(a0->field_0, a0[1].padding_4, 1, 0);
+    if (a0->field_100 && !UTIL_IsMasterTriggered(a0->field_100, a1))
+        PlayLockSounds(a0->field_0, a0[1].padding_4, 1, 0);
     if (a0->field_0->field_1cc)
-        return sub_48dfe0(a0->field_0, a0[1].padding_4, 1, 0);
-    sub_48d960(&a0->field_d4, a1);
-    v1 = sub_48a240(a0);
+        return PlayLockSounds(a0->field_0, a0[1].padding_4, 1, 0);
+    EHANDLE::__as(&a0->field_d4, a1);
+    v1 = CBaseDoor::DoorActivate(a0);
     if (!v1)
         return v1;
     a0->field_14 = 0;

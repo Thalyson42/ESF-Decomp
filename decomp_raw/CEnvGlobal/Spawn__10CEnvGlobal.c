@@ -23,7 +23,7 @@ typedef struct st_4956e0_2 {
     unsigned int field_0;
 } st_4956e0_2;
 
-extern st_4956e0_2 *g_616818;
+extern st_4956e0_2 *g_engfuncs.pfnRemoveEntity;
 extern st_4956e0_3 *gpGlobals;
 extern int gGlobalState;
 
@@ -33,14 +33,14 @@ st_4956e0_0 * Spawn__10CEnvGlobal(st_4956e0_1 *a0)
 
     if (!a0->field_64)
     {
-        return g_616818(a0->field_0->field_208);
+        return g_engfuncs.pfnRemoveEntity(a0->field_0->field_208);
     }
     else if (a0->field_0->field_1a0 & 1)
     {
-        v0 = sub_48d370(&gGlobalState, a0->field_64);
+        v0 = CGlobalState::Find(&gGlobalState, a0->field_64);
         if (v0)
             return v0;
-        return sub_48aad0(&gGlobalState, a0->field_64, gpGlobals->field_c, a0->field_6c);
+        return CGlobalState::EntityAdd(&gGlobalState, a0->field_64, gpGlobals->field_c, a0->field_6c);
     }
     else
     {

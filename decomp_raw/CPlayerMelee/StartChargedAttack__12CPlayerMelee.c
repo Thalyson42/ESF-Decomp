@@ -7,7 +7,7 @@ typedef struct st_509a70_0 {
     unsigned int field_0;
 } st_509a70_0;
 
-extern st_509a70_0 *g_6168dc;
+extern st_509a70_0 *g_engfuncs.pfnIndexOfEdict;
 extern st_509a70_1 *gpGlobals;
 
 float StartChargedAttack__12CPlayerMelee(float idx)
@@ -29,24 +29,24 @@ float StartChargedAttack__12CPlayerMelee(float idx)
     if (!*(int *)(*(unsigned int *)&idx + 244))
     {
         v6 = 11;
-        v5 = g_6168dc(*(int *)(*(int *)*(int *)(*(unsigned int *)&idx + 296) + 520));
-        sub_48dc20(g_6168dc(*(int *)(*(int *)*(int *)(*(unsigned int *)&idx + 292) + 520)));
+        v5 = g_engfuncs.pfnIndexOfEdict(*(int *)(*(int *)*(int *)(*(unsigned int *)&idx + 296) + 520));
+        UTIL_Model_Connect(g_engfuncs.pfnIndexOfEdict(*(int *)(*(int *)*(int *)(*(unsigned int *)&idx + 292) + 520)));
         v13 = -*(float *)(*(unsigned int *)&idx + 280);
         v7 = -*(float *)(*(unsigned int *)&idx + 272);
         v8 = -*(float *)(*(unsigned int *)&idx + 276);
         v9 = (float)v13;
         v4 = &v10;
-        sub_488860(v4, &v7);
+        UTIL_VecToAngles(v4, &v7);
         v0 = &v10;
-        sub_487b20(g_6168dc(*(int *)(*(int *)*(int *)(*(unsigned int *)&idx + 292) + 520)));
+        UTIL_Model_MeleeStruggle_Anglefix(g_engfuncs.pfnIndexOfEdict(*(int *)(*(int *)*(int *)(*(unsigned int *)&idx + 292) + 520)));
     }
     if (!*(int *)(*(unsigned int *)&idx + 236))
     {
-        sub_48c1e0(idx);
-        sub_48c1e0(*(int *)(*(unsigned int *)&idx + 304));
-        sub_487b30(*(int *)(*(unsigned int *)&idx + 304));
+        CPlayerMelee::DelAllDirections(idx);
+        CPlayerMelee::DelAllDirections(*(int *)(*(unsigned int *)&idx + 304));
+        CPlayerMelee::GetStunTime(*(int *)(*(unsigned int *)&idx + 304));
         v0 = (char *)(float)v13;
-        sub_48c6e0(idx, v0);
+        CPlayerMelee::SendPredictVars(idx, v0);
     }
     v15 = *(int *)(*(unsigned int *)&idx + 304);
     if (!v15[56])
@@ -71,9 +71,9 @@ LABEL_509bea:
         *(unsigned short *)&v0 = 1;
         v15 = *(int *)(*(unsigned int *)&idx + 304);
     }
-    sub_48b670(v15, v0, v1, v2, v3, v4);
+    CPlayerMelee::AddAnimation(v15, v0, v1, v2, v3, v4);
     *(unsigned short *)&v0 = 1;
-    sub_48b670(idx, v0, *(float *)gpGlobals, 1, "ref_stance");
+    CPlayerMelee::AddAnimation(idx, v0, *(float *)gpGlobals, 1, "ref_stance");
     return *(float *)gpGlobals;
 }
 

@@ -4,7 +4,7 @@ typedef struct st_51cc50_0 {
 } st_51cc50_0;
 
 extern unsigned int fSentencesInit;
-extern st_51cc50_0 *g_616928;
+extern st_51cc50_0 *g_engfuncs.pfnRandomLong;
 
 unsigned int * USENTENCEG_InitLRU__FPUci(unsigned int a0, char *a1)
 {
@@ -33,8 +33,8 @@ unsigned int * USENTENCEG_InitLRU__FPUci(unsigned int a0, char *a1)
     v0 = a1 - 1;
     do
     {
-        v2 = g_616928(0, v0);
-        v3 = g_616928(0, v0);
+        v2 = g_engfuncs.pfnRandomLong(0, v0);
+        v3 = g_engfuncs.pfnRandomLong(0, v0);
         v4 = v2[a0];
         v2[a0] = v3[a0];
         v3[a0] = v4;

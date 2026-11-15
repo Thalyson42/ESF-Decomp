@@ -26,8 +26,8 @@ typedef struct st_5704a0_2 {
 } st_5704a0_2;
 
 extern unsigned int g_teamplay;
-extern st_5704a0_2 *g_616928;
-extern st_5704a0_2 *g_61692c;
+extern st_5704a0_2 *g_engfuncs.pfnRandomLong;
+extern st_5704a0_2 *g_engfuncs.pfnRandomFloat;
 extern st_5704a0_0 *gpGlobals;
 
 double CheckStrafe__4CBot(float idx)
@@ -66,20 +66,20 @@ double CheckStrafe__4CBot(float idx)
     unsigned int v16;  // [bp-0x4c]
     int v17;  // [bp-0x8]
 
-    v17 = sub_48a780(idx);
+    v17 = CBasePlayer::GetMaxSpeed(idx);
     if (*(float *)&v17 == 0.0f)
         return (double)v17;
     if (!*(int *)(*(unsigned int *)&idx + 3428))
     {
         *(float *)&*(uint32_t *)v2 = idx;
-        v19 = -sub_48a780(*(uint32_t *)v2);
+        v19 = -CBasePlayer::GetMaxSpeed(*(uint32_t *)v2);
     }
     else
     {
         if (*(int *)(*(unsigned int *)&idx + 3428) != 1)
             goto LABEL_570516;
         *(float *)&*(uint32_t *)v2 = idx;
-        v19 = sub_48a780(*(uint32_t *)v2);
+        v19 = CBasePlayer::GetMaxSpeed(*(uint32_t *)v2);
     }
     v17 = v19;
     *(float *)(*(unsigned int *)&idx + 3432) = (float)v17;
@@ -91,15 +91,15 @@ LABEL_570516:
     *(float *)(*(unsigned int *)&idx + 3424) = (float)v20;
     *(uint64_t *)v2 = _INSERT(CONCAT(*(uint32_t *)v2, 0), 4, 2);
     *(uint32_t *)v2 = *(int *)(*(int *)idx + 520);
-    v7 = sub_487c70(*(uint32_t *)v2, *(unsigned int *)((void*)&*(uint64_t *)v2 + 4), 0x428c0000);
-    v21 = sub_487c70(*(int *)(*(int *)idx + 520), 4, 0x428c0000);
+    v7 = CheckForCollide(*(uint32_t *)v2, *(unsigned int *)((void*)&*(uint64_t *)v2 + 4), 0x428c0000);
+    v21 = CheckForCollide(*(int *)(*(int *)idx + 520), 4, 0x428c0000);
     if (v7)
     {
         if (!v21)
         {
             *(unsigned int *)(*(unsigned int *)&idx + 3428) = 1;
             strncpy(&v2[4], "333?", 4);
-            g_61692c(0.30000001192092896f, *(unsigned int *)((void*)&*(uint64_t *)v2 + 4));
+            g_engfuncs.pfnRandomFloat(0.30000001192092896f, *(unsigned int *)((void*)&*(uint64_t *)v2 + 4));
             v36 = 0.30000001192092896 + *(float *)gpGlobals;
             *(float *)(*(unsigned int *)&idx + 3424) = (float)v36;
             return v36;
@@ -117,7 +117,7 @@ LABEL_5705e1:
     if (!*(char *)(*(unsigned int *)&idx + 2592))
     {
         *(float *)&*(uint32_t *)v2 = idx;
-        sub_48bf40(*(uint32_t *)v2);
+        CBot::MakePlayerList(*(uint32_t *)v2);
     }
     v23 = 400.0;
     v3 = 400.0f;
@@ -149,7 +149,7 @@ LABEL_5705e1:
                     if (isnan(v33))
                     {
                         *(double *)&*(uint64_t *)v2 = v32;
-                        sub_487dc0(*(unsigned int *)&*(uint64_t *)v2);
+                        sqrt(*(unsigned int *)&*(uint64_t *)v2);
                     }
                     else
                     {
@@ -160,7 +160,7 @@ LABEL_5705e1:
                     if (v23 <= 400.0)
                     {
                         *(uint64_t *)v2 = CONCAT(v5, *(unsigned int *)&idx);
-                        if ((short)sub_48aab0(*(unsigned int *)&*(uint64_t *)v2, *(unsigned int *)((void*)&*(uint64_t *)v2 + 4)) > 64 || (*(uint64_t *)v2 = CONCAT(v5, *(unsigned int *)&idx), (char)sub_489330(*(unsigned int *)&*(uint64_t *)v2, *(unsigned int *)((void*)&*(uint64_t *)v2 + 4))))
+                        if ((short)UTIL_GetHeadingPercentage(*(unsigned int *)&*(uint64_t *)v2, *(unsigned int *)((void*)&*(uint64_t *)v2 + 4)) > 64 || (*(uint64_t *)v2 = CONCAT(v5, *(unsigned int *)&idx), (char)EntIsInFieldOfView(*(unsigned int *)&*(uint64_t *)v2, *(unsigned int *)((void*)&*(uint64_t *)v2 + 4))))
                         {
                             v23 = v4;
                             if (v23 < v3)
@@ -182,8 +182,8 @@ LABEL_5705e1:
     *(float *)&v10 = *(float *)&v34[2];
     v2 = _INSERT(*(uint64_t *)v2, 4, &v8);
     *(float *)&*(uint32_t *)v2 = idx;
-    v35 = sub_4880e0(*(uint32_t *)v2, *(unsigned int *)((void*)&v2 + 4));
-    if (!(v35 & 2) && (v35 & 4 || (v2 = _INSERT(CONCAT(*(uint32_t *)v2, 0), 4, 1), *(uint32_t *)v2 = 0, g_616928(*(uint32_t *)v2, *(unsigned int *)((void*)&v2 + 4)))))
+    v35 = UTIL_EntDir(*(uint32_t *)v2, *(unsigned int *)((void*)&v2 + 4));
+    if (!(v35 & 2) && (v35 & 4 || (v2 = _INSERT(CONCAT(*(uint32_t *)v2, 0), 4, 1), *(uint32_t *)v2 = 0, g_engfuncs.pfnRandomLong(*(uint32_t *)v2, *(unsigned int *)((void*)&v2 + 4)))))
     {
 LABEL_5707c4:
         *(unsigned int *)(*(unsigned int *)&idx + 3428) = 0;
@@ -194,7 +194,7 @@ LABEL_5707c4:
     }
     strncpy(&v2[4], "333?", 4);
     v2 = _INSERT(*(uint64_t *)v2, 0, 0.30000001192092896f);
-    g_61692c(v2, *(unsigned int *)((void*)&v2 + 4));
+    g_engfuncs.pfnRandomFloat(v2, *(unsigned int *)((void*)&v2 + 4));
     v36 = 0.30000001192092896 + *(float *)gpGlobals;
     *(float *)(*(unsigned int *)&idx + 3424) = (float)v36;
     return v36;

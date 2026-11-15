@@ -17,8 +17,8 @@ unsigned int GetSenderNameFromTextMsg__10CChatClassPCcPc(unsigned int a0, char *
         {
             v0 = 0;
             v1 = 0;
-            sub_48d0e0(&v1 + 1, 0, 0xff);
-            sub_48e110(&v1, a1 + 1);
+            memset@GLIBC_2.0(&v1 + 1, 0, 0xff);
+            strcpy@GLIBC_2.0(&v1, a1 + 1);
             v2 = &v1;
             v3 = -0x1;
             do
@@ -33,7 +33,7 @@ unsigned int GetSenderNameFromTextMsg__10CChatClassPCcPc(unsigned int a0, char *
                     v0 += 1;
                 } while (v0 < v5 && (&v1)[v0] && (&v1)[v0] != 58 && v0 <= 31);
             }
-            v6 = sub_48d360(a2, &v1, v0);
+            v6 = strncpy@GLIBC_2.0(a2, &v1, v0);
             a2[v0] = 0;
             return v6;
         }

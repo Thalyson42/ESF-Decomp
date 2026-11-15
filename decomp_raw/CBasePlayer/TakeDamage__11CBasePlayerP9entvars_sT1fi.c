@@ -136,14 +136,14 @@ typedef struct st_4f3000_11 {
 } st_4f3000_11;
 
 extern st_4f3000_11 *g_pGameRules;
-extern st_4f3000_1 *g_616878;
-extern st_4f3000_1 *g_61687c;
-extern st_4f3000_1 *g_616880;
-extern st_4f3000_1 *g_616888;
-extern st_4f3000_1 *g_61688c;
-extern st_4f3000_1 *g_6168d4;
-extern st_4f3000_1 *g_6168dc;
-extern st_4f3000_1 *g_616928;
+extern st_4f3000_1 *g_engfuncs.pfnMessageBegin;
+extern st_4f3000_1 *g_engfuncs.pfnMessageEnd;
+extern st_4f3000_1 *g_engfuncs.pfnWriteByte;
+extern st_4f3000_1 *g_engfuncs.pfnWriteShort;
+extern st_4f3000_1 *g_engfuncs.pfnWriteLong;
+extern st_4f3000_1 *g_engfuncs.pfnPEntityOfEntOffset;
+extern st_4f3000_1 *g_engfuncs.pfnIndexOfEdict;
+extern st_4f3000_1 *g_engfuncs.pfnRandomLong;
 extern st_4f3000_12 *gpGlobals;
 
 unsigned int TakeDamage__11CBasePlayerP9entvars_sT1fi(st_4f3000_3 *a0, st_4f3000_9 *a1, st_4f3000_6 *a2, float a3, int a4)
@@ -196,21 +196,21 @@ unsigned int TakeDamage__11CBasePlayerP9entvars_sT1fi(st_4f3000_3 *a0, st_4f3000
     if (!a0->field_60->field_8c(a0))
         return 0;
     v15 = a1->field_208;
-    if (a1->field_208 || (v15 = g_6168d4(0), v15))
+    if (a1->field_208 || (v15 = g_engfuncs.pfnPEntityOfEntOffset(0), v15))
         v16 = v15->field_7c;
     else
         v16 = NULL;
     v17 = v16;
     v18 = a2->field_208;
-    if (a2->field_208 || (v18 = g_6168d4(0), v18))
+    if (a2->field_208 || (v18 = g_engfuncs.pfnPEntityOfEntOffset(0), v18))
         v19 = *(int *)(v18 + 124);
     else
         v19 = NULL;
     v3 = v19;
-    if (g_pGameRules->field_44->field_40(g_pGameRules, a0, v3) && !a0->field_34c && (!a0->field_4c4 || a4 & 0x2400000 && !(v20 = &a0->field_380, v20->field_138 && a2 != *(int *)v20->field_128 || (v21 = &a0->field_380, v21->field_13c && a2 != *(int *)v21->field_12c))) && sub_48cd10(&a0->field_380, v17, a4))
+    if (g_pGameRules->field_44->field_40(g_pGameRules, a0, v3) && !a0->field_34c && (!a0->field_4c4 || a4 & 0x2400000 && !(v20 = &a0->field_380, v20->field_138 && a2 != *(int *)v20->field_128 || (v21 = &a0->field_380, v21->field_13c && a2 != *(int *)v21->field_12c))) && CPlayerMelee::CanInflictDamage(&a0->field_380, v17, a4))
     {
         v2 = v17->field_60->field_28(v17) == 14;
-        if (!a0->field_35c && (!a0->field_358 || a0->field_780 == v17) && (!a0->field_354 || !a0->field_36c || sub_488ac0(a0->field_36c, a1)))
+        if (!a0->field_35c && (!a0->field_358 || a0->field_780 == v17) && (!a0->field_354 || !a0->field_36c || CPowerStruggle::InStruggle(a0->field_36c, a1)))
         {
             v14 = __fnstcw();
             v13 = v14 | 0xc00;
@@ -237,7 +237,7 @@ unsigned int TakeDamage__11CBasePlayerP9entvars_sT1fi(st_4f3000_3 *a0, st_4f3000
             }
             if (a4 & 0x100000 && v3->field_60->field_a0(v3) && a3 >= *(float *)&a0->field_0->field_160 && v3 != a0)
             {
-                sub_48b180(a0, v3);
+                CBasePlayer::WaitToBecomeCandy(a0, v3);
             }
             else
             {
@@ -264,14 +264,14 @@ unsigned int TakeDamage__11CBasePlayerP9entvars_sT1fi(st_4f3000_3 *a0, st_4f3000
                         v12 = (int)v24;
                         v0 = v12;
                     }
-                    sub_489350(v3, a0);
+                    CBasePlayer::IncreaseStrength(v3, a0);
                 }
                 if (!a0->field_344 && a4 & 0x1000000)
                 {
                     v6 = 255.0f;
                     v7 = 255.0f;
                     v8 = 255.0f;
-                    sub_48df50(a0, &v6, 1.1666666269302368f, 2.3333332538604736f, 0xff, 0);
+                    UTIL_ScreenFade(a0, &v6, 1.1666666269302368f, 2.3333332538604736f, 0xff, 0);
                     a0->field_344 = 1;
                     a0->field_31c = (float)(3.5 + gpGlobals->field_0);
                 }
@@ -286,7 +286,7 @@ unsigned int TakeDamage__11CBasePlayerP9entvars_sT1fi(st_4f3000_3 *a0, st_4f3000
                         v6 = 255.0f;
                         v7 = 255.0f;
                         v8 = 255.0f;
-                        sub_48df50(a0, &v6, 4.0f, 8.0f, 0xff, 0);
+                        UTIL_ScreenFade(a0, &v6, 4.0f, 8.0f, 0xff, 0);
                         a0->field_344 = 1;
                         a0->field_31c = (float)(gpGlobals->field_0 + 12.0);
                     }
@@ -294,7 +294,7 @@ unsigned int TakeDamage__11CBasePlayerP9entvars_sT1fi(st_4f3000_3 *a0, st_4f3000
                     {
                         if (v23)
                         {
-                            sub_48a800(&a1->field_50);
+                            UTIL_MakeVectors(&a1->field_50);
                             if (a4 & 0x200000)
                             {
                                 v26 = &gpGlobals->field_28;
@@ -332,7 +332,7 @@ unsigned int TakeDamage__11CBasePlayerP9entvars_sT1fi(st_4f3000_3 *a0, st_4f3000
                         }
                         else
                         {
-                            sub_48a800(&a1->field_50);
+                            UTIL_MakeVectors(&a1->field_50);
                             v36 = a0->field_0;
                             v37 = &gpGlobals->field_28;
                             v38 = 50.0 * gpGlobals->field_28;
@@ -352,28 +352,28 @@ unsigned int TakeDamage__11CBasePlayerP9entvars_sT1fi(st_4f3000_3 *a0, st_4f3000
                     v14 = __fnstcw();
                     v13 = v14 | 0xc00;
                     v12 = (int)a3;
-                    v5 = sub_48a8f0(a0, a1, a2, (float)v12, a4);
+                    v5 = CBaseMonster::TakeDamage(a0, a1, a2, (float)v12, a4);
                     if (v5 && 1.0 <= a3)
-                        sub_488d00(a0);
-                    g_616878(9, 0x33, 0, 0);
-                    g_616880(9);
-                    g_616880(2);
-                    v41 = g_6168dc(a0->field_0->field_208);
-                    g_616888(v41);
-                    v42 = g_6168dc(a1->field_208);
-                    g_616888(v42);
-                    g_61688c(5);
-                    g_61687c();
+                        CBasePlayer::Pain(a0);
+                    g_engfuncs.pfnMessageBegin(9, 0x33, 0, 0);
+                    g_engfuncs.pfnWriteByte(9);
+                    g_engfuncs.pfnWriteByte(2);
+                    v41 = g_engfuncs.pfnIndexOfEdict(a0->field_0->field_208);
+                    g_engfuncs.pfnWriteShort(v41);
+                    v42 = g_engfuncs.pfnIndexOfEdict(a1->field_208);
+                    g_engfuncs.pfnWriteShort(v42);
+                    g_engfuncs.pfnWriteLong(5);
+                    g_engfuncs.pfnMessageEnd();
                     *(float *)&a0->field_0->padding_2c[60] = -2.0f;
                     if (!v5 || !(a4 & 0xffffc000) || v4 >= 75.0f)
                         return v5;
                     if (v4 >= 50.0f)
                     {
-                        sub_489ad0(a0, "!HEV_HLTH1", 0, 600);
+                        CBasePlayer::SetSuitUpdate(a0, "!HEV_HLTH1", 0, 600);
                     }
-                    else if (!g_616928(0, 3))
+                    else if (!g_engfuncs.pfnRandomLong(0, 3))
                     {
-                        sub_489ad0(a0, "!HEV_DMG7", 0, 300);
+                        CBasePlayer::SetSuitUpdate(a0, "!HEV_DMG7", 0, 300);
                     }
                     return v5;
                 }

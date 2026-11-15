@@ -16,7 +16,7 @@ typedef struct st_522330_2 {
     unsigned int field_0;
 } st_522330_2;
 
-extern st_522330_2 *g_6168cc;
+extern st_522330_2 *g_engfuncs.pfnAllocString;
 
 unsigned int KeyValue__10CBaseDelayP14KeyValueData_s(st_522330_1 *a0, st_522330_0 *a1)
 {
@@ -25,20 +25,20 @@ unsigned int KeyValue__10CBaseDelayP14KeyValueData_s(st_522330_1 *a0, st_522330_
     unsigned int v2;  // eax
     unsigned int v3;  // eax
 
-    if (!sub_488af0(a1->field_4, "delay"))
+    if (!strcmp@GLIBC_2.0(a1->field_4, "delay"))
     {
-        v0 = sub_487fc0(a1->field_8, 0, 0);
+        v0 = __strtod_internal@GLIBC_2.0(a1->field_8, 0, 0);
         a0->field_64 = (float)v1;
         a1->field_c = 1;
         return v0;
     }
-    v2 = sub_488af0(a1->field_4, "killtarget");
+    v2 = strcmp@GLIBC_2.0(a1->field_4, "killtarget");
     if (v2)
     {
         a1->field_c = 0;
         return v2;
     }
-    v3 = g_6168cc(a1->field_8);
+    v3 = g_engfuncs.pfnAllocString(a1->field_8);
     a0->field_68 = v3;
     a1->field_c = 1;
     return v3;

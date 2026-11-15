@@ -38,7 +38,7 @@ unsigned int Use__12CRevertSavedP11CBaseEntityT18USE_TYPEf(st_4fe930_1 *a0)
     v2 = __fnstcw();
     v1 = v2 | 0xc00;
     v0 = (int)*(float *)&v3->field_14c;
-    sub_48b130(&v3->field_150, *(float *)&v3->field_1d8, *(float *)&v3->field_1dc, v0, 1);
+    UTIL_ScreenFadeAll(&v3->field_150, *(float *)&v3->field_1d8, *(float *)&v3->field_1dc, v0, 1);
     *(float *)&a0->field_0->field_104 = *(float *)&a0->field_64 + *(float *)gpGlobals;
     v4 = _INSERT(gpGlobals, 0, 0);
     a0->field_c = v4 | 0xffff0000;

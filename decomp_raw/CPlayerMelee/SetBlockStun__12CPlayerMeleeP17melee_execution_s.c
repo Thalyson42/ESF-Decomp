@@ -45,7 +45,7 @@ int SetBlockStun__12CPlayerMeleeP17melee_execution_s(st_504e80_2 *a0, st_504e80_
     }
     else if (!a1->field_44)
     {
-        v1 = sub_48cca0(a0->field_130, a1->field_50);
+        v1 = CPlayerMelee::GetBlockStunAmt(a0->field_130, a1->field_50);
         if (!v1)
             return v1;
         v2 = a1->field_50;
@@ -54,7 +54,7 @@ int SetBlockStun__12CPlayerMeleeP17melee_execution_s(st_504e80_2 *a0, st_504e80_
         {
             if ((int)i <= 0)
                 return v1;
-            v1 = sub_48db20(a0, &i, v2, iter->field_50);
+            v1 = CPlayerMelee::ContinueBlockStun(a0, &i, v2, iter->field_50);
             if (!v1)
                 return v1;
             iter->field_3c = 1;

@@ -33,11 +33,11 @@ typedef struct st_541560_1 {
 } st_541560_1;
 
 extern st_541560_3 g_engfuncs;
-extern st_541560_2 *g_6168b4;
-extern st_541560_2 *g_61698c;
+extern st_541560_2 *g_engfuncs.pfnAlertMessage;
+extern st_541560_2 *g_engfuncs.pfnIsDedicatedServer;
 extern st_541560_1 *gpGlobals;
 extern st_541560_0 BotManager;
-extern char g_6246bc;
+extern char BotManager+60;
 
 st_541560_0 * OpenBotCFGFile__11CBotManager(st_541560_0 *a0)
 {
@@ -48,31 +48,31 @@ st_541560_0 * OpenBotCFGFile__11CBotManager(st_541560_0 *a0)
     char v2;  // [bp-0x144]
     char v3;  // [bp-0x104]
 
-    if (!g_6246bc)
+    if (!BotManager+60)
         return &BotManager.field_0;
     a0->field_3c = 0;
-    sub_48e110(&v2, gpGlobals->field_c + gpGlobals->field_98);
-    sub_48c150(&v2, "_bot.cfg");
-    sub_489050(&v3, "maps", &v2);
-    v4 = sub_48d440(&v3, "r");
+    strcpy@GLIBC_2.0(&v2, gpGlobals->field_c + gpGlobals->field_98);
+    strcat@GLIBC_2.0(&v2, "_bot.cfg");
+    BuildBotFileName(&v3, "maps", &v2);
+    v4 = fopen@GLIBC_2.1(&v3, "r");
     a0->field_38 = v4;
     if (v4)
     {
-        sub_48d990(&v1, "Executing %s\n", &v3);
-        g_6168b4(1, &v1);
+        sprintf@GLIBC_2.0(&v1, "Executing %s\n", &v3);
+        g_engfuncs.pfnAlertMessage(1, &v1);
     }
     else
     {
-        sub_489050(&v3, "bot.cfg", 0);
-        sub_48d990(&v1, "Executing %s\n", &v3);
+        BuildBotFileName(&v3, "bot.cfg", 0);
+        sprintf@GLIBC_2.0(&v1, "Executing %s\n", &v3);
         v0 = &g_engfuncs.padding_0[0];
-        g_6168b4(1, &v1);
-        v5 = sub_48d440(&v3, "r");
+        g_engfuncs.pfnAlertMessage(1, &v1);
+        v5 = fopen@GLIBC_2.1(&v3, "r");
         a0->field_38 = v5;
         if (!v5)
             v0->field_f4(1, "bot.cfg file not found\n");
     }
-    if (!g_61698c())
+    if (!g_engfuncs.pfnIsDedicatedServer())
     {
         a0->field_34 = (float)(20.0 + gpGlobals->field_0);
         return gpGlobals;

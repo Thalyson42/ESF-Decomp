@@ -13,7 +13,7 @@ typedef struct st_4a9950_1 {
     unsigned int field_98;
 } st_4a9950_1;
 
-extern st_4a9950_0 *g_6168b4;
+extern st_4a9950_0 *g_engfuncs.pfnAlertMessage;
 extern st_4a9950_1 *gpGlobals;
 
 st_4a9950_2 * ScheduleInList__12CBaseMonsterPCcPP10Schedule_ti(st_4a9950_0 **a0, int a1, st_4a9950_2 **a2, int a3)
@@ -22,7 +22,7 @@ st_4a9950_2 * ScheduleInList__12CBaseMonsterPCcPP10Schedule_ti(st_4a9950_0 **a0,
 
     if (!a1)
     {
-        g_6168b4(1, "%s set to unnamed schedule!\n", *(int *)*a0 + gpGlobals->field_98);
+        g_engfuncs.pfnAlertMessage(1, "%s set to unnamed schedule!\n", *(int *)*a0 + gpGlobals->field_98);
     }
     else
     {
@@ -33,9 +33,9 @@ st_4a9950_2 * ScheduleInList__12CBaseMonsterPCcPP10Schedule_ti(st_4a9950_0 **a0,
             {
                 if (!a2[v0]->field_10)
                 {
-                    g_6168b4(1, "Unnamed schedule!\n");
+                    g_engfuncs.pfnAlertMessage(1, "Unnamed schedule!\n");
                 }
-                else if (!sub_48cac0(a1, a2[v0]->field_10))
+                else if (!strcasecmp@GLIBC_2.0(a1, a2[v0]->field_10))
                 {
                     return a2[v0];
                 }

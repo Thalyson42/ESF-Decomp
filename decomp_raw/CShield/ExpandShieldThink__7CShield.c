@@ -50,7 +50,7 @@ double ExpandShieldThink__7CShield(float idx)
     float v9;  // [bp-0x20]
     float v10;  // [bp-0x1c]
 
-    v12 = sub_489e40(idx, (!*(int *)(*(int *)idx + 408) ? 0 : *(int *)(*(int *)idx + 408) + 128));
+    v12 = CShield::GetOwner(idx, (!*(int *)(*(int *)idx + 408) ? 0 : *(int *)(*(int *)idx + 408) + 128));
     v0 = v12;
     v13 = &*v12->field_8;
     v14 = *(int *)idx + 8;
@@ -63,7 +63,7 @@ double ExpandShieldThink__7CShield(float idx)
     v18 = v15 * v15 + v16 * v16 + v17 * v17;
     v19 = sqrt(v18);
     if (isnan(v19))
-        sub_487dc0(*(unsigned int *)&v18);
+        sqrt(*(unsigned int *)&v18);
     else
         v18 = v19;
     v5 = (float)v18;
@@ -74,7 +74,7 @@ double ExpandShieldThink__7CShield(float idx)
         *(float *)&v20->padding_0[8] = v21[2];
         *(float *)&v20->padding_0[12] = v21[3];
         *(float *)&v20->padding_0[16] = v21[4];
-        v22 = sub_48db50(*(int *)idx, *(int *)idx + 8);
+        v22 = UTIL_SetOrigin(*(int *)idx, *(int *)idx + 8);
     }
     *(unsigned int *)(*(unsigned int *)&idx + 100) = *(int *)(*(unsigned int *)&idx + 100) + 20;
     if (*(int *)(*(unsigned int *)&idx + 100) > 109)
@@ -91,8 +91,8 @@ double ExpandShieldThink__7CShield(float idx)
     v5 = (float)v24;
     v6 = (float)v24;
     v7 = (float)v24;
-    sub_48a0d0(*(int *)idx, &v5, &v2);
-    sub_487f60(idx);
+    UTIL_SetSize(*(int *)idx, &v5, &v2);
+    CShield::UpdateShieldClient(idx);
     v25 = 0.2 + *(float *)gpGlobals;
     *(float *)(*(int *)idx + 260) = (float)v25;
     return v25;

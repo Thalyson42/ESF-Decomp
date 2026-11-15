@@ -20,6 +20,6 @@ st_4f2dc0_0 * IncreaseStrength__11CBasePlayerP11CBasePlayeri(st_4f2dc0_0 *a0, st
     v1 = __fnstcw();
     v0 = v1 | 0xc00;
     v2 = (int)(v3 * (double)(int)v2);
-    return sub_489700(a0, v2);
+    return CBasePlayer::IncreasePL(a0, v2);
 }
 

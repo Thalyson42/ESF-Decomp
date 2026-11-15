@@ -4,7 +4,7 @@ typedef struct st_5383d0_0 {
 } st_5383d0_0;
 
 extern st_5383d0_0 *gpGlobals;
-extern unsigned int g_62f730[4];
+extern unsigned int _15CBasePlayerItem.ItemInfoArray+16[4];
 
 unsigned int ItemPostFrame__17CBasePlayerWeapon(float idx)
 {
@@ -17,9 +17,9 @@ unsigned int ItemPostFrame__17CBasePlayerWeapon(float idx)
     unsigned int v8;  // eax
     float v0;  // [bp-0x2c]
 
-    if (*(char *)(*(int *)*(int *)(*(unsigned int *)&idx + 128) + 385) & 8 && (v2 = (*(int *)(*(int *)(*(unsigned int *)&idx + 96) + 340))(idx), sub_48b190(*(float *)(*(unsigned int *)&idx + 160), *(float *)gpGlobals, (*(int *)(*(int *)(*(unsigned int *)&idx + 96) + 340))(idx))))
+    if (*(char *)(*(int *)*(int *)(*(unsigned int *)&idx + 128) + 385) & 8 && (v2 = (*(int *)(*(int *)(*(unsigned int *)&idx + 96) + 340))(idx), CanAttack(*(float *)(*(unsigned int *)&idx + 160), *(float *)gpGlobals, (*(int *)(*(int *)(*(unsigned int *)&idx + 96) + 340))(idx))))
     {
-        if (g_62f730[11 * *(int *)(*(unsigned int *)&idx + 0x88)])
+        if (_15CBasePlayerItem.ItemInfoArray+16[11 * *(int *)(*(unsigned int *)&idx + 0x88)])
             *(unsigned int *)(*(unsigned int *)&idx + 144) = 1;
         v3 = *(int *)(*(unsigned int *)&idx + 128);
         if (v3[217] || v3[203] || v3[0xcc] || v3[476] || v3[223] || v3[286])
@@ -30,7 +30,7 @@ unsigned int ItemPostFrame__17CBasePlayerWeapon(float idx)
     }
     else
     {
-        if (*(char *)(*(int *)*(int *)(*(unsigned int *)&idx + 128) + 384) & 1 && !(v5 = (*(int *)(*(int *)(*(unsigned int *)&idx + 96) + 340))(idx), !sub_48b190(*(float *)(*(unsigned int *)&idx + 156), *(float *)gpGlobals, (*(int *)(*(int *)(*(unsigned int *)&idx + 96) + 340))(idx))))
+        if (*(char *)(*(int *)*(int *)(*(unsigned int *)&idx + 128) + 384) & 1 && !(v5 = (*(int *)(*(int *)(*(unsigned int *)&idx + 96) + 340))(idx), !CanAttack(*(float *)(*(unsigned int *)&idx + 156), *(float *)gpGlobals, (*(int *)(*(int *)(*(unsigned int *)&idx + 96) + 340))(idx))))
         {
             *(unsigned int *)(*(unsigned int *)&idx + 144) = 1;
             v6 = *(int *)(*(unsigned int *)&idx + 128);

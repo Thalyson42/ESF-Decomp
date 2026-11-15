@@ -14,8 +14,8 @@ unsigned int HandleDelayedBlock__12CPlayerMeleeP12melee_move_sT1(st_509da0_0 *a0
 {
     unsigned int v0;  // eax
 
-    v0 = sub_48bdd0(a0, a1);
-    if (v0 != sub_48bdd0(a0, a2) && a0->field_ac + 1.0 >= *(float *)gpGlobals)
+    v0 = CPlayerMelee::GetMoveCount(a0, a1);
+    if (v0 != CPlayerMelee::GetMoveCount(a0, a2) && a0->field_ac + 1.0 >= *(float *)gpGlobals)
         return 0;
     return 1;
 }

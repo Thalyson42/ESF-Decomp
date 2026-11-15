@@ -36,7 +36,7 @@ extern char SUB_DoNothing__11CBaseEntity;
 extern char TriggerDecal__6CDecalP11CBaseEntityT18USE_TYPEf;
 extern char StaticDecal__6CDecal;
 extern unsigned int g_model_hulls_fixed;
-extern st_539560_3 *g_616818;
+extern st_539560_3 *g_engfuncs.pfnRemoveEntity;
 extern st_539560_2 *gpGlobals;
 
 unsigned int * Spawn__6CDecal(st_539560_1 *a0)
@@ -64,6 +64,6 @@ unsigned int * Spawn__6CDecal(st_539560_1 *a0)
         *(float *)&v0->field_104 = gpGlobals->field_0;
         return gpGlobals;
     }
-    return g_616818(a0->field_0->field_208);
+    return g_engfuncs.pfnRemoveEntity(a0->field_0->field_208);
 }
 

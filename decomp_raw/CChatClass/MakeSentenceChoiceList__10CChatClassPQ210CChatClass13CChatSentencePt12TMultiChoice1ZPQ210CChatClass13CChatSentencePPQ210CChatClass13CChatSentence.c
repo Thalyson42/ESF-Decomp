@@ -38,8 +38,8 @@ typedef struct st_548ef0_6 {
     unsigned int field_0;
 } st_548ef0_6;
 
-extern st_548ef0_6 *g_616928;
-extern char g_6253c4;
+extern st_548ef0_6 *g_engfuncs.pfnRandomLong;
+extern char BotManager+3396;
 
 int MakeSentenceChoiceList__10CChatClassPQ210CChatClass13CChatSentencePt12TMultiChoice1ZPQ210CChatClass13CChatSentencePPQ210CChatClass13CChatSentence(unsigned int a0, st_548ef0_0 *a1, st_548ef0_4 *a2, st_548ef0_0 **a3)
 {
@@ -60,18 +60,18 @@ int MakeSentenceChoiceList__10CChatClassPQ210CChatClass13CChatSentencePt12TMulti
     unsigned short v4;  // [bp-0x10]
     char v5;  // [bp-0xd]
 
-    v6 = g_6253c4 - 1;
+    v6 = BotManager+3396 - 1;
     if (a1->field_2a > v6)
         return v6;
     v7 = _INSERT(v6, 0, a1->field_2b);
-    if (a1->field_2b > g_6253c4)
+    if (a1->field_2b > BotManager+3396)
         return v7;
     v5 = 0;
     do
     {
         if (a1 == a3[v5])
         {
-            v8 = g_616928(1, 100);
+            v8 = g_engfuncs.pfnRandomLong(1, 100);
             if (v8 <= 80)
                 return v8;
         }
@@ -80,7 +80,7 @@ int MakeSentenceChoiceList__10CChatClassPQ210CChatClass13CChatSentencePt12TMulti
     v4 = v9;
     if (!(unsigned short)v9)
         return v9;
-    v10 = sub_48d6a0(12);
+    v10 = __builtin_new(12);
     v10->field_0 = 0;
     v10->field_4 = 0;
     v3 = v10;
@@ -91,15 +91,15 @@ int MakeSentenceChoiceList__10CChatClassPQ210CChatClass13CChatSentencePt12TMulti
     v12 = a2->field_4;
     if (!*v12)
     {
-        v13 = sub_48d6a0(12);
+        v13 = __builtin_new(12);
         v2 = 1;
         v13->field_4 = NULL;
         v13->field_8 = 0;
-        sub_48d0e0(v13, 0, 4);
+        memset@GLIBC_2.0(v13, 0, 4);
         v2 = 0;
         *v12 = v13;
         if (v2)
-            sub_48d4e0(v13);
+            __builtin_delete(v13);
         *v12->field_0 = v3;
         *v12->field_4 = NULL;
         *v12->field_8 = 0;
@@ -108,15 +108,15 @@ int MakeSentenceChoiceList__10CChatClassPQ210CChatClass13CChatSentencePt12TMulti
     else
     {
         v1 = v12[1];
-        v14 = sub_48d6a0(12);
+        v14 = __builtin_new(12);
         v0 = 1;
         v14->field_4 = 0;
         v14->field_8 = NULL;
-        sub_48d0e0(v14, 0, 4);
+        memset@GLIBC_2.0(v14, 0, 4);
         v0 = 0;
         v1->field_4 = v14;
         if (v0)
-            sub_48d4e0(v14);
+            __builtin_delete(v14);
         v12[1]->field_4->field_8 = v12[1];
         v15 = v12[1]->field_4;
         v12[1] = v15;

@@ -20,16 +20,16 @@ typedef struct st_4a2730_0 {
     unsigned int field_0;
 } st_4a2730_0;
 
-extern unsigned int g_5b8260;
-extern unsigned int g_5b8284;
-extern unsigned int g_5b82a8;
-extern unsigned int g_5b82cc;
-extern unsigned int g_5b82f0;
-extern unsigned int g_5b8314;
+extern unsigned int entity_field_alias+32;
+extern unsigned int entity_field_alias+68;
+extern unsigned int entity_field_alias+104;
+extern unsigned int entity_field_alias+140;
+extern unsigned int entity_field_alias+176;
+extern unsigned int entity_field_alias+212;
 extern unsigned int initialized.1836;
-extern st_4a2730_0 *g_6169c8;
-extern st_4a2730_0 *g_6169d4;
-extern st_4a2730_0 *g_6169d8;
+extern st_4a2730_0 *g_engfuncs.pfnCanSkipPlayer;
+extern st_4a2730_0 *g_engfuncs.pfnDeltaUnsetFieldByIndex;
+extern st_4a2730_0 *g_engfuncs.pfnSetGroupMask;
 
 unsigned int Entity_Encode__FP7delta_sPCUcT1(int a0, st_4a2730_2 *a1, st_4a2730_1 *a2)
 {
@@ -40,35 +40,35 @@ unsigned int Entity_Encode__FP7delta_sPCUcT1(int a0, st_4a2730_2 *a1, st_4a2730_
 
     if (!initialized.1836)
     {
-        sub_48acf0(a0);
+        Entity_FieldInit(a0);
         initialized.1836 = 1;
     }
-    v3 = g_6169c8(v0, v1, v2);
+    v3 = g_engfuncs.pfnCanSkipPlayer(v0, v1, v2);
     if (a2->field_4 - 1 == v3)
     {
-        g_6169d8(a0, g_5b8260);
-        g_6169d8(a0, g_5b8284);
-        g_6169d8(a0, g_5b82a8);
+        g_engfuncs.pfnSetGroupMask(a0, entity_field_alias+32);
+        g_engfuncs.pfnSetGroupMask(a0, entity_field_alias+68);
+        g_engfuncs.pfnSetGroupMask(a0, entity_field_alias+104);
     }
     if (a2->field_fc != 0.0f && a2->field_100 != 0.0f)
     {
-        g_6169d8(a0, g_5b8260);
-        g_6169d8(a0, g_5b8284);
-        g_6169d8(a0, g_5b82a8);
-        g_6169d8(a0, g_5b82cc);
-        g_6169d8(a0, g_5b82f0);
-        g_6169d8(a0, g_5b8314);
+        g_engfuncs.pfnSetGroupMask(a0, entity_field_alias+32);
+        g_engfuncs.pfnSetGroupMask(a0, entity_field_alias+68);
+        g_engfuncs.pfnSetGroupMask(a0, entity_field_alias+104);
+        g_engfuncs.pfnSetGroupMask(a0, entity_field_alias+140);
+        g_engfuncs.pfnSetGroupMask(a0, entity_field_alias+176);
+        g_engfuncs.pfnSetGroupMask(a0, entity_field_alias+212);
     }
     if (a2->field_58 == 12 && a2->field_94)
     {
-        g_6169d8(a0, g_5b8260);
-        g_6169d8(a0, g_5b8284);
-        return g_6169d8(a0, g_5b82a8);
+        g_engfuncs.pfnSetGroupMask(a0, entity_field_alias+32);
+        g_engfuncs.pfnSetGroupMask(a0, entity_field_alias+68);
+        return g_engfuncs.pfnSetGroupMask(a0, entity_field_alias+104);
     }
     if (a2->field_94 == a1->field_94)
         return a2->field_94;
-    g_6169d4(a0, g_5b8260);
-    g_6169d4(a0, g_5b8284);
-    return g_6169d4(a0, g_5b82a8);
+    g_engfuncs.pfnDeltaUnsetFieldByIndex(a0, entity_field_alias+32);
+    g_engfuncs.pfnDeltaUnsetFieldByIndex(a0, entity_field_alias+68);
+    return g_engfuncs.pfnDeltaUnsetFieldByIndex(a0, entity_field_alias+104);
 }
 

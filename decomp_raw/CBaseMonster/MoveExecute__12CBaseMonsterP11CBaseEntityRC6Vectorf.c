@@ -38,7 +38,7 @@ int MoveExecute__12CBaseMonsterP11CBaseEntityRC6Vectorf(st_4d7490_1 *a0, unsigne
         return v5;
     do
     {
-    } while ((v0 = (float)(v2 > 16.0 ? 16.0 : v1), v2 = v1 - v0, v1 = (float)v2, v6 = _INSERT(sub_48d870(a0->field_0->field_208, &(&a0->field_0)[4 * a0->field_218 + 101], v0, 0), 0, 0), v7 = _INSERT(_INSERT(sub_48d870(a0->field_0->field_208, &(&a0->field_0)[4 * a0->field_218 + 101], v0, 0), 0, 0), 1, (isnan(v2) ? 69 : v2 == 0.001 ? 64 : v2 < 0.001)), v2 > 0.001));
+    } while ((v0 = (float)(v2 > 16.0 ? 16.0 : v1), v2 = v1 - v0, v1 = (float)v2, v6 = _INSERT(UTIL_MoveToOrigin(a0->field_0->field_208, &(&a0->field_0)[4 * a0->field_218 + 101], v0, 0), 0, 0), v7 = _INSERT(_INSERT(UTIL_MoveToOrigin(a0->field_0->field_208, &(&a0->field_0)[4 * a0->field_218 + 101], v0, 0), 0, 0), 1, (isnan(v2) ? 69 : v2 == 0.001 ? 64 : v2 < 0.001)), v2 > 0.001));
     return v7;
 }
 

@@ -14,10 +14,10 @@ unsigned int Use__13CButtonTargetP11CBaseEntityT18USE_TYPEf(st_498e40_0 **a0, in
     v2 = __fnstcw();
     v1 = v2 | 0xc00;
     v0 = (int)*a0->field_130;
-    v3 = sub_48ab90(a0, a3, v0);
+    v3 = CBaseEntity::ShouldToggle(a0, a3, v0);
     if (!v3)
         return v3;
     *a0->field_130 = (float)(1.0 - *a0->field_130);
-    return (0.0 == *a0->field_130 ? sub_48df80(a0, a1, 0, 0) : sub_48df80(a0, a1, 1, 0.0f));
+    return (0.0 == *a0->field_130 ? CBaseEntity::SUB_UseTargets(a0, a1, 0, 0) : CBaseEntity::SUB_UseTargets(a0, a1, 1, 0.0f));
 }
 

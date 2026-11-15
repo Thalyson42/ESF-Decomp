@@ -16,7 +16,7 @@ st_583ea0_0 * TaskThink__11CAscendTask(st_583ea0_1 *a0)
 
     v0 = a0->field_8;
     if (v0->field_770)
-        return sub_48d0d0(a0->field_8);
+        return CBot::ResetMoveSpeed(a0->field_8);
     a0->field_4 = 2;
     return v0;
 }

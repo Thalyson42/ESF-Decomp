@@ -15,7 +15,7 @@ typedef struct st_5220a0_2 {
     unsigned int field_0;
 } st_5220a0_2;
 
-extern st_5220a0_2 *g_6168cc;
+extern st_5220a0_2 *g_engfuncs.pfnAllocString;
 
 st_5220a0_1 * KeyValue__12CBaseDMStartP14KeyValueData_s(st_5220a0_1 **a0, st_5220a0_0 *a1)
 {
@@ -23,13 +23,13 @@ st_5220a0_1 * KeyValue__12CBaseDMStartP14KeyValueData_s(st_5220a0_1 **a0, st_522
     unsigned int v1;  // eax
     st_5220a0_1 *v2;  // eax
 
-    v0 = sub_488af0(a1->field_4, "master");
+    v0 = strcmp@GLIBC_2.0(a1->field_4, "master");
     if (v0)
     {
         a1->field_c = 0;
         return v0;
     }
-    v1 = g_6168cc(a1->field_8);
+    v1 = g_engfuncs.pfnAllocString(a1->field_8);
     v2 = *a0;
     v2->field_1d0 = v1;
     a1->field_c = 1;

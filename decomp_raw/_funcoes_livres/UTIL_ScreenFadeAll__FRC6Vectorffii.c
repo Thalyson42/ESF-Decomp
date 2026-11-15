@@ -11,13 +11,13 @@ st_532490_0 * UTIL_ScreenFadeAll__FRC6Vectorffii(int a0, float a1, float a2, int
     int i;  // esi
     char v0;  // [bp-0x24]
 
-    sub_48dec0(&v0, a0, a1, a2, a3, a4);
+    UTIL_ScreenFadeBuild(&v0, a0, a1, a2, a3, a4);
     i = 1;
     if (1 > (int)gpGlobals->field_90)
         return gpGlobals;
     do
     {
-        sub_48c780(&v0, sub_48a500(i));
+        UTIL_ScreenFadeWrite(&v0, UTIL_PlayerByIndex(i));
         i += 1;
     } while (i <= (int)gpGlobals->field_90);
     return gpGlobals;

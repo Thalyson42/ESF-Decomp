@@ -33,15 +33,15 @@ typedef struct st_579b90_4 {
 
 extern int g_5b085c;
 extern st_579b90_4 *gpGlobals;
-extern char g_6253ca;
+extern char BotManager+3402;
 
 char UTIL_IsValidPlayer__FP11CBasePlayerbT1(st_579b90_3 *a0, char a1, char a2)
 {
     char v0;  // [bp-0x5]
 
-    if (a0 && a0->field_0 && !(char)sub_48b140(a0))
+    if (a0 && a0->field_0 && !(char)IsNull(a0))
     {
-        if (a2 && g_6253ca)
+        if (a2 && BotManager+3402)
         {
             v0 = 0;
             if (!a0->field_60->field_a4(a0))
@@ -52,7 +52,7 @@ char UTIL_IsValidPlayer__FP11CBasePlayerbT1(st_579b90_3 *a0, char a1, char a2)
         else
         {
 LABEL_579c0e:
-            if (sub_488af0(a0->field_0->field_1d0 + gpGlobals->field_98, &g_5b085c) && (!a1 || a0->field_60->field_8c(a0) && !a0->field_328) && a0->field_0->field_1a4 & 8)
+            if (strcmp@GLIBC_2.0(a0->field_0->field_1d0 + gpGlobals->field_98, &g_5b085c) && (!a1 || a0->field_60->field_8c(a0) && !a0->field_328) && a0->field_0->field_1a4 & 8)
                 return 1;
         }
     }

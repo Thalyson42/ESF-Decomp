@@ -47,8 +47,8 @@ typedef struct st_527dd0_4 {
     float field_0;
 } st_527dd0_4;
 
-extern st_527dd0_2 *g_61690c;
-extern st_527dd0_2 *g_616910;
+extern st_527dd0_2 *g_engfuncs.pfnCmd_Argv;
+extern st_527dd0_2 *g_engfuncs.pfnCmd_Argc;
 extern st_527dd0_4 *gpGlobals;
 extern int g_VoiceGameMgr;
 
@@ -63,18 +63,18 @@ unsigned int ClientCommand__17CHalfLifeTeamplayP11CBasePlayerPCc(st_527dd0_6 *a0
     char v1;  // [bp-0x15]
     char v2;  // [bp-0x14]
 
-    if ((char)sub_48b400(&g_VoiceGameMgr, a1, a2))
+    if ((char)CVoiceGameMgr::ClientCommand(&g_VoiceGameMgr, a1, a2))
         return 1;
-    if (!sub_488af0(a2, "menuselect"))
+    if (!strcmp@GLIBC_2.0(a2, "menuselect"))
     {
-        g_616910();
+        g_engfuncs.pfnCmd_Argc();
     }
     else
     {
-        if (sub_488af0(a2, "jointeam"))
+        if (strcmp@GLIBC_2.0(a2, "jointeam"))
         {
 LABEL_5280b0:
-            return sub_48b2e0(a0, a1, a2);
+            return CHalfLifeMultiplay::ClientCommand(a0, a1, a2);
         }
         if (!a1->field_4c4 && !a1->field_3e4 && !a1->field_354 && !a1->field_35c && !a1->field_358)
         {
@@ -89,7 +89,7 @@ LABEL_5280b0:
                 case 2:
                     goto LABEL_528058;
                 case 5:
-                    v7 = sub_48d1d0(a0, a1);
+                    v7 = CHalfLifeTeamplay::WeakestTeam(a0, a1);
 LABEL_52808a:
                     a0->field_44->field_114(a0, a1, v7);
                     break;
@@ -106,7 +106,7 @@ LABEL_52808a:
                 if (*(float *)&a1->field_79c + 10.0 >= *(float *)gpGlobals && a1->field_0->field_1ac)
                     goto LABEL_5280b0;
                 v0 = &v2;
-                v4 = sub_48b500(g_61690c(1), 0, 10, 0);
+                v4 = __strtol_internal@GLIBC_2.0(g_engfuncs.pfnCmd_Argv(1), 0, 10, 0);
                 switch (v4)
                 {
                 case 2:
@@ -117,7 +117,7 @@ LABEL_528067:
                     v5->field_114(a0, a1, v6);
                     break;
                 case 5:
-                    v7 = sub_48d1d0(a0, a1);
+                    v7 = CHalfLifeTeamplay::WeakestTeam(a0, a1);
                     goto LABEL_52808a;
                 case 1:
                     v5 = a0->field_44;

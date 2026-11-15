@@ -25,7 +25,7 @@ typedef struct st_49d3f0_2 {
 
 extern int _11CBaseEntity.m_SaveData;
 extern st_49d3f0_2 *g_engfuncs;
-extern st_49d3f0_2 *g_6167c8;
+extern st_49d3f0_2 *g_engfuncs.pfnSetModel;
 extern st_49d3f0_1 *gpGlobals;
 
 unsigned int Restore__11CBaseEntityR8CRestore(st_49d3f0_0 **a0, int a1)
@@ -39,9 +39,9 @@ unsigned int Restore__11CBaseEntityR8CRestore(st_49d3f0_0 **a0, int a1)
     unsigned int v5;  // [bp-0x20]
     unsigned int v6;  // [bp-0x1c]
 
-    v0 = sub_4896a0(a1, "ENTVARS", *a0);
+    v0 = CRestore::ReadEntVars(a1, "ENTVARS", *a0);
     if (v0)
-        v0 = sub_48a980(a1, "BASE", a0, &_11CBaseEntity.m_SaveData, 5);
+        v0 = CRestore::ReadFields(a1, "BASE", a0, &_11CBaseEntity.m_SaveData, 5);
     v7 = *a0;
     if (!v7[45])
         return v0;
@@ -54,8 +54,8 @@ unsigned int Restore__11CBaseEntityR8CRestore(st_49d3f0_0 **a0, int a1)
     v2 = v7[59];
     v3 = v7[60];
     g_engfuncs(v7[46] + gpGlobals->field_98);
-    g_6167c8(*a0->field_208, *a0->field_b8 + gpGlobals->field_98);
-    sub_48a0d0(*a0, &v4, &v1);
+    g_engfuncs.pfnSetModel(*a0->field_208, *a0->field_b8 + gpGlobals->field_98);
+    UTIL_SetSize(*a0, &v4, &v1);
     return v0;
 }
 

@@ -17,9 +17,9 @@ typedef struct st_49c5d0_0 {
     unsigned int field_98;
 } st_49c5d0_0;
 
-extern st_49c5d0_1 *g_6167f8;
-extern st_49c5d0_1 *g_6168b4;
-extern st_49c5d0_1 *g_6168d4;
+extern st_49c5d0_1 *g_engfuncs.pfnFindEntityByString;
+extern st_49c5d0_1 *g_engfuncs.pfnAlertMessage;
+extern st_49c5d0_1 *g_engfuncs.pfnPEntityOfEntOffset;
 extern st_49c5d0_0 *gpGlobals;
 
 st_49c5d0_1 ** FindGlobalEntity__Fii(unsigned int a0, unsigned int a1)
@@ -28,8 +28,8 @@ st_49c5d0_1 ** FindGlobalEntity__Fii(unsigned int a0, unsigned int a1)
     st_49c5d0_1 **v1;  // eax
     st_49c5d0_1 **v2;  // esi
 
-    v0 = g_6167f8(0, "globalname", a1 + gpGlobals->field_98);
-    if (v0 || (v0 = g_6168d4(0), v0))
+    v0 = g_engfuncs.pfnFindEntityByString(0, "globalname", a1 + gpGlobals->field_98);
+    if (v0 || (v0 = g_engfuncs.pfnPEntityOfEntOffset(0), v0))
         v1 = v0->field_7c;
     else
         v1 = NULL;
@@ -38,9 +38,9 @@ st_49c5d0_1 ** FindGlobalEntity__Fii(unsigned int a0, unsigned int a1)
     {
         return v2;
     }
-    else if (sub_488af0(gpGlobals->field_98 + *(int *)*v2, a0 + gpGlobals->field_98))
+    else if (strcmp@GLIBC_2.0(gpGlobals->field_98 + *(int *)*v2, a0 + gpGlobals->field_98))
     {
-        g_6168b4(1, "Global entity found %s, wrong class %s\n", a1 + gpGlobals->field_98, *(int *)*v2 + gpGlobals->field_98);
+        g_engfuncs.pfnAlertMessage(1, "Global entity found %s, wrong class %s\n", a1 + gpGlobals->field_98, *(int *)*v2 + gpGlobals->field_98);
         return NULL;
     }
     else

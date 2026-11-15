@@ -8,11 +8,11 @@ st_53d870_0 * ToggleTurbo__4CBotb(st_53d870_0 *a0, char a1)
 {
     if (!a1)
     {
-        return sub_48dbc0(a0);
+        return CBasePlayer::StopTurbo(a0);
     }
     else if (!a0->field_324)
     {
-        return sub_487d00(a0);
+        return CBasePlayer::StartTurbo(a0);
     }
     else
     {

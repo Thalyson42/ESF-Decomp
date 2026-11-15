@@ -10,7 +10,7 @@ typedef struct st_505290_0 {
     struct st_505290_0 *field_35c;
 } st_505290_0;
 
-extern float g_5bd1d0;
+extern float melee_percentblocked+12;
 
 int CanEXECombo__12CPlayerMeleeP17melee_execution_s(unsigned int a0, st_505290_0 *iter)
 {
@@ -30,6 +30,6 @@ int CanEXECombo__12CPlayerMeleeP17melee_execution_s(unsigned int a0, st_505290_0
             break;
     }
     v0 = v2 / v1;
-    return (double)v0 <= g_5bd1d0;
+    return (double)v0 <= melee_percentblocked+12;
 }
 

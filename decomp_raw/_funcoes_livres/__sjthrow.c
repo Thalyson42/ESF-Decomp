@@ -94,7 +94,7 @@ int __sjthrow(void)
         v2->field_0 = v4;
     }
     if (!v3->field_8 || !v2->field_0->field_0)
-        sub_48d640();
+        __terminate();
     v19 = v2->field_0;
     v2->field_0 = v19->field_0;
     goto *((void *)(v19->field_c));

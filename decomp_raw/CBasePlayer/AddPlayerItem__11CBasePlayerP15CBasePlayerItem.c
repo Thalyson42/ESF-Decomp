@@ -83,7 +83,7 @@ unsigned int AddPlayerItem__11CBasePlayerP15CBasePlayerItem(st_4fcf60_5 *a0, st_
         while (1)
         {
             v3 = v2;
-            if (!sub_488af0(gpGlobals->field_98 + *(int *)*(int *)&v3->padding_0[0], *(int *)a1->field_0 + gpGlobals->field_98))
+            if (!strcmp@GLIBC_2.0(gpGlobals->field_98 + *(int *)*(int *)&v3->padding_0[0], *(int *)a1->field_0 + gpGlobals->field_98))
                 break;
             v2 = v3->field_84;
             if (!v3->field_84)
@@ -92,7 +92,7 @@ unsigned int AddPlayerItem__11CBasePlayerP15CBasePlayerItem(st_4fcf60_5 *a0, st_
         if (a1->field_60->field_f0(a1, v3))
         {
             g_pGameRules->field_44->field_78(g_pGameRules, a0, a1);
-            sub_48d0f0(a1);
+            CBasePlayerItem::CheckRespawn(a1);
             (*(int *)(*(int *)&v3->padding_0[96] + 264))(v3);
             if (a0->field_968)
                 a0->field_968->field_60->field_108(a0->field_968);
@@ -112,14 +112,14 @@ LABEL_4fd090:
         if (a1->field_60->field_ec(a1, a0))
         {
             g_pGameRules->field_44->field_78(g_pGameRules, a0, a1);
-            sub_48d0f0(a1);
+            CBasePlayerItem::CheckRespawn(a1);
             v5 = &a0->field_940;
             v6 = a1;
             v6->field_84 = v5[a1->field_60->field_130(a1)];
             v5[v6->field_60->field_130(v6)] = a1;
             if (!g_pGameRules->field_44->field_10(g_pGameRules, a0, a1))
                 return 1;
-            sub_4883d0(a0, a1);
+            CBasePlayer::SwitchWeapon(a0, a1);
             return 1;
         }
         if (gEvilImpulse101)

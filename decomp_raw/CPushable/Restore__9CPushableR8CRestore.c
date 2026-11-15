@@ -3,6 +3,6 @@ extern int _9CPushable.m_SaveData;
 
 unsigned int Restore__9CPushableR8CRestore(int a0, int a1)
 {
-    return (!sub_488080(a0, a1) ? 0 : sub_48a980(a1, "CPushable", a0, &_9CPushable.m_SaveData, 2));
+    return (!CBreakable::Restore(a0, a1) ? 0 : CRestore::ReadFields(a1, "CPushable", a0, &_9CPushable.m_SaveData, 2));
 }
 

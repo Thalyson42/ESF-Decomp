@@ -22,9 +22,9 @@ typedef struct st_49f190_3 {
     struct st_49f190_1 *field_4;
 } st_49f190_3;
 
-extern st_49f190_2 *g_6168dc;
-extern st_49f190_2 *g_616968;
-extern st_49f190_2 *g_616974;
+extern st_49f190_2 *g_engfuncs.pfnIndexOfEdict;
+extern st_49f190_2 *g_engfuncs.pfnGetInfoKeyBuffer;
+extern st_49f190_2 *g_engfuncs.pfnSetClientKeyValue;
 
 int SetModel__10CBaseClass(st_49f190_3 *a0)
 {
@@ -34,12 +34,12 @@ int SetModel__10CBaseClass(st_49f190_3 *a0)
     char *v2;  // [bp-0x120]
     char v3;  // [bp-0x104]
 
-    sub_48e110(&v3, a0->field_4->field_3c(a0));
+    strcpy@GLIBC_2.0(&v3, a0->field_4->field_3c(a0));
     v2 = &v3;
     v1 = "model";
-    v0 = g_616968(*(int *)(*(int *)a0->field_0 + 520));
-    v5 = g_6168dc(*(int *)(*(int *)a0->field_0 + 520));
-    g_616974(v5);
-    return sub_48cdb0(a0->field_0, &v3);
+    v0 = g_engfuncs.pfnGetInfoKeyBuffer(*(int *)(*(int *)a0->field_0 + 520));
+    v5 = g_engfuncs.pfnIndexOfEdict(*(int *)(*(int *)a0->field_0 + 520));
+    g_engfuncs.pfnSetClientKeyValue(v5);
+    return UTIL_SetPlayerModel(a0->field_0, &v3);
 }
 

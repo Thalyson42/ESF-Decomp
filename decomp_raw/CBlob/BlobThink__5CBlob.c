@@ -28,10 +28,10 @@ unsigned int * BlobThink__5CBlob(float a0)
         v2 = 0;
         v1 = (float)*(int *)(*(unsigned int *)&a0 + 100);
         v0 = (float)(*(float *)&v8[120] * 0.5);
-        sub_48ab00(&v4, *(int *)a0, (!v8[0x66] ? 0 : v8[0x66] + 128));
+        RadiusDamage(&v4, *(int *)a0, (!v8[0x66] ? 0 : v8[0x66] + 128));
         *(float *)(*(int *)a0 + 260) = (float)(0.25 + *(float *)gpGlobals);
         return gpGlobals;
     }
-    return sub_48ae80(a0);
+    return CBlob::Remove(a0);
 }
 

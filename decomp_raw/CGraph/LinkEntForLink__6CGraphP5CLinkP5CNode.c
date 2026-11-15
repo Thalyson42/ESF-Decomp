@@ -23,9 +23,9 @@ typedef struct st_4df260_3 {
     unsigned int field_0;
 } st_4df260_3;
 
-extern st_4df260_3 *g_6167f8;
-extern st_4df260_3 *g_6168b4;
-extern st_4df260_3 *g_6168d8;
+extern st_4df260_3 *g_engfuncs.pfnFindEntityByString;
+extern st_4df260_3 *g_engfuncs.pfnAlertMessage;
+extern st_4df260_3 *g_engfuncs.pfnEntOffsetOfPEntity;
 extern st_4df260_2 *gpGlobals;
 extern int g_pBodyQueueHead;
 
@@ -44,9 +44,9 @@ st_4df260_0 * LinkEntForLink__6CGraphP5CLinkP5CNode(unsigned int a0, st_4df260_1
     if (!a1->field_8)
         return NULL;
     v5 = NULL;
-    if (sub_488af0(v1->field_0 + gpGlobals->field_98, "func_door") && sub_488af0(v1->field_0 + gpGlobals->field_98, "func_door_rotating"))
+    if (strcmp@GLIBC_2.0(v1->field_0 + gpGlobals->field_98, "func_door") && strcmp@GLIBC_2.0(v1->field_0 + gpGlobals->field_98, "func_door_rotating"))
     {
-        g_6168b4(2, "Unsupported PathEnt:\n'%s'\n", v1->field_0 + gpGlobals->field_98);
+        g_engfuncs.pfnAlertMessage(2, "Unsupported PathEnt:\n'%s'\n", v1->field_0 + gpGlobals->field_98);
     }
     else if (!(v1->field_1a1 & 1))
     {
@@ -55,16 +55,16 @@ st_4df260_0 * LinkEntForLink__6CGraphP5CLinkP5CNode(unsigned int a0, st_4df260_1
         {
             do
             {
-                v5 = g_6167f8(v5, "target", v1->field_1cc + gpGlobals->field_98);
+                v5 = g_engfuncs.pfnFindEntityByString(v5, "target", v1->field_1cc + gpGlobals->field_98);
                 v6 = 0;
-                if (!v5 || !g_6168d8(v5))
+                if (!v5 || !g_engfuncs.pfnEntOffsetOfPEntity(v5))
                     v6 = 1;
                 if (v6)
                     return v1;
                 i = (!v5 ? NULL : v5 + 32);
-            } while (sub_488af0(*i + gpGlobals->field_98, "func_button") && sub_488af0(*i + gpGlobals->field_98, "func_rot_button"));
-            sub_48b610(v0, i);
-            sub_487b80(a2, v0, 1, g_pBodyQueueHead, &v3);
+            } while (strcmp@GLIBC_2.0(*i + gpGlobals->field_98, "func_button") && strcmp@GLIBC_2.0(*i + gpGlobals->field_98, "func_rot_button"));
+            VecBModelOrigin(v0, i);
+            UTIL_TraceLine(a2, v0, 1, g_pBodyQueueHead, &v3);
         } while ((!v4 ? 0 : (struct st_4df260_0 *)&v4->field_80) != i);
         if (v4)
             return &v4->field_80;

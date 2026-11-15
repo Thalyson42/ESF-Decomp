@@ -29,7 +29,7 @@ typedef struct st_4eb480_3 {
 } st_4eb480_3;
 
 extern char g_vecZero;
-extern st_4eb480_3 *g_6169ac;
+extern st_4eb480_3 *g_engfuncs.pfnPlaybackEvent;
 extern st_4eb480_2 *gpGlobals;
 
 unsigned int * UpdateSound__15CFuncTrackTrain(st_4eb480_1 *a0)
@@ -62,13 +62,13 @@ unsigned int * UpdateSound__15CFuncTrackTrain(st_4eb480_1 *a0)
         v4 = __fnstcw();
         v3 = v4 | 0xc00;
         v2 = (int)(40.0 * a0->field_9c);
-        return g_6169ac(10, a0->field_0->field_208, a0->field_a8, 0, &g_vecZero, &g_vecZero, 0, 0, ((a0->field_98 & 7) * 0x1000 | ((short)v1 & 63) * 64 | (short)v2 & 63) & 0xffff, 0, 0, 0);
+        return g_engfuncs.pfnPlaybackEvent(10, a0->field_0->field_208, a0->field_a8, 0, &g_vecZero, &g_vecZero, 0, 0, ((a0->field_98 & 7) * 0x1000 | ((short)v1 & 63) * 64 | (short)v2 & 63) & 0xffff, 0, 0, 0);
     }
-    sub_489390(a0->field_0->field_208, 3, "plats/ttrain_start1.wav", a0->field_9c, 1061997773, 0, 100);
+    EMIT_SOUND_DYN(a0->field_0->field_208, 3, "plats/ttrain_start1.wav", a0->field_9c, 1061997773, 0, 100);
     v4 = __fnstcw();
     v3 = v4 | 0xc00;
     v1 = (int)v0;
-    v7 = sub_489390(a0->field_0->field_208, 6, a0->field_0->field_1e8 + gpGlobals->field_98, a0->field_9c, 1061997773, 0, v1);
+    v7 = EMIT_SOUND_DYN(a0->field_0->field_208, 6, a0->field_0->field_1e8 + gpGlobals->field_98, a0->field_9c, 1061997773, 0, v1);
     a0->field_94 = 1;
     return v7;
 }

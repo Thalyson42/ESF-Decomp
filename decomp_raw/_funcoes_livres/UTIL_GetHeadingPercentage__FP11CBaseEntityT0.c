@@ -72,7 +72,7 @@ double UTIL_GetHeadingPercentage__FP11CBaseEntityT0(st_57ea20_0 **a0, st_57ea20_
         v27 = *a1->field_20 * *a1->field_20 + *(float *)&v26[1] * *(float *)&v26[1] + *(float *)&v26[2] * *(float *)&v26[2];
         v28 = sqrt(v27);
         if (isnan(v28))
-            sub_487dc0(*(unsigned int *)&v27);
+            sqrt(*(unsigned int *)&v27);
         else
             v27 = v28;
         v22 = (float)v27;
@@ -80,7 +80,7 @@ double UTIL_GetHeadingPercentage__FP11CBaseEntityT0(st_57ea20_0 **a0, st_57ea20_
         if (v29 != 0.0)
         {
             *(unsigned short *)&v0 = 0;
-            sub_48a640(&v19, a1, 0.009999999776482582f, v0);
+            PredictEntityPos(&v19, a1, 0.009999999776482582f, v0);
             v30 = &*a0->field_8;
             v22 = *a0->field_8;
             v23 = *(float *)&v30[1];
@@ -98,7 +98,7 @@ double UTIL_GetHeadingPercentage__FP11CBaseEntityT0(st_57ea20_0 **a0, st_57ea20_
             v35 = v32 * v32 + v33 * v33 + v34 * v34;
             v36 = sqrt(v35);
             if (isnan(v36))
-                sub_487dc0(*(unsigned int *)&v35);
+                sqrt(*(unsigned int *)&v35);
             else
                 v35 = v36;
             v2 = (float)v35;
@@ -118,7 +118,7 @@ double UTIL_GetHeadingPercentage__FP11CBaseEntityT0(st_57ea20_0 **a0, st_57ea20_
             v41 = v38 * v38 + v39 * v39 + v40 * v40;
             v42 = sqrt(v41);
             if (isnan(v42))
-                sub_487dc0(*(unsigned int *)&v41);
+                sqrt(*(unsigned int *)&v41);
             else
                 v41 = v42;
             v1 = (float)v41;
@@ -129,7 +129,7 @@ double UTIL_GetHeadingPercentage__FP11CBaseEntityT0(st_57ea20_0 **a0, st_57ea20_
                 v44 = *a1->field_20 * *a1->field_20 + *(float *)&v43[1] * *(float *)&v43[1] + *(float *)&v43[2] * *(float *)&v43[2];
                 v45 = sqrt(v44);
                 if (isnan(v45))
-                    sub_487dc0(*(unsigned int *)&v44);
+                    sqrt(*(unsigned int *)&v44);
                 else
                     v44 = v45;
                 v25 = (float)v44;

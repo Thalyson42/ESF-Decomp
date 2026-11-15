@@ -86,11 +86,11 @@ int Jump__11CBasePlayer(float a0)
         }
         else if (v5->field_19c)
         {
-            sub_48a800(&v5->padding_2d[35]);
-            sub_489390(*(int *)(*(int *)a0 + 520), 4, "weapons/jump.wav", 0x3f800000, 0.800000011920929f, 0, 100);
+            UTIL_MakeVectors(&v5->padding_2d[35]);
+            EMIT_SOUND_DYN(*(int *)(*(int *)a0 + 520), 4, "weapons/jump.wav", 0x3f800000, 0.800000011920929f, 0, 100);
             if (*(char *)(*(int *)a0 + 384) & 4)
             {
-                sub_48d680(a0, 2);
+                CBasePlayer::SetAnimation(a0, 2);
                 v6 = *(int *)a0;
                 v7 = *(float *)(*(int *)a0 + 608) - 50.0;
             }
@@ -100,7 +100,7 @@ int Jump__11CBasePlayer(float a0)
                     v0 = 3;
                 else
                     v0 = 1;
-                sub_48d680(a0);
+                CBasePlayer::SetAnimation(a0);
                 v6 = *(int *)a0;
                 v7 = *(float *)(*(int *)a0 + 608) - 20.0;
             }

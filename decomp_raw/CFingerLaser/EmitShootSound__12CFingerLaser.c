@@ -15,6 +15,6 @@ typedef struct st_4bdc10_0 {
 
 int EmitShootSound__12CFingerLaser(st_4bdc10_1 *a0)
 {
-    return sub_489390(*(int *)(*(int *)a0->field_80 + 520), 1, "weapons/fingerlaser.wav", 0x3f800000, 0.800000011920929f, 0, 100);
+    return EMIT_SOUND_DYN(*(int *)(*(int *)a0->field_80 + 520), 1, "weapons/fingerlaser.wav", 0x3f800000, 0.800000011920929f, 0, 100);
 }
 

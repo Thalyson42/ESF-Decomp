@@ -38,7 +38,7 @@ typedef struct st_4a5670_3 {
 extern char WaitTillLand__4CGib;
 extern char BounceGibTouch__4CGibP11CBaseEntity;
 extern char g_59c3a8;
-extern st_4a5670_3 *g_6167c8;
+extern st_4a5670_3 *g_engfuncs.pfnSetModel;
 extern st_4a5670_2 *gpGlobals;
 
 unsigned int Spawn__4CGibPCc(st_4a5670_1 *a0, unsigned int a1)
@@ -60,14 +60,14 @@ unsigned int Spawn__4CGibPCc(st_4a5670_1 *a0, unsigned int a1)
     a0->field_0->field_15c = 0;
     a0->field_0->field_10c = 3;
     a0->field_0->field_0 = &(&g_59c3a8)[-1 * gpGlobals->field_98];
-    g_6167c8(a0->field_0->field_208, a1);
+    g_engfuncs.pfnSetModel(a0->field_0->field_208, a1);
     v3 = 0;
     v4 = 0;
     v5 = 0;
     v0 = 0;
     v1 = 0;
     v2 = 0;
-    sub_48a0d0(a0->field_0, &v0, &v3);
+    UTIL_SetSize(a0->field_0, &v0, &v3);
     a0->field_0->field_104 = (float)(gpGlobals->field_0 + 4.0);
     *(float *)&a0[1].field_0 = 25.0f;
     v6 = _INSERT(gpGlobals, 0, 0);

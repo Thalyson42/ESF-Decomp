@@ -13,9 +13,9 @@ typedef struct st_58bf00_1 {
 extern char voice_serverdebug;
 extern char sv_alltalk;
 extern st_58bf00_1 *g_engfuncs;
-extern st_58bf00_1 *g_6168a0;
-extern st_58bf00_1 *g_6168ec;
-extern st_58bf00_1 *g_616990;
+extern st_58bf00_1 *g_engfuncs.pfnCVarRegister;
+extern st_58bf00_1 *g_engfuncs.pfnRegUserMsg;
+extern st_58bf00_1 *g_engfuncs.pfnCVarGetPointer;
 
 char Init__13CVoiceGameMgrP19IVoiceGameMgrHelperi(st_58bf00_0 *a0, unsigned int a1, int a2)
 {
@@ -24,12 +24,12 @@ char Init__13CVoiceGameMgrP19IVoiceGameMgrHelperi(st_58bf00_0 *a0, unsigned int 
         a2 = 32;
     a0->field_c = a2;
     g_engfuncs("sprites/voiceicon.spr");
-    a0->field_0 = g_6168ec("VoiceMask", 8);
-    a0->field_4 = g_6168ec("ReqState", 0);
-    if (!g_616990("voice_serverdebug"))
-        g_6168a0(&voice_serverdebug);
-    if (!g_616990("sv_alltalk"))
-        g_6168a0(&sv_alltalk);
+    a0->field_0 = g_engfuncs.pfnRegUserMsg("VoiceMask", 8);
+    a0->field_4 = g_engfuncs.pfnRegUserMsg("ReqState", 0);
+    if (!g_engfuncs.pfnCVarGetPointer("voice_serverdebug"))
+        g_engfuncs.pfnCVarRegister(&voice_serverdebug);
+    if (!g_engfuncs.pfnCVarGetPointer("sv_alltalk"))
+        g_engfuncs.pfnCVarRegister(&sv_alltalk);
     return 1;
 }
 

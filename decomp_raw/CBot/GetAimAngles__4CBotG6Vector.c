@@ -23,8 +23,8 @@ int GetAimAngles__4CBotG6Vector(void)
     v0 = *v7 - *v5->field_8;
     v1 = v7[1] - *(float *)&v8[1];
     v2 = v7[2] - *(float *)&v8[2];
-    sub_488860(&v3, &v0);
-    sub_489120(v4, &v3);
+    UTIL_VecToAngles(&v3, &v0);
+    WrapAngles(v4, &v3);
     return v4;
 }
 

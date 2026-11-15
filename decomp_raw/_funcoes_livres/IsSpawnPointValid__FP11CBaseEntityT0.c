@@ -33,7 +33,7 @@ unsigned int IsSpawnPointValid__FP11CBaseEntityT0(st_4fa4e0_2 *a0, st_4fa4e0_4 *
     {
         do
         {
-            v0 = sub_48bba0(v0, a1->field_0 + 8, 128.0f);
+            v0 = UTIL_FindEntityInSphere(v0, a1->field_0 + 8, 128.0f);
             if (!v0)
                 return 1;
         } while (!v0->field_60->field_a0(v0) || v0 == a0);

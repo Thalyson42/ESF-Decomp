@@ -26,7 +26,7 @@ int memfgets__FPUciRiPci(unsigned int a0, char *a1, st_51d970_0 **a2, int a3, in
     if (v0 != *a2)
     {
         v2 = v0 - *a2;
-        sub_48c4b0(a3, &(*a2)[a0], v2);
+        memcpy@GLIBC_2.0(a3, &(*a2)[a0], v2);
         if (v2 < a4)
             *(char *)(v2 + a3) = 0;
         *a2 = v0;

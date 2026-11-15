@@ -24,8 +24,8 @@ typedef struct st_572520_4 {
     unsigned int field_0;
 } st_572520_4;
 
-extern st_572520_4 *g_616928;
-extern st_572520_4 *g_61692c;
+extern st_572520_4 *g_engfuncs.pfnRandomLong;
+extern st_572520_4 *g_engfuncs.pfnRandomFloat;
 
 st_572520_0 * BotTurnAtWall__19CNormalMovementTaskP6Vector(st_572520_3 *a0, int a1)
 {
@@ -52,7 +52,7 @@ st_572520_0 * BotTurnAtWall__19CNormalMovementTaskP6Vector(st_572520_3 *a0, int 
     float v10;  // [bp-0x20]
     unsigned int v11;  // [bp-0x1c]
 
-    sub_488860(&v6, a1);
+    UTIL_VecToAngles(&v6, a1);
     v9 = v6;
     v10 = v7;
     v11 = v8;
@@ -65,17 +65,17 @@ st_572520_0 * BotTurnAtWall__19CNormalMovementTaskP6Vector(st_572520_3 *a0, int 
     if (0.0 > v13)
         v10 = (float)(v13 + 360.0);
     v1 = (float)(v10 - 90.0);
-    if ((int)g_616928(1, 100) <= 50)
+    if ((int)g_engfuncs.pfnRandomLong(1, 100) <= 50)
     {
-        g_61692c(5.0f, 20.0f);
+        g_engfuncs.pfnRandomFloat(5.0f, 20.0f);
         v1 = (float)(v1 - 5.0);
     }
     if (0.0 > v1)
         v1 = (float)(v1 + 360.0);
     v0 = (float)(v10 + 90.0);
-    if ((int)g_616928(1, 100) <= 50)
+    if ((int)g_engfuncs.pfnRandomLong(1, 100) <= 50)
     {
-        g_61692c(5.0f, 20.0f);
+        g_engfuncs.pfnRandomFloat(5.0f, 20.0f);
         v0 = (float)(5.0 + v0);
     }
     if (v0 > 359.0f)
@@ -123,7 +123,7 @@ st_572520_0 * BotTurnAtWall__19CNormalMovementTaskP6Vector(st_572520_3 *a0, int 
         v20 = v1;
     if (v20 > 180.0)
         v20 -= 360.0;
-    sub_48d430((float)v20);
+    UTIL_WrapAngle((float)v20);
     v21 = a0->field_8;
     v21->field_c14 = (float)v20;
     return v21;

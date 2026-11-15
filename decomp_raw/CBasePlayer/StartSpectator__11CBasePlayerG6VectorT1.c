@@ -104,14 +104,14 @@ extern unsigned int gmsgTeamInfo;
 extern unsigned int gmsgSetFOV;
 extern unsigned int gmsgSpectator;
 extern unsigned int g_vecZero;
-extern unsigned int g_616790;
-extern unsigned int g_616794;
-extern st_4f8150_1 *g_616878;
-extern st_4f8150_1 *g_61687c;
-extern st_4f8150_1 *g_616880;
-extern st_4f8150_1 *g_616888;
-extern st_4f8150_1 *g_616898;
-extern st_4f8150_1 *g_6168dc;
+extern unsigned int g_vecZero+4;
+extern unsigned int g_vecZero+8;
+extern st_4f8150_1 *g_engfuncs.pfnMessageBegin;
+extern st_4f8150_1 *g_engfuncs.pfnMessageEnd;
+extern st_4f8150_1 *g_engfuncs.pfnWriteByte;
+extern st_4f8150_1 *g_engfuncs.pfnWriteShort;
+extern st_4f8150_1 *g_engfuncs.pfnWriteString;
+extern st_4f8150_1 *g_engfuncs.pfnIndexOfEdict;
 
 unsigned int * StartSpectator__11CBasePlayerG6VectorT1(st_4f8150_4 *a0, int a1, unsigned int *a2)
 {
@@ -132,44 +132,44 @@ unsigned int * StartSpectator__11CBasePlayerG6VectorT1(st_4f8150_4 *a0, int a1, 
     if (a0->field_0->field_244)
         return a0->field_0;
     if (a0->field_328)
-        sub_48aaa0(a0);
-    g_616878(5, 23, &a0->field_0->padding_0[8], 0);
-    g_616880(125);
-    v0 = g_6168dc(a0->field_0->field_208) & 0xff;
-    g_616880(v0);
-    g_61687c(v0);
+        CBasePlayer::StopObserving(a0);
+    g_engfuncs.pfnMessageBegin(5, 23, &a0->field_0->padding_0[8], 0);
+    g_engfuncs.pfnWriteByte(125);
+    v0 = g_engfuncs.pfnIndexOfEdict(a0->field_0->field_208) & 0xff;
+    g_engfuncs.pfnWriteByte(v0);
+    g_engfuncs.pfnMessageEnd(v0);
     if (a0->field_968)
         a0->field_968->field_60->field_104(a0->field_968, 0);
     v5 = &a0->field_90c;
-    if (sub_48d8b0(v5))
+    if (EHANDLE::__opi(v5))
     {
-        v6 = sub_489fd0(v5);
+        v6 = EHANDLE::__rf(v5);
         (*(int *)&v6->field_60->padding_0[184])(v6, a0, a0, 0, 0);
-        sub_48d960(v5, 0);
+        EHANDLE::__as(v5, 0);
     }
     if (a0->field_60->field_8c(a0))
-        sub_48aee0(a0);
-    sub_489ad0(a0, 0, 0, 0);
-    g_616878(1, gmsgCurWeapon, 0, a0->field_0->field_208);
-    g_616880(0);
-    g_616880(0xff);
+        CBasePlayer::RemoveSpecialModes(a0);
+    CBasePlayer::SetSuitUpdate(a0, 0, 0, 0);
+    g_engfuncs.pfnMessageBegin(1, gmsgCurWeapon, 0, a0->field_0->field_208);
+    g_engfuncs.pfnWriteByte(0);
+    g_engfuncs.pfnWriteByte(0xff);
     v0 = 0xff;
-    g_616880(v0);
-    g_61687c(v0);
+    g_engfuncs.pfnWriteByte(v0);
+    g_engfuncs.pfnMessageEnd(v0);
     a0->field_93c = 0;
     a0->field_938 = 0;
     a0->field_0->field_214 = 0;
-    g_616878(1, gmsgSetFOV, 0, a0->field_0->field_208);
+    g_engfuncs.pfnMessageBegin(1, gmsgSetFOV, 0, a0->field_0->field_208);
     v0 = 0;
-    g_616880(v0);
-    g_61687c(v0);
+    g_engfuncs.pfnWriteByte(v0);
+    g_engfuncs.pfnMessageEnd(v0);
     a0->field_930 = 9;
     a0->field_310 = a0->field_310 | 32;
     a0->field_0->field_118 = 128;
     v7 = a0->field_0;
     v7[93] = g_vecZero;
-    v7[94] = g_616790;
-    v7[95] = g_616794;
+    v7[94] = g_vecZero+4;
+    v7[95] = g_vecZero+8;
     v8 = a0->field_0;
     v8[29] = *a2;
     v8[30] = a2[1];
@@ -189,31 +189,31 @@ unsigned int * StartSpectator__11CBasePlayerG6VectorT1(st_4f8150_4 *a0, int a1, 
     v1 = &g_5a4bfc;
     a0->field_99c = 0;
     a0->field_8fc = 1;
-    g_616878(2, gmsgTeamInfo, 0, 0);
-    v10 = g_6168dc(a0->field_0->field_208);
-    g_616880(v10);
-    g_616898(v1);
-    g_61687c();
-    g_616878(2, gmsgScoreInfo, 0, 0);
-    v11 = g_6168dc(a0->field_0->field_208);
-    g_616880(v11);
+    g_engfuncs.pfnMessageBegin(2, gmsgTeamInfo, 0, 0);
+    v10 = g_engfuncs.pfnIndexOfEdict(a0->field_0->field_208);
+    g_engfuncs.pfnWriteByte(v10);
+    g_engfuncs.pfnWriteString(v1);
+    g_engfuncs.pfnMessageEnd();
+    g_engfuncs.pfnMessageBegin(2, gmsgScoreInfo, 0, 0);
+    v11 = g_engfuncs.pfnIndexOfEdict(a0->field_0->field_208);
+    g_engfuncs.pfnWriteByte(v11);
     v3 = __fnstcw();
     v2 = v3 | 0xc00;
     v4 = (int)*(float *)&a0->field_0->field_164;
-    g_616888(v4);
-    g_616888(a0->field_984);
-    g_616888(a0->field_738);
-    g_616888(0);
-    g_616888(0);
-    g_61687c();
-    sub_48b9d0(a0, 0);
-    sub_48db50(a0->field_0, a1);
+    g_engfuncs.pfnWriteShort(v4);
+    g_engfuncs.pfnWriteShort(a0->field_984);
+    g_engfuncs.pfnWriteShort(a0->field_738);
+    g_engfuncs.pfnWriteShort(0);
+    g_engfuncs.pfnWriteShort(0);
+    g_engfuncs.pfnMessageEnd();
+    CBasePlayer::RemoveAllItems(a0, 0);
+    UTIL_SetOrigin(a0->field_0, a1);
     a0->field_790 = 0;
-    sub_48dce0(a0, 1);
-    g_616878(2, gmsgSpectator, 0, 0);
-    v12 = g_6168dc(a0->field_0->field_208);
-    g_616880(v12);
-    g_616880(1);
-    return g_61687c();
+    CBasePlayer::Spectator_SetMode(a0, 1);
+    g_engfuncs.pfnMessageBegin(2, gmsgSpectator, 0, 0);
+    v12 = g_engfuncs.pfnIndexOfEdict(a0->field_0->field_208);
+    g_engfuncs.pfnWriteByte(v12);
+    g_engfuncs.pfnWriteByte(1);
+    return g_engfuncs.pfnMessageEnd();
 }
 

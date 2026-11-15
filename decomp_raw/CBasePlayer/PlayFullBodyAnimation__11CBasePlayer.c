@@ -50,10 +50,10 @@ unsigned int PlayFullBodyAnimation__11CBasePlayer(float idx)
     if (*(int *)(*(unsigned int *)&idx + 1912))
         return 0;
     v8 = *(unsigned int *)&idx + 896;
-    if (sub_48ae90(v8))
+    if (CPlayerMelee::CanPlayAnimation(v8))
     {
-        v9 = sub_487fb0(v8);
-        v10 = sub_48afe0(idx, &v9->padding_0[32 * v9->field_288]);
+        v9 = CPlayerMelee::GetCurrentAnim(v8);
+        v10 = CBaseAnimating::LookupSequence(idx, &v9->padding_0[32 * v9->field_288]);
         if (v10 == 0xffffffff)
             v10 = 0;
         if (!v9->field_29c)
@@ -70,7 +70,7 @@ unsigned int PlayFullBodyAnimation__11CBasePlayer(float idx)
         {
             if (v9->field_294)
             {
-                sub_48b0c0(*(unsigned int *)&idx + 896);
+                CPlayerMelee::NextExeMove(*(unsigned int *)&idx + 896);
                 goto LABEL_4f4b9a;
             }
             v11 = v9->field_288 + 1;
@@ -80,7 +80,7 @@ unsigned int PlayFullBodyAnimation__11CBasePlayer(float idx)
             }
             else if (!v9->field_290 && (v12 = *(unsigned int *)&idx + 896, !v12[81]))
             {
-                sub_48b460(v12, v9);
+                CPlayerMelee::RemoveAnim(v12, v9);
 LABEL_4f4b9a:
             }
         }
@@ -127,13 +127,13 @@ LABEL_4f47d5:
         {
             if (*(int *)(*(unsigned int *)&idx + 1288))
             {
-                sub_488620(*(unsigned int *)&idx + 1284, v5, *(unsigned int *)&idx + 376);
+                CSwoop::SetSwoopAnim(*(unsigned int *)&idx + 1284, v5, *(unsigned int *)&idx + 376);
             }
             else
             {
                 if (!*(int *)(*(unsigned int *)&idx + 936))
                     goto LABEL_4f4aad;
-                sub_48d480(*(unsigned int *)&idx + 896, v5, *(unsigned int *)&idx + 376);
+                CPlayerMelee::SetThrowAnim(*(unsigned int *)&idx + 896, v5, *(unsigned int *)&idx + 376);
             }
             goto LABEL_4f4aad;
         }
@@ -149,7 +149,7 @@ LABEL_4f47d5:
             {
                 *(unsigned int *)(*(unsigned int *)&idx + 376) = 81;
                 strcpy(v5, "ref_control_");
-                sub_48c150(v5, *(unsigned int *)&idx + 2476);
+                strcat@GLIBC_2.0(v5, *(unsigned int *)&idx + 2476);
                 goto LABEL_4f4aad;
             }
         }
@@ -164,9 +164,9 @@ LABEL_4f47d5:
             *(unsigned int *)(*(unsigned int *)&idx + 376) = 80;
             strcpy(v5, "ref_charge_");
 LABEL_4f4a12:
-            sub_48c150(v5, *(unsigned int *)&idx + 2476);
+            strcat@GLIBC_2.0(v5, *(unsigned int *)&idx + 2476);
             v1 = 1;
-            v0 = sub_48afe0(idx, v5);
+            v0 = CBaseAnimating::LookupSequence(idx, v5);
         }
         else
         {
@@ -188,12 +188,12 @@ LABEL_4f4aad:
 LABEL_4f4ab4:
                 v7 = &v5[0];
 LABEL_4f4aba:
-                v0 = sub_48afe0(idx, v7);
+                v0 = CBaseAnimating::LookupSequence(idx, v7);
                 goto LABEL_4f4b9a;
             }
             if (*(int *)(*(unsigned int *)&idx + 864))
             {
-                v0 = sub_48afe0(idx, "struggle");
+                v0 = CBaseAnimating::LookupSequence(idx, "struggle");
                 *(unsigned int *)(*(unsigned int *)&idx + 376) = 92;
                 goto LABEL_4f4b9a;
             }
@@ -220,7 +220,7 @@ LABEL_4f4aba:
                     {
                         v15 = "fly_powerup";
 LABEL_4f4b6c:
-                        v0 = sub_48afe0(idx, v15);
+                        v0 = CBaseAnimating::LookupSequence(idx, v15);
                         v1 = 2;
                         goto LABEL_4f4b9a;
                     }
@@ -228,7 +228,7 @@ LABEL_4f4b6c:
                     {
                         v16 = "ref_powerup";
 LABEL_4f4b89:
-                        v0 = sub_48afe0(idx, v16);
+                        v0 = CBaseAnimating::LookupSequence(idx, v16);
                         v1 = 1;
                         goto LABEL_4f4b9a;
                     }
@@ -265,7 +265,7 @@ LABEL_4f4b89:
         *(unsigned int *)(*(int *)idx + 296) = v0;
         v2 = v17;
         *(float *)(*(int *)idx + 304) = (float)v2;
-        sub_488850(idx);
+        CBaseAnimating::ResetSequenceInfo(idx);
     }
 LABEL_4f4c80:
     return 1;

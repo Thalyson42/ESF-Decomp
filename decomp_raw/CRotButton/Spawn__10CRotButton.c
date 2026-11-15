@@ -88,9 +88,9 @@ typedef struct st_497910_2 {
 
 extern char ButtonUse__11CBaseButtonP11CBaseEntityT18USE_TYPEf;
 extern unsigned int ButtonTouch__11CBaseButtonP11CBaseEntity;
-extern st_497910_2 *g_6167c4;
-extern st_497910_2 *g_6167c8;
-extern st_497910_2 *g_6168cc;
+extern st_497910_2 *g_engfuncs.pfnPrecacheSound;
+extern st_497910_2 *g_engfuncs.pfnSetModel;
+extern st_497910_2 *g_engfuncs.pfnAllocString;
 extern st_497910_3 *gpGlobals;
 
 short Spawn__10CRotButton(st_497910_1 *a0)
@@ -112,11 +112,11 @@ short Spawn__10CRotButton(st_497910_1 *a0)
     float v4;  // [bp-0x14]
     float v5;  // [bp-0x10]
 
-    v6 = sub_487cb0(a0->field_138);
-    g_6167c4(v6);
-    v7 = g_6168cc(v6);
+    v6 = ButtonSound(a0->field_138);
+    g_engfuncs.pfnPrecacheSound(v6);
+    v7 = g_engfuncs.pfnAllocString(v6);
     a0->field_0->field_1e8 = v7;
-    sub_48b820(a0->field_0);
+    CBaseToggle::AxisDir(a0->field_0);
     v8 = a0->field_0;
     if (v8->field_1a0 & 2)
     {
@@ -133,7 +133,7 @@ short Spawn__10CRotButton(st_497910_1 *a0)
         a0->field_0->field_10c = 0;
     else
         a0->field_0->field_10c = 4;
-    g_6167c8(a0->field_0->field_208, a0->field_0->field_b8 + gpGlobals->field_98);
+    g_engfuncs.pfnSetModel(a0->field_0->field_208, a0->field_0->field_b8 + gpGlobals->field_98);
     if (*(float *)&a0->field_0->field_1f8 == 0.0f)
         *(float *)&a0->field_0->field_1f8 = 40.0f;
     if (*(float *)&a0->field_8c == 0.0f)

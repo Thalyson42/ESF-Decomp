@@ -10,7 +10,7 @@ typedef struct st_4da6b0_1 {
     unsigned int field_0;
 } st_4da6b0_1;
 
-extern st_4da6b0_1 *g_6168d8;
+extern st_4da6b0_1 *g_engfuncs.pfnEntOffsetOfPEntity;
 
 unsigned int ShouldFadeOnDeath__12CBaseMonster(st_4da6b0_0 **a0)
 {
@@ -19,7 +19,7 @@ unsigned int ShouldFadeOnDeath__12CBaseMonster(st_4da6b0_0 **a0)
     if (!(*a0->field_1a1 & 2))
     {
         v0 = 0;
-        if (!*a0->field_198 || !g_6168d8(*a0->field_198))
+        if (!*a0->field_198 || !g_engfuncs.pfnEntOffsetOfPEntity(*a0->field_198))
             v0 = 1;
         if (v0)
             return 0;

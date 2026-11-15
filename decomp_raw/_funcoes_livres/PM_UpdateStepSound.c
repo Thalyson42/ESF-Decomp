@@ -74,8 +74,8 @@ double PM_UpdateStepSound(void)
     }
     else if (pmove->field_dc != 15)
     {
-        sub_48a4e0();
-        sub_48c330(&pmove->field_5c);
+        PM_CatagorizeTextureType();
+        Length(&pmove->field_5c);
         v4 = (float)v19;
         v0 = pmove->field_dc == 5;
         if (v0)
@@ -94,7 +94,7 @@ double PM_UpdateStepSound(void)
         }
         if (!v0 && pmove->field_e0 == 0xffffffff)
             return v20;
-        sub_48c330(&pmove->field_5c);
+        Length(&pmove->field_5c);
         if (0.0 >= v21)
             return 0.0;
         if (v4 < v2 && pmove->field_94)
@@ -137,7 +137,7 @@ LABEL_58ebfc:
             }
             else
             {
-                v24 = sub_48d100(pmove->field_1f0);
+                v24 = PM_MapTextureTypeStepType(pmove->field_1f0);
                 if ((char)(pmove->field_1f0 - 67) <= 19)
                     goto *((void *)(&(&_GLOBAL_OFFSET_TABLE_)[-1 * *(int *)(&(&_GLOBAL_OFFSET_TABLE_)[4 * pmove->field_1f0] - 544648)]));
                 if (v5)
@@ -155,7 +155,7 @@ LABEL_58ec04:
         v6 = v7 | 0xc00;
         v8 = (int)v26;
         pmove->field_94 = v8;
-        sub_488060(v24, (float)v25);
+        PM_PlayStepSound(v24, (float)v25);
         return v26;
     }
     else

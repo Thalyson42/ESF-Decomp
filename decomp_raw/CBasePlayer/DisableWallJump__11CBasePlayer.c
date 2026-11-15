@@ -18,17 +18,17 @@ int DisableWallJump__11CBasePlayer(float idx)
     char v6;  // [bp-0x44]
 
     v8 = *(unsigned int *)&idx + 896;
-    if (sub_48ae90(v8))
+    if (CPlayerMelee::CanPlayAnimation(v8))
     {
         v1 = &v6;
-        sub_48d220(idx, sub_487fb0(v8));
+        CBasePlayer::GetWallJumpAnim(idx, CPlayerMelee::GetCurrentAnim(v8));
         *(float *)&v3 = *(float *)(*(unsigned int *)&idx + 972);
         *(float *)&v4 = *(float *)(*(unsigned int *)&idx + 976);
         *(float *)&v5 = *(float *)(*(unsigned int *)&idx + 980);
         *(unsigned short *)&v0 = 0;
-        sub_48be10(v8, 3, sub_488dc0(v8, &v3, v0, *(float *)gpGlobals, &v6));
+        CPlayerMelee::SetAnimPriority(v8, 3, CPlayerMelee::AddAnimationAFix(v8, &v3, v0, *(float *)gpGlobals, &v6));
     }
-    sub_489390(*(int *)(*(int *)idx + 520), 4, "weapons/walljumps.wav", 0x3f800000, 0.800000011920929f, 0, 100);
+    EMIT_SOUND_DYN(*(int *)(*(int *)idx + 520), 4, "weapons/walljumps.wav", 0x3f800000, 0.800000011920929f, 0, 100);
     if (*(int *)(*(unsigned int *)&idx + 2408))
     {
         v11 = (*(int *)(*(int *)(*(int *)(*(unsigned int *)&idx + 2408) + 96) + 300))(*(int *)(*(unsigned int *)&idx + 2408));
@@ -39,6 +39,6 @@ int DisableWallJump__11CBasePlayer(float idx)
             v11[39] = v2;
         }
     }
-    return sub_489f10(idx);
+    return CBasePlayer::ResetWallJumpVars(idx);
 }
 

@@ -18,6 +18,6 @@ typedef struct st_4a93a0_2 {
 int EnableChargeSprite__10CDeathBall(st_4a93a0_2 *a0)
 {
     a0->field_60->field_174(a0);
-    return sub_487b90(a0->field_1d4);
+    return CSprite::TurnOn(a0->field_1d4);
 }
 

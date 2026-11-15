@@ -76,9 +76,9 @@ double SecondaryAttack__8CRenzoku(float idx)
         (*(int *)(*(int *)(*(unsigned int *)&idx + 96) + 328))(idx);
     *(unsigned int *)(*(unsigned int *)&idx + 468) = 0;
     *(unsigned int *)(*(int *)(*(unsigned int *)&idx + 128) + 828) = 0;
-    if (sub_48c980(*(int *)(*(unsigned int *)&idx + 128), 15))
+    if (CBasePlayer::UseKi(*(int *)(*(unsigned int *)&idx + 128), 15))
     {
-        sub_48a800(*(int *)*(int *)(*(unsigned int *)&idx + 128) + 116);
+        UTIL_MakeVectors(*(int *)*(int *)(*(unsigned int *)&idx + 128) + 116);
         (*(int *)(*(int *)(*(int *)(*(unsigned int *)&idx + 128) + 96) + 480))(&v24, *(int *)(*(unsigned int *)&idx + 128));
         v35 = &gpGlobals->field_40;
         v36 = 10.0 * gpGlobals->field_40;
@@ -93,7 +93,7 @@ double SecondaryAttack__8CRenzoku(float idx)
         v39 = gpGlobals->field_28 * gpGlobals->field_28 + *(float *)&v38[1] * *(float *)&v38[1] + *(float *)&v38[2] * *(float *)&v38[2];
         v40 = sqrt(v39);
         if (isnan(v40))
-            sub_487dc0(*(unsigned int *)&v39);
+            sqrt(*(unsigned int *)&v39);
         else
             v39 = v40;
         v10 = (float)v39;
@@ -139,15 +139,15 @@ double SecondaryAttack__8CRenzoku(float idx)
         v2 = *(short *)(*(unsigned int *)&idx + 480);
         v1 = *(short *)(*(unsigned int *)&idx + 478);
         v0 = *(short *)(*(unsigned int *)&idx + 476);
-        sub_48aef0(idx);
+        CBasePlayerWeapon::GetPowerRatio(idx);
         v6 = __fnstcw();
         v5 = v6 | 0xc00;
         v4 = (int)(v52 * 10.0);
-        sub_48b900(*(int *)*(int *)(*(unsigned int *)&idx + 128), &v10, &v13, v4);
+        CKiAttack::ShootKiAttack(*(int *)*(int *)(*(unsigned int *)&idx + 128), &v10, &v13, v4);
         (*(int *)(*(int *)(*(unsigned int *)&idx + 96) + 356))(idx);
-        sub_48d680(*(int *)(*(unsigned int *)&idx + 128), 5);
+        CBasePlayer::SetAnimation(*(int *)(*(unsigned int *)&idx + 128), 5);
     }
-    sub_488640();
+    UTIL_WeaponTimeBase();
     v3 = (float)(v53 + 0.6);
     v54 = v3;
     *(float *)(*(unsigned int *)&idx + 160) = (float)v54;

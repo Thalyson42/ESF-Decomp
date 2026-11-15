@@ -46,7 +46,7 @@ typedef struct st_5537e0_2 {
 } st_5537e0_2;
 
 extern unsigned int g_teamplay;
-extern st_5537e0_1 *g_6168dc;
+extern st_5537e0_1 *g_engfuncs.pfnIndexOfEdict;
 
 int IsValidEnemy__4CBotP11CBasePlayer(st_5537e0_6 *a0, st_5537e0_2 *a1)
 {
@@ -73,7 +73,7 @@ int IsValidEnemy__4CBotP11CBasePlayer(st_5537e0_6 *a0, st_5537e0_2 *a1)
 
     *(unsigned short *)&v1 = 1;
     *(unsigned short *)&v0 = 1;
-    v13 = sub_489a70(a1, v0, v1);
+    v13 = UTIL_IsValidPlayer(a1, v0, v1);
     if ((char)v13 && (!g_teamplay || (v13 = a0->field_0->field_1ac, a0->field_0->field_1ac != a1->field_0->field_1ac)))
     {
         a1->field_60->field_d0(&v10, a1);
@@ -86,14 +86,14 @@ int IsValidEnemy__4CBotP11CBasePlayer(st_5537e0_6 *a0, st_5537e0_2 *a1)
         v16 = v14 * v14 + v15 * v15 + 0.0;
         v17 = sqrt(v16);
         if (isnan(v17))
-            sub_487dc0(*(unsigned int *)&v16);
+            sqrt(*(unsigned int *)&v16);
         else
             v16 = v17;
         v6 = (float)v16;
         v2 = 0;
         if (v6 <= 2300.0f || a0->field_ba4 > 0)
             v2 = 1;
-        v13 = sub_489330(a0, a1);
+        v13 = EntIsInFieldOfView(a0, a1);
         if ((char)v13 || v2)
         {
             if (!a0->field_a20)
@@ -101,7 +101,7 @@ int IsValidEnemy__4CBotP11CBasePlayer(st_5537e0_6 *a0, st_5537e0_2 *a1)
                 v18 = a0->field_60->field_e4(a0, &v10);
                 return _INSERT(v18, 0, v18 == 1);
             }
-            v20 = 1 << ((char)((g_6168dc(a1->field_0->field_208) & 0xff) - 1) & 31);
+            v20 = 1 << ((char)((g_engfuncs.pfnIndexOfEdict(a1->field_0->field_208) & 0xff) - 1) & 31);
             return _INSERT(v20 & a0->field_aa4, 0, (v20 & a0->field_aa4) != 0);
         }
     }

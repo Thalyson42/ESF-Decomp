@@ -24,9 +24,9 @@ typedef struct st_520290_2 {
 } st_520290_2;
 
 extern st_520290_1 *pGoal.651;
-extern st_520290_2 *g_6167f8;
-extern st_520290_2 *g_6168b4;
-extern st_520290_2 *g_6168d8;
+extern st_520290_2 *g_engfuncs.pfnFindEntityByString;
+extern st_520290_2 *g_engfuncs.pfnAlertMessage;
+extern st_520290_2 *g_engfuncs.pfnEntOffsetOfPEntity;
 
 unsigned int * SpectatorImpulseCommand__14CBaseSpectator(st_520290_0 **a0)
 {
@@ -44,14 +44,14 @@ unsigned int * SpectatorImpulseCommand__14CBaseSpectator(st_520290_0 **a0)
         v0 = 0;
         do
         {
-            v2 = g_6167f8(v2, "classname", "info_player_deathmatch");
+            v2 = g_engfuncs.pfnFindEntityByString(v2, "classname", "info_player_deathmatch");
             if (v2 == v1)
             {
-                g_6168b4(1, "Could not find a spawn spot.\n");
+                g_engfuncs.pfnAlertMessage(1, "Could not find a spawn spot.\n");
                 goto LABEL_52032a;
             }
             i = 0;
-            if (!v2 || !g_6168d8(v2))
+            if (!v2 || !g_engfuncs.pfnEntOffsetOfPEntity(v2))
                 i = 1;
         } while (i);
         v0 = 1;
@@ -59,7 +59,7 @@ LABEL_52032a:
         if (v0)
         {
             pGoal.651 = v2;
-            sub_48db50(*a0, &v2->field_88);
+            UTIL_SetOrigin(*a0, &v2->field_88);
             v4 = *a0;
             v4[20] = pGoal.651->field_d0;
             v4[21] = pGoal.651->field_d4;
@@ -69,7 +69,7 @@ LABEL_52032a:
     }
     else
     {
-        g_6168b4(1, "Unknown spectator impulse\n");
+        g_engfuncs.pfnAlertMessage(1, "Unknown spectator impulse\n");
     }
     v5 = *a0;
     v5[97] = 0;

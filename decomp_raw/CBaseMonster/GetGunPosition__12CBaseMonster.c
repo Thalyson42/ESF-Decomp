@@ -53,7 +53,7 @@ unsigned int * GetGunPosition__12CBaseMonster(void)
     st_4d8b20_0 *v10;  // [bp+0x8]
 
     v11 = v10;
-    sub_48a800(v11->field_0 + 4);
+    UTIL_MakeVectors(v11->field_0 + 4);
     v12 = v11->field_298;
     v13 = &gpGlobals->field_28;
     v2 = v12 * *(float *)&v13[2];

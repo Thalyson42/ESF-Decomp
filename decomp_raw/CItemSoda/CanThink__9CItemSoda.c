@@ -28,7 +28,7 @@ short CanThink__9CItemSoda(st_4b6c90_1 *a0)
     float v4;  // [bp-0x20]
     float v5;  // [bp-0x1c]
 
-    sub_489390(a0->field_0->field_208, 1, "weapons/g_bounce3.wav", 0x3f800000, 0.800000011920929f, 0, 100);
+    EMIT_SOUND_DYN(a0->field_0->field_208, 1, "weapons/g_bounce3.wav", 0x3f800000, 0.800000011920929f, 0, 100);
     a0->field_0->field_10c = 1;
     v3 = 8.0f;
     v4 = 8.0f;
@@ -36,7 +36,7 @@ short CanThink__9CItemSoda(st_4b6c90_1 *a0)
     v0 = -8.0f;
     v1 = -8.0f;
     v2 = 0;
-    v6 = sub_48a0d0(a0->field_0, &v0, &v3);
+    v6 = UTIL_SetSize(a0->field_0, &v0, &v3);
     a0->field_c = 0;
     a0->field_10 = 0;
     v7 = _INSERT(v6, 0, 0);

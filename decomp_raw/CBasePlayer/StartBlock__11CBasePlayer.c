@@ -53,7 +53,7 @@ unsigned int * StartBlock__11CBasePlayer(float idx)
         else if (!*(int *)(*(unsigned int *)&idx + 1724))
         {
             if (*(int *)(*(unsigned int *)&idx + 816))
-                sub_48ba60(idx);
+                CBasePlayer::StopPowerUp(idx);
             *(unsigned int *)(*(unsigned int *)&idx + 1876) = 0;
             *(unsigned int *)(*(unsigned int *)&idx + 812) = 1;
             *(float *)(*(unsigned int *)&idx + 1844) = *(float *)gpGlobals;

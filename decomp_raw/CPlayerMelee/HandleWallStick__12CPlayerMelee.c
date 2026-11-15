@@ -32,9 +32,9 @@ typedef struct st_502af0_1 {
     unsigned int field_0;
 } st_502af0_1;
 
-extern float g_5bd2e8;
-extern float g_5bd2fc;
-extern st_502af0_1 *g_6168dc;
+extern float melee_wallstick_mintime+12;
+extern float melee_wallstick_maxtime+12;
+extern st_502af0_1 *g_engfuncs.pfnIndexOfEdict;
 extern st_502af0_0 *gpGlobals;
 
 unsigned int HandleWallStick__12CPlayerMelee(float idx)
@@ -82,16 +82,16 @@ unsigned int HandleWallStick__12CPlayerMelee(float idx)
     v24[10] = v16;
     *(unsigned int *)(*(int *)*(int *)(*(unsigned int *)&idx + 292) + 264) = 0;
     v1 = &gpGlobals;
-    if (gpGlobals->field_0 - g_5bd2e8 < *(float *)(*(unsigned int *)&idx + 32))
+    if (gpGlobals->field_0 - melee_wallstick_mintime+12 < *(float *)(*(unsigned int *)&idx + 32))
         return v31;
-    if (*(char *)(*(int *)*(int *)(*(unsigned int *)&idx + 292) + 384) & 2 && sub_48c980(*(int *)(*(unsigned int *)&idx + 292), 100))
+    if (*(char *)(*(int *)*(int *)(*(unsigned int *)&idx + 292) + 384) & 2 && CBasePlayer::UseKi(*(int *)(*(unsigned int *)&idx + 292), 100))
     {
         v25 = *(unsigned int *)&idx + 76;
         *(float *)&v14 = *(float *)(*(unsigned int *)&idx + 76);
         *(float *)&v15 = *(float *)&v25->field_4;
         *(float *)&v16 = *(float *)&v25->field_8;
-        sub_48d400(idx);
-        sub_48a800(&v14);
+        CPlayerMelee::StopThrow(idx);
+        UTIL_MakeVectors(&v14);
         v26 = *(int *)*(int *)(*(unsigned int *)&idx + 292);
         v8 = (float)(0.6499999761581421 * *(float *)&v14);
         v9 = (float)(0.6499999761581421 * *(float *)&v15);
@@ -115,13 +115,13 @@ unsigned int HandleWallStick__12CPlayerMelee(float idx)
         v20 = v15;
         v22 = v16;
         *(unsigned short *)&v0 = 0;
-        sub_48be10(idx, 3, sub_488dc0(idx, &v18, v0, *v1->field_0, "wall_recover"));
-        v31 = sub_489390(*(int *)(*(int *)*(int *)(*(unsigned int *)&idx + 292) + 520), 4, "weapons/jump.wav", 0x3f800000, 0.800000011920929f, 0, 100);
+        CPlayerMelee::SetAnimPriority(idx, 3, CPlayerMelee::AddAnimationAFix(idx, &v18, v0, *v1->field_0, "wall_recover"));
+        v31 = EMIT_SOUND_DYN(*(int *)(*(int *)*(int *)(*(unsigned int *)&idx + 292) + 520), 4, "weapons/jump.wav", 0x3f800000, 0.800000011920929f, 0, 100);
         return v31;
     }
-    if (*(float *)(*(unsigned int *)&idx + 32) + g_5bd2fc >= gpGlobals->field_0)
+    if (*(float *)(*(unsigned int *)&idx + 32) + melee_wallstick_maxtime+12 >= gpGlobals->field_0)
         return v31;
-    sub_48c960(idx);
+    CPlayerMelee::StartRoll(idx);
     *(float *)(*(unsigned int *)&idx + 20) = gpGlobals->field_0 - *(float *)(*(unsigned int *)&idx + 32) + *(float *)(*(unsigned int *)&idx + 20);
     v32 = *(int *)*(int *)(*(unsigned int *)&idx + 292);
     v33 = *(unsigned int *)&idx + 76;
@@ -138,9 +138,9 @@ unsigned int HandleWallStick__12CPlayerMelee(float idx)
     *(unsigned int *)(*(unsigned int *)&idx + 80) = v5;
     *(unsigned int *)(*(unsigned int *)&idx + 84) = v7;
     *(unsigned int *)(*(unsigned int *)&idx + 32) = 0;
-    v34 = g_6168dc(*(int *)(*(int *)*(int *)(*(unsigned int *)&idx + 292) + 520));
-    sub_48b090(v34);
-    sub_4887c0(idx);
+    v34 = g_engfuncs.pfnIndexOfEdict(*(int *)(*(int *)*(int *)(*(unsigned int *)&idx + 292) + 520));
+    UTIL_Model_RemoveAll(v34);
+    CPlayerMelee::RemoveAllAnims(idx);
     *(float *)(*(unsigned int *)&idx + 36) = gpGlobals->field_0;
     return v31;
 }

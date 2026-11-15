@@ -7,7 +7,7 @@ int SBotLaserPercentMenu__5NMenuv(void)
     int v0;  // [bp-0x1c]
 
     if (_5NMenu.CurrentMenuChoice <= 8)
-        sub_48df00(&BotManager, (short)sub_48cb20());
-    return sub_48d6f0(v0);
+        CBotManager::ChangeSBotLaserPercent(&BotManager, (short)NMenu::GetPercentFromMenu());
+    return NMenu::ResetMenu(v0);
 }
 

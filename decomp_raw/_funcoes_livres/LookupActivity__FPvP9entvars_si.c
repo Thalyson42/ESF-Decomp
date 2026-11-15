@@ -9,7 +9,7 @@ typedef struct st_48eee0_1 {
     unsigned int field_0;
 } st_48eee0_1;
 
-extern st_48eee0_1 *g_616928;
+extern st_48eee0_1 *g_engfuncs.pfnRandomLong;
 
 int LookupActivity__FPvP9entvars_si(st_48eee0_0 *a0, unsigned int a1, unsigned int a2)
 {
@@ -33,7 +33,7 @@ int LookupActivity__FPvP9entvars_si(st_48eee0_0 *a0, unsigned int a1, unsigned i
         if (*(int *)&v3->padding_0[40 + v5] == a2)
         {
             v2 = v1 + *(int *)&v3->padding_0[44 + v5];
-            if (!(v1 + *(int *)&v3->padding_0[44 + v5]) || (v6 = g_616928(0, v2 - 1), (int)g_616928(0, v2 - 1) < *(int *)&v3->padding_0[44 + v5]))
+            if (!(v1 + *(int *)&v3->padding_0[44 + v5]) || (v6 = g_engfuncs.pfnRandomLong(0, v2 - 1), (int)g_engfuncs.pfnRandomLong(0, v2 - 1) < *(int *)&v3->padding_0[44 + v5]))
             {
                 v0 = iter;
                 iter += 1;

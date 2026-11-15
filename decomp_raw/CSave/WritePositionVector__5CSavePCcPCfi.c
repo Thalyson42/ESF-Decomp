@@ -21,7 +21,7 @@ unsigned int WritePositionVector__5CSavePCcPCfi(st_535910_0 **a0, int a1, float 
     float v4;  // [bp-0x60]
     float v5;  // [bp-0x5c]
 
-    v6 = sub_487bf0(a0, a1, a3 * 12);
+    v6 = CSave::BufferHeader(a0, a1, a3 * 12);
     v7 = 0;
     if (0 >= a3)
         return v6;
@@ -39,7 +39,7 @@ unsigned int WritePositionVector__5CSavePCcPCfi(st_535910_0 **a0, int a1, float 
             v4 = v1;
             v5 = v2;
         }
-    } while ((v9 = sub_488670(a0, &v3, 12), iter += 3, v7 += 1, v7 < a3));
-    return sub_488670(a0, &v3, 12);
+    } while ((v9 = CSave::BufferData(a0, &v3, 12), iter += 3, v7 += 1, v7 < a3));
+    return CSave::BufferData(a0, &v3, 12);
 }
 

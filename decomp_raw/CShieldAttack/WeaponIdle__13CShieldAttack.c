@@ -13,14 +13,14 @@ double WeaponIdle__13CShieldAttack(float idx)
     if (*(int *)(*(unsigned int *)&idx + 212) > 0 && *(int *)(*(unsigned int *)&idx + 196) && *(char *)(*(int *)(*(unsigned int *)&idx + 196) + 108))
     {
         v0 = idx;
-        sub_48d080(v0);
+        CShieldAttack::RemoveShield(v0);
         *(unsigned int *)(*(int *)(*(unsigned int *)&idx + 128) + 1724) = 0;
         *(unsigned int *)(*(unsigned int *)&idx + 212) = 0;
         *(unsigned int *)(*(int *)(*(unsigned int *)&idx + 128) + 828) = 0;
         *(unsigned int *)(*(int *)(*(unsigned int *)&idx + 128) + 820) = 0;
         *(unsigned int *)(*(int *)(*(unsigned int *)&idx + 128) + 1876) = 0x3f800000;
         memset(*(unsigned int *)&idx + 200, 0, 12);
-        sub_488640(v0);
+        UTIL_WeaponTimeBase(v0);
         v3 = v2 + 1.0;
         *(float *)(*(unsigned int *)&idx + 160) = (float)v3;
         *(float *)(*(unsigned int *)&idx + 156) = (float)v3;
@@ -29,11 +29,11 @@ double WeaponIdle__13CShieldAttack(float idx)
     if (*(int *)(*(unsigned int *)&idx + 212) == 1)
     {
         v0 = idx;
-        sub_48d080(v0);
+        CShieldAttack::RemoveShield(v0);
         *(unsigned int *)(*(int *)(*(unsigned int *)&idx + 128) + 1876) = 0x3f800000;
         *(unsigned int *)(*(int *)(*(unsigned int *)&idx + 128) + 820) = 0;
         *(unsigned int *)(*(unsigned int *)&idx + 212) = 0;
-        sub_488640(v0);
+        UTIL_WeaponTimeBase(v0);
         *(float *)(*(unsigned int *)&idx + 156) = (float)(v4 + 2.5);
         return 2.5;
     }
@@ -48,15 +48,15 @@ double WeaponIdle__13CShieldAttack(float idx)
         }
         else
         {
-            sub_488640();
+            UTIL_WeaponTimeBase();
             if (v5 < *(float *)(*(unsigned int *)&idx + 200))
                 return v5;
             v0 = idx;
-            sub_489140(v0);
+            CShieldAttack::ShootShield(v0);
             *(unsigned int *)(*(int *)(*(unsigned int *)&idx + 128) + 828) = 1;
             *(unsigned int *)(*(int *)(*(unsigned int *)&idx + 128) + 820) = 0;
             *(unsigned int *)(*(unsigned int *)&idx + 212) = 3;
-            sub_488640(v0);
+            UTIL_WeaponTimeBase(v0);
             *(float *)(*(unsigned int *)&idx + 0xcc) = (float)(v6 + 1.25);
             return 1.25;
         }
@@ -65,7 +65,7 @@ double WeaponIdle__13CShieldAttack(float idx)
     {
         if (*(int *)(*(unsigned int *)&idx + 212) == 3)
         {
-            sub_488640();
+            UTIL_WeaponTimeBase();
             if (v7 <= *(float *)(*(unsigned int *)&idx + 0xcc))
                 return v7;
             *(unsigned int *)(*(unsigned int *)&idx + 0xcc) = 0;

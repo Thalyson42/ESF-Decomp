@@ -50,7 +50,7 @@ typedef struct st_4cbff0_3 {
 } st_4cbff0_3;
 
 extern char CurveThink__9CKiAttack;
-extern st_4cbff0_3 *g_61692c;
+extern st_4cbff0_3 *g_engfuncs.pfnRandomFloat;
 extern st_4cbff0_2 *gpGlobals;
 
 st_4cbff0_1 * ShootCurvedKiAttack__9CKiAttackP9entvars_sG6VectorT2isss(int a0, float *a1, float *a2, int a3, short a4, short a5, short a6)
@@ -147,24 +147,24 @@ st_4cbff0_1 * ShootCurvedKiAttack__9CKiAttackP9entvars_sG6VectorT2isss(int a0, f
     v23 = *v35;
     v24 = v35[1];
     v25 = v35[2];
-    v36 = sub_48b900(a0, &v31, &v23, a3, a4, a5, a6);
-    g_61692c(10.0f, 20.0f);
+    v36 = CKiAttack::ShootKiAttack(a0, &v31, &v23, a3, a4, a5, a6);
+    g_engfuncs.pfnRandomFloat(10.0f, 20.0f);
     v22 = (float)(v37 * 6.283185307179586 / 360.0);
     v2 = v22;
-    sub_48aeb0(*(unsigned int *)&v2, *(unsigned int *)((void*)&v2 + 4));
+    sin(*(unsigned int *)&v2, *(unsigned int *)((void*)&v2 + 4));
     v38 = v2 * *(float *)&v36->field_2a8;
     v3 = (float)v38;
-    sub_48a9e0(*(unsigned int *)&v2, *(unsigned int *)((void*)&v2 + 4));
+    cos(*(unsigned int *)&v2, *(unsigned int *)((void*)&v2 + 4));
     v39 = v38 * *(float *)&v36->field_2a8;
     v1 = (float)v39;
-    sub_48a800(&v36->field_0->field_50);
-    g_61692c(0xbf800000, 0x3f800000);
+    UTIL_MakeVectors(&v36->field_0->field_50);
+    g_engfuncs.pfnRandomFloat(0xbf800000, 0x3f800000);
     v40 = &gpGlobals->field_40;
     v26 = (float)(v39 * gpGlobals->field_40);
     v41 = v39 * *(float *)&v40[2];
     v27 = (float)(v39 * *(float *)&v40[1]);
     v28 = (float)v41;
-    g_61692c(0xbf800000, 0x3f800000);
+    g_engfuncs.pfnRandomFloat(0xbf800000, 0x3f800000);
     v42 = &gpGlobals->field_34;
     v43 = v41 * gpGlobals->field_34;
     v29 = (float)v43;
@@ -182,7 +182,7 @@ st_4cbff0_1 * ShootCurvedKiAttack__9CKiAttackP9entvars_sG6VectorT2isss(int a0, f
     v47 = v46 * v46 + *(float *)&v36->field_2e0 * *(float *)&v36->field_2e0 + *(float *)&v36->field_2e4 * *(float *)&v36->field_2e4;
     v48 = sqrt(v47);
     if (isnan(v48))
-        sub_487dc0(*(unsigned int *)&v47);
+        sqrt(*(unsigned int *)&v47);
     else
         v47 = v48;
     v32 = (float)v47;
@@ -211,7 +211,7 @@ st_4cbff0_1 * ShootCurvedKiAttack__9CKiAttackP9entvars_sG6VectorT2isss(int a0, f
     v53 = v52 * v52 + v51[1] * v51[1] + v51[2] * v51[2];
     v54 = sqrt(v53);
     if (isnan(v54))
-        sub_487dc0(*(unsigned int *)&v53);
+        sqrt(*(unsigned int *)&v53);
     else
         v53 = v54;
     v7 = (float)v53;
@@ -239,7 +239,7 @@ st_4cbff0_1 * ShootCurvedKiAttack__9CKiAttackP9entvars_sG6VectorT2isss(int a0, f
     v19 = (float)(v58 + *v60);
     v20 = (float)(v59 + v60[1]);
     v21 = v60[2] + v18;
-    sub_487b80(&v36->field_0->field_8, &v19, 0, 0, &v23);
+    UTIL_TraceLine(&v36->field_0->field_8, &v19, 0, 0, &v23);
     v61 = &v36->field_0->field_8;
     v62 = v28 - *(float *)&v36->field_0->field_8;
     v4 = v62;
@@ -250,7 +250,7 @@ st_4cbff0_1 * ShootCurvedKiAttack__9CKiAttackP9entvars_sG6VectorT2isss(int a0, f
     v65 = v62 * v62 + v63 * v63 + v64 * v64;
     v66 = sqrt(v65);
     if (isnan(v66))
-        sub_487dc0(*(unsigned int *)&v65);
+        sqrt(*(unsigned int *)&v65);
     else
         v65 = v66;
     v0 = (float)v65;
@@ -259,7 +259,7 @@ st_4cbff0_1 * ShootCurvedKiAttack__9CKiAttackP9entvars_sG6VectorT2isss(int a0, f
     v69 = v68 * v68 + v67[1] * v67[1] + v67[2] * v67[2];
     v70 = sqrt(v69);
     if (isnan(v70))
-        sub_487dc0(*(unsigned int *)&v69);
+        sqrt(*(unsigned int *)&v69);
     else
         v69 = v70;
     v10 = (float)v69;
@@ -280,7 +280,7 @@ st_4cbff0_1 * ShootCurvedKiAttack__9CKiAttackP9entvars_sG6VectorT2isss(int a0, f
     v75 = v74 * v74 + v73[1] * v73[1] + v73[2] * v73[2];
     v76 = sqrt(v75);
     if (isnan(v76))
-        sub_487dc0(*(unsigned int *)&v75);
+        sqrt(*(unsigned int *)&v75);
     else
         v75 = v76;
     v15 = (float)v75;

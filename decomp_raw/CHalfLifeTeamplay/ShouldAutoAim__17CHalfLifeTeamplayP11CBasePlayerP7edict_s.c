@@ -28,7 +28,7 @@ typedef struct st_5288d0_2 {
     struct st_5288d0_0 *field_60;
 } st_5288d0_2;
 
-extern st_5288d0_1 *g_6168d4;
+extern st_5288d0_1 *g_engfuncs.pfnPEntityOfEntOffset;
 
 unsigned int ShouldAutoAim__17CHalfLifeTeamplayP11CBasePlayerP7edict_s(st_5288d0_5 *a0, unsigned int a1, st_5288d0_3 *a2)
 {
@@ -36,7 +36,7 @@ unsigned int ShouldAutoAim__17CHalfLifeTeamplayP11CBasePlayerP7edict_s(st_5288d0
     st_5288d0_2 *v1;  // esi
 
     v0 = a2;
-    if (v0 || (v0 = g_6168d4(0), v0))
+    if (v0 || (v0 = g_engfuncs.pfnPEntityOfEntOffset(0), v0))
         v1 = v0->field_7c;
     else
         v1 = NULL;

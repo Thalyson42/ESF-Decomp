@@ -13,7 +13,7 @@ typedef struct st_4b6e60_1 {
     unsigned int field_0;
 } st_4b6e60_1;
 
-extern st_4b6e60_1 *g_6168dc;
+extern st_4b6e60_1 *g_engfuncs.pfnIndexOfEdict;
 
 unsigned int * SetAttachment__7CSpriteP7edict_si(st_4b6e60_0 **a0, unsigned int a1, unsigned int a2)
 {
@@ -23,7 +23,7 @@ unsigned int * SetAttachment__7CSpriteP7edict_si(st_4b6e60_0 **a0, unsigned int 
 
     if (!a1)
         return v2;
-    v0 = g_6168dc(a1);
+    v0 = g_engfuncs.pfnIndexOfEdict(a1);
     *a0->field_110 = v0;
     *a0->field_114 = a2;
     *a0->field_194 = a1;

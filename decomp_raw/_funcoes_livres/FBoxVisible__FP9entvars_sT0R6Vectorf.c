@@ -34,7 +34,7 @@ typedef struct st_4c7ed0_2 {
     unsigned int field_0;
 } st_4c7ed0_2;
 
-extern st_4c7ed0_2 *g_61692c;
+extern st_4c7ed0_2 *g_engfuncs.pfnRandomFloat;
 
 unsigned int FBoxVisible__FP9entvars_sT0R6Vectorf(st_4c7ed0_0 *a0, st_4c7ed0_1 *a1, float *a2, float a3)
 {
@@ -77,15 +77,15 @@ LABEL_4c7f40:
         v3 = *(float *)&v11[1];
         v4 = *(float *)&v11[2];
         v12 = a3 + a1->field_dc;
-        g_61692c(v12, a1->field_e8 - a3);
+        g_engfuncs.pfnRandomFloat(v12, a1->field_e8 - a3);
         v2 += v12;
         v13 = a3 + a1->field_e0;
-        g_61692c(v13, a1->field_ec - a3);
+        g_engfuncs.pfnRandomFloat(v13, a1->field_ec - a3);
         v3 += v13;
         v14 = a3 + a1->field_e4;
-        g_61692c(v14, a1->field_f0 - a3);
+        g_engfuncs.pfnRandomFloat(v14, a1->field_f0 - a3);
         v4 += v14;
-        sub_488820(&v5, &v2, 1, 1, a0->field_208, &v8);
+        UTIL_TraceLine(&v5, &v2, 1, 1, a0->field_208, &v8);
         if (v9 == 1.0f)
         {
             *a2 = v2;

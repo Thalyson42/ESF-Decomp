@@ -59,7 +59,7 @@ typedef struct st_54d140_3 {
 } st_54d140_3;
 
 extern char _GLOBAL_OFFSET_TABLE_;
-extern char g_6253c7;
+extern char BotManager+3399;
 
 unsigned int GetAttackPercent__11CCombatTaskP11CBasePlayeri(st_54d140_3 *a0, st_54d140_6 *a1, unsigned int a2)
 {
@@ -78,7 +78,7 @@ unsigned int GetAttackPercent__11CCombatTaskP11CBasePlayeri(st_54d140_3 *a0, st_
     unsigned short v9;  // [bp-0x16]
     unsigned short v10;  // [bp-0x6]
 
-    if (!g_6253c7)
+    if (!BotManager+3399)
     {
 LABEL_54d4b5:
         return 0;

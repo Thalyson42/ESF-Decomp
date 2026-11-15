@@ -38,6 +38,6 @@ int Spawn__12CKameTorpedo(st_4ca4a0_2 *a0)
     a0->field_d4 = 1701667179;
     a0->field_d8 = 1886547828;
     a0->field_dc = 7300197;
-    return sub_48cf50(a0);
+    return CBasePlayerItem::FallInit(a0);
 }
 

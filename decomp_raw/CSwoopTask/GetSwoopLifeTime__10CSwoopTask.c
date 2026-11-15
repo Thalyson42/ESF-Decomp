@@ -46,10 +46,10 @@ double GetSwoopLifeTime__10CSwoopTask(st_54f2d0_1 *a0)
     v4 = v7[0x22];
     v5 = *(float *)&v8[1];
     v6 = *(float *)&v8[2];
-    sub_48a800(v7 + 61);
+    UTIL_MakeVectors(v7 + 61);
     if (a0->field_8->field_504 > 5)
     {
-        sub_488460(&v4, &v3, 0, 1, a0->field_c, &v1);
+        UTIL_TraceHull(&v4, &v3, 0, 1, a0->field_c, &v1);
         return (0.0 >= v2 ? 0.10000000149011612 : v0 * v2 / 1500.0 + v0 * v2 / 1500.0 + *(float *)gpGlobals);
     }
     goto *((void *)(&(&_GLOBAL_OFFSET_TABLE_)[-1 * *(int *)(&(&_GLOBAL_OFFSET_TABLE_)[4 * a0->field_8->field_504] - 804716)]));

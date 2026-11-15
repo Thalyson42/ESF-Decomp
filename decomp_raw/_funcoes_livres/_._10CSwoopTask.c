@@ -21,8 +21,8 @@ typedef struct st_54d750_1 {
 
 extern char __vt_10CSwoopTask;
 extern unsigned int g_vecZero;
-extern unsigned int g_616790;
-extern unsigned int g_616794;
+extern unsigned int g_vecZero+4;
+extern unsigned int g_vecZero+8;
 
 int _._10CSwoopTask(st_54d750_1 *a0, int a1)
 {
@@ -32,12 +32,12 @@ int _._10CSwoopTask(st_54d750_1 *a0, int a1)
     a0->field_14 = &__vt_10CSwoopTask;
     v1 = a0->field_8;
     v1->field_be8 = g_vecZero;
-    v1->field_bec = g_616790;
-    v1->field_bf0 = g_616794;
+    v1->field_bec = g_vecZero+4;
+    v1->field_bf0 = g_vecZero+8;
     a0->field_8->field_be4 = 0;
     a0->field_8->field_bf8 = 0;
     v0 = a0->field_30;
     a0->field_8->field_bfc = (float)v0;
-    return sub_488170(a0, a1);
+    return _._9CBaseTask(a0, a1);
 }
 

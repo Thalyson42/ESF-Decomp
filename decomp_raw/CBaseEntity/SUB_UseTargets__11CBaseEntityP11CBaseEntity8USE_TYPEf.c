@@ -16,7 +16,7 @@ unsigned int SUB_UseTargets__11CBaseEntityP11CBaseEntity8USE_TYPEf(st_5224c0_0 *
     unsigned int v0;  // eax
 
     if (*a0->field_1c8)
-        v0 = sub_48c1b0(*a0->field_1c8 + gpGlobals->field_98, a1, a0, a2, a3);
+        v0 = FireTargets(*a0->field_1c8 + gpGlobals->field_98, a1, a0, a2, a3);
     return v0;
 }
 

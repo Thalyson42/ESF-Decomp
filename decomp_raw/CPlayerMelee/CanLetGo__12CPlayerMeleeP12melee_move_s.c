@@ -17,7 +17,7 @@ unsigned int CanLetGo__12CPlayerMeleeP12melee_move_s(double a0, st_505e90_2 *a1,
 {
     double v0;  // mm7
 
-    sub_48b4e0(a1, a2);
+    CPlayerMelee::GetCmbTime(a1, a2);
     return (float)v0 >= *(float *)a1->field_180->field_c(a1);
 }
 

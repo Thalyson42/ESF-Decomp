@@ -33,15 +33,15 @@ int Shoot__14CChargedAttack(st_49ec60_2 *a0)
 {
     a0->field_80->field_754 = 0x3f800000;
     a0->field_80->field_334 = 0;
-    sub_48c680(a0->field_80, 0);
+    CBasePlayer::DrawChargeBar(a0->field_80, 0);
     if (a0->field_c4 > a0->field_c8 / 3)
     {
-        sub_48d680(a0->field_80, 5);
+        CBasePlayer::SetAnimation(a0->field_80, 5);
         a0->field_60->field_164(a0);
         a0->field_60->field_17c(a0);
         return a0->field_60->field_170(a0);
     }
-    sub_48de80(a0);
-    return sub_488840(a0);
+    CChargedAttack::SilenceVoice(a0);
+    return CChargedAttack::SilenceWeaponSounds(a0);
 }
 

@@ -33,16 +33,16 @@ unsigned int * Holster__11CFriezaDisci(st_4c0eb0_3 *a0, int a1)
     unsigned int *v0;  // eax
 
     if (a0->field_1d4 - 1 <= 1)
-        sub_488830(a0);
+        CFriezaDisc::Release(a0);
     if (a0->field_1d4 == 1)
-        sub_487cf0(a0);
+        CFriezaDisc::StopControl(a0);
     if (a0->field_1d4 == 3 || !a0->field_1d4 && a0->field_1d8)
     {
         a0->field_1d8->field_60->field_1fc(a0->field_1d8);
         a0->field_80->field_340 = 0;
         a0->field_80->field_754 = 0x3f800000;
     }
-    sub_48b470(a0, a1);
+    CChargedAttack::Holster(a0, a1);
     v0 = a0->field_80;
     v0[208] = 0;
     return v0;

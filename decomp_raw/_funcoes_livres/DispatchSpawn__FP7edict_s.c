@@ -150,18 +150,18 @@ unsigned int DispatchSpawn__FP7edict_s(st_49c0a0_4 *a0)
         }
         else if (v14 && v14->field_0->field_4)
         {
-            v15 = sub_48b360(&gGlobalState, v14->field_0->field_4);
+            v15 = CGlobalState::EntityFromTable(&gGlobalState, v14->field_0->field_4);
             if (!v15)
             {
-                sub_48aad0(&gGlobalState, v14->field_0->field_4, gpGlobals->field_c, 1);
+                CGlobalState::EntityAdd(&gGlobalState, v14->field_0->field_4, gpGlobals->field_c, 1);
             }
             else if (v15->field_60 == 2)
             {
                 return 0xffffffff;
             }
-            else if (sub_488af0(gpGlobals->field_c + gpGlobals->field_98, &v15->padding_0[64]))
+            else if (strcmp@GLIBC_2.0(gpGlobals->field_c + gpGlobals->field_98, &v15->padding_0[64]))
             {
-                sub_48a320(v14);
+                CBaseEntity::MakeDormant(v14);
             }
         }
     }

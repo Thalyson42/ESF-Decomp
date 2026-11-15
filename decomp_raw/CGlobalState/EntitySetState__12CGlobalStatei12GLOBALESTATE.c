@@ -8,7 +8,7 @@ st_539df0_0 * EntitySetState__12CGlobalStatei12GLOBALESTATE(int a0, int a1, st_5
 {
     st_539df0_0 *v0;  // edx
 
-    v0 = sub_48d370(a0, a1);
+    v0 = CGlobalState::Find(a0, a1);
     if (!v0)
         return v0;
     v0->field_60 = a2;

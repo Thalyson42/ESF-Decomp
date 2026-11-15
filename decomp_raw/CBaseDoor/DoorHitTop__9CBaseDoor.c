@@ -23,8 +23,8 @@ int DoorHitTop__9CBaseDoor(float idx)
     v6 = *(int *)idx;
     if ((int)v6[104] >= 0)
     {
-        sub_489390(v6[130], 6, v6[123] + gpGlobals->field_98, 0, 0, 32, 100);
-        sub_489390(*(int *)(*(int *)idx + 520), 6, *(int *)(*(int *)idx + 496) + gpGlobals->field_98, 0x3f800000, 0.800000011920929f, 0, 100);
+        EMIT_SOUND_DYN(v6[130], 6, v6[123] + gpGlobals->field_98, 0, 0, 32, 100);
+        EMIT_SOUND_DYN(*(int *)(*(int *)idx + 520), 6, *(int *)(*(int *)idx + 496) + gpGlobals->field_98, 0x3f800000, 0.800000011920929f, 0, 100);
     }
     *(unsigned int *)(*(unsigned int *)&idx + 128) = 0;
     v7 = *(int *)idx;
@@ -47,11 +47,11 @@ int DoorHitTop__9CBaseDoor(float idx)
         v2 = 0;
         v1 = 3;
         v0 = idx;
-        v11 = sub_488810(*(unsigned int *)&idx + 212);
-        sub_48c1b0(*(int *)(*(int *)idx + 464) + gpGlobals->field_98, v11);
+        v11 = EHANDLE::__opP11CBaseEntity(*(unsigned int *)&idx + 212);
+        FireTargets(*(int *)(*(int *)idx + 464) + gpGlobals->field_98, v11);
     }
     v4 = 0;
     v3 = 3;
-    return sub_48d150(idx, sub_488810(*(unsigned int *)&idx + 212));
+    return CBaseDelay::SUB_UseTargets(idx, EHANDLE::__opP11CBaseEntity(*(unsigned int *)&idx + 212));
 }
 

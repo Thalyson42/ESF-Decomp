@@ -20,6 +20,6 @@ int BarnacleVictimBitten__12CBaseMonsterP9entvars_s(st_4d3c70_2 *a0)
     v0 = a0->field_60->field_154(a0, 39);
     if (!v0)
         return v0;
-    return sub_48b250(a0, v0);
+    return CBaseMonster::ChangeSchedule(a0, v0);
 }
 

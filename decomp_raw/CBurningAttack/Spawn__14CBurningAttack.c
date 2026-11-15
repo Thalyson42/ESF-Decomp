@@ -21,6 +21,6 @@ int Spawn__14CBurningAttack(float idx)
     *(float *)(*(unsigned int *)&idx + 500) = 0.25f;
     *(unsigned int *)(*(unsigned int *)&idx + 508) = 4;
     *(unsigned int *)(*(unsigned int *)&idx + 504) = 1;
-    return sub_48cf50(idx);
+    return CBasePlayerItem::FallInit(idx);
 }
 

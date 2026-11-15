@@ -19,7 +19,7 @@ typedef struct st_4a6dd0_3 {
     struct st_4a6dd0_1 *field_60;
 } st_4a6dd0_3;
 
-extern st_4a6dd0_2 *g_61692c;
+extern st_4a6dd0_2 *g_engfuncs.pfnRandomFloat;
 
 float TraceBleed__11CBaseEntityfG6VectorP11TraceResulti(st_4a6dd0_3 *a0, float a1, float *a2, float *a3, unsigned int a4)
 {
@@ -87,13 +87,13 @@ float TraceBleed__11CBaseEntityfG6VectorP11TraceResulti(st_4a6dd0_3 *a0, float a
         v13 = v6;
         v14 = v8;
         v15 = v9;
-        g_61692c(v2, v5);
+        g_engfuncs.pfnRandomFloat(v2, v5);
         v20 = v19 + v13;
         v13 = (float)v20;
-        g_61692c(v2, v5);
+        g_engfuncs.pfnRandomFloat(v2, v5);
         v21 = v20 + v14;
         v14 = (float)v21;
-        g_61692c(v2, v5);
+        g_engfuncs.pfnRandomFloat(v2, v5);
         v15 = (float)(v21 + v15);
         v22 = -172.0 * v13;
         v10 = (float)v22;
@@ -103,9 +103,9 @@ float TraceBleed__11CBaseEntityfG6VectorP11TraceResulti(st_4a6dd0_3 *a0, float a
         v6 = (float)(v22 + a3[5]);
         v8 = (float)(v23 + *(float *)&v18[1]);
         v9 = *(float *)&v18[2] + v12;
-        sub_487b80(v18, v1, 1, a0->field_0->field_208, v0);
+        UTIL_TraceLine(v18, v1, 1, a0->field_0->field_208, v0);
         if (v17 != 1.0f)
-            sub_48d7e0(v0, a0->field_60->field_40(a0));
+            UTIL_BloodDecalTrace(v0, a0->field_60->field_40(a0));
     } while ((v3 += 1, v3 < v4));
     return v25;
     return v27;

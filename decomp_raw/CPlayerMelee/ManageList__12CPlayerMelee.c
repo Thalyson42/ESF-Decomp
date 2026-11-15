@@ -12,15 +12,15 @@ void ManageList__12CPlayerMelee(float a0)
 
     if (!*(int *)(*(unsigned int *)&a0 + 292))
         return;
-    sub_489470(a0);
+    CPlayerMelee::ManagePriority(a0);
     iter = *(int *)(*(unsigned int *)&a0 + 132);
-    v0 = sub_487fb0(a0);
+    v0 = CPlayerMelee::GetCurrentAnim(a0);
     if (*(int *)(*(unsigned int *)&a0 + 324))
         return;
     while (iter)
     {
         if (iter != v0 && (*(float *)&iter[163] < *(float *)gpGlobals || iter[167]))
-            iter = sub_48b460(a0, iter);
+            iter = CPlayerMelee::RemoveAnim(a0, iter);
         else
             iter = iter[169];
     }

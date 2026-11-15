@@ -29,7 +29,7 @@ typedef struct st_516360_3 {
     unsigned int field_0;
 } st_516360_3;
 
-extern st_516360_3 *g_6168cc;
+extern st_516360_3 *g_engfuncs.pfnAllocString;
 
 double KeyValue__17CScriptedSentenceP14KeyValueData_s(st_516360_2 *a0, st_516360_0 *a1)
 {
@@ -44,62 +44,62 @@ double KeyValue__17CScriptedSentenceP14KeyValueData_s(st_516360_2 *a0, st_516360
     double v8;  // mm7
     double v9;  // mm7
 
-    if (!sub_488af0(a1->field_4, "sentence"))
+    if (!strcmp@GLIBC_2.0(a1->field_4, "sentence"))
     {
-        a0->field_104 = g_6168cc(a1->field_8);
+        a0->field_104 = g_engfuncs.pfnAllocString(a1->field_8);
         a1->field_c = 1;
         return v0;
     }
-    else if (!sub_488af0(a1->field_4, "entity"))
+    else if (!strcmp@GLIBC_2.0(a1->field_4, "entity"))
     {
-        a0->field_108 = g_6168cc(a1->field_8);
+        a0->field_108 = g_engfuncs.pfnAllocString(a1->field_8);
         a1->field_c = 1;
         return v1;
     }
-    else if (!sub_488af0(a1->field_4, "duration"))
+    else if (!strcmp@GLIBC_2.0(a1->field_4, "duration"))
     {
-        sub_487fc0(a1->field_8, 0, 0);
+        __strtod_internal@GLIBC_2.0(a1->field_8, 0, 0);
         a0->field_110 = (float)v2;
         a1->field_c = 1;
         return v2;
     }
-    else if (!sub_488af0(a1->field_4, "radius"))
+    else if (!strcmp@GLIBC_2.0(a1->field_4, "radius"))
     {
-        sub_487fc0(a1->field_8, 0, 0);
+        __strtod_internal@GLIBC_2.0(a1->field_8, 0, 0);
         a0->field_10c = (float)v3;
         a1->field_c = 1;
         return v3;
     }
-    else if (!sub_488af0(a1->field_4, "refire"))
+    else if (!strcmp@GLIBC_2.0(a1->field_4, "refire"))
     {
-        sub_487fc0(a1->field_8, 0, 0);
+        __strtod_internal@GLIBC_2.0(a1->field_8, 0, 0);
         a0->field_114 = (float)v4;
         a1->field_c = 1;
         return v4;
     }
-    else if (!sub_488af0(a1->field_4, "attenuation"))
+    else if (!strcmp@GLIBC_2.0(a1->field_4, "attenuation"))
     {
-        v5 = sub_48b500(a1->field_8, 0, 10, 0);
+        v5 = __strtol_internal@GLIBC_2.0(a1->field_8, 0, 10, 0);
         a0->field_0->field_184 = v5;
         a1->field_c = 1;
         return v6;
     }
-    else if (!sub_488af0(a1->field_4, "volume"))
+    else if (!strcmp@GLIBC_2.0(a1->field_4, "volume"))
     {
-        sub_487fc0(a1->field_8, 0, 0);
+        __strtod_internal@GLIBC_2.0(a1->field_8, 0, 0);
         a0->field_11c = (float)(v7 * 0.1);
         a1->field_c = 1;
         return v7 * 0.1;
     }
-    else if (!sub_488af0(a1->field_4, "listener"))
+    else if (!strcmp@GLIBC_2.0(a1->field_4, "listener"))
     {
-        a0->field_124 = g_6168cc(a1->field_8);
+        a0->field_124 = g_engfuncs.pfnAllocString(a1->field_8);
         a1->field_c = 1;
         return v8;
     }
     else
     {
-        sub_48ba40(a0, a1);
+        CBaseToggle::KeyValue(a0, a1);
         return v9;
     }
 }

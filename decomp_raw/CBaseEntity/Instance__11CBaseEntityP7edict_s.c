@@ -8,7 +8,7 @@ typedef struct st_49e150_1 {
     unsigned int field_0;
 } st_49e150_1;
 
-extern st_49e150_1 *g_6168d4;
+extern st_49e150_1 *g_engfuncs.pfnPEntityOfEntOffset;
 
 unsigned int Instance__11CBaseEntityP7edict_s(st_49e150_0 *a0)
 {
@@ -17,7 +17,7 @@ unsigned int Instance__11CBaseEntityP7edict_s(st_49e150_0 *a0)
     v0 = a0;
     if (!v0)
     {
-        v0 = g_6168d4(0);
+        v0 = g_engfuncs.pfnPEntityOfEntOffset(0);
         if (!v0)
             return 0;
     }

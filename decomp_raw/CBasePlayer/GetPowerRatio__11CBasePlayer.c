@@ -12,7 +12,7 @@ double GetPowerRatio__11CBasePlayer(float a0)
 
     if (!*(int *)g_pGameRules)
         return 0.0;
-    v0 = sub_48bb90(a0);
+    v0 = CBasePlayer::GetPowerLevel(a0);
     v2 = (double)v0 / (double)*(int *)g_pGameRules;
     if (v2 < 100.0)
         return v2;

@@ -19,10 +19,10 @@ typedef struct st_4d86f0_1 {
 } st_4d86f0_1;
 
 extern unsigned int g_vecZero;
-extern unsigned int g_616790;
-extern unsigned int g_616794;
-extern st_4d86f0_1 *g_6168b4;
-extern st_4d86f0_1 *g_6168e8;
+extern unsigned int g_vecZero+4;
+extern unsigned int g_vecZero+8;
+extern st_4d86f0_1 *g_engfuncs.pfnAlertMessage;
+extern st_4d86f0_1 *g_engfuncs.pfnGetModelPtr;
 extern st_4d86f0_2 *gpGlobals;
 
 unsigned int SetEyePosition__12CBaseMonster(st_4d86f0_0 **a0)
@@ -35,15 +35,15 @@ unsigned int SetEyePosition__12CBaseMonster(st_4d86f0_0 **a0)
     float v2;  // [bp-0x20]
     float v3;  // [bp-0x1c]
 
-    sub_48adb0(g_6168e8(*a0->field_208), &v0);
+    GetEyePosition(g_engfuncs.pfnGetModelPtr(*a0->field_208), &v0);
     v5 = *a0;
     v5->field_174 = v1;
     v5->field_178 = v2;
     v5->field_17c = v3;
     v6 = *a0;
     v7 = 0;
-    if (*(float *)&g_vecZero == v6->field_174 && *(float *)&g_616790 == v6->field_178)
-        v7 = *(float *)&g_616794 == v6->field_17c;
-    return g_6168b4(2, "%s has no view_ofs!\n", *a0->field_0 + gpGlobals->field_98);
+    if (*(float *)&g_vecZero == v6->field_174 && *(float *)&g_vecZero+4 == v6->field_178)
+        v7 = *(float *)&g_vecZero+8 == v6->field_17c;
+    return g_engfuncs.pfnAlertMessage(2, "%s has no view_ofs!\n", *a0->field_0 + gpGlobals->field_98);
 }
 

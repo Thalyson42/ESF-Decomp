@@ -11,8 +11,8 @@ float * Center__5CBeam(void)
     int v4;  // [bp+0x8]
 
     v5 = v4;
-    v6 = sub_487ce0(v5);
-    v7 = sub_4882e0(v5);
+    v6 = CBeam::GetStartPos(v5);
+    v7 = CBeam::GetEndPos(v5);
     v0 = *v6 + *v7;
     v1 = v6[1] + v7[1];
     v2 = v6[2] + v7[2];

@@ -11,9 +11,9 @@ float TotalCmbTime__12CPlayerMelee(float a0)
     float v0;  // [bp-0x8]
 
     v0 = 0;
-    for (iter = sub_48cc50(a0); iter; iter = iter->field_1c)
+    for (iter = CPlayerMelee::GetCurrentDirection(a0); iter; iter = iter->field_1c)
     {
-        sub_48b4e0(a0, iter);
+        CPlayerMelee::GetCmbTime(a0, iter);
         v0 = (float)(v3 + v0);
     }
     return v0;

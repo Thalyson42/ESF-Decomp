@@ -13,8 +13,8 @@ typedef struct st_525ab0_2 {
     struct st_525ab0_1 *field_60;
 } st_525ab0_2;
 
-extern st_525ab0_0 *g_616928;
-extern st_525ab0_0 *g_61692c;
+extern st_525ab0_0 *g_engfuncs.pfnRandomLong;
+extern st_525ab0_0 *g_engfuncs.pfnRandomFloat;
 
 int HandleAnimEvent__12CTalkMonsterP14MonsterEvent_t(st_525ab0_2 *a0, unsigned int *a1)
 {
@@ -28,20 +28,20 @@ int HandleAnimEvent__12CTalkMonsterP14MonsterEvent_t(st_525ab0_2 *a0, unsigned i
     {
         if (*a1 == 1009)
         {
-            v4 = g_616928(0, 99);
+            v4 = g_engfuncs.pfnRandomLong(0, 99);
             if (v4 <= 74)
                 return v4;
         }
         else
         {
-            return sub_488a20(a0, a1);
+            return CBaseMonster::HandleAnimEvent(a0, a1);
         }
     }
-    sub_489fa0(a0);
+    CTalkMonster::ShutUpFriends(a0);
     v3 = 2.0f;
     v2 = 0x3f800000;
     strncpy(&v0, "333@", 4);
-    g_61692c(v0, 3.4000000953674316f);
+    g_engfuncs.pfnRandomFloat(v0, 3.4000000953674316f);
     strncpy(v1, "333@", 4);
     return a0->field_60->field_168(a0, a1[1], (unsigned int)v1);
 }

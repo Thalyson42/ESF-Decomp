@@ -35,9 +35,9 @@ typedef struct st_516d10_0 {
     unsigned int field_98;
 } st_516d10_0;
 
-extern st_516d10_1 *g_6167f8;
-extern st_516d10_1 *g_6168d4;
-extern st_516d10_1 *g_6168d8;
+extern st_516d10_1 *g_engfuncs.pfnFindEntityByString;
+extern st_516d10_1 *g_engfuncs.pfnPEntityOfEntOffset;
+extern st_516d10_1 *g_engfuncs.pfnEntOffsetOfPEntity;
 extern st_516d10_0 *gpGlobals;
 
 int FindEntity__17CScriptedSentence(float idx)
@@ -56,19 +56,19 @@ int FindEntity__17CScriptedSentence(float idx)
     v0 = NULL;
     while (1)
     {
-        v0 = g_6167f8(v0, v1, v2);
+        v0 = g_engfuncs.pfnFindEntityByString(v0, v1, v2);
         v4 = 0;
-        if (!v0 || !g_6168d8(v0))
+        if (!v0 || !g_engfuncs.pfnEntOffsetOfPEntity(v0))
             v4 = 1;
         if (!v4)
         {
             v5 = v0;
-            if (v5 || (v5 = g_6168d4(0), v5))
+            if (v5 || (v5 = g_engfuncs.pfnPEntityOfEntOffset(0), v5))
                 v6 = v5->field_7c;
             else
                 v6 = NULL;
             v8 = (!v6 ? 0 : v6->field_60->field_4c(v6));
-            if (v8 && sub_48afc0(idx, v8))
+            if (v8 && CScriptedSentence::AcceptableSpeaker(idx, v8))
                 break;
             v2 = *(int *)(*(unsigned int *)&idx + 264) + gpGlobals->field_98;
             v1 = "targetname";
@@ -78,10 +78,10 @@ int FindEntity__17CScriptedSentence(float idx)
             v9 = NULL;
             do
             {
-                v9 = sub_48bba0(v9, *(int *)idx + 8, *(float *)(*(unsigned int *)&idx + 268));
+                v9 = UTIL_FindEntityInSphere(v9, *(int *)idx + 8, *(float *)(*(unsigned int *)&idx + 268));
                 if (!v9)
                     return 0;
-            } while (sub_488af0(gpGlobals->field_98 + v9->field_0->field_0, gpGlobals->field_98 + *(int *)(*(unsigned int *)&idx + 264)) || !(v9->field_0->field_1a4 & 32) || !(v8 = v9->field_60->field_4c(v9), sub_48afc0(idx, v8)));
+            } while (strcmp@GLIBC_2.0(gpGlobals->field_98 + v9->field_0->field_0, gpGlobals->field_98 + *(int *)(*(unsigned int *)&idx + 264)) || !(v9->field_0->field_1a4 & 32) || !(v8 = v9->field_60->field_4c(v9), CScriptedSentence::AcceptableSpeaker(idx, v8)));
         }
     }
     return v8;

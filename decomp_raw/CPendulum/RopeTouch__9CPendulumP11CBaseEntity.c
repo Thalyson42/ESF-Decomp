@@ -35,9 +35,9 @@ typedef struct st_4934f0_5 {
 } st_4934f0_5;
 
 extern unsigned int g_vecZero;
-extern unsigned int g_616790;
-extern st_4934f0_2 *g_616794;
-extern st_4934f0_4 *g_6168b4;
+extern unsigned int g_vecZero+4;
+extern st_4934f0_2 *g_vecZero+8;
+extern st_4934f0_4 *g_engfuncs.pfnAlertMessage;
 
 st_4934f0_0 ** RopeTouch__9CPendulumP11CBaseEntity(st_4934f0_0 **a0, st_4934f0_5 *a1)
 {
@@ -47,7 +47,7 @@ st_4934f0_0 ** RopeTouch__9CPendulumP11CBaseEntity(st_4934f0_0 **a0, st_4934f0_5
     v0 = a1->field_0;
     if (!a1->field_60->field_a0(a1))
     {
-        v1 = g_6168b4(1, "Not a client\n");
+        v1 = g_engfuncs.pfnAlertMessage(1, "Not a client\n");
     }
     else
     {
@@ -56,9 +56,9 @@ st_4934f0_0 ** RopeTouch__9CPendulumP11CBaseEntity(st_4934f0_0 **a0, st_4934f0_5
         {
             *v1->field_190 = a1->field_0->field_208;
             v0->field_20 = g_vecZero;
-            v0->field_24 = g_616790;
-            v1 = g_616794;
-            v0->field_28 = g_616794;
+            v0->field_24 = g_vecZero+4;
+            v1 = g_vecZero+8;
+            v0->field_28 = g_vecZero+8;
             v0->field_108 = 0;
         }
     }

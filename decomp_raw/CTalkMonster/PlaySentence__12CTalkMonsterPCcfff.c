@@ -26,17 +26,17 @@ unsigned int PlaySentence__12CTalkMonsterPCcfff(st_526950_1 *a0, char *a1, float
 
     if (!a1)
         return v3;
-    sub_4880c0(a0, a2);
+    CTalkMonster::Talk(a0, a2);
     *(float *)&_12CTalkMonster.g_talkWaitTime = (float)(a2 + *(float *)gpGlobals + 2.0);
     if (*a1 == 33)
     {
-        v0 = sub_48c9b0(a0);
-        v1 = sub_489390(a0->field_0->field_208, 2, a1, a3, a4, 0, v0);
+        v0 = CTalkMonster::GetVoicePitch(a0);
+        v1 = EMIT_SOUND_DYN(a0->field_0->field_208, 2, a1, a3, a4, 0, v0);
     }
     else
     {
-        v2 = sub_48c9b0(a0);
-        v1 = sub_48d620(a0->field_0->field_208, a1, a3, a4, 0, v2);
+        v2 = CTalkMonster::GetVoicePitch(a0);
+        v1 = SENTENCEG_PlayRndSz(a0->field_0->field_208, a1, a3, a4, 0, v2);
     }
     a0->field_2a8 = a0->field_2a8 | 8;
     return v1;

@@ -30,9 +30,9 @@ typedef struct st_532090_1 {
 } st_532090_1;
 
 extern unsigned int gmsgShake;
-extern st_532090_1 *g_616878;
-extern st_532090_1 *g_61687c;
-extern st_532090_1 *g_616888;
+extern st_532090_1 *g_engfuncs.pfnMessageBegin;
+extern st_532090_1 *g_engfuncs.pfnMessageEnd;
+extern st_532090_1 *g_engfuncs.pfnWriteShort;
 extern st_532090_0 *gpGlobals;
 
 st_532090_0 * UTIL_ScreenShake__FRC6Vectorffff(float *a0, float a1, int a2, float a3, float a4)
@@ -60,7 +60,7 @@ st_532090_0 * UTIL_ScreenShake__FRC6Vectorffff(float *a0, float a1, int a2, floa
     iter = 1;
     while (iter <= (int)gpGlobals->field_90)
     {
-        v10 = sub_48a500(iter);
+        v10 = UTIL_PlayerByIndex(iter);
         if (v10)
         {
             if (!(*v10->field_1a5 & 2))
@@ -81,7 +81,7 @@ st_532090_0 * UTIL_ScreenShake__FRC6Vectorffff(float *a0, float a1, int a2, floa
                 v15 = v12 * v12 + v13 * v13 + v14 * v14;
                 v16 = sqrt(v15);
                 if (isnan(v16))
-                    sub_487dc0(*(unsigned int *)&v15);
+                    sqrt(*(unsigned int *)&v15);
                 else
                     v15 = v16;
                 v2 = (float)v15;
@@ -93,12 +93,12 @@ LABEL_5321a4:
             if (v1 != 0.0f)
             {
                 v6 = FixedUnsigned16__Fff(v1, 4096.0f);
-                g_616878(1, gmsgShake, 0, *v10->field_208);
-                g_616888(v6);
-                g_616888(v7);
+                g_engfuncs.pfnMessageBegin(1, gmsgShake, 0, *v10->field_208);
+                g_engfuncs.pfnWriteShort(v6);
+                g_engfuncs.pfnWriteShort(v7);
                 v0 = v8;
-                g_616888(v0);
-                g_61687c(v0);
+                g_engfuncs.pfnWriteShort(v0);
+                g_engfuncs.pfnMessageEnd(v0);
                 iter += 1;
             }
             else

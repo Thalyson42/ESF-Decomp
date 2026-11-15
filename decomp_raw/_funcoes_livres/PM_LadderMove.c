@@ -83,7 +83,7 @@ double PM_LadderMove(float a0)
     v39 = v27 + v23;
     v40 = v28 + v24;
     v41 = v29 + v25;
-    sub_48d230(&v39, 0.5f, &v39);
+    VectorScale(&v39, 0.5f, &v39);
     pmove->field_dc = 5;
     v30 = pmove->field_38;
     v31 = pmove->field_3c;
@@ -96,7 +96,7 @@ double PM_LadderMove(float a0)
         return v34;
     v3 = 0;
     v2 = 0;
-    sub_4896c0(&pmove->field_44, &v21, &v20, 0);
+    AngleVectors(&pmove->field_44, &v21, &v20, 0);
     if (pmove->field_45476 & 16)
         v3 = (float)(v2 - 200.0);
     if (pmove->field_45476 & 8)
@@ -108,7 +108,7 @@ double PM_LadderMove(float a0)
     if (pmove->field_45476 & 2)
     {
         pmove->field_dc = 3;
-        sub_48d230(&v35, 270.0f, &pmove->field_5c);
+        VectorScale(&v35, 270.0f, &pmove->field_5c);
         return 270.0;
     }
     if (v3 == 0.0f && v2 == 0.0f)
@@ -116,30 +116,30 @@ double PM_LadderMove(float a0)
         memset(&pmove->field_5c, 0, 12);
         return 0.0;
     }
-    sub_48d230(&v21, v3, &v16);
-    sub_48c590(&v16, v2, &v20, &v16);
+    VectorScale(&v21, v3, &v16);
+    VectorMA(&v16, v2, &v20, &v16);
     v5 = 0;
     v6 = 0;
     v7 = 0x3f800000;
     v0 = &v36;
-    sub_4883f0(&v5, &v35, &v15);
-    sub_489290(&v15);
+    CrossProduct(&v5, &v35, &v15);
+    VectorNormalize(&v15);
     v1 = v17 * v36;
     v1 += v18 * v37;
     v1 += v19 * v38;
-    sub_48d230(v0, v1, &v11);
+    VectorScale(v0, v1, &v11);
     v8 = v17 - v12;
     v9 = v18 - v13;
     v10 = v19 - v14;
-    sub_4883f0(v0, &v15, &v5);
-    sub_48c590(&v8, -v1, &v5, &pmove->field_5c);
+    CrossProduct(v0, &v15, &v5);
+    VectorMA(&v8, -v1, &v5, &pmove->field_5c);
     if (!v4)
     {
         return -v1;
     }
     else if (0.0 < v1)
     {
-        sub_48c590(&pmove->field_5c, 200.0f, v0, &pmove->field_5c);
+        VectorMA(&pmove->field_5c, 200.0f, v0, &pmove->field_5c);
         return -v1;
     }
     else

@@ -37,7 +37,7 @@ unsigned int dcast__C17__class_type_infoRC9type_infoiPvPC9type_infoT3(st_598114_
     unsigned int v4;  // [bp-0x8]
 
     sub_598110(v0, v1, v2);
-    if ((char)sub_48be00(a0, a1))
+    if ((char)type_info::__eq(a0, a1))
         return a3;
     v4 = 0;
     v3 = 0;

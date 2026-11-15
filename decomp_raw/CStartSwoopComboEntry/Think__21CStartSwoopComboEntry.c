@@ -36,8 +36,8 @@ st_55c1e0_0 * Think__21CStartSwoopComboEntry(st_55c1e0_2 *a0)
 
     if (a0->field_4->field_b6c)
     {
-        sub_48d0d0(a0->field_4);
-        sub_488e30(a0->field_4, a0->field_1c);
+        CBot::ResetMoveSpeed(a0->field_4);
+        CBot::SetMoveDir(a0->field_4, a0->field_1c);
         if (a0->field_4->field_0->field_108 == 11)
         {
             if (a0->field_1c == 16)
@@ -64,14 +64,14 @@ st_55c1e0_0 * Think__21CStartSwoopComboEntry(st_55c1e0_2 *a0)
             {
                 v0 = 3;
             }
-            if (a0->field_4->field_504 != v0 || (sub_48b300(&a0->field_4->field_504), v1 <= 0.20000000298023224))
+            if (a0->field_4->field_504 != v0 || (CSwoop::GetSwoopTime(&a0->field_4->field_504), v1 <= 0.20000000298023224))
                 goto LABEL_55c2b4;
         }
         else
         {
 LABEL_55c2b4:
-            sub_48b720(a0->field_4, a0->field_4->field_b6c);
-            if (a0->field_18 > *(float *)gpGlobals || (sub_48b300(&a0->field_4->field_504), a0->field_18 <= 0.20000000298023224f && a0->field_4->field_0->field_108 == 11))
+            CBot::AimAtEnemy(a0->field_4, a0->field_4->field_b6c);
+            if (a0->field_18 > *(float *)gpGlobals || (CSwoop::GetSwoopTime(&a0->field_4->field_504), a0->field_18 <= 0.20000000298023224f && a0->field_4->field_0->field_108 == 11))
             {
                 if (a0->field_4->field_a18 > 159)
                 {

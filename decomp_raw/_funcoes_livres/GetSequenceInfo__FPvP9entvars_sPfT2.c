@@ -48,7 +48,7 @@ double GetSequenceInfo__FPvP9entvars_sPfT2(st_48f280_0 *a0, st_48f280_1 *a1, uns
             v3 = v2->field_4c * v2->field_4c + v2->field_50 * v2->field_50 + v2->field_54 * v2->field_54;
             v4 = sqrt(v3);
             if (isnan(v4))
-                sub_487dc0(*(unsigned int *)&v3);
+                sqrt(*(unsigned int *)&v3);
             else
                 v3 = v4;
             v0 = (float)v3;

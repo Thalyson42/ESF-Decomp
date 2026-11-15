@@ -106,7 +106,7 @@ st_53dc90_0 * __11CBotManager(st_53dc90_0 *a0)
     a0->field_d4d = 1;
     a0->field_f6c = 0xffff;
     a0->field_10f4 = 0;
-    v0 = sub_48d6a0(8);
+    v0 = __builtin_new(8);
     *v0 = 0;
     v0[1] = 0;
     a0->field_0 = v0;

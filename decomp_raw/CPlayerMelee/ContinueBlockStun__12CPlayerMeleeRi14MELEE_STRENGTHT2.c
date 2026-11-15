@@ -25,7 +25,7 @@ LABEL_504e62:
     {
         if (a2 == 2)
         {
-            v1 = sub_48cca0(a0, 2);
+            v1 = CPlayerMelee::GetBlockStunAmt(a0, 2);
             if (*a1 == v1)
             {
                 *a1 = 0;

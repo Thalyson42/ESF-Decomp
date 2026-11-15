@@ -13,6 +13,6 @@ extern st_49ded0_0 *gpGlobals;
 
 char HasTarget__11CBaseEntityi(st_49ded0_1 **a0, unsigned int a1)
 {
-    return !sub_488af0(a1 + gpGlobals->field_98, gpGlobals->field_98 + *a0->field_1cc);
+    return !strcmp@GLIBC_2.0(a1 + gpGlobals->field_98, gpGlobals->field_98 + *a0->field_1cc);
 }
 

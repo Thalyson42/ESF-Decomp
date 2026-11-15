@@ -85,8 +85,8 @@ typedef struct st_4d6dc0_8 {
     unsigned int field_98;
 } st_4d6dc0_8;
 
-extern st_4d6dc0_2 *g_6168b4;
-extern st_4d6dc0_2 *g_6168d4;
+extern st_4d6dc0_2 *g_engfuncs.pfnAlertMessage;
+extern st_4d6dc0_2 *g_engfuncs.pfnPEntityOfEntOffset;
 extern st_4d6dc0_8 *gpGlobals;
 
 double Move__12CBaseMonsterf(st_4d6dc0_3 *a0, float a1)
@@ -143,10 +143,10 @@ double Move__12CBaseMonsterf(st_4d6dc0_3 *a0, float a1)
     float v27;  // [bp-0x20]
     float v28;  // [bp-0x1c]
 
-    if (sub_48b2c0(a0) && (!a0->field_214 || !sub_48d390(a0)))
+    if (CBaseMonster::FRouteClear(a0) && (!a0->field_214 || !CBaseMonster::FRefreshRoute(a0)))
     {
-        g_6168b4(2, "Tried to move with no route!\n");
-        sub_488eb0(a0, 0x40000000);
+        g_engfuncs.pfnAlertMessage(2, "Tried to move with no route!\n");
+        CBaseMonster::SetConditions(a0, 0x40000000);
         return 0.0;
     }
     if (a0->field_170 > *(float *)&gpGlobals->field_0)
@@ -163,7 +163,7 @@ double Move__12CBaseMonsterf(st_4d6dc0_3 *a0, float a1)
     v34 = v31 * v31 + v32 * v32 + v33 * v33;
     v35 = sqrt(v34);
     if (isnan(v35))
-        sub_487dc0(*(unsigned int *)&v34);
+        sqrt(*(unsigned int *)&v34);
     else
         v34 = v35;
     v12 = (float)v34;
@@ -193,7 +193,7 @@ double Move__12CBaseMonsterf(st_4d6dc0_3 *a0, float a1)
     v41 = v39 * v39 + v40 * v40;
     v42 = sqrt(v41);
     if (isnan(v42))
-        sub_487dc0(*(unsigned int *)&v41);
+        sqrt(*(unsigned int *)&v41);
     else
         v41 = v42;
     v2 = (float)v41;
@@ -201,7 +201,7 @@ double Move__12CBaseMonsterf(st_4d6dc0_3 *a0, float a1)
     v7 = *(float *)v43;
     *(float *)&v9 = *(float *)&v43[1];
     *(float *)&v11 = *(float *)&v43[2];
-    sub_4882f0(a0, &v7);
+    CBaseMonster::MakeIdealYaw(a0, &v7);
     v6 = __fnstcw();
     v5 = v6 | 0xc00;
     v4 = (int)*(float *)&a0->field_0->field_b0;
@@ -219,7 +219,7 @@ double Move__12CBaseMonsterf(st_4d6dc0_3 *a0, float a1)
             goto LABEL_4d7092;
         v44 = &a0->field_110;
     }
-    v0 = sub_488810(v44);
+    v0 = EHANDLE::__opP11CBaseEntity(v44);
 LABEL_4d7092:
     v3 = 0;
     v12 = v1 * v26;
@@ -233,11 +233,11 @@ LABEL_4d7092:
     {
         a0->field_60->field_134(a0);
         v46 = gpGlobals->field_74;
-        if (gpGlobals->field_74 || (v46 = g_6168d4(0), v46))
+        if (gpGlobals->field_74 || (v46 = g_engfuncs.pfnPEntityOfEntOffset(0), v46))
             v47 = v46->field_7c;
         else
             v47 = NULL;
-        if (v47 && !(sub_48c450(a0->field_0->field_208, v47->field_0->field_208), 0.0 >= *(float *)&a0->field_21c || !v47->field_60->field_6c(v47) || v47->field_60->field_a0(v47) || *(float *)&gpGlobals->field_0 - a0->field_170 <= 3.0f))
+        if (v47 && !(DispatchBlocked(a0->field_0->field_208, v47->field_0->field_208), 0.0 >= *(float *)&a0->field_21c || !v47->field_60->field_6c(v47) || v47->field_60->field_a0(v47) || *(float *)&gpGlobals->field_0 - a0->field_170 <= 3.0f))
         {
             if (v3 < a0->field_70)
             {
@@ -253,18 +253,18 @@ LABEL_4d7092:
                 v15 = v23;
                 v16 = v24;
                 v17 = v25;
-                sub_48bfb0(a0, &v15, 8);
-                sub_489670(a0, v0);
+                CBaseMonster::InsertWaypoint(a0, &v15, 8);
+                CBaseMonster::RouteSimplify(a0, v0);
             }
             else
             {
                 a0->field_60->field_134(a0);
                 if (0.0 < *(float *)&a0->field_21c && !(a0->field_248 & 32))
                 {
-                    sub_48d390(a0);
-                    if (sub_48b2c0(a0))
+                    CBaseMonster::FRefreshRoute(a0);
+                    if (CBaseMonster::FRouteClear(a0))
                     {
-                        sub_488eb0(a0, 0x40000000);
+                        CBaseMonster::SetConditions(a0, 0x40000000);
                         return 0.0;
                     }
                     if (*(float *)&gpGlobals->field_0 - a0->field_170 < 0.2)
@@ -273,14 +273,14 @@ LABEL_4d7092:
                     a0->field_170 = (float)v50;
                     return v50;
                 }
-                sub_488eb0(a0, 0x40000000);
-                g_6168b4(2, "%s Failed to move (%d)!\n", a0->field_0->field_0 + gpGlobals->field_98, (a0->field_248 & 32) != 0);
+                CBaseMonster::SetConditions(a0, 0x40000000);
+                g_engfuncs.pfnAlertMessage(2, "%s Failed to move (%d)!\n", a0->field_0->field_0 + gpGlobals->field_98, (a0->field_248 & 32) != 0);
                 return 0.0;
             }
         }
     }
     if (a0->field_60->field_12c(a0, v2))
-        sub_48a6c0(a0, v2);
+        CBaseMonster::AdvanceRoute(a0, v2);
     if (a0->field_170 > *(float *)&gpGlobals->field_0)
     {
         a0->field_60->field_134(a0);
@@ -296,7 +296,7 @@ LABEL_4d7092:
     if (a0->field_214)
         return v51;
     a0->field_60->field_134(a0);
-    sub_48bce0(a0);
+    CBaseMonster::RouteClear(a0);
     return v51;
 }
 

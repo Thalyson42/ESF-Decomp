@@ -27,7 +27,7 @@ int Spawn__8CDeadHEV(float a0)
     *(unsigned int *)(*(int *)a0 + 296) = 0;
     *(unsigned int *)(*(int *)a0 + 276) = 1;
     *(unsigned int *)(*(unsigned int *)&a0 + 632) = 247;
-    v2 = sub_48afe0(a0, _8CDeadHEV.m_szPoses[*(int *)(*(unsigned int *)&a0 + 680)]);
+    v2 = CBaseAnimating::LookupSequence(a0, _8CDeadHEV.m_szPoses[*(int *)(*(unsigned int *)&a0 + 680)]);
     *(unsigned int *)(*(int *)a0 + 296) = v2;
     if (*(int *)(*(int *)a0 + 296) == 0xffffffff)
     {

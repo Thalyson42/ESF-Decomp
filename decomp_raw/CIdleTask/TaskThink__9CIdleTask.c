@@ -16,7 +16,7 @@ typedef struct st_584550_0 {
     struct st_584550_1 *field_8;
 } st_584550_0;
 
-extern char g_6253cb;
+extern char BotManager+3403;
 
 unsigned int TaskThink__9CIdleTask(st_584550_0 *a0)
 {
@@ -25,7 +25,7 @@ unsigned int TaskThink__9CIdleTask(st_584550_0 *a0)
     unsigned int v2;  // eax
 
     v0 = 0;
-    if (g_6253cb || a0->field_8->field_364)
+    if (BotManager+3403 || a0->field_8->field_364)
         v0 = 1;
     if (!v0)
     {
@@ -39,6 +39,6 @@ unsigned int TaskThink__9CIdleTask(st_584550_0 *a0)
             return v2;
         }
     }
-    return sub_48d0d0(a0->field_8);
+    return CBot::ResetMoveSpeed(a0->field_8);
 }
 

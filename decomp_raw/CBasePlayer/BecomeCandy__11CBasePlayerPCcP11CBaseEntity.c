@@ -84,7 +84,7 @@ unsigned int BecomeCandy__11CBasePlayerPCcP11CBaseEntity(st_4f0390_3 *a0, char *
     if (v10 & 1)
     {
         a0->field_60->field_1e0(&v0, a0);
-        sub_48a850(&v0, a0->field_0);
+        CCookie::CreateCookie(&v0, a0->field_0);
     }
     else
     {
@@ -111,7 +111,7 @@ unsigned int BecomeCandy__11CBasePlayerPCcP11CBaseEntity(st_4f0390_3 *a0, char *
         if (v19 & 1)
         {
             a0->field_60->field_1e0(&v0, a0);
-            sub_489420(&v0, a0->field_0);
+            CChocolate::CreateChocolate(&v0, a0->field_0);
         }
         else
         {
@@ -137,10 +137,10 @@ unsigned int BecomeCandy__11CBasePlayerPCcP11CBaseEntity(st_4f0390_3 *a0, char *
             if (!(v27 & 1))
                 return 0;
             a0->field_60->field_1e0(&v0, a0);
-            sub_48c540(&v0, a0->field_0);
+            CDonut::CreateDonut(&v0, a0->field_0);
         }
     }
-    sub_489390(a0->field_0->field_208, 4, "weapons/candypop.wav", 0x3f800000, 0.800000011920929f, 0, 100);
+    EMIT_SOUND_DYN(a0->field_0->field_208, 4, "weapons/candypop.wav", 0x3f800000, 0.800000011920929f, 0, 100);
     v28 = a0;
     v28->field_0->field_118 = v28->field_0->field_118 | 128;
     v28->field_60->field_34(a0, *a2, *a2, 900.0f, 0x1000);

@@ -36,7 +36,7 @@ st_4b1000_0 * ToggleUse__10CLightningP11CBaseEntityT18USE_TYPEf(st_4b1000_2 *a0,
     st_4b1000_1 *v1;  // eax
     unsigned int v0;  // [bp-0x34]
 
-    if (!sub_48ab90(a0, a3, a0->field_64))
+    if (!CBaseEntity::ShouldToggle(a0, a3, a0->field_64))
     {
         return v1;
     }
@@ -52,8 +52,8 @@ st_4b1000_0 * ToggleUse__10CLightningP11CBaseEntityT18USE_TYPEf(st_4b1000_2 *a0,
     {
         a0->field_64 = 1;
         a0->field_0->field_118 = a0->field_0->field_118 & 127;
-        v0 = sub_4882e0(a0);
-        sub_489be0(a0, sub_487ce0(a0));
+        v0 = CBeam::GetEndPos(a0);
+        CBeam::DoSparks(a0, CBeam::GetStartPos(a0));
         if (0.0 >= a0->field_0->field_1e0)
             return v1;
         *(float *)&a0->field_0->field_104 = *(float *)gpGlobals;

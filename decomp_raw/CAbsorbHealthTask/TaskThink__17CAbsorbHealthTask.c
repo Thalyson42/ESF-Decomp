@@ -17,15 +17,15 @@ unsigned int TaskThink__17CAbsorbHealthTask(float idx)
         if (v4 >= 100.0f && !*(int *)(*(int *)(*(unsigned int *)&idx + 8) + 892))
         {
             *(unsigned short *)&v0 = 0;
-            sub_48ab70(*(int *)(*(unsigned int *)&idx + 8), v0);
+            CBot::ToggleTurbo(*(int *)(*(unsigned int *)&idx + 8), v0);
             *(unsigned int *)(*(int *)(*(unsigned int *)&idx + 12) + 456) = 0;
             *(unsigned int *)(*(int *)(*(unsigned int *)&idx + 12) + 476) = 19;
             *(float *)(*(int *)(*(unsigned int *)&idx + 12) + 460) = 25.0f;
             *(float *)(*(int *)(*(unsigned int *)&idx + 12) + 464) = 125.0f;
             *(float *)(*(int *)(*(unsigned int *)&idx + 12) + 468) = 255.0f;
             *(float *)(*(int *)(*(unsigned int *)&idx + 12) + 472) = 255.0f;
-            sub_48d0d0(*(int *)(*(unsigned int *)&idx + 8));
-            v6 = sub_48a930(idx);
+            CBot::ResetMoveSpeed(*(int *)(*(unsigned int *)&idx + 8));
+            v6 = CAbsorbHealthTask::ShootAbsorbHealthBeams(idx);
             if ((char)v6)
                 return v6;
         }

@@ -68,9 +68,9 @@ st_4aa8e0_0 * HitTouch__11CDiscAttackP11CBaseEntity(st_4aa8e0_5 *a0, st_4aa8e0_4
     if (!v2)
         return v2;
     if (a1->field_354 || a1->field_35c || a1->field_358 || a1->field_3e4 == 4 || a1->field_3e4 == 5)
-        return sub_48c880(a0);
+        return CDiscAttack::Vaporize(a0);
     a1->field_60->field_34(a1, a0->field_0, v1, *(float *)&a0->field_0->field_1e0, &g_800000);
-    return sub_489390(a0->field_0->field_208, 2, "weapons/disckill.wav", 0x3f800000, 0.800000011920929f, 0, 100);
-    return sub_48c880(a0);
+    return EMIT_SOUND_DYN(a0->field_0->field_208, 2, "weapons/disckill.wav", 0x3f800000, 0.800000011920929f, 0, 100);
+    return CDiscAttack::Vaporize(a0);
 }
 

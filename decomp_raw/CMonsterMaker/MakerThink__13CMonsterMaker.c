@@ -8,6 +8,6 @@ extern st_4d39b0_0 *gpGlobals;
 int MakerThink__13CMonsterMaker(float a0)
 {
     *(float *)(*(int *)a0 + 260) = *(float *)gpGlobals + *(float *)(*(unsigned int *)&a0 + 100);
-    return sub_48b490(a0);
+    return CMonsterMaker::MakeMonster(a0);
 }
 

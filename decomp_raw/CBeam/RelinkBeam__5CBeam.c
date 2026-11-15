@@ -20,8 +20,8 @@ int RelinkBeam__5CBeam(float a0)
     float v1;  // [bp-0x20]
     float v2;  // [bp-0x1c]
 
-    v4 = sub_487ce0(a0);
-    v5 = sub_4882e0(a0);
+    v4 = CBeam::GetStartPos(a0);
+    v5 = CBeam::GetEndPos(a0);
     v6 = *v4;
     if (v6 >= *v5)
         v6 = *v5;
@@ -65,7 +65,7 @@ int RelinkBeam__5CBeam(float a0)
     *(float *)(index + 236) = v1;
     *(float *)(index + 240) = v2;
     v18 = *(int *)a0;
-    sub_48a0d0(v18, v18 + 220, v18 + 232);
-    return sub_48db50(*(int *)a0, *(int *)a0 + 8);
+    UTIL_SetSize(v18, v18 + 220, v18 + 232);
+    return UTIL_SetOrigin(*(int *)a0, *(int *)a0 + 8);
 }
 

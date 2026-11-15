@@ -12,7 +12,7 @@ void NextScheduledTask__12CBaseMonster(st_511de0_0 *a0)
 {
     a0->field_188 = 0;
     a0->field_190 = a0->field_190 + 1;
-    if (sub_48c050(a0))
+    if (CBaseMonster::FScheduleDone(a0))
         a0->field_107 = a0->field_107 | 128;
     return;
 }

@@ -16,12 +16,12 @@ typedef struct st_53eea0_0 {
     unsigned int field_0;
 } st_53eea0_0;
 
-extern st_53eea0_0 *g_6168a4;
-extern st_53eea0_0 *g_6168ac;
-extern st_53eea0_0 *g_6168b4;
-extern st_53eea0_0 *g_6168c4;
-extern st_53eea0_0 *g_6168d8;
-extern st_53eea0_0 *g_61695c;
+extern st_53eea0_0 *g_engfuncs.pfnCVarGetFloat;
+extern st_53eea0_0 *g_engfuncs.pfnCVarSetFloat;
+extern st_53eea0_0 *g_engfuncs.pfnAlertMessage;
+extern st_53eea0_0 *g_engfuncs.pfnFreeEntPrivateData;
+extern st_53eea0_0 *g_engfuncs.pfnEntOffsetOfPEntity;
+extern st_53eea0_0 *g_engfuncs.pfnCreateFakeClient;
 extern st_53eea0_1 *gpGlobals;
 extern int BotManager;
 
@@ -69,26 +69,26 @@ unsigned int * CreateSuperBot__11CBotManagersPCcss(unsigned int a0, unsigned int
     }
     if (v7 && *v7)
     {
-        sub_48d360((char *)&v6 + 64, v7, 31);
+        strncpy@GLIBC_2.0((char *)&v6 + 64, v7, 31);
         *((char *)&v6 + 96) = 0;
     }
     else if (*(short *)(*(unsigned int *)((void*)&v6 + 200) + 62) > 0)
     {
-        sub_4898f0(&BotManager, (char *)&v6 + 64);
+        CBotManager::PickBotName(&BotManager, (char *)&v6 + 64);
     }
     else
     {
         *(unsigned int *)((char *)&v6 + 64) = 7630658;
     }
     v9 = &v6;
-    sub_48d990(&v6, "[SBot%i]", v2);
+    sprintf@GLIBC_2.0(&v6, "[SBot%i]", v2);
     v10 = 0xffffffff;
     v11 = v9;
     do
     {
         v12 = v11;
     } while (v10 && (v10 -= 1, v11 = v12 + 1, *v12));
-    sub_488150(&v6, (char *)&v6 + 64, 32 - ~v10);
+    strncat@GLIBC_2.0(&v6, (char *)&v6 + 64, 32 - ~v10);
     v13 = 0xffffffff;
     do
     {
@@ -121,9 +121,9 @@ unsigned int * CreateSuperBot__11CBotManagersPCcss(unsigned int a0, unsigned int
             }
         } while ((v1 += 1, v1 < iter));
     }
-    v18 = g_61695c(&v6);
+    v18 = g_engfuncs.pfnCreateFakeClient(&v6);
     v19 = 0;
-    if (!v18 || !g_6168d8(v18))
+    if (!v18 || !g_engfuncs.pfnEntOffsetOfPEntity(v18))
         v19 = 1;
     if (v19)
     {
@@ -131,20 +131,20 @@ unsigned int * CreateSuperBot__11CBotManagersPCcss(unsigned int a0, unsigned int
     }
     else
     {
-        g_6168b4(1, "Creating bot...\n");
-        g_6168c4(v18);
+        g_engfuncs.pfnAlertMessage(1, "Creating bot...\n");
+        g_engfuncs.pfnFreeEntPrivateData(v18);
         v18[31] = 0;
         v18[121] = 0;
-        v21 = sub_48ceb0((!v18 ? 0 : v18 + 32));
+        v21 = GetClassPtr__H1Z4CBot_PX01_PX01((!v18 ? 0 : v18 + 32));
         if (!v21)
         {
             v20 = "Error ! Couldn't create bot\n";
         }
         else
         {
-            sub_48a0a0(v18, &v6, "127.0.0.1", &v5);
-            sub_48d410(v18);
-            sub_48bde0(v21, 2, v4, 1, v3, v2);
+            ClientConnect(v18, &v6, "127.0.0.1", &v5);
+            ClientPutInServer(v18);
+            CBot::CreateInit(v21, 2, v4, 1, v3, v2);
             v22 = *(unsigned int *)((void*)&v6 + 200);
             v22->field_4 = v22->field_4 + 1;
             v23 = gpGlobals;
@@ -152,14 +152,14 @@ unsigned int * CreateSuperBot__11CBotManagersPCcss(unsigned int a0, unsigned int
             v22->field_10 = (float)v24;
             if (!v22->field_2c)
             {
-                g_6168a4("mp_plcatchup");
+                g_engfuncs.pfnCVarGetFloat("mp_plcatchup");
                 *(float *)(*(unsigned int *)((void*)&v6 + 200) + 40) = (float)v24;
-                v23 = g_6168ac("mp_plcathcup", 0);
+                v23 = g_engfuncs.pfnCVarSetFloat("mp_plcathcup", 0);
             }
             *(char *)(*(unsigned int *)((void*)&v6 + 200) + 44) = *(char *)(*(unsigned int *)((void*)&v6 + 200) + 44) + 1;
             return v23;
         }
     }
-    return g_6168b4(1, v20);
+    return g_engfuncs.pfnAlertMessage(1, v20);
 }
 

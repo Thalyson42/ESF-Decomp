@@ -40,7 +40,7 @@ st_5930d0_0 * PM_CheckFalling(void)
             }
             else if (290.0f < *(float *)&pmove->field_9c)
             {
-                if (sub_48b500(pmove->field_4f554(&pmove->padding_1f1[0x4f1ff], "tfc"), 0, 10, 0) == 1)
+                if (__strtol_internal@GLIBC_2.0(pmove->field_4f554(&pmove->padding_1f1[0x4f1ff], "tfc"), 0, 10, 0) == 1)
                     pmove->field_4f5b4(2, "weapons/groundhit.wav", 0x3f800000, 0.800000011920929f, 0, 100);
                 v1 = 0.8500000238418579f;
             }
@@ -52,9 +52,9 @@ st_5930d0_0 * PM_CheckFalling(void)
         if (0.0 < v1)
         {
             pmove->field_94 = 0;
-            sub_487ee0();
+            PM_UpdateStepSound();
             v0 = v1;
-            sub_488060(sub_48d100(pmove->field_1f0));
+            PM_PlayStepSound(PM_MapTextureTypeStepType(pmove->field_1f0));
         }
     }
     if (pmove->field_e0 != 0xffffffff)

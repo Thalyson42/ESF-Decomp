@@ -36,18 +36,18 @@ void* Use__15CGamePlayerTeamP11CBaseEntityT18USE_TYPEf(void* *a0, st_4d0f70_2 *a
     void* v0;  // eax
     unsigned int v1;  // edi
 
-    v0 = sub_48aa30(a0, a1);
+    v0 = CRuleEntity::CanFireForActivator(a0, a1);
     if (v0)
     {
         if (a1->field_60->field_a0(a1))
         {
-            v1 = sub_489c30(a0, (int)(*a0)[456] + gpGlobals->field_98);
+            v1 = CGamePlayerTeam::TargetTeamName(a0, (int)(*a0)[456] + gpGlobals->field_98);
             if (v1)
                 g_pGameRules->field_44->field_d8(g_pGameRules, a1, v1, (unsigned int)((int)(*a0)[416]) >> 1 & 1, (unsigned int)((int)(*a0)[416]) >> 2 & 1);
         }
         v0 = *a0;
         if ((char)(*a0)[416] & 1)
-            v0 = sub_48cc00(a0);
+            v0 = UTIL_Remove(a0);
     }
     return v0;
 }

@@ -3,16 +3,16 @@ typedef struct st_4df1f0_0 {
     unsigned int field_0;
 } st_4df1f0_0;
 
-extern st_4df1f0_0 *g_6168b4;
-extern unsigned int g_61716c;
-extern unsigned int g_617178;
+extern st_4df1f0_0 *g_engfuncs.pfnAlertMessage;
+extern unsigned int WorldGraph+12;
+extern unsigned int WorldGraph+24;
 
 unsigned int AllocNodes__6CGraph(void)
 {
-    g_61716c = sub_48ccc0(88, 0x400);
-    if (!g_61716c)
+    WorldGraph+12 = calloc@GLIBC_2.0(88, 0x400);
+    if (!WorldGraph+12)
     {
-        g_6168b4(2, "**ERROR**\nCouldn't malloc %d nodes!\n", g_617178);
+        g_engfuncs.pfnAlertMessage(2, "**ERROR**\nCouldn't malloc %d nodes!\n", WorldGraph+24);
         return 0;
     }
     return 1;

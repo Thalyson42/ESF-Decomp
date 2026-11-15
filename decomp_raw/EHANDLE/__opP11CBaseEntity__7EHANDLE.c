@@ -8,7 +8,7 @@ unsigned int __opP11CBaseEntity__7EHANDLE(int a0)
 {
     st_49cd80_0 *v0;  // eax
 
-    v0 = sub_4893d0(a0);
+    v0 = EHANDLE::Get(a0);
     return (!v0 ? 0 : v0->field_7c);
 }
 

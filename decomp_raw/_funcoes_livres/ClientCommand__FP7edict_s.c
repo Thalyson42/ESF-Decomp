@@ -82,18 +82,18 @@ typedef struct st_49fd60_7 {
     struct st_49fd60_6 *field_44;
 } st_49fd60_7;
 
-extern float g_5bd040;
-extern float g_5bd054;
+extern float realteams+12;
+extern float allowspectator+12;
 extern st_49fd60_7 *g_pGameRules;
 extern unsigned int gmsgVGUIMenu;
-extern st_49fd60_0 *g_616878;
-extern st_49fd60_0 *g_61687c;
-extern st_49fd60_0 *g_616880;
-extern st_49fd60_0 *g_6168b4;
-extern st_49fd60_0 *g_6168e0;
-extern st_49fd60_0 *g_616900;
-extern st_49fd60_0 *g_61690c;
-extern st_49fd60_0 *g_616910;
+extern st_49fd60_0 *g_engfuncs.pfnMessageBegin;
+extern st_49fd60_0 *g_engfuncs.pfnMessageEnd;
+extern st_49fd60_0 *g_engfuncs.pfnWriteByte;
+extern st_49fd60_0 *g_engfuncs.pfnAlertMessage;
+extern st_49fd60_0 *g_engfuncs.pfnPEntityOfEntIndex;
+extern st_49fd60_0 *g_engfuncs.pfnClientPrintf;
+extern st_49fd60_0 *g_engfuncs.pfnCmd_Argv;
+extern st_49fd60_0 *g_engfuncs.pfnCmd_Argc;
 extern st_49fd60_8 *gpGlobals;
 extern float g_flWeaponCheat;
 extern int BotManager;
@@ -148,54 +148,54 @@ unsigned int ClientCommand__FP7edict_s(float a0)
     unsigned int v27;  // [bp-0x20]
     unsigned int v28;  // [bp-0x1c]
 
-    v10 = g_61690c(0);
+    v10 = g_engfuncs.pfnCmd_Argv(0);
     if (!*(int *)(*(unsigned int *)&a0 + 124))
         return v31;
     v9 = *(unsigned int *)&a0 + 128;
-    v30 = sub_48c260(v9);
-    if (!sub_488af0(v10, "say"))
+    v30 = GetClassPtr__H1Z11CBasePlayer_PX01_PX01(v9);
+    if (!strcmp@GLIBC_2.0(v10, "say"))
     {
-        v31 = sub_48e000(a0, 0);
+        v31 = Host_Say(a0, 0);
         return v31;
     }
-    else if (!sub_488af0(v10, "say_team"))
+    else if (!strcmp@GLIBC_2.0(v10, "say_team"))
     {
-        sub_48e000(a0, 1);
+        Host_Say(a0, 1);
         return v31;
     }
-    else if (!sub_488af0(v10, "fullupdate"))
+    else if (!strcmp@GLIBC_2.0(v10, "fullupdate"))
     {
-        sub_4891d0(sub_48c260(v9));
+        CBasePlayer::ForceClientDllUpdate(GetClassPtr__H1Z11CBasePlayer_PX01_PX01(v9));
         return v31;
     }
-    else if (!sub_488af0(v10, "fov"))
+    else if (!strcmp@GLIBC_2.0(v10, "fov"))
     {
-        if (g_flWeaponCheat != 0.0f && (int)g_616910() > 1)
+        if (g_flWeaponCheat != 0.0f && (int)g_engfuncs.pfnCmd_Argc() > 1)
         {
-            v33 = sub_48c260(v9);
-            v33->field_938 = sub_48b500(g_61690c(1), 0, 10, 0);
+            v33 = GetClassPtr__H1Z11CBasePlayer_PX01_PX01(v9);
+            v33->field_938 = __strtol_internal@GLIBC_2.0(g_engfuncs.pfnCmd_Argv(1), 0, 10, 0);
             return v31;
         }
-        v34 = sub_488b00("\"fov\" is \"%d\"\n", *(int *)(sub_48c260(v9) + 2360));
-        g_616900(a0, 0, v34);
+        v34 = UTIL_VarArgs("\"fov\" is \"%d\"\n", *(int *)(GetClassPtr__H1Z11CBasePlayer_PX01_PX01(v9) + 2360));
+        g_engfuncs.pfnClientPrintf(a0, 0, v34);
         return v31;
     }
     else
     {
-        if (!sub_488af0(v10, "use"))
+        if (!strcmp@GLIBC_2.0(v10, "use"))
         {
-            v2 = g_61690c(1);
+            v2 = g_engfuncs.pfnCmd_Argv(1);
         }
-        else if (sub_48b210(v10, "weapon_") && sub_48b210(v10, "weapon_") == v10)
+        else if (strstr@GLIBC_2.0(v10, "weapon_") && strstr@GLIBC_2.0(v10, "weapon_") == v10)
         {
             v5 = v10;
         }
-        else if (!sub_488af0(v10, "lastinv"))
+        else if (!strcmp@GLIBC_2.0(v10, "lastinv"))
         {
-            sub_488ad0(sub_48c260(v9));
+            CBasePlayer::SelectLastItem(GetClassPtr__H1Z11CBasePlayer_PX01_PX01(v9));
             return v31;
         }
-        else if (!sub_488af0(v10, "spectate"))
+        else if (!strcmp@GLIBC_2.0(v10, "spectate"))
         {
             if (v9[35].padding_0[2] & 16)
             {
@@ -209,10 +209,10 @@ unsigned int ClientCommand__FP7edict_s(float a0)
                 v16 = v40[20];
                 v18 = *(float *)&v41[1];
                 v19 = *(float *)&v41[2];
-                sub_48cd20(v30, &v26, &v16);
+                CBasePlayer::StartObserver(v30, &v26, &v16);
                 return v31;
             }
-            else if (g_5bd054 != 1.0)
+            else if (allowspectator+12 != 1.0)
             {
                 return v31;
             }
@@ -232,7 +232,7 @@ unsigned int ClientCommand__FP7edict_s(float a0)
             {
                 if (v30->field_60->field_8c(v30) && !(v30->field_310 & 32))
                 {
-                    v42 = g_6168e0(0);
+                    v42 = g_engfuncs.pfnPEntityOfEntIndex(0);
                     v43 = (!v42 ? 0 : v42 + 128);
                     g_pGameRules->field_44->field_6c(g_pGameRules, v30, v43, v43);
                 }
@@ -246,7 +246,7 @@ unsigned int ClientCommand__FP7edict_s(float a0)
                 v21 = v46[20];
                 *(float *)&v24 = *(float *)&v47[1];
                 *(float *)&v25 = *(float *)&v47[2];
-                sub_48a2d0(v30, &v16, &v21);
+                CBasePlayer::StartSpectator(v30, &v16, &v21);
                 return v31;
             }
             else
@@ -256,117 +256,117 @@ unsigned int ClientCommand__FP7edict_s(float a0)
         }
         else
         {
-            if (!sub_488af0(v10, "follownext"))
+            if (!strcmp@GLIBC_2.0(v10, "follownext"))
             {
                 v8 = &v16;
                 v5 = 0;
-                v48 = sub_48b500(g_61690c(1), 0, 10, v5);
+                v48 = __strtol_internal@GLIBC_2.0(g_engfuncs.pfnCmd_Argv(1), 0, 10, v5);
                 *(unsigned short *)&v5 = _INSERT(v48, 0, v48 == 1);
-                sub_4898a0(v30, v5);
+                CBasePlayer::Spectator_FindNextPlayer(v30, v5);
                 return v31;
             }
-            else if (!sub_488af0(v10, "spec_mode"))
+            else if (!strcmp@GLIBC_2.0(v10, "spec_mode"))
             {
                 v7 = &v16;
-                sub_48dce0(v30, sub_48b500(g_61690c(1), 0, 10, 0));
+                CBasePlayer::Spectator_SetMode(v30, __strtol_internal@GLIBC_2.0(g_engfuncs.pfnCmd_Argv(1), 0, 10, 0));
                 return v31;
             }
-            else if (!sub_488af0(v10, "teleport"))
+            else if (!strcmp@GLIBC_2.0(v10, "teleport"))
             {
-                sub_488180(v30);
+                CBasePlayer::Teleport(v30);
                 return v31;
             }
-            else if (!sub_488af0(v10, "togglefly"))
+            else if (!strcmp@GLIBC_2.0(v10, "togglefly"))
             {
                 if (!v30->field_320)
                 {
-                    sub_488d40(v30);
+                    CBasePlayer::StartFly(v30);
                     return v31;
                 }
-                sub_48c5a0(v30);
+                CBasePlayer::StopFly(v30);
                 return v31;
             }
             else
             {
-                if (!sub_488af0(v10, "turbo"))
+                if (!strcmp@GLIBC_2.0(v10, "turbo"))
                 {
                     if (!v30->field_324)
                     {
-                        sub_487d00(v30);
+                        CBasePlayer::StartTurbo(v30);
                         return v31;
                     }
-                    sub_48dbc0(v30);
+                    CBasePlayer::StopTurbo(v30);
                     return v31;
                 }
                 else
                 {
-                    if (!sub_488af0(v10, "+block"))
+                    if (!strcmp@GLIBC_2.0(v10, "+block"))
                     {
                         if (!v30->field_32c)
                         {
-                            sub_489930(v30);
+                            CBasePlayer::StartBlock(v30);
                             return v31;
                         }
                         return v31;
                     }
                     else
                     {
-                        if (!sub_488af0(v10, "-block"))
+                        if (!strcmp@GLIBC_2.0(v10, "-block"))
                         {
                             if (v30->field_32c)
                             {
-                                sub_4895a0(v30);
+                                CBasePlayer::StopBlock(v30);
                                 return v31;
                             }
                             return v31;
                         }
                         else
                         {
-                            if (!sub_488af0(v10, "+powerup"))
+                            if (!strcmp@GLIBC_2.0(v10, "+powerup"))
                             {
                                 if (!v30->field_330)
                                 {
-                                    sub_48dd60(v30);
+                                    CBasePlayer::StartPowerUp(v30);
                                     return v31;
                                 }
                                 return v31;
                             }
                             else
                             {
-                                if (!sub_488af0(v10, "-powerup"))
+                                if (!strcmp@GLIBC_2.0(v10, "-powerup"))
                                 {
                                     if (v30->field_330)
                                     {
-                                        sub_48ba60(v30);
+                                        CBasePlayer::StopPowerUp(v30);
                                         return v31;
                                     }
                                     return v31;
                                 }
                                 else
                                 {
-                                    if (!sub_488af0(v10, "ascend"))
+                                    if (!strcmp@GLIBC_2.0(v10, "ascend"))
                                     {
-                                        sub_489400(v30);
+                                        CBasePlayer::StartAscend(v30);
                                         return v31;
                                     }
                                     v5 = "descend";
-                                    if (!sub_488af0(v10, v5))
+                                    if (!strcmp@GLIBC_2.0(v10, v5))
                                     {
                                         *(unsigned short *)&v5 = 1;
-                                        sub_4886c0(v30, v5);
+                                        CBasePlayer::Descend(v30, v5);
                                         return v31;
                                     }
-                                    else if (!sub_489e10(v30, v10))
+                                    else if (!CBasePlayer::MakeCandy(v30, v10))
                                     {
-                                        if (!sub_488af0(v10, "change_class"))
+                                        if (!strcmp@GLIBC_2.0(v10, "change_class"))
                                         {
                                             if ((v30->field_798 + 2.0 < *(float *)gpGlobals || v30->field_0->field_244 || !v30->field_764->field_4->field_34(v30->field_764)) && !v30->field_364)
                                             {
                                                 if (v30->field_0->field_244 && g_pGameRules->field_44->field_20(g_pGameRules))
                                                     return v31;
-                                                if (g_5bd040 != 1.0f || (v4 = 33, !g_pGameRules->field_44->field_20(g_pGameRules)))
+                                                if (realteams+12 != 1.0f || (v4 = 33, !g_pGameRules->field_44->field_20(g_pGameRules)))
                                                     v4 = 3;
-                                                g_616878(1, gmsgVGUIMenu, 0, v30->field_0->field_208);
+                                                g_engfuncs.pfnMessageBegin(1, gmsgVGUIMenu, 0, v30->field_0->field_208);
                                                 v4 = v4;
                                             }
                                             else if (v30->field_0->field_244)
@@ -387,8 +387,8 @@ unsigned int ClientCommand__FP7edict_s(float a0)
                                                 v12 = v13 | 0xc00;
                                                 v11 = (int)v16;
                                                 v6 = v11;
-                                                sub_48d990(&v14, "You must wait %i more second(s) to change classes.\n");
-                                                sub_489df0(&v14, v30);
+                                                sprintf@GLIBC_2.0(&v14, "You must wait %i more second(s) to change classes.\n");
+                                                UTIL_SayText(&v14, v30);
                                                 return v31;
                                             }
                                             else
@@ -398,29 +398,29 @@ unsigned int ClientCommand__FP7edict_s(float a0)
                                         }
                                         else
                                         {
-                                            if (sub_488af0(v10, "change_team"))
+                                            if (strcmp@GLIBC_2.0(v10, "change_team"))
                                             {
                                                 v5 = v10;
-                                                if (sub_48af30(sub_48c260(v9)))
+                                                if (CBasePlayer::ChangeClass(GetClassPtr__H1Z11CBasePlayer_PX01_PX01(v9)))
                                                     return v31;
-                                                if (!sub_488af0(v10, "identify"))
+                                                if (!strcmp@GLIBC_2.0(v10, "identify"))
                                                 {
-                                                    g_6168b4(1, "ESF Beta 1.2.1, Public Version");
+                                                    g_engfuncs.pfnAlertMessage(1, "ESF Beta 1.2.1, Public Version");
                                                     return v31;
                                                 }
-                                                if (!(char)sub_48b340(&BotManager, a0))
+                                                if (!(char)CBotManager::HandleBotCommands(&BotManager, a0))
                                                 {
                                                     v6 = v10;
-                                                    v55 = sub_48c260(v9);
+                                                    v55 = GetClassPtr__H1Z11CBasePlayer_PX01_PX01(v9);
                                                     if (g_pGameRules->field_44->field_60(g_pGameRules, v55))
                                                         return v31;
-                                                    sub_48d360(&v14, v10, 127);
+                                                    strncpy@GLIBC_2.0(&v14, v10, 127);
                                                     v15 = 0;
                                                     v3 = 0;
                                                     v2 = 0;
                                                     v1 = 0;
                                                     v0 = 0;
-                                                    sub_489e90(*(unsigned int *)&a0 + 128, 2, sub_488b00("Unknown command: %s\n", &v14));
+                                                    ClientPrint(*(unsigned int *)&a0 + 128, 2, UTIL_VarArgs("Unknown command: %s\n", &v14));
                                                     return v31;
                                                 }
                                                 else
@@ -430,7 +430,7 @@ unsigned int ClientCommand__FP7edict_s(float a0)
                                             }
                                             else if (g_pGameRules->field_44->field_20(g_pGameRules) && (v30->field_79c + 10.0 < *(float *)gpGlobals || !v30->field_0->field_1ac))
                                             {
-                                                g_616878(1, gmsgVGUIMenu, 0, v30->field_0->field_208);
+                                                g_engfuncs.pfnMessageBegin(1, gmsgVGUIMenu, 0, v30->field_0->field_208);
                                                 v4 = 2;
                                             }
                                             else if (!g_pGameRules->field_44->field_20(g_pGameRules))
@@ -447,8 +447,8 @@ unsigned int ClientCommand__FP7edict_s(float a0)
                                                 v12 = v13 | 0xc00;
                                                 v11 = (int)v16;
                                                 v6 = v11;
-                                                sub_48d990(&v14, "You must wait %i more second(s) to change teams.\n");
-                                                sub_489df0(&v14, v30);
+                                                sprintf@GLIBC_2.0(&v14, "You must wait %i more second(s) to change teams.\n");
+                                                UTIL_SayText(&v14, v30);
                                                 return v31;
                                             }
                                             else
@@ -456,8 +456,8 @@ unsigned int ClientCommand__FP7edict_s(float a0)
                                                 return v31;
                                             }
                                         }
-                                        g_616880(v4);
-                                        g_61687c();
+                                        g_engfuncs.pfnWriteByte(v4);
+                                        g_engfuncs.pfnMessageEnd();
                                         return v31;
                                     }
                                     else
@@ -471,7 +471,7 @@ unsigned int ClientCommand__FP7edict_s(float a0)
                 }
             }
         }
-        sub_48ce10(sub_48c260(v9));
+        CBasePlayer::SelectItem(GetClassPtr__H1Z11CBasePlayer_PX01_PX01(v9));
         return v31;
     }
 }

@@ -41,7 +41,7 @@ typedef struct st_578ac0_6 {
     unsigned int field_0;
 } st_578ac0_6;
 
-extern st_578ac0_6 *g_61692c;
+extern st_578ac0_6 *g_engfuncs.pfnRandomFloat;
 extern st_578ac0_5 *gpGlobals;
 
 double ReactOnDanger__11CAscendTaskP13danger_info_s(st_578ac0_3 *a0, st_578ac0_4 *a1)
@@ -92,8 +92,8 @@ LABEL_578b7f:
             if (a0->field_8->field_774 - *(float *)gpGlobals > v4)
             {
                 *(unsigned short *)&v0 = 1;
-                sub_4886c0(a0->field_8, v0);
-                g_61692c(10.0f, 25.0f);
+                CBasePlayer::Descend(a0->field_8, v0);
+                g_engfuncs.pfnRandomFloat(10.0f, 25.0f);
                 v6 = 10.0 + *(float *)gpGlobals;
                 a0->field_8->field_b18 = (float)v6;
                 return v6;

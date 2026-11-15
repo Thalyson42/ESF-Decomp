@@ -18,7 +18,7 @@ double HandleSwoop__6CSwoop(float idx)
     v4 = 2.85 + *(float *)(*(unsigned int *)&idx + 16);
     if (v4 < *(float *)gpGlobals)
     {
-        sub_48a910(idx);
+        CSwoop::StopSwoop(idx);
         return v4;
     }
     v2 = 0;
@@ -28,11 +28,11 @@ double HandleSwoop__6CSwoop(float idx)
         v5 = 1.0 - (*(float *)gpGlobals - *(float *)(*(unsigned int *)&idx + 16)) / 0.75;
         v2 = (float)v5;
     }
-    sub_48d2e0(idx);
+    CSwoop::GetSwoopSpeed(idx);
     v1 = (float)v5;
-    sub_48c500(idx);
+    CSwoop::GetSwoopBoostSpeed(idx);
     v0 = (float)v5;
-    sub_488cb0(idx);
+    CSwoop::SwoopSlowdown(idx);
     v7 = v6 * (v2 * v0 + v1);
     *(float *)(*(unsigned int *)&idx + 20) = (float)v7;
     *(float *)(*(int *)*(int *)(*(unsigned int *)&idx + 120) + 652) = (float)v7;

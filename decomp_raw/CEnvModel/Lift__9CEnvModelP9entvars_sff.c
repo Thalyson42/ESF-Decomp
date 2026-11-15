@@ -65,7 +65,7 @@ typedef struct st_4b9390_3 {
 } st_4b9390_3;
 
 extern char RotateThink__9CEnvModel;
-extern st_4b9390_3 *g_6168b4;
+extern st_4b9390_3 *g_engfuncs.pfnAlertMessage;
 extern st_4b9390_4 *gpGlobals;
 
 float Lift__9CEnvModelP9entvars_sff(st_4b9390_1 *a0, st_4b9390_2 *a1, float a2, float a3)
@@ -107,7 +107,7 @@ float Lift__9CEnvModelP9entvars_sff(st_4b9390_1 *a0, st_4b9390_2 *a1, float a2, 
     float v21;  // [bp-0x24]
     float v22;  // [bp-0x20]
 
-    g_6168b4(1, "Size %f\n", (unsigned int)(*(float *)&a0->field_2bc >> 0));
+    g_engfuncs.pfnAlertMessage(1, "Size %f\n", (unsigned int)(*(float *)&a0->field_2bc >> 0));
     v23 = a0->field_0;
     v15 = 0;
     v17 = 0;
@@ -118,7 +118,7 @@ float Lift__9CEnvModelP9entvars_sff(st_4b9390_1 *a0, st_4b9390_2 *a1, float a2, 
     a0->field_14 = 0;
     a0->field_18 = 0;
     a0->field_0->field_108 = 8;
-    sub_48a800(&a1->field_74);
+    UTIL_MakeVectors(&a1->field_74);
     v24 = &gpGlobals->field_28;
     v16 = gpGlobals->field_28;
     v18 = *(float *)&v24[1];
@@ -135,7 +135,7 @@ float Lift__9CEnvModelP9entvars_sff(st_4b9390_1 *a0, st_4b9390_2 *a1, float a2, 
     v8 = (float)(v26 + v20);
     v9 = (float)(v27 + v21);
     v10 = v22 + v2;
-    sub_487b80(&v20, &v8, 0, a0->field_0->field_208, &v11);
+    UTIL_TraceLine(&v20, &v8, 0, a0->field_0->field_208, &v11);
     v28 = &a0->field_0->field_8;
     v0 = v12 - *(float *)&a0->field_0->field_8;
     v1 = v13 - *(float *)&v28[1];
@@ -146,7 +146,7 @@ float Lift__9CEnvModelP9entvars_sff(st_4b9390_1 *a0, st_4b9390_2 *a1, float a2, 
     v29 = v16 * v16 + v18 * v18 + v19 * v19;
     v30 = sqrt(v29);
     if (isnan(v30))
-        sub_487dc0(*(unsigned int *)&v29);
+        sqrt(*(unsigned int *)&v29);
     else
         v29 = v30;
     v6 = (float)v29;
@@ -166,7 +166,7 @@ float Lift__9CEnvModelP9entvars_sff(st_4b9390_1 *a0, st_4b9390_2 *a1, float a2, 
     v16 = v0;
     v18 = v1;
     v19 = v2;
-    sub_488860(&v0, &v16);
+    UTIL_VecToAngles(&v0, &v16);
     v3 = v0;
     v4 = (float)(v1 - 90.0);
     v5 = 90.0f;

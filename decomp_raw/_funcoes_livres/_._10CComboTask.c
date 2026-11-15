@@ -17,7 +17,7 @@ int _._10CComboTask(st_585950_1 *a0, int a1)
 {
     a0->field_14 = &__vt_10CComboTask;
     if (a0->field_8->field_1070)
-        sub_48c9f0(a0->field_8);
-    return sub_488170(a0, a1);
+        CBot::DeleteCombos(a0->field_8);
+    return _._9CBaseTask(a0, a1);
 }
 

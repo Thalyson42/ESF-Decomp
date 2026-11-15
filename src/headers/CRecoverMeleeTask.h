@@ -1,7 +1,7 @@
 // CRecoverMeleeTask.h -- reconstruído automaticamente (vtable + offsets). REVISAR.
 #pragma once
 
-class CRecoverMeleeTask {
+class CRecoverMeleeTask : public CBaseTask {  // base: heuristica
 public:
     virtual void _._17CRecoverMeleeTask();  // vtable[0] _._17CRecoverMeleeTask
     virtual void GetNesserelyChecks();  // vtable[1] GetNesserelyChecks__17CRecoverMeleeTask
@@ -11,9 +11,7 @@ public:
     virtual void TaskThink();  // vtable[5] TaskThink__17CRecoverMeleeTask
     virtual void TaskIdentify();  // vtable[6] TaskIdentify__17CRecoverMeleeTask
     virtual void ShouldManageEnemies();  // vtable[7] ShouldManageEnemies__17CRecoverMeleeTask
-    virtual void ManageEnemies();  // vtable[8] ManageEnemies__9CBaseTask
     virtual void ReactOnDanger();  // vtable[9] ReactOnDanger__17CRecoverMeleeTaskP13danger_info_s
-    virtual void 0();  // vtable[10] 0
     // campos observados (offset em bytes a partir de `this`; inclui os herdados)
     int f_004;  // +0x4 (4)
     void* f_008;  // +0x8 (8)

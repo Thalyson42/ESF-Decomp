@@ -90,10 +90,10 @@ unsigned int Spawn__6CLaser(float idx)
     v13->field_10 = &StrikeThink__6CLaser;
     v13->field_0->field_1a7 = v13->field_0->field_1a7 | 32;
     v14 = &v13->field_0->padding_0[8];
-    sub_48b880(v13, v14, v14);
+    CBeam::PointsInit(v13, v14, v14);
     v15 = (unsigned int *)idx;
     if (!v15[25] && v15[26])
-        v15[25] = sub_48c010(v15[26] + gpGlobals->field_98, *v15 + 8, 1);
+        v15[25] = CSprite::SpriteCreate(v15[26] + gpGlobals->field_98, *v15 + 8, 1);
     else
         *(st_4b2820_8 ***)(*(unsigned int *)&idx + 100) = NULL;
     if (*(int *)(*(unsigned int *)&idx + 100))
@@ -123,8 +123,8 @@ unsigned int Spawn__6CLaser(float idx)
         *(unsigned int *)&(*v17)[1].padding_0[16] = v1;
     }
     if (!*(int *)(*(int *)idx + 460) || *(char *)(*(int *)idx + 416) & 1)
-        return sub_48bef0(idx);
-    return sub_488110(idx);
-    return sub_48bef0(idx);
+        return CLaser::TurnOn(idx);
+    return CLaser::TurnOff(idx);
+    return CLaser::TurnOn(idx);
 }
 

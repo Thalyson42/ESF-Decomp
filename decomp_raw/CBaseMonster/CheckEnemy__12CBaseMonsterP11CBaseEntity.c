@@ -74,7 +74,7 @@ typedef struct st_4d5390_5 {
     struct st_4d5390_4 *field_60;
 } st_4d5390_5;
 
-extern st_4d5390_1 *g_61692c;
+extern st_4d5390_1 *g_engfuncs.pfnRandomFloat;
 
 unsigned int CheckEnemy__12CBaseMonsterP11CBaseEntity(st_4d5390_2 *a0, st_4d5390_5 *a1)
 {
@@ -159,7 +159,7 @@ unsigned int CheckEnemy__12CBaseMonsterP11CBaseEntity(st_4d5390_2 *a0, st_4d5390
     v22 = v19 * v19 + v20 * v20 + v21 * v21;
     v23 = sqrt(v22);
     if (isnan(v23))
-        sub_487dc0(*(unsigned int *)&v22);
+        sqrt(*(unsigned int *)&v22);
     else
         v22 = v23;
     v2 = (float)v22;
@@ -174,7 +174,7 @@ unsigned int CheckEnemy__12CBaseMonsterP11CBaseEntity(st_4d5390_2 *a0, st_4d5390
     v28 = v25 * v25 + v26 * v26 + v27 * v27;
     v29 = sqrt(v28);
     if (isnan(v29))
-        sub_487dc0(*(unsigned int *)&v28);
+        sqrt(*(unsigned int *)&v28);
     else
         v28 = v29;
     v9 = (float)v28;
@@ -192,7 +192,7 @@ unsigned int CheckEnemy__12CBaseMonsterP11CBaseEntity(st_4d5390_2 *a0, st_4d5390
         v35 = v32 * v32 + v33 * v33 + v34 * v34;
         v36 = sqrt(v35);
         if (isnan(v36))
-            sub_487dc0(*(unsigned int *)&v35);
+            sqrt(*(unsigned int *)&v35);
         else
             v35 = v36;
         v9 = (float)v35;
@@ -229,7 +229,7 @@ LABEL_4d5589:
             v40 = *(float *)&v39[2] == 0.0f;
         if (v40)
             goto LABEL_4d5722;
-        g_61692c(-0.05000000074505806f, 0);
+        g_engfuncs.pfnRandomFloat(-0.05000000074505806f, 0);
         v41 = &a1->field_0->field_20;
         v42 = -0.05000000074505806 * a1->field_0->field_20;
         v9 = (float)v42;
@@ -262,7 +262,7 @@ LABEL_4d5722:
     if (a0->field_60->field_19c(a0))
     {
         *(float *)&v0 = v2;
-        sub_48a8e0(a0, sub_488810(&a0->field_108));
+        CBaseMonster::CheckAttacks(a0, EHANDLE::__opP11CBaseEntity(&a0->field_108));
     }
     if (a0->field_214 != 2)
         return v1;
@@ -284,13 +284,13 @@ LABEL_4d5722:
             v53 = v50 * v50 + v51 * v51 + v52 * v52;
             v54 = sqrt(v53);
             if (isnan(v54))
-                sub_487dc0(*(unsigned int *)&v53);
+                sqrt(*(unsigned int *)&v53);
             else
                 v53 = v54;
             v9 = (float)v53;
             if (v9 > 80.0f)
             {
-                sub_48d390(a0);
+                CBaseMonster::FRefreshRoute(a0);
                 break;
             }
         } while ((v47 += 1, v47 <= 7));

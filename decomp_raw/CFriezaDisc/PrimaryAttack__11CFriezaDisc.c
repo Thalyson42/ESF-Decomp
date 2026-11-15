@@ -21,7 +21,7 @@ int PrimaryAttack__11CFriezaDisc(st_4c1380_2 *a0)
 {
     if (!a0->field_1d4)
     {
-        return sub_48a400(a0);
+        return CChargedAttack::PrimaryAttack(a0);
     }
     else if (a0->field_1d4 == 3)
     {
@@ -30,7 +30,7 @@ int PrimaryAttack__11CFriezaDisc(st_4c1380_2 *a0)
     }
     else
     {
-        return sub_48dd00(a0);
+        return CFriezaDisc::HandleDiscStatus(a0);
     }
 }
 

@@ -41,14 +41,14 @@ unsigned int * Shoot__8CRenzoku(st_50e860_2 *a0)
         v0[469] = 0x3f800000;
         a0->field_80->field_334 = 0;
         a0->field_80->field_33c = 1;
-        sub_48c680(a0->field_80, 0);
+        CBasePlayer::DrawChargeBar(a0->field_80, 0);
         if (a0->field_c4 >= a0->field_c8 / 3)
         {
             a0->field_1d4 = a0->field_c4 * 6 / a0->field_c8;
-            return sub_48d4f0(a0->field_80, "renzoku.wav");
+            return CBasePlayer::EmitClassSound(a0->field_80, "renzoku.wav");
         }
-        sub_48de80(a0);
-        v1 = sub_488840(a0);
+        CChargedAttack::SilenceVoice(a0);
+        v1 = CChargedAttack::SilenceWeaponSounds(a0);
         a0->field_1d4 = 0;
         return v1;
     }

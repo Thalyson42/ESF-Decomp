@@ -29,7 +29,7 @@ st_5009a0_0 * RemoveAllAnims__12CPlayerMelee(st_5009a0_1 *a0)
         v0 = v0;
         do
         {
-            i = sub_48b460(v0, i);
+            i = CPlayerMelee::RemoveAnim(v0, i);
         } while (i);
     }
     v0->field_84 = NULL;

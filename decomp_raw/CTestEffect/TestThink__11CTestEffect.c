@@ -50,7 +50,7 @@ typedef struct st_4b4e20_4 {
     unsigned int field_0;
 } st_4b4e20_4;
 
-extern st_4b4e20_4 *g_61692c;
+extern st_4b4e20_4 *g_engfuncs.pfnRandomFloat;
 extern st_4b4e20_0 *gpGlobals;
 
 double TestThink__11CTestEffect(st_4b4e20_2 *a0)
@@ -106,24 +106,24 @@ double TestThink__11CTestEffect(st_4b4e20_2 *a0)
     v5 = *(float *)gpGlobals - v26->field_134;
     if (v26->field_70 <= 23)
     {
-        v4 = sub_48b530("sprites/lgtning.spr", 100);
+        v4 = CBeam::BeamCreate("sprites/lgtning.spr", 100);
         v27 = &a0->field_0->field_8;
         *(float *)&v21 = a0->field_0->field_8;
         *(float *)&v22 = *(float *)&v27[1];
         v28 = *(float *)&v27[2];
         v23 = v28;
-        g_61692c(0xbf800000, 0x3f800000);
+        g_engfuncs.pfnRandomFloat(0xbf800000, 0x3f800000);
         v3 = v28;
-        g_61692c(0xbf800000, 0x3f800000);
+        g_engfuncs.pfnRandomFloat(0xbf800000, 0x3f800000);
         v2 = v28;
-        g_61692c(0xbf800000, 0x3f800000);
+        g_engfuncs.pfnRandomFloat(0xbf800000, 0x3f800000);
         v18 = v3;
         v19 = v2;
         v20 = (float)v29;
         v30 = v3 * v18 + v19 * v19 + v29 * v29;
         v31 = sqrt(v30);
         if (isnan(v31))
-            sub_487dc0(*(unsigned int *)&v30);
+            sqrt(*(unsigned int *)&v30);
         else
             v30 = v31;
         v12 = (float)v30;
@@ -152,8 +152,8 @@ double TestThink__11CTestEffect(st_4b4e20_2 *a0)
         v8 = (float)(v34 + *(float *)&v21);
         v10 = (float)(v35 + *(float *)&v22);
         v11 = v23 + v14;
-        sub_487b80(&v21, &v8, 1, a0->field_0->field_208, &v24);
-        sub_48b880(v4, &v21, &v25);
+        UTIL_TraceLine(&v21, &v8, 1, a0->field_0->field_208, &v24);
+        CBeam::PointsInit(v4, &v21, &v25);
         v9 = 0xff;
         *v4->field_150 = (float)v9;
         v9 = 180;
@@ -196,7 +196,7 @@ double TestThink__11CTestEffect(st_4b4e20_2 *a0)
         {
             do
             {
-                sub_48cc00((&v42->field_74)[j]);
+                UTIL_Remove((&v42->field_74)[j]);
                 j += 1;
             } while ((int)j < a0->field_70);
         }

@@ -35,6 +35,6 @@ unsigned int TeamMatch__15CGameTeamMasterP11CBaseEntity(st_4d0300_3 *a0, st_4d03
     if (!a1)
         return 0;
     v0 = a0->field_60->field_a8(a0);
-    return sub_48c400(a1->field_60->field_a8(a1));
+    return UTIL_TeamsMatch(a1->field_60->field_a8(a1));
 }
 

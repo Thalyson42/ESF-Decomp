@@ -52,7 +52,7 @@ typedef struct st_4b4c80_5 {
     unsigned int field_0;
 } st_4b4c80_5;
 
-extern st_4b4c80_5 *g_616928;
+extern st_4b4c80_5 *g_engfuncs.pfnRandomLong;
 extern st_4b4c80_4 *gpGlobals;
 
 st_4b4c80_0 * CreateGib__11CEnvShooter(st_4b4c80_3 *a0)
@@ -62,11 +62,11 @@ st_4b4c80_0 * CreateGib__11CEnvShooter(st_4b4c80_3 *a0)
     unsigned int *v2;  // ecx
     st_4b4c80_2 *v3;  // edx
 
-    v0 = sub_48a010(0);
-    sub_48d700(v0, a0->field_0->field_b8 + gpGlobals->field_98);
+    v0 = GetClassPtr__H1Z4CGib_PX01_PX01(0);
+    CGib::Spawn(v0, a0->field_0->field_b8 + gpGlobals->field_98);
     v1 = 0;
     if (a0->field_0->field_114 > 1)
-        v1 = g_616928(0, a0->field_0->field_114 - 1);
+        v1 = g_engfuncs.pfnRandomLong(0, a0->field_0->field_114 - 1);
     v0->field_0->field_114 = v1;
     v0->field_2a8 = 0xffffffff;
     v0->field_2b0 = a0->field_74;

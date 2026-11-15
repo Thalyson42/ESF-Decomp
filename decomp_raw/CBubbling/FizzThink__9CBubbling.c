@@ -22,11 +22,11 @@ typedef struct st_4af890_2 {
     unsigned int field_0;
 } st_4af890_2;
 
-extern st_4af890_2 *g_616878;
-extern st_4af890_2 *g_61687c;
-extern st_4af890_2 *g_616880;
-extern st_4af890_2 *g_616888;
-extern st_4af890_2 *g_6168dc;
+extern st_4af890_2 *g_engfuncs.pfnMessageBegin;
+extern st_4af890_2 *g_engfuncs.pfnMessageEnd;
+extern st_4af890_2 *g_engfuncs.pfnWriteByte;
+extern st_4af890_2 *g_engfuncs.pfnWriteShort;
+extern st_4af890_2 *g_engfuncs.pfnIndexOfEdict;
 extern st_4af890_3 *gpGlobals;
 
 unsigned int * FizzThink__9CBubbling(st_4af890_1 *a0)
@@ -38,15 +38,15 @@ unsigned int * FizzThink__9CBubbling(st_4af890_1 *a0)
     unsigned int v0;  // [bp-0x60]
     char v1;  // [bp-0x24]
 
-    sub_48b610(&v1, a0->field_0);
-    g_616878(5, 23, &v1, 0);
-    g_616880(105);
-    v2 = g_6168dc(a0->field_0->field_208);
-    g_616888(v2);
-    g_616888(a0->field_6c);
+    VecBModelOrigin(&v1, a0->field_0);
+    g_engfuncs.pfnMessageBegin(5, 23, &v1, 0);
+    g_engfuncs.pfnWriteByte(105);
+    v2 = g_engfuncs.pfnIndexOfEdict(a0->field_0->field_208);
+    g_engfuncs.pfnWriteShort(v2);
+    g_engfuncs.pfnWriteShort(a0->field_6c);
     v0 = a0->field_64;
-    g_616880(v0);
-    g_61687c(v0);
+    g_engfuncs.pfnWriteByte(v0);
+    g_engfuncs.pfnMessageEnd(v0);
     if (a0->field_68 > 19)
     {
         v3 = a0->field_0;

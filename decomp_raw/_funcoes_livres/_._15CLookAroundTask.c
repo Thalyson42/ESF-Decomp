@@ -20,14 +20,14 @@ typedef struct st_586b40_2 {
 } st_586b40_2;
 
 extern char __vt_15CLookAroundTask;
-extern st_586b40_2 *g_61692c;
+extern st_586b40_2 *g_engfuncs.pfnRandomFloat;
 extern st_586b40_3 *gpGlobals;
 
 int _._15CLookAroundTask(double a0, st_586b40_1 *a1, int a2)
 {
     a1->field_14 = &__vt_15CLookAroundTask;
-    g_61692c(6.0f, 12.0f);
+    g_engfuncs.pfnRandomFloat(6.0f, 12.0f);
     a1->field_8->field_b20 = (float)(6.0 + *(float *)gpGlobals);
-    return sub_488170(a1, a2);
+    return _._9CBaseTask(a1, a2);
 }
 

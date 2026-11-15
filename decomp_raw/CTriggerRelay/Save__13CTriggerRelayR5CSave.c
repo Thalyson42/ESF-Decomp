@@ -3,6 +3,6 @@ extern int _13CTriggerRelay.m_SaveData;
 
 unsigned int Save__13CTriggerRelayR5CSave(int a0, int a1)
 {
-    return (!sub_48acd0(a0, a1) ? 0 : sub_48db60(a1, "CTriggerRelay", a0, &_13CTriggerRelay.m_SaveData, 1));
+    return (!CBaseDelay::Save(a0, a1) ? 0 : CSave::WriteFields(a1, "CTriggerRelay", a0, &_13CTriggerRelay.m_SaveData, 1));
 }
 

@@ -24,8 +24,8 @@ extern char SpinUp__13CFuncRotating;
 extern char SpinDown__13CFuncRotating;
 extern char Rotate__13CFuncRotating;
 extern float g_vecZero;
-extern float g_616790;
-extern float g_616794;
+extern float g_vecZero+4;
+extern float g_vecZero+8;
 extern st_492810_0 *gpGlobals;
 
 int RotatingUse__13CFuncRotatingP11CBaseEntityT18USE_TYPEf(float idx)
@@ -51,28 +51,28 @@ int RotatingUse__13CFuncRotatingP11CBaseEntityT18USE_TYPEf(float idx)
     {
         v0 = &v5->field_5c;
         v6 = 0;
-        if (g_vecZero == *(float *)&v5->field_5c && g_616790 == *(float *)&v0[1])
+        if (g_vecZero == *(float *)&v5->field_5c && g_vecZero+4 == *(float *)&v0[1])
         {
             v7 = *(float *)&v0[2];
-            v8 = _INSERT(v0, 1, (isunordered(g_616794, v7) ? 69 : g_616794 == v7 ? 64 : g_616794 < v7));
-            v9 = _INSERT(v8, 0, g_616794 == v7);
-            v6 = g_616794 == v7;
+            v8 = _INSERT(v0, 1, (isunordered(g_vecZero+8, v7) ? 69 : g_vecZero+8 == v7 ? 64 : g_vecZero+8 < v7));
+            v9 = _INSERT(v8, 0, g_vecZero+8 == v7);
+            v6 = g_vecZero+8 == v7;
         }
         if (!v6)
             goto LABEL_492937;
         *(unsigned int *)(*(unsigned int *)&idx + 12) = _INSERT(v9, 0, 0) | 0xffff0000;
         *(char **)(*(unsigned int *)&idx + 16) = &SpinUp__13CFuncRotating;
-        sub_489390(*(int *)(*(int *)idx + 520), 6, *(int *)(*(int *)idx + 500) + gpGlobals->field_98, 0.009999999776482582f, *(float *)(*(unsigned int *)&idx + 104), 0, 30);
+        EMIT_SOUND_DYN(*(int *)(*(int *)idx + 520), 6, *(int *)(*(int *)idx + 500) + gpGlobals->field_98, 0.009999999776482582f, *(float *)(*(unsigned int *)&idx + 104), 0, 30);
     }
     else
     {
         v11 = *(int *)idx + 92;
         v12 = 0;
-        if (g_vecZero == *(float *)(*(int *)idx + 92) && g_616790 == *(float *)&v11[1])
-            v12 = g_616794 == *(float *)&v11[2];
+        if (g_vecZero == *(float *)(*(int *)idx + 92) && g_vecZero+4 == *(float *)&v11[1])
+            v12 = g_vecZero+8 == *(float *)&v11[2];
         if (v12)
         {
-            sub_489390(*(int *)(*(int *)idx + 520), 6, *(int *)(*(int *)idx + 500) + gpGlobals->field_98, *(float *)(*(unsigned int *)&idx + 108), *(float *)(*(unsigned int *)&idx + 104), 0, 100);
+            EMIT_SOUND_DYN(*(int *)(*(int *)idx + 520), 6, *(int *)(*(int *)idx + 500) + gpGlobals->field_98, *(float *)(*(unsigned int *)&idx + 108), *(float *)(*(unsigned int *)&idx + 104), 0, 100);
             v15 = *(int *)idx;
             v16 = *&v15->field_1f8;
             v17 = &v15->field_44;
@@ -84,7 +84,7 @@ int RotatingUse__13CFuncRotatingP11CBaseEntityT18USE_TYPEf(float idx)
             *(float *)&v15->field_64 = v3;
             *(unsigned int *)(*(unsigned int *)&idx + 12) = _INSERT(v3, 0, 0) | 0xffff0000;
             *(char **)(*(unsigned int *)&idx + 16) = &Rotate__13CFuncRotating;
-            return sub_488570(idx);
+            return CFuncRotating::Rotate(idx);
         }
 LABEL_492937:
         *(unsigned int *)(*(unsigned int *)&idx + 12) = _INSERT(v9, 0, 0) | 0xffff0000;

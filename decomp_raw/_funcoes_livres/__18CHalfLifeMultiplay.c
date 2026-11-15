@@ -13,15 +13,15 @@ typedef struct st_4db6e0_2 {
     unsigned int field_0;
 } st_4db6e0_2;
 
-extern float g_5bd054;
-extern float g_5bd07c;
+extern float allowspectator+12;
+extern float characterlimit+12;
 extern char __vt_10CGameRules;
 extern unsigned int g_flIntermissionStartTime;
 extern char __vt_18CHalfLifeMultiplay;
-extern st_4db6e0_2 *g_61685c;
-extern st_4db6e0_2 *g_6168a8;
-extern st_4db6e0_2 *g_6168b4;
-extern st_4db6e0_2 *g_61698c;
+extern st_4db6e0_2 *g_engfuncs.pfnServerCommand;
+extern st_4db6e0_2 *g_engfuncs.pfnCVarGetString;
+extern st_4db6e0_2 *g_engfuncs.pfnAlertMessage;
+extern st_4db6e0_2 *g_engfuncs.pfnIsDedicatedServer;
 extern st_4db6e0_1 *gpGlobals;
 extern int g_VoiceGameMgr;
 extern int g_GameMgrHelper;
@@ -43,18 +43,18 @@ float __18CHalfLifeMultiplay(float a0)
     v2 = gpGlobals->field_90;
     v1 = &g_GameMgrHelper;
     v0 = &g_VoiceGameMgr;
-    sub_489ae0(v0, v1, v2);
+    CVoiceGameMgr::Init(v0, v1, v2);
     *(unsigned int *)(*(unsigned int *)&a0 + 72) = 0;
     g_flIntermissionStartTime = 0;
     v6 = (unsigned int *)a0;
-    *(float *)&v6[20] = g_5bd054;
-    *(float *)&v6[21] = g_5bd07c;
-    if (g_61698c(v0, v1, v2))
+    *(float *)&v6[20] = allowspectator+12;
+    *(float *)&v6[21] = characterlimit+12;
+    if (g_engfuncs.pfnIsDedicatedServer(v0, v1, v2))
     {
-        v7 = g_6168a8("servercfgfile");
+        v7 = g_engfuncs.pfnCVarGetString("servercfgfile");
         if (!v7)
         {
-            sub_488630(a0);
+            CGameRules::SetMeleeSettings(a0);
             return a0;
         }
         if (*v7)
@@ -65,17 +65,17 @@ float __18CHalfLifeMultiplay(float a0)
     }
     else
     {
-        v7 = g_6168a8("lservercfgfile");
+        v7 = g_engfuncs.pfnCVarGetString("lservercfgfile");
         if (v7 && *v7)
         {
             v8 = "Executing listen server config file\n";
 LABEL_4db7d2:
-            g_6168b4(1, v8);
-            sub_48d990(&v3, "exec %s\n", v7);
-            g_61685c(&v3);
+            g_engfuncs.pfnAlertMessage(1, v8);
+            sprintf@GLIBC_2.0(&v3, "exec %s\n", v7);
+            g_engfuncs.pfnServerCommand(&v3);
         }
     }
-    sub_488630(a0);
+    CGameRules::SetMeleeSettings(a0);
     return a0;
 }
 

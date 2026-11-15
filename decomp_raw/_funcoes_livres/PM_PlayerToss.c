@@ -11,6 +11,6 @@ int PM_PlayerToss(void)
         *(float *)(i * 4 + pmove + 92) = *(float *)(i * 4 + pmove + 576);
         i += 1;
     } while (i <= 2);
-    return sub_48dbe0();
+    return PM_FlyMove();
 }
 

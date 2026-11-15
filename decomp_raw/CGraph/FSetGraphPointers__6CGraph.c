@@ -18,9 +18,9 @@ typedef struct st_4e41f0_1 {
     unsigned int field_0;
 } st_4e41f0_1;
 
-extern st_4e41f0_1 *g_6167f8;
-extern st_4e41f0_1 *g_6168b4;
-extern st_4e41f0_1 *g_6168d8;
+extern st_4e41f0_1 *g_engfuncs.pfnFindEntityByString;
+extern st_4e41f0_1 *g_engfuncs.pfnAlertMessage;
+extern st_4e41f0_1 *g_engfuncs.pfnEntOffsetOfPEntity;
 
 unsigned int FSetGraphPointers__6CGraph(st_4e41f0_0 *a0)
 {
@@ -43,13 +43,13 @@ unsigned int FSetGraphPointers__6CGraph(st_4e41f0_0 *a0)
             {
                 v2 = *(int *)(a0->field_10 + v4 + 12);
                 v3 = 0;
-                v5 = g_6167f8(0, "model", &v2);
+                v5 = g_engfuncs.pfnFindEntityByString(0, "model", &v2);
                 v0 = 0;
-                if (!v5 || !g_6168d8(v5))
+                if (!v5 || !g_engfuncs.pfnEntOffsetOfPEntity(v5))
                     v0 = 1;
                 if (v0)
                 {
-                    g_6168b4(2, "**Could not find model %s\n", &v2);
+                    g_engfuncs.pfnAlertMessage(2, "**Could not find model %s\n", &v2);
                     *(unsigned int *)(a0->field_10 + v1 * 24 + 8) = 0;
                 }
                 else

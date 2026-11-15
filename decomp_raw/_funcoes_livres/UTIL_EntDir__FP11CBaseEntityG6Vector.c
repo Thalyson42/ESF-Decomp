@@ -24,8 +24,8 @@ typedef struct st_57c4c0_2 {
 } st_57c4c0_2;
 
 extern float g_vecZero;
-extern float g_616790;
-extern float g_616794;
+extern float g_vecZero+4;
+extern float g_vecZero+8;
 extern st_57c4c0_2 *gpGlobals;
 
 unsigned int UTIL_EntDir__FP11CBaseEntityG6Vector(st_57c4c0_0 **a0, st_57c4c0_1 *a1)
@@ -89,12 +89,12 @@ unsigned int UTIL_EntDir__FP11CBaseEntityG6Vector(st_57c4c0_0 **a0, st_57c4c0_1 
     v19 = *(float *)&v21[2];
     v22 = 0;
     v14 = g_vecZero;
-    v15 = g_616790;
-    v16 = g_616794;
+    v15 = g_vecZero+4;
+    v16 = g_vecZero+8;
     v11 = g_vecZero;
-    v12 = g_616790;
-    v13 = g_616794;
-    sub_48a800(v20 + 20);
+    v12 = g_vecZero+4;
+    v13 = g_vecZero+8;
+    UTIL_MakeVectors(v20 + 20);
     v23 = &gpGlobals->field_40;
     v1 = (float)(100.0 * gpGlobals->field_40);
     v2 = (float)(100.0 * *(float *)&v23[1]);
@@ -126,7 +126,7 @@ unsigned int UTIL_EntDir__FP11CBaseEntityG6Vector(st_57c4c0_0 **a0, st_57c4c0_1 
     v30 = v27 * v27 + v28 * v28 + v29 * v29;
     v31 = sqrt(v30);
     if (isnan(v31))
-        sub_487dc0(*(unsigned int *)&v30);
+        sqrt(*(unsigned int *)&v30);
     else
         v30 = v31;
     v0 = (float)v30;
@@ -139,7 +139,7 @@ unsigned int UTIL_EntDir__FP11CBaseEntityG6Vector(st_57c4c0_0 **a0, st_57c4c0_1 
     v35 = v32 * v32 + v33 * v33 + v34 * v34;
     v36 = sqrt(v35);
     if (isnan(v36))
-        sub_487dc0(*(unsigned int *)&v35);
+        sqrt(*(unsigned int *)&v35);
     else
         v35 = v36;
     v7 = (float)v35;
@@ -190,7 +190,7 @@ unsigned int UTIL_EntDir__FP11CBaseEntityG6Vector(st_57c4c0_0 **a0, st_57c4c0_1 
     v44 = v41 * v41 + v42 * v42 + v43 * v43;
     v45 = sqrt(v44);
     if (isnan(v45))
-        sub_487dc0(*(unsigned int *)&v44);
+        sqrt(*(unsigned int *)&v44);
     else
         v44 = v45;
     v0 = (float)v44;
@@ -203,7 +203,7 @@ unsigned int UTIL_EntDir__FP11CBaseEntityG6Vector(st_57c4c0_0 **a0, st_57c4c0_1 
     v49 = v46 * v46 + v47 * v47 + v48 * v48;
     v50 = sqrt(v49);
     if (isnan(v50))
-        sub_487dc0(*(unsigned int *)&v49);
+        sqrt(*(unsigned int *)&v49);
     else
         v49 = v50;
     v7 = (float)v49;

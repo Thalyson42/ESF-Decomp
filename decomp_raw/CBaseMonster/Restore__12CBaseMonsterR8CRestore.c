@@ -16,14 +16,14 @@ unsigned int Restore__12CBaseMonsterR8CRestore(st_4d3b60_0 *a0, int a1)
 {
     unsigned int v0;  // edi
 
-    if (!sub_489eb0(a0, a1))
+    if (!CBaseToggle::Restore(a0, a1))
         return 0;
-    v0 = sub_48a980(a1, "CBaseMonster", a0, &_12CBaseMonster.m_SaveData, 37);
-    sub_48bce0(a0);
+    v0 = CRestore::ReadFields(a1, "CBaseMonster", a0, &_12CBaseMonster.m_SaveData, 37);
+    CBaseMonster::RouteClear(a0);
     a0->field_18c = 0;
     a0->field_188 = 0;
     a0->field_174 = 0;
-    if (sub_48d8b0(&a0->field_108))
+    if (EHANDLE::__opi(&a0->field_108))
         return v0;
     a0->field_104 = 0;
     return v0;

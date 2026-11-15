@@ -18,7 +18,7 @@ typedef struct st_4e5260_2 {
     unsigned int field_0;
 } st_4e5260_2;
 
-extern st_4e5260_2 *g_6168b4;
+extern st_4e5260_2 *g_engfuncs.pfnAlertMessage;
 
 st_4e5260_1 * ComputeStaticRoutingTables__6CGraph(st_4e5260_1 *a0)
 {
@@ -85,11 +85,11 @@ st_4e5260_1 * ComputeStaticRoutingTables__6CGraph(st_4e5260_1 *a0)
     unsigned int *v21;  // [bp-0xc]
     unsigned short *v22;  // [bp-0x8]
 
-    v22 = sub_48c340(a0->field_18 * a0->field_18 * 2);
-    v21 = sub_48c340(a0->field_18 * 4);
+    v22 = __builtin_vec_new(a0->field_18 * a0->field_18 * 2);
+    v21 = __builtin_vec_new(a0->field_18 * 4);
     v23 = a0;
-    v20 = sub_48c340(v23->field_18 * 2);
-    v19 = sub_48c340(v23->field_18 * 2);
+    v20 = __builtin_vec_new(v23->field_18 * 2);
+    v19 = __builtin_vec_new(v23->field_18 * 2);
     if (v22)
     {
         if (v21 && v20 && v19)
@@ -139,7 +139,7 @@ st_4e5260_1 * ComputeStaticRoutingTables__6CGraph(st_4e5260_1 *a0)
                                     v1 = v0;
                                     if (v22[v1 + a0->field_18 * iter1] == 0xffff)
                                     {
-                                        v2 = sub_48ad80(a0, v21, iter1, v1, i, v15);
+                                        v2 = CGraph::FindShortestPath(a0, v21, iter1, v1, i, v15);
                                         if (v2 > 1)
                                         {
                                             idx = 0;
@@ -226,7 +226,7 @@ st_4e5260_1 * ComputeStaticRoutingTables__6CGraph(st_4e5260_1 *a0)
                                             }
                                             else
                                             {
-                                                g_6168b4(2, "Nodes need sorting (%d,%d)!\n", v10, iter1);
+                                                g_engfuncs.pfnAlertMessage(2, "Nodes need sorting (%d,%d)!\n", v10, iter1);
                                             }
                                             v30 = 0;
                                             if (!v6)
@@ -305,7 +305,7 @@ LABEL_4e5621:
                                 }
                                 else
                                 {
-                                    g_6168b4(2, "Nodes need sorting (%d,%d)!\n", v10, iter1);
+                                    g_engfuncs.pfnAlertMessage(2, "Nodes need sorting (%d,%d)!\n", v10, iter1);
                                 }
                             }
                             if (v9)
@@ -377,12 +377,12 @@ LABEL_4e5621:
                                     }
                                 }
 LABEL_4e5760:
-                                v58 = sub_48ccc0(1, v5 + a0->field_20);
+                                v58 = calloc@GLIBC_2.0(1, v5 + a0->field_20);
                                 v59 = a0;
-                                sub_48c4b0(v58, v59->field_14, v59->field_20);
-                                sub_48cf10(v59->field_14);
+                                memcpy@GLIBC_2.0(v58, v59->field_14, v59->field_20);
+                                free@GLIBC_2.0(v59->field_14);
                                 v59->field_14 = v58;
-                                sub_48c4b0(v58 + v59->field_20, v19, v5);
+                                memcpy@GLIBC_2.0(v58 + v59->field_20, v19, v5);
                                 v60 = a0;
                                 *(struct st_4e5260_0 **)((char *)v3 + v59->field_c + 88 * iter1 + 40) = v60->field_20;
                                 v60->field_20 = v60->field_20 + v5;
@@ -391,9 +391,9 @@ LABEL_4e5760:
                             else
                             {
                                 a0->field_20 = v5;
-                                v61 = sub_48ccc0(1, v5);
+                                v61 = calloc@GLIBC_2.0(1, v5);
                                 a0->field_14 = v61;
-                                sub_48c4b0(v61, v19, v5);
+                                memcpy@GLIBC_2.0(v61, v19, v5);
                                 *(unsigned int *)((char *)v3 + a0->field_c + 88 * iter1 + 40) = 0;
                                 iter2 += node;
                             }
@@ -403,17 +403,17 @@ LABEL_4e5760:
                 } while (j <= 1);
                 i += 1;
             } while (i <= 3);
-            g_6168b4(2, "Size of Routes = %d\n", iter2);
+            g_engfuncs.pfnAlertMessage(2, "Size of Routes = %d\n", iter2);
         }
         if (v22)
-            sub_48d4e0(v22);
+            __builtin_delete(v22);
     }
     if (v20)
-        sub_48d4e0(v20);
+        __builtin_delete(v20);
     if (v19)
-        sub_48d4e0(v19);
+        __builtin_delete(v19);
     if (v21)
-        sub_48d4e0(v21);
+        __builtin_delete(v21);
     a0->field_8 = 1;
     return a0;
 }

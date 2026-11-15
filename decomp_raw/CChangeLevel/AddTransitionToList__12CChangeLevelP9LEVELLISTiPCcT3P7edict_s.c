@@ -17,14 +17,14 @@ unsigned int AddTransitionToList__12CChangeLevelP9LEVELLISTiPCcT3P7edict_s(unsig
             do
             {
                 v1 = v0 * 80;
-                if (*(int *)(a0 + v1 + 64) == a4 && !sub_488af0(v1 + a0, a2))
+                if (*(int *)(a0 + v1 + 64) == a4 && !strcmp@GLIBC_2.0(v1 + a0, a2))
                     goto LABEL_52ddd5;
             } while ((v0 += 1, v0 < a1));
         }
         v2 = a1 * 80;
         v3 = a0 + v2;
-        sub_48e110(v3, a2);
-        sub_48e110(v3 + 32, a3);
+        strcpy@GLIBC_2.0(v3, a2);
+        strcpy@GLIBC_2.0(v3 + 32, a3);
         *(unsigned int **)(a0 + v2 + 64) = a4;
         v4 = (!a4 ? NULL : a4 + 32);
         v5 = a1 * 80 + a0;

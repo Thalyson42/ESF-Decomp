@@ -6,6 +6,6 @@ typedef struct st_4c9930_0 {
 
 int EnableChargeSprite__11CKamehameha(st_4c9930_0 *a0)
 {
-    return sub_487b90(a0->field_20c);
+    return CSprite::TurnOn(a0->field_20c);
 }
 

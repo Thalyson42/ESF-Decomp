@@ -3,7 +3,7 @@ typedef struct st_552350_0 {
     unsigned int field_0;
 } st_552350_0;
 
-extern st_552350_0 *g_616928;
+extern st_552350_0 *g_engfuncs.pfnRandomLong;
 
 char SetMoveAwayDir__13CKameTorpTask(void* a0)
 {
@@ -16,25 +16,25 @@ char SetMoveAwayDir__13CKameTorpTask(void* a0)
 
     *(unsigned int *)&a0[28] = 0;
     v2 = 0;
-    v3 = g_616928(0, 2);
+    v3 = g_engfuncs.pfnRandomLong(0, 2);
     if (v3)
     {
         if (v3 == 1)
         {
-            if (!(char)sub_487c70((int)a0[12], 16, 35.0f))
+            if (!(char)CheckForCollide((int)a0[12], 16, 35.0f))
             {
                 *(char *)&a0[28] = (char)a0[28] | 16;
                 v2 = 1;
                 goto LABEL_552442;
             }
-            else if (!(char)sub_487c70((int)a0[12], 8, 35.0f))
+            else if (!(char)CheckForCollide((int)a0[12], 8, 35.0f))
             {
                 goto LABEL_552409;
             }
         }
         else
         {
-            if (!(char)sub_487c70((int)a0[12], 8, 35.0f))
+            if (!(char)CheckForCollide((int)a0[12], 8, 35.0f))
             {
 LABEL_552409:
                 *(char *)&a0[28] = (char)a0[28] | 8;
@@ -44,7 +44,7 @@ LABEL_552442:
                 v0 = 0;
                 goto LABEL_55245e;
             }
-            else if (!(char)sub_487c70((int)a0[12], 16, 35.0f))
+            else if (!(char)CheckForCollide((int)a0[12], 16, 35.0f))
             {
                 *(char *)&a0[28] = (char)a0[28] | 16;
                 v2 = 1;
@@ -56,25 +56,25 @@ LABEL_552442:
     v1 = 2;
     v0 = 1;
 LABEL_55245e:
-    v4 = g_616928(v0, v1);
+    v4 = g_engfuncs.pfnRandomLong(v0, v1);
     if (v4)
     {
         if (v4 == 1)
         {
-            if (!(char)sub_487c70((int)a0[12], 2, 35.0f))
+            if (!(char)CheckForCollide((int)a0[12], 2, 35.0f))
             {
                 *(char *)&a0[28] = (char)a0[28] | 2;
                 v2 = 1;
                 goto LABEL_552520;
             }
-            else if (!(char)sub_487c70((int)a0[12], 4, 35.0f))
+            else if (!(char)CheckForCollide((int)a0[12], 4, 35.0f))
             {
                 goto LABEL_5524e7;
             }
         }
         else
         {
-            if (!(char)sub_487c70((int)a0[12], 4, 35.0f))
+            if (!(char)CheckForCollide((int)a0[12], 4, 35.0f))
             {
 LABEL_5524e7:
                 *(char *)&a0[28] = (char)a0[28] | 4;
@@ -84,7 +84,7 @@ LABEL_552520:
                 v0 = 0;
                 goto LABEL_55253d;
             }
-            else if (!(char)sub_487c70((int)a0[12], 2, 35.0f))
+            else if (!(char)CheckForCollide((int)a0[12], 2, 35.0f))
             {
                 *(char *)&a0[28] = (char)a0[28] | 2;
                 v2 = 1;
@@ -96,23 +96,23 @@ LABEL_552520:
     v1 = 2;
     v0 = 1;
 LABEL_55253d:
-    v5 = g_616928(v0, v1);
+    v5 = g_engfuncs.pfnRandomLong(v0, v1);
     if (!v5)
         return v2;
     if (v5 == 1)
     {
-        if (!(char)sub_487c70((int)a0[12], 32, 35.0f))
+        if (!(char)CheckForCollide((int)a0[12], 32, 35.0f))
             goto LABEL_5525df;
-        if ((char)sub_487c70((int)a0[12], 64, 35.0f))
+        if ((char)CheckForCollide((int)a0[12], 64, 35.0f))
             return v2;
 LABEL_552593:
         *(char *)&a0[28] = (char)a0[28] | 64;
     }
     else
     {
-        if (!(char)sub_487c70((int)a0[12], 64, 35.0f))
+        if (!(char)CheckForCollide((int)a0[12], 64, 35.0f))
             goto LABEL_552593;
-        if ((char)sub_487c70((int)a0[12], 32, 35.0f))
+        if ((char)CheckForCollide((int)a0[12], 32, 35.0f))
             return v2;
 LABEL_5525df:
         *(char *)&a0[28] = (char)a0[28] | 32;

@@ -20,8 +20,8 @@ typedef struct st_4c89e0_5 {
 } st_4c89e0_5;
 
 extern char _GLOBAL_OFFSET_TABLE_;
-extern st_4c89e0_5 *g_616818;
-extern st_4c89e0_5 *g_6168b4;
+extern st_4c89e0_5 *g_engfuncs.pfnRemoveEntity;
+extern st_4c89e0_5 *g_engfuncs.pfnAlertMessage;
 
 int Spawn__10CWorldItem(st_4c89e0_0 *a0)
 {
@@ -35,10 +35,10 @@ int Spawn__10CWorldItem(st_4c89e0_0 *a0)
         v0 = _INSERT(*(uint160_t *)((void*)&v0 + 12), 12, a0->field_64);
         *(char **)((char *)&v0 + 8) = "unable to create world_item %d\n";
         *(unsigned int *)((char *)&v0 + 4) = 1;
-        g_6168b4(v1, a0, v2);
+        g_engfuncs.pfnAlertMessage(v1, a0, v2);
         esp = (char *)&v0 + 16;
         *(unsigned int *)(esp - 16) = a0->field_0->field_208;
-        return g_616818(v1);
+        return g_engfuncs.pfnRemoveEntity(v1);
     }
     goto *((void *)(&(&_GLOBAL_OFFSET_TABLE_)[-1 * *(int *)(&(&_GLOBAL_OFFSET_TABLE_)[4 * a0->field_64] - 1356148)]));
 }

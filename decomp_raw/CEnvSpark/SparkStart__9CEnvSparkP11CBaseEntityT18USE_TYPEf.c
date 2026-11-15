@@ -26,7 +26,7 @@ typedef struct st_498cc0_3 {
 
 extern char SparkThink__9CEnvSpark;
 extern char SparkStop__9CEnvSparkP11CBaseEntityT18USE_TYPEf;
-extern st_498cc0_3 *g_61692c;
+extern st_498cc0_3 *g_engfuncs.pfnRandomFloat;
 extern st_498cc0_0 *gpGlobals;
 
 unsigned int * SparkStart__9CEnvSparkP11CBaseEntityT18USE_TYPEf(double a0, st_498cc0_2 *a1)
@@ -38,7 +38,7 @@ unsigned int * SparkStart__9CEnvSparkP11CBaseEntityT18USE_TYPEf(double a0, st_49
     a1->field_20 = &SparkStop__9CEnvSparkP11CBaseEntityT18USE_TYPEf;
     a1->field_c = _INSERT(v1, 0, 0) | 0xffff0000;
     a1->field_10 = &SparkThink__9CEnvSpark;
-    g_61692c(0, *(float *)&a1->field_64);
+    g_engfuncs.pfnRandomFloat(0, *(float *)&a1->field_64);
     a1->field_0->field_104 = (float)(a0 + 0.1 + *(float *)gpGlobals);
     return gpGlobals;
 }

@@ -15,6 +15,6 @@ unsigned int _._9exception(unsigned int *a0, char a1)
     *a0 = v2;
     if (!(a1 & 1))
         return v2;
-    return sub_48d4e0(a0);
+    return __builtin_delete(a0);
 }
 

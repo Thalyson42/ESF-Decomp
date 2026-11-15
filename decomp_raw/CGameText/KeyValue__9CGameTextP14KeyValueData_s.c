@@ -51,37 +51,37 @@ unsigned int KeyValue__9CGameTextP14KeyValueData_s(st_4cf450_1 *a0, st_4cf450_0 
     char v2;  // [bp-0x20]
     char v3;  // [bp-0x1c]
 
-    if (!sub_488af0(a1->field_4, "channel"))
+    if (!strcmp@GLIBC_2.0(a1->field_4, "channel"))
     {
-        v4 = sub_48b500(a1->field_8, 0, 10, 0);
+        v4 = __strtol_internal@GLIBC_2.0(a1->field_8, 0, 10, 0);
         a0->field_8c = v4;
         a1->field_c = 1;
         return v4;
     }
-    else if (!sub_488af0(a1->field_4, L"xy晥敦瑣挀汯牯挀汯牯2慦敤湩昀摡潥瑵栀汯瑤浩e硦楴敭琀慥業摮硥琀楲杧牥瑳瑡e"))
+    else if (!strcmp@GLIBC_2.0(a1->field_4, L"xy晥敦瑣挀汯牯挀汯牯2慦敤湩昀摡潥瑵栀汯瑤浩e硦楴敭琀慥業摮硥琀楲杧牥瑳瑡e"))
     {
-        v5 = sub_487fc0(a1->field_8, 0, 0);
+        v5 = __strtod_internal@GLIBC_2.0(a1->field_8, 0, 0);
         a0->field_68 = (float)v6;
         a1->field_c = 1;
         return v5;
     }
-    else if (!sub_488af0(a1->field_4, "y"))
+    else if (!strcmp@GLIBC_2.0(a1->field_4, "y"))
     {
-        v7 = sub_487fc0(a1->field_8, 0, 0);
+        v7 = __strtod_internal@GLIBC_2.0(a1->field_8, 0, 0);
         a0->field_6c = (float)v8;
         a1->field_c = 1;
         return v7;
     }
-    else if (!sub_488af0(a1->field_4, "effect"))
+    else if (!strcmp@GLIBC_2.0(a1->field_4, "effect"))
     {
-        v9 = sub_48b500(a1->field_8, 0, 10, 0);
+        v9 = __strtol_internal@GLIBC_2.0(a1->field_8, 0, 10, 0);
         a0->field_70 = v9;
         a1->field_c = 1;
         return v9;
     }
-    else if (!sub_488af0(a1->field_4, "color"))
+    else if (!strcmp@GLIBC_2.0(a1->field_4, "color"))
     {
-        v10 = sub_48c320(&v0, 4, a1->field_8);
+        v10 = UTIL_StringToIntArray(&v0, 4, a1->field_8);
         a0->field_74 = v0;
         a0->field_75 = v1;
         a0->field_76 = v2;
@@ -90,9 +90,9 @@ unsigned int KeyValue__9CGameTextP14KeyValueData_s(st_4cf450_1 *a0, st_4cf450_0 
         a1->field_c = 1;
         return v11;
     }
-    else if (!sub_488af0(a1->field_4, "color2"))
+    else if (!strcmp@GLIBC_2.0(a1->field_4, "color2"))
     {
-        v12 = sub_48c320(&v0, 4, a1->field_8);
+        v12 = UTIL_StringToIntArray(&v0, 4, a1->field_8);
         a0->field_78 = v0;
         a0->field_79 = v1;
         a0->field_7a = v2;
@@ -101,37 +101,37 @@ unsigned int KeyValue__9CGameTextP14KeyValueData_s(st_4cf450_1 *a0, st_4cf450_0 
         a1->field_c = 1;
         return v13;
     }
-    else if (!sub_488af0(a1->field_4, "fadein"))
+    else if (!strcmp@GLIBC_2.0(a1->field_4, "fadein"))
     {
-        v14 = sub_487fc0(a1->field_8, 0, 0);
+        v14 = __strtod_internal@GLIBC_2.0(a1->field_8, 0, 0);
         a0->field_7c = (float)v15;
         a1->field_c = 1;
         return v14;
     }
-    else if (!sub_488af0(a1->field_4, "fadeout"))
+    else if (!strcmp@GLIBC_2.0(a1->field_4, "fadeout"))
     {
-        v16 = sub_487fc0(a1->field_8, 0, 0);
+        v16 = __strtod_internal@GLIBC_2.0(a1->field_8, 0, 0);
         a0->field_80 = (float)v17;
         a1->field_c = 1;
         return v16;
     }
-    else if (!sub_488af0(a1->field_4, "holdtime"))
+    else if (!strcmp@GLIBC_2.0(a1->field_4, "holdtime"))
     {
-        v18 = sub_487fc0(a1->field_8, 0, 0);
+        v18 = __strtod_internal@GLIBC_2.0(a1->field_8, 0, 0);
         a0->field_84 = (float)v19;
         a1->field_c = 1;
         return v18;
     }
-    else if (!sub_488af0(a1->field_4, "fxtime"))
+    else if (!strcmp@GLIBC_2.0(a1->field_4, "fxtime"))
     {
-        v20 = sub_487fc0(a1->field_8, 0, 0);
+        v20 = __strtod_internal@GLIBC_2.0(a1->field_8, 0, 0);
         a0->field_88 = (float)v21;
         a1->field_c = 1;
         return v20;
     }
     else
     {
-        return sub_489590(a0, a1);
+        return CRuleEntity::KeyValue(a0, a1);
     }
 }
 

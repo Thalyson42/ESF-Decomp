@@ -42,7 +42,7 @@ int FInViewCone__12CBaseMonsterP6Vector(st_4a6900_0 *a0, float *a1)
     float v12;  // [bp-0x1c]
     float v13;  // [bp-0x18]
 
-    sub_48a800(a0->field_0 + 4);
+    UTIL_MakeVectors(a0->field_0 + 4);
     v14 = &a0->field_0->field_8;
     v10 = *a1 - a0->field_0->field_8;
     v11 = a1[1] - *(float *)&v14[1];
@@ -54,7 +54,7 @@ int FInViewCone__12CBaseMonsterP6Vector(st_4a6900_0 *a0, float *a1)
     v15 = v6 * v6 + v7 * v7;
     v16 = sqrt(v15);
     if (isnan(v16))
-        sub_487dc0(*(unsigned int *)&v15);
+        sqrt(*(unsigned int *)&v15);
     else
         v15 = v16;
     v13 = (float)v15;

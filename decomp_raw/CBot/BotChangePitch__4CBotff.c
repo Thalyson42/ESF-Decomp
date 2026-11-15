@@ -4,7 +4,7 @@ typedef struct st_570240_0 {
     float field_74;
 } st_570240_0;
 
-extern float g_6253c0;
+extern float BotManager+3392;
 
 double BotChangePitch__4CBotff(st_570240_0 **a0, float a1, float a2)
 {
@@ -18,7 +18,7 @@ double BotChangePitch__4CBotff(st_570240_0 **a0, float a1, float a2)
     v0 = a2;
     v1 = -*a0->field_74;
     v2 = fabs(v1 - a2);
-    v3 = a1 * g_6253c0;
+    v3 = a1 * BotManager+3392;
     if (v3 > v2)
         v3 = v2;
     if ((isnan(v1) ? 0x44 : 0.0 == v1 ? 63 : 0.0 < v1 ? 0 : 0xff) < 64)

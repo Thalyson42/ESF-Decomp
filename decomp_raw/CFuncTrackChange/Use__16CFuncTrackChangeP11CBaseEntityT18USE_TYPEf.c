@@ -15,14 +15,14 @@ int Use__16CFuncTrackChangeP11CBaseEntityT18USE_TYPEf(float idx)
     {
         v1 = *(int *)(*(unsigned int *)&idx + 296);
 LABEL_4ed8ca:
-        *(unsigned int *)(*(unsigned int *)&idx + 316) = sub_48a950(idx, v1);
+        *(unsigned int *)(*(unsigned int *)&idx + 316) = CFuncTrackChange::EvaluateTrain(idx, v1);
     }
     else
     {
         *(unsigned int *)(*(unsigned int *)&idx + 316) = 1;
     }
     if (*(int *)(*(unsigned int *)&idx + 316) == 1)
-        return sub_489390(*(int *)(*(int *)idx + 520), 2, "buttons/button11.wav", 0x3f800000, 0.800000011920929f, 0, 100);
+        return EMIT_SOUND_DYN(*(int *)(*(int *)idx + 520), 2, "buttons/button11.wav", 0x3f800000, 0.800000011920929f, 0, 100);
     *(unsigned int *)(*(unsigned int *)&idx + 324) = 0;
     if (*(int *)(*(unsigned int *)&idx + 128))
         return (*(int *)(*(int *)(*(unsigned int *)&idx + 96) + 240))(idx);

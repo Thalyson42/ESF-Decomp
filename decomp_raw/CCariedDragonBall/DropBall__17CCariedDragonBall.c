@@ -57,7 +57,7 @@ st_4aeef0_2 * DropBall__17CCariedDragonBall(st_4aeef0_6 *a0)
     v7 = a0->field_80;
     if (!v7->field_760)
         return v7;
-    sub_48a800(&v7->field_0[2].padding_0[28]);
+    UTIL_MakeVectors(&v7->field_0[2].padding_0[28]);
     a0->field_80->field_60->field_1e0(&v6, a0->field_80);
     v8 = a0->field_80;
     v9 = &gpGlobals->field_28;
@@ -70,7 +70,7 @@ st_4aeef0_2 * DropBall__17CCariedDragonBall(st_4aeef0_6 *a0)
     v3 = (float)(v10 + *(float *)&v8->field_0->field_20);
     v4 = (float)(v11 + *(float *)&v12[1]);
     v5 = *(float *)&v12[2] + v2;
-    sub_4885c0(v8->field_0, &v6, &v3, v8->field_760);
+    CDragonBall::ThrowDragonBall(v8->field_0, &v6, &v3, v8->field_760);
     v13 = a0->field_80;
     v13->field_760 = 0;
     return v13;

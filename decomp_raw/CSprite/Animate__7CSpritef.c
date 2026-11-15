@@ -24,7 +24,7 @@ unsigned int Animate__7CSpritef(st_4b3c20_1 *a0, float a1)
     }
     else if (a0->field_0->field_1a0 & 2)
     {
-        v1 = sub_48df90(a0);
+        v1 = CSprite::TurnOff(a0);
         return v1;
     }
     else

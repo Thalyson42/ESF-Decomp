@@ -13,7 +13,7 @@ typedef struct st_56a270_0 {
 } st_56a270_0;
 
 extern unsigned int g_teamplay;
-extern st_56a270_0 *g_6168a4;
+extern st_56a270_0 *g_engfuncs.pfnCVarGetFloat;
 extern float GatherDBPosForTeamGood[3];
 extern float GatherDBPosForTeamEvil[3];
 extern unsigned int num_waypoints;
@@ -71,14 +71,14 @@ char SearchDragonBall__4CBot(float idx)
 
     if (!g_teamplay)
         return 0;
-    g_6168a4("mp_gamemode");
+    g_engfuncs.pfnCVarGetFloat("mp_gamemode");
     if (v28 == 2.0)
     {
         if (*(int *)(*(unsigned int *)&idx + 1888))
         {
             return 1;
         }
-        else if (!(char)sub_488740() && (char)sub_48e050())
+        else if (!(char)UTIL_DBsAreGathered() && (char)UTIL_DBsAreActive())
         {
             v29 = NULL;
             v5 = NULL;
@@ -97,14 +97,14 @@ char SearchDragonBall__4CBot(float idx)
                 *(float *)&v21 = *(float *)&v31[2];
                 *(float *)&v22 = *(float *)&v32[1];
                 *(float *)&v23 = *(float *)&v32[2];
-                v0 = sub_48a280(&v21, v31[130], 1750.0f, v31[107]);
+                v0 = WaypointFindNearest(&v21, v31[130], 1750.0f, v31[107]);
             }
             while (1)
             {
-                v29 = sub_487e80(v29, "dragonball");
+                v29 = UTIL_FindEntityByClassname(v29, "dragonball");
                 if (!v29)
                     break;
-                if ((char)sub_48b140(v29))
+                if ((char)IsNull(v29))
                     continue;
                 v33 = &*v29->field_8;
                 v20 = *v29->field_8;
@@ -120,7 +120,7 @@ char SearchDragonBall__4CBot(float idx)
                 v38 = v35 * v35 + v36 * v36 + v37 * v37;
                 v39 = sqrt(v38);
                 if (isnan(v39))
-                    sub_487dc0(*(unsigned int *)&v38);
+                    sqrt(*(unsigned int *)&v38);
                 else
                     v38 = v39;
                 v4 = (float)v38;
@@ -142,7 +142,7 @@ char SearchDragonBall__4CBot(float idx)
                 v44 = v41 * v41 + v42 * v42 + v43 * v43;
                 v45 = sqrt(v44);
                 if (isnan(v45))
-                    sub_487dc0(*(unsigned int *)&v44);
+                    sqrt(*(unsigned int *)&v44);
                 else
                     v44 = v45;
                 v13 = (float)v44;
@@ -156,8 +156,8 @@ char SearchDragonBall__4CBot(float idx)
                     v6 = *v29->field_8;
                     v7 = *(float *)&v46[1];
                     *(float *)&v8 = *(float *)&v46[2];
-                    v2 = sub_48a280(&v6, *v29->field_208, 750.0f, *(int *)(*(int *)idx + 428));
-                    if (v2 == -0x1 || (unsigned short)sub_48cef0(v0, v2, *(int *)(*(int *)idx + 428)) == 0xffff)
+                    v2 = WaypointFindNearest(&v6, *v29->field_208, 750.0f, *(int *)(*(int *)idx + 428));
+                    if (v2 == -0x1 || (unsigned short)WaypointRouteFromTo(v0, v2, *(int *)(*(int *)idx + 428)) == 0xffff)
                         continue;
                 }
                 v3 = v4;
@@ -179,7 +179,7 @@ char SearchDragonBall__4CBot(float idx)
                     v9 = (float)v48;
                     v10 = *(float *)&v47[1];
                     v11 = *(float *)&v47[2];
-                    sub_48a170(&v15, idx, &v9);
+                    CBot::GetAimAngles(&v15, idx, &v9);
                     *(unsigned int *)(*(unsigned int *)&idx + 3088) = v15;
                     *(unsigned int *)(*(unsigned int *)&idx + 3092) = v16;
                     *(unsigned int *)(*(unsigned int *)&idx + 3096) = v17;

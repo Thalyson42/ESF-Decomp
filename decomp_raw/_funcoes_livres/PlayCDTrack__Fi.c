@@ -9,8 +9,8 @@ typedef struct st_52c120_1 {
 } st_52c120_1;
 
 extern st_52c120_0 g_engfuncs;
-extern st_52c120_1 *g_616864;
-extern st_52c120_1 *g_6168e0;
+extern st_52c120_1 *g_engfuncs.pfnClientCommand;
+extern st_52c120_1 *g_engfuncs.pfnPEntityOfEntIndex;
 
 unsigned int PlayCDTrack__Fi(int a0)
 {
@@ -19,7 +19,7 @@ unsigned int PlayCDTrack__Fi(int a0)
     char v1;  // [bp-0x44]
 
     v0 = &g_engfuncs.padding_0[0];
-    v2 = g_6168e0(1);
+    v2 = g_engfuncs.pfnPEntityOfEntIndex(1);
     if (!v2)
     {
         return v2;
@@ -30,12 +30,12 @@ unsigned int PlayCDTrack__Fi(int a0)
     }
     else if (a0 == -0x1)
     {
-        return g_616864(v2, "cd pause\n");
+        return g_engfuncs.pfnClientCommand(v2, "cd pause\n");
     }
     else
     {
-        sub_48d990(&v1, "cd play %3d\n", a0);
-        return g_616864(v2, &v1);
+        sprintf@GLIBC_2.0(&v1, "cd play %3d\n", a0);
+        return g_engfuncs.pfnClientCommand(v2, &v1);
     }
 }
 

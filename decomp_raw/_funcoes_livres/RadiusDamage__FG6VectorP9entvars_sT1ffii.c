@@ -81,14 +81,14 @@ st_4a6220_3 * RadiusDamage__FG6VectorP9entvars_sT1ffii(st_4a6220_4 *a0, st_4a622
     v2 = 1.0;
     if (a4 != 0.0f)
         v2 = a3 / a4;
-    v1 = sub_48ae20(a0) == 0xfffffffd;
+    v1 = UTIL_PointContents(a0) == 0xfffffffd;
     a0->field_8 = (float)(1.0 + a0->field_8);
     if (!a2)
         a2 = a1;
     v0 = &v5;
     while (1)
     {
-        v23 = sub_48bba0(v23, a0, a4);
+        v23 = UTIL_FindEntityInSphere(v23, a0, a4);
         if (!v23)
             break;
         if (v23->field_0->field_16c == 0.0f || a5 && v23->field_60->field_28(v23) == a5)
@@ -107,7 +107,7 @@ st_4a6220_3 * RadiusDamage__FG6VectorP9entvars_sT1ffii(st_4a6220_4 *a0, st_4a622
         v13 = v6;
         v14 = v7;
         v15 = v8;
-        sub_487b80(a0, &v13, 0, a1->field_208, &v16);
+        UTIL_TraceLine(a0, &v13, 0, a1->field_208, &v16);
         if (v18 == 1.0f || v22 == v23->field_0->field_208)
         {
             if (v17)
@@ -126,7 +126,7 @@ st_4a6220_3 * RadiusDamage__FG6VectorP9entvars_sT1ffii(st_4a6220_4 *a0, st_4a622
             v27 = v24 * v24 + v25 * v25 + v26 * v26;
             v28 = sqrt(v27);
             if (isnan(v28))
-                sub_487dc0(*(unsigned int *)&v27);
+                sqrt(*(unsigned int *)&v27);
             else
                 v27 = v28;
             v12 = (float)v27;
@@ -135,7 +135,7 @@ st_4a6220_3 * RadiusDamage__FG6VectorP9entvars_sT1ffii(st_4a6220_4 *a0, st_4a622
                 v3 = 0.0f;
             if (v18 != 1.0f)
             {
-                sub_48a370();
+                ClearMultiDamage();
                 v29 = v19 - *(float *)&a0->field_0;
                 v9 = v29;
                 v30 = v20 - *(float *)&a0->field_4;
@@ -145,7 +145,7 @@ st_4a6220_3 * RadiusDamage__FG6VectorP9entvars_sT1ffii(st_4a6220_4 *a0, st_4a622
                 v32 = v29 * v29 + v30 * v30 + v31 * v31;
                 v33 = sqrt(v32);
                 if (isnan(v33))
-                    sub_487dc0(*(unsigned int *)&v32);
+                    sqrt(*(unsigned int *)&v32);
                 else
                     v32 = v33;
                 v4 = (float)v32;
@@ -163,7 +163,7 @@ st_4a6220_3 * RadiusDamage__FG6VectorP9entvars_sT1ffii(st_4a6220_4 *a0, st_4a622
                     v8 = (float)(v34 * v11);
                 }
                 v23->field_60->field_30(v23, a1, v3, v0, &v16, a6);
-                sub_48d630(a1, a2);
+                ApplyMultiDamage(a1, a2);
             }
             else
             {

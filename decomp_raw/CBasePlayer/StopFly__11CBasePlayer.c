@@ -68,7 +68,7 @@ unsigned int * StopFly__11CBasePlayer(st_4f0840_0 *a0)
         else if (!a0->field_6bc)
         {
             if (a0->field_32c)
-                sub_4895a0(a0);
+                CBasePlayer::StopBlock(a0);
             a0->field_320 = 0;
             a0->field_0->field_11c = 0x3f800000;
             v1 = a0->field_0;

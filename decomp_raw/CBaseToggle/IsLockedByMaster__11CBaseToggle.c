@@ -10,8 +10,8 @@ unsigned int IsLockedByMaster__11CBaseToggle(st_523170_0 *a0)
 
     if (a0->field_100)
     {
-        v0 = sub_488810(&a0->padding_0[212]);
-        if (!sub_488a80(a0->field_100, v0))
+        v0 = EHANDLE::__opP11CBaseEntity(&a0->padding_0[212]);
+        if (!UTIL_IsMasterTriggered(a0->field_100, v0))
             return 1;
     }
     return 0;

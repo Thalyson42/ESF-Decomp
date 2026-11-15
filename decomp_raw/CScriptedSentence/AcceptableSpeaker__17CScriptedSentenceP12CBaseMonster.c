@@ -30,7 +30,7 @@ unsigned int AcceptableSpeaker__17CScriptedSentenceP12CBaseMonster(st_516c50_3 *
     unsigned int v0;  // esi
     st_516c50_1 **v1;  // eax
 
-    if (a1 && (!(*a0->field_1a0 & 2) || (v0 = &a1[2].padding_0[72], sub_48d8b0(v0) && !(v1 = sub_489fd0(v0), sub_488af0(*(int *)*(int *)sub_489fd0(v0) + gpGlobals->field_98, "player")))) && a1->field_60->field_164(a1, (*a0->field_1a0 & 4) != 0))
+    if (a1 && (!(*a0->field_1a0 & 2) || (v0 = &a1[2].padding_0[72], EHANDLE::__opi(v0) && !(v1 = EHANDLE::__rf(v0), strcmp@GLIBC_2.0(*(int *)*(int *)EHANDLE::__rf(v0) + gpGlobals->field_98, "player")))) && a1->field_60->field_164(a1, (*a0->field_1a0 & 4) != 0))
         return 1;
     return 0;
 }

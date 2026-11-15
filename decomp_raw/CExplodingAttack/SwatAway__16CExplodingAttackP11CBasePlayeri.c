@@ -16,6 +16,6 @@ typedef struct st_4bc310_2 {
 int SwatAway__16CExplodingAttackP11CBasePlayeri(st_4bc310_2 *a0, int a1, int a2)
 {
     a0->field_60->field_208(a0);
-    return sub_48d740(a0, a1, a2);
+    return CMagicAttack::SwatAway(a0, a1, a2);
 }
 

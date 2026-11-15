@@ -24,11 +24,11 @@ float GetMoveStrength__12CPlayerMeleeP12melee_move_s(st_5061e0_2 *a0, int a1)
     v1 = 0;
     if (!a1)
         return v4;
-    sub_48b4e0(a0, a1);
+    CPlayerMelee::GetCmbTime(a0, a1);
     v3 = (float)v2;
     if (v3 < *(float *)(a0->field_180->field_c(a0) + 4))
         return v3;
-    sub_48b4e0(a0, a1);
+    CPlayerMelee::GetCmbTime(a0, a1);
     v0 = v3;
     v1 = 2;
     if (v0 >= *(float *)(a0->field_180->field_c(a0) + 8))

@@ -13,7 +13,7 @@ typedef struct st_52e5b0_1 {
     unsigned int field_0;
 } st_52e5b0_1;
 
-extern st_52e5b0_1 *g_6168a4;
+extern st_52e5b0_1 *g_engfuncs.pfnCVarGetFloat;
 
 st_52e5b0_0 * Precache__7CLadder(double a0, st_52e5b0_0 **a1)
 {
@@ -21,7 +21,7 @@ st_52e5b0_0 * Precache__7CLadder(double a0, st_52e5b0_0 **a1)
 
     *a1->field_10c = 0;
     *a1->field_110 = 0xfffffff0;
-    g_6168a4("showtriggers");
+    g_engfuncs.pfnCVarGetFloat("showtriggers");
     if (a0 == 0.0)
     {
         *a1->field_148 = 2;

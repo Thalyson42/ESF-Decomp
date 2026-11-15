@@ -16,7 +16,7 @@ typedef struct st_4d42b0_2 {
     unsigned int field_0;
 } st_4d42b0_2;
 
-extern st_4d42b0_2 *g_6168b4;
+extern st_4d42b0_2 *g_engfuncs.pfnAlertMessage;
 extern st_4d42b0_1 *gpGlobals;
 
 unsigned int PBestSound__12CBaseMonster(float a0)
@@ -44,14 +44,14 @@ unsigned int PBestSound__12CBaseMonster(float a0)
     v12 = *(int *)(*(unsigned int *)&a0 + 560);
     if (*(int *)(*(unsigned int *)&a0 + 560) == 0xffffffff)
     {
-        g_6168b4(2, "ERROR! monster %s has no audible sounds!\n", *(int *)*(int *)a0 + gpGlobals->field_98);
+        g_engfuncs.pfnAlertMessage(2, "ERROR! monster %s has no audible sounds!\n", *(int *)*(int *)a0 + gpGlobals->field_98);
         return 0;
     }
     v0 = &v5;
     do
     {
-        v13 = sub_488470(v12);
-        if (v13 && sub_4884a0(v13))
+        v13 = CSoundEnt::SoundPointerForIndex(v12);
+        if (v13 && CSound::FIsSound(v13))
         {
             (*(int *)(*(int *)(*(unsigned int *)&a0 + 96) + 212))(v0, a0);
             v14 = v13->field_0 - v5;
@@ -63,7 +63,7 @@ unsigned int PBestSound__12CBaseMonster(float a0)
             v17 = v14 * v14 + v15 * v15 + v16 * v16;
             v18 = sqrt(v17);
             if (isnan(v18))
-                sub_487dc0(*(unsigned int *)&v17);
+                sqrt(*(unsigned int *)&v17);
             else
                 v17 = v18;
             v3 = (float)v17;
@@ -74,6 +74,6 @@ unsigned int PBestSound__12CBaseMonster(float a0)
             }
         }
     } while ((v12 = v13->field_1c, v13->field_1c != 0xffffffff));
-    return (v2 < 0 ? 0 : sub_488470(v2));
+    return (v2 < 0 ? 0 : CSoundEnt::SoundPointerForIndex(v2));
 }
 

@@ -3,7 +3,7 @@ typedef struct st_547f90_0 {
     unsigned int field_0;
 } st_547f90_0;
 
-extern st_547f90_0 *g_616928;
+extern st_547f90_0 *g_engfuncs.pfnRandomLong;
 
 int MakeChatSentence__10CChatClassP17bot_personality_sPCcPc(int a0, short *a1, int a2, int a3)
 {
@@ -19,39 +19,39 @@ int MakeChatSentence__10CChatClassP17bot_personality_sPCcPc(int a0, short *a1, i
     char v0;  // [bp-0x64], Other Possible Types: unsigned short
     char v1;  // [bp-0x14]
 
-    sub_48d360(&v0, a2, 79);
+    strncpy@GLIBC_2.0(&v0, a2, 79);
     v1 = 0;
-    v2 = g_616928(1, 100);
+    v2 = g_engfuncs.pfnRandomLong(1, 100);
     if (v2 <= a1[16])
     {
-        i = g_616928(1, 3);
+        i = g_engfuncs.pfnRandomLong(1, 3);
         if (i)
         {
             do
             {
                 v4 = i;
-                sub_48d7f0(a0, &v0, a3);
-                sub_48e110(&v0, a3);
+                CChatClass::DropChars(a0, &v0, a3);
+                strcpy@GLIBC_2.0(&v0, a3);
                 i = v4 - 1;
             } while (i);
         }
     }
-    v5 = g_616928(1, 100);
+    v5 = g_engfuncs.pfnRandomLong(1, 100);
     if ((int)v5 <= a1[0x11])
     {
-        j = g_616928(1, 2);
+        j = g_engfuncs.pfnRandomLong(1, 2);
         if (j)
         {
             do
             {
                 v7 = j;
-                sub_48ca20(a0, &v0, a3);
-                sub_48e110(&v0, a3);
+                CChatClass::SwapChars(a0, &v0, a3);
+                strcpy@GLIBC_2.0(&v0, a3);
                 j = v7 - 1;
             } while (j);
         }
     }
-    v8 = g_616928(1, 100);
+    v8 = g_engfuncs.pfnRandomLong(1, 100);
     if ((int)v8 <= a1[18])
     {
         v9 = NULL;
@@ -60,11 +60,11 @@ int MakeChatSentence__10CChatClassP17bot_personality_sPCcPc(int a0, short *a1, i
         {
             do
             {
-                *(char *)(v9 + v10) = sub_489b30(*(char *)(v9 + v10));
+                *(char *)(v9 + v10) = tolower@GLIBC_2.0(*(char *)(v9 + v10));
                 v9 += 1;
             } while (*(char *)(v9 + v10));
         }
     }
-    return sub_48e110(a3, &v0);
+    return strcpy@GLIBC_2.0(a3, &v0);
 }
 

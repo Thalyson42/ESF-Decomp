@@ -123,7 +123,7 @@ typedef struct st_4a3aa0_9 {
 } st_4a3aa0_9;
 
 extern char FlyOffThink__10CBodySlice;
-extern st_4a3aa0_1 *g_6168d4;
+extern st_4a3aa0_1 *g_engfuncs.pfnPEntityOfEntOffset;
 extern st_4a3aa0_9 *gpGlobals;
 
 int SpawnBodySlices__10CBodySliceP9entvars_sb(st_4a3aa0_6 *a0, char a1)
@@ -149,7 +149,7 @@ int SpawnBodySlices__10CBodySliceP9entvars_sb(st_4a3aa0_6 *a0, char a1)
     unsigned int v4;  // [bp-0x1c], Other Possible Types: float
 
     v5 = a0->field_208;
-    if (a0->field_208 || (v5 = g_6168d4(0), v5))
+    if (a0->field_208 || (v5 = g_engfuncs.pfnPEntityOfEntOffset(0), v5))
         v6 = v5->field_7c;
     else
         v6 = NULL;
@@ -163,15 +163,15 @@ int SpawnBodySlices__10CBodySliceP9entvars_sb(st_4a3aa0_6 *a0, char a1)
         v8 = v1->field_764->field_4->field_48(v1->field_764);
         if (v0 >= v8)
             break;
-        v9 = sub_48b710(0);
-        sub_48d700(v9, sub_488b00("models/bodyparts/%s/slice.mdl", v1->field_764->field_4->field_3c(v1->field_764)));
+        v9 = GetClassPtr__H1Z10CBodySlice_PX01_PX01(0);
+        CGib::Spawn(v9, UTIL_VarArgs("models/bodyparts/%s/slice.mdl", v1->field_764->field_4->field_3c(v1->field_764)));
         v9->field_0->field_114 = v0;
         v11 = &a0->field_8;
         v2 = a0->field_8 + a0->field_174;
         v3 = *(float *)&v11->field_4 + a0->field_178;
         v4 = *(float *)&v11->field_8 + a0->field_17c;
-        sub_48db50(v9->field_0, &v2);
-        sub_48a800(v1->field_0 + 116);
+        UTIL_SetOrigin(v9->field_0, &v2);
+        UTIL_MakeVectors(v1->field_0 + 116);
         if ((char)v0 & 1)
         {
             *(float *)&v9->field_2c4 = gpGlobals->field_40;
@@ -214,21 +214,21 @@ int SpawnBodySlices__10CBodySliceP9entvars_sb(st_4a3aa0_6 *a0, char a1)
             v17->field_24 = v3;
             v17->field_28 = v4;
             *(float *)&v9->field_0->padding_118[4] = 9.999999974752427e-07f;
-            v18 = sub_48afe0(v9, "shake");
+            v18 = CBaseAnimating::LookupSequence(v9, "shake");
             if (v18 == 0xffffffff)
                 goto LABEL_4a3d29;
             v9->field_0->field_12c = 0;
             v9->field_0->field_128 = v18;
             v9->field_0->field_130 = 0;
-            sub_488850(v9);
+            CBaseAnimating::ResetSequenceInfo(v9);
         }
         else
         {
-            sub_48c110(v9);
+            CBodySlice::FlyOffThink(v9);
         }
 LABEL_4a3d29:
         v19 = a0->field_208;
-        if (a0->field_208 || (v19 = g_6168d4(0), v19))
+        if (a0->field_208 || (v19 = g_engfuncs.pfnPEntityOfEntOffset(0), v19))
             v20 = v19->field_7c;
         else
             v20 = NULL;

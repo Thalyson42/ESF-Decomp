@@ -8,7 +8,7 @@ typedef struct st_4a1b50_1 {
     unsigned int field_0;
 } st_4a1b50_1;
 
-extern st_4a1b50_1 *g_6168b4;
+extern st_4a1b50_1 *g_engfuncs.pfnAlertMessage;
 
 int PlayerCustomization__FP7edict_sP15customization_s(st_4a1b50_0 *a0, int *a1)
 {
@@ -29,17 +29,17 @@ int PlayerCustomization__FP7edict_sP15customization_s(st_4a1b50_0 *a0, int *a1)
     {
         v2 = a1[0x11];
         if (v2 < 0)
-            return g_6168b4(1, "PlayerCustomization:  Unknown customization type!\n");
+            return g_engfuncs.pfnAlertMessage(1, "PlayerCustomization:  Unknown customization type!\n");
         if (v2 <= 2)
         {
             return v2;
         }
         else if (v2 == 3)
         {
-            return sub_489b50(v0, a1[37]);
+            return CBasePlayer::SetCustomDecalFrames(v0, a1[37]);
         }
-        return g_6168b4(1, "PlayerCustomization:  Unknown customization type!\n");
+        return g_engfuncs.pfnAlertMessage(1, "PlayerCustomization:  Unknown customization type!\n");
     }
-    return g_6168b4(1, v1);
+    return g_engfuncs.pfnAlertMessage(1, v1);
 }
 

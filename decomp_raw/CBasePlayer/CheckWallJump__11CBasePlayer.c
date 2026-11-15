@@ -27,7 +27,7 @@ unsigned int CheckWallJump__11CBasePlayer(float idx)
                 *(float *)&v0 = *(float *)&v5[162];
                 *(float *)&v1 = *(float *)&v5[163];
                 *(float *)&v2 = *(float *)&v5[164];
-                v6 = sub_48d1f0(idx, &v0);
+                v6 = CBasePlayer::EnableWallJump(idx, &v0);
                 if (!*(int *)(*(unsigned int *)&idx + 1732))
                     return v6;
             }
@@ -37,13 +37,13 @@ unsigned int CheckWallJump__11CBasePlayer(float idx)
             *(unsigned int *)(*(unsigned int *)&idx + 1732) = 0;
             if (!*(int *)(*(unsigned int *)&idx + 1736))
                 return v7;
-            return sub_48d3d0(idx);
+            return CBasePlayer::DisableWallJump(idx);
         }
     }
     if (*(int *)(*(unsigned int *)&idx + 1732))
         *(unsigned int *)(*(unsigned int *)&idx + 1732) = 0;
     if (*(int *)(*(unsigned int *)&idx + 1736))
-        sub_48d3d0(idx);
+        CBasePlayer::DisableWallJump(idx);
     return v4;
 }
 

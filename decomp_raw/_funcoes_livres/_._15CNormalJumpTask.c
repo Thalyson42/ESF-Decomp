@@ -9,6 +9,6 @@ extern char __vt_15CNormalJumpTask;
 int _._15CNormalJumpTask(st_5871b0_0 *a0, int a1)
 {
     a0->field_14 = &__vt_15CNormalJumpTask;
-    return sub_488170(a0, a1);
+    return _._9CBaseTask(a0, a1);
 }
 

@@ -44,7 +44,7 @@ st_538e20_1 * Respawn__15CBasePlayerAmmo(double a0, st_538e20_1 *a1)
     a1->field_18 = 0;
     v0 = &g_pGameRules;
     g_pGameRules->field_44->field_b0(&v1, *v0, a1);
-    a1->field_c = _INSERT(sub_48db50(a1->field_0, &v1), 0, 0) | 0xffff0000;
+    a1->field_c = _INSERT(UTIL_SetOrigin(a1->field_0, &v1), 0, 0) | 0xffff0000;
     a1->field_10 = &Materialize__15CBasePlayerAmmo;
     *v0->field_44->field_ac(*v0, a1);
     a1->field_0->field_104 = (float)v3;

@@ -64,9 +64,9 @@ int RejectInlineLinks__6CGraphP5CLinkP8_IO_FILE(st_4e13e0_0 *a0, unsigned int a1
 
     if (a2)
     {
-        sub_488d60(a2, "----------------------------------------------------------------------------\n");
-        sub_488d60(a2, "InLine Rejection:\n");
-        sub_488d60(a2, "----------------------------------------------------------------------------\n");
+        fprintf@GLIBC_2.0(a2, "----------------------------------------------------------------------------\n");
+        fprintf@GLIBC_2.0(a2, "InLine Rejection:\n");
+        fprintf@GLIBC_2.0(a2, "----------------------------------------------------------------------------\n");
     }
     v4 = 0;
     i = 0;
@@ -76,7 +76,7 @@ int RejectInlineLinks__6CGraphP5CLinkP8_IO_FILE(st_4e13e0_0 *a0, unsigned int a1
     {
         v2 = a0->field_c + i * 88;
         if (a2)
-            sub_488d60(a2, "Node %3d:\n", i);
+            fprintf@GLIBC_2.0(a2, "Node %3d:\n", i);
         node = 0;
         if (node < v2->field_20)
         {
@@ -94,14 +94,14 @@ int RejectInlineLinks__6CGraphP5CLinkP8_IO_FILE(st_4e13e0_0 *a0, unsigned int a1
                 v26 = v16 * v16 + v17 * v17;
                 v27 = sqrt(v26);
                 if (isnan(v27))
-                    sub_487dc0(*(unsigned int *)&v26);
+                    sqrt(*(unsigned int *)&v26);
                 else
                     v26 = v27;
                 v0 = (float)v26;
                 v28 = v16 * v16 + v17 * v17;
                 v29 = sqrt(v28);
                 if (isnan(v29))
-                    sub_487dc0(*(unsigned int *)&v28);
+                    sqrt(*(unsigned int *)&v28);
                 else
                     v28 = v29;
                 v23 = (float)v28;
@@ -141,14 +141,14 @@ int RejectInlineLinks__6CGraphP5CLinkP8_IO_FILE(st_4e13e0_0 *a0, unsigned int a1
                             v35 = v10 * v10 + v11 * v11;
                             v36 = sqrt(v35);
                             if (isnan(v36))
-                                sub_487dc0(*(unsigned int *)&v35);
+                                sqrt(*(unsigned int *)&v35);
                             else
                                 v35 = v36;
                             v1 = (float)v35;
                             v37 = v10 * v10 + v11 * v11;
                             v38 = sqrt(v37);
                             if (isnan(v38))
-                                sub_487dc0(*(unsigned int *)&v37);
+                                sqrt(*(unsigned int *)&v37);
                             else
                                 v37 = v38;
                             v23 = (float)v37;
@@ -169,7 +169,7 @@ int RejectInlineLinks__6CGraphP5CLinkP8_IO_FILE(st_4e13e0_0 *a0, unsigned int a1
                             if (v16 * v10 + v17 * v11 >= 0.998 && v1 < v0)
                             {
                                 if (a2)
-                                    sub_488d60(a2, "REJECTED NODE %3d through Node %3d, Dot = %8f\n", *(int *)(a1 + (node + v2->field_24) * 24 + 4), *(int *)(a1 + (v5 + v2->field_24) * 24 + 4), (unsigned int)(v16 * v10 + v17 * v11 >> 0));
+                                    fprintf@GLIBC_2.0(a2, "REJECTED NODE %3d through Node %3d, Dot = %8f\n", *(int *)(a1 + (node + v2->field_24) * 24 + 4), *(int *)(a1 + (v5 + v2->field_24) * 24 + 4), (unsigned int)(v16 * v10 + v17 * v11 >> 0));
                                 iter = a1 + (node + v2->field_24) * 24;
                                 k = a1 + (v2->field_24 + v2->field_20) * 24 - 24;
                                 for (v43 = 6; v43; k += 1)
@@ -190,7 +190,7 @@ int RejectInlineLinks__6CGraphP5CLinkP8_IO_FILE(st_4e13e0_0 *a0, unsigned int a1
             } while (node < v2->field_20);
         }
         if (a2)
-            sub_488d60(a2, "----------------------------------------------------------------------------\n\n");
+            fprintf@GLIBC_2.0(a2, "----------------------------------------------------------------------------\n\n");
         i += 1;
     } while (i < a0->field_18);
     return v4;

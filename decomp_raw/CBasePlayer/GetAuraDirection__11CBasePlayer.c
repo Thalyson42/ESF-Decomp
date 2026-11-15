@@ -14,7 +14,7 @@ unsigned int GetAuraDirection__11CBasePlayer(float a0)
     v5 = *(float *)(*(int *)a0 + 32) * *(float *)(*(int *)a0 + 32) + *(float *)(*(int *)a0 + 36) * *(float *)(*(int *)a0 + 36);
     v6 = sqrt(v5);
     if (isnan(v6))
-        sub_487dc0(*(unsigned int *)&v5);
+        sqrt(*(unsigned int *)&v5);
     else
         v5 = v6;
     v3 = (float)v5;
@@ -53,7 +53,7 @@ LABEL_4f6120:
             if (*(int *)(*(int *)a0 + 448) > 1)
             {
                 v0 = v3;
-                v2 = sub_48a780(a0);
+                v2 = CBasePlayer::GetMaxSpeed(a0);
                 if ((double)v2 / 1.6 < v0)
                     goto LABEL_4f618f;
             }

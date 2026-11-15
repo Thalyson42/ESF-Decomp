@@ -12,12 +12,12 @@ typedef struct st_509040_0 {
     float field_48;
 } st_509040_0;
 
-extern float g_5bd1e4;
-extern float g_5bd1f8;
-extern float g_5bd20c;
-extern float g_5bd220;
-extern float g_5bd234;
-extern float g_5bd248;
+extern float melee_prepunch_delay+12;
+extern float melee_prepunch_delaystruggle+12;
+extern float melee_prepunch_driftspeed+12;
+extern float melee_prepunch_max+12;
+extern float melee_prepunch_maxstun+12;
+extern float melee_prepunch_mincombo+12;
 extern st_509040_0 *gpGlobals;
 
 double HandlePrepunchAttack__12CPlayerMelee(float idx)
@@ -70,9 +70,9 @@ double HandlePrepunchAttack__12CPlayerMelee(float idx)
     if (!*(int *)(*(int *)(*(unsigned int *)&idx + 304) + 208))
     {
         index = *(int *)*(int *)(*(unsigned int *)&idx + 292);
-        v16 = g_5bd20c * *(float *)(*(unsigned int *)&idx + 272);
-        v17 = g_5bd20c * *(float *)(*(unsigned int *)&idx + 276);
-        v18 = g_5bd20c * *(float *)(*(unsigned int *)&idx + 280);
+        v16 = melee_prepunch_driftspeed+12 * *(float *)(*(unsigned int *)&idx + 272);
+        v17 = melee_prepunch_driftspeed+12 * *(float *)(*(unsigned int *)&idx + 276);
+        v18 = melee_prepunch_driftspeed+12 * *(float *)(*(unsigned int *)&idx + 280);
     }
     else
     {
@@ -84,29 +84,29 @@ double HandlePrepunchAttack__12CPlayerMelee(float idx)
     *(float *)(index + 648) = v16;
     *(float *)(index + 652) = v17;
     *(float *)(index + 656) = v18;
-    if (*(char *)(*(int *)*(int *)(*(unsigned int *)&idx + 292) + 384) & 1 && (v25 = (double)*(int *)(*(unsigned int *)&idx + 184), v25 >= g_5bd248))
+    if (*(char *)(*(int *)*(int *)(*(unsigned int *)&idx + 292) + 384) & 1 && (v25 = (double)*(int *)(*(unsigned int *)&idx + 184), v25 >= melee_prepunch_mincombo+12))
     {
         if (*(int *)(*(unsigned int *)&idx + 0x100))
         {
-            sub_489040(idx);
+            CPlayerMelee::StopMelee(idx);
             return v25;
         }
-        sub_489880(idx);
+        CPlayerMelee::StopPrepunchAttack(idx);
 LABEL_509177:
         v0 = 3;
     }
     else
     {
-        if (!(*(char *)(*(int *)*(int *)(*(unsigned int *)&idx + 292) + 385) & 8) || !(v25 = (double)*(int *)(*(unsigned int *)&idx + 184), v25 >= g_5bd248))
+        if (!(*(char *)(*(int *)*(int *)(*(unsigned int *)&idx + 292) + 385) & 8) || !(v25 = (double)*(int *)(*(unsigned int *)&idx + 184), v25 >= melee_prepunch_mincombo+12))
         {
             if (*(int *)(*(unsigned int *)&idx + 0x100))
             {
-                if (*(float *)(*(unsigned int *)&idx + 148) + g_5bd1f8 < gpGlobals->field_0)
+                if (*(float *)(*(unsigned int *)&idx + 148) + melee_prepunch_delaystruggle+12 < gpGlobals->field_0)
                     goto LABEL_5091e0;
             }
             else
             {
-                if (*(float *)(*(unsigned int *)&idx + 148) + g_5bd1e4 < gpGlobals->field_0)
+                if (*(float *)(*(unsigned int *)&idx + 148) + melee_prepunch_delay+12 < gpGlobals->field_0)
                 {
 LABEL_5091e0:
                     *(float *)(*(unsigned int *)&idx + 148) = gpGlobals->field_0;
@@ -121,11 +121,11 @@ LABEL_5091e0:
                         v4 = *(int *)(*(unsigned int *)&idx + 184);
                         v3 = 1;
                     }
-                    sub_488530(idx);
+                    CPlayerMelee::MeleeText(idx);
                     v26 = (double)*(int *)(*(unsigned int *)&idx + 184);
-                    if (v26 < g_5bd234)
+                    if (v26 < melee_prepunch_maxstun+12)
                     {
-                        sub_48b2b0(idx);
+                        CPlayerMelee::GetStunPerPunch(idx);
                         v27 = v26 + *(float *)(*(int *)(*(unsigned int *)&idx + 304) + 0x88);
                         *(float *)(*(int *)(*(unsigned int *)&idx + 304) + 0x88) = (float)v27;
                         if (!*(int *)(*(int *)(*(unsigned int *)&idx + 304) + 224))
@@ -143,10 +143,10 @@ LABEL_5091e0:
                             v26 = *(float *)(*(int *)(*(unsigned int *)&idx + 304) + 0x88) + gpGlobals->field_0;
                             *(float *)(*(int *)(*(unsigned int *)&idx + 304) + 0x88) = (float)v26;
                         }
-                        sub_48b2b0(idx);
+                        CPlayerMelee::GetStunPerPunch(idx);
                         v29 = *(float *)(*(int *)(*(unsigned int *)&idx + 304) + 140) - v26 * 0.5;
                         *(float *)(*(int *)(*(unsigned int *)&idx + 304) + 140) = (float)v29;
-                        sub_48b2b0(idx);
+                        CPlayerMelee::GetStunPerPunch(idx);
                         *(float *)(*(int *)(*(unsigned int *)&idx + 304) + 0x88) = (float)(*(float *)(*(int *)(*(unsigned int *)&idx + 304) + 0x88) - v29 * 0.5);
                         v30 = *(int *)(*(unsigned int *)&idx + 304);
                         v27 = 0.0;
@@ -160,16 +160,16 @@ LABEL_5091e0:
                         if (*(int *)(*(unsigned int *)&idx + 0x100))
                             v28 = 37;
                     }
-                    if (!sub_48c980(*(int *)(*(unsigned int *)&idx + 292), v28))
+                    if (!CBasePlayer::UseKi(*(int *)(*(unsigned int *)&idx + 292), v28))
                     {
                         *(float *)&v16 = *(float *)(*(unsigned int *)&idx + 272);
                         *(float *)&v17 = *(float *)(*(unsigned int *)&idx + 276);
                         *(float *)&v18 = *(float *)(*(unsigned int *)&idx + 280);
-                        sub_48a700(idx, 0);
+                        CPlayerMelee::StopMelee(idx, 0);
                         *(unsigned int *)&v19 = -v16;
                         *(unsigned int *)&v21 = -v17;
                         *(unsigned int *)&v22 = -v18;
-                        sub_489100(*(int *)(*(unsigned int *)&idx + 304), *(int *)(*(unsigned int *)&idx + 292), &v19, 4);
+                        CPlayerMelee::Powerhit(*(int *)(*(unsigned int *)&idx + 304), *(int *)(*(unsigned int *)&idx + 292), &v19, 4);
                         return -*(float *)&v18;
                     }
                     if (*(int *)(*(int *)(*(unsigned int *)&idx + 304) + 212))
@@ -177,20 +177,20 @@ LABEL_5091e0:
                         v31 = 20;
                         if (*(int *)(*(int *)(*(unsigned int *)&idx + 304) + 208))
                             v31 = 30;
-                        if (sub_48c980(*(int *)(*(unsigned int *)&idx + 296), v31))
+                        if (CBasePlayer::UseKi(*(int *)(*(unsigned int *)&idx + 296), v31))
                             goto LABEL_5094db;
                         *(unsigned int *)(*(int *)(*(unsigned int *)&idx + 304) + 212) = 0;
                         v2 = 0x2000000;
-                        sub_48b320(idx);
+                        CPlayerMelee::GetDmgPerPunch(idx);
                         v0 = *(int *)*(int *)(*(unsigned int *)&idx + 292);
                         (*(int *)(*(int *)(*(int *)(*(unsigned int *)&idx + 296) + 96) + 52))(*(int *)(*(unsigned int *)&idx + 296), v0, *(int *)*(int *)(*(unsigned int *)&idx + 292), (float)v27);
                         *(unsigned short *)&v0 = 1;
-                        sub_48b670(*(int *)(*(unsigned int *)&idx + 304), v0, gpGlobals->field_0, 1, "ref_autopunch_hit");
+                        CPlayerMelee::AddAnimation(*(int *)(*(unsigned int *)&idx + 304), v0, gpGlobals->field_0, 1, "ref_autopunch_hit");
                     }
                     else
                     {
                         v2 = 0x2000000;
-                        sub_48b320(idx);
+                        CPlayerMelee::GetDmgPerPunch(idx);
                         (*(int *)(*(int *)(*(int *)(*(unsigned int *)&idx + 296) + 96) + 52))(*(int *)(*(unsigned int *)&idx + 296), *(int *)*(int *)(*(unsigned int *)&idx + 292), *(int *)*(int *)(*(unsigned int *)&idx + 292), (float)v27);
                     }
 LABEL_5094db:
@@ -201,7 +201,7 @@ LABEL_5094db:
                         v16 = -*(float *)(*(unsigned int *)&idx + 272);
                         v17 = -*(float *)(*(unsigned int *)&idx + 276);
                         v18 = -*(float *)(*(unsigned int *)&idx + 280);
-                        sub_48a800(&v16);
+                        UTIL_MakeVectors(&v16);
                         v20 = __fnstcw();
                         v19 = _INSERT(v20, 1, *(char *)((void*)&v20 + 1) & 243 | 8);
                         v33 = _ccall(v19);
@@ -254,27 +254,27 @@ LABEL_5094db:
                             v1 = 5.0f;
                             v39 = &v6;
                         }
-                        sub_48a6f0(*(int *)(*(unsigned int *)&idx + 304), &v16, v39);
+                        CPlayerMelee::EmitExplosionRocks(*(int *)(*(unsigned int *)&idx + 304), &v16, v39);
                     }
                 }
             }
             v45 = (double)*(int *)(*(unsigned int *)&idx + 184);
-            if (g_5bd220 != v45 || *(int *)(*(int *)*(int *)(*(unsigned int *)&idx + 296) + 368))
+            if (melee_prepunch_max+12 != v45 || *(int *)(*(int *)*(int *)(*(unsigned int *)&idx + 296) + 368))
                 return v45;
-            sub_489040(idx);
+            CPlayerMelee::StopMelee(idx);
             return v45;
         }
         if (*(int *)(*(unsigned int *)&idx + 0x100))
         {
-            sub_489040(idx);
+            CPlayerMelee::StopMelee(idx);
             return v25;
         }
-        sub_489880(idx);
+        CPlayerMelee::StopPrepunchAttack(idx);
         if (*(int *)(*(int *)(*(unsigned int *)&idx + 304) + 212) || *(int *)(*(unsigned int *)&idx + 184) > 6)
             goto LABEL_509177;
         v3 = 5;
     }
-    sub_489610(idx);
+    CPlayerMelee::SetMode(idx);
     return v25;
 }
 

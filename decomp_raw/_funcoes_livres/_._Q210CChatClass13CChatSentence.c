@@ -11,12 +11,12 @@ unsigned int _._Q210CChatClass13CChatSentence(st_543d80_0 *a0, unsigned int a1)
     if (a0->field_24)
     {
         if (a0->field_24)
-            sub_48cc20(a0->field_24);
+            __builtin_vec_delete(a0->field_24);
         a0->field_24 = 0;
     }
     v0 = a1;
     if ((char)v0 & 1)
-        v0 = sub_48d4e0(a0);
+        v0 = __builtin_delete(a0);
     return v0;
 }
 

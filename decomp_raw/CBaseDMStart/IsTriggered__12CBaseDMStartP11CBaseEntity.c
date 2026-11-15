@@ -6,6 +6,6 @@ typedef struct st_522110_0 {
 
 int IsTriggered__12CBaseDMStartP11CBaseEntity(st_522110_0 **a0, int a1)
 {
-    return sub_488a80(*a0->field_1d0, a1);
+    return UTIL_IsMasterTriggered(*a0->field_1d0, a1);
 }
 

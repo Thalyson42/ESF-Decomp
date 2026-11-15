@@ -2,7 +2,7 @@
 int Charge__15CControlledBeam(float idx)
 {
     if (*(int *)(*(unsigned int *)&idx + 196) == 2)
-        sub_48bd60(idx);
+        CControlledBeam::StopAiming(idx);
     if (*(int *)(*(unsigned int *)&idx + 196) != 1)
     {
         *(float *)(*(int *)(*(unsigned int *)&idx + 128) + 1876) = *(float *)(*(unsigned int *)&idx + 240);
@@ -15,7 +15,7 @@ int Charge__15CControlledBeam(float idx)
     {
         return *(int *)(*(unsigned int *)&idx + 216);
     }
-    else if (!sub_48c980(*(int *)(*(unsigned int *)&idx + 128), *(int *)(*(unsigned int *)&idx + 228)))
+    else if (!CBasePlayer::UseKi(*(int *)(*(unsigned int *)&idx + 128), *(int *)(*(unsigned int *)&idx + 228)))
     {
         return (*(int *)(*(int *)(*(unsigned int *)&idx + 96) + 384))(idx);
     }
@@ -26,7 +26,7 @@ int Charge__15CControlledBeam(float idx)
         if (*(int *)(*(unsigned int *)&idx + 216) > *(int *)(*(unsigned int *)&idx + 220) / 3)
             (*(int *)(*(int *)(*(unsigned int *)&idx + 96) + 376))(idx);
         *(unsigned int *)(*(unsigned int *)&idx + 216) = *(int *)(*(unsigned int *)&idx + 216) + 1;
-        return sub_48c680(*(int *)(*(unsigned int *)&idx + 128), *(int *)(*(unsigned int *)&idx + 216) * 100 / *(int *)(*(unsigned int *)&idx + 220));
+        return CBasePlayer::DrawChargeBar(*(int *)(*(unsigned int *)&idx + 128), *(int *)(*(unsigned int *)&idx + 216) * 100 / *(int *)(*(unsigned int *)&idx + 220));
     }
 }
 

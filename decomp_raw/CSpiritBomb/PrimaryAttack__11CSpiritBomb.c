@@ -4,12 +4,12 @@ typedef struct st_5216c0_0 {
 } st_5216c0_0;
 
 extern unsigned int gmsgAddEffect;
-extern st_5216c0_0 *g_616878;
-extern st_5216c0_0 *g_61687c;
-extern st_5216c0_0 *g_616880;
-extern st_5216c0_0 *g_616888;
-extern st_5216c0_0 *g_616894;
-extern st_5216c0_0 *g_6168dc;
+extern st_5216c0_0 *g_engfuncs.pfnMessageBegin;
+extern st_5216c0_0 *g_engfuncs.pfnMessageEnd;
+extern st_5216c0_0 *g_engfuncs.pfnWriteByte;
+extern st_5216c0_0 *g_engfuncs.pfnWriteShort;
+extern st_5216c0_0 *g_engfuncs.pfnWriteCoord;
+extern st_5216c0_0 *g_engfuncs.pfnIndexOfEdict;
 
 double PrimaryAttack__11CSpiritBomb(float idx)
 {
@@ -33,7 +33,7 @@ double PrimaryAttack__11CSpiritBomb(float idx)
         return v15;
     if (!*(int *)(*(int *)(*(unsigned int *)&idx + 128) + 820))
     {
-        sub_48a800(*(int *)*(int *)(*(unsigned int *)&idx + 128) + 80);
+        UTIL_MakeVectors(*(int *)*(int *)(*(unsigned int *)&idx + 128) + 80);
         v9 = *(int *)(*(unsigned int *)&idx + 128);
         v2 = 0;
         v3 = 0;
@@ -43,10 +43,10 @@ double PrimaryAttack__11CSpiritBomb(float idx)
         v6 = *(float *)(index + 4) + v3;
         v7 = *(float *)(index + 8) + v4;
         (*(int *)(v9[24] + 480))(&v2, v9);
-        sub_487b80(&v2, &v5, 1, *(int *)(*(int *)*(int *)(*(unsigned int *)&idx + 128) + 520), &v0);
+        UTIL_TraceLine(&v2, &v5, 1, *(int *)(*(int *)*(int *)(*(unsigned int *)&idx + 128) + 520), &v0);
         if (1.0 > v1)
             return 1.0;
-        sub_48d4f0(*(int *)(*(unsigned int *)&idx + 128), "spiritbomb_charge.wav");
+        CBasePlayer::EmitClassSound(*(int *)(*(unsigned int *)&idx + 128), "spiritbomb_charge.wav");
         *(unsigned int *)(*(int *)(*(unsigned int *)&idx + 128) + 820) = 1;
         *(unsigned int *)(*(int *)(*(unsigned int *)&idx + 128) + 872) = 1;
         *(unsigned int *)(*(unsigned int *)&idx + 0xcc) = 1;
@@ -55,22 +55,22 @@ double PrimaryAttack__11CSpiritBomb(float idx)
         v2 = v5;
         v3 = v6;
         v4 = v7;
-        *(unsigned int *)(*(unsigned int *)&idx + 200) = sub_48d040(*(int *)*(int *)(*(unsigned int *)&idx + 128), &v2, *(short *)(*(unsigned int *)&idx + 220));
-        g_616878(2, gmsgAddEffect, *(int *)*(int *)(*(unsigned int *)&idx + 128) + 8, 0);
-        g_616880(1);
-        v11 = g_6168dc(*(int *)(*(int *)*(int *)(*(unsigned int *)&idx + 200) + 520));
-        g_616888(v11);
-        g_616894(*(float *)(*(int *)*(int *)(*(unsigned int *)&idx + 200) + 8));
-        g_616894(*(float *)(*(int *)*(int *)(*(unsigned int *)&idx + 200) + 12));
+        *(unsigned int *)(*(unsigned int *)&idx + 200) = CSpiritBombAttack::CreateSpiritBomb(*(int *)*(int *)(*(unsigned int *)&idx + 128), &v2, *(short *)(*(unsigned int *)&idx + 220));
+        g_engfuncs.pfnMessageBegin(2, gmsgAddEffect, *(int *)*(int *)(*(unsigned int *)&idx + 128) + 8, 0);
+        g_engfuncs.pfnWriteByte(1);
+        v11 = g_engfuncs.pfnIndexOfEdict(*(int *)(*(int *)*(int *)(*(unsigned int *)&idx + 200) + 520));
+        g_engfuncs.pfnWriteShort(v11);
+        g_engfuncs.pfnWriteCoord(*(float *)(*(int *)*(int *)(*(unsigned int *)&idx + 200) + 8));
+        g_engfuncs.pfnWriteCoord(*(float *)(*(int *)*(int *)(*(unsigned int *)&idx + 200) + 12));
         v12 = *(float *)(*(int *)*(int *)(*(unsigned int *)&idx + 200) + 16);
-        g_616894((float)v12);
-        g_61687c();
+        g_engfuncs.pfnWriteCoord((float)v12);
+        g_engfuncs.pfnMessageEnd();
     }
-    else if (!sub_48c980(*(int *)(*(unsigned int *)&idx + 128), 0))
+    else if (!CBasePlayer::UseKi(*(int *)(*(unsigned int *)&idx + 128), 0))
     {
         if (*(int *)(*(int *)(*(unsigned int *)&idx + 128) + 820))
         {
-            sub_48d600(idx);
+            CSpiritBomb::Shoot1(idx);
             return v13;
         }
         return v14;
@@ -80,12 +80,12 @@ double PrimaryAttack__11CSpiritBomb(float idx)
         if (*(int *)(*(unsigned int *)&idx + 196) <= 90)
         {
             if (*(char *)(*(unsigned int *)&idx + 196) & 1)
-                sub_487b00(*(int *)(*(unsigned int *)&idx + 200));
+                CSpiritBombAttack::Grow(*(int *)(*(unsigned int *)&idx + 200));
             *(unsigned int *)(*(unsigned int *)&idx + 196) = *(int *)(*(unsigned int *)&idx + 196) + 1;
-            sub_48c680(*(int *)(*(unsigned int *)&idx + 128), *(int *)(*(unsigned int *)&idx + 196) * 10 / 9);
+            CBasePlayer::DrawChargeBar(*(int *)(*(unsigned int *)&idx + 128), *(int *)(*(unsigned int *)&idx + 196) * 10 / 9);
         }
     }
-    sub_488640();
+    UTIL_WeaponTimeBase();
     *(float *)(*(unsigned int *)&idx + 156) = (float)(v12 + 0.2);
     return v12 + 0.2;
 }

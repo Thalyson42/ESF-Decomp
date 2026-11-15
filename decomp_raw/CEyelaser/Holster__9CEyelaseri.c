@@ -11,8 +11,8 @@ unsigned int Holster__9CEyelaseri(st_4bcda0_0 *a0)
 {
     unsigned int v0;  // eax
 
-    sub_48bb00(a0, a0->field_c4);
-    v0 = sub_48bb00(a0, a0->field_c8);
+    CEyelaser::DestroyLaser(a0, a0->field_c4);
+    v0 = CEyelaser::DestroyLaser(a0, a0->field_c8);
     a0->field_d4 = 0;
     return v0;
 }

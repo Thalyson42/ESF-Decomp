@@ -5,7 +5,7 @@ int DestroyLaser__9CEyelaserP5CBeam(unsigned int a0, int a1)
 
     v0 = a1;
     if (v0)
-        v0 = sub_48cc00(v0);
+        v0 = UTIL_Remove(v0);
     return v0;
 }
 

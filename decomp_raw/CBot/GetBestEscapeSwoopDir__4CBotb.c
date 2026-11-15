@@ -51,7 +51,7 @@ typedef struct st_573bf0_6 {
 } st_573bf0_6;
 
 extern char _GLOBAL_OFFSET_TABLE_;
-extern st_573bf0_6 *g_616928;
+extern st_573bf0_6 *g_engfuncs.pfnRandomLong;
 extern st_573bf0_5 *gpGlobals;
 
 unsigned int GetBestEscapeSwoopDir__4CBotb(st_573bf0_3 *a0, char a1)
@@ -189,7 +189,7 @@ unsigned int GetBestEscapeSwoopDir__4CBotb(st_573bf0_3 *a0, char a1)
     v45 = v28;
     v46 = v29;
     v47 = v30;
-    sub_488460(&v48, &v45, 0, 1, v51->field_208, &v43);
+    UTIL_TraceHull(&v48, &v45, 0, 1, v51->field_208, &v43);
     v54 = &*v9->field_34;
     v23 = v8 * *v9->field_34;
     v24 = v8 * *(float *)&v54[1];
@@ -200,7 +200,7 @@ unsigned int GetBestEscapeSwoopDir__4CBotb(st_573bf0_3 *a0, char a1)
     v45 = v20;
     v46 = v21;
     v47 = v22;
-    sub_488460(&v48, &v45, 0, 1, a0->field_0->field_208, &v41);
+    UTIL_TraceHull(&v48, &v45, 0, 1, a0->field_0->field_208, &v41);
     v55 = &*v9->field_40;
     v23 = v8 * *v9->field_40;
     v24 = v8 * *(float *)&v55[1];
@@ -211,7 +211,7 @@ unsigned int GetBestEscapeSwoopDir__4CBotb(st_573bf0_3 *a0, char a1)
     v45 = v20;
     v46 = v21;
     v47 = v22;
-    sub_488460(&v48, &v45, 0, 1, a0->field_0->field_208, &v39);
+    UTIL_TraceHull(&v48, &v45, 0, 1, a0->field_0->field_208, &v39);
     v56 = &*v9->field_40;
     v23 = v8 * *v9->field_40;
     v24 = v8 * *(float *)&v56[1];
@@ -223,7 +223,7 @@ unsigned int GetBestEscapeSwoopDir__4CBotb(st_573bf0_3 *a0, char a1)
     v46 = v21;
     v47 = v22;
     v0 = &v37;
-    sub_488460(&v48, &v45, 0, 1, a0->field_0->field_208, v0);
+    UTIL_TraceHull(&v48, &v45, 0, 1, a0->field_0->field_208, v0);
     v36 = 0;
     if (a1)
     {
@@ -238,7 +238,7 @@ unsigned int GetBestEscapeSwoopDir__4CBotb(st_573bf0_3 *a0, char a1)
         v46 = v21;
         v47 = v22;
         v0 = &v35;
-        sub_488460(&v48, &v45, 0, 1, a0->field_0->field_208, v0);
+        UTIL_TraceHull(&v48, &v45, 0, 1, a0->field_0->field_208, v0);
     }
     v19 = __fnstcw();
     v18 = v19 | 0xc00;
@@ -258,14 +258,14 @@ unsigned int GetBestEscapeSwoopDir__4CBotb(st_573bf0_3 *a0, char a1)
     iter = v17;
     *(unsigned short *)&v1 = 1;
     *(unsigned short *)&v0 = 1;
-    if ((char)sub_489a70(a0->field_b6c, v0, v1) && *(int *)(*(int *)a0->field_b6c + 264) == 11)
+    if ((char)UTIL_IsValidPlayer(a0->field_b6c, v0, v1) && *(int *)(*(int *)a0->field_b6c + 264) == 11)
     {
         v59 = &a0->field_0->field_8;
         v20 = a0->field_0->field_8;
         v21 = *(float *)&v59[1];
         v22 = *(float *)&v59[2];
         *(unsigned short *)&v2 = 1;
-        sub_48a640(&v23, a0->field_b6c, 0x3f800000, v2);
+        PredictEntityPos(&v23, a0->field_b6c, 0x3f800000, v2);
         v29 = v23;
         v30 = v24;
         v31 = v25;
@@ -279,11 +279,11 @@ unsigned int GetBestEscapeSwoopDir__4CBotb(st_573bf0_3 *a0, char a1)
         v64 = v61 * v61 + v62 * v62 + v63 * v63;
         v65 = sqrt(v64);
         if (isnan(v65))
-            sub_487dc0(*(unsigned int *)&v64);
+            sqrt(*(unsigned int *)&v64);
         else
             v64 = v65;
         v3 = (float)v64;
-        sub_48a800(&a0->field_0->field_50);
+        UTIL_MakeVectors(&a0->field_0->field_50);
         v66 = &gpGlobals->field_28;
         v67 = 100.0 * gpGlobals->field_28;
         v32 = (float)v67;
@@ -306,7 +306,7 @@ unsigned int GetBestEscapeSwoopDir__4CBotb(st_573bf0_3 *a0, char a1)
         v73 = v70 * v70 + v71 * v71 + v72 * v72;
         v74 = sqrt(v73);
         if (isnan(v74))
-            sub_487dc0(*(unsigned int *)&v73);
+            sqrt(*(unsigned int *)&v73);
         else
             v73 = v74;
         v13 = (float)v73;
@@ -334,7 +334,7 @@ unsigned int GetBestEscapeSwoopDir__4CBotb(st_573bf0_3 *a0, char a1)
         v82 = v79 * v79 + v80 * v80 + v81 * v81;
         v83 = sqrt(v82);
         if (isnan(v83))
-            sub_487dc0(*(unsigned int *)&v82);
+            sqrt(*(unsigned int *)&v82);
         else
             v82 = v83;
         v13 = (float)v82;
@@ -362,7 +362,7 @@ unsigned int GetBestEscapeSwoopDir__4CBotb(st_573bf0_3 *a0, char a1)
         v91 = v88 * v88 + v89 * v89 + v90 * v90;
         v92 = sqrt(v91);
         if (isnan(v92))
-            sub_487dc0(*(unsigned int *)&v91);
+            sqrt(*(unsigned int *)&v91);
         else
             v91 = v92;
         v13 = (float)v91;
@@ -390,7 +390,7 @@ unsigned int GetBestEscapeSwoopDir__4CBotb(st_573bf0_3 *a0, char a1)
         v100 = v97 * v97 + v98 * v98 + v99 * v99;
         v101 = sqrt(v100);
         if (isnan(v101))
-            sub_487dc0(*(unsigned int *)&v100);
+            sqrt(*(unsigned int *)&v100);
         else
             v100 = v101;
         v13 = (float)v100;
@@ -418,7 +418,7 @@ unsigned int GetBestEscapeSwoopDir__4CBotb(st_573bf0_3 *a0, char a1)
         v109 = v106 * v106 + v107 * v107 + v108 * v108;
         v110 = sqrt(v109);
         if (isnan(v110))
-            sub_487dc0(*(unsigned int *)&v109);
+            sqrt(*(unsigned int *)&v109);
         else
             v109 = v110;
         v13 = (float)v109;
@@ -426,7 +426,7 @@ unsigned int GetBestEscapeSwoopDir__4CBotb(st_573bf0_3 *a0, char a1)
             v4 -= 1;
     }
     if (a0->field_a20)
-        sub_48bf40(a0);
+        CBot::MakePlayerList(a0);
     if (a0->field_aac)
     {
         idx = 0;
@@ -438,7 +438,7 @@ unsigned int GetBestEscapeSwoopDir__4CBotb(st_573bf0_3 *a0, char a1)
                 *(float *)&v10 = *(float *)(*(int *)(&a0->field_a24)[idx] + 8);
                 *(float *)&v11 = *(float *)&v112[1];
                 *(float *)&v12 = *(float *)&v112[2];
-                v113 = sub_4880e0(a0, &v10);
+                v113 = UTIL_EntDir(a0, &v10);
                 if (v113 & 8)
                     iter -= 1;
                 if (v113 & 2)
@@ -463,9 +463,9 @@ unsigned int GetBestEscapeSwoopDir__4CBotb(st_573bf0_3 *a0, char a1)
             return 2;
         if (iter > node && iter > iter1 && iter > iter2 && iter > v4)
             return 8;
-        v114 = (!a1 ? g_616928(0, 3) : g_616928(0, 4));
-        if ((!a1 ? g_616928(0, 3) : g_616928(0, 4)) <= 4)
-            goto *((void *)(&(&_GLOBAL_OFFSET_TABLE_)[-1 * *(int *)(&(&_GLOBAL_OFFSET_TABLE_)[4 * (!a1 ? g_616928(0, 3) : g_616928(0, 4))] - 651436)]));
+        v114 = (!a1 ? g_engfuncs.pfnRandomLong(0, 3) : g_engfuncs.pfnRandomLong(0, 4));
+        if ((!a1 ? g_engfuncs.pfnRandomLong(0, 3) : g_engfuncs.pfnRandomLong(0, 4)) <= 4)
+            goto *((void *)(&(&_GLOBAL_OFFSET_TABLE_)[-1 * *(int *)(&(&_GLOBAL_OFFSET_TABLE_)[4 * (!a1 ? g_engfuncs.pfnRandomLong(0, 3) : g_engfuncs.pfnRandomLong(0, 4))] - 651436)]));
     }
     return 32;
 }

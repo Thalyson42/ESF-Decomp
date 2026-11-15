@@ -25,7 +25,7 @@ int dcast__C14__si_type_infoRC9type_infoiPvPC9type_infoT3(st_5980b4_3 *a0, int a
     int v2;  // [bp-0x14]
 
     sub_5980b0(v0, v1, v2);
-    if ((char)sub_48be00(a0, a1))
+    if ((char)type_info::__eq(a0, a1))
         return a3;
     return a0->field_8->field_4->field_c(a0->field_8, a1, a2, a3, a4, a5);
 }

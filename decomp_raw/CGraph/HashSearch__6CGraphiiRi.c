@@ -17,9 +17,9 @@ typedef struct st_4e4540_0 {
     unsigned int field_0;
 } st_4e4540_0;
 
-extern st_4e4540_0 *g_616918;
-extern st_4e4540_0 *g_61691c;
-extern st_4e4540_0 *g_616924;
+extern st_4e4540_0 *g_engfuncs.pfnCRC32_Init;
+extern st_4e4540_0 *g_engfuncs.pfnCRC32_ProcessBuffer;
+extern st_4e4540_0 *g_engfuncs.pfnCRC32_Final;
 
 unsigned int * HashSearch__6CGraphiiRi(st_4e4540_1 *a0, unsigned int a1, unsigned int a2, unsigned int *a3)
 {
@@ -33,9 +33,9 @@ unsigned int * HashSearch__6CGraphiiRi(st_4e4540_1 *a0, unsigned int a1, unsigne
     *(unsigned short *)&v2 = a1;
     v2 &= 0xffff;
     v2 |= a2 * 0x10000;
-    g_616918(&v3);
-    g_61691c(&v3, &v2, 4);
-    v3 = g_616924(v3);
+    g_engfuncs.pfnCRC32_Init(&v3);
+    g_engfuncs.pfnCRC32_ProcessBuffer(&v3, &v2, 4);
+    v3 = g_engfuncs.pfnCRC32_Final(v3);
     v1 = (&a0->field_207c)[v3 & 15];
     iter = (v3 >> 4) % a0->field_20c0;
     if (*(short *)&a0->field_20bc[iter] != 0xffff)

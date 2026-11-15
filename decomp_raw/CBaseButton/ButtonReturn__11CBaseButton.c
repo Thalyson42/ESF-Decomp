@@ -24,7 +24,7 @@ int ButtonReturn__11CBaseButton(float idx)
         *(float *)&v0 = *(float *)(*(unsigned int *)&idx + 156);
         *(float *)&v1 = *(float *)&v5[1];
         *(float *)&v2 = *(float *)&v5[2];
-        sub_488220(idx, &v0, *(float *)(*(int *)idx + 504));
+        CBaseToggle::LinearMove(idx, &v0, *(float *)(*(int *)idx + 504));
     }
     else
     {
@@ -32,7 +32,7 @@ int ButtonReturn__11CBaseButton(float idx)
         *(float *)&v0 = *(float *)(*(unsigned int *)&idx + 180);
         *(float *)&v1 = *(float *)&v6[1];
         *(float *)&v2 = *(float *)&v6[2];
-        sub_488a40(idx, &v0, *(float *)(*(int *)idx + 504));
+        CBaseToggle::AngularMove(idx, &v0, *(float *)(*(int *)idx + 504));
     }
     v7 = *(int *)idx;
     v7->field_130 = 0;

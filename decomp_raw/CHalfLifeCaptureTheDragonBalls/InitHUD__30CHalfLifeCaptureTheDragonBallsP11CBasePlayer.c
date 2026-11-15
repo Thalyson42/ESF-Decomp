@@ -31,11 +31,11 @@ typedef struct st_49b4c0_3 {
 } st_49b4c0_3;
 
 extern unsigned int gmsgDragonBallEnt;
-extern st_49b4c0_2 *g_616878;
-extern st_49b4c0_2 *g_61687c;
-extern st_49b4c0_2 *g_616880;
-extern st_49b4c0_2 *g_616888;
-extern st_49b4c0_2 *g_6168dc;
+extern st_49b4c0_2 *g_engfuncs.pfnMessageBegin;
+extern st_49b4c0_2 *g_engfuncs.pfnMessageEnd;
+extern st_49b4c0_2 *g_engfuncs.pfnWriteByte;
+extern st_49b4c0_2 *g_engfuncs.pfnWriteShort;
+extern st_49b4c0_2 *g_engfuncs.pfnIndexOfEdict;
 extern st_49b4c0_3 *gpGlobals;
 
 int InitHUD__30CHalfLifeCaptureTheDragonBallsP11CBasePlayer(int a0, st_49b4c0_0 **a1)
@@ -53,17 +53,17 @@ int InitHUD__30CHalfLifeCaptureTheDragonBallsP11CBasePlayer(int a0, st_49b4c0_0 
         v3 = iter * 4;
         if (*(int *)((char *)v3 + v1))
         {
-            g_616878(1, gmsgDragonBallEnt, 0, *a1->field_208);
-            g_616880(iter);
-            v0 = g_6168dc(*(int *)(*(int *)*(int *)((char *)v3 + v1) + 520));
-            g_616888(v0);
-            g_61687c(v0);
+            g_engfuncs.pfnMessageBegin(1, gmsgDragonBallEnt, 0, *a1->field_208);
+            g_engfuncs.pfnWriteByte(iter);
+            v0 = g_engfuncs.pfnIndexOfEdict(*(int *)(*(int *)*(int *)((char *)v3 + v1) + 520));
+            g_engfuncs.pfnWriteShort(v0);
+            g_engfuncs.pfnMessageEnd(v0);
         }
     } while ((iter += 1, iter <= 6));
     iter = 1;
     while (iter <= gpGlobals->field_90)
     {
-        v4 = sub_48a500(iter);
+        v4 = UTIL_PlayerByIndex(iter);
         if (!v4)
         {
             iter += 1;
@@ -74,11 +74,11 @@ int InitHUD__30CHalfLifeCaptureTheDragonBallsP11CBasePlayer(int a0, st_49b4c0_0 
         }
         else if (v4->field_760)
         {
-            g_616878(1, gmsgDragonBallEnt, 0, *a1->field_208);
-            g_616880(v4->field_760 - 1);
-            v0 = g_6168dc(v4->field_0->field_208);
-            g_616888(v0);
-            g_61687c(v0);
+            g_engfuncs.pfnMessageBegin(1, gmsgDragonBallEnt, 0, *a1->field_208);
+            g_engfuncs.pfnWriteByte(v4->field_760 - 1);
+            v0 = g_engfuncs.pfnIndexOfEdict(v4->field_0->field_208);
+            g_engfuncs.pfnWriteShort(v0);
+            g_engfuncs.pfnMessageEnd(v0);
             iter += 1;
         }
         else
@@ -86,6 +86,6 @@ int InitHUD__30CHalfLifeCaptureTheDragonBallsP11CBasePlayer(int a0, st_49b4c0_0 
             iter += 1;
         }
     }
-    return sub_489190(a0, a1);
+    return CHalfLifeTeamplay::InitHUD(a0, a1);
 }
 

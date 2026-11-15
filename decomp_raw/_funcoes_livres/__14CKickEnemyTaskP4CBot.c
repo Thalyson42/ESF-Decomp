@@ -3,7 +3,7 @@ extern char __vt_14CKickEnemyTask;
 
 unsigned int * __14CKickEnemyTaskP4CBot(unsigned int *a0, int a1)
 {
-    sub_48ce80(a0, a1);
+    __9CBaseTaskP4CBot(a0, a1);
     a0[5] = &__vt_14CKickEnemyTask;
     *(float *)&a0[6] = *(float *)a0;
     return a0;

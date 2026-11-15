@@ -64,7 +64,7 @@ float DisableBeamJump__15CControlledBeam(st_4a7680_4 *a0)
         v4 = a0->field_c8;
         v4->field_14 = _INSERT(0, 0, 0) | 0xffff0000;
         v4->field_18 = &ExplodeTouch__16CExplodingAttackP11CBaseEntity;
-        sub_48a800(&a0->field_c8->field_0[1].field_24);
+        UTIL_MakeVectors(&a0->field_c8->field_0[1].field_24);
         v6 = a0->field_c8->field_0;
         v7 = a0->field_c8->field_2a8;
         v8 = &gpGlobals->field_28;

@@ -10,7 +10,7 @@ unsigned int * Spawn__16CRulePointEntity(st_4cefa0_0 **a0)
 {
     unsigned int *v0;  // eax
 
-    sub_487ec0(a0);
+    CRuleEntity::Spawn(a0);
     *a0->field_130 = 0;
     v0 = *a0;
     v0[46] = 0;

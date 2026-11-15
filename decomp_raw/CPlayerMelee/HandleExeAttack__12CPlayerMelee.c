@@ -12,7 +12,7 @@ typedef struct st_5037a0_1 {
     unsigned int field_0;
 } st_5037a0_1;
 
-extern st_5037a0_1 *g_6168b4;
+extern st_5037a0_1 *g_engfuncs.pfnAlertMessage;
 extern st_5037a0_2 *gpGlobals;
 
 unsigned int HandleExeAttack__12CPlayerMelee(float idx)
@@ -25,7 +25,7 @@ unsigned int HandleExeAttack__12CPlayerMelee(float idx)
     unsigned int *v6;  // edx
     unsigned int *v7;  // edx
 
-    v1 = sub_487fb0(idx);
+    v1 = CPlayerMelee::GetCurrentAnim(idx);
     if (!v1)
     {
         v2 = "No pAnim!\n";
@@ -43,7 +43,7 @@ unsigned int HandleExeAttack__12CPlayerMelee(float idx)
                 goto LABEL_50385e;
             if (*(float *)&v3[13] + *(float *)&v3[14] < *(float *)gpGlobals)
             {
-                v4 = sub_488c70(idx);
+                v4 = CPlayerMelee::EmitDamage(idx);
                 if (!*(int *)(*(unsigned int *)&idx + 324))
                     return v4;
             }
@@ -59,13 +59,13 @@ LABEL_50385e:
             {
                 v7 = &v6[6 * v5 + 22];
                 if (!v7[3] && v7[4] && *(float *)&v7[1] < *(float *)gpGlobals)
-                    sub_48be40(idx, v7);
+                    CPlayerMelee::EmitComboDamage(idx, v7);
             } while ((v5 += 1, v6 = *(int *)(*(unsigned int *)&idx + 380), (int)v5 < *(int *)(*(int *)(*(unsigned int *)&idx + 380) + 40)));
         }
 LABEL_5038b3:
-        return sub_48ca30(idx);
+        return CPlayerMelee::SetBlockingDirections(idx);
     }
-    g_6168b4(1, v2);
-    return sub_489040(idx);
+    g_engfuncs.pfnAlertMessage(1, v2);
+    return CPlayerMelee::StopMelee(idx);
 }
 

@@ -15,16 +15,16 @@ typedef struct st_52ef60_1 {
     unsigned int field_0;
 } st_52ef60_1;
 
-extern st_52ef60_1 *g_6168cc;
+extern st_52ef60_1 *g_engfuncs.pfnAllocString;
 
 st_52ef60_2 * KeyValue__18CTriggerEndSectionP14KeyValueData_s(st_52ef60_2 **a0, st_52ef60_0 *a1)
 {
     unsigned int v0;  // eax
     st_52ef60_2 *v1;  // eax
 
-    if (sub_488af0(a1->field_4, "section"))
-        return sub_489a50(a0, a1);
-    v0 = g_6168cc(a1->field_8);
+    if (strcmp@GLIBC_2.0(a1->field_4, "section"))
+        return CBaseTrigger::KeyValue(a0, a1);
+    v0 = g_engfuncs.pfnAllocString(a1->field_8);
     v1 = *a0;
     v1->field_1d4 = v0;
     a1->field_c = 1;

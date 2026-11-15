@@ -32,6 +32,6 @@ int HoseInit__5CBeamRC6VectorT1(st_4afdf0_0 **a0, unsigned int *a1, unsigned int
     v1->field_58 = a2[2];
     *a0->field_128 = *a0->field_128 & 0xfff;
     *a0->field_110 = *a0->field_110 & 0xfff;
-    return sub_48bc90(a0);
+    return CBeam::RelinkBeam(a0);
 }
 

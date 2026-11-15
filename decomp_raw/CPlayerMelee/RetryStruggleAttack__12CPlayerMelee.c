@@ -21,14 +21,14 @@ typedef struct st_50aec0_2 {
     float field_0;
 } st_50aec0_2;
 
-extern float g_5bd298;
+extern float melee_struggle_startdelay+12;
 extern st_50aec0_2 *gpGlobals;
 
 unsigned int * RetryStruggleAttack__12CPlayerMelee(st_50aec0_0 *a0)
 {
     unsigned int *v0;  // eax
 
-    *(float *)&a0->field_70 = *(float *)gpGlobals + g_5bd298;
+    *(float *)&a0->field_70 = *(float *)gpGlobals + melee_struggle_startdelay+12;
     a0->field_6c = 0;
     memset(&a0->field_74, 0, 12);
     a0->field_130->field_6c = 0;

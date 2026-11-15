@@ -4,7 +4,7 @@ extern int gGlobalState;
 
 unsigned int * ResetGlobalState__Fv(void)
 {
-    sub_48a450(&gGlobalState);
+    CGlobalState::ClearStates(&gGlobalState);
     gInitHUD = 1;
     return &gInitHUD;
 }

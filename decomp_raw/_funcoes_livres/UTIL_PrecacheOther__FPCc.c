@@ -28,11 +28,11 @@ typedef struct st_534f40_0 {
     unsigned int field_98;
 } st_534f40_0;
 
-extern st_534f40_1 *g_616818;
-extern st_534f40_1 *g_61681c;
-extern st_534f40_1 *g_6168b4;
-extern st_534f40_1 *g_6168d4;
-extern st_534f40_1 *g_6168d8;
+extern st_534f40_1 *g_engfuncs.pfnRemoveEntity;
+extern st_534f40_1 *g_engfuncs.pfnCreateNamedEntity;
+extern st_534f40_1 *g_engfuncs.pfnAlertMessage;
+extern st_534f40_1 *g_engfuncs.pfnPEntityOfEntOffset;
+extern st_534f40_1 *g_engfuncs.pfnEntOffsetOfPEntity;
 extern st_534f40_0 *gpGlobals;
 
 int UTIL_PrecacheOther__FPCc(unsigned int a0)
@@ -43,21 +43,21 @@ int UTIL_PrecacheOther__FPCc(unsigned int a0)
     st_534f40_3 *v4;  // edx
     unsigned int v0;  // [bp-0x8]
 
-    v1 = g_61681c(a0 - gpGlobals->field_98);
+    v1 = g_engfuncs.pfnCreateNamedEntity(a0 - gpGlobals->field_98);
     v0 = 0;
-    if (!v1 || !g_6168d8(v1))
+    if (!v1 || !g_engfuncs.pfnEntOffsetOfPEntity(v1))
         v0 = 1;
     if (v0)
-        return g_6168b4(1, "NULL Ent in UTIL_PrecacheOther\n");
+        return g_engfuncs.pfnAlertMessage(1, "NULL Ent in UTIL_PrecacheOther\n");
     v2 = (!v1 ? NULL : (struct st_534f40_5 *)&v1->padding_0[128]);
     v3 = v2->field_208;
-    if (v2->field_208 || (v3 = g_6168d4(0), v3))
+    if (v2->field_208 || (v3 = g_engfuncs.pfnPEntityOfEntOffset(0), v3))
         v4 = v3->field_7c;
     else
         v4 = NULL;
     if (!v4)
-        return g_616818(v1);
+        return g_engfuncs.pfnRemoveEntity(v1);
     v4->field_60->field_c(v4);
-    return g_616818(v1);
+    return g_engfuncs.pfnRemoveEntity(v1);
 }
 

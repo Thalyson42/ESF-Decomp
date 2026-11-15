@@ -9,6 +9,6 @@ extern char __vt_17CRecoverMeleeTask;
 int _._17CRecoverMeleeTask(st_586ed0_0 *a0, int a1)
 {
     a0->field_14 = &__vt_17CRecoverMeleeTask;
-    return sub_488170(a0, a1);
+    return _._9CBaseTask(a0, a1);
 }
 

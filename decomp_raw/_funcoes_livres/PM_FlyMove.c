@@ -51,8 +51,8 @@ typedef struct st_58f610_3 {
 } st_58f610_3;
 
 extern float vec3_origin;
-extern float g_5ccd84;
-extern float g_5ccd88;
+extern float vec3_origin+4;
+extern float vec3_origin+8;
 extern st_58f610_1 *pmove;
 
 unsigned int PM_FlyMove(void)
@@ -133,8 +133,8 @@ unsigned int PM_FlyMove(void)
         if ((unsigned int)v14)
         {
             pmove->field_5c = vec3_origin;
-            pmove->field_60 = g_5ccd84;
-            pmove->field_64 = g_5ccd88;
+            pmove->field_60 = vec3_origin+4;
+            pmove->field_64 = vec3_origin+8;
             return 4;
         }
         if (0.0 < v15)
@@ -158,7 +158,7 @@ unsigned int PM_FlyMove(void)
             *iter = *k;
             iter += 1;
         }
-        sub_48caf0();
+        PM_AddToTouched();
         if (0.7 < v21)
             v7 |= 1;
         if (v21 == 0.0f)
@@ -183,7 +183,7 @@ unsigned int PM_FlyMove(void)
                         v46 = v45 * 12;
                         if (0.7 < *(float *)((char *)&v33 + v46))
                         {
-                            sub_489f00(&v25, v46 + (char *)&v31, v6, 0x3f800000);
+                            PM_ClipVelocity(&v25, v46 + (char *)&v31, v6, 0x3f800000);
                             *(unsigned int *)&v25 = v22;
                             v26 = v23;
                             v27 = v24;
@@ -191,7 +191,7 @@ unsigned int PM_FlyMove(void)
                         else
                         {
                             v12 = (float)((1.0 - pmove->field_c4) * pmove->field_4f4f0->field_2c + 1.0);
-                            sub_489f00(&v25, &(&v31)[3 * v45], v6, v12);
+                            PM_ClipVelocity(&v25, &(&v31)[3 * v45], v6, v12);
                         }
                     } while ((v45 += 1, v45 < v10));
                 }
@@ -210,7 +210,7 @@ unsigned int PM_FlyMove(void)
                 v5 = &v31;
                 do
                 {
-                    sub_489f00(&v25, &v5[12 * v47], &pmove->field_5c, 0x3f800000);
+                    PM_ClipVelocity(&v25, &v5[12 * v47], &pmove->field_5c, 0x3f800000);
                     v48 = 0;
                     if (0 < v10)
                     {
@@ -227,16 +227,16 @@ unsigned int PM_FlyMove(void)
             {
                 if (v10 != 2)
                     goto LABEL_58faa6;
-                sub_4883f0(&v31, &v34, &v35);
-                sub_48d230(&v35, v35 * pmove->field_5c + v36 * pmove->field_60 + v37 * pmove->field_64, &pmove->field_5c);
+                CrossProduct(&v31, &v34, &v35);
+                VectorScale(&v35, v35 * pmove->field_5c + v36 * pmove->field_60 + v37 * pmove->field_64, &pmove->field_5c);
             }
             v49 = pmove;
             if (0.0 >= pmove->field_5c * v28 + pmove->field_60 * v29 + pmove->field_64 * v30)
             {
 LABEL_58fb21:
                 v49->field_5c = vec3_origin;
-                v49->field_60 = g_5ccd84;
-                v49->field_64 = g_5ccd88;
+                v49->field_60 = vec3_origin+4;
+                v49->field_64 = vec3_origin+8;
                 break;
             }
             else
@@ -254,8 +254,8 @@ LABEL_58faa6:
     if (v8 == 0.0f)
     {
         pmove->field_5c = vec3_origin;
-        pmove->field_60 = g_5ccd84;
-        pmove->field_64 = g_5ccd88;
+        pmove->field_60 = vec3_origin+4;
+        pmove->field_64 = vec3_origin+8;
     }
     return v7;
 }

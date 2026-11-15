@@ -15,6 +15,6 @@ int Use__6CShakeP11CBaseEntityT18USE_TYPEf(st_4b5e30_0 **a0)
     st_4b5e30_0 *v0;  // eax
 
     v0 = *a0;
-    return sub_48b7f0(&v0->field_8, v0->field_144, v0->field_1dc, v0->field_1d8, v0->field_1e0);
+    return UTIL_ScreenShake(&v0->field_8, v0->field_144, v0->field_1dc, v0->field_1d8, v0->field_1e0);
 }
 

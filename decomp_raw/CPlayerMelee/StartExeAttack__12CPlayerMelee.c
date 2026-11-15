@@ -11,8 +11,8 @@ void StartExeAttack__12CPlayerMelee(st_503a10_0 *a0)
         a0->field_104 = 0;
         return;
     }
-    sub_48b780(a0);
-    sub_488190(a0);
+    CPlayerMelee::CopyMoveToExe(a0);
+    CPlayerMelee::NewExeMovePost(a0);
     return;
 }
 

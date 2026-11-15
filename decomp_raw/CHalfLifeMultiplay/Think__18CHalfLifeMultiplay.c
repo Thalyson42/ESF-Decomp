@@ -17,21 +17,21 @@ typedef struct st_4db870_1 {
 
 extern char fragsleft;
 extern char timeleft;
-extern float g_5bcfa0;
-extern float g_5bd054;
-extern float g_5bd07c;
-extern float g_5bd090;
-extern float g_5bd0a4;
-extern float g_5bd158;
+extern float timeleft+12;
+extern float allowspectator+12;
+extern float characterlimit+12;
+extern float fraglimit+12;
+extern float timelimit+12;
+extern float mp_chattime+12;
 extern float g_flIntermissionStartTime;
 extern unsigned int gmsgAllowSpec;
 extern unsigned int g_fGameOver;
-extern st_4db870_1 *g_616878;
-extern st_4db870_1 *g_61687c;
-extern st_4db870_1 *g_616880;
-extern st_4db870_1 *g_6168a4;
-extern st_4db870_1 *g_6168b0;
-extern st_4db870_1 *g_6169e4;
+extern st_4db870_1 *g_engfuncs.pfnMessageBegin;
+extern st_4db870_1 *g_engfuncs.pfnMessageEnd;
+extern st_4db870_1 *g_engfuncs.pfnWriteByte;
+extern st_4db870_1 *g_engfuncs.pfnCVarGetFloat;
+extern st_4db870_1 *g_engfuncs.pfnCVarSetString;
+extern st_4db870_1 *g_engfuncs.pfnForceUnmodified;
 extern st_4db870_0 *gpGlobals;
 extern unsigned int last_frags.1743;
 extern int last_time.1744;
@@ -57,42 +57,42 @@ double Think__18CHalfLifeMultiplay(float idx)
     unsigned short v5;  // [bp-0x18]
     unsigned short v6;  // [bp-0x16]
 
-    sub_488ca0(&g_VoiceGameMgr, (unsigned int)(gpGlobals->field_4 >> 0));
+    CVoiceGameMgr::Update(&g_VoiceGameMgr, (unsigned int)(gpGlobals->field_4 >> 0));
     v3 = 0;
-    if (*(float *)(*(unsigned int *)&idx + 80) != g_5bd054)
+    if (*(float *)(*(unsigned int *)&idx + 80) != allowspectator+12)
     {
-        g_616878(2, gmsgAllowSpec, 0, 0);
+        g_engfuncs.pfnMessageBegin(2, gmsgAllowSpec, 0, 0);
         v6 = __fnstcw();
         v5 = v6 | 0xc00;
-        v4 = (int)g_5bd054;
+        v4 = (int)allowspectator+12;
         v0 = v4;
-        g_616880(v0);
-        g_61687c(v0);
-        *(float *)(*(unsigned int *)&idx + 80) = g_5bd054;
+        g_engfuncs.pfnWriteByte(v0);
+        g_engfuncs.pfnMessageEnd(v0);
+        *(float *)(*(unsigned int *)&idx + 80) = allowspectator+12;
     }
-    v8 = g_5bd07c;
-    if (*(float *)(*(unsigned int *)&idx + 84) != g_5bd07c)
+    v8 = characterlimit+12;
+    if (*(float *)(*(unsigned int *)&idx + 84) != characterlimit+12)
     {
         (*(int *)(*(int *)(*(unsigned int *)&idx + 0x44) + 56))(idx, 0);
-        v8 = g_5bd07c;
-        *(float *)(*(unsigned int *)&idx + 84) = g_5bd07c;
+        v8 = characterlimit+12;
+        *(float *)(*(unsigned int *)&idx + 84) = characterlimit+12;
     }
     if (g_fGameOver)
     {
-        g_6168a4("mp_chattime");
+        g_engfuncs.pfnCVarGetFloat("mp_chattime");
         v6 = __fnstcw();
         v5 = v6 | 0xc00;
         v4 = (int)v8;
         if (v4 <= 0)
         {
-            g_6168b0("mp_chattime", "1");
+            g_engfuncs.pfnCVarSetString("mp_chattime", "1");
         }
         else if (v4 > 120)
         {
-            v9 = sub_48a560(120);
-            g_6168b0("mp_chattime", v9);
+            v9 = UTIL_dtos1(120);
+            g_engfuncs.pfnCVarSetString("mp_chattime", v9);
         }
-        v10 = g_flIntermissionStartTime + g_5bd158;
+        v10 = g_flIntermissionStartTime + mp_chattime+12;
         *(float *)(*(unsigned int *)&idx + 72) = (float)v10;
         if (v10 >= gpGlobals->field_0)
             return v10;
@@ -107,8 +107,8 @@ double Think__18CHalfLifeMultiplay(float idx)
     }
     else
     {
-        v11 = g_5bd0a4 * 60.0;
-        v1 = g_5bd090;
+        v11 = timelimit+12 * 60.0;
+        v1 = fraglimit+12;
         if (v11 != 0.0)
         {
             v6 = __fnstcw();
@@ -130,7 +130,7 @@ double Think__18CHalfLifeMultiplay(float idx)
             iter = 1;
             while (iter <= gpGlobals->field_90)
             {
-                v14 = sub_48a500(iter);
+                v14 = UTIL_PlayerByIndex(iter);
                 if (v14)
                 {
                     v11 = v1;
@@ -161,14 +161,14 @@ double Think__18CHalfLifeMultiplay(float idx)
         }
         if (v3 != last_frags.1743)
         {
-            v16 = sub_488b00("%i", v3);
-            g_6169e4(&fragsleft, v16);
+            v16 = UTIL_VarArgs("%i", v3);
+            g_engfuncs.pfnForceUnmodified(&fragsleft, v16);
         }
         v17 = (double)last_time.1744;
-        if (g_5bcfa0 != v17)
+        if (timeleft+12 != v17)
         {
-            v18 = sub_488b00("%i", v2);
-            g_6169e4(&timeleft, v18);
+            v18 = UTIL_VarArgs("%i", v2);
+            g_engfuncs.pfnForceUnmodified(&timeleft, v18);
         }
         last_frags.1743 = v3;
         last_time.1744 = v2;

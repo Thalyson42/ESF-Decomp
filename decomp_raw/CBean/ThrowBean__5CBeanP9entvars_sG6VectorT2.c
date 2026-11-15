@@ -33,10 +33,10 @@ st_517790_2 * ThrowBean__5CBeanP9entvars_sG6VectorT2(st_517790_4 *a0, int a1, un
     st_517790_2 *v0;  // edi
     unsigned int *v1;  // edx
 
-    v0 = sub_48d110(0);
+    v0 = GetClassPtr__H1Z5CBean_PX01_PX01(0);
     v0->field_60->field_8(v0);
     v0->field_0->field_198 = a0->field_208;
-    sub_48db50(v0->field_0, a1);
+    UTIL_SetOrigin(v0->field_0, a1);
     v1 = v0->field_0;
     v1[8] = *a2;
     v1[9] = a2[1];

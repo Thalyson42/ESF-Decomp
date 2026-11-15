@@ -14,16 +14,16 @@ typedef struct st_48fee0_0 {
     unsigned int field_0;
 } st_48fee0_0;
 
-extern st_48fee0_0 *g_6168dc;
+extern st_48fee0_0 *g_engfuncs.pfnIndexOfEdict;
 
 int Destroy__5CAura(float a0)
 {
     st_48fee0_2 *v2;  // eax
     st_48fee0_1 *v3;  // eax
 
-    sub_489390(*(int *)(*(int *)*(int *)(*(unsigned int *)&a0 + 680) + 520), 3, "common/null.wav", 0x3f800000, 0.800000011920929f, 0, 100);
-    sub_48b090(g_6168dc(*(int *)(*(int *)a0 + 520)));
-    sub_48cc00(a0);
+    EMIT_SOUND_DYN(*(int *)(*(int *)*(int *)(*(unsigned int *)&a0 + 680) + 520), 3, "common/null.wav", 0x3f800000, 0.800000011920929f, 0, 100);
+    UTIL_Model_RemoveAll(g_engfuncs.pfnIndexOfEdict(*(int *)(*(int *)a0 + 520)));
+    UTIL_Remove(a0);
     v2 = *(int *)(*(unsigned int *)&a0 + 680);
     if (v2->field_350)
         return v2;

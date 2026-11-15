@@ -26,8 +26,8 @@ st_4c1400_0 * SecondaryAttack__11CFriezaDisc(st_4c1400_2 *a0)
     st_4c1400_0 *v2;  // eax
 
     if (a0->field_1d4 != 1)
-        return sub_48dd00(a0);
-    sub_487cf0(a0);
+        return CFriezaDisc::HandleDiscStatus(a0);
+    CFriezaDisc::StopControl(a0);
     v0 = a0->field_1d8;
     v0->field_c = _INSERT(0, 0, 0) | 0xffff0000;
     v0->field_10 = &HomeThink__17CFriezaDiscAttack;

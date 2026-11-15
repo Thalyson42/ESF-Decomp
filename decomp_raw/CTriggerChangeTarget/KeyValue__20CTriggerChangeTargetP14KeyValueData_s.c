@@ -15,15 +15,15 @@ typedef struct st_52f190_1 {
     unsigned int field_0;
 } st_52f190_1;
 
-extern st_52f190_1 *g_6168cc;
+extern st_52f190_1 *g_engfuncs.pfnAllocString;
 
 unsigned int KeyValue__20CTriggerChangeTargetP14KeyValueData_s(st_52f190_2 *a0, st_52f190_0 *a1)
 {
     unsigned int v0;  // eax
 
-    if (sub_488af0(a1->field_4, "m_iszNewTarget"))
-        return sub_48b920(a0, a1);
-    v0 = g_6168cc(a1->field_8);
+    if (strcmp@GLIBC_2.0(a1->field_4, "m_iszNewTarget"))
+        return CBaseDelay::KeyValue(a0, a1);
+    v0 = g_engfuncs.pfnAllocString(a1->field_8);
     a0->field_6c = v0;
     a1->field_c = 1;
     return v0;

@@ -71,13 +71,13 @@ unsigned int * ActivateMultiTrigger__12CBaseTriggerP11CBaseEntity(st_52cec0_2 *a
     unsigned int v0;  // [bp-0x44]
     unsigned int v1;  // [bp-0x40]
 
-    if (a0->field_0->field_104 > *(float *)&gpGlobals->field_0 || !sub_488a80(a0->field_100, a1))
+    if (a0->field_0->field_104 > *(float *)&gpGlobals->field_0 || !UTIL_IsMasterTriggered(a0->field_100, a1))
         return gpGlobals;
-    if (!sub_488af0(a0->field_0->field_0 + gpGlobals->field_98, "trigger_secret"))
+    if (!strcmp@GLIBC_2.0(a0->field_0->field_0 + gpGlobals->field_98, "trigger_secret"))
     {
         if (!a0->field_0->field_190)
             return gpGlobals;
-        if (!sub_488af0(*(!a0->field_0->field_190 ? NULL : (struct st_52cec0_0 *)&a0->field_0->field_190->field_80) + gpGlobals->field_98, "player"))
+        if (!strcmp@GLIBC_2.0(*(!a0->field_0->field_190 ? NULL : (struct st_52cec0_0 *)&a0->field_0->field_190->field_80) + gpGlobals->field_98, "player"))
         {
             gpGlobals->field_24 = (float)(1.0 + gpGlobals->field_24);
             goto LABEL_52cf9b;
@@ -87,14 +87,14 @@ unsigned int * ActivateMultiTrigger__12CBaseTriggerP11CBaseEntity(st_52cec0_2 *a
     {
 LABEL_52cf9b:
         if (a0->field_0->field_1e8)
-            sub_489390(a0->field_0->field_208, 2, gpGlobals->field_98 + a0->field_0->field_1e8, 0x3f800000, 0.800000011920929f, 0, 100);
+            EMIT_SOUND_DYN(a0->field_0->field_208, 2, gpGlobals->field_98 + a0->field_0->field_1e8, 0x3f800000, 0.800000011920929f, 0, 100);
         v2 = &a0->field_d4;
-        sub_48d960(v2, a1);
+        EHANDLE::__as(v2, a1);
         v1 = 0;
         v0 = 3;
-        sub_48d150(a0, sub_488810(v2));
+        CBaseDelay::SUB_UseTargets(a0, EHANDLE::__opP11CBaseEntity(v2));
         if (a0->field_0->field_1d4 && a1->field_60->field_a0(a1))
-            sub_488380(a0->field_0->field_1d4 + gpGlobals->field_98, a1);
+            UTIL_ShowMessage(a0->field_0->field_1d4 + gpGlobals->field_98, a1);
         if (0.0 < *(float *)&a0->field_8c)
         {
             a0->field_c = _INSERT(0, 0, 0) | 0xffff0000;

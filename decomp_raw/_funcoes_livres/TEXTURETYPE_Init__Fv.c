@@ -5,8 +5,8 @@ typedef struct st_51da20_0 {
 
 extern unsigned int fTextureTypeInit;
 extern int gcTextures;
-extern st_51da20_0 *g_61693c;
-extern st_51da20_0 *g_616940;
+extern st_51da20_0 *g_engfuncs.pfnLoadFileForMe;
+extern st_51da20_0 *g_engfuncs.pfnFreeFile;
 extern int grgszTextureName;
 extern int grgchTextureType;
 
@@ -29,11 +29,11 @@ unsigned int * TEXTURETYPE_Init__Fv(void)
     v4 = 0;
     if (fTextureTypeInit)
         return &fTextureTypeInit;
-    sub_48d0e0(&grgszTextureName, 0, 0x1a00);
-    sub_48d0e0(&grgchTextureType, 0, 0x200);
+    memset@GLIBC_2.0(&grgszTextureName, 0, 0x1a00);
+    memset@GLIBC_2.0(&grgchTextureType, 0, 0x200);
     gcTextures = 0;
-    sub_48d0e0(&v6, 0, 0x200);
-    v2 = g_61693c("sound/materials.txt", &v5);
+    memset@GLIBC_2.0(&v6, 0, 0x200);
+    v2 = g_engfuncs.pfnLoadFileForMe("sound/materials.txt", &v5);
     if (!v2)
         return v2;
     v1 = &v6;
@@ -41,23 +41,23 @@ unsigned int * TEXTURETYPE_Init__Fv(void)
     {
         for (iter = NULL; *(char *)(iter + &v6); iter += 1)
         {
-            if (!sub_488b30(*(char *)(iter + &v6)))
+            if (!isspace@GLIBC_2.0(*(char *)(iter + &v6)))
             {
                 v8 = iter;
-                if (*(char *)(v8 + &v6) && *(char *)(v8 + &v6) != 47 && sub_48cbf0(*(char *)(v8 + &v6)))
+                if (*(char *)(v8 + &v6) && *(char *)(v8 + &v6) != 47 && isalpha@GLIBC_2.0(*(char *)(v8 + &v6)))
                 {
                     v9 = iter;
                     iter = v9 + 1;
-                    v10 = sub_48c040(*(char *)(v9 + &v6));
+                    v10 = toupper@GLIBC_2.0(*(char *)(v9 + &v6));
                     for (*(gcTextures + (char *)&grgchTextureType) = v10; *(char *)(iter + &v6); iter += 1)
                     {
-                        if (!sub_488b30(*(char *)(iter + &v6)))
+                        if (!isspace@GLIBC_2.0(*(char *)(iter + &v6)))
                         {
                             if (*(char *)(iter + v1))
                             {
                                 for (node = iter; *(char *)(node + &v6); node += 1)
                                 {
-                                    if (sub_488b30(*(char *)(node + &v6)))
+                                    if (isspace@GLIBC_2.0(*(char *)(node + &v6)))
                                     {
                                         if (*(char *)(node + v1))
                                         {
@@ -67,7 +67,7 @@ unsigned int * TEXTURETYPE_Init__Fv(void)
                                             *(char *)(v12 + v1) = 0;
                                             v0 = 13 * gcTextures + (char *)&grgszTextureName;
                                             gcTextures = gcTextures + 1;
-                                            sub_48e110(v0, v1 + iter);
+                                            strcpy@GLIBC_2.0(v0, v1 + iter);
                                             break;
                                         }
                                     }
@@ -79,7 +79,7 @@ unsigned int * TEXTURETYPE_Init__Fv(void)
             }
         }
     }
-    g_616940(v2);
+    g_engfuncs.pfnFreeFile(v2);
     fTextureTypeInit = 1;
     return &fTextureTypeInit;
 }

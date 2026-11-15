@@ -28,7 +28,7 @@ st_582370_2 * __9CBaseTaskP4CBot(st_582370_2 *a0, st_582370_1 *a1)
     a0->field_c = a1->field_0->field_208;
     a0->field_10 = a1->field_b6c;
     a0->field_4 = 1;
-    sub_48d850(a0);
+    CBaseTask::SetGeneralDelay(a0);
     return a0;
 }
 

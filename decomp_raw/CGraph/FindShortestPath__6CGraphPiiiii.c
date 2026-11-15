@@ -19,7 +19,7 @@ typedef struct st_4df990_2 {
 } st_4df990_2;
 
 extern char _GLOBAL_OFFSET_TABLE_;
-extern st_4df990_2 *g_6168b4;
+extern st_4df990_2 *g_engfuncs.pfnAlertMessage;
 
 int FindShortestPath__6CGraphPiiiii(st_4df990_0 *a0, int *a1, int j, int a3, int a4, int a5)
 {
@@ -66,7 +66,7 @@ int FindShortestPath__6CGraphPiiiii(st_4df990_0 *a0, int *a1, int j, int a3, int
             v0 = j;
             v30 = "Can't build a path, iStart is %d!\n";
 LABEL_4df9eb:
-            g_6168b4(2, v30);
+            g_engfuncs.pfnAlertMessage(2, v30);
         }
         else if (j == a3)
         {
@@ -84,7 +84,7 @@ LABEL_4df9eb:
             {
                 if (v14 == a3)
                     return iter;
-                v15 = sub_4889b0(a0, v14, a3, a4, v8);
+                v15 = CGraph::NextNodeInRoute(a0, v14, a3, a4, v8);
                 if (v14 == v15)
                     break;
                 if (iter > 9)
@@ -96,7 +96,7 @@ LABEL_4df9eb:
         }
         else
         {
-            sub_48ab60(&v12);
+            __14CQueuePriority(&v12);
             if ((unsigned int)a4 <= 3)
             {
                 goto *((void *)(&(&_GLOBAL_OFFSET_TABLE_)[-1 * *(int *)(&(&_GLOBAL_OFFSET_TABLE_)[4 * a4] - 1261596)]));
@@ -116,8 +116,8 @@ LABEL_4df9eb:
                 *(unsigned int *)(a0->field_c + v16 + 72) = 0;
                 v17 = j;
                 *(int *)(a0->field_c + v16 + 76) = v17;
-                sub_48b3c0(&v12, v17, 0);
-                while (v12 && (v18 = sub_4890f0(&v12, &v11), v18 != a3))
+                CQueuePriority::Insert(&v12, v17, 0);
+                while (v12 && (v18 = CQueuePriority::Remove(&v12, &v11), v18 != a3))
                 {
                     v6 = a0->field_c + v18 * 88;
                     node = 0;
@@ -133,7 +133,7 @@ LABEL_4df9eb:
                             v20 = *(int *)(a0->field_10 + (node + *(int *)(v19 + v5 + 36)) * 24 + 4);
                             v2 = node + *(int *)(v19 + v5 + 36);
                             v21 = v2 * 24;
-                            if ((v9 & *(int *)(v1 + v21 + 16)) == v9 && (!*(int *)(v1 + v21 + 8) || (v2 = node + *(int *)(v4 + v5 + 36), sub_48a1f0(a0, v18, *(int *)(v1 + v2 * 24 + 8), a5, 1))))
+                            if ((v9 & *(int *)(v1 + v21 + 16)) == v9 && (!*(int *)(v1 + v21 + 8) || (v2 = node + *(int *)(v4 + v5 + 36), CGraph::HandleLinkEnt(a0, v18, *(int *)(v1 + v2 * 24 + 8), a5, 1))))
                             {
                                 v22 = a0->field_c;
                                 v23 = v10 + *(float *)(a0->field_10 + (node + *(int *)(v22 + v3 * 8 + 36)) * 24 + 20);
@@ -143,7 +143,7 @@ LABEL_4df9eb:
                                     v25 = v20 * 88;
                                     *(float *)(a0->field_c + v25 + 72) = v23;
                                     *(int *)(a0->field_c + v25 + 76) = v18;
-                                    sub_48b3c0(&v12, v20, v23);
+                                    CQueuePriority::Insert(&v12, v20, v23);
                                 }
                             }
                         } while ((node += 1, node < v6->field_20));

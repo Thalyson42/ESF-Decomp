@@ -15,6 +15,6 @@ int BeamDamageInstant__5CBeamP11TraceResultf(st_4b7510_0 **a0, int a1, float a2)
 {
     *a0->field_1e0 = a2;
     *a0->field_1e4 = (float)(*(float *)gpGlobals - 1.0);
-    return sub_48bfc0(a0, a1);
+    return CBeam::BeamDamage(a0, a1);
 }
 

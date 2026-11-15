@@ -61,7 +61,7 @@ typedef struct st_4da3f0_2 {
     char field_a;
 } st_4da3f0_2;
 
-extern st_4da3f0_1 *g_6168d4;
+extern st_4da3f0_1 *g_engfuncs.pfnPEntityOfEntOffset;
 
 unsigned int GetEnemy__12CBaseMonster(st_4da3f0_3 *a0)
 {
@@ -77,15 +77,15 @@ unsigned int GetEnemy__12CBaseMonster(st_4da3f0_3 *a0)
     {
         v1 = a0->field_60->field_114(a0);
         v2 = &a0->field_106;
-        if (v1 != sub_488810(v2) && v1 && *(int *)&a0->padding_109[129])
+        if (v1 != EHANDLE::__opP11CBaseEntity(v2) && v1 && *(int *)&a0->padding_109[129])
         {
             if (*(char *)(*(int *)&a0->padding_109[129] + 10) & 1)
             {
                 v0 = &a0->padding_190[188];
-                sub_48a510(a0, sub_488810(v2));
+                CBaseMonster::PushEnemy(a0, EHANDLE::__opP11CBaseEntity(v2));
                 a0->field_104[2] = a0->field_104[2] | 1;
-                sub_48d960(v2, v1);
-                v4 = *(int *)sub_489fd0(v2);
+                EHANDLE::__as(v2, v1);
+                v4 = *(int *)EHANDLE::__rf(v2);
                 *(unsigned int *)&a0->padding_190[188] = v4[2];
                 a0->field_250 = v4[3];
                 a0->field_254 = v4[4];
@@ -93,18 +93,18 @@ unsigned int GetEnemy__12CBaseMonster(st_4da3f0_3 *a0)
             if (*v1->field_198)
             {
                 v5 = *v1->field_198;
-                if (*v1->field_198 || (v5 = g_6168d4(0), v5))
+                if (*v1->field_198 || (v5 = g_engfuncs.pfnPEntityOfEntOffset(0), v5))
                     v6 = v5->field_7c;
                 else
                     v6 = NULL;
                 v8 = (!v6 ? NULL : v6->field_60->field_4c(v6));
                 if (v8 && *v8->field_1a4 & 32 && a0->field_60->field_100(a0, v8))
-                    sub_48a510(a0, v8, &a0->padding_190[188]);
+                    CBaseMonster::PushEnemy(a0, v8, &a0->padding_190[188]);
             }
         }
     }
-    if (!sub_48d8b0(&a0->field_106) && sub_489af0(a0) && *(int *)&a0->padding_109[129] && *(char *)(*(int *)&a0->padding_109[129] + 10) & 1)
+    if (!EHANDLE::__opi(&a0->field_106) && CBaseMonster::PopEnemy(a0) && *(int *)&a0->padding_109[129] && *(char *)(*(int *)&a0->padding_109[129] + 10) & 1)
         a0->field_104[2] = a0->field_104[2] | 1;
-    return (!sub_48d8b0(&a0->field_106) ? 0 : 1);
+    return (!EHANDLE::__opi(&a0->field_106) ? 0 : 1);
 }
 

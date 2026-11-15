@@ -9,6 +9,6 @@ extern char __vt_14CRecoverHPTask;
 int _._14CRecoverHPTask(st_586c60_0 *a0, int a1)
 {
     a0->field_14 = &__vt_14CRecoverHPTask;
-    return sub_488170(a0, a1);
+    return _._9CBaseTask(a0, a1);
 }
 

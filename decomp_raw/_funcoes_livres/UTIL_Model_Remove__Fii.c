@@ -4,10 +4,10 @@ typedef struct st_534900_0 {
 } st_534900_0;
 
 extern unsigned int gmsgManipModel;
-extern st_534900_0 *g_616878;
-extern st_534900_0 *g_61687c;
-extern st_534900_0 *g_616880;
-extern st_534900_0 *g_616888;
+extern st_534900_0 *g_engfuncs.pfnMessageBegin;
+extern st_534900_0 *g_engfuncs.pfnMessageEnd;
+extern st_534900_0 *g_engfuncs.pfnWriteByte;
+extern st_534900_0 *g_engfuncs.pfnWriteShort;
 
 int UTIL_Model_Remove__Fii(unsigned int a0, int a1)
 {
@@ -22,9 +22,9 @@ int UTIL_Model_Remove__Fii(unsigned int a0, int a1)
     {
         v0 = 16;
     }
-    g_616878(2, gmsgManipModel, 0, 0);
-    g_616880(v0);
-    g_616888(a0);
-    return g_61687c();
+    g_engfuncs.pfnMessageBegin(2, gmsgManipModel, 0, 0);
+    g_engfuncs.pfnWriteByte(v0);
+    g_engfuncs.pfnWriteShort(a0);
+    return g_engfuncs.pfnMessageEnd();
 }
 

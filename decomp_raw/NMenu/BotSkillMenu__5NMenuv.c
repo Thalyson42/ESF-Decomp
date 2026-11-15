@@ -13,10 +13,10 @@ int BotSkillMenu__5NMenuv(void)
     else
     {
         if (_5NMenu.CurrentMenuChoice != 6)
-            return sub_48d6f0();
+            return NMenu::ResetMenu();
         v1 = 2;
     }
-    sub_48d3f0(&BotManager, v1);
-    return sub_48d6f0(&BotManager, v1);
+    CBotManager::ChangeBotSkill(&BotManager, v1);
+    return NMenu::ResetMenu(&BotManager, v1);
 }
 

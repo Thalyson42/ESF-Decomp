@@ -4,7 +4,7 @@ int ReadInt__8CRestore(int a0)
     unsigned int v0;  // [bp-0x8]
 
     v0 = 0;
-    sub_487da0(a0, &v0, 4);
+    CRestore::BufferReadBytes(a0, &v0, 4);
     return v0;
 }
 

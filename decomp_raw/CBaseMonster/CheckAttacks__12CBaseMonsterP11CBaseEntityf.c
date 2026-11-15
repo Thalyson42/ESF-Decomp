@@ -72,7 +72,7 @@ float CheckAttacks__12CBaseMonsterP11CBaseEntityf(st_4d5180_2 *a0, st_4d5180_4 *
     float v16;  // [bp-0x1c]
     float v17;  // [bp-0x18]
 
-    sub_48a800(a0->field_0 + 4);
+    UTIL_MakeVectors(a0->field_0 + 4);
     v18 = &*a1->field_8;
     v19 = &a0->field_0->field_8;
     v14 = *a1->field_8 - *(float *)&a0->field_0->field_8;
@@ -86,7 +86,7 @@ float CheckAttacks__12CBaseMonsterP11CBaseEntityf(st_4d5180_2 *a0, st_4d5180_4 *
     v20 = v10 * v10 + v11 * v11;
     v21 = sqrt(v20);
     if (isnan(v21))
-        sub_487dc0(*(unsigned int *)&v20);
+        sqrt(*(unsigned int *)&v20);
     else
         v20 = v21;
     v17 = (float)v20;

@@ -13,7 +13,7 @@ int GetTeamIndex__17CHalfLifeTeamplayPCc(unsigned int a0, char *a1)
         {
             do
             {
-                if (!sub_48cac0(&(&team_names)[16 * v0], a1))
+                if (!strcasecmp@GLIBC_2.0(&(&team_names)[16 * v0], a1))
                     return v0;
             } while ((v0 += 1, v0 < num_teams));
         }

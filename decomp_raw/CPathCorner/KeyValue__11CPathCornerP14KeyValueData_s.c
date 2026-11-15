@@ -16,13 +16,13 @@ st_4e6a50_1 * KeyValue__11CPathCornerP14KeyValueData_s(st_4e6a50_1 *a0, st_4e6a5
     st_4e6a50_1 *v0;  // eax
     double v1;  // mm7
 
-    v0 = sub_488af0(a1->field_4, "wait");
+    v0 = strcmp@GLIBC_2.0(a1->field_4, "wait");
     if (v0)
     {
         a1->field_c = 0;
         return v0;
     }
-    sub_487fc0(a1->field_8, 0, 0);
+    __strtod_internal@GLIBC_2.0(a1->field_8, 0, 0);
     a0->field_64 = (float)v1;
     a1->field_c = 1;
     return a0;

@@ -36,13 +36,13 @@ int GoToDB__7CDBTask(float idx)
     unsigned int v7;  // [bp-0x20]
     unsigned int v8;  // [bp-0x1c]
 
-    v10 = sub_48b140(*(int *)(*(int *)(*(unsigned int *)&idx + 8) + 2864));
+    v10 = IsNull(*(int *)(*(int *)(*(unsigned int *)&idx + 8) + 2864));
     if (!(char)v10)
     {
-        v10 = sub_488740();
+        v10 = UTIL_DBsAreGathered();
         if (!(char)v10)
         {
-            v10 = sub_48e050();
+            v10 = UTIL_DBsAreActive();
             if ((char)v10)
             {
                 v11 = *(int *)(*(unsigned int *)&idx + 8);
@@ -56,7 +56,7 @@ int GoToDB__7CDBTask(float idx)
                     *(float *)&v0 = *(float *)(*(int *)v12->field_b30 + 8);
                     *(float *)&v1 = *(float *)&v13[1];
                     *(float *)&v2 = *(float *)&v13[2];
-                    sub_48a170(&v3, v12, &v0);
+                    CBot::GetAimAngles(&v3, v12, &v0);
                     *(unsigned int *)&v12->padding_b34[220] = v3;
                     *(unsigned int *)&v12->padding_b34[224] = v4;
                     *(unsigned int *)&v12->padding_b34[228] = v5;
@@ -70,7 +70,7 @@ int GoToDB__7CDBTask(float idx)
                 {
                     v10 = *(int *)(*(unsigned int *)&idx + 8);
                     if (*(int *)(*(int *)(*(unsigned int *)&idx + 8) + 4132) != 0xffffffff)
-                        return sub_48bf80(idx);
+                        return CDBTask::HeadToNextDBWP(idx);
                 }
             }
         }

@@ -11,6 +11,6 @@ int Spawn__10CDeathBall(float idx)
     *(unsigned int *)(*(unsigned int *)&idx + 212) = 1952540004;
     *(unsigned int *)(*(unsigned int *)&idx + 216) = 1818321512;
     *(unsigned short *)(*(unsigned int *)&idx + 220) = 108;
-    return sub_48cf50(idx);
+    return CBasePlayerItem::FallInit(idx);
 }
 

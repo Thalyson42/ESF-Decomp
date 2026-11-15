@@ -31,17 +31,17 @@ unsigned int GoUp__16CFuncTrackChange(float idx)
         *(float *)&v0 = *(float *)(*(unsigned int *)&idx + 268);
         *(float *)&v1 = *(float *)(*(unsigned int *)&idx + 272);
         *(float *)&v2 = *(float *)(*(unsigned int *)&idx + 276);
-        v7 = sub_488a40(idx, &v0, *(float *)(v5 + 504));
+        v7 = CBaseToggle::AngularMove(idx, &v0, *(float *)(v5 + 504));
     }
     else
     {
-        *(unsigned int *)(*(unsigned int *)&idx + 220) = _INSERT(sub_48b550(idx), 0, 0) | 0xffff0000;
+        *(unsigned int *)(*(unsigned int *)&idx + 220) = _INSERT(CFuncPlat::GoUp(idx), 0, 0) | 0xffff0000;
         *(char **)(*(unsigned int *)&idx + 224) = &CallHitTop__9CFuncPlat;
-        v7 = sub_48bb80(idx, *(unsigned int *)&idx + 268, *(float *)(*(int *)idx + 260) - *(float *)(*(int *)idx + 0x100));
+        v7 = CFuncPlatRot::RotMove(idx, *(unsigned int *)&idx + 268, *(float *)(*(int *)idx + 260) - *(float *)(*(int *)idx + 0x100));
     }
     if (*(int *)(*(unsigned int *)&idx + 316) != 2)
         return v7;
-    sub_48d5c0(idx, *(unsigned int *)&idx + 268);
+    CFuncTrackChange::UpdateTrain(idx, *(unsigned int *)&idx + 268);
     v9 = *(int *)(*(unsigned int *)&idx + 300);
     v9->field_64 = 0;
     return v9;

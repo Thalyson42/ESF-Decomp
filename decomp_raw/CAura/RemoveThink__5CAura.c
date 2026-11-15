@@ -17,11 +17,11 @@ unsigned int * RemoveThink__5CAura(float a0)
 
     if (!*(int *)(*(int *)a0 + 408))
     {
-        sub_48dd20(a0);
+        CAura::Destroy(a0);
     }
     else if (!*(int *)((!*(int *)(*(int *)a0 + 408) ? 0 : *(int *)(*(int *)a0 + 408) + 128) + 268))
     {
-        sub_48dd20(a0);
+        CAura::Destroy(a0);
     }
     if (*(int *)(*(int *)(*(unsigned int *)&a0 + 680) + 800))
     {

@@ -113,15 +113,15 @@ extern unsigned int gmsgSetFOV;
 extern unsigned int gmsgPowerLevel;
 extern unsigned int gmsgInitHUDMap;
 extern unsigned int gmsgBlobStart;
-extern st_4fd3d0_0 *g_616878;
-extern st_4fd3d0_0 *g_61687c;
-extern st_4fd3d0_0 *g_616880;
-extern st_4fd3d0_0 *g_616888;
-extern st_4fd3d0_0 *g_61688c;
-extern st_4fd3d0_0 *g_616894;
-extern st_4fd3d0_0 *g_616898;
-extern st_4fd3d0_0 *g_6168dc;
-extern st_4fd3d0_0 *g_616958;
+extern st_4fd3d0_0 *g_engfuncs.pfnMessageBegin;
+extern st_4fd3d0_0 *g_engfuncs.pfnMessageEnd;
+extern st_4fd3d0_0 *g_engfuncs.pfnWriteByte;
+extern st_4fd3d0_0 *g_engfuncs.pfnWriteShort;
+extern st_4fd3d0_0 *g_engfuncs.pfnWriteLong;
+extern st_4fd3d0_0 *g_engfuncs.pfnWriteCoord;
+extern st_4fd3d0_0 *g_engfuncs.pfnWriteString;
+extern st_4fd3d0_0 *g_engfuncs.pfnIndexOfEdict;
+extern st_4fd3d0_0 *g_engfuncs.pfnSetClientMaxspeed;
 extern unsigned int _15CBasePlayerItem.ItemInfoArray[10];
 
 unsigned int UpdateClientData__11CBasePlayer(float idx)
@@ -166,34 +166,34 @@ unsigned int UpdateClientData__11CBasePlayer(float idx)
     {
         *(unsigned int *)(*(unsigned int *)&idx + 2300) = 0;
         gInitHUD = 0;
-        g_616878(1, gmsgResetHUD, 0, *(int *)(*(int *)idx + 520));
+        g_engfuncs.pfnMessageBegin(1, gmsgResetHUD, 0, *(int *)(*(int *)idx + 520));
         v1 = 0;
-        g_616880(v1);
-        g_61687c(v1);
+        g_engfuncs.pfnWriteByte(v1);
+        g_engfuncs.pfnMessageEnd(v1);
         if (!*(int *)(*(unsigned int *)&idx + 0x900))
         {
-            g_616878(1, gmsgInitHUD, 0, *(int *)(*(int *)idx + 520));
-            g_61687c();
+            g_engfuncs.pfnMessageBegin(1, gmsgInitHUD, 0, *(int *)(*(int *)idx + 520));
+            g_engfuncs.pfnMessageEnd();
             g_pGameRules->field_44->field_30(g_pGameRules, idx);
             *(unsigned int *)(*(unsigned int *)&idx + 0x900) = 1;
             if (g_pGameRules->field_44->field_18(g_pGameRules))
-                sub_48c1b0("game_playerjoin", idx, idx, 3, 0);
+                FireTargets("game_playerjoin", idx, idx, 3, 0);
             v2 = "kishield";
             v1 = NULL;
             while (1)
             {
-                v15 = sub_487e80(v1, v2);
+                v15 = UTIL_FindEntityByClassname(v1, v2);
                 if (!v15)
                     break;
-                g_616878(1, gmsgBlobStart, 0, *(int *)(*(int *)idx + 520));
-                g_616880(0);
-                g_616894(v15->field_0->field_8);
-                g_616894(v15->field_0->field_c);
-                g_616894(v15->field_0->field_10);
-                v16 = g_6168dc(v15->field_0->field_208);
-                g_616888(v16);
-                g_616888(v15->field_64);
-                g_61687c();
+                g_engfuncs.pfnMessageBegin(1, gmsgBlobStart, 0, *(int *)(*(int *)idx + 520));
+                g_engfuncs.pfnWriteByte(0);
+                g_engfuncs.pfnWriteCoord(v15->field_0->field_8);
+                g_engfuncs.pfnWriteCoord(v15->field_0->field_c);
+                g_engfuncs.pfnWriteCoord(v15->field_0->field_10);
+                v16 = g_engfuncs.pfnIndexOfEdict(v15->field_0->field_208);
+                g_engfuncs.pfnWriteShort(v16);
+                g_engfuncs.pfnWriteShort(v15->field_64);
+                g_engfuncs.pfnMessageEnd();
                 v2 = "kishield";
                 v1 = v15;
             }
@@ -201,44 +201,44 @@ unsigned int UpdateClientData__11CBasePlayer(float idx)
             v1 = NULL;
             while (1)
             {
-                v17 = sub_487e80(v1, v2);
+                v17 = UTIL_FindEntityByClassname(v1, v2);
                 if (!v17)
                     break;
-                g_616878(1, gmsgBlobStart, 0, *(int *)(*(int *)idx + 520));
-                g_616880(1);
-                g_616894(v17->field_0->field_8);
-                g_616894(v17->field_0->field_c);
-                g_616894(v17->field_0->field_10);
-                v18 = g_6168dc(v17->field_0->field_208);
-                g_616888(v18);
-                g_616888(v17->field_64);
-                g_61687c();
+                g_engfuncs.pfnMessageBegin(1, gmsgBlobStart, 0, *(int *)(*(int *)idx + 520));
+                g_engfuncs.pfnWriteByte(1);
+                g_engfuncs.pfnWriteCoord(v17->field_0->field_8);
+                g_engfuncs.pfnWriteCoord(v17->field_0->field_c);
+                g_engfuncs.pfnWriteCoord(v17->field_0->field_10);
+                v18 = g_engfuncs.pfnIndexOfEdict(v17->field_0->field_208);
+                g_engfuncs.pfnWriteShort(v18);
+                g_engfuncs.pfnWriteShort(v17->field_64);
+                g_engfuncs.pfnMessageEnd();
                 v2 = "kiblob";
                 v1 = v17;
             }
         }
-        sub_48c1b0("game_playerspawn", idx, idx, 3, 0);
+        FireTargets("game_playerspawn", idx, idx, 3, 0);
     }
     if (*(int *)(*(unsigned int *)&idx + 884))
     {
         *(unsigned int *)(*(unsigned int *)&idx + 884) = 0;
-        g_616878(1, gmsgInitHUDMap, 0, *(int *)(*(int *)idx + 520));
-        g_61687c();
+        g_engfuncs.pfnMessageBegin(1, gmsgInitHUDMap, 0, *(int *)(*(int *)idx + 520));
+        g_engfuncs.pfnMessageEnd();
     }
     if (*(int *)(*(unsigned int *)&idx + 2352) != *(int *)(*(unsigned int *)&idx + 2356))
     {
-        g_616878(1, gmsgHideWeapon, 0, *(int *)(*(int *)idx + 520));
+        g_engfuncs.pfnMessageBegin(1, gmsgHideWeapon, 0, *(int *)(*(int *)idx + 520));
         v1 = *(int *)(*(unsigned int *)&idx + 2352);
-        g_616880(v1);
-        g_61687c(v1);
+        g_engfuncs.pfnWriteByte(v1);
+        g_engfuncs.pfnMessageEnd(v1);
         *(int *)(*(unsigned int *)&idx + 2356) = *(int *)(*(unsigned int *)&idx + 2352);
     }
     if (*(int *)(*(unsigned int *)&idx + 2360) != *(int *)(*(unsigned int *)&idx + 2364))
     {
-        g_616878(1, gmsgSetFOV, 0, *(int *)(*(int *)idx + 520));
+        g_engfuncs.pfnMessageBegin(1, gmsgSetFOV, 0, *(int *)(*(int *)idx + 520));
         v1 = *(int *)(*(unsigned int *)&idx + 2360);
-        g_616880(v1);
-        g_61687c(v1);
+        g_engfuncs.pfnWriteByte(v1);
+        g_engfuncs.pfnMessageEnd(v1);
     }
     if (*(float *)(*(int *)idx + 352) != (double)*(int *)(*(unsigned int *)&idx + 2344))
     {
@@ -250,38 +250,38 @@ unsigned int UpdateClientData__11CBasePlayer(float idx)
             v13 = (int)*(float *)(*(int *)idx + 352);
             v19 = v13;
         }
-        g_616878(1, gmsgHealth, 0, *(int *)(*(int *)idx + 520));
+        g_engfuncs.pfnMessageBegin(1, gmsgHealth, 0, *(int *)(*(int *)idx + 520));
         v1 = v19;
-        g_616880(v1);
-        g_61687c(v1);
+        g_engfuncs.pfnWriteByte(v1);
+        g_engfuncs.pfnMessageEnd(v1);
         v20 = (st_4fd3d0_6 *)idx;
         v12 = __fnstcw();
         v11 = v12 | 0xc00;
         v13 = (int)*(float *)&v20->field_0->field_160;
         v20->field_928 = v13;
     }
-    v21 = sub_48a780(idx);
+    v21 = CBasePlayer::GetMaxSpeed(idx);
     if (v21 != *(int *)(*(unsigned int *)&idx + 1856))
     {
         if (v21)
             *(unsigned int *)(*(int *)idx + 592) = 0;
         else
             *(unsigned int *)(*(int *)idx + 592) = 1;
-        v13 = sub_48a780(idx);
-        g_616958(*(int *)(*(int *)idx + 520), (float)v13);
+        v13 = CBasePlayer::GetMaxSpeed(idx);
+        g_engfuncs.pfnSetClientMaxspeed(*(int *)(*(int *)idx + 520), (float)v13);
         v22 = (st_4fd3d0_8 *)idx;
         v13 = v21;
         v22->field_0->field_254 = (float)v13;
         v22->field_740 = v21;
     }
-    v23 = sub_48bb90(idx);
+    v23 = CBasePlayer::GetPowerLevel(idx);
     if (v23 != *(int *)(*(unsigned int *)&idx + 1872))
     {
-        g_616878(2, gmsgPowerLevel, 0, 0);
-        v24 = g_6168dc(*(int *)(*(int *)idx + 520));
-        g_616880(v24);
-        g_61688c(v23);
-        g_61687c();
+        g_engfuncs.pfnMessageBegin(2, gmsgPowerLevel, 0, 0);
+        v24 = g_engfuncs.pfnIndexOfEdict(*(int *)(*(int *)idx + 520));
+        g_engfuncs.pfnWriteByte(v24);
+        g_engfuncs.pfnWriteLong(v23);
+        g_engfuncs.pfnMessageEnd();
         *(unsigned int *)(*(unsigned int *)&idx + 1872) = v23;
     }
     v25 = (st_4fd3d0_9 *)idx;
@@ -321,14 +321,14 @@ LABEL_4fdaad:
                 v3 = "Empty";
                 if (v30[6])
                     v3 = v30[6];
-                g_616878(1, gmsgWeaponList, 0, *(int *)(*(int *)idx + 520));
-                g_616898(v3);
-                g_616880(*v30);
-                g_616880(v30[1]);
-                g_616880(v30[8]);
+                g_engfuncs.pfnMessageBegin(1, gmsgWeaponList, 0, *(int *)(*(int *)idx + 520));
+                g_engfuncs.pfnWriteString(v3);
+                g_engfuncs.pfnWriteByte(*v30);
+                g_engfuncs.pfnWriteByte(v30[1]);
+                g_engfuncs.pfnWriteByte(v30[8]);
                 v0 = v30[9];
-                g_616880(v0);
-                g_61687c(v0);
+                g_engfuncs.pfnWriteByte(v0);
+                g_engfuncs.pfnMessageEnd(v0);
             }
         } while ((v4 += 1, v4 <= 63));
     }

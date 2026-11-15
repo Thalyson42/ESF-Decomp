@@ -31,10 +31,10 @@ st_5825c0_1 * TaskThink__12CPowerUpTask(st_5825c0_2 *a0)
         a0->field_4 = 2;
         return v0;
     }
-    sub_48d0d0(a0->field_8);
+    CBot::ResetMoveSpeed(a0->field_8);
     v3 = a0->field_8;
     if (v3->field_330)
         return v3;
-    return sub_48dd60(v3);
+    return CBasePlayer::StartPowerUp(v3);
 }
 

@@ -28,9 +28,9 @@ int FireAtPoint__6CLaserR11TraceResult(st_4b32c0_0 *a0, unsigned int *a1)
     v2[21] = v1[1];
     v2[22] = v1[2];
     if (a0->field_64)
-        sub_48db50(*(int *)a0->field_64, v1);
-    sub_48bfc0(a0, a1);
+        UTIL_SetOrigin(*(int *)a0->field_64, v1);
+    CBeam::BeamDamage(a0, a1);
     v0 = a1 + 5;
-    return sub_489be0(a0, sub_487ce0(a0));
+    return CBeam::DoSparks(a0, CBeam::GetStartPos(a0));
 }
 

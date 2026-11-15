@@ -97,14 +97,14 @@ float CheckNode__6CGraphG6Vectori(st_4dfe10_0 *a0, float *a1, unsigned int a2)
     v35 = v32 * v32 + v33 * v33 + v34 * v34;
     v36 = sqrt(v35);
     if (isnan(v36))
-        sub_487dc0(*(unsigned int *)&v35);
+        sqrt(*(unsigned int *)&v35);
     else
         v35 = v36;
     v12 = (float)v35;
     if (v12 >= a0->field_1828)
         return v12;
     v37 = a2 * 88;
-    sub_487b80(a1, v37 + a0->field_c + 12, 1, 0, &v24);
+    UTIL_TraceLine(a1, v37 + a0->field_c + 12, 1, 0, &v24);
     if (v25 != 1.0f)
         return v25;
     a0->field_182c = a2;

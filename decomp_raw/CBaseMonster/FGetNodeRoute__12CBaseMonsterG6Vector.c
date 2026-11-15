@@ -19,9 +19,9 @@ typedef struct st_4d8c60_0 {
     unsigned int field_0;
 } st_4d8c60_0;
 
-extern st_4d8c60_0 *g_6168b4;
+extern st_4d8c60_0 *g_engfuncs.pfnAlertMessage;
 extern int WorldGraph;
-extern st_4d8c60_0 *g_61716c;
+extern st_4d8c60_0 *WorldGraph+12;
 
 unsigned int FGetNodeRoute__12CBaseMonsterG6Vector(st_4d8c60_1 *a0, unsigned int *a1)
 {
@@ -40,15 +40,15 @@ unsigned int FGetNodeRoute__12CBaseMonsterG6Vector(st_4d8c60_1 *a0, unsigned int
     int v4;  // [bp-0x48]
     char v5;  // [bp-0x44]
 
-    v4 = sub_488f40(&WorldGraph, a0->field_0 + 8, a0);
-    v6 = sub_488f40(&WorldGraph, a1, a0);
+    v4 = CGraph::FindNearestNode(&WorldGraph, a0->field_0 + 8, a0);
+    v6 = CGraph::FindNearestNode(&WorldGraph, a1, a0);
     if (v4 == -0x1 || v6 == -0x1)
         return 0;
-    v7 = sub_488e90(&WorldGraph, a0);
-    v8 = sub_48ad80(&WorldGraph, &v5, v4, v6, v7, a0->field_260);
+    v7 = CGraph::HullIndex(&WorldGraph, a0);
+    v8 = CGraph::FindShortestPath(&WorldGraph, &v5, v4, v6, v7, a0->field_260);
     if (!v8)
     {
-        g_6168b4(2, "No Path from %d to %d!\n", v4, v6);
+        g_engfuncs.pfnAlertMessage(2, "No Path from %d to %d!\n", v4, v6);
     }
     else
     {
@@ -65,9 +65,9 @@ unsigned int FGetNodeRoute__12CBaseMonsterG6Vector(st_4d8c60_1 *a0, unsigned int
                 v9 = idx * 16;
                 v10 = (char *)a0 + v9;
                 v11 = v1[idx] * 88;
-                v10->field_194 = *(int *)((char *)g_61716c + v11);
-                v10->field_198 = *(int *)((char *)g_61716c + v11 + 4);
-                v10->field_19c = *(int *)((char *)g_61716c + v11 + 8);
+                v10->field_194 = *(int *)((char *)WorldGraph+12 + v11);
+                v10->field_198 = *(int *)((char *)WorldGraph+12 + v11 + 4);
+                v10->field_19c = *(int *)((char *)WorldGraph+12 + v11 + 8);
                 *(unsigned int *)&v0->padding_0[v9] = 32;
                 idx += 1;
             } while (idx < v2);

@@ -38,7 +38,7 @@ void __throw_bad_typeid(void)
     iter = &v4->field_7df77;
     v2 = *(int *)&iter[1].padding_0[1520];
     v2 = iter->field_2374;
-    v7 = sub_48df10(4);
+    v7 = __eh_alloc(4);
     *v7 = *(int *)&iter[1].padding_0[1520];
     *v7 = iter->field_2374;
     while (1)
@@ -47,13 +47,13 @@ void __throw_bad_typeid(void)
         v2 = *(int *)&iter[1].padding_0[1520];
         v1 = *v7->field_4(*(int *)&iter[1].padding_0[1460]);
         v0 = v7;
-        sub_488580(v0, v1);
-        sub_48a220(v0, v1);
+        __cp_push_exception(v0, v1);
+        __throw(v0, v1);
         sub_595b54();
         iter = &iter[56].padding_0[7363];
         v2 = iter->field_2374;
         v2 = *(int *)&iter[1].padding_0[1520];
-        sub_48a220();
+        __throw();
     }
 }
 

@@ -79,7 +79,7 @@ double ContractThink__18CScatterShotAttack(float idx)
     v27 = v24 * v24 + v25 * v25 + v26 * v26;
     v28 = sqrt(v27);
     if (isnan(v28))
-        sub_487dc0(*(unsigned int *)&v27);
+        sqrt(*(unsigned int *)&v27);
     else
         v27 = v28;
     v0 = (float)v27;
@@ -91,7 +91,7 @@ double ContractThink__18CScatterShotAttack(float idx)
     v29 = v14 * v14 + v15 * v15 + v16 * v16;
     v30 = sqrt(v29);
     if (isnan(v30))
-        sub_487dc0(*(unsigned int *)&v29);
+        sqrt(*(unsigned int *)&v29);
     else
         v29 = v30;
     v4 = (float)v29;
@@ -114,7 +114,7 @@ double ContractThink__18CScatterShotAttack(float idx)
     v32 = *(float *)&v17 * *(float *)&v17 + *(float *)&v18 * *(float *)&v18 + *(float *)&v19 * *(float *)&v19;
     v33 = sqrt(v32);
     if (isnan(v33))
-        sub_487dc0(*(unsigned int *)&v32);
+        sqrt(*(unsigned int *)&v32);
     else
         v32 = v33;
     v13 = (float)v32;
@@ -151,11 +151,11 @@ double ContractThink__18CScatterShotAttack(float idx)
     *(float *)&v34->field_24 = v2;
     *(float *)&v34->field_28 = v3;
     v41 = *(int *)idx;
-    sub_488860(&v1, &v41->field_20);
+    UTIL_VecToAngles(&v1, &v41->field_20);
     *(float *)&v41[1].field_24 = v1;
     *(float *)&v41[1].field_28 = v2;
     *(float *)&v41[2].padding_0[0] = v3;
-    sub_487d50(idx);
+    CMagicAttack::DrawBubbles(idx);
     *(double *)(*(unsigned int *)&idx + 784) = v0;
     v42 = 0.3 + *(float *)gpGlobals;
     *(float *)(*(int *)idx + 260) = (float)v42;

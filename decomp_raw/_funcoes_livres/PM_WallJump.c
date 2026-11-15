@@ -37,7 +37,7 @@ unsigned int PM_WallJump(void)
                 *(float *)&v12 = (float)pmove[92];
                 v13 = (float)pmove[96];
                 v14 = 0;
-                sub_489290(&v12);
+                VectorNormalize(&v12);
                 if ((char)pmove[283766] & 8)
                 {
                     *(float *)&v12 = (float)pmove[20];
@@ -81,7 +81,7 @@ unsigned int PM_WallJump(void)
                 (int)pmove[324992](&v3, pmove + 56, &v15, 0, 0xffffffff);
                 if (v4 != 1.0f && !v3)
                 {
-                    sub_48c310(&v8, &v10);
+                    PM_VecToAngles(&v8, &v10);
                     v2 = __fnstcw();
                     v1 = v2 | 0xc00;
                     v0 = (int)v11;
@@ -132,7 +132,7 @@ unsigned int PM_WallJump(void)
     {
         if ((int)pmove[516] == 1)
         {
-            sub_48d160();
+            PM_WallJumpPush();
             *(float *)&pmove[140] = 0;
             *(unsigned int *)&pmove[516] = 0;
             index = 0;

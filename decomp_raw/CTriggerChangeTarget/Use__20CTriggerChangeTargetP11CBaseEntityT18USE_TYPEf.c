@@ -38,7 +38,7 @@ st_52f210_4 * Use__20CTriggerChangeTargetP11CBaseEntityT18USE_TYPEf(st_52f210_1 
     st_52f210_4 *v0;  // ecx
     st_52f210_4 *v1;  // eax
 
-    v0 = sub_48bd10(0, "targetname", a0->field_0->field_1c8 + gpGlobals->field_98);
+    v0 = UTIL_FindEntityByString(0, "targetname", a0->field_0->field_1c8 + gpGlobals->field_98);
     if (!v0)
         return v0;
     v0->field_0->field_1c8 = a0->field_6c;

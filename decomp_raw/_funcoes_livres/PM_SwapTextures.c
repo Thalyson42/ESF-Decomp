@@ -15,13 +15,13 @@ int PM_SwapTextures(unsigned int a0, unsigned int a1)
     v2 = &grgszTextureName;
     v5 = 13 * a0 + (char *)&grgszTextureName;
     v1 = &v4;
-    sub_48e110(&v4, v5);
+    strcpy@GLIBC_2.0(&v4, v5);
     v0 = &grgchTextureType;
     v3 = *(a0 + (char *)&grgchTextureType);
     v6 = a1 * 13 + v2;
-    sub_48e110(v5, v6);
+    strcpy@GLIBC_2.0(v5, v6);
     *(char *)(a0 + v0) = *(char *)(a1 + v0);
-    sub_48e110(v6, v1);
+    strcpy@GLIBC_2.0(v6, v1);
     *(char *)(a1 + v0) = v3;
     return a1;
 }

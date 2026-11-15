@@ -47,9 +47,9 @@ typedef struct st_495c50_2 {
 } st_495c50_2;
 
 extern char SUB_DoNothing__11CBaseEntity;
-extern st_495c50_3 *g_6167f8;
-extern st_495c50_3 *g_6168d4;
-extern st_495c50_3 *g_6168d8;
+extern st_495c50_3 *g_engfuncs.pfnFindEntityByString;
+extern st_495c50_3 *g_engfuncs.pfnPEntityOfEntOffset;
+extern st_495c50_3 *g_engfuncs.pfnEntOffsetOfPEntity;
 extern st_495c50_2 *gpGlobals;
 
 st_495c50_0 * Register__12CMultiSource(st_495c50_1 *a0)
@@ -74,18 +74,18 @@ st_495c50_0 * Register__12CMultiSource(st_495c50_1 *a0)
     v3 = a0;
     v3->field_1e4 = 0;
     v5 = a0;
-    v5->field_c = _INSERT(sub_48d0e0(&v3->field_64, 0, 0x100), 0, 0) | 0xffff0000;
+    v5->field_c = _INSERT(memset@GLIBC_2.0(&v3->field_64, 0, 0x100), 0, 0) | 0xffff0000;
     v5->field_10 = &SUB_DoNothing__11CBaseEntity;
-    v6 = g_6167f8(0, "target", a0->field_0->field_1cc + gpGlobals->field_98);
+    v6 = g_engfuncs.pfnFindEntityByString(0, "target", a0->field_0->field_1cc + gpGlobals->field_98);
     while (1)
     {
         v7 = 0;
-        if (!v6 || !g_6168d8(v6))
+        if (!v6 || !g_engfuncs.pfnEntOffsetOfPEntity(v6))
             v7 = 1;
         if (v7 || a0->field_1e4 > 31)
             break;
         v8 = v6;
-        if (v8 || (v8 = g_6168d4(0), v8))
+        if (v8 || (v8 = g_engfuncs.pfnPEntityOfEntOffset(0), v8))
             v9 = v8->field_7c;
         else
             v9 = 0;
@@ -94,23 +94,23 @@ st_495c50_0 * Register__12CMultiSource(st_495c50_1 *a0)
             v10 = a0;
             v0 = &(&v10->field_0)[2 * v10->field_1e4 + 25];
             v10->field_1e4 = v10->field_1e4 + 1;
-            sub_48d960(v0, v9);
+            EHANDLE::__as(v0, v9);
         }
-        v6 = g_6167f8(v6, "target", a0->field_0->field_1cc + gpGlobals->field_98);
+        v6 = g_engfuncs.pfnFindEntityByString(v6, "target", a0->field_0->field_1cc + gpGlobals->field_98);
     }
     v2 = "multi_manager";
     v1 = "classname";
     v0 = NULL;
     while (1)
     {
-        v11 = g_6167f8(v0, v1, v2);
+        v11 = g_engfuncs.pfnFindEntityByString(v0, v1, v2);
         v12 = 0;
-        if (!v11 || !g_6168d8(v11))
+        if (!v11 || !g_engfuncs.pfnEntOffsetOfPEntity(v11))
             v12 = 1;
         if (v12 || a0->field_1e4 > 31)
             break;
         v13 = v11;
-        if (v13 || (v13 = g_6168d4(0), v13))
+        if (v13 || (v13 = g_engfuncs.pfnPEntityOfEntOffset(0), v13))
             v14 = v13->field_7c;
         else
             v14 = NULL;
@@ -119,7 +119,7 @@ st_495c50_0 * Register__12CMultiSource(st_495c50_1 *a0)
             v15 = a0;
             v0 = &(&v15->field_0)[2 * v15->field_1e4 + 25];
             v15->field_1e4 = v15->field_1e4 + 1;
-            sub_48d960(v0, v14);
+            EHANDLE::__as(v0, v14);
         }
         v2 = "multi_manager";
         v1 = "classname";

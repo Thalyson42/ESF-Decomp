@@ -24,8 +24,8 @@ typedef struct st_592640_0 {
 } st_592640_0;
 
 extern float vec3_origin;
-extern float g_5ccd84;
-extern float g_5ccd88;
+extern float vec3_origin+4;
+extern float vec3_origin+8;
 extern st_592640_0 *pmove;
 
 float * PM_Physics_Toss(void)
@@ -49,41 +49,41 @@ float * PM_Physics_Toss(void)
     float v14;  // [bp-0x3c]
     unsigned int v15;  // [bp-0x34]
 
-    sub_488fe0(v3, v4, v5);
+    PM_CheckWater(v3, v4, v5);
     if (0.0 < pmove->field_64)
         pmove->field_e0 = 0xffffffff;
-    if (pmove->field_e0 != 0xffffffff && sub_48a300(&pmove->field_74, &vec3_origin))
+    if (pmove->field_e0 != 0xffffffff && VectorCompare(&pmove->field_74, &vec3_origin))
     {
-        v17 = sub_48a300(&pmove->field_5c, &vec3_origin);
+        v17 = VectorCompare(&pmove->field_5c, &vec3_origin);
         if (v17)
             return v17;
     }
-    sub_489840();
+    PM_CheckVelocity();
     if (pmove->field_dc != 5 && pmove->field_dc != 16 && pmove->field_dc != 9)
-        sub_48a9f0();
+        PM_AddGravity();
     pmove->field_5c = pmove->field_5c + pmove->field_74;
     pmove->field_60 = pmove->field_60 + pmove->field_78;
     pmove->field_64 = pmove->field_64 + pmove->field_7c;
-    sub_489840();
-    sub_48d230(&pmove->field_5c, pmove->field_10, &v10);
+    PM_CheckVelocity();
+    VectorScale(&pmove->field_5c, pmove->field_10, &v10);
     pmove->field_5c = pmove->field_5c - pmove->field_74;
     pmove->field_60 = pmove->field_60 - pmove->field_78;
     pmove->field_64 = pmove->field_64 - pmove->field_7c;
     v2 = &v10;
     v1 = &v11;
-    sub_48d650(v1, v2);
-    sub_489840(v0, v1, v2);
+    PM_PushEntity(v1, v2);
+    PM_CheckVelocity(v0, v1, v2);
     if (v11)
     {
         pmove->field_e0 = v15;
         pmove->field_5c = vec3_origin;
-        pmove->field_60 = g_5ccd84;
-        pmove->field_64 = g_5ccd88;
+        pmove->field_60 = vec3_origin+4;
+        pmove->field_64 = vec3_origin+8;
         return &vec3_origin;
     }
     else if (v12 == 1.0)
     {
-        return sub_488fe0();
+        return PM_CheckWater();
     }
     else
     {
@@ -96,9 +96,9 @@ float * PM_Physics_Toss(void)
         {
             v18 = __double_as_longlong((pmove->field_dc == 16 ? 2.0 : 1.0));
         }
-        sub_489f00(&pmove->field_5c, &v13, &pmove->field_5c, v18);
+        PM_ClipVelocity(&pmove->field_5c, &v13, &pmove->field_5c, v18);
         if (0.7 >= v14)
-            return sub_488fe0();
+            return PM_CheckWater();
         v6 = 0;
         v7 = 0;
         v8 = 0;
@@ -111,19 +111,19 @@ float * PM_Physics_Toss(void)
         {
             pmove->field_e0 = v15;
             pmove->field_5c = vec3_origin;
-            pmove->field_60 = g_5ccd84;
-            pmove->field_64 = g_5ccd88;
+            pmove->field_60 = vec3_origin+4;
+            pmove->field_64 = vec3_origin+8;
         }
         else
         {
             v9 = (float)((1.0 - v12) * pmove->field_10 * 0.9);
-            sub_48d230(&pmove->field_5c, v9, &v10);
-            sub_48d650(&v11, &v10);
+            VectorScale(&pmove->field_5c, v9, &v10);
+            PM_PushEntity(&v11, &v10);
         }
         pmove->field_5c = pmove->field_5c - v6;
         pmove->field_60 = pmove->field_60 - v7;
         pmove->field_64 = pmove->field_64 - v8;
-        return sub_488fe0();
+        return PM_CheckWater();
     }
 }
 

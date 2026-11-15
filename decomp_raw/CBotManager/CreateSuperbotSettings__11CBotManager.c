@@ -3,14 +3,14 @@ typedef struct st_540120_0 {
     unsigned int field_0;
 } st_540120_0;
 
-extern st_540120_0 *g_616904;
-extern st_540120_0 *g_616928;
+extern st_540120_0 *g_engfuncs.pfnServerPrint;
+extern st_540120_0 *g_engfuncs.pfnRandomLong;
 extern int server_cmd.2922;
-extern unsigned short g_625744;
-extern unsigned short g_625746;
-extern unsigned int g_625748;
-extern unsigned int g_62574c;
-extern unsigned short g_625750;
+extern unsigned short BotManager+4292;
+extern unsigned short BotManager+4294;
+extern unsigned int BotManager+4296;
+extern unsigned int BotManager+4300;
+extern unsigned short BotManager+4304;
 
 int CreateSuperbotSettings__11CBotManager(void)
 {
@@ -106,24 +106,24 @@ int CreateSuperbotSettings__11CBotManager(void)
     char v8;  // [bp-0x103]
 
     v7 = 0;
-    sub_48d0e0(&v8, 0, 0xff);
-    sub_48d0e0(&g_625744, 0, 48);
-    sub_489050(&v7, "sbot.cfg", 0);
-    j = sub_48d440(&v7, "r");
+    memset@GLIBC_2.0(&v8, 0, 0xff);
+    memset@GLIBC_2.0(&BotManager+4292, 0, 48);
+    BuildBotFileName(&v7, "sbot.cfg", 0);
+    j = fopen@GLIBC_2.1(&v7, "r");
     idx = 0;
     do
     {
         index = idx * 16;
-        *(unsigned short *)(index + (char *)&g_625744) = g_616928(0xffffffff, 5);
-        *(unsigned short *)(index + (char *)&g_625746) = g_616928(0xffffffff, 5);
-        *(unsigned int *)(index + (char *)&g_625748) = g_616928(3500000, 10000000);
-        *(unsigned int *)(index + (char *)&g_62574c) = g_616928(1, 0xff);
-        *(unsigned short *)(index + (char *)&g_625750) = g_616928(0, 100);
+        *(unsigned short *)(index + (char *)&BotManager+4292) = g_engfuncs.pfnRandomLong(0xffffffff, 5);
+        *(unsigned short *)(index + (char *)&BotManager+4294) = g_engfuncs.pfnRandomLong(0xffffffff, 5);
+        *(unsigned int *)(index + (char *)&BotManager+4296) = g_engfuncs.pfnRandomLong(3500000, 10000000);
+        *(unsigned int *)(index + (char *)&BotManager+4300) = g_engfuncs.pfnRandomLong(1, 0xff);
+        *(unsigned short *)(index + (char *)&BotManager+4304) = g_engfuncs.pfnRandomLong(0, 100);
         idx += 1;
     } while (idx <= 2);
-    g_616904("Reading sbot.cfg file... ");
+    g_engfuncs.pfnServerPrint("Reading sbot.cfg file... ");
     if (!j)
-        return g_616904("file not found, random settings will be used\n");
+        return g_engfuncs.pfnServerPrint("file not found, random settings will be used\n");
     do
     {
         v11 = NULL;
@@ -131,7 +131,7 @@ int CreateSuperbotSettings__11CBotManager(void)
         v0 = j;
         while (1)
         {
-            v12 = sub_487f00(v0);
+            v12 = fgetc@GLIBC_2.0(v0);
             if (v12 != 32)
                 break;
             v0 = j;
@@ -146,16 +146,16 @@ LABEL_540361:
                 goto LABEL_540378;
         case 13:
 LABEL_540366:
-            v12 = sub_487f00(j);
+            v12 = fgetc@GLIBC_2.0(j);
 LABEL_540378:
             if (v12 == 0xffffffff)
             {
-                sub_48c560(j);
+                fclose@GLIBC_2.1(j);
                 j = 0;
             }
             *(char *)(v11 + &v6) = 0;
-            sub_48e110(&server_cmd.2922, &v6);
-            sub_48c150(&server_cmd.2922, "\n");
+            strcpy@GLIBC_2.0(&server_cmd.2922, &v6);
+            strcat@GLIBC_2.0(&server_cmd.2922, "\n");
             v13 = 0;
             v2 = NULL;
             switch (v6)
@@ -300,7 +300,7 @@ LABEL_54049f:
                     }
                     if (!v2 || !*v2 || idx == -0x1)
                         break;
-                    v3 = sub_48b500(v2, 0, 10, 0);
+                    v3 = __strtol_internal@GLIBC_2.0(v2, 0, 10, 0);
                     v44 = &v6;
                     v45 = "ki_gain";
                     v46 = 8;
@@ -325,12 +325,12 @@ LABEL_54049f:
                     {
                         if (v3 + 1 <= 1001)
                         {
-                            (&g_625744)[8 * idx] = v3;
+                            (&BotManager+4292)[8 * idx] = v3;
                             break;
                         }
                         else
                         {
-                            (&g_625744)[8 * idx] = g_616928(0xffffffff, 5);
+                            (&BotManager+4292)[8 * idx] = g_engfuncs.pfnRandomLong(0xffffffff, 5);
                             goto LABEL_5408b2;
                         }
                     }
@@ -358,12 +358,12 @@ LABEL_54049f:
                     {
                         if (v3 + 1 <= 251)
                         {
-                            (&g_625746)[8 * idx] = v3;
+                            (&BotManager+4294)[8 * idx] = v3;
                             break;
                         }
                         else
                         {
-                            (&g_625746)[8 * idx] = g_616928(0xffffffff, 5);
+                            (&BotManager+4294)[8 * idx] = g_engfuncs.pfnRandomLong(0xffffffff, 5);
                             goto LABEL_5408b2;
                         }
                     }
@@ -414,11 +414,11 @@ LABEL_54049f:
                             if (v3 == 0xffffffff || v3 - 1 <= 254)
                             {
                                 v71 = idx * 16;
-                                v72 = &g_62574c;
+                                v72 = &BotManager+4300;
                             }
                             else
                             {
-                                (&g_62574c)[4 * idx] = g_616928(1, 0xff);
+                                (&BotManager+4300)[4 * idx] = g_engfuncs.pfnRandomLong(1, 0xff);
                                 goto LABEL_5408b2;
                             }
                         }
@@ -448,12 +448,12 @@ LABEL_54049f:
                                 break;
                             if (v3 <= 100)
                             {
-                                (&g_625750)[8 * idx] = v3;
+                                (&BotManager+4304)[8 * idx] = v3;
                                 break;
                             }
                             else
                             {
-                                (&g_625750)[8 * idx] = g_616928(0, 100);
+                                (&BotManager+4304)[8 * idx] = g_engfuncs.pfnRandomLong(0, 100);
                             }
 LABEL_5408b2:
                             break;
@@ -462,11 +462,11 @@ LABEL_5408b2:
                     else if (v3 - 650000 <= 99349999)
                     {
                         v71 = idx * 16;
-                        v72 = &g_625748;
+                        v72 = &BotManager+4296;
                     }
                     else
                     {
-                        (&g_625748)[4 * idx] = g_616928(650000, 10000000);
+                        (&BotManager+4296)[4 * idx] = g_engfuncs.pfnRandomLong(650000, 10000000);
                         goto LABEL_5408b2;
                     }
                     *(unsigned int *)(v71 + (char *)v72) = v3;
@@ -489,12 +489,12 @@ LABEL_5408b2:
                 if (v12 == 9)
                     v12 = 32;
                 *(char *)(v11 + v1) = v12;
-                v12 = sub_487f00(j);
+                v12 = fgetc@GLIBC_2.0(j);
                 if (*(char *)(v11 + v1) == 32 && v12 == 32)
                 {
                     do
                     {
-                        v12 = sub_487f00(j);
+                        v12 = fgetc@GLIBC_2.0(j);
                     } while (*(char *)(v11 + &v6) == 32 && v12 == 32);
                 }
                 v11 += 1;
@@ -506,6 +506,6 @@ LABEL_5408b2:
             goto LABEL_540361;
         }
     } while (j);
-    return g_616904("done\n");
+    return g_engfuncs.pfnServerPrint("done\n");
 }
 

@@ -26,16 +26,16 @@ int TakeDamage__9CEnvModelP9entvars_sT1fi(st_4b8f30_1 *a0, int a1, int a2, float
 {
     unsigned int v0;  // edx
 
-    v0 = sub_48afe0(a0, "explosion");
+    v0 = CBaseAnimating::LookupSequence(a0, "explosion");
     if (v0 != 0xffffffff)
     {
         a0->field_0->field_12c = 0;
         a0->field_0->field_130 = 0;
         a0->field_0->field_128 = v0;
-        a0->field_c = _INSERT(sub_488850(a0), 0, 0) | 0xffff0000;
+        a0->field_c = _INSERT(CBaseAnimating::ResetSequenceInfo(a0), 0, 0) | 0xffff0000;
         a0->field_10 = &AnimateThink__9CEnvModel;
         a0->field_0->field_104 = (float)(1.0 + *(float *)gpGlobals);
     }
-    return sub_48a8f0(a0, a1, a2, a3, a4);
+    return CBaseMonster::TakeDamage(a0, a1, a2, a3, a4);
 }
 

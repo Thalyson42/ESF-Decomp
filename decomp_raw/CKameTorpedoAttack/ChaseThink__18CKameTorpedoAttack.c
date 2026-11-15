@@ -168,7 +168,7 @@ double ChaseThink__18CKameTorpedoAttack(float idx)
         iter = 1;
         while (iter <= gpGlobals->field_90)
         {
-            v46 = sub_48a500(iter);
+            v46 = UTIL_PlayerByIndex(iter);
             if (v46)
             {
                 if (v46->field_60->field_8c(v46))
@@ -221,7 +221,7 @@ double ChaseThink__18CKameTorpedoAttack(float idx)
         v24 = v21 * v21 + v22 * v22 + v23 * v23;
         v25 = sqrt(v24);
         if (isnan(v25))
-            sub_487dc0(*(unsigned int *)&v24);
+            sqrt(*(unsigned int *)&v24);
         else
             v24 = v25;
         v4 = (float)v24;
@@ -267,7 +267,7 @@ double ChaseThink__18CKameTorpedoAttack(float idx)
         v35 = *(float *)&v33->padding_0[32] * *(float *)&v33->padding_0[32] + *(float *)&v34->padding_0[4] * *(float *)&v34->padding_0[4] + *(float *)&v34->padding_0[8] * *(float *)&v34->padding_0[8];
         v36 = sqrt(v35);
         if (isnan(v36))
-            sub_487dc0(*(unsigned int *)&v35);
+            sqrt(*(unsigned int *)&v35);
         else
             v35 = v36;
         v10 = (float)v35;
@@ -293,7 +293,7 @@ double ChaseThink__18CKameTorpedoAttack(float idx)
         *(float *)&v33->padding_0[36] = v2;
         *(float *)&v33->padding_0[40] = v3;
         v40 = v38->field_0;
-        sub_488860(&v1, &v40->field_20);
+        UTIL_VecToAngles(&v1, &v40->field_20);
         *(float *)&v40->field_50 = v1;
         *(float *)&v40->field_54 = v2;
         *(float *)&v40->field_58 = v3;
@@ -302,7 +302,7 @@ double ChaseThink__18CKameTorpedoAttack(float idx)
     {
         *(unsigned int **)(*(unsigned int *)&idx + 732) = NULL;
     }
-    sub_487d50(idx);
+    CMagicAttack::DrawBubbles(idx);
     v47 = 0.1 + gpGlobals->field_0;
     *(float *)(*(int *)idx + 260) = (float)v47;
     return v47;

@@ -7,13 +7,13 @@ int Spawn__16CFuncTrackChange(float idx)
     unsigned int index;  // edx
     unsigned int v3;  // eax
 
-    sub_48cb50(idx);
+    CFuncPlat::Setup(idx);
     if (*(char *)(*(int *)idx + 416) & 16)
         *(float *)(*(unsigned int *)&idx + 176) = *(float *)(*(int *)idx + 16);
-    sub_48c730(idx);
+    CFuncPlatRot::SetupRotation(idx);
     if (*(char *)(*(int *)idx + 416) & 8)
     {
-        sub_48db50(*(int *)idx, *(unsigned int *)&idx + 168);
+        UTIL_SetOrigin(*(int *)idx, *(unsigned int *)&idx + 168);
         *(unsigned int *)(*(unsigned int *)&idx + 128) = 1;
         idx1 = *(int *)idx;
         *(int *)(idx1 + 80) = *(int *)(*(unsigned int *)&idx + 280);
@@ -23,7 +23,7 @@ int Spawn__16CFuncTrackChange(float idx)
     }
     else
     {
-        sub_48db50(*(int *)idx, *(unsigned int *)&idx + 156);
+        UTIL_SetOrigin(*(int *)idx, *(unsigned int *)&idx + 156);
         *(unsigned int *)(*(unsigned int *)&idx + 128) = 0;
         index = *(int *)idx;
         *(int *)(index + 80) = *(int *)(*(unsigned int *)&idx + 268);

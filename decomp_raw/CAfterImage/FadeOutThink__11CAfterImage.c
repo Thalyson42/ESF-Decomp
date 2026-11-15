@@ -16,6 +16,6 @@ unsigned int * FadeOutThink__11CAfterImage(float a0)
         *(float *)(*(int *)a0 + 260) = (float)(0.06 + *(float *)gpGlobals);
         return gpGlobals;
     }
-    return sub_48cc00(a0);
+    return UTIL_Remove(a0);
 }
 

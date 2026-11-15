@@ -14,15 +14,15 @@ typedef struct st_537330_2 {
 } st_537330_2;
 
 extern st_537330_2 *gMultiDamage;
-extern float g_624374;
-extern unsigned int g_624378;
+extern float gMultiDamage+4;
+extern unsigned int gMultiDamage+8;
 
 unsigned int ApplyMultiDamage__FP9entvars_sT0(unsigned int a0, unsigned int a1)
 {
     unsigned int v0;  // eax
 
     if (gMultiDamage)
-        v0 = gMultiDamage->field_60->field_34(gMultiDamage, a0, a1, g_624374, g_624378);
+        v0 = gMultiDamage->field_60->field_34(gMultiDamage, a0, a1, gMultiDamage+4, gMultiDamage+8);
     return v0;
 }
 

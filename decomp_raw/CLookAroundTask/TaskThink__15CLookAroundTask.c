@@ -64,8 +64,8 @@ typedef struct st_583fe0_5 {
     unsigned int field_0;
 } st_583fe0_5;
 
-extern st_583fe0_5 *g_616928;
-extern st_583fe0_5 *g_61692c;
+extern st_583fe0_5 *g_engfuncs.pfnRandomLong;
+extern st_583fe0_5 *g_engfuncs.pfnRandomFloat;
 extern st_583fe0_0 *gpGlobals;
 
 st_583fe0_4 * TaskThink__15CLookAroundTask(st_583fe0_2 *a0)
@@ -154,7 +154,7 @@ st_583fe0_4 * TaskThink__15CLookAroundTask(st_583fe0_2 *a0)
                 v40 = v37 * v37 + v38 * v38 + v39 * v39;
                 v41 = sqrt(v40);
                 if (isnan(v41))
-                    sub_487dc0(*(unsigned int *)&v40);
+                    sqrt(*(unsigned int *)&v40);
                 else
                     v40 = v41;
                 v8 = (float)v40;
@@ -176,18 +176,18 @@ st_583fe0_4 * TaskThink__15CLookAroundTask(st_583fe0_2 *a0)
             v9 = v2;
             v10 = v4;
             v12 = v6;
-            sub_48a170(&v21, v44, &v9);
+            CBot::GetAimAngles(&v21, v44, &v9);
             *(float *)&v44->field_c10 = v22;
             *(float *)&v44->field_c14 = v23;
             v44->field_c18 = v24;
             a0->field_4 = 2;
             return v24;
         }
-        v1 = g_616928(80, 100);
+        v1 = g_engfuncs.pfnRandomLong(80, 100);
         v45 = (double)v1 + a0->field_8->field_c14;
-        sub_48d430((float)v45);
+        UTIL_WrapAngle((float)v45);
         a0->field_8->field_c14 = (float)v45;
-        sub_48a800(&a0->field_c[1].padding_0[96]);
+        UTIL_MakeVectors(&a0->field_c[1].padding_0[96]);
         v46 = &gpGlobals->field_28;
         v47 = 10000.0 * gpGlobals->field_28;
         v8 = (float)v47;
@@ -199,30 +199,30 @@ st_583fe0_4 * TaskThink__15CLookAroundTask(st_583fe0_2 *a0)
         v3 = (float)(v47 + *(float *)&v49[0x22]);
         v5 = (float)(v48 + *(float *)&v50[1]);
         v7 = *(float *)&v50[2] + v13;
-        sub_488460(v50, &v3, 1, 1, v49, &v8);
+        UTIL_TraceHull(v50, &v3, 1, 1, v49, &v8);
         v51 = &(a0->padding_0)[3 * a0->field_48];
         v52 = &v51->field_c;
         v51->field_c = v16;
         v52->field_4 = v18;
         v52->field_8 = v20;
-        g_61692c(0.4000000059604645f, 0.800000011920929f);
+        g_engfuncs.pfnRandomFloat(0.4000000059604645f, 0.800000011920929f);
         a0->field_4c = (float)(0.4000000059604645 + *(float *)&gpGlobals->field_0);
         a0->field_4c = v14 + v14 + a0->field_4c;
     }
-    sub_48d0d0(a0->field_8);
-    if ((int)g_616928(0, 5) > 0x4)
+    CBot::ResetMoveSpeed(a0->field_8);
+    if ((int)g_engfuncs.pfnRandomLong(0, 5) > 0x4)
     {
-        v1 = g_616928(0xfffffff6, 10);
+        v1 = g_engfuncs.pfnRandomLong(0xfffffff6, 10);
         v53 = (double)v1 + a0->field_8->field_c10;
-        sub_48d430((float)v53);
+        UTIL_WrapAngle((float)v53);
         a0->field_8->field_c10 = (float)v53;
     }
-    v54 = g_616928(0, 5);
+    v54 = g_engfuncs.pfnRandomLong(0, 5);
     if (v54 <= 0x4)
         return v54;
-    v1 = g_616928(0xfffffff6, 10);
+    v1 = g_engfuncs.pfnRandomLong(0xfffffff6, 10);
     v55 = (double)v1 + a0->field_8->field_c14;
-    sub_48d430((float)v55);
+    UTIL_WrapAngle((float)v55);
     v56 = a0->field_8;
     *(float *)&v56->field_c14 = (float)v55;
     return v56;

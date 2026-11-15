@@ -22,6 +22,6 @@ unsigned int IRelationship__12CTalkMonsterP11CBaseEntity(st_5270e0_3 *a0, st_527
 {
     if (a1->field_60->field_a0(a1) && a0->field_248 & 1)
         return 2;
-    return sub_4885a0(a0, a1);
+    return CBaseMonster::IRelationship(a0, a1);
 }
 

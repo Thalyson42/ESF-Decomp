@@ -84,7 +84,7 @@ short Shoot__9CEnvModelG6Vectorff(st_4b9120_1 *a0, float *a1, float a2, float a3
     *(float *)&v15->field_28 = v7;
     a0->field_0->field_108 = 5;
     a0->field_0->field_1e0 = (float)(v14 * 5.0);
-    v19 = sub_488f20(a0);
+    v19 = CEnvModel::SetBoundingBox(a0);
     a0->field_c = 0;
     a0->field_10 = 0;
     v20 = _INSERT(v19, 0, 0);

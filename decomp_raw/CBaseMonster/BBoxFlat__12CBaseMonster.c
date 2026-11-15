@@ -72,7 +72,7 @@ unsigned int BBoxFlat__12CBaseMonster(st_4d9f90_0 **a0)
     v10 = v13 - v3;
     v11 = v14 - v4;
     v12 = v15 - v5;
-    sub_487b80(&v13, &v10, 1, v20->field_208, &v16);
+    UTIL_TraceLine(&v13, &v10, 1, v20->field_208, &v16);
     v22 = v13 - v17;
     v3 = v22;
     v23 = v14 - v18;
@@ -82,7 +82,7 @@ unsigned int BBoxFlat__12CBaseMonster(st_4d9f90_0 **a0)
     v25 = v22 * v22 + v23 * v23 + v24 * v24;
     v26 = sqrt(v25);
     if (isnan(v26))
-        sub_487dc0(*(unsigned int *)&v25);
+        sqrt(*(unsigned int *)&v25);
     else
         v25 = v26;
     v0 = (float)v25;
@@ -95,7 +95,7 @@ unsigned int BBoxFlat__12CBaseMonster(st_4d9f90_0 **a0)
     v3 = v13 - v6;
     v4 = v14 - v7;
     v5 = v15 - v8;
-    sub_487b80(&v13, &v3, 1, v27->field_208, &v16);
+    UTIL_TraceLine(&v13, &v3, 1, v27->field_208, &v16);
     v28 = v13 - v17;
     v3 = v28;
     v29 = v14 - v18;
@@ -105,7 +105,7 @@ unsigned int BBoxFlat__12CBaseMonster(st_4d9f90_0 **a0)
     v31 = v28 * v28 + v29 * v29 + v30 * v30;
     v32 = sqrt(v31);
     if (isnan(v32))
-        sub_487dc0(*(unsigned int *)&v31);
+        sqrt(*(unsigned int *)&v31);
     else
         v31 = v32;
     v9 = (float)v31;
@@ -121,7 +121,7 @@ unsigned int BBoxFlat__12CBaseMonster(st_4d9f90_0 **a0)
         v3 = v13 - v6;
         v4 = v14 - v7;
         v5 = v15 - v8;
-        sub_487b80(&v13, &v3, 1, v33->field_208, &v16);
+        UTIL_TraceLine(&v13, &v3, 1, v33->field_208, &v16);
         v34 = v13 - v17;
         v3 = v34;
         v35 = v14 - v18;
@@ -131,7 +131,7 @@ unsigned int BBoxFlat__12CBaseMonster(st_4d9f90_0 **a0)
         v37 = v34 * v34 + v35 * v35 + v36 * v36;
         v38 = sqrt(v37);
         if (isnan(v38))
-            sub_487dc0(*(unsigned int *)&v37);
+            sqrt(*(unsigned int *)&v37);
         else
             v37 = v38;
         v9 = (float)v37;
@@ -147,7 +147,7 @@ unsigned int BBoxFlat__12CBaseMonster(st_4d9f90_0 **a0)
         v3 = v13 - v6;
         v4 = v14 - v7;
         v5 = v15 - v8;
-        sub_487b80(&v13, &v3, 1, v39->field_208, &v16);
+        UTIL_TraceLine(&v13, &v3, 1, v39->field_208, &v16);
         v40 = v13 - v17;
         v3 = v40;
         v41 = v14 - v18;
@@ -157,7 +157,7 @@ unsigned int BBoxFlat__12CBaseMonster(st_4d9f90_0 **a0)
         v43 = v40 * v40 + v41 * v41 + v42 * v42;
         v44 = sqrt(v43);
         if (isnan(v44))
-            sub_487dc0(*(unsigned int *)&v43);
+            sqrt(*(unsigned int *)&v43);
         else
             v43 = v44;
         v9 = (float)v43;

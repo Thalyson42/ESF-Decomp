@@ -22,6 +22,6 @@ unsigned int _._13bad_exception(unsigned int *a0, char a1)
     *a0 = v3;
     if (!(a1 & 1))
         return v3;
-    return sub_48d4e0(a0);
+    return __builtin_delete(a0);
 }
 

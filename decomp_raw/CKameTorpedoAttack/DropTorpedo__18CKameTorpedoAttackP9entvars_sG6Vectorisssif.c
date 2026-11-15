@@ -61,13 +61,13 @@ typedef struct st_4c9b10_1 {
 
 extern char NormalThink__12CMagicAttack;
 extern unsigned int gmsgFlare;
-extern st_4c9b10_2 *g_6167c8;
-extern st_4c9b10_2 *g_616878;
-extern st_4c9b10_2 *g_61687c;
-extern st_4c9b10_2 *g_616888;
-extern st_4c9b10_2 *g_61688c;
-extern st_4c9b10_2 *g_616894;
-extern st_4c9b10_2 *g_6168dc;
+extern st_4c9b10_2 *g_engfuncs.pfnSetModel;
+extern st_4c9b10_2 *g_engfuncs.pfnMessageBegin;
+extern st_4c9b10_2 *g_engfuncs.pfnMessageEnd;
+extern st_4c9b10_2 *g_engfuncs.pfnWriteShort;
+extern st_4c9b10_2 *g_engfuncs.pfnWriteLong;
+extern st_4c9b10_2 *g_engfuncs.pfnWriteCoord;
+extern st_4c9b10_2 *g_engfuncs.pfnIndexOfEdict;
 extern st_4c9b10_5 *gpGlobals;
 
 short DropTorpedo__18CKameTorpedoAttackP9entvars_sG6Vectorisssif(st_4c9b10_4 *a0, float *a1, int a2, short a3, short a4, short a5, unsigned int a6, float a7)
@@ -103,12 +103,12 @@ short DropTorpedo__18CKameTorpedoAttackP9entvars_sG6Vectorisssif(st_4c9b10_4 *a0
     float v19;  // [bp-0x10]
     unsigned int v20;  // [bp-0x10]
 
-    v21 = sub_48dde0(0);
+    v21 = GetClassPtr__H1Z18CKameTorpedoAttack_PX01_PX01(0);
     v21->field_60->field_8(v21);
     v21->field_2c8 = 0;
     v21->field_0->field_108 = 5;
     v21->field_0->field_10c = 0;
-    g_6167c8(v21->field_0->field_208, "sprites/null.spr");
+    g_engfuncs.pfnSetModel(v21->field_0->field_208, "sprites/null.spr");
     v21->field_2d0 = a6;
     v21->field_2d4 = 0;
     *(float *)&v21->padding_64[260] = 0.5f;
@@ -130,7 +130,7 @@ short DropTorpedo__18CKameTorpedoAttackP9entvars_sG6Vectorisssif(st_4c9b10_4 *a0
     v18 = 0;
     v20 = 0x3f800000;
     v4 = &v16;
-    sub_488860(&v9, &v16);
+    UTIL_VecToAngles(&v9, &v16);
     v23->field_50 = v9;
     v23->field_54 = v12;
     v23->field_58 = v14;
@@ -147,8 +147,8 @@ short DropTorpedo__18CKameTorpedoAttackP9entvars_sG6Vectorisssif(st_4c9b10_4 *a0
     v15 = (float)v25;
     v17 = (float)v25;
     v19 = (float)v25;
-    sub_48a0d0(v21->field_0, v4, v5);
-    sub_48a800(&a0->padding_0[80]);
+    UTIL_SetSize(v21->field_0, v4, v5);
+    UTIL_MakeVectors(&a0->padding_0[80]);
     v26 = &*v3->field_28;
     v15 = v2 * *v3->field_28;
     v17 = v2 * *(float *)&v26[1];
@@ -161,26 +161,26 @@ short DropTorpedo__18CKameTorpedoAttackP9entvars_sG6Vectorisssif(st_4c9b10_4 *a0
     *v28 = v10;
     v28[1] = v11;
     v28[2] = v13;
-    sub_48db50(v21->field_0, v28);
-    g_616878(2, gmsgFlare, 0, 0);
-    v29 = g_6168dc(v21->field_0->field_208);
-    g_61688c(v29);
-    g_616888(a3);
-    g_616888(a4);
+    UTIL_SetOrigin(v21->field_0, v28);
+    g_engfuncs.pfnMessageBegin(2, gmsgFlare, 0, 0);
+    v29 = g_engfuncs.pfnIndexOfEdict(v21->field_0->field_208);
+    g_engfuncs.pfnWriteLong(v29);
+    g_engfuncs.pfnWriteShort(a3);
+    g_engfuncs.pfnWriteShort(a4);
     v8 = __fnstcw();
     v7 = v8 | 0xc00;
     v6 = (int)(v1 * 0.1);
-    g_616888(v6);
-    g_616888(a5);
+    g_engfuncs.pfnWriteShort(v6);
+    g_engfuncs.pfnWriteShort(a5);
     v8 = __fnstcw();
     v7 = v8 | 0xc00;
     v6 = (int)(a7 * 80.0);
-    g_616888(v6);
-    g_616894(*a1);
-    g_616894(a1[1]);
+    g_engfuncs.pfnWriteShort(v6);
+    g_engfuncs.pfnWriteCoord(*a1);
+    g_engfuncs.pfnWriteCoord(a1[1]);
     v0 = a1[2];
-    g_616894(v0);
-    v21->field_c = _INSERT(g_61687c(v0), 0, 0) | 0xffff0000;
+    g_engfuncs.pfnWriteCoord(v0);
+    v21->field_c = _INSERT(g_engfuncs.pfnMessageEnd(v0), 0, 0) | 0xffff0000;
     v21->field_10 = &NormalThink__12CMagicAttack;
     *(float *)&v21->field_0->field_104 = *v3->field_0;
     return (unsigned short)v21;

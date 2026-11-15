@@ -30,7 +30,7 @@ int ShootShield__13CShieldAttack(double a0, float a1)
     unsigned int v13;  // [bp-0x20]
     unsigned int v14;  // [bp-0x1c]
 
-    sub_48a800(*(int *)*(int *)(*(unsigned int *)&a1 + 128) + 116);
+    UTIL_MakeVectors(*(int *)*(int *)(*(unsigned int *)&a1 + 128) + 116);
     (*(int *)(*(int *)(*(int *)(*(unsigned int *)&a1 + 128) + 96) + 480))(&v12, *(int *)(*(unsigned int *)&a1 + 128));
     v16 = &gpGlobals->field_28;
     v17 = 900.0 * gpGlobals->field_28;
@@ -45,12 +45,12 @@ int ShootShield__13CShieldAttack(double a0, float a1)
     v3 = (float)v17;
     v4 = (float)v18;
     v5 = (float)v19;
-    sub_48aef0(a1);
+    CBasePlayerWeapon::GetPowerRatio(a1);
     v1 = __fnstcw();
     v0 = v1 | 0xc00;
     v2 = (int)(a0 * (double)*(int *)(*(unsigned int *)&a1 + 208));
-    sub_48af20(*(int *)*(int *)(*(unsigned int *)&a1 + 128), &v6, &v3, v2);
-    sub_489390(*(int *)(*(int *)*(int *)(*(unsigned int *)&a1 + 128) + 520), 1, "weapons/shieldha.wav", 0x3f800000, 0.800000011920929f, 0, 100);
-    return sub_48d4f0(*(int *)(*(unsigned int *)&a1 + 128), "shield.wav");
+    CShieldAtk::ShootShield(*(int *)*(int *)(*(unsigned int *)&a1 + 128), &v6, &v3, v2);
+    EMIT_SOUND_DYN(*(int *)(*(int *)*(int *)(*(unsigned int *)&a1 + 128) + 520), 1, "weapons/shieldha.wav", 0x3f800000, 0.800000011920929f, 0, 100);
+    return CBasePlayer::EmitClassSound(*(int *)(*(unsigned int *)&a1 + 128), "shield.wav");
 }
 

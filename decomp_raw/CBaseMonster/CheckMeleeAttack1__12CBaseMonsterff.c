@@ -12,9 +12,9 @@ unsigned int CheckMeleeAttack1__12CBaseMonsterff(int a0, float a1, float a2)
     if (64.0 >= a2 && a1 >= 0.7)
     {
         v0 = a0 + 264;
-        if (sub_48d8b0(v0))
+        if (EHANDLE::__opi(v0))
         {
-            v1 = sub_489fd0(v0);
+            v1 = EHANDLE::__rf(v0);
             if (*v1->field_1a5 & 2)
                 return 1;
         }

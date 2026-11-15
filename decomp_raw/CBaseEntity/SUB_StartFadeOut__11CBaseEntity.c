@@ -25,8 +25,8 @@ typedef struct st_4a4f90_2 {
 
 extern char SUB_FadeOut__11CBaseEntity;
 extern unsigned int g_vecZero;
-extern unsigned int g_616790;
-extern unsigned int g_616794;
+extern unsigned int g_vecZero+4;
+extern unsigned int g_vecZero+8;
 extern st_4a4f90_2 *gpGlobals;
 
 unsigned int SUB_StartFadeOut__11CBaseEntity(st_4a4f90_1 *a0)
@@ -42,8 +42,8 @@ unsigned int SUB_StartFadeOut__11CBaseEntity(st_4a4f90_1 *a0)
     a0->field_0->field_10c = 0;
     v0 = a0->field_0;
     v0->field_5c = g_vecZero;
-    v0->field_60 = g_616790;
-    v0->field_64 = g_616794;
+    v0->field_60 = g_vecZero+4;
+    v0->field_64 = g_vecZero+8;
     a0->field_0->field_104 = (float)(0.1 + *(float *)gpGlobals);
     v1 = _INSERT(gpGlobals, 0, 0);
     a0->field_c = v1 | 0xffff0000;

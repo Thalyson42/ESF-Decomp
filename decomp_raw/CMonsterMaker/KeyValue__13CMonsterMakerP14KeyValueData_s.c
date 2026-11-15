@@ -10,7 +10,7 @@ typedef struct st_4d3250_1 {
     unsigned int field_0;
 } st_4d3250_1;
 
-extern st_4d3250_1 *g_6168cc;
+extern st_4d3250_1 *g_engfuncs.pfnAllocString;
 
 unsigned int KeyValue__13CMonsterMakerP14KeyValueData_s(unsigned int *a0, st_4d3250_0 *a1)
 {
@@ -18,30 +18,30 @@ unsigned int KeyValue__13CMonsterMakerP14KeyValueData_s(unsigned int *a0, st_4d3
     unsigned int v1;  // eax
     unsigned int v2;  // eax
 
-    if (!sub_488af0(a1->field_4, "monstercount"))
+    if (!strcmp@GLIBC_2.0(a1->field_4, "monstercount"))
     {
-        v0 = sub_48b500(a1->field_8, 0, 10, 0);
+        v0 = __strtol_internal@GLIBC_2.0(a1->field_8, 0, 10, 0);
         a0[171] = v0;
         a1->field_c = 1;
         return v0;
     }
-    else if (!sub_488af0(a1->field_4, "m_imaxlivechildren"))
+    else if (!strcmp@GLIBC_2.0(a1->field_4, "m_imaxlivechildren"))
     {
-        v1 = sub_48b500(a1->field_8, 0, 10, 0);
+        v1 = __strtol_internal@GLIBC_2.0(a1->field_8, 0, 10, 0);
         a0[173] = v1;
         a1->field_c = 1;
         return v1;
     }
-    else if (!sub_488af0(a1->field_4, "monstertype"))
+    else if (!strcmp@GLIBC_2.0(a1->field_4, "monstertype"))
     {
-        v2 = g_6168cc(a1->field_8);
+        v2 = g_engfuncs.pfnAllocString(a1->field_8);
         a0[0xaa] = v2;
         a1->field_c = 1;
         return v2;
     }
     else
     {
-        return sub_488d50(a0, a1);
+        return CBaseMonster::KeyValue(a0, a1);
     }
 }
 

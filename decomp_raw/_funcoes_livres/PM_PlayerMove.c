@@ -59,37 +59,37 @@ unsigned int PM_PlayerMove(unsigned int a0)
 
     v4 = 0;
     pmove->field_4 = a0;
-    sub_48ab20(v0, v1, v2);
+    PM_CheckParamters(v0, v1, v2);
     pmove->field_4548c = 0;
     v3 = pmove->field_4545a;
     pmove->field_10 = (float)((double)(int)v3 * 0.001);
-    sub_489370(v0, v1, v2);
-    sub_4896c0(&pmove->field_44, &pmove->field_14, &pmove->field_20, &pmove->field_2c);
+    PM_ReduceTimers(v0, v1, v2);
+    AngleVectors(&pmove->field_44, &pmove->field_14, &pmove->field_20, &pmove->field_2c);
     if (!pmove->field_d8 && pmove->field_1fc <= 0)
     {
         if (pmove->field_dc != 8 && pmove->field_dc)
         {
-            v5 = sub_48c720();
+            v5 = PM_CheckStuck();
             if (v5)
                 return v5;
         }
-        sub_48c700();
+        PM_CatagorizePosition();
         pmove->field_ec = pmove->field_e4;
         if (pmove->field_e0 == 0xffffffff)
             *(float *)&pmove->field_9c = -pmove->field_64;
         g_onladder = 0;
         if (!pmove->field_d0 && !(pmove->field_bb & 1))
         {
-            v4 = sub_489730();
+            v4 = PM_Ladder();
             if (v4)
                 g_onladder = 1;
         }
-        sub_487ee0();
+        PM_UpdateStepSound();
         if (!pmove->field_d0 && !(pmove->field_bb & 1))
         {
             if (v4)
             {
-                sub_48dbb0(v4);
+                PM_LadderMove(v4);
             }
             else if (pmove->field_dc != 3 && pmove->field_dc != 8 && pmove->field_dc != 14 && pmove->field_dc != 2 && pmove->field_dc != 15 && pmove->field_dc != 11)
             {
@@ -97,12 +97,12 @@ unsigned int PM_PlayerMove(unsigned int a0)
             }
         }
         if (pmove->field_e0 != 0xffffffff && pmove->field_45476 & 32)
-            sub_48d230(&pmove->field_5c, 0.30000001192092896f, &pmove->field_5c);
+            VectorScale(&pmove->field_5c, 0.30000001192092896f, &pmove->field_5c);
         if (pmove->field_dc > 15)
             return pmove->field_4f564("Bogus pmove player movetype %i on (%i) 0=cl 1=sv\n", pmove->field_dc, pmove->field_4);
         goto *((void *)(&(&_GLOBAL_OFFSET_TABLE_)[-1 * *(int *)(&(&_GLOBAL_OFFSET_TABLE_)[4 * pmove->field_dc] - 524380)]));
     }
-    sub_48a8a0();
-    return sub_48c700();
+    PM_SpectatorMove();
+    return PM_CatagorizePosition();
 }
 

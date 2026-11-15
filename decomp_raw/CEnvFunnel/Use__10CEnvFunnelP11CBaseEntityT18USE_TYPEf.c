@@ -28,11 +28,11 @@ typedef struct st_4b6860_3 {
 } st_4b6860_3;
 
 extern char SUB_Remove__11CBaseEntity;
-extern st_4b6860_3 *g_616878;
-extern st_4b6860_3 *g_61687c;
-extern st_4b6860_3 *g_616880;
-extern st_4b6860_3 *g_616888;
-extern st_4b6860_3 *g_616894;
+extern st_4b6860_3 *g_engfuncs.pfnMessageBegin;
+extern st_4b6860_3 *g_engfuncs.pfnMessageEnd;
+extern st_4b6860_3 *g_engfuncs.pfnWriteByte;
+extern st_4b6860_3 *g_engfuncs.pfnWriteShort;
+extern st_4b6860_3 *g_engfuncs.pfnWriteCoord;
 extern st_4b6860_2 *gpGlobals;
 
 short Use__10CEnvFunnelP11CBaseEntityT18USE_TYPEf(st_4b6860_1 *a0)
@@ -43,24 +43,24 @@ short Use__10CEnvFunnelP11CBaseEntityT18USE_TYPEf(st_4b6860_1 *a0)
     unsigned int v2;  // [bp-0x18]
     unsigned int v3;  // [bp-0x14]
 
-    g_616878(0, 23, 0, 0, v1, v2, v3);
-    g_616880(100);
-    g_616894(*(float *)&a0->field_0->field_8);
-    g_616894(*(float *)&a0->field_0->field_c);
-    g_616894(*(float *)&a0->field_0->field_10);
-    g_616888(a0->field_6c);
+    g_engfuncs.pfnMessageBegin(0, 23, 0, 0, v1, v2, v3);
+    g_engfuncs.pfnWriteByte(100);
+    g_engfuncs.pfnWriteCoord(*(float *)&a0->field_0->field_8);
+    g_engfuncs.pfnWriteCoord(*(float *)&a0->field_0->field_c);
+    g_engfuncs.pfnWriteCoord(*(float *)&a0->field_0->field_10);
+    g_engfuncs.pfnWriteShort(a0->field_6c);
     if (a0->field_0->field_1a0 & 1)
     {
         v0 = 1;
-        v4 = g_616888;
+        v4 = g_engfuncs.pfnWriteShort;
     }
     else
     {
         v0 = 0;
-        v4 = g_616888;
+        v4 = g_engfuncs.pfnWriteShort;
     }
     v4(v0);
-    a0->field_c = _INSERT(g_61687c(), 0, 0) | 0xffff0000;
+    a0->field_c = _INSERT(g_engfuncs.pfnMessageEnd(), 0, 0) | 0xffff0000;
     a0->field_10 = &SUB_Remove__11CBaseEntity;
     *(float *)&a0->field_0->field_104 = *(float *)gpGlobals;
     return (unsigned short)gpGlobals;

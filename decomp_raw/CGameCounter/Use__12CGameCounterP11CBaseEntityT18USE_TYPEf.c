@@ -30,7 +30,7 @@ st_4d0960_1 * Use__12CGameCounterP11CBaseEntityT18USE_TYPEf(st_4d0960_0 **a0, in
     unsigned short v2;  // [bp-0x28]
     unsigned short v3;  // [bp-0x26]
 
-    v4 = sub_48aa30(a0, a1);
+    v4 = CRuleEntity::CanFireForActivator(a0, a1);
     if (!v4)
     {
         return v4;
@@ -49,9 +49,9 @@ st_4d0960_1 * Use__12CGameCounterP11CBaseEntityT18USE_TYPEf(st_4d0960_0 **a0, in
         v1 = (int)*a0->field_160;
         if (v0 != v1)
             return v1;
-        sub_48df80(a0, a1, 3, 0);
+        CBaseEntity::SUB_UseTargets(a0, a1, 3, 0);
         if (*a0->field_1a0 & 1)
-            sub_48cc00(a0);
+            UTIL_Remove(a0);
         v5 = *a0;
         if (!(v5->field_1a0 & 2))
             return v5;

@@ -30,7 +30,7 @@ int BufferSkipZString__8CRestore(st_536bc0_0 **a0)
         v1 += 1;
         v2 = v3;
     }
-    sub_4895b0(a0, v1 + 1);
+    CRestore::BufferSkipBytes(a0, v1 + 1);
     return v1 + 1;
 }
 

@@ -1,7 +1,7 @@
 // PM_CreateStuckTable @0x193ec0 size=1202
 extern unsigned int rgv3tStuckTable;
-extern unsigned int g_62cb24;
-extern unsigned int g_62cb28;
+extern unsigned int rgv3tStuckTable+4;
+extern unsigned int rgv3tStuckTable+8;
 
 double PM_CreateStuckTable(void)
 {
@@ -102,8 +102,8 @@ double PM_CreateStuckTable(void)
             v15 = iter * 12;
             *(float *)(v15 + (char *)&rgv3tStuckTable) = (float)v14;
             v16 = v10;
-            *(float *)(v15 + (char *)&g_62cb24) = (float)v16;
-            *(float *)(v15 + (char *)&g_62cb28) = (float)v12;
+            *(float *)(v15 + (char *)&rgv3tStuckTable+4) = (float)v16;
+            *(float *)(v15 + (char *)&rgv3tStuckTable+8) = (float)v12;
             iter += 1;
             v2 = (float)(v13 + 0.125);
             v17 = v2;
@@ -127,9 +127,9 @@ double PM_CreateStuckTable(void)
             v23 = v19;
             idx = iter * 12;
             *(float *)(idx + (char *)&rgv3tStuckTable) = (float)v23;
-            *(float *)(idx + (char *)&g_62cb24) = (float)v20;
+            *(float *)(idx + (char *)&rgv3tStuckTable+4) = (float)v20;
             v25 = v18;
-            *(float *)(idx + (char *)&g_62cb28) = (float)v25;
+            *(float *)(idx + (char *)&rgv3tStuckTable+8) = (float)v25;
             iter += 1;
             v26 = v22;
             v2 = (float)(v21 + v26);
@@ -155,9 +155,9 @@ double PM_CreateStuckTable(void)
             idx1 = iter * 12;
             *(float *)(idx1 + (char *)&rgv3tStuckTable) = (float)v30;
             v34 = v29;
-            *(float *)(idx1 + (char *)&g_62cb24) = (float)v34;
+            *(float *)(idx1 + (char *)&rgv3tStuckTable+4) = (float)v34;
             v35 = v28;
-            *(float *)(idx1 + (char *)&g_62cb28) = (float)v35;
+            *(float *)(idx1 + (char *)&rgv3tStuckTable+8) = (float)v35;
             iter += 1;
             v36 = v32;
             v2 = (float)(v31 + v36);
@@ -191,9 +191,9 @@ double PM_CreateStuckTable(void)
                         *(float *)(idx2 + (char *)&rgv3tStuckTable) = (float)v43;
                         v45 = v39;
                         v46 = v43;
-                        *(float *)(idx2 + (char *)&g_62cb24) = (float)v45;
+                        *(float *)(idx2 + (char *)&rgv3tStuckTable+4) = (float)v45;
                         v47 = v45;
-                        *(float *)(idx2 + (char *)&g_62cb28) = (float)v40;
+                        *(float *)(idx2 + (char *)&rgv3tStuckTable+8) = (float)v40;
                         v48 = v42;
                         iter += 1;
                         v2 = (float)(v41 + 0.25);
@@ -228,8 +228,8 @@ double PM_CreateStuckTable(void)
     v4 = 0x3f800000;
     v5 = 6.0f;
     v53 = 0;
-    v1 = &g_62cb24;
-    v0 = &g_62cb28;
+    v1 = &rgv3tStuckTable+4;
+    v0 = &rgv3tStuckTable+8;
     while (1)
     {
         v54 = v51;
@@ -256,8 +256,8 @@ double PM_CreateStuckTable(void)
             index = iter * 12;
             *(float *)(index + (char *)&rgv3tStuckTable) = (float)v59;
             v62 = v60;
-            *(float *)(index + (char *)&g_62cb24) = (float)v62;
-            *(float *)(index + (char *)&g_62cb28) = (float)v58;
+            *(float *)(index + (char *)&rgv3tStuckTable+4) = (float)v62;
+            *(float *)(index + (char *)&rgv3tStuckTable+8) = (float)v58;
             iter += 1;
             v2 = (float)(v62 + 2.0);
             v60 = v2;
@@ -273,9 +273,9 @@ double PM_CreateStuckTable(void)
             v66 = iter * 12;
             *(float *)(v66 + (char *)&rgv3tStuckTable) = (float)v65;
             v67 = v64;
-            *(float *)(v66 + (char *)&g_62cb24) = (float)v67;
+            *(float *)(v66 + (char *)&rgv3tStuckTable+4) = (float)v67;
             v68 = v63;
-            *(float *)(v66 + (char *)&g_62cb28) = (float)v68;
+            *(float *)(v66 + (char *)&rgv3tStuckTable+8) = (float)v68;
             iter += 1;
             v69 = v65 + 2.0;
             if (2.0 < v69)
@@ -304,9 +304,9 @@ double PM_CreateStuckTable(void)
                         *(float *)(v75 + (char *)&rgv3tStuckTable) = (float)v74;
                         v76 = v73;
                         iter1 = v74;
-                        *(float *)(v75 + (char *)&g_62cb24) = (float)v76;
+                        *(float *)(v75 + (char *)&rgv3tStuckTable+4) = (float)v76;
                         v77 = v71;
-                        *(float *)(v75 + (char *)&g_62cb28) = (float)v77;
+                        *(float *)(v75 + (char *)&rgv3tStuckTable+8) = (float)v77;
                         iter += 1;
                         v71 = v77;
                         v2 = (float)(v76 + 2.0);

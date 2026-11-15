@@ -68,8 +68,8 @@ typedef struct st_50abb0_2 {
     unsigned int field_0;
 } st_50abb0_2;
 
-extern float g_5bd298;
-extern st_50abb0_2 *g_6168dc;
+extern float melee_struggle_startdelay+12;
+extern st_50abb0_2 *g_engfuncs.pfnIndexOfEdict;
 extern st_50abb0_3 *gpGlobals;
 
 unsigned int * StartStruggleAttack__12CPlayerMelee(float idx)
@@ -103,14 +103,14 @@ unsigned int * StartStruggleAttack__12CPlayerMelee(float idx)
     char v14;  // [bp-0x30]
     char v15;  // [bp-0x24]
 
-    v3 = g_6168dc(*(int *)(*(int *)*(int *)(*(unsigned int *)&idx + 296) + 520));
+    v3 = g_engfuncs.pfnIndexOfEdict(*(int *)(*(int *)*(int *)(*(unsigned int *)&idx + 296) + 520));
     v2 = *(int *)(*(int *)*(int *)(*(unsigned int *)&idx + 292) + 520);
-    sub_48ccd0(g_6168dc(v2));
+    UTIL_Model_MeleeStruggle(g_engfuncs.pfnIndexOfEdict(v2));
     *(unsigned short *)&v0 = 1;
-    sub_48b670(idx, v0, gpGlobals->field_0, 1, "ref_grapple");
+    CPlayerMelee::AddAnimation(idx, v0, gpGlobals->field_0, 1, "ref_grapple");
     *(unsigned short *)&v2 = 1;
-    sub_48b670(*(int *)(*(unsigned int *)&idx + 304), v2, gpGlobals->field_0, 1, "ref_grapple");
-    sub_48a800(*(int *)*(int *)(*(unsigned int *)&idx + 292) + 116);
+    CPlayerMelee::AddAnimation(*(int *)(*(unsigned int *)&idx + 304), v2, gpGlobals->field_0, 1, "ref_grapple");
+    UTIL_MakeVectors(*(int *)*(int *)(*(unsigned int *)&idx + 292) + 116);
     v18 = gpGlobals->field_28;
     *(unsigned int *)(*(unsigned int *)&idx + 272) = v18;
     v19 = (st_50abb0_4 *)idx;
@@ -121,14 +121,14 @@ unsigned int * StartStruggleAttack__12CPlayerMelee(float idx)
     v21 = (unsigned int *)idx;
     v20[69] = v21[69];
     v20[70] = v21[70];
-    *(float *)&v21[28] = gpGlobals->field_0 + g_5bd298;
+    *(float *)&v21[28] = gpGlobals->field_0 + melee_struggle_startdelay+12;
     v22 = (float *)idx;
     v10 = -v22[0x44];
     v11 = -v22[69];
     v12 = -v22[70];
-    sub_488860(&v15, &v10);
+    UTIL_VecToAngles(&v15, &v10);
     v1 = &v15;
-    sub_487b20(g_6168dc(*(int *)(*(int *)*(int *)(*(unsigned int *)&idx + 292) + 520)));
+    UTIL_Model_MeleeStruggle_Anglefix(g_engfuncs.pfnIndexOfEdict(*(int *)(*(int *)*(int *)(*(unsigned int *)&idx + 292) + 520)));
     v24 = (st_50abb0_7 *)idx;
     v25 = v24->field_124;
     v26 = 11.0 * v24->field_110;
@@ -140,13 +140,13 @@ unsigned int * StartStruggleAttack__12CPlayerMelee(float idx)
     v7 = (float)(*v25->field_8 - v26);
     v8 = (float)(*(float *)&v28[1] - v27);
     v9 = *(float *)&v28[2] - v6;
-    sub_488460(&*v25->field_8, &v7, 0, 1, *v25->field_208, &v10);
+    UTIL_TraceHull(&*v25->field_8, &v7, 0, 1, *v25->field_208, &v10);
     if (v13 == 1.0f)
-        sub_48db50(*(int *)v24->field_124, &v14);
-    sub_489390(sub_48be70(idx), 4, "weapons/meleestruggleinit.wav", 0x3f800000, 0.800000011920929f, 0, 100);
+        UTIL_SetOrigin(*(int *)v24->field_124, &v14);
+    EMIT_SOUND_DYN(CPlayerMelee::GetSoundEdict(idx), 4, "weapons/meleestruggleinit.wav", 0x3f800000, 0.800000011920929f, 0, 100);
     v30 = (st_50abb0_0 *)idx;
-    sub_488530(v30, 15, 0);
-    sub_488530(v30->field_130, 15, 0);
+    CPlayerMelee::MeleeText(v30, 15, 0);
+    CPlayerMelee::MeleeText(v30->field_130, 15, 0);
     v30->field_c4 = 0;
     v30->field_6c = 0;
     memset(&v30->field_74, 0, 12);

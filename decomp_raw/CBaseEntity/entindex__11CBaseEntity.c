@@ -8,10 +8,10 @@ typedef struct st_49e380_1 {
     unsigned int field_0;
 } st_49e380_1;
 
-extern st_49e380_1 *g_6168dc;
+extern st_49e380_1 *g_engfuncs.pfnIndexOfEdict;
 
 int entindex__11CBaseEntity(st_49e380_0 **a0)
 {
-    return g_6168dc(*a0->field_208);
+    return g_engfuncs.pfnIndexOfEdict(*a0->field_208);
 }
 

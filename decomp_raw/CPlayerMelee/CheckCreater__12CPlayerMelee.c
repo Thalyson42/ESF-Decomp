@@ -24,7 +24,7 @@ st_501f90_0 * CheckCreater__12CPlayerMelee(st_501f90_1 *a0)
         if (!a0->field_30)
         {
             a0->field_30 = 1;
-            return sub_48a690(a0);
+            return CPlayerMelee::MakeCreater(a0);
         }
     }
     else

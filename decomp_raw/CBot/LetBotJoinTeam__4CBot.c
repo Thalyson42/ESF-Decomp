@@ -31,7 +31,7 @@ typedef struct st_53b1b0_5 {
 } st_53b1b0_5;
 
 extern st_53b1b0_5 *g_pGameRules;
-extern st_53b1b0_3 *g_616928;
+extern st_53b1b0_3 *g_engfuncs.pfnRandomLong;
 extern st_53b1b0_1 *gpGlobals;
 
 unsigned int LetBotJoinTeam__4CBot(st_53b1b0_0 *a0)
@@ -53,10 +53,10 @@ unsigned int LetBotJoinTeam__4CBot(st_53b1b0_0 *a0)
         iter = 1;
         while (iter <= gpGlobals->field_90)
         {
-            v5 = sub_48a500(iter);
+            v5 = UTIL_PlayerByIndex(iter);
             *(unsigned short *)&v1 = 0;
             *(unsigned short *)&v0 = 0;
-            if (!(char)sub_489a70(v5, v0, v1))
+            if (!(char)UTIL_IsValidPlayer(v5, v0, v1))
             {
                 iter += 1;
             }
@@ -85,7 +85,7 @@ unsigned int LetBotJoinTeam__4CBot(st_53b1b0_0 *a0)
         }
         else
         {
-            a0->field_1060 = g_616928(1, 2);
+            a0->field_1060 = g_engfuncs.pfnRandomLong(1, 2);
         }
     }
     v6 = g_pGameRules->field_44->field_60(g_pGameRules, a0, "jointeam");

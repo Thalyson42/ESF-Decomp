@@ -84,8 +84,8 @@ typedef struct st_578ce0_9 {
     float field_0;
 } st_578ce0_9;
 
-extern st_578ce0_1 *g_616928;
-extern st_578ce0_1 *g_61692c;
+extern st_578ce0_1 *g_engfuncs.pfnRandomLong;
+extern st_578ce0_1 *g_engfuncs.pfnRandomFloat;
 extern st_578ce0_9 *gpGlobals;
 
 char ReactOnDanger__17CChargeAttackTaskP13danger_info_s(st_578ce0_8 *a0, st_578ce0_0 *a1)
@@ -115,18 +115,18 @@ char ReactOnDanger__17CChargeAttackTaskP13danger_info_s(st_578ce0_8 *a0, st_578c
     if (a1->field_18 <= 59)
         return 0;
     v0 = 100;
-    v11 = g_616928(1, v0);
+    v11 = g_engfuncs.pfnRandomLong(1, v0);
     v12 = a0->field_8;
     if (v11 <= v12->field_a04->field_26 && (v13 = (v12->field_6d0 <= 0 ? 1 : v12->field_764->field_4->field_44(v12->field_764) != 0), (v12->field_6d0 <= 0 ? 1 : v12->field_764->field_4->field_44(v12->field_764) != 0)))
     {
-        sub_488180(a0->field_8);
+        CBasePlayer::Teleport(a0->field_8);
     }
-    else if ((char)sub_488bd0(a0->field_8))
+    else if ((char)CBot::BotShouldFallDown(a0->field_8))
     {
         if (a0->field_8->field_320)
-            sub_48c5a0(a0->field_8);
+            CBasePlayer::StopFly(a0->field_8);
         a0->field_8->field_a10 = 0;
-        g_61692c(0.800000011920929f, 1.2000000476837158f);
+        g_engfuncs.pfnRandomFloat(0.800000011920929f, 1.2000000476837158f);
         a0->field_8->field_a14 = (float)(0.800000011920929 + *(float *)gpGlobals);
     }
     else
@@ -137,7 +137,7 @@ char ReactOnDanger__17CChargeAttackTaskP13danger_info_s(st_578ce0_8 *a0, st_578c
 LABEL_578fc9:
             return 1;
         }
-        else if (v14->field_b80 && v14->field_b80->field_46 && a1->field_18 <= 99 && (*(unsigned short *)&v0 = 0, (char)sub_48dc80(v14, v0)))
+        else if (v14->field_b80 && v14->field_b80->field_46 && a1->field_18 <= 99 && (*(unsigned short *)&v0 = 0, (char)CBot::BotCanBeamJump(v14, v0)))
         {
             a0->field_8->field_1068 = 22;
             a0->field_4 = 2;
@@ -149,12 +149,12 @@ LABEL_578fc9:
             v15 = a0->field_8;
             if (v15->field_b6c && v15->field_a1c == 1)
             {
-                v16 = sub_489660(v15->field_b6c);
-                if (v16 && (char)sub_48b600(a0->field_8, v16))
+                v16 = UTIL_GetLastAttackFromPlayer(v15->field_b6c);
+                if (v16 && (char)EntityHeadsToPlayer(a0->field_8, v16))
                 {
                     v1 = 1;
-                    sub_48bf00(a0->field_8);
-                    v17 = g_616928(1, 100);
+                    CBot::AddShootDelay(a0->field_8);
+                    v17 = g_engfuncs.pfnRandomLong(1, 100);
                     if ((int)v17 <= a0->field_8->field_a04->field_2a)
                         a0->field_8->field_b14 = 1;
                     else
@@ -169,7 +169,7 @@ LABEL_578fc9:
                     v2 = *v16->field_8;
                     v3 = *(float *)&v18[1];
                     v4 = *(float *)&v18[2];
-                    sub_48a170(&v5, v19, &v2);
+                    CBot::GetAimAngles(&v5, v19, &v2);
                     v19->field_c10 = v5;
                     v19->field_c14 = v6;
                     v19->field_c18 = v7;
@@ -182,14 +182,14 @@ LABEL_578fc9:
                 {
                     return 1;
                 }
-                else if ((char)sub_48c9d0(v20, v20->field_b80))
+                else if ((char)CBot::AttackIsBeam(v20, v20->field_b80))
                 {
                     if (a0->field_c->field_28c == 7)
                     {
-                        sub_48ce10(a0->field_8, "weapon_sword");
+                        CBasePlayer::SelectItem(a0->field_8, "weapon_sword");
                         return 1;
                     }
-                    sub_48ce10(a0->field_8, "weapon_melee");
+                    CBasePlayer::SelectItem(a0->field_8, "weapon_melee");
                 }
                 goto LABEL_578fc9;
             }

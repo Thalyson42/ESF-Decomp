@@ -4,7 +4,7 @@ typedef struct st_4db1a0_0 {
 } st_4db1a0_0;
 
 extern st_4db1a0_0 *g_engfuncs;
-extern st_4db1a0_0 *g_6167c4;
+extern st_4db1a0_0 *g_engfuncs.pfnPrecacheSound;
 
 int Precache__11CMouthblast(unsigned short *a0)
 {
@@ -14,10 +14,10 @@ int Precache__11CMouthblast(unsigned short *a0)
     a0[106] = g_engfuncs("sprites/mouthblastbstart.spr");
     a0[0x66] = g_engfuncs("sprites/mouthblasttrail.spr");
     g_engfuncs("sprites/mouthblastcharge.spr");
-    g_6167c4("buu/mouthbeam.wav");
-    g_6167c4("fatbuu/mouthbeam.wav");
-    g_6167c4("buu/mouthbeam_charge.wav");
-    g_6167c4("fatbuu/mouthbeam_charge.wav");
-    return sub_488bb0(a0);
+    g_engfuncs.pfnPrecacheSound("buu/mouthbeam.wav");
+    g_engfuncs.pfnPrecacheSound("fatbuu/mouthbeam.wav");
+    g_engfuncs.pfnPrecacheSound("buu/mouthbeam_charge.wav");
+    g_engfuncs.pfnPrecacheSound("fatbuu/mouthbeam_charge.wav");
+    return CControlledBeam::Precache(a0);
 }
 

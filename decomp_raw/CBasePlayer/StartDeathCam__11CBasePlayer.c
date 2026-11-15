@@ -13,11 +13,11 @@ typedef struct st_4f7e60_0 {
 } st_4f7e60_0;
 
 extern float g_vecZero;
-extern float g_616790;
-extern float g_616794;
-extern st_4f7e60_0 *g_6167f8;
-extern st_4f7e60_0 *g_6168d8;
-extern st_4f7e60_0 *g_616928;
+extern float g_vecZero+4;
+extern float g_vecZero+8;
+extern st_4f7e60_0 *g_engfuncs.pfnFindEntityByString;
+extern st_4f7e60_0 *g_engfuncs.pfnEntOffsetOfPEntity;
+extern st_4f7e60_0 *g_engfuncs.pfnRandomLong;
 
 unsigned int StartDeathCam__11CBasePlayer(float a0)
 {
@@ -55,13 +55,13 @@ unsigned int StartDeathCam__11CBasePlayer(float a0)
 
     v19 = *(int *)a0;
     v20 = 0;
-    if (g_vecZero == *(float *)&v19->field_174 && g_616790 == *(float *)&v19->field_178)
-        v20 = g_616794 == *(float *)&v19->field_17c;
+    if (g_vecZero == *(float *)&v19->field_174 && g_vecZero+4 == *(float *)&v19->field_178)
+        v20 = g_vecZero+8 == *(float *)&v19->field_17c;
     if (v20)
         return v31;
-    v21 = g_6167f8(0, "classname", "info_intermission");
+    v21 = g_engfuncs.pfnFindEntityByString(0, "classname", "info_intermission");
     v22 = 0;
-    if (!v21 || !g_6168d8(v21))
+    if (!v21 || !g_engfuncs.pfnEntOffsetOfPEntity(v21))
         v22 = 1;
     if (v22)
     {
@@ -73,7 +73,7 @@ unsigned int StartDeathCam__11CBasePlayer(float a0)
         v6 = *(float *)&v28->field_8 + v0;
         v7 = *(float *)&v29[1] + v1;
         v8 = *(float *)&v29[2] + v2;
-        sub_487b80(v29, &v6, 1, *(int *)&v28[1].padding_9[127], &v9);
+        UTIL_TraceLine(v29, &v6, 1, *(int *)&v28[1].padding_9[127], &v9);
         v0 = v12;
         v1 = v13;
         v2 = v14;
@@ -81,16 +81,16 @@ unsigned int StartDeathCam__11CBasePlayer(float a0)
         v4 = v12 - *(float *)(*(int *)a0 + 8);
         v5 = v13 - *(float *)&v30[1];
         v6 = v14 - *(float *)&v30[2];
-        sub_488860(&v3, &v4);
-        v31 = sub_48cd20(a0, &v0, &v3);
+        UTIL_VecToAngles(&v3, &v4);
+        v31 = CBasePlayer::StartObserver(a0, &v0, &v3);
         return v31;
     }
-    v23 = g_616928(0, 3);
+    v23 = g_engfuncs.pfnRandomLong(0, 3);
     if (v23 > 0)
     {
         do
         {
-            v24 = g_6167f8(v21, "classname", "info_intermission");
+            v24 = g_engfuncs.pfnFindEntityByString(v21, "classname", "info_intermission");
             if (v24)
                 v21 = v24;
         } while ((v23 -= 1, v23 > 0));
@@ -103,7 +103,7 @@ unsigned int StartDeathCam__11CBasePlayer(float a0)
     v9 = v21[61];
     v10 = *(float *)&v26[1];
     v11 = *(float *)&v26[2];
-    sub_48cd20(a0, &v15, &v9);
+    CBasePlayer::StartObserver(a0, &v15, &v9);
     return v27;
 }
 

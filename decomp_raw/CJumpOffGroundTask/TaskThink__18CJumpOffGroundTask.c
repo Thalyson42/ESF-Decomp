@@ -25,8 +25,8 @@ unsigned int * TaskThink__18CJumpOffGroundTask(st_5857b0_1 *a0)
     unsigned int *v0;  // eax
 
     a0->field_c->field_200 = a0->field_c->field_200 | 2;
-    sub_48d0d0(a0->field_8);
-    sub_488e30(a0->field_8, a0->field_18);
+    CBot::ResetMoveSpeed(a0->field_8);
+    CBot::SetMoveDir(a0->field_8, a0->field_18);
     v0 = a0->field_8;
     if (v0[249] == 5 && v0[223])
         return v0;

@@ -132,7 +132,7 @@ typedef struct st_507390_7 {
     float field_0;
 } st_507390_7;
 
-extern st_507390_2 *g_6168dc;
+extern st_507390_2 *g_engfuncs.pfnIndexOfEdict;
 extern st_507390_7 *gpGlobals;
 
 unsigned int StopMelee__12CPlayerMeleei(st_507390_6 *a0, unsigned int a1)
@@ -201,24 +201,24 @@ unsigned int StopMelee__12CPlayerMeleei(st_507390_6 *a0, unsigned int a1)
     v17 = a0->field_11c;
     if (a0->field_11c == 1)
     {
-        sub_489880(a0);
+        CPlayerMelee::StopPrepunchAttack(a0);
     }
     else if (a0->field_11c == 3)
     {
-        sub_48b380(a0);
+        CPlayerMelee::StopChargedAttack(a0);
     }
     else if (a0->field_11c == 5)
     {
-        sub_48a9c0(a0);
+        CPlayerMelee::StopGrabbedAttack(a0);
     }
     else if (a0->field_11c == 7)
     {
-        sub_48a2f0(a0);
+        CPlayerMelee::StopExeAttack(a0);
     }
     else if (a0->field_11c == 9)
     {
 LABEL_507433:
-        sub_4899e0(a0);
+        CPlayerMelee::StopStruggleAttack(a0);
     }
     else if (a0->field_11c == 10)
     {
@@ -229,19 +229,19 @@ LABEL_507433:
     {
         return a0->field_11c;
     }
-    sub_489610(a0, 0);
+    CPlayerMelee::SetMode(a0, 0);
     if (!a0->field_f4 && !a0->field_ec)
     {
-        sub_48c1e0(a0);
-        sub_48b4c0(a0);
-        sub_48c1e0(a0->field_130);
-        sub_48b4c0(a0->field_130);
-        sub_48b990(a0);
+        CPlayerMelee::DelAllDirections(a0);
+        CPlayerMelee::MeleeHudDisable(a0);
+        CPlayerMelee::DelAllDirections(a0->field_130);
+        CPlayerMelee::MeleeHudDisable(a0->field_130);
+        CPlayerMelee::PushAwayOtherPlayers(a0);
     }
     else
     {
-        sub_48caa0(a0);
-        sub_48c120(a0->field_130);
+        CPlayerMelee::DelAllDirectionsAttacker(a0);
+        CPlayerMelee::DelAllDirectionsDefender(a0->field_130);
     }
     a0->field_124->field_37c = 0;
     a0->field_144 = 0;
@@ -275,12 +275,12 @@ LABEL_507433:
         if (!(a0->field_124->field_0->field_1a5 & 2))
         {
             a0->field_124->field_320 = 0;
-            sub_488d40(a0->field_124);
+            CBasePlayer::StartFly(a0->field_124);
         }
         if (!(a0->field_128->field_0->field_1a5 & 2))
         {
             a0->field_128->field_320 = 0;
-            sub_488d40(a0->field_128);
+            CBasePlayer::StartFly(a0->field_128);
         }
         if (v17 != 5 || a1)
         {
@@ -339,9 +339,9 @@ LABEL_507433:
             v15 = &v31;
             v14 = &v34;
             v13 = &v37;
-            sub_488460(&v37, &v34, 1, 1, v46->field_0->field_208, &v31);
+            UTIL_TraceHull(&v37, &v34, 1, 1, v46->field_0->field_208, &v31);
             v12 = &v33;
-            sub_48db50(v16->field_0, &v33);
+            UTIL_SetOrigin(v16->field_0, &v33);
             if (v32 != 1.0f)
             {
                 v50 = 1.0 - v32;
@@ -364,17 +364,17 @@ LABEL_507433:
                 v34 = v25;
                 v35 = v26;
                 v36 = v27;
-                sub_488460(v13, v14, 1, 1, v16->field_0->field_208, v15);
-                sub_48db50(v46->field_0, v12);
+                UTIL_TraceHull(v13, v14, 1, 1, v16->field_0->field_208, v15);
+                UTIL_SetOrigin(v46->field_0, v12);
             }
         }
         if (v17 == 7)
-            sub_48d380(a0);
+            CPlayerMelee::PushAfterDeath(a0);
         v55 = &a0->field_110;
         v56 = *(float *)&a0->field_110 * *(float *)&a0->field_110 + *(float *)&a0->field_114 * *(float *)&a0->field_114 + *(float *)&a0->field_118 * *(float *)&a0->field_118;
         v57 = sqrt(v56);
         if (isnan(v57))
-            sub_487dc0(*(unsigned int *)&v56);
+            sqrt(*(unsigned int *)&v56);
         else
             v56 = v57;
         v24 = (float)v56;
@@ -413,8 +413,8 @@ LABEL_507433:
         a0->field_130->field_ac = 0;
         a0->field_130->field_108 = 0;
         *(float *)&a0->field_24 = *(float *)gpGlobals;
-        sub_48b090(g_6168dc(a0->field_124->field_0->field_208));
-        sub_48b090(g_6168dc(a0->field_128->field_0->field_208));
+        UTIL_Model_RemoveAll(g_engfuncs.pfnIndexOfEdict(a0->field_124->field_0->field_208));
+        UTIL_Model_RemoveAll(g_engfuncs.pfnIndexOfEdict(a0->field_128->field_0->field_208));
         if (a1)
         {
             a0->field_3c = 1;
@@ -428,7 +428,7 @@ LABEL_507433:
                 v10 = 350.0f;
                 v9 = 300.0f;
                 v8 = 600.0f;
-                sub_48c240(a0, a0->field_128, 0, &v21, 600.0f, 300.0f, 350.0f, 5.0f);
+                CPlayerMelee::StartToss(a0, a0->field_128, 0, &v21, 600.0f, 300.0f, 350.0f, 5.0f);
                 v21 = -v18;
                 v22 = -v19;
                 v23 = -v20;
@@ -446,7 +446,7 @@ LABEL_507433:
                 v6 = 350.0f;
                 v5 = 300.0f;
                 v4 = 600.0f;
-                sub_48c240(a0, a0->field_128, 0, &v21, 600.0f, 300.0f, 350.0f, 5.0f);
+                CPlayerMelee::StartToss(a0, a0->field_128, 0, &v21, 600.0f, 300.0f, 350.0f, 5.0f);
                 v21 = v18;
                 v22 = v19;
                 v23 = v20;
@@ -455,20 +455,20 @@ LABEL_507433:
                 v1 = v5;
                 v0 = v4;
             }
-            sub_48c240(a0->field_130, a0->field_124, 0, &v21);
+            CPlayerMelee::StartToss(a0->field_130, a0->field_124, 0, &v21);
         }
         else
         {
-            sub_488d40(a0->field_124);
+            CBasePlayer::StartFly(a0->field_124);
         }
         a0->field_140 = 0;
         a0->field_130->field_140 = 0;
     }
     if (!a0->field_128->field_60->field_8c(a0->field_128))
         a0->field_130->field_180->field_8(a0->field_130);
-    sub_488660(a0->field_130, 0);
-    sub_48b7e0(a0->field_130, 0);
-    sub_488660(a0, 0);
-    return sub_48b7e0(a0, 0);
+    CPlayerMelee::SetAttackerOther(a0->field_130, 0);
+    CPlayerMelee::SetDefender(a0->field_130, 0);
+    CPlayerMelee::SetAttackerOther(a0, 0);
+    return CPlayerMelee::SetDefender(a0, 0);
 }
 

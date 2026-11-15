@@ -12,7 +12,7 @@ unsigned int DeleteCombos__4CBot(st_55ab00_0 *a0)
     if (!a0->field_1070)
         return v1;
     if (a0->field_1070)
-        v0 = sub_48dbd0(a0->field_1070, 3);
+        v0 = _._9CBotCombo(a0->field_1070, 3);
     a0->field_1070 = 0;
     return v0;
 }

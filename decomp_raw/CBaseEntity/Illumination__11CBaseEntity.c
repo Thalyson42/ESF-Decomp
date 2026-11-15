@@ -8,10 +8,10 @@ typedef struct st_49e500_1 {
     unsigned int field_0;
 } st_49e500_1;
 
-extern st_49e500_1 *g_6167fc;
+extern st_49e500_1 *g_engfuncs.pfnGetEntityIllum;
 
 int Illumination__11CBaseEntity(st_49e500_0 **a0)
 {
-    return g_6167fc(*a0->field_208);
+    return g_engfuncs.pfnGetEntityIllum(*a0->field_208);
 }
 

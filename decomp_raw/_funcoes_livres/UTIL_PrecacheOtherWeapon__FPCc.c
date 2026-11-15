@@ -30,11 +30,11 @@ typedef struct st_5376f0_0 {
     unsigned int field_98;
 } st_5376f0_0;
 
-extern st_5376f0_1 *g_616818;
-extern st_5376f0_1 *g_61681c;
-extern st_5376f0_1 *g_6168b4;
-extern st_5376f0_1 *g_6168d4;
-extern st_5376f0_1 *g_6168d8;
+extern st_5376f0_1 *g_engfuncs.pfnRemoveEntity;
+extern st_5376f0_1 *g_engfuncs.pfnCreateNamedEntity;
+extern st_5376f0_1 *g_engfuncs.pfnAlertMessage;
+extern st_5376f0_1 *g_engfuncs.pfnPEntityOfEntOffset;
+extern st_5376f0_1 *g_engfuncs.pfnEntOffsetOfPEntity;
 extern st_5376f0_0 *gpGlobals;
 extern char _15CBasePlayerItem.ItemInfoArray;
 
@@ -53,23 +53,23 @@ int UTIL_PrecacheOtherWeapon__FPCc(unsigned int a0)
     char *v3;  // [bp-0x34]
     unsigned int v4;  // [bp-0x24]
 
-    v0 = g_61681c(a0 - gpGlobals->field_98);
+    v0 = g_engfuncs.pfnCreateNamedEntity(a0 - gpGlobals->field_98);
     v5 = 0;
-    if (!v0 || !g_6168d8(v0))
+    if (!v0 || !g_engfuncs.pfnEntOffsetOfPEntity(v0))
         v5 = 1;
     if (v5)
-        return g_6168b4(1, "NULL Ent in UTIL_PrecacheOtherWeapon\n");
+        return g_engfuncs.pfnAlertMessage(1, "NULL Ent in UTIL_PrecacheOtherWeapon\n");
     v6 = (!v0 ? NULL : (struct st_5376f0_5 *)&v0->padding_0[128]);
     v7 = v6->field_208;
-    if (v6->field_208 || (v7 = g_6168d4(0), v7))
+    if (v6->field_208 || (v7 = g_engfuncs.pfnPEntityOfEntOffset(0), v7))
         v8 = v7->field_7c;
     else
         v8 = NULL;
     if (!v8)
-        return g_616818(v0);
+        return g_engfuncs.pfnRemoveEntity(v0);
     v8->field_60->field_c(v8);
     i = &v1;
-    sub_48d0e0(&v1, 0, 44);
+    memset@GLIBC_2.0(&v1, 0, 44);
     if (v8->field_60->field_f4(v8, &v1))
     {
         iter = &(&_15CBasePlayerItem.ItemInfoArray)[44 * v4];
@@ -80,11 +80,11 @@ int UTIL_PrecacheOtherWeapon__FPCc(unsigned int a0)
             iter += 1;
         }
         if (v2 && *v2)
-            sub_48d0b0(v2);
+            AddAmmoNameToAmmoRegistry(v2);
         if (v3 && *v3)
-            sub_48d0b0(v3);
-        sub_48d0e0(&v1, 0, 44);
+            AddAmmoNameToAmmoRegistry(v3);
+        memset@GLIBC_2.0(&v1, 0, 44);
     }
-    return g_616818(v0);
+    return g_engfuncs.pfnRemoveEntity(v0);
 }
 

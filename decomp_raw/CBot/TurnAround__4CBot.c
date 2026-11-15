@@ -30,7 +30,7 @@ int TurnAround__4CBot(double a0, st_570820_0 *a1)
     *(float *)&v4 = *(float *)&v6[1];
     *(float *)&v5 = *(float *)&v6[2];
     v7 = *(float *)&v4 + 180.0;
-    sub_48d430((float)v7);
+    UTIL_WrapAngle((float)v7);
     v0 = v3;
     v1 = (float)v7;
     v2 = v5;

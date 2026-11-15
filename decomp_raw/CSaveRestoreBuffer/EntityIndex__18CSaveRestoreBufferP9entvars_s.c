@@ -6,6 +6,6 @@ typedef struct st_535260_0 {
 
 unsigned int EntityIndex__18CSaveRestoreBufferP9entvars_s(int a0, st_535260_0 *a1)
 {
-    return (!a1 ? 0xffffffff : sub_48d780(a0, a1->field_208));
+    return (!a1 ? 0xffffffff : CSaveRestoreBuffer::EntityIndex(a0, a1->field_208));
 }
 

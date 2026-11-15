@@ -61,9 +61,9 @@ st_4edbf0_4 * Use__14CFuncTrackAutoP11CBaseEntityT18USE_TYPEf(st_4edbf0_4 *a0, s
         if (a0->field_80 == 0x1)
             v1 = a0->field_128;
     }
-    if (!sub_488af0(*(int *)*a1 + gpGlobals->field_98, "func_tracktrain"))
+    if (!strcmp@GLIBC_2.0(*(int *)*a1 + gpGlobals->field_98, "func_tracktrain"))
     {
-        v2 = sub_48a950(a0, v1);
+        v2 = CFuncTrackChange::EvaluateTrain(a0, v1);
         v3 = a0;
         v3->field_13c = v2;
         if (v2 != 0x2)
@@ -78,11 +78,11 @@ st_4edbf0_4 * Use__14CFuncTrackAutoP11CBaseEntityT18USE_TYPEf(st_4edbf0_4 *a0, s
     {
         if (!v1)
             return a0->field_60->field_100(a0, a0->field_140);
-        v6 = sub_48d550(v1);
+        v6 = CPathTrack::GetNext(v1);
         if (v6)
         {
             v7 = a0;
-            if (v7->field_12c->field_64 != v6 && sub_48ab90(v7, a3, v7->field_140))
+            if (v7->field_12c->field_64 != v6 && CBaseEntity::ShouldToggle(v7, a3, v7->field_140))
             {
                 if (!a0->field_140)
                     a0->field_140 = 0x1;

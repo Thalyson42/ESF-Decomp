@@ -45,7 +45,7 @@ typedef struct st_4b6d50_6 {
 } st_4b6d50_6;
 
 extern char SUB_Remove__11CBaseEntity;
-extern st_4b6d50_1 *g_6168d8;
+extern st_4b6d50_1 *g_engfuncs.pfnEntOffsetOfPEntity;
 extern st_4b6d50_6 *gpGlobals;
 
 unsigned int * CanTouch__9CItemSodaP11CBaseEntity(st_4b6d50_5 *a0, st_4b6d50_2 *a1)
@@ -59,7 +59,7 @@ unsigned int * CanTouch__9CItemSodaP11CBaseEntity(st_4b6d50_5 *a0, st_4b6d50_2 *
         return v0;
     a1->field_60->field_38(a1, 0x3f800000, 0);
     v1 = 0;
-    if (!a0->field_0->field_198 || !g_6168d8(a0->field_0->field_198))
+    if (!a0->field_0->field_198 || !g_engfuncs.pfnEntOffsetOfPEntity(a0->field_0->field_198))
         v1 = 1;
     if (!v1)
         a0->field_0->field_198->field_1e4 = 0;

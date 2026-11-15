@@ -6,7 +6,7 @@ void AddAllToNullKeyset__6CSwoop(int a0)
     i = 0;
     do
     {
-        sub_488f60(a0, sub_48b040(a0, i));
+        CSwoop::AddToNullKeyset(a0, CSwoop::DirectionsToFlags(a0, i));
         i += 1;
     } while (i <= 5);
     return;

@@ -1,7 +1,7 @@
 // WaypointFindNearestAiming__FG6Vector @0x188f20 size=277
 extern unsigned int waypoints[4];
-extern char g_626821[4];
-extern unsigned int g_626824[4];
+extern char waypoints+1[4];
+extern unsigned int waypoints+4[4];
 extern int num_waypoints;
 
 int WaypointFindNearestAiming__FG6Vector(float *a0)
@@ -35,9 +35,9 @@ int WaypointFindNearestAiming__FG6Vector(float *a0)
         {
             iter += 1;
         }
-        else if (g_626821[v9] & 64)
+        else if (waypoints+1[v9] & 64)
         {
-            idx = v9 + (char *)&g_626824[0];
+            idx = v9 + (char *)&waypoints+4[0];
             v11 = *a0 - *(float *)idx;
             v5 = v11;
             v12 = a0[1] - *(float *)(idx + 4);
@@ -47,7 +47,7 @@ int WaypointFindNearestAiming__FG6Vector(float *a0)
             v14 = v11 * v11 + v12 * v12 + v13 * v13;
             v15 = sqrt(v14);
             if (isnan(v15))
-                sub_487dc0(*(unsigned int *)&v14);
+                sqrt(*(unsigned int *)&v14);
             else
                 v14 = v15;
             v4 = (float)v14;

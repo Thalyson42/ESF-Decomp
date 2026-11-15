@@ -7,7 +7,7 @@ unsigned int ResetAllDT__6CSwoop(int a0)
     i = 0;
     do
     {
-        v1 = sub_48d4a0(a0, a0 + i * 16 + 24);
+        v1 = CSwoop::ResetDT(a0, a0 + i * 16 + 24);
         i += 1;
     } while (i <= 5);
     return v1;

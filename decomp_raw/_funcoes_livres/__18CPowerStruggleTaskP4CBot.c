@@ -8,7 +8,7 @@ extern char __vt_18CPowerStruggleTask;
 
 st_586780_0 * __18CPowerStruggleTaskP4CBot(st_586780_0 *a0, int a1)
 {
-    sub_48ce80(a0, a1);
+    __9CBaseTaskP4CBot(a0, a1);
     a0->field_14 = &__vt_18CPowerStruggleTask;
     return a0;
 }

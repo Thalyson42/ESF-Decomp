@@ -67,6 +67,6 @@ int Spawn__9CSprayCanP9entvars_s(st_4fbd30_0 **a0, st_4fbd30_1 *a1)
     *a0->field_198 = a1->field_208;
     *a0->field_130 = 0;
     *a0->field_104 = (float)(0.1 + *(float *)gpGlobals);
-    return sub_489390(*a0->field_208, 2, "player/sprayer.wav", 0x3f800000, 0.800000011920929f, 0, 100);
+    return EMIT_SOUND_DYN(*a0->field_208, 2, "player/sprayer.wav", 0x3f800000, 0.800000011920929f, 0, 100);
 }
 

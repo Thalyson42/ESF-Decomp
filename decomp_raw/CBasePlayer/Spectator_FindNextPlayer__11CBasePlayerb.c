@@ -30,8 +30,8 @@ typedef struct st_4efd80_1 {
     unsigned int field_0;
 } st_4efd80_1;
 
-extern st_4efd80_1 *g_6168b4;
-extern st_4efd80_1 *g_6168dc;
+extern st_4efd80_1 *g_engfuncs.pfnAlertMessage;
+extern st_4efd80_1 *g_engfuncs.pfnIndexOfEdict;
 extern st_4efd80_2 *gpGlobals;
 
 int Spectator_FindNextPlayer__11CBasePlayerb(st_4efd80_0 **a0, char a1)
@@ -49,9 +49,9 @@ int Spectator_FindNextPlayer__11CBasePlayerb(st_4efd80_0 **a0, char a1)
     unsigned int v0;  // [bp-0x8]
 
     v1 = a0 + 482;
-    v2 = (!sub_48d8b0(v1) ? *a0 : *(int *)sub_489fd0(v1));
-    v3 = g_6168dc(v2->field_208);
-    sub_48d960(a0 + 482, 0);
+    v2 = (!EHANDLE::__opi(v1) ? *a0 : *(int *)EHANDLE::__rf(v1));
+    v3 = g_engfuncs.pfnIndexOfEdict(v2->field_208);
+    EHANDLE::__as(a0 + 482, 0);
     v0 = 1;
     i = v3;
     if (a1)
@@ -66,22 +66,22 @@ int Spectator_FindNextPlayer__11CBasePlayerb(st_4efd80_0 **a0, char a1)
             i = 1;
         if (i <= 0)
             i = gpGlobals->field_90;
-        v5 = sub_48a500(i);
+        v5 = UTIL_PlayerByIndex(i);
         if (v5 && v5 != a0 && !*v5->field_244 && *v5->field_118 >= 0)
         {
-            sub_48d960(a0 + 482, v5);
+            EHANDLE::__as(a0 + 482, v5);
             break;
         }
     } while (i != v3);
     v6 = a0 + 482;
-    if (!sub_48d8b0(v6))
-        return g_6168b4(1, "No observer targets.\n");
-    v7 = sub_489fd0(v6);
-    v8 = g_6168dc(*v7->field_208);
+    if (!EHANDLE::__opi(v6))
+        return g_engfuncs.pfnAlertMessage(1, "No observer targets.\n");
+    v7 = EHANDLE::__rf(v6);
+    v8 = g_engfuncs.pfnIndexOfEdict(*v7->field_208);
     *a0->field_248 = v8;
-    v9 = sub_489fd0(v6);
-    sub_48db50(*a0, *v9 + 8);
-    v10 = sub_489fd0(v6);
-    return g_6168b4(1, "Now Tracking %s\n", *v10->field_1d0 + gpGlobals->field_98);
+    v9 = EHANDLE::__rf(v6);
+    UTIL_SetOrigin(*a0, *v9 + 8);
+    v10 = EHANDLE::__rf(v6);
+    return g_engfuncs.pfnAlertMessage(1, "Now Tracking %s\n", *v10->field_1d0 + gpGlobals->field_98);
 }
 

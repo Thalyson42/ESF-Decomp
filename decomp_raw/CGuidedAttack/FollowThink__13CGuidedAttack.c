@@ -118,7 +118,7 @@ double FollowThink__13CGuidedAttack(float idx)
         *(float *)&v38 = *(float *)&v42[1];
         *(float *)&v39 = *(float *)&v42[2];
         v43 = (!v41->field_198 ? NULL : v41->field_198 + 128);
-        sub_48a800(&v43->field_74);
+        UTIL_MakeVectors(&v43->field_74);
         v44 = &v43->field_8;
         v34 = v43->field_8 + v43->field_174;
         v35 = *(float *)&v44[1] + v43->field_178;
@@ -135,7 +135,7 @@ double FollowThink__13CGuidedAttack(float idx)
         v20 = (float)(v46 + v34);
         v21 = (float)(v47 + v35);
         v22 = v36 + v14;
-        sub_487b80(&v34, &v20, 0, *(int *)(*(int *)idx + 408), &v27);
+        UTIL_TraceLine(&v34, &v20, 0, *(int *)(*(int *)idx + 408), &v27);
         v48 = *(int *)idx + 8;
         v49 = v28 - *(float *)(*(int *)idx + 8);
         v12 = v49;
@@ -146,7 +146,7 @@ double FollowThink__13CGuidedAttack(float idx)
         v52 = v49 * v49 + v50 * v50 + v51 * v51;
         v53 = sqrt(v52);
         if (isnan(v53))
-            sub_487dc0(*(unsigned int *)&v52);
+            sqrt(*(unsigned int *)&v52);
         else
             v52 = v53;
         v18 = (float)v52;
@@ -159,7 +159,7 @@ double FollowThink__13CGuidedAttack(float idx)
             v57 = *(float *)&v55->field_20 * *(float *)&v55->field_20 + *(float *)&v56[1] * *(float *)&v56[1] + *(float *)&v56[2] * *(float *)&v56[2];
             v58 = sqrt(v57);
             if (isnan(v58))
-                sub_487dc0(*(unsigned int *)&v57);
+                sqrt(*(unsigned int *)&v57);
             else
                 v57 = v58;
             v8 = (float)v57;
@@ -188,7 +188,7 @@ double FollowThink__13CGuidedAttack(float idx)
             v62 = v12 * v12 + v13 * v13 + v14 * v14;
             v63 = sqrt(v62);
             if (isnan(v63))
-                sub_487dc0(*(unsigned int *)&v62);
+                sqrt(*(unsigned int *)&v62);
             else
                 v62 = v63;
             v1 = (float)v62;
@@ -221,7 +221,7 @@ double FollowThink__13CGuidedAttack(float idx)
             *(float *)&v0->field_24 = v16;
             *(float *)&v0->field_28 = v17;
             v67 = *(int *)idx;
-            sub_488860(&v8, &v67->field_20);
+            UTIL_VecToAngles(&v8, &v67->field_20);
             *(float *)&v67->padding_2c[36] = v8;
             *(float *)&v67->padding_2c[40] = v9;
             *(float *)&v67->padding_2c[44] = v10;
@@ -232,14 +232,14 @@ double FollowThink__13CGuidedAttack(float idx)
         *(unsigned int *)(*(unsigned int *)&idx + 12) = _INSERT(0, 0, 0) | 0xffff0000;
         *(char **)(*(unsigned int *)&idx + 16) = &NormalThink__12CMagicAttack;
     }
-    sub_487d50(idx);
+    CMagicAttack::DrawBubbles(idx);
     if ((*(int *)(*(int *)(*(unsigned int *)&idx + 96) + 156))(idx))
     {
         v69 = 0.05 + gpGlobals->field_0;
         *(float *)(*(int *)idx + 260) = (float)v69;
         return v69;
     }
-    sub_488520(idx);
+    CExplodingAttack::Vaporize(idx);
     return v54;
 }
 

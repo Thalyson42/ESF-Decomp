@@ -19,7 +19,7 @@ unsigned int PlayEmptySound__17CBasePlayerWeapon(st_538ca0_1 *a0)
 {
     if (a0->field_8c)
     {
-        sub_489390(*(int *)(*(int *)a0->field_80 + 520), 1, "weapons/357_cock1.wav", 0.800000011920929f, 0.800000011920929f, 0, 100);
+        EMIT_SOUND_DYN(*(int *)(*(int *)a0->field_80 + 520), 1, "weapons/357_cock1.wav", 0.800000011920929f, 0.800000011920929f, 0, 100);
         a0->field_8c = 0;
     }
     return 0;

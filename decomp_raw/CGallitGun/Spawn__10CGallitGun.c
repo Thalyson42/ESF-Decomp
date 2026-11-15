@@ -20,6 +20,6 @@ int Spawn__10CGallitGun(float idx)
     *(float *)(*(unsigned int *)&idx + 500) = 0.10000000149011612f;
     *(unsigned int *)(*(unsigned int *)&idx + 508) = 3;
     *(unsigned int *)(*(unsigned int *)&idx + 504) = 1;
-    return sub_48cf50(idx);
+    return CBasePlayerItem::FallInit(idx);
 }
 

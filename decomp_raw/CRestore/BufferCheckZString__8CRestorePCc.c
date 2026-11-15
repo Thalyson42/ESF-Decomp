@@ -24,7 +24,7 @@ unsigned int BufferCheckZString__8CRestorePCc(st_536c20_0 **a0, char *a1)
         v3 = v2;
     } while (v1 && (v1 -= 1, v2 = v3 + 1, *v3));
     v4 = ~v1 - 1;
-    if (v4 <= (int)(v0->field_c - v0->field_8) && !sub_48ba50(a1, v0->field_4, v4))
+    if (v4 <= (int)(v0->field_c - v0->field_8) && !strncmp@GLIBC_2.0(a1, v0->field_4, v4))
         return 1;
     return 0;
 }

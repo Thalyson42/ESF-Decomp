@@ -24,7 +24,7 @@ typedef struct st_4acfb0_1 {
 } st_4acfb0_1;
 
 extern char DoorTouch__9CBaseDoorP11CBaseEntity;
-extern st_4acfb0_1 *g_6167c8;
+extern st_4acfb0_1 *g_engfuncs.pfnSetModel;
 extern st_4acfb0_0 *gpGlobals;
 
 int Spawn__8CRotDoor(float idx)
@@ -49,7 +49,7 @@ int Spawn__8CRotDoor(float idx)
     float v5;  // [bp-0x10]
 
     (*(int *)(*(int *)(*(unsigned int *)&idx + 96) + 12))(idx);
-    sub_48b820(*(int *)idx);
+    CBaseToggle::AxisDir(*(int *)idx);
     v7 = *(int *)idx;
     if (v7[1].padding_51[63] & 2)
     {
@@ -82,8 +82,8 @@ int Spawn__8CRotDoor(float idx)
     else
         *(unsigned int *)(*(int *)idx + 268) = 4;
     *(unsigned int *)(*(int *)idx + 264) = 7;
-    sub_48db50(*(int *)idx, *(int *)idx + 8);
-    g_6167c8(*(int *)(*(int *)idx + 520), *(int *)(*(int *)idx + 184) + gpGlobals->field_98);
+    UTIL_SetOrigin(*(int *)idx, *(int *)idx + 8);
+    g_engfuncs.pfnSetModel(*(int *)(*(int *)idx + 520), *(int *)(*(int *)idx + 184) + gpGlobals->field_98);
     if (*(float *)(*(int *)idx + 504) == 0.0f)
         *(float *)(*(int *)idx + 504) = 100.0f;
     v13 = *(int *)idx;

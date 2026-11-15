@@ -25,10 +25,10 @@ typedef struct st_533380_0 {
     unsigned int field_98;
 } st_533380_0;
 
-extern st_533380_1 *g_6167f8;
-extern st_533380_1 *g_6168b4;
-extern st_533380_1 *g_6168d4;
-extern st_533380_1 *g_6168d8;
+extern st_533380_1 *g_engfuncs.pfnFindEntityByString;
+extern st_533380_1 *g_engfuncs.pfnAlertMessage;
+extern st_533380_1 *g_engfuncs.pfnPEntityOfEntOffset;
+extern st_533380_1 *g_engfuncs.pfnEntOffsetOfPEntity;
 extern st_533380_0 *gpGlobals;
 
 unsigned int UTIL_IsMasterTriggered__FiP11CBaseEntity(unsigned int a0, unsigned int a1)
@@ -40,21 +40,21 @@ unsigned int UTIL_IsMasterTriggered__FiP11CBaseEntity(unsigned int a0, unsigned 
 
     if (!a0)
         return 1;
-    v0 = g_6167f8(0, "targetname", a0 + gpGlobals->field_98);
+    v0 = g_engfuncs.pfnFindEntityByString(0, "targetname", a0 + gpGlobals->field_98);
     v1 = 0;
-    if (!v0 || !g_6168d8(v0))
+    if (!v0 || !g_engfuncs.pfnEntOffsetOfPEntity(v0))
         v1 = 1;
     if (!v1)
     {
         v2 = v0;
-        if (v2 || (v2 = g_6168d4(0), v2))
+        if (v2 || (v2 = g_engfuncs.pfnPEntityOfEntOffset(0), v2))
             v3 = v2->field_7c;
         else
             v3 = NULL;
         if (v3 && (char)v3->field_60->field_1c(v3) < 0)
             return v3->field_60->field_48(v3, a1);
     }
-    g_6168b4(1, "Master was null or not a master!\n");
+    g_engfuncs.pfnAlertMessage(1, "Master was null or not a master!\n");
     return 1;
 }
 

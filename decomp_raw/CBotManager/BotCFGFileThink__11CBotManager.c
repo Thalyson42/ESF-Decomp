@@ -28,11 +28,11 @@ typedef struct st_541710_3 {
 } st_541710_3;
 
 extern unsigned int g_teamplay;
-extern st_541710_3 *g_61685c;
+extern st_541710_3 *g_engfuncs.pfnServerCommand;
 extern st_541710_0 *gpGlobals;
 extern int server_cmd.2935;
 extern char cout;
-extern st_541710_2 *g_625f80;
+extern st_541710_2 *cout+512;
 
 double BotCFGFileThink__11CBotManager(float idx)
 {
@@ -222,7 +222,7 @@ double BotCFGFileThink__11CBotManager(float idx)
     v19 = v17->field_38;
     while (1)
     {
-        v20 = sub_487f00(v19);
+        v20 = fgetc@GLIBC_2.0(v19);
         if (v20 != 32)
             break;
         v19 = *(int *)(*(unsigned int *)&idx + 56);
@@ -237,7 +237,7 @@ LABEL_54180d:
             break;
     case 13:
 LABEL_541812:
-        v20 = sub_487f00(*(int *)(*(unsigned int *)&idx + 56));
+        v20 = fgetc@GLIBC_2.0(*(int *)(*(unsigned int *)&idx + 56));
         break;
     default:
         v7 = &v14;
@@ -246,12 +246,12 @@ LABEL_541812:
             if (v20 == 9)
                 v20 = 32;
             *(char *)(v18 + v7) = v20;
-            v20 = sub_487f00(*(int *)(*(unsigned int *)&idx + 56));
+            v20 = fgetc@GLIBC_2.0(*(int *)(*(unsigned int *)&idx + 56));
             if (*(char *)(v18 + v7) == 32 && v20 == 32)
             {
                 do
                 {
-                    v20 = sub_487f00(*(int *)(*(unsigned int *)&idx + 56));
+                    v20 = fgetc@GLIBC_2.0(*(int *)(*(unsigned int *)&idx + 56));
                 } while (*(char *)(v18 + &v14) == 32 && v20 == 32);
             }
             v18 += 1;
@@ -266,14 +266,14 @@ LABEL_541812:
     }
     if (v20 == 0xffffffff)
     {
-        sub_48c560(*(int *)(*(unsigned int *)&idx + 56));
+        fclose@GLIBC_2.1(*(int *)(*(unsigned int *)&idx + 56));
         v21 = (unsigned int *)idx;
         v21[14] = 0;
         v21[13] = 0;
     }
     *(char *)(v18 + &v14) = 0;
-    sub_48e110(&server_cmd.2935, &v14);
-    sub_48c150(&server_cmd.2935, "\n");
+    strcpy@GLIBC_2.0(&server_cmd.2935, &v14);
+    strcat@GLIBC_2.0(&server_cmd.2935, "\n");
     v22 = 0;
     v8 = NULL;
     v9 = NULL;
@@ -428,7 +428,7 @@ LABEL_5419db:
                 if (*v38)
                 {
                     if (g_teamplay)
-                        v36 = sub_48b500(v38, 0, 10, 0);
+                        v36 = __strtol_internal@GLIBC_2.0(v38, 0, 10, 0);
                     else
                         v36 = -0x1;
                 }
@@ -437,17 +437,17 @@ LABEL_5419db:
             {
                 v39 = v11;
                 if (*v39)
-                    v6 = sub_48b500(v39, 0, 10, 0);
+                    v6 = __strtol_internal@GLIBC_2.0(v39, 0, 10, 0);
             }
             if (v9)
             {
                 v40 = v9;
                 if (*v40)
-                    v5 = sub_48b500(v40, 0, 10, 0);
+                    v5 = __strtol_internal@GLIBC_2.0(v40, 0, 10, 0);
             }
             if (v8 && *v8)
-                v4 = sub_48b500(v8, 0, 10, 0);
-            sub_4892c0(idx, v36, v6, v3, v5, v4);
+                v4 = __strtol_internal@GLIBC_2.0(v8, 0, 10, 0);
+            CBotManager::CreateBot(idx, v36, v6, v3, v5, v4);
             v41 = (float *)idx;
             v41[13] = (float)(2.0 + *(float *)gpGlobals);
             v42 = 5.0 + *(float *)gpGlobals;
@@ -500,10 +500,10 @@ LABEL_5419db:
                 v66 = _ccall(4, v61, v62, v63, 0);
                 if (v66 & 1)
                 {
-                    v67 = sub_48b500(v12, 0, 10, 0);
+                    v67 = __strtol_internal@GLIBC_2.0(v12, 0, 10, 0);
                     if (v67 - 1 > 4)
                         return v16;
-                    sub_48d3f0(idx, (short)v67);
+                    CBotManager::ChangeBotSkill(idx, (short)v67);
                     return v16;
                 }
                 else
@@ -530,7 +530,7 @@ LABEL_5419db:
                     v76 = _ccall(4, v71, v72, v73, 0);
                     if (v76 & 1)
                     {
-                        if (sub_48b500(v12, 0, 10, 0))
+                        if (__strtol_internal@GLIBC_2.0(v12, 0, 10, 0))
                         {
                             *(char *)(*(unsigned int *)&idx + 3405) = 1;
                             return v16;
@@ -540,14 +540,14 @@ LABEL_5419db:
                     }
                     else
                     {
-                        if (!sub_488af0(&v14, "botsusediscs"))
+                        if (!strcmp@GLIBC_2.0(&v14, "botsusediscs"))
                         {
                             if (v12)
                             {
                                 v77 = v12;
                                 if (!*v77)
                                     return v16;
-                                if (sub_48b500(v77, 0, 10, 0))
+                                if (__strtol_internal@GLIBC_2.0(v77, 0, 10, 0))
                                 {
                                     *(char *)(*(unsigned int *)&idx + 3401) = 1;
                                     return v16;
@@ -584,7 +584,7 @@ LABEL_5419db:
                             v86 = _ccall(4, v81, v82, v83, 0);
                             if (v86 & 1)
                             {
-                                if (sub_48b500(v12, 0, 10, 0))
+                                if (__strtol_internal@GLIBC_2.0(v12, 0, 10, 0))
                                 {
                                     *(char *)(*(unsigned int *)&idx + 3399) = 1;
                                     return v16;
@@ -616,7 +616,7 @@ LABEL_5419db:
                                 v95 = _ccall(4, v90, v91, v92, 0);
                                 if (v95 & 1)
                                 {
-                                    v96 = sub_48b500(v12, 0, 10, 0);
+                                    v96 = __strtol_internal@GLIBC_2.0(v12, 0, 10, 0);
                                     v97 = (st_541710_4 *)idx;
                                     v97->field_1a = v96;
                                     if (v96 <= 31)
@@ -648,7 +648,7 @@ LABEL_5419db:
                                     v106 = _ccall(4, v101, v102, v103, 0);
                                     if (v106 & 1)
                                     {
-                                        v107 = sub_48b500(v12, 0, 10, 0);
+                                        v107 = __strtol_internal@GLIBC_2.0(v12, 0, 10, 0);
                                         v108 = (st_541710_5 *)idx;
                                         v108->field_1c = v107;
                                         if (v107 <= 31)
@@ -685,7 +685,7 @@ LABEL_5419db:
                                                 v118 = v12;
                                                 if (!*v118)
                                                     return v16;
-                                                sub_487fc0(v118, 0, 0);
+                                                __strtod_internal@GLIBC_2.0(v118, 0, 0);
                                                 *(float *)(*(unsigned int *)&idx + 52) = (float)(v119 + *(float *)gpGlobals);
                                                 return v16;
                                             }
@@ -740,7 +740,7 @@ LABEL_5419db:
                                                 v137 = _ccall(4, v131, v132, v133, 0);
                                                 if (v137 & 1)
                                                 {
-                                                    sub_48d520(idx);
+                                                    CBotManager::FillServer(idx);
                                                     return v16;
                                                 }
                                                 v138 = "half_good";
@@ -765,7 +765,7 @@ LABEL_5419db:
                                                 v146 = _ccall(4, v140, v141, v142, 0);
                                                 if (v146 & 1)
                                                 {
-                                                    sub_488ee0(idx, 1);
+                                                    CBotManager::FillAHalfTeam(idx, 1);
                                                     return v16;
                                                 }
                                                 v147 = "half_evil";
@@ -790,7 +790,7 @@ LABEL_5419db:
                                                 v155 = _ccall(4, v149, v150, v151, 0);
                                                 if (v155 & 1)
                                                 {
-                                                    sub_488ee0(idx, 2);
+                                                    CBotManager::FillAHalfTeam(idx, 2);
                                                     return v16;
                                                 }
                                                 v156 = "full_good";
@@ -815,7 +815,7 @@ LABEL_5419db:
                                                 v164 = _ccall(4, v158, v159, v160, 0);
                                                 if (v164 & 1)
                                                 {
-                                                    sub_4889a0(idx, 1);
+                                                    CBotManager::FillATeam(idx, 1);
                                                     return v16;
                                                 }
                                                 v165 = "full_evil";
@@ -840,15 +840,15 @@ LABEL_5419db:
                                                 v173 = _ccall(4, v167, v168, v169, 0);
                                                 if (v173 & 1)
                                                 {
-                                                    sub_4889a0(idx, 2);
+                                                    CBotManager::FillATeam(idx, 2);
                                                     return v16;
                                                 }
                                             }
-                                            if (sub_488af0(&v14, "bot_balanceteams"))
+                                            if (strcmp@GLIBC_2.0(&v14, "bot_balanceteams"))
                                             {
-                                                sub_48d990(&v13, "executing server command: %s\n", &server_cmd.2935);
-                                                sub_488f70(&v13, 1, 0);
-                                                g_61685c(&server_cmd.2935);
+                                                sprintf@GLIBC_2.0(&v13, "executing server command: %s\n", &server_cmd.2935);
+                                                UTIL_Printf(&v13, 1, 0);
+                                                g_engfuncs.pfnServerCommand(&server_cmd.2935);
                                                 return v16;
                                             }
                                             if (v12)
@@ -856,7 +856,7 @@ LABEL_5419db:
                                                 v174 = v12;
                                                 if (!*v174)
                                                     return v16;
-                                                if (sub_48b500(v174, 0, 10, 0))
+                                                if (__strtol_internal@GLIBC_2.0(v174, 0, 10, 0))
                                                 {
                                                     *(char *)(*(unsigned int *)&idx + 3404) = 1;
                                                     return v16;
@@ -878,7 +878,7 @@ LABEL_5419db:
             }
             else if (!g_teamplay)
             {
-                g_625f80->field_14(&cout, "Cannot create Super Bots in free fight!\n");
+                cout+512->field_14(&cout, "Cannot create Super Bots in free fight!\n");
                 return v16;
             }
             else
@@ -897,21 +897,21 @@ LABEL_5419db:
                 {
                     v54 = v12;
                     if (*v54 && *v54 != 42)
-                        v1 = sub_48b500(v54, 0, 10, 0);
+                        v1 = __strtol_internal@GLIBC_2.0(v54, 0, 10, 0);
                 }
                 if (v11)
                 {
                     v55 = v11;
                     if (*v55 && *v55 != 42)
-                        v52 = sub_48b500(v55, 0, 10, 0);
+                        v52 = __strtol_internal@GLIBC_2.0(v55, 0, 10, 0);
                 }
                 if (v10)
                 {
                     v56 = v10;
                     if (*v56 && *v56 != 42)
-                        v2 = sub_48b500(v56, 0, 10, 0);
+                        v2 = __strtol_internal@GLIBC_2.0(v56, 0, 10, 0);
                 }
-                sub_48e120(idx, v52, v0, v2, v1);
+                CBotManager::CreateSuperBot(idx, v52, v0, v2, v1);
                 *(float *)(*(unsigned int *)&idx + 52) = (float)(2.0 + *(float *)gpGlobals);
                 v57 = 5.0 + *(float *)gpGlobals;
                 *(float *)(*(unsigned int *)&idx + 16) = (float)v57;

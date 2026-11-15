@@ -27,7 +27,7 @@ typedef struct st_554290_0 {
 
 extern unsigned int g_teamplay;
 extern st_554290_0 *gpGlobals;
-extern char g_6253c6;
+extern char BotManager+3398;
 extern unsigned int num_waypoints;
 
 int CheckForHuntEnemy__4CBot(float a0)
@@ -103,7 +103,7 @@ int CheckForHuntEnemy__4CBot(float a0)
     unsigned int v35;  // [bp-0x20]
     unsigned int v36;  // [bp-0x1c]
 
-    if (!*(int *)(*(unsigned int *)&a0 + 800) || !g_6253c6 || *(float *)(*(unsigned int *)&a0 + 4184) > gpGlobals->field_0)
+    if (!*(int *)(*(unsigned int *)&a0 + 800) || !BotManager+3398 || *(float *)(*(unsigned int *)&a0 + 4184) > gpGlobals->field_0)
         return v66;
     v38 = (st_554290_2 *)a0;
     v38->field_1058 = (float)(gpGlobals->field_0 + 1.25);
@@ -128,7 +128,7 @@ int CheckForHuntEnemy__4CBot(float a0)
             v41 = v39->field_1ac;
         v1 = 1750.0f;
         *(int *)((char *)&v0 + 4) = *(int *)(*(int *)a0 + 520);
-        v10 = sub_48a280(&v31, *(unsigned int *)((void*)&v0 + 4), v1, v41);
+        v10 = WaypointFindNearest(&v31, *(unsigned int *)((void*)&v0 + 4), v1, v41);
     }
     i = 1;
     if (i <= gpGlobals->field_90)
@@ -136,8 +136,8 @@ int CheckForHuntEnemy__4CBot(float a0)
         do
         {
             v0 = i;
-            v42 = __int_as_float(sub_48a500(v0));
-            if (__float_as_int(v42) == *(unsigned int *)&a0 || !(*(unsigned short *)&v1 = 1, v0 = _INSERT(CONCAT(v0, 0), 4, 1), *(float *)&v0 = v42, (char)sub_489a70(v0, *(unsigned int *)((void*)&v0 + 4), v1) && (!g_teamplay || *(int *)(*(int *)a0 + 428) != *(int *)(*(int *)v42 + 428))))
+            v42 = __int_as_float(UTIL_PlayerByIndex(v0));
+            if (__float_as_int(v42) == *(unsigned int *)&a0 || !(*(unsigned short *)&v1 = 1, v0 = _INSERT(CONCAT(v0, 0), 4, 1), *(float *)&v0 = v42, (char)UTIL_IsValidPlayer(v0, *(unsigned int *)((void*)&v0 + 4), v1) && (!g_teamplay || *(int *)(*(int *)a0 + 428) != *(int *)(*(int *)v42 + 428))))
                 continue;
             v43 = *(int *)v42 + 8;
             *(float *)&v31 = *(float *)(*(int *)v42 + 8);
@@ -153,7 +153,7 @@ int CheckForHuntEnemy__4CBot(float a0)
             v48 = v45 * v45 + v46 * v46 + v47 * v47;
             v49 = sqrt(v48);
             if (isnan(v49))
-                sub_487dc0(*(unsigned int *)&v48);
+                sqrt(*(unsigned int *)&v48);
             else
                 v48 = v49;
             v6 = (float)v48;
@@ -166,8 +166,8 @@ int CheckForHuntEnemy__4CBot(float a0)
                 *(float *)&v21 = *(float *)&v50[1];
                 *(float *)&v22 = *(float *)&v50[2];
                 v1 = 750.0f;
-                v51 = sub_48a280(&v19, CONCAT(*(int *)(*(int *)v42 + 520), &v19) >> 32, v1, *(int *)(*(int *)a0 + 428));
-                if (v51 != 0xffff && !(*(int *)&v1 = *(int *)(*(int *)a0 + 428), (unsigned short)sub_48cef0(v10, (unsigned int)(CONCAT(v51, v10)) >> 32, v1) == 0xffff))
+                v51 = WaypointFindNearest(&v19, CONCAT(*(int *)(*(int *)v42 + 520), &v19) >> 32, v1, *(int *)(*(int *)a0 + 428));
+                if (v51 != 0xffff && !(*(int *)&v1 = *(int *)(*(int *)a0 + 428), (unsigned short)WaypointRouteFromTo(v10, (unsigned int)(CONCAT(v51, v10)) >> 32, v1) == 0xffff))
                 {
                     v9 = v51;
                     v8 = v6;
@@ -202,7 +202,7 @@ int CheckForHuntEnemy__4CBot(float a0)
                     v58 = v55 * v55 + v56 * v56 + v57 * v57;
                     v59 = sqrt(v58);
                     if (isnan(v59))
-                        sub_487dc0(*(unsigned int *)&v58);
+                        sqrt(*(unsigned int *)&v58);
                     else
                         v58 = v59;
                     v6 = (float)v58;
@@ -273,13 +273,13 @@ LABEL_55477d:
             *(float *)&v21 = *(float *)&v69[1039];
             *(float *)&v22 = *(float *)&v69[1040];
             v0 = &v28;
-            sub_48a170(v0, v69, &v19);
+            CBot::GetAimAngles(v0, v69, &v19);
             v70 = (unsigned int *)a0;
             *(float *)&v70[772] = v28;
             *(float *)&v70[773] = v29;
             *(float *)&v70[774] = v30;
             *(unsigned short *)&v0 = 1;
-            sub_48ab70(v70, v0);
+            CBot::ToggleTurbo(v70, v0);
             return v66;
         }
     }

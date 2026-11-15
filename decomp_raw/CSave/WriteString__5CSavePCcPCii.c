@@ -37,7 +37,7 @@ unsigned int WriteString__5CSavePCcPCii(int a0, int a1, unsigned int *a2, int a3
             idx += 1;
         } while (idx < a3);
     }
-    v5 = sub_487bf0(a0, a1, v0);
+    v5 = CSave::BufferHeader(a0, a1, v0);
     index = 0;
     if (0 >= a3)
         return v5;
@@ -50,7 +50,7 @@ unsigned int WriteString__5CSavePCcPCii(int a0, int a1, unsigned int *a2, int a3
         {
             v10 = v9;
         } while (v8 && (v8 -= 1, v9 = v10 + 1, *v10));
-        v11 = sub_488670(a0, v7, ~v8);
+        v11 = CSave::BufferData(a0, v7, ~v8);
         index += 1;
     } while (index < a3);
     return v11;

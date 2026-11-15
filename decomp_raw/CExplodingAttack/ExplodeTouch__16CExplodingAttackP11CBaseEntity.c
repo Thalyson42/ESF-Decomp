@@ -158,13 +158,13 @@ typedef struct st_4bb7c0_12 {
 
 extern char BlockStruggleThink__16CExplodingAttack;
 extern unsigned int gmsgBlockStruggle;
-extern st_4bb7c0_3 *g_616878;
-extern st_4bb7c0_3 *g_61687c;
-extern st_4bb7c0_3 *g_616880;
-extern st_4bb7c0_3 *g_616888;
-extern st_4bb7c0_3 *g_61688c;
-extern st_4bb7c0_3 *g_6168d4;
-extern st_4bb7c0_3 *g_6168dc;
+extern st_4bb7c0_3 *g_engfuncs.pfnMessageBegin;
+extern st_4bb7c0_3 *g_engfuncs.pfnMessageEnd;
+extern st_4bb7c0_3 *g_engfuncs.pfnWriteByte;
+extern st_4bb7c0_3 *g_engfuncs.pfnWriteShort;
+extern st_4bb7c0_3 *g_engfuncs.pfnWriteLong;
+extern st_4bb7c0_3 *g_engfuncs.pfnPEntityOfEntOffset;
+extern st_4bb7c0_3 *g_engfuncs.pfnIndexOfEdict;
 extern st_4bb7c0_12 *gpGlobals;
 
 unsigned int ExplodeTouch__16CExplodingAttackP11CBaseEntity(st_4bb7c0_9 *a0, st_4bb7c0_10 *a1)
@@ -192,7 +192,7 @@ unsigned int ExplodeTouch__16CExplodingAttackP11CBaseEntity(st_4bb7c0_9 *a0, st_
 
     if (a1->field_60->field_28(a1) == 16)
         return v5;
-    if (a0->field_2ac && sub_488af0(a0->field_0->field_4 + gpGlobals->field_98, "magic_attack") && a1->field_60->field_28(a1) != 15)
+    if (a0->field_2ac && strcmp@GLIBC_2.0(a0->field_0->field_4 + gpGlobals->field_98, "magic_attack") && a1->field_60->field_28(a1) != 15)
     {
         v5 = a0->field_60->field_200(a0);
         return v5;
@@ -211,15 +211,15 @@ unsigned int ExplodeTouch__16CExplodingAttackP11CBaseEntity(st_4bb7c0_9 *a0, st_
         return v5;
     if (a1 == a0->field_2bc && a0->field_2b0)
         return v5;
-    if (!sub_488af0(a1->field_0->field_0 + gpGlobals->field_98, "rock"))
+    if (!strcmp@GLIBC_2.0(a1->field_0->field_0 + gpGlobals->field_98, "rock"))
         return v5;
-    if (!sub_488af0(a1->field_0->field_0 + gpGlobals->field_98, "kiblast") || !sub_488af0(a1->field_0->field_0 + gpGlobals->field_98, "scattershot"))
+    if (!strcmp@GLIBC_2.0(a1->field_0->field_0 + gpGlobals->field_98, "kiblast") || !strcmp@GLIBC_2.0(a1->field_0->field_0 + gpGlobals->field_98, "scattershot"))
     {
-        if (!sub_488af0(a0->field_0->field_0 + gpGlobals->field_98, "kiblast"))
+        if (!strcmp@GLIBC_2.0(a0->field_0->field_0 + gpGlobals->field_98, "kiblast"))
         {
             return v5;
         }
-        else if (!sub_488af0(a0->field_0->field_0 + gpGlobals->field_98, "scattershot"))
+        else if (!strcmp@GLIBC_2.0(a0->field_0->field_0 + gpGlobals->field_98, "scattershot"))
         {
             return v5;
         }
@@ -241,7 +241,7 @@ unsigned int ExplodeTouch__16CExplodingAttackP11CBaseEntity(st_4bb7c0_9 *a0, st_
                         {
                             if (!a1->field_2b0)
                             {
-                                sub_488520(a1);
+                                CExplodingAttack::Vaporize(a1);
                                 return v5;
                             }
                             return v5;
@@ -255,16 +255,16 @@ unsigned int ExplodeTouch__16CExplodingAttackP11CBaseEntity(st_4bb7c0_9 *a0, st_
                     {
                         if (*(float *)&a0->field_0->field_1e0 / *(float *)&a1->field_0->field_1e0 < 0.2)
                         {
-                            sub_488520(a0);
+                            CExplodingAttack::Vaporize(a0);
                             return v5;
                         }
-                        if (sub_488af0(a1->field_0->field_0 + gpGlobals->field_98, "scattershot"))
+                        if (strcmp@GLIBC_2.0(a1->field_0->field_0 + gpGlobals->field_98, "scattershot"))
                         {
-                            if (sub_488af0(a0->field_0->field_0 + gpGlobals->field_98, "scattershot"))
+                            if (strcmp@GLIBC_2.0(a0->field_0->field_0 + gpGlobals->field_98, "scattershot"))
                             {
                                 if (!a1->field_2b0)
                                 {
-                                    sub_48db70(a0, a1);
+                                    CExplodingAttack::StartPowerStruggle(a0, a1);
                                     return v5;
                                 }
                                 return v5;
@@ -300,15 +300,15 @@ unsigned int ExplodeTouch__16CExplodingAttackP11CBaseEntity(st_4bb7c0_9 *a0, st_
         if (a1->field_60->field_a0(a1) && !a0->field_2ac)
         {
             if (a1->field_4c4)
-                sub_488520(a0);
+                CExplodingAttack::Vaporize(a0);
             v9 = a0->field_0->field_198;
-            if (a0->field_0->field_198 || (v9 = g_6168d4(0), v9))
+            if (a0->field_0->field_198 || (v9 = g_engfuncs.pfnPEntityOfEntOffset(0), v9))
                 v10 = v9->field_7c;
             else
                 v10 = NULL;
-            if (sub_48b6d0(a0, a1) && !a1->field_358 && v10 && *v10->field_108 != 15)
+            if (CMagicAttack::BlocksAttack(a0, a1) && !a1->field_358 && v10 && *v10->field_108 != 15)
             {
-                v4 = sub_48bb90(a1);
+                v4 = CBasePlayer::GetPowerLevel(a1);
                 v11 = a0;
                 if (0.0 <= *(float *)&v11->field_0->field_1e0)
                 {
@@ -333,21 +333,21 @@ unsigned int ExplodeTouch__16CExplodingAttackP11CBaseEntity(st_4bb7c0_9 *a0, st_
                     *(float *)&v16->field_24 = v2;
                     *(float *)&v16->field_28 = v3;
                     *(float *)&v15->field_0->field_104 = (float)(0.1 + gpGlobals->field_0);
-                    g_616878(2, gmsgBlockStruggle, 0, 0);
-                    v18 = g_6168dc(a0->field_0->field_208);
-                    g_616888(v18);
-                    v0 = g_6168dc(a1->field_0->field_208);
-                    g_616888(v0);
-                    g_61687c(v0);
-                    g_616878(9, 0x33, 0, 0);
-                    g_616880(9);
-                    g_616880(3);
-                    v19 = g_6168dc(a0->field_0->field_208);
-                    g_616888(v19);
-                    v20 = g_6168dc(a1->field_0->field_208);
-                    g_616888(v20);
-                    g_61688c(6);
-                    g_61687c();
+                    g_engfuncs.pfnMessageBegin(2, gmsgBlockStruggle, 0, 0);
+                    v18 = g_engfuncs.pfnIndexOfEdict(a0->field_0->field_208);
+                    g_engfuncs.pfnWriteShort(v18);
+                    v0 = g_engfuncs.pfnIndexOfEdict(a1->field_0->field_208);
+                    g_engfuncs.pfnWriteShort(v0);
+                    g_engfuncs.pfnMessageEnd(v0);
+                    g_engfuncs.pfnMessageBegin(9, 0x33, 0, 0);
+                    g_engfuncs.pfnWriteByte(9);
+                    g_engfuncs.pfnWriteByte(3);
+                    v19 = g_engfuncs.pfnIndexOfEdict(a0->field_0->field_208);
+                    g_engfuncs.pfnWriteShort(v19);
+                    v20 = g_engfuncs.pfnIndexOfEdict(a1->field_0->field_208);
+                    g_engfuncs.pfnWriteShort(v20);
+                    g_engfuncs.pfnWriteLong(6);
+                    g_engfuncs.pfnMessageEnd();
                     return v5;
                 }
                 v11->field_60->field_1f8(v11, a1, 1);

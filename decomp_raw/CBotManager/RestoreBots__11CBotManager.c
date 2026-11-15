@@ -57,15 +57,15 @@ unsigned int RestoreBots__11CBotManager(float idx)
                     if (v4)
                         v4->field_8 = 0;
                     v3->field_4 = NULL;
-                    sub_48d4e0(v3);
+                    __builtin_delete(v3);
                 }
             }
             if (v2->field_28 > 0)
-                sub_48e120(idx, v2->field_2, &v2->field_6, v2->field_1 + 1, v2->field_28);
+                CBotManager::CreateSuperBot(idx, v2->field_2, &v2->field_6, v2->field_1 + 1, v2->field_28);
             else
-                sub_4892c0(idx, v2->field_4, v2->field_2, &v2->field_6, v2->field_0 + 1, v2->field_1);
+                CBotManager::CreateBot(idx, v2->field_4, v2->field_2, &v2->field_6, v2->field_0 + 1, v2->field_1);
             *(float *)(*(unsigned int *)&idx + 32) = (float)(2.0 + *(float *)gpGlobals);
-            v5 = sub_48d4e0(v2);
+            v5 = __builtin_delete(v2);
             return v5;
         }
         *(unsigned int *)(*(unsigned int *)&idx + 32) = 0;

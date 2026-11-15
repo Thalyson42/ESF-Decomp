@@ -86,18 +86,18 @@ double PM_PlayerFlyMove(void)
     v17 = v21;
     v18 = v22;
     v19 = v26;
-    sub_489290(&v17);
+    VectorNormalize(&v17);
     v2 = v26;
     if (v26 > *(float *)&pmove->field_1f4)
     {
-        sub_48d230(&v20, *(float *)&pmove->field_1f4 / v26, &v20);
+        VectorScale(&v20, *(float *)&pmove->field_1f4 / v26, &v20);
         v2 = *(float *)&pmove->field_1f4;
     }
     v8 = pmove->field_5c;
     v9 = pmove->field_60;
     v27 = pmove->field_64;
     v10 = v27;
-    sub_489290(&v8);
+    VectorNormalize(&v8);
     v28 = v27;
     if (v28 != 0.0f)
     {
@@ -111,7 +111,7 @@ double PM_PlayerFlyMove(void)
         {
             v29 = v28;
         }
-        sub_48d230(&pmove->field_5c, (float)(v1 / v29), &pmove->field_5c);
+        VectorScale(&pmove->field_5c, (float)(v1 / v29), &pmove->field_5c);
     }
     else
     {
@@ -122,7 +122,7 @@ double PM_PlayerFlyMove(void)
     v0 = (float)(v2 - v1);
     if (0.0 < v0)
     {
-        sub_489290(&v20);
+        VectorNormalize(&v20);
         v30 = v2 * pmove->field_4f4f0->field_10 * pmove->field_10 * pmove->field_c4;
         if (v30 > v0)
             v30 = v0;
@@ -134,7 +134,7 @@ double PM_PlayerFlyMove(void)
             index += 1;
         } while (index <= 2);
     }
-    sub_48c590(&pmove->field_38, pmove->field_10, &pmove->field_5c, &v11);
+    VectorMA(&pmove->field_38, pmove->field_10, &pmove->field_5c, &v11);
     v14 = v11;
     v15 = v12;
     v16 = v13;
@@ -148,7 +148,7 @@ double PM_PlayerFlyMove(void)
         *(double *)&pmove->field_40 = v7;
         return v7;
     }
-    sub_48dbe0();
+    PM_FlyMove();
     return v33;
 }
 

@@ -15,10 +15,10 @@ typedef struct st_519090_0 {
 } st_519090_0;
 
 extern unsigned int gmsgBlobKill;
-extern st_519090_0 *g_616878;
-extern st_519090_0 *g_61687c;
-extern st_519090_0 *g_616888;
-extern st_519090_0 *g_6168dc;
+extern st_519090_0 *g_engfuncs.pfnMessageBegin;
+extern st_519090_0 *g_engfuncs.pfnMessageEnd;
+extern st_519090_0 *g_engfuncs.pfnWriteShort;
+extern st_519090_0 *g_engfuncs.pfnIndexOfEdict;
 
 int Remove__7CShield(st_519090_2 *a0)
 {
@@ -27,11 +27,11 @@ int Remove__7CShield(st_519090_2 *a0)
     unsigned int v1;  // [bp-0x18]
     unsigned int v2;  // [bp-0x14]
 
-    g_616878(2, gmsgBlobKill, 0, 0, v0, v1, v2);
-    v3 = g_6168dc(a0->field_0->field_208);
-    g_616888(v3);
-    g_616888(a0->field_64);
-    g_61687c();
-    return sub_48cc00(a0);
+    g_engfuncs.pfnMessageBegin(2, gmsgBlobKill, 0, 0, v0, v1, v2);
+    v3 = g_engfuncs.pfnIndexOfEdict(a0->field_0->field_208);
+    g_engfuncs.pfnWriteShort(v3);
+    g_engfuncs.pfnWriteShort(a0->field_64);
+    g_engfuncs.pfnMessageEnd();
+    return UTIL_Remove(a0);
 }
 

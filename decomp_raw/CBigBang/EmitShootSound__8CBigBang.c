@@ -15,7 +15,7 @@ typedef struct st_490a50_0 {
 
 int EmitShootSound__8CBigBang(st_490a50_1 *a0)
 {
-    sub_48d4f0(a0->field_80, "bigbang.wav");
-    return sub_489390(*(int *)(*(int *)a0->field_80 + 520), 1, "weapons/bigbang_fire.wav", 0x3f800000, 0.800000011920929f, 0, 100);
+    CBasePlayer::EmitClassSound(a0->field_80, "bigbang.wav");
+    return EMIT_SOUND_DYN(*(int *)(*(int *)a0->field_80 + 520), 1, "weapons/bigbang_fire.wav", 0x3f800000, 0.800000011920929f, 0, 100);
 }
 

@@ -48,7 +48,7 @@ int GetPotentialPL__11CBasePlayer(st_4f2ce0_3 *a0)
                 v6 = v4->field_4->field_28(v4);
                 v0 = v4;
                 v4 = v4->field_4->field_1c(v4);
-                sub_48d4e0(v0);
+                __builtin_delete(v0);
             } while (v1 > v6 && v4);
         }
         else
@@ -57,7 +57,7 @@ int GetPotentialPL__11CBasePlayer(st_4f2ce0_3 *a0)
         }
     }
     if (v4)
-        sub_48d4e0(v4);
+        __builtin_delete(v4);
     return v1;
 }
 

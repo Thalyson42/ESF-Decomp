@@ -36,7 +36,7 @@ typedef struct st_527430_5 {
     struct st_527430_4 *field_60;
 } st_527430_5;
 
-extern st_527430_2 *g_6168b4;
+extern st_527430_2 *g_engfuncs.pfnAlertMessage;
 extern st_527430_2 *gpGlobals;
 
 unsigned int FollowerUse__12CTalkMonsterP11CBaseEntityT18USE_TYPEf(st_527430_3 *a0, unsigned int a1, st_527430_5 *a2)
@@ -60,16 +60,16 @@ unsigned int FollowerUse__12CTalkMonsterP11CBaseEntityT18USE_TYPEf(st_527430_3 *
         v0 = a0->field_60->field_1f8(a0);
         return v0;
     }
-    else if (sub_488df0(a0))
+    else if (CTalkMonster::CanFollow(a0))
     {
-        sub_48b200(a0, a2, 1);
+        CTalkMonster::LimitFollowers(a0, a2, 1);
         if (!(a0->field_248 & 1))
         {
-            sub_48aae0(a0, a2);
+            CTalkMonster::StartFollowing(a0, a2);
             a0->field_2a8 = a0->field_2a8 | 8;
             return v0;
         }
-        g_6168b4(1, "I'm not following you, you evil person!\n");
+        g_engfuncs.pfnAlertMessage(1, "I'm not following you, you evil person!\n");
         return v0;
     }
     else

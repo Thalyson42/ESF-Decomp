@@ -61,7 +61,7 @@ unsigned int Touch__6CCandyP11CBaseEntity(st_499d90_3 *a0, st_499d90_7 *a1)
     if (v2 != 1)
         return v2;
     a0->field_60->field_e8(a0, a1);
-    sub_48d4f0(a1, "candyeat.wav");
-    return sub_48cc00(a0);
+    CBasePlayer::EmitClassSound(a1, "candyeat.wav");
+    return UTIL_Remove(a0);
 }
 

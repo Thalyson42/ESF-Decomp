@@ -29,7 +29,7 @@ typedef struct st_549b90_3 {
     unsigned int field_0;
 } st_549b90_3;
 
-extern st_549b90_3 *g_61692c;
+extern st_549b90_3 *g_engfuncs.pfnRandomFloat;
 extern st_549b90_4 *gpGlobals;
 
 float ManageEnemies__9CBaseTask(st_549b90_2 *a0)
@@ -43,7 +43,7 @@ float ManageEnemies__9CBaseTask(st_549b90_2 *a0)
     int v1;  // [bp-0x24]
 
     v2 = a0->field_8->field_b6c;
-    v3 = sub_48ad00(a0->field_8);
+    v3 = CBot::GetBestEnemyFromList(a0->field_8);
     v4 = a0->field_8;
     a0->field_10 = v3;
     v4->field_b6c = v3;
@@ -51,9 +51,9 @@ float ManageEnemies__9CBaseTask(st_549b90_2 *a0)
         return v7;
     *(unsigned short *)&v1 = 1;
     *(unsigned short *)&v0 = 0;
-    if (!(char)sub_489a70(v2, v0, v1))
+    if (!(char)UTIL_IsValidPlayer(v2, v0, v1))
         return v5;
-    g_61692c(*(float *)&a0->field_8->field_a00->field_30, *(float *)&a0->field_8->field_a00->field_34);
+    g_engfuncs.pfnRandomFloat(*(float *)&a0->field_8->field_a00->field_30, *(float *)&a0->field_8->field_a00->field_34);
     *(float *)&a0->field_8->field_b3c = *(float *)&a0->field_8->field_a00->field_30 + *(float *)gpGlobals;
     return v5;
 }

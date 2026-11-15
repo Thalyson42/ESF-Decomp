@@ -19,19 +19,19 @@ unsigned int * KeyValue__6CBloodP14KeyValueData_s(st_4b52f0_1 **a0, st_4b52f0_0 
     unsigned int *v1;  // eax
     double v2;  // mm7
 
-    if (sub_488af0(a1->field_4, "color"))
+    if (strcmp@GLIBC_2.0(a1->field_4, "color"))
     {
-        v1 = sub_488af0(a1->field_4, "amount");
+        v1 = strcmp@GLIBC_2.0(a1->field_4, "amount");
         if (v1)
         {
             a1->field_c = 0;
             return v1;
         }
-        sub_487fc0(a1->field_8, 0, 0);
+        __strtod_internal@GLIBC_2.0(a1->field_8, 0, 0);
         v0 = *a0;
         v0->field_1e0 = (float)v2;
     }
-    else if (sub_48b500(a1->field_8, 0, 10, 0) == 1)
+    else if (__strtol_internal@GLIBC_2.0(a1->field_8, 0, 10, 0) == 1)
     {
         v0 = *a0;
         v0->field_184 = 195;

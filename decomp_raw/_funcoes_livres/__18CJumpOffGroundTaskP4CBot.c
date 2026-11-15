@@ -37,7 +37,7 @@ typedef struct st_584620_5 {
 
 extern unsigned int FindSelection__t12TMultiChoice1ZiPQ2t12TMultiChoice1Zi12SMultiChoicei;
 extern char __vt_18CJumpOffGroundTask;
-extern st_584620_5 *g_616928;
+extern st_584620_5 *g_engfuncs.pfnRandomLong;
 
 st_584620_3 * __18CJumpOffGroundTaskP4CBot(st_584620_3 *a0, int a1)
 {
@@ -149,7 +149,7 @@ st_584620_3 * __18CJumpOffGroundTaskP4CBot(st_584620_3 *a0, int a1)
     unsigned int v48;  // [bp-0x20]
     unsigned int v49;  // [bp-0x1c]
 
-    sub_48ce80(a0, a1);
+    __9CBaseTaskP4CBot(a0, a1);
     v50 = a0;
     v50->field_14 = &__vt_18CJumpOffGroundTask;
     v44 = 50;
@@ -162,7 +162,7 @@ st_584620_3 * __18CJumpOffGroundTaskP4CBot(st_584620_3 *a0, int a1)
         *(float *)&v47 = *(float *)(*(int *)v50->field_10 + 8);
         *(float *)&v48 = *(float *)&v51[1];
         *(float *)&v49 = *(float *)&v51[2];
-        v52 = sub_4880e0(a0->field_8, &v47);
+        v52 = UTIL_EntDir(a0->field_8, &v47);
         if (v52 & 2)
             v44 = 15;
         if (v52 & 4)
@@ -173,13 +173,13 @@ st_584620_3 * __18CJumpOffGroundTaskP4CBot(st_584620_3 *a0, int a1)
             v41 = 15;
     }
     iter = 0;
-    v53 = sub_48d6a0(8);
+    v53 = __builtin_new(8);
     *v53 = NULL;
     v53[1] = NULL;
     v46 = v53;
     if (v41)
     {
-        v54 = sub_48d6a0(12);
+        v54 = __builtin_new(12);
         *v54 = 0;
         v54[1] = 0;
         v40 = v54;
@@ -189,15 +189,15 @@ st_584620_3 * __18CJumpOffGroundTaskP4CBot(st_584620_3 *a0, int a1)
         v55 = v46;
         if (!*v55)
         {
-            v56 = sub_48d6a0(12);
+            v56 = __builtin_new(12);
             v39 = 1;
             v56->field_4 = NULL;
             v56->field_8 = NULL;
-            sub_48d0e0(v56, 0, 4);
+            memset@GLIBC_2.0(v56, 0, 4);
             v39 = 0;
             *v55 = v56;
             if (v39)
-                sub_48d4e0(v56);
+                __builtin_delete(v56);
             *v55->field_0 = v40;
             *v55->field_4 = NULL;
             *v55->field_8 = NULL;
@@ -206,15 +206,15 @@ st_584620_3 * __18CJumpOffGroundTaskP4CBot(st_584620_3 *a0, int a1)
         else
         {
             v38 = v55[1];
-            v57 = sub_48d6a0(12);
+            v57 = __builtin_new(12);
             v37 = 1;
             v57->field_4 = NULL;
             v57->field_8 = NULL;
-            sub_48d0e0(v57, 0, 4);
+            memset@GLIBC_2.0(v57, 0, 4);
             v37 = 0;
             v38->field_4 = v57;
             if (v37)
-                sub_48d4e0(v57);
+                __builtin_delete(v57);
             v55[1]->field_4->field_8 = v55[1];
             v58 = v55[1]->field_4;
             v55[1] = v58;
@@ -225,7 +225,7 @@ st_584620_3 * __18CJumpOffGroundTaskP4CBot(st_584620_3 *a0, int a1)
     }
     if (v42)
     {
-        v59 = sub_48d6a0(12);
+        v59 = __builtin_new(12);
         *v59 = 0;
         v59[1] = 0;
         v36 = v59;
@@ -235,15 +235,15 @@ st_584620_3 * __18CJumpOffGroundTaskP4CBot(st_584620_3 *a0, int a1)
         v60 = v46;
         if (!*v60)
         {
-            v61 = sub_48d6a0(12);
+            v61 = __builtin_new(12);
             v35 = 1;
             v61->field_4 = NULL;
             v61->field_8 = NULL;
-            sub_48d0e0(v61, 0, 4);
+            memset@GLIBC_2.0(v61, 0, 4);
             v35 = 0;
             *v60 = v61;
             if (v35)
-                sub_48d4e0(v61);
+                __builtin_delete(v61);
             *v60->field_0 = v36;
             *v60->field_4 = NULL;
             *v60->field_8 = NULL;
@@ -252,15 +252,15 @@ st_584620_3 * __18CJumpOffGroundTaskP4CBot(st_584620_3 *a0, int a1)
         else
         {
             v34 = v60[1];
-            v62 = sub_48d6a0(12);
+            v62 = __builtin_new(12);
             v33 = 1;
             v62->field_4 = NULL;
             v62->field_8 = NULL;
-            sub_48d0e0(v62, 0, 4);
+            memset@GLIBC_2.0(v62, 0, 4);
             v33 = 0;
             v34->field_4 = v62;
             if (v33)
-                sub_48d4e0(v62);
+                __builtin_delete(v62);
             v60[1]->field_4->field_8 = v60[1];
             v63 = v60[1]->field_4;
             v60[1] = v63;
@@ -271,7 +271,7 @@ st_584620_3 * __18CJumpOffGroundTaskP4CBot(st_584620_3 *a0, int a1)
     }
     if (v44)
     {
-        v64 = sub_48d6a0(12);
+        v64 = __builtin_new(12);
         *v64 = 0;
         v64[1] = 0;
         v32 = v64;
@@ -281,15 +281,15 @@ st_584620_3 * __18CJumpOffGroundTaskP4CBot(st_584620_3 *a0, int a1)
         v65 = v46;
         if (!*v65)
         {
-            v66 = sub_48d6a0(12);
+            v66 = __builtin_new(12);
             v31 = 1;
             v66->field_4 = NULL;
             v66->field_8 = NULL;
-            sub_48d0e0(v66, 0, 4);
+            memset@GLIBC_2.0(v66, 0, 4);
             v31 = 0;
             *v65 = v66;
             if (v31)
-                sub_48d4e0(v66);
+                __builtin_delete(v66);
             *v65->field_0 = v32;
             *v65->field_4 = NULL;
             *v65->field_8 = NULL;
@@ -298,15 +298,15 @@ st_584620_3 * __18CJumpOffGroundTaskP4CBot(st_584620_3 *a0, int a1)
         else
         {
             v30 = v65[1];
-            v67 = sub_48d6a0(12);
+            v67 = __builtin_new(12);
             v29 = 1;
             v67->field_4 = NULL;
             v67->field_8 = NULL;
-            sub_48d0e0(v67, 0, 4);
+            memset@GLIBC_2.0(v67, 0, 4);
             v29 = 0;
             v30->field_4 = v67;
             if (v29)
-                sub_48d4e0(v67);
+                __builtin_delete(v67);
             v65[1]->field_4->field_8 = v65[1];
             v68 = v65[1]->field_4;
             v65[1] = v68;
@@ -317,7 +317,7 @@ st_584620_3 * __18CJumpOffGroundTaskP4CBot(st_584620_3 *a0, int a1)
     }
     if (v43)
     {
-        v69 = sub_48d6a0(12);
+        v69 = __builtin_new(12);
         *v69 = 0;
         v69[1] = 0;
         v28 = v69;
@@ -327,15 +327,15 @@ st_584620_3 * __18CJumpOffGroundTaskP4CBot(st_584620_3 *a0, int a1)
         v70 = v46;
         if (!*v70)
         {
-            v71 = sub_48d6a0(12);
+            v71 = __builtin_new(12);
             v27 = 1;
             v71->field_4 = NULL;
             v71->field_8 = NULL;
-            sub_48d0e0(v71, 0, 4);
+            memset@GLIBC_2.0(v71, 0, 4);
             v27 = 0;
             *v70 = v71;
             if (v27)
-                sub_48d4e0(v71);
+                __builtin_delete(v71);
             *v70->field_0 = v28;
             *v70->field_4 = NULL;
             *v70->field_8 = NULL;
@@ -344,15 +344,15 @@ st_584620_3 * __18CJumpOffGroundTaskP4CBot(st_584620_3 *a0, int a1)
         else
         {
             v26 = v70[1];
-            v72 = sub_48d6a0(12);
+            v72 = __builtin_new(12);
             v25 = 1;
             v72->field_4 = NULL;
             v72->field_8 = NULL;
-            sub_48d0e0(v72, 0, 4);
+            memset@GLIBC_2.0(v72, 0, 4);
             v25 = 0;
             v26->field_4 = v72;
             if (v25)
-                sub_48d4e0(v72);
+                __builtin_delete(v72);
             v70[1]->field_4->field_8 = v70[1];
             v73 = v70[1]->field_4;
             v70[1] = v73;
@@ -364,7 +364,7 @@ st_584620_3 * __18CJumpOffGroundTaskP4CBot(st_584620_3 *a0, int a1)
     v24 = v44 + v41 >> 1;
     if (v24)
     {
-        v74 = sub_48d6a0(12);
+        v74 = __builtin_new(12);
         *v74 = 0;
         v74[1] = 0;
         v23 = v74;
@@ -374,15 +374,15 @@ st_584620_3 * __18CJumpOffGroundTaskP4CBot(st_584620_3 *a0, int a1)
         v75 = v46;
         if (!*v75)
         {
-            v76 = sub_48d6a0(12);
+            v76 = __builtin_new(12);
             v22 = 1;
             v76->field_4 = NULL;
             v76->field_8 = NULL;
-            sub_48d0e0(v76, 0, 4);
+            memset@GLIBC_2.0(v76, 0, 4);
             v22 = 0;
             *v75 = v76;
             if (v22)
-                sub_48d4e0(v76);
+                __builtin_delete(v76);
             *v75->field_0 = v23;
             *v75->field_4 = NULL;
             *v75->field_8 = NULL;
@@ -391,15 +391,15 @@ st_584620_3 * __18CJumpOffGroundTaskP4CBot(st_584620_3 *a0, int a1)
         else
         {
             v21 = v75[1];
-            v77 = sub_48d6a0(12);
+            v77 = __builtin_new(12);
             v20 = 1;
             v77->field_4 = NULL;
             v77->field_8 = NULL;
-            sub_48d0e0(v77, 0, 4);
+            memset@GLIBC_2.0(v77, 0, 4);
             v20 = 0;
             v21->field_4 = v77;
             if (v20)
-                sub_48d4e0(v77);
+                __builtin_delete(v77);
             v75[1]->field_4->field_8 = v75[1];
             v78 = v75[1]->field_4;
             v75[1] = v78;
@@ -411,7 +411,7 @@ st_584620_3 * __18CJumpOffGroundTaskP4CBot(st_584620_3 *a0, int a1)
     v19 = v43 + v41 >> 1;
     if (v19)
     {
-        v79 = sub_48d6a0(12);
+        v79 = __builtin_new(12);
         *v79 = 0;
         v79[1] = 0;
         v18 = v79;
@@ -421,15 +421,15 @@ st_584620_3 * __18CJumpOffGroundTaskP4CBot(st_584620_3 *a0, int a1)
         v80 = v46;
         if (!*v80)
         {
-            v81 = sub_48d6a0(12);
+            v81 = __builtin_new(12);
             v17 = 1;
             v81->field_4 = NULL;
             v81->field_8 = NULL;
-            sub_48d0e0(v81, 0, 4);
+            memset@GLIBC_2.0(v81, 0, 4);
             v17 = 0;
             *v80 = v81;
             if (v17)
-                sub_48d4e0(v81);
+                __builtin_delete(v81);
             *v80->field_0 = v18;
             *v80->field_4 = NULL;
             *v80->field_8 = NULL;
@@ -438,15 +438,15 @@ st_584620_3 * __18CJumpOffGroundTaskP4CBot(st_584620_3 *a0, int a1)
         else
         {
             v16 = v80[1];
-            v82 = sub_48d6a0(12);
+            v82 = __builtin_new(12);
             v15 = 1;
             v82->field_4 = NULL;
             v82->field_8 = NULL;
-            sub_48d0e0(v82, 0, 4);
+            memset@GLIBC_2.0(v82, 0, 4);
             v15 = 0;
             v16->field_4 = v82;
             if (v15)
-                sub_48d4e0(v82);
+                __builtin_delete(v82);
             v80[1]->field_4->field_8 = v80[1];
             v83 = v80[1]->field_4;
             v80[1] = v83;
@@ -458,7 +458,7 @@ st_584620_3 * __18CJumpOffGroundTaskP4CBot(st_584620_3 *a0, int a1)
     v14 = v44 + v42 >> 1;
     if (v14)
     {
-        v84 = sub_48d6a0(12);
+        v84 = __builtin_new(12);
         *v84 = 0;
         v84[1] = 0;
         v13 = v84;
@@ -468,15 +468,15 @@ st_584620_3 * __18CJumpOffGroundTaskP4CBot(st_584620_3 *a0, int a1)
         v85 = v46;
         if (!*v85)
         {
-            v86 = sub_48d6a0(12);
+            v86 = __builtin_new(12);
             v12 = 1;
             v86->field_4 = NULL;
             v86->field_8 = NULL;
-            sub_48d0e0(v86, 0, 4);
+            memset@GLIBC_2.0(v86, 0, 4);
             v12 = 0;
             *v85 = v86;
             if (v12)
-                sub_48d4e0(v86);
+                __builtin_delete(v86);
             *v85->field_0 = v13;
             *v85->field_4 = NULL;
             *v85->field_8 = NULL;
@@ -485,15 +485,15 @@ st_584620_3 * __18CJumpOffGroundTaskP4CBot(st_584620_3 *a0, int a1)
         else
         {
             v11 = v85[1];
-            v87 = sub_48d6a0(12);
+            v87 = __builtin_new(12);
             v10 = 1;
             v87->field_4 = NULL;
             v87->field_8 = NULL;
-            sub_48d0e0(v87, 0, 4);
+            memset@GLIBC_2.0(v87, 0, 4);
             v10 = 0;
             v11->field_4 = v87;
             if (v10)
-                sub_48d4e0(v87);
+                __builtin_delete(v87);
             v85[1]->field_4->field_8 = v85[1];
             v88 = v85[1]->field_4;
             v85[1] = v88;
@@ -505,7 +505,7 @@ st_584620_3 * __18CJumpOffGroundTaskP4CBot(st_584620_3 *a0, int a1)
     v9 = v43 + v42 >> 1;
     if (v9)
     {
-        v89 = sub_48d6a0(12);
+        v89 = __builtin_new(12);
         *v89 = 0;
         v89[1] = 0;
         v8 = v89;
@@ -515,15 +515,15 @@ st_584620_3 * __18CJumpOffGroundTaskP4CBot(st_584620_3 *a0, int a1)
         v90 = v46;
         if (!*v90)
         {
-            v91 = sub_48d6a0(12);
+            v91 = __builtin_new(12);
             v7 = 1;
             v91->field_4 = NULL;
             v91->field_8 = NULL;
-            sub_48d0e0(v91, 0, 4);
+            memset@GLIBC_2.0(v91, 0, 4);
             v7 = 0;
             *v90 = v91;
             if (v7)
-                sub_48d4e0(v91);
+                __builtin_delete(v91);
             *v90->field_0 = v8;
             *v90->field_4 = NULL;
             *v90->field_8 = NULL;
@@ -532,15 +532,15 @@ st_584620_3 * __18CJumpOffGroundTaskP4CBot(st_584620_3 *a0, int a1)
         else
         {
             v6 = v90[1];
-            v92 = sub_48d6a0(12);
+            v92 = __builtin_new(12);
             v5 = 1;
             v92->field_4 = NULL;
             v92->field_8 = NULL;
-            sub_48d0e0(v92, 0, 4);
+            memset@GLIBC_2.0(v92, 0, 4);
             v5 = 0;
             v6->field_4 = v92;
             if (v5)
-                sub_48d4e0(v92);
+                __builtin_delete(v92);
             v90[1]->field_4->field_8 = v90[1];
             v93 = v90[1]->field_4;
             v90[1] = v93;
@@ -552,7 +552,7 @@ st_584620_3 * __18CJumpOffGroundTaskP4CBot(st_584620_3 *a0, int a1)
     v94 = a0;
     v94->field_18 = 0;
     v4 = &v94->field_18;
-    v3 = g_616928(0, iter);
+    v3 = g_engfuncs.pfnRandomLong(0, iter);
     v1 = _INSERT(v3, 0, 0) | 0xffff0000;
     v2 = &FindSelection__t12TMultiChoice1ZiPQ2t12TMultiChoice1Zi12SMultiChoicei;
     v96 = *v46;
@@ -587,12 +587,12 @@ LABEL_5855cc:
             if (v103)
                 v103->field_8 = NULL;
             v102->field_4 = NULL;
-            sub_48d4e0(v102);
+            __builtin_delete(v102);
         }
         v104 = v101;
         if (!v104)
             break;
-        sub_48d4e0(v104);
+        __builtin_delete(v104);
     }
     if (v46)
     {
@@ -606,12 +606,12 @@ LABEL_5855cc:
                 node = node->field_4;
                 v107->field_4 = NULL;
                 v107->field_8 = NULL;
-                sub_48d4e0(v107);
+                __builtin_delete(v107);
             } while (node);
         }
         v105[1] = NULL;
         *v105 = NULL;
-        sub_48d4e0(v105);
+        __builtin_delete(v105);
     }
     v46 = 0;
     return a0;

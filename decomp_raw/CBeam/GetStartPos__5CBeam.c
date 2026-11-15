@@ -21,10 +21,10 @@ typedef struct st_4afb60_2 {
     unsigned int field_0;
 } st_4afb60_2;
 
-extern st_4afb60_2 *g_6168e0;
+extern st_4afb60_2 *g_engfuncs.pfnPEntityOfEntIndex;
 
 st_4afb60_1 * GetStartPos__5CBeam(st_4afb60_0 **a0)
 {
-    return ((*a0->field_148 & 15) == 2 ? g_6168e0(*a0->field_128 & 0xfff) + 0x88 : (struct st_4afb60_0 *)&*a0->field_8);
+    return ((*a0->field_148 & 15) == 2 ? g_engfuncs.pfnPEntityOfEntIndex(*a0->field_128 & 0xfff) + 0x88 : (struct st_4afb60_0 *)&*a0->field_8);
 }
 

@@ -145,7 +145,7 @@ double FollowThink__17CFriezaDiscAttack(float a0)
         *(float *)&v38 = *(float *)&v42[1];
         *(float *)&v39 = *(float *)&v42[2];
         v43 = (!v41->field_198 ? NULL : v41->field_198 + 128);
-        sub_48a800(&v43->field_74);
+        UTIL_MakeVectors(&v43->field_74);
         v44 = &v43->field_8;
         v34 = v43->field_8 + v43->field_174;
         v35 = *(float *)&v44[1] + v43->field_178;
@@ -162,7 +162,7 @@ double FollowThink__17CFriezaDiscAttack(float a0)
         v20 = (float)(v46 + v34);
         v21 = (float)(v47 + v35);
         v22 = v36 + v14;
-        sub_487b80(&v34, &v20, 0, *(int *)(*(int *)a0 + 408), &v27);
+        UTIL_TraceLine(&v34, &v20, 0, *(int *)(*(int *)a0 + 408), &v27);
         v48 = &gpGlobals->field_28;
         v49 = 10.0 * gpGlobals->field_28;
         v15 = (float)v49;
@@ -175,7 +175,7 @@ double FollowThink__17CFriezaDiscAttack(float a0)
         v28 = v12;
         v29 = v13;
         v30 = v14;
-        sub_488e40(*(int *)a0 + 80);
+        UTIL_MakeAimVectors(*(int *)a0 + 80);
         v51 = &gpGlobals->field_28;
         v12 = gpGlobals->field_28;
         v13 = *(float *)&v51[1];
@@ -191,14 +191,14 @@ double FollowThink__17CFriezaDiscAttack(float a0)
         v56 = v53 * v53 + v54 * v54 + v55 * v55;
         v57 = sqrt(v56);
         if (isnan(v57))
-            sub_487dc0(*(unsigned int *)&v56);
+            sqrt(*(unsigned int *)&v56);
         else
             v56 = v57;
         v1 = (float)v56;
         v58 = v15 * v15 + v16 * v16 + v17 * v17;
         v59 = sqrt(v58);
         if (isnan(v59))
-            sub_487dc0(*(unsigned int *)&v58);
+            sqrt(*(unsigned int *)&v58);
         else
             v58 = v59;
         v9 = (float)v58;
@@ -231,7 +231,7 @@ double FollowThink__17CFriezaDiscAttack(float a0)
         v65 = *(float *)&v63->field_20 * *(float *)&v63->field_20 + *(float *)&v64[1] * *(float *)&v64[1] + *(float *)&v64[2] * *(float *)&v64[2];
         v66 = sqrt(v65);
         if (isnan(v66))
-            sub_487dc0(*(unsigned int *)&v65);
+            sqrt(*(unsigned int *)&v65);
         else
             v65 = v66;
         v5 = (float)v65;
@@ -271,7 +271,7 @@ double FollowThink__17CFriezaDiscAttack(float a0)
         *(float *)&v63->field_24 = v7;
         *(float *)&v63->field_28 = v8;
         v72 = v68->field_0;
-        sub_488860(&v9, &v72->field_20);
+        UTIL_VecToAngles(&v9, &v72->field_20);
         *(float *)&v72->field_50 = v9;
         *(float *)&v72->field_54 = v10;
         *(float *)&v72->field_58 = v11;
@@ -282,9 +282,9 @@ double FollowThink__17CFriezaDiscAttack(float a0)
         v74->field_c = _INSERT(a0, 0, 0) | 0xffff0000;
         v74->field_10 = &NormalThink__12CMagicAttack;
     }
-    sub_487d50(a0);
+    CMagicAttack::DrawBubbles(a0);
     if (!(*(int *)(*(int *)(*(unsigned int *)&a0 + 96) + 156))(a0))
-        sub_48c880(a0);
+        CDiscAttack::Vaporize(a0);
     v75 = 0.3 + gpGlobals->field_0;
     *(float *)(*(int *)a0 + 260) = (float)v75;
     return v75;

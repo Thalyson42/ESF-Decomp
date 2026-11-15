@@ -63,7 +63,7 @@ double EvaluateTrain__16CFuncTrackChangeP10CPathTrack(st_4ed280_3 *a0, st_4ed280
             v9 = v7 * v7 + v8 * v8;
             v10 = sqrt(v9);
             if (isnan(v10))
-                sub_487dc0(*(unsigned int *)&v9);
+                sqrt(*(unsigned int *)&v9);
             else
                 v9 = v10;
             v0 = (float)v9;

@@ -1,8 +1,17 @@
 // CExplodingAttack.h -- reconstruído automaticamente (vtable + offsets). REVISAR.
 #pragma once
 
-class CExplodingAttack : public CShieldAtk {  // base: heuristica
+class CExplodingAttack : public CMagicAttack {  // base: heuristica
 public:
+    virtual void Spawn();  // vtable[0] Spawn__16CExplodingAttack
+    virtual void Precache();  // vtable[1] Precache__16CExplodingAttack
+    virtual void Classify();  // vtable[8] Classify__16CExplodingAttack
+    virtual void SwatAway();  // vtable[124] SwatAway__16CExplodingAttackP11CBasePlayeri
+    virtual void Explode();  // vtable[126] Explode__16CExplodingAttack
+    virtual void GetExplosionRadius();  // vtable[127] GetExplosionRadius__16CExplodingAttack
+    virtual void Release();  // vtable[128] Release__16CExplodingAttack
+    virtual void DrawExplosionFX();  // vtable[129] DrawExplosionFX__16CExplodingAttackiG6Vector
+    virtual void 0();  // vtable[130] 0
     // campos observados (offset em bytes a partir de `this`; inclui os herdados)
     char f_00c;  // +0xc (12)
     int f_010;  // +0x10 (16)

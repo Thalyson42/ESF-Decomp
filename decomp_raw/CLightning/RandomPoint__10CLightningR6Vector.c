@@ -14,7 +14,7 @@ typedef struct st_4b2200_0 {
     unsigned int field_0;
 } st_4b2200_0;
 
-extern st_4b2200_0 *g_61692c;
+extern st_4b2200_0 *g_engfuncs.pfnRandomFloat;
 
 unsigned int RandomPoint__10CLightningR6Vector(st_4b2200_2 *a0, float *a1)
 {
@@ -66,11 +66,11 @@ unsigned int RandomPoint__10CLightningR6Vector(st_4b2200_2 *a0, float *a1)
     v0 = &v9;
     while (1)
     {
-        g_61692c(0xbf800000, 0x3f800000);
+        g_engfuncs.pfnRandomFloat(0xbf800000, 0x3f800000);
         v2 = (float)v24;
-        g_61692c(0xbf800000, 0x3f800000);
+        g_engfuncs.pfnRandomFloat(0xbf800000, 0x3f800000);
         v1 = (float)v24;
-        g_61692c(0xbf800000, 0x3f800000);
+        g_engfuncs.pfnRandomFloat(0xbf800000, 0x3f800000);
         v21 = v2;
         v26 = v1;
         v22 = v26;
@@ -79,7 +79,7 @@ unsigned int RandomPoint__10CLightningR6Vector(st_4b2200_2 *a0, float *a1)
         v28 = v2 * v21 + v26 * v26 + v27 * v27;
         v29 = sqrt(v28);
         if (isnan(v29))
-            sub_487dc0(*(unsigned int *)&v28);
+            sqrt(*(unsigned int *)&v28);
         else
             v28 = v29;
         v13 = (float)v28;
@@ -110,7 +110,7 @@ unsigned int RandomPoint__10CLightningR6Vector(st_4b2200_2 *a0, float *a1)
         v8 = (float)(v34 + *a1);
         v10 = (float)(v35 + a1[1]);
         v11 = a1[2] + v6;
-        sub_487b80(a1, v0, 1, v32->field_0->field_208, &v12);
+        UTIL_TraceLine(a1, v0, 1, v32->field_0->field_208, &v12);
         v36 = v15 - *a1;
         v4 = v36;
         v37 = v16 - a1[1];
@@ -120,7 +120,7 @@ unsigned int RandomPoint__10CLightningR6Vector(st_4b2200_2 *a0, float *a1)
         v39 = v36 * v36 + v37 * v37 + v38 * v38;
         v40 = sqrt(v39);
         if (isnan(v40))
-            sub_487dc0(*(unsigned int *)&v39);
+            sqrt(*(unsigned int *)&v39);
         else
             v39 = v40;
         v7 = (float)v39;
@@ -133,7 +133,7 @@ unsigned int RandomPoint__10CLightningR6Vector(st_4b2200_2 *a0, float *a1)
             v24 = 1.0;
             if (v25 != 1.0)
             {
-                v42 = sub_487e40(v41, a1, &v15);
+                v42 = CLightning::Zap(v41, a1, &v15);
                 return v42;
             }
         }

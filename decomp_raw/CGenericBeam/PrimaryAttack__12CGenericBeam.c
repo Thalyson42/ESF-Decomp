@@ -7,6 +7,6 @@ typedef struct st_4c6030_0 {
 int PrimaryAttack__12CGenericBeam(st_4c6030_0 *a0)
 {
     a0->field_210 = 0;
-    return sub_48ba00(a0);
+    return CControlledBeam::PrimaryAttack(a0);
 }
 

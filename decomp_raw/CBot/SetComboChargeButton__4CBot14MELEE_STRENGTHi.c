@@ -7,7 +7,7 @@ typedef struct st_555e60_0 {
     unsigned int field_0;
 } st_555e60_0;
 
-extern st_555e60_0 *g_61692c;
+extern st_555e60_0 *g_engfuncs.pfnRandomFloat;
 extern st_555e60_1 *gpGlobals;
 
 int SetComboChargeButton__4CBot14MELEE_STRENGTHi(double a0, double a1, double a2, void* a3, int a4, unsigned int a5)
@@ -21,17 +21,17 @@ int SetComboChargeButton__4CBot14MELEE_STRENGTHi(double a0, double a1, double a2
     unsigned int v2;  // [bp-0x8]
 
     v3 = a3 + 896;
-    *(float *)&v0 = *(float *)(sub_48cc40(v3) + 4);
-    v4 = *(unsigned int *)&*(float *)sub_48cc40(v3);
-    g_61692c(*(float *)sub_48cc40(v3));
-    *(float *)&v2 = *(float *)sub_48cc40(v3);
-    *(float *)&v0 = *(float *)(sub_48cc40(v3) + 8);
-    v5 = *(unsigned int *)&*(float *)(sub_48cc40(v3) + 4);
-    g_61692c(*(float *)(sub_48cc40(v3) + 4));
-    *(float *)&v1 = *(float *)(sub_48cc40(v3) + 4);
-    *(float *)&v0 = *(float *)(sub_48cc40(v3) + 12);
-    v6 = *(float *)(sub_48cc40(v3) + 8);
-    g_61692c((float)v6);
+    *(float *)&v0 = *(float *)(CPlayerMelee::GetSkillValues(v3) + 4);
+    v4 = *(unsigned int *)&*(float *)CPlayerMelee::GetSkillValues(v3);
+    g_engfuncs.pfnRandomFloat(*(float *)CPlayerMelee::GetSkillValues(v3));
+    *(float *)&v2 = *(float *)CPlayerMelee::GetSkillValues(v3);
+    *(float *)&v0 = *(float *)(CPlayerMelee::GetSkillValues(v3) + 8);
+    v5 = *(unsigned int *)&*(float *)(CPlayerMelee::GetSkillValues(v3) + 4);
+    g_engfuncs.pfnRandomFloat(*(float *)(CPlayerMelee::GetSkillValues(v3) + 4));
+    *(float *)&v1 = *(float *)(CPlayerMelee::GetSkillValues(v3) + 4);
+    *(float *)&v0 = *(float *)(CPlayerMelee::GetSkillValues(v3) + 12);
+    v6 = *(float *)(CPlayerMelee::GetSkillValues(v3) + 8);
+    g_engfuncs.pfnRandomFloat((float)v6);
     if (a4 == 1)
     {
         v6 = *(float *)&v1;
@@ -54,22 +54,22 @@ LABEL_555f60:
     *(float *)&a3[2976] = (float)(*(float *)gpGlobals + 0.15000000596046448);
     if ((char)a5 & 8)
     {
-        sub_488e30(a3, 16);
+        CBot::SetMoveDir(a3, 16);
         *(char *)&a3[2972] = (char)a3[2972] | 8;
     }
     if ((char)a5 & 16)
     {
-        sub_488e30(a3, 8);
+        CBot::SetMoveDir(a3, 8);
         *(char *)&a3[2972] = (char)a3[2972] | 16;
     }
     if (*(char *)((void*)&a5 + 1) & 2)
     {
-        sub_488e30(a3, 2);
+        CBot::SetMoveDir(a3, 2);
         *(char *)&a3[2973] = (char)a3[2973] | 2;
     }
     if (*(char *)((void*)&a5 + 1) & 4)
     {
-        sub_488e30(a3, 4);
+        CBot::SetMoveDir(a3, 4);
         *(char *)&a3[2973] = (char)a3[2973] | 4;
     }
     if ((char)a5 & 1)

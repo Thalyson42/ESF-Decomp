@@ -14,7 +14,7 @@ typedef struct st_53e940_1 {
 } st_53e940_1;
 
 extern char cout;
-extern st_53e940_1 *g_625f80;
+extern st_53e940_1 *cout+512;
 
 int ChangeAggressionLevel__11CBotManager16EAggressionLevel(st_53e940_0 *a0, int a1)
 {
@@ -31,7 +31,7 @@ int ChangeAggressionLevel__11CBotManager16EAggressionLevel(st_53e940_0 *a0, int 
         v2 = v3 + 1;
     } while (v3 + 1 <= 8);
     v0 = 0;
-    sub_48d0e0(&v1, 0, 24);
+    memset@GLIBC_2.0(&v1, 0, 24);
     if (a1 == 1)
     {
         strcpy(&v0, "Normal");
@@ -46,8 +46,8 @@ int ChangeAggressionLevel__11CBotManager16EAggressionLevel(st_53e940_0 *a0, int 
         if (a1 == 2)
             strcpy(&v0, "Defensive");
     }
-    g_625f80->field_14(&cout, "The personality setting aggression level is now for each personality ");
-    g_625f80->field_14(&cout, &v0);
-    return g_625f80->field_14(&cout, "\n");
+    cout+512->field_14(&cout, "The personality setting aggression level is now for each personality ");
+    cout+512->field_14(&cout, &v0);
+    return cout+512->field_14(&cout, "\n");
 }
 

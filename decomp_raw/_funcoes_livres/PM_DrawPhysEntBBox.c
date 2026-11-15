@@ -11,9 +11,9 @@ typedef struct st_58cf00_0 {
 } st_58cf00_0;
 
 extern unsigned int PM_boxpnt[4];
-extern unsigned int g_5ccd24[4];
-extern unsigned int g_5ccd28[4];
-extern unsigned int g_5ccd2c[4];
+extern unsigned int PM_boxpnt+4[4];
+extern unsigned int PM_boxpnt+8[4];
+extern unsigned int PM_boxpnt+12[4];
 extern st_58cf00_0 *pmove;
 
 unsigned int PM_DrawPhysEntBBox(int a0, int a1, int a2)
@@ -94,7 +94,7 @@ unsigned int PM_DrawPhysEntBBox(int a0, int a1, int a2)
             } while (i <= 7);
             if (*(float *)&v31[21] == 0.0f && *(float *)&v31[22] == 0.0f && *(float *)&v31[23] == 0.0f)
                 goto LABEL_58d12c;
-            sub_4890e0(v31 + 21, &v10, &v6, &v2);
+            AngleVectorsTranspose(v31 + 21, &v10, &v6, &v2);
             j = 0;
             do
             {
@@ -120,7 +120,7 @@ LABEL_58d12c:
             l = 0;
             do
             {
-                v39 = sub_489c70(&(&v22)[3 * g_5ccd24[4 * l]], &(&v22)[3 * PM_boxpnt[4 * l]], &(&v22)[3 * g_5ccd28[4 * l]], &(&v22)[3 * g_5ccd2c[4 * l]], a1, a2);
+                v39 = PM_DrawRectangle(&(&v22)[3 * PM_boxpnt+4[4 * l]], &(&v22)[3 * PM_boxpnt[4 * l]], &(&v22)[3 * PM_boxpnt+8[4 * l]], &(&v22)[3 * PM_boxpnt+12[4 * l]], a1, a2);
                 l += 1;
             } while (l <= 5);
             return v39;
@@ -145,7 +145,7 @@ LABEL_58d12c:
             n = 0;
             do
             {
-                v43 = sub_489c70(&(&v22)[3 * g_5ccd24[4 * n]], &(&v22)[3 * PM_boxpnt[4 * n]], &(&v22)[3 * g_5ccd28[4 * n]], &(&v22)[3 * g_5ccd2c[4 * n]], a1, a2);
+                v43 = PM_DrawRectangle(&(&v22)[3 * PM_boxpnt+4[4 * n]], &(&v22)[3 * PM_boxpnt[4 * n]], &(&v22)[3 * PM_boxpnt+8[4 * n]], &(&v22)[3 * PM_boxpnt+12[4 * n]], a1, a2);
                 n += 1;
             } while (n <= 5);
             return v43;

@@ -6,6 +6,6 @@ typedef struct st_4db4b0_0 {
 
 int EmitChargeSound__11CMouthblast(st_4db4b0_0 *a0)
 {
-    return sub_48d4f0(a0->field_80, "mouthbeam_charge.wav");
+    return CBasePlayer::EmitClassSound(a0->field_80, "mouthbeam_charge.wav");
 }
 

@@ -75,13 +75,13 @@ short ShootSpiritBomb__17CSpiritBombAttackG6Vectori(st_5204d0_1 *a0, float *a1, 
     v14 = *a1 * *a1 + a1[1] * a1[1] + a1[2] * a1[2];
     v15 = sqrt(v14);
     if (isnan(v15))
-        sub_487dc0(*(unsigned int *)&v14);
+        sqrt(*(unsigned int *)&v14);
     else
         v14 = v15;
     v16 = a0;
     v16->field_2a8 = (float)v14;
     v17 = v16->field_0;
-    sub_488860(&v3, &v17->field_20);
+    UTIL_VecToAngles(&v3, &v17->field_20);
     v17->field_50 = v3;
     v17->field_54 = v5;
     v17->field_58 = v8;
@@ -97,7 +97,7 @@ short ShootSpiritBomb__17CSpiritBombAttackG6Vectori(st_5204d0_1 *a0, float *a1, 
     v9 = (float)v19;
     v10 = (float)v19;
     v11 = (float)v19;
-    v21 = _INSERT(sub_48a0d0(a0->field_0, &v9, &v4), 0, 0) | 0xffff0000;
+    v21 = _INSERT(UTIL_SetSize(a0->field_0, &v9, &v4), 0, 0) | 0xffff0000;
     v22 = a0;
     v22->field_14 = v21;
     v22->field_18 = &ExplodeTouch__16CExplodingAttackP11CBaseEntity;

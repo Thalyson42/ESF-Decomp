@@ -32,7 +32,7 @@ float ChangeYaw__12CBaseMonsteri(st_4d8510_0 *a0, int a1)
     float v0;  // [bp-0xc]
     unsigned int v1;  // [bp-0xc]
 
-    sub_48d0c0(a0->field_0->field_54);
+    UTIL_AngleMod(a0->field_0->field_54);
     v2 = a0->field_0->field_ac;
     if (v2 == v3)
     {
@@ -73,7 +73,7 @@ LABEL_4d85d5:
 LABEL_4d85ec:
     }
     v8 = v3 + v0;
-    sub_48d0c0((float)v8);
+    UTIL_AngleMod((float)v8);
     a0->field_0->field_54 = (float)v8;
     if (!(a0->field_261 & 4))
         return v0;
@@ -82,7 +82,7 @@ LABEL_4d85ec:
         iter -= 360.0;
     if (iter < -180.0)
         iter += 360.0;
-    sub_489b40(a0, 0, (float)iter);
+    CBaseAnimating::SetBoneController(a0, 0, (float)iter);
     return v0;
 }
 

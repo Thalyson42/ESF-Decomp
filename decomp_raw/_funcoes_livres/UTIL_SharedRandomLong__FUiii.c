@@ -3,10 +3,10 @@ unsigned int UTIL_SharedRandomLong__FUiii(unsigned int a0, unsigned int a1, unsi
 {
     unsigned int v0;  // esi
 
-    sub_489200(a0 + a1 + a2);
+    U_Srand(a0 + a1 + a2);
     v0 = a2 - a1 + 1;
     if (v0 == 1)
         return a1;
-    return sub_48a890() % v0 + a1;
+    return U_Random() % v0 + a1;
 }
 

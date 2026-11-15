@@ -27,8 +27,8 @@ typedef struct st_4986d0_1 {
 } st_4986d0_1;
 
 extern unsigned int g_vecZero;
-extern unsigned int g_616790;
-extern unsigned int g_616794;
+extern unsigned int g_vecZero+4;
+extern unsigned int g_vecZero+8;
 
 unsigned int * UpdateSelfReturn__19CMomentaryRotButtonf(st_4986d0_1 *a0, float a1)
 {
@@ -60,8 +60,8 @@ unsigned int * UpdateSelfReturn__19CMomentaryRotButtonf(st_4986d0_1 *a0, float a
     }
     v3 = a0->field_0;
     v3->field_5c = g_vecZero;
-    v3->field_60 = g_616790;
-    v3->field_64 = g_616794;
+    v3->field_60 = g_vecZero+4;
+    v3->field_64 = g_vecZero+8;
     v4 = a0->field_0;
     v4->field_50 = a0->field_110;
     v4->field_54 = a0->field_114;

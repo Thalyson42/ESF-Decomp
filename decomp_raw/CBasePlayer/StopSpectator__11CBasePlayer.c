@@ -20,10 +20,10 @@ typedef struct st_4f0e20_2 {
 } st_4f0e20_2;
 
 extern unsigned int gmsgSpectator;
-extern st_4f0e20_2 *g_616878;
-extern st_4f0e20_2 *g_61687c;
-extern st_4f0e20_2 *g_616880;
-extern st_4f0e20_2 *g_6168dc;
+extern st_4f0e20_2 *g_engfuncs.pfnMessageBegin;
+extern st_4f0e20_2 *g_engfuncs.pfnMessageEnd;
+extern st_4f0e20_2 *g_engfuncs.pfnWriteByte;
+extern st_4f0e20_2 *g_engfuncs.pfnIndexOfEdict;
 
 unsigned int * StopSpectator__11CBasePlayer(st_4f0e20_0 *a0)
 {
@@ -35,15 +35,15 @@ unsigned int * StopSpectator__11CBasePlayer(st_4f0e20_0 *a0)
     v0 = a0->field_0;
     if (!v0[145] && !v0[146])
         return v0;
-    g_616878(2, gmsgSpectator, 0, 0);
-    v1 = g_6168dc(a0->field_0->field_208);
-    g_616880(v1);
-    g_616880(0);
-    g_61687c();
+    g_engfuncs.pfnMessageBegin(2, gmsgSpectator, 0, 0);
+    v1 = g_engfuncs.pfnIndexOfEdict(a0->field_0->field_208);
+    g_engfuncs.pfnWriteByte(v1);
+    g_engfuncs.pfnWriteByte(0);
+    g_engfuncs.pfnMessageEnd();
     v2 = a0->field_0;
     v2[146] = 0;
     v2[145] = 0;
-    v3 = sub_48d960(&a0->field_788, 0);
+    v3 = EHANDLE::__as(&a0->field_788, 0);
     a0->field_930 = a0->field_930 & 246;
     return v3;
 }

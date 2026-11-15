@@ -20,11 +20,11 @@ typedef struct st_553780_3 {
     unsigned int field_0;
 } st_553780_3;
 
-extern st_553780_3 *g_61692c;
+extern st_553780_3 *g_engfuncs.pfnRandomFloat;
 
 int AddShootDelay__4CBot(double a0, st_553780_1 *a1)
 {
-    g_61692c(a1->field_a00->field_28, a1->field_a00->field_2c);
+    g_engfuncs.pfnRandomFloat(a1->field_a00->field_28, a1->field_a00->field_2c);
     return a1->field_a04->field_34;
 }
 

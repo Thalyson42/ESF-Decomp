@@ -36,7 +36,7 @@ st_4b10c0_2 * StrikeUse__10CLightningP11CBaseEntityT18USE_TYPEf(st_4b10c0_1 *a0,
 {
     st_4b10c0_2 *v0;  // eax
 
-    v0 = sub_48ab90(a0, a3, a0->field_64);
+    v0 = CBaseEntity::ShouldToggle(a0, a3, a0->field_64);
     if (v0)
     {
         if (a0->field_64)

@@ -1,7 +1,7 @@
 // CSwoopTask.h -- reconstruído automaticamente (vtable + offsets). REVISAR.
 #pragma once
 
-class CSwoopTask {
+class CSwoopTask : public CBaseTask {  // base: heuristica
 public:
     virtual void _._10CSwoopTask();  // vtable[0] _._10CSwoopTask
     virtual void GetNesserelyChecks();  // vtable[1] GetNesserelyChecks__10CSwoopTask
@@ -11,9 +11,7 @@ public:
     virtual void TaskThink();  // vtable[5] TaskThink__10CSwoopTask
     virtual void TaskIdentify();  // vtable[6] TaskIdentify__10CSwoopTask
     virtual void ShouldManageEnemies();  // vtable[7] ShouldManageEnemies__10CSwoopTask
-    virtual void ManageEnemies();  // vtable[8] ManageEnemies__9CBaseTask
     virtual void ReactOnDanger();  // vtable[9] ReactOnDanger__10CSwoopTaskP13danger_info_s
-    virtual void 0();  // vtable[10] 0
     // campos observados (offset em bytes a partir de `this`; inclui os herdados)
     int f_004;  // +0x4 (4)
     int f_008;  // +0x8 (8)

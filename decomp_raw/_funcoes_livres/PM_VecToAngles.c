@@ -43,7 +43,7 @@ float PM_VecToAngles(float *a0, st_58e1c0_0 *a1)
         v8 = *a0 * *a0 + a0[1] * a0[1];
         v9 = sqrt(v8);
         if (isnan(v9))
-            sub_487dc0(*(unsigned int *)&v8);
+            sqrt(*(unsigned int *)&v8);
         else
             v8 = v9;
         v5 = (float)v8;

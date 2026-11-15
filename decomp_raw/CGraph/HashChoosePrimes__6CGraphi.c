@@ -4,8 +4,8 @@ typedef struct st_4e4640_0 {
 } st_4e4640_0;
 
 extern unsigned int Primes[4];
-extern int g_5c11bc;
-extern st_4e4640_0 *g_616928;
+extern int Primes+700;
+extern st_4e4640_0 *g_engfuncs.pfnRandomLong;
 
 unsigned int HashChoosePrimes__6CGraphi(int *a0, unsigned int a1)
 {
@@ -27,8 +27,8 @@ unsigned int HashChoosePrimes__6CGraphi(int *a0, unsigned int a1)
     int v3;  // [bp-0x8]
 
     v4 = a1 / 2;
-    if (v4 > g_5c11bc)
-        v4 = g_5c11bc;
+    if (v4 > Primes+700)
+        v4 = Primes+700;
     if (v4 < 0)
         v4 += 15;
     v3 = v4 >> 4;
@@ -78,7 +78,7 @@ unsigned int HashChoosePrimes__6CGraphi(int *a0, unsigned int a1)
     do
     {
         v11 = 15 - iter;
-        v12 = g_616928(0, v11) * 4;
+        v12 = g_engfuncs.pfnRandomLong(0, v11) * 4;
         v13 = *(int *)(v12 + v10);
         v14 = v11 * 4;
         v15 = *(int *)(v14 + v10);

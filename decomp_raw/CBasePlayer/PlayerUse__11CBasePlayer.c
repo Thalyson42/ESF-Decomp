@@ -61,7 +61,7 @@ typedef struct st_4f85e0_10 {
 } st_4f85e0_10;
 
 extern st_4f85e0_10 *g_pGameRules;
-extern st_4f85e0_1 *g_6168d4;
+extern st_4f85e0_1 *g_engfuncs.pfnPEntityOfEntOffset;
 extern st_4f85e0_8 *gpGlobals;
 
 st_4f85e0_2 * PlayerUse__11CBasePlayer(float idx)
@@ -115,12 +115,12 @@ st_4f85e0_2 * PlayerUse__11CBasePlayer(float idx)
     if (*(char *)(*(unsigned int *)&idx + 712) & 32)
     {
         v28 = *(unsigned int *)&idx + 2316;
-        v29 = sub_48d8b0(v28);
+        v29 = EHANDLE::__opi(v28);
         if (v29)
         {
-            v30 = sub_489fd0(v28);
+            v30 = EHANDLE::__rf(v28);
             v30->field_60->field_b8(v30, idx, idx, 0, 0);
-            return sub_48d960(v28, 0);
+            return EHANDLE::__as(v28, 0);
         }
         else if (*(char *)(*(unsigned int *)&idx + 784) & 2)
         {
@@ -131,7 +131,7 @@ st_4f85e0_2 * PlayerUse__11CBasePlayer(float idx)
         else
         {
             v31 = *(int *)(*(int *)idx + 412);
-            if (*(int *)(*(int *)idx + 412) || (v31 = g_6168d4(0), v31))
+            if (*(int *)(*(int *)idx + 412) || (v31 = g_engfuncs.pfnPEntityOfEntOffset(0), v31))
                 v32 = *(int *)(v31 + 124);
             else
                 v32 = NULL;
@@ -141,24 +141,24 @@ st_4f85e0_2 * PlayerUse__11CBasePlayer(float idx)
                 v25 = __fnstcw();
                 v24 = v25 | 0xc00;
                 v23 = (int)v32->field_0[1].field_f8;
-                *(unsigned int *)(*(unsigned int *)&idx + 2308) = sub_488890(v23, *(int *)&v32->field_0[1].padding_0[132]);
+                *(unsigned int *)(*(unsigned int *)&idx + 2308) = TrainSpeed(v23, *(int *)&v32->field_0[1].padding_0[132]);
                 *(char *)(*(unsigned int *)&idx + 2308) = *(char *)(*(unsigned int *)&idx + 2308) | 192;
-                return sub_489390(*(int *)(*(int *)idx + 520), 3, "plats/train_use1.wav", 0.800000011920929f, 0.800000011920929f, 0, 100);
+                return EMIT_SOUND_DYN(*(int *)(*(int *)idx + 520), 3, "plats/train_use1.wav", 0.800000011920929f, 0.800000011920929f, 0, 100);
             }
         }
     }
     v33 = NULL;
     strncpy(v3, "333?", 8);
-    sub_48a800(*(int *)idx + 116);
+    UTIL_MakeVectors(*(int *)idx + 116);
     v2 = &v7;
     while (1)
     {
-        v33 = sub_48bba0(v33, *(int *)idx + 8, 64.0f);
+        v33 = UTIL_FindEntityInSphere(v33, *(int *)idx + 8, 64.0f);
         if (!v33)
             break;
         if ((char)v33->field_60->field_1c(v33) & 56)
         {
-            sub_48b610(&v14, v33->field_0);
+            VecBModelOrigin(&v14, v33->field_0);
             v34 = *(int *)idx;
             v35 = &v34->padding_0[8];
             v6 = *(float *)&v34->padding_0[8] + *(float *)&v34->padding_0[372];
@@ -174,7 +174,7 @@ st_4f85e0_2 * PlayerUse__11CBasePlayer(float idx)
             v10 = (float)(0.5 * v33->field_0->field_f4);
             v11 = (float)(0.5 * *(float *)&v36[1]);
             v12 = (float)(0.5 * *(float *)&v36[2]);
-            sub_48af50(v2, &v20, &v10);
+            UTIL_ClampVectorToBox(v2, &v20, &v10);
             v20 = v6;
             v21 = v8;
             v22 = v9;
@@ -192,7 +192,7 @@ st_4f85e0_2 * PlayerUse__11CBasePlayer(float idx)
     {
         v1 = v39->field_60->field_1c(v39);
         if (*(char *)(*(unsigned int *)&idx + 712) & 32)
-            sub_489390(*(int *)(*(int *)idx + 520), 3, "common/wpn_select.wav", 0.4000000059604645f, 0.800000011920929f, 0, 100);
+            EMIT_SOUND_DYN(*(int *)(*(int *)idx + 520), 3, "common/wpn_select.wav", 0.4000000059604645f, 0.800000011920929f, 0, 100);
         if (!(*(char *)(*(int *)idx + 384) & 32) || !((char)v1 & 16))
         {
             if (*(char *)(*(unsigned int *)&idx + 712) & 32 && (char)v1 & 40)

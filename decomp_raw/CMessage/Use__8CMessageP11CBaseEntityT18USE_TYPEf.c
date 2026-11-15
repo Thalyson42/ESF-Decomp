@@ -38,8 +38,8 @@ typedef struct st_4b66b0_5 {
     unsigned int field_98;
 } st_4b66b0_5;
 
-extern st_4b66b0_1 *g_6168d4;
-extern st_4b66b0_1 *g_6168e0;
+extern st_4b66b0_1 *g_engfuncs.pfnPEntityOfEntOffset;
+extern st_4b66b0_1 *g_engfuncs.pfnPEntityOfEntIndex;
 extern st_4b66b0_5 *gpGlobals;
 
 int Use__8CMessageP11CBaseEntityT18USE_TYPEf(st_4b66b0_4 **a0, st_4b66b0_2 *a1)
@@ -51,28 +51,28 @@ int Use__8CMessageP11CBaseEntityT18USE_TYPEf(st_4b66b0_4 **a0, st_4b66b0_2 *a1)
     v0 = a1;
     if (*a0->field_1a0 & 2)
     {
-        sub_48cb90(*a0->field_1d4 + gpGlobals->field_98);
+        UTIL_ShowMessageAll(*a0->field_1d4 + gpGlobals->field_98);
     }
     else
     {
         if (!v0 || !v0->field_60->field_a0(v0))
         {
-            v1 = g_6168e0(1);
-            if (v1 || (v1 = g_6168d4(0), v1))
+            v1 = g_engfuncs.pfnPEntityOfEntIndex(1);
+            if (v1 || (v1 = g_engfuncs.pfnPEntityOfEntOffset(0), v1))
                 v0 = v1->field_7c;
             else
                 v0 = NULL;
         }
         if (!v0)
             goto LABEL_4b676c;
-        sub_488380(*a0->field_1d4 + gpGlobals->field_98, v0);
+        UTIL_ShowMessage(*a0->field_1d4 + gpGlobals->field_98, v0);
     }
 LABEL_4b676c:
     v2 = *a0;
     if (v2->field_1e8)
-        sub_489390(v2->field_208, 4, v2->field_1e8 + gpGlobals->field_98, v2->field_144, v2->field_1f8, 0, 100);
+        EMIT_SOUND_DYN(v2->field_208, 4, v2->field_1e8 + gpGlobals->field_98, v2->field_144, v2->field_1f8, 0, 100);
     if (*a0->field_1a0 & 1)
-        sub_48cc00(a0);
-    return sub_48df80(a0, a0, 3, 0);
+        UTIL_Remove(a0);
+    return CBaseEntity::SUB_UseTargets(a0, a0, 3, 0);
 }
 

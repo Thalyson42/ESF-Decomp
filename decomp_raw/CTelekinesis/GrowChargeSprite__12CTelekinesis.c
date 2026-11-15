@@ -44,7 +44,7 @@ int GrowChargeSprite__12CTelekinesis(st_529fa0_0 *a0)
             *(float *)&v1 = *(float *)&a0->field_1f0;
             *(float *)&v2 = *(float *)&a0->field_1f4;
             *(float *)&v3 = *(float *)&a0->field_1f8;
-            v5 = sub_488c50(&v1, *(int *)a0->field_80, (float)((double)a0->field_1ec / 6.0), *(float *)&a0->field_1fc);
+            v5 = CRock::CreateRock(&v1, *(int *)a0->field_80, (float)((double)a0->field_1ec / 6.0), *(float *)&a0->field_1fc);
             *(unsigned int *)&a0->padding_cc[264 + 4 * a0->field_1ec] = v5;
             a0->field_1ec = a0->field_1ec + 1;
             if ((int)(v4 * 6 / v0) < a0->field_1ec)

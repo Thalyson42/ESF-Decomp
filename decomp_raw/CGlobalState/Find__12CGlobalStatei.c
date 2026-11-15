@@ -22,7 +22,7 @@ st_539c80_0 * Find__12CGlobalStatei(st_539c80_0 **a0, unsigned int a1)
     {
         do
         {
-        } while (sub_488af0(a1 + gpGlobals->field_98, iter) && (iter = iter->field_64, iter));
+        } while (strcmp@GLIBC_2.0(a1 + gpGlobals->field_98, iter) && (iter = iter->field_64, iter));
     }
     return iter;
 }

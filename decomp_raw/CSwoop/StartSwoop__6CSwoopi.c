@@ -47,25 +47,25 @@ st_5240b0_1 * StartSwoop__6CSwoopi(double a0, double a1, st_5240b0_2 *a2, int a3
     st_5240b0_1 *v5;  // eax
 
     if (a2->field_78->field_320)
-        sub_48c5a0(a2->field_78);
+        CBasePlayer::StopFly(a2->field_78);
     v0 = a2->field_4;
     a2->field_4 = 1;
     a2->field_0 = a3;
-    sub_48d2e0(a2);
-    sub_48c500(a2);
+    CSwoop::GetSwoopSpeed(a2);
+    CSwoop::GetSwoopBoostSpeed(a2);
     a2->field_14 = (float)(v1 + (float)v1);
     *(float *)&a2->field_10 = *(float *)gpGlobals;
     a2->field_78->field_37c = 1;
     *(float *)&a2->field_78->field_0->padding_10c[16] = 1.0000000116860974e-07f;
     a2->field_78->field_0->field_108 = 11;
-    sub_4887c0(&a2->field_78->field_380);
+    CPlayerMelee::RemoveAllAnims(&a2->field_78->field_380);
     a2->field_78->field_0->field_288 = (float)a3;
     a2->field_78->field_0->field_28c = a2->field_14;
     if (v0)
         a2->field_8 = 1;
     if (!a2->field_78->field_76c)
     {
-        v4 = sub_4884f0(a2->field_78);
+        v4 = CAura::Create(a2->field_78);
         v5 = a2->field_78;
         v5->field_76c = v4;
         return v5;
@@ -80,6 +80,6 @@ st_5240b0_1 * StartSwoop__6CSwoopi(double a0, double a1, st_5240b0_2 *a2, int a3
         v2 = a2->field_78->field_0->field_208;
         v3 = "weapons/swoop.wav";
     }
-    return sub_489390(v2, 3, v3, 0x3f800000, 0.800000011920929f, 0, 100);
+    return EMIT_SOUND_DYN(v2, 3, v3, 0x3f800000, 0.800000011920929f, 0, 100);
 }
 

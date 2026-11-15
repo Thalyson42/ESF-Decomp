@@ -8,7 +8,7 @@ float Powerhit__12CPlayerMeleeP11CBasePlayerG6Vectorifffff(int a0, int a1, float
     v0 = *a2;
     v1 = a2[1];
     v2 = a2[2];
-    sub_48b420(a0, 1, a1, &v0, a3, a4, a5, a6, a7, a8);
+    CPlayerMelee::Powerhit(a0, 1, a1, &v0, a3, a4, a5, a6, a7, a8);
     return a4;
 }
 

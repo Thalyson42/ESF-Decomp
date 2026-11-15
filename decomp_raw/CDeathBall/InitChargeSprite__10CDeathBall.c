@@ -53,7 +53,7 @@ typedef struct st_4a9240_5 {
     unsigned int field_0;
 } st_4a9240_5;
 
-extern st_4a9240_5 *g_6168dc;
+extern st_4a9240_5 *g_engfuncs.pfnIndexOfEdict;
 
 unsigned int * InitChargeSprite__10CDeathBall(st_4a9240_2 *a0)
 {
@@ -66,15 +66,15 @@ unsigned int * InitChargeSprite__10CDeathBall(st_4a9240_2 *a0)
     st_4a9240_1 *v7;  // eax
     int v0;  // [bp-0x24]
 
-    v1 = sub_48c010("sprites/deathball.spr", *(int *)a0->field_80 + 8, 1);
+    v1 = CSprite::SpriteCreate("sprites/deathball.spr", *(int *)a0->field_80 + 8, 1);
     a0->field_1d4 = v1;
-    sub_48df90(v1);
+    CSprite::TurnOff(v1);
     *(float *)(*(int *)a0->field_1d4 + 324) = 9.999999747378752e-06f;
     v2 = *(int *)(*(int *)a0->field_80 + 520);
     v3 = a0->field_1d4;
     if (v2)
     {
-        v4 = g_6168dc(v2);
+        v4 = g_engfuncs.pfnIndexOfEdict(v2);
         *v3->field_110 = v4;
         *v3->field_114 = 3;
         *v3->field_194 = v2;

@@ -13,7 +13,7 @@ unsigned int _._11CBaseOutput(st_56d390_0 *a0, char a1)
     v0 = &__vt_11CBaseOutput;
     a0->field_200 = &__vt_11CBaseOutput;
     if (a1 & 1)
-        v0 = sub_48d4e0(a0);
+        v0 = __builtin_delete(a0);
     return v0;
 }
 

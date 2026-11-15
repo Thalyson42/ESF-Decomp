@@ -52,7 +52,7 @@ int PM_CatagorizePosition(void)
     float v12;  // [bp-0x20]
     float v13;  // [bp-0x1c]
 
-    sub_488fe0(v2, v3, v4);
+    PM_CheckWater(v2, v3, v4);
     v11 = pmove->field_38;
     v12 = pmove->field_3c;
     v13 = (float)(pmove->field_40 - 2.0);
@@ -88,7 +88,7 @@ int PM_CatagorizePosition(void)
         *iter = *i;
         iter += 1;
     }
-    sub_48caf0();
+    PM_AddToTouched();
     return v15;
 }
 

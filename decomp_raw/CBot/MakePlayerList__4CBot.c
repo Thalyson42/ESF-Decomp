@@ -45,7 +45,7 @@ typedef struct st_53d8c0_3 {
     unsigned int field_208;
 } st_53d8c0_3;
 
-extern st_53d8c0_1 *g_6168dc;
+extern st_53d8c0_1 *g_engfuncs.pfnIndexOfEdict;
 extern st_53d8c0_0 *gpGlobals;
 
 st_53d8c0_0 * MakePlayerList__4CBot(st_53d8c0_5 *a0)
@@ -68,7 +68,7 @@ st_53d8c0_0 * MakePlayerList__4CBot(st_53d8c0_5 *a0)
     st_53d8c0_5 *v6;  // [bp-0xc]
     char iter;  // [bp-0x5]
 
-    v8 = g_6168dc(a0->field_0->field_208);
+    v8 = g_engfuncs.pfnIndexOfEdict(a0->field_0->field_208);
     iter = 0;
     do
     {
@@ -85,7 +85,7 @@ st_53d8c0_0 * MakePlayerList__4CBot(st_53d8c0_5 *a0)
         do
         {
             v10 = iter;
-            v11 = sub_48a500(v10);
+            v11 = UTIL_PlayerByIndex(v10);
             v12 = 1 << ((char)(v10 - 1) & 31);
             v13 = a0;
             if (v12 & v13->field_aa8)
@@ -102,7 +102,7 @@ st_53d8c0_0 * MakePlayerList__4CBot(st_53d8c0_5 *a0)
                 {
                     *(unsigned short *)&v1 = 1;
                     *(unsigned short *)&v0 = 1;
-                    if ((char)sub_489a70(v11, v0, v1))
+                    if ((char)UTIL_IsValidPlayer(v11, v0, v1))
                     {
                         v4 = 0;
                         if (!v11->field_60->field_a4(v11))

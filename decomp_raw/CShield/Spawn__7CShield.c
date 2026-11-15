@@ -24,14 +24,14 @@ typedef struct st_518a70_2 {
     struct st_518a70_0 *field_60;
 } st_518a70_2;
 
-extern st_518a70_1 *g_6167c8;
+extern st_518a70_1 *g_engfuncs.pfnSetModel;
 
 unsigned int * Spawn__7CShield(st_518a70_2 *a0)
 {
     unsigned int *v0;  // eax
 
     a0->field_60->field_c(a0);
-    g_6167c8(a0->field_0->field_208, "sprites/null.spr");
+    g_engfuncs.pfnSetModel(a0->field_0->field_208, "sprites/null.spr");
     a0->field_0->field_148 = 5;
     a0->field_0->field_108 = 0;
     v0 = a0->field_0;

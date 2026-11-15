@@ -43,16 +43,16 @@ double Shoot2__11CSpiritBomb(float idx)
     *(unsigned int *)(*(int *)(*(unsigned int *)&idx + 128) + 824) = 0;
     *(unsigned int *)(*(unsigned int *)&idx + 208) = 0;
     *(unsigned int *)(*(unsigned int *)&idx + 216) = 0;
-    sub_48c680(*(int *)(*(unsigned int *)&idx + 128), 0);
+    CBasePlayer::DrawChargeBar(*(int *)(*(unsigned int *)&idx + 128), 0);
     (*(int *)(*(int *)(*(unsigned int *)&idx + 96) + 356))(idx);
     if (*(int *)(*(unsigned int *)&idx + 196) <= 14)
     {
-        sub_489390(*(int *)(*(int *)*(int *)(*(unsigned int *)&idx + 128) + 520), 2, "common/null.wav", 0x3f800000, 0.800000011920929f, 0, 100);
+        EMIT_SOUND_DYN(*(int *)(*(int *)*(int *)(*(unsigned int *)&idx + 128) + 520), 2, "common/null.wav", 0x3f800000, 0.800000011920929f, 0, 100);
         return 0.800000011920929;
     }
-    sub_48d4f0(*(int *)(*(unsigned int *)&idx + 128), "spiritbomb_shoot.wav");
-    sub_489390(*(int *)(*(int *)*(int *)(*(unsigned int *)&idx + 128) + 520), 1, "weapons/spiritbomb_fire.wav", 0x3f800000, 0.800000011920929f, 0, 100);
-    sub_48a800(*(int *)*(int *)(*(unsigned int *)&idx + 128) + 116);
+    CBasePlayer::EmitClassSound(*(int *)(*(unsigned int *)&idx + 128), "spiritbomb_shoot.wav");
+    EMIT_SOUND_DYN(*(int *)(*(int *)*(int *)(*(unsigned int *)&idx + 128) + 520), 1, "weapons/spiritbomb_fire.wav", 0x3f800000, 0.800000011920929f, 0, 100);
+    UTIL_MakeVectors(*(int *)*(int *)(*(unsigned int *)&idx + 128) + 116);
     v21 = &gpGlobals->field_28;
     v17 = gpGlobals->field_28;
     v18 = *(float *)&v21[1];
@@ -67,14 +67,14 @@ double Shoot2__11CSpiritBomb(float idx)
     v14 = (float)(v23 + v10);
     v15 = (float)(v24 + v12);
     v16 = v13 + v4;
-    sub_48d680(*(int *)(*(unsigned int *)&idx + 128), 6);
+    CBasePlayer::SetAnimation(*(int *)(*(unsigned int *)&idx + 128), 6);
     v2 = v14;
     v3 = v15;
     v4 = v16;
     v25 = v17 * v17 + v18 * v18 + v19 * v19;
     v26 = sqrt(v25);
     if (isnan(v26))
-        sub_487dc0(*(unsigned int *)&v25);
+        sqrt(*(unsigned int *)&v25);
     else
         v25 = v26;
     v1 = (float)v25;
@@ -95,7 +95,7 @@ double Shoot2__11CSpiritBomb(float idx)
     v6 = (float)(1000.0 * v9);
     v7 = (float)(1000.0 * v10);
     v0 = (float)((double)*(int *)(*(unsigned int *)&idx + 196) * 0.25 / 45.0);
-    sub_48cfd0(*(int *)*(int *)(*(unsigned int *)&idx + 128), &v2, &v5, *(int *)(*(unsigned int *)&idx + 196) * 3, v0, *(short *)(*(unsigned int *)&idx + 220));
+    CSpiritBombAttack::ShootSpiritBomb(*(int *)*(int *)(*(unsigned int *)&idx + 128), &v2, &v5, *(int *)(*(unsigned int *)&idx + 196) * 3, v0, *(short *)(*(unsigned int *)&idx + 220));
     return v0;
 }
 

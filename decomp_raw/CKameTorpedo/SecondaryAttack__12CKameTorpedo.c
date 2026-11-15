@@ -56,12 +56,12 @@ double SecondaryAttack__12CKameTorpedo(float idx)
     if (*(int *)(*(unsigned int *)&idx + 504))
     {
         *(unsigned int *)(*(unsigned int *)&idx + 504) = 0;
-        sub_48c470(idx);
+        CKameTorpedo::UpdateTorpedoList(idx);
         if (*(int *)(*(unsigned int *)&idx + 500) > 0)
         {
             *(unsigned int *)(*(unsigned int *)&idx + 500) = *(int *)(*(unsigned int *)&idx + 500) - 1;
-            sub_48d680(*(int *)(*(unsigned int *)&idx + 128), 6);
-            sub_48a800(*(int *)*(int *)(*(unsigned int *)&idx + 128) + 116);
+            CBasePlayer::SetAnimation(*(int *)(*(unsigned int *)&idx + 128), 6);
+            UTIL_MakeVectors(*(int *)*(int *)(*(unsigned int *)&idx + 128) + 116);
             v31 = &gpGlobals->field_28;
             v27 = gpGlobals->field_28;
             v28 = *(float *)&v31[1];
@@ -75,7 +75,7 @@ double SecondaryAttack__12CKameTorpedo(float idx)
             v16 = (float)(v32 + v24);
             v17 = (float)(v33 + v25);
             v18 = v26 + v10;
-            sub_487b80(&v23, &v16, 0, *(int *)(*(int *)idx + 520), &v19);
+            UTIL_TraceLine(&v23, &v16, 0, *(int *)(*(int *)idx + 520), &v19);
             v34 = *(int *)*(int *)(*(int *)(*(unsigned int *)&idx + 500) * 4 + *(unsigned int *)&idx + 468) + 8;
             v35 = v20 - *(float *)(*(int *)*(int *)(*(int *)(*(unsigned int *)&idx + 500) * 4 + *(unsigned int *)&idx + 468) + 8);
             v8 = v35;
@@ -86,7 +86,7 @@ double SecondaryAttack__12CKameTorpedo(float idx)
             v38 = v35 * v35 + v36 * v36 + v37 * v37;
             v39 = sqrt(v38);
             if (isnan(v39))
-                sub_487dc0(*(unsigned int *)&v38);
+                sqrt(*(unsigned int *)&v38);
             else
                 v38 = v39;
             v7 = (float)v38;
@@ -112,10 +112,10 @@ double SecondaryAttack__12CKameTorpedo(float idx)
             v4 = v8;
             v5 = v9;
             v6 = v10;
-            sub_489c90(*(int *)(*(int *)(*(unsigned int *)&idx + 500) * 4 + *(unsigned int *)&idx + 468), &v4, 1);
+            CKameTorpedoAttack::Fire(*(int *)(*(int *)(*(unsigned int *)&idx + 500) * 4 + *(unsigned int *)&idx + 468), &v4, 1);
         }
     }
-    sub_488640(v0, v1, v2);
+    UTIL_WeaponTimeBase(v0, v1, v2);
     v3 = (float)(v41 + 0.2);
     v42 = v3;
     *(float *)(*(unsigned int *)&idx + 160) = (float)v42;

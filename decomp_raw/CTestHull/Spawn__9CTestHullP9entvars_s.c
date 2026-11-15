@@ -30,7 +30,7 @@ typedef struct st_4e1850_2 {
 
 extern char DropDelay__9CTestHull;
 extern char SUB_Remove__11CBaseEntity;
-extern st_4e1850_2 *g_6167c8;
+extern st_4e1850_2 *g_engfuncs.pfnSetModel;
 extern st_4e1850_3 *gpGlobals;
 extern unsigned int WorldGraph;
 
@@ -46,14 +46,14 @@ unsigned int * Spawn__9CTestHullP9entvars_s(st_4e1850_1 *a0)
     float v4;  // [bp-0x20]
     float v5;  // [bp-0x1c]
 
-    g_6167c8(a0->field_0->field_208, "models/player.mdl");
+    g_engfuncs.pfnSetModel(a0->field_0->field_208, "models/player.mdl");
     v3 = 4.0f;
     v4 = 4.0f;
     v5 = 18.0f;
     v0 = -4.0f;
     v1 = -4.0f;
     v2 = 0;
-    sub_48a0d0(a0->field_0, &v0, &v3);
+    UTIL_SetSize(a0->field_0, &v0, &v3);
     a0->field_0->field_10c = 3;
     a0->field_0->field_108 = 4;
     a0->field_0->field_118 = 0;

@@ -3,10 +3,10 @@ typedef struct st_50dd00_0 {
     unsigned int field_0;
 } st_50dd00_0;
 
-extern st_50dd00_0 *g_6167c4;
+extern st_50dd00_0 *g_engfuncs.pfnPrecacheSound;
 
 int Precache__13CRegeneration(void)
 {
-    return g_6167c4("weapons/regen.wav");
+    return g_engfuncs.pfnPrecacheSound("weapons/regen.wav");
 }
 

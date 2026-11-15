@@ -81,7 +81,7 @@ double LandRecoverDash__12CPlayerMelee(float idx)
     float v18;  // [bp-0x1c]
     unsigned int v19;  // [bp-0x1c]
 
-    sub_48a800(*(unsigned int *)&idx + 88);
+    UTIL_MakeVectors(*(unsigned int *)&idx + 88);
     v14 = 0;
     v16 = 0;
     v19 = 0;
@@ -144,7 +144,7 @@ double LandRecoverDash__12CPlayerMelee(float idx)
         v26 = v15 * v15 + v17 * v17 + 0.0;
         v27 = sqrt(v26);
         if (isnan(v27))
-            sub_487dc0(*(unsigned int *)&v26);
+            sqrt(*(unsigned int *)&v26);
         else
             v26 = v27;
         v10 = (float)v26;
@@ -177,13 +177,13 @@ double LandRecoverDash__12CPlayerMelee(float idx)
     *(float *)&v29->padding_0[32] = v15;
     *(float *)&v29->padding_0[36] = v17;
     *(float *)&v29->padding_0[40] = v18;
-    sub_48c5a0(*(int *)(*(unsigned int *)&idx + 292));
+    CBasePlayer::StopFly(*(int *)(*(unsigned int *)&idx + 292));
     if (!v21)
     {
-        sub_48b230(idx, 0, v24, &v2);
+        CPlayerMelee::GetThrowAnimDirection(idx, 0, v24, &v2);
         v0 = &v2;
         v1 = &v3;
-        sub_48d990(&v3, "throw_recover_%s", v0);
+        sprintf@GLIBC_2.0(&v3, "throw_recover_%s", v0);
         iter1 = v1;
         v31 = "throw_recover_front";
         v32 = 20;
@@ -272,20 +272,20 @@ double LandRecoverDash__12CPlayerMelee(float idx)
         *(short *)node = *(short *)k;
         *(char *)&node[2] = (char)k[2];
     }
-    sub_48a800(*(unsigned int *)&idx + 88);
+    UTIL_MakeVectors(*(unsigned int *)&idx + 88);
     v59 = &gpGlobals->field_28;
     v4 = gpGlobals->field_28;
     v6 = *(float *)&v59[1];
     v8 = *(float *)&v59[2];
     *(unsigned short *)&v0 = 0;
-    sub_488dc0(idx, &v4, v0, gpGlobals->field_0, &v3);
+    CPlayerMelee::AddAnimationAFix(idx, &v4, v0, gpGlobals->field_0, &v3);
     v5 = 0;
     v7 = 0;
     v9 = 0;
     *(unsigned int *)(*(unsigned int *)&idx + 88) = v5;
     *(unsigned int *)(*(unsigned int *)&idx + 92) = v7;
     *(unsigned int *)(*(unsigned int *)&idx + 96) = v9;
-    sub_489390(*(int *)(*(int *)*(int *)(*(unsigned int *)&idx + 292) + 520), 4, "weapons/recoverjump.wav", 0x3f800000, 0.800000011920929f, 0, 100);
+    EMIT_SOUND_DYN(*(int *)(*(int *)*(int *)(*(unsigned int *)&idx + 292) + 520), 4, "weapons/recoverjump.wav", 0x3f800000, 0.800000011920929f, 0, 100);
     return 0.800000011920929;
 }
 

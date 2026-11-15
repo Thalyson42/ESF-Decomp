@@ -104,7 +104,7 @@ st_497c70_0 * Spawn__19CMomentaryRotButton(st_497c70_1 *a0)
     float v8;  // [bp-0x20]
     float v9;  // [bp-0x1c]
 
-    sub_48b820(a0->field_0);
+    CBaseToggle::AxisDir(a0->field_0);
     if (*(float *)&a0->field_0->field_1f8 == 0.0f)
         *(float *)&a0->field_0->field_1f8 = 100.0f;
     v10 = *&a0->field_88;
@@ -153,10 +153,10 @@ st_497c70_0 * Spawn__19CMomentaryRotButton(st_497c70_1 *a0)
     else
         a0->field_0->field_10c = 0;
     a0->field_0->field_108 = 7;
-    sub_48db50(a0->field_0, &a0->field_0->field_8);
+    UTIL_SetOrigin(a0->field_0, &a0->field_0->field_8);
     v0 = &g_engfuncs.padding_0[0];
     v0->field_8(a0->field_0->field_208, a0->field_0->field_b8 + gpGlobals->field_98);
-    v18 = sub_487cb0(a0->field_128);
+    v18 = ButtonSound(a0->field_128);
     v0->field_4(v18);
     v19 = v0->field_10c(v18);
     v20 = a0->field_0;

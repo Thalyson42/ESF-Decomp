@@ -43,10 +43,10 @@ typedef struct st_53f240_4 {
 } st_53f240_4;
 
 extern unsigned int g_teamplay;
-extern st_53f240_2 *g_61685c;
+extern st_53f240_2 *g_engfuncs.pfnServerCommand;
 extern st_53f240_4 *gpGlobals;
 extern char cout;
-extern st_53f240_6 *g_625f80;
+extern st_53f240_6 *cout+512;
 
 int KickBots__11CBotManagers(st_53f240_5 *a0, short a1)
 {
@@ -68,10 +68,10 @@ int KickBots__11CBotManagers(st_53f240_5 *a0, short a1)
         v2 = &v5;
         do
         {
-            v6 = sub_48a500(v4);
+            v6 = UTIL_PlayerByIndex(v4);
             *(unsigned short *)&v1 = 0;
             *(unsigned short *)&v0 = 0;
-            if ((char)sub_489a70(v6, v0, v1))
+            if ((char)UTIL_IsValidPlayer(v6, v0, v1))
             {
                 v3 = 0;
                 if (!v6->field_60->field_a4(v6))
@@ -82,8 +82,8 @@ int KickBots__11CBotManagers(st_53f240_5 *a0, short a1)
                     if (v7 && (v7->field_0->field_1ac == a1 || a1 == -0x1))
                     {
                         v7->field_a08 = 1;
-                        sub_48d990(v2, "kick \"%s\"\n", v7->field_0->field_1d0 + gpGlobals->field_98);
-                        g_61685c(v2);
+                        sprintf@GLIBC_2.0(v2, "kick \"%s\"\n", v7->field_0->field_1d0 + gpGlobals->field_98);
+                        g_engfuncs.pfnServerCommand(v2);
                     }
                 }
             }
@@ -101,8 +101,8 @@ int KickBots__11CBotManagers(st_53f240_5 *a0, short a1)
     }
     else
     {
-        return g_625f80->field_14(&cout, "All bots removed\n");
+        return cout+512->field_14(&cout, "All bots removed\n");
     }
-    return g_625f80->field_14(&cout, v8);
+    return cout+512->field_14(&cout, v8);
 }
 

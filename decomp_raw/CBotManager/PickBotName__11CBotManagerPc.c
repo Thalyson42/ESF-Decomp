@@ -20,7 +20,7 @@ typedef struct st_53e390_1 {
     unsigned int field_0;
 } st_53e390_1;
 
-extern st_53e390_1 *g_616928;
+extern st_53e390_1 *g_engfuncs.pfnRandomLong;
 extern st_53e390_2 *gpGlobals;
 
 int PickBotName__11CBotManagerPc(st_53e390_0 *a0, int a1)
@@ -35,7 +35,7 @@ int PickBotName__11CBotManagerPc(st_53e390_0 *a0, int a1)
     unsigned int v5;  // [bp-0x8]
 
     v3 = 0;
-    v5 = g_616928(1, a0->field_3e) - 1;
+    v5 = g_engfuncs.pfnRandomLong(1, a0->field_3e) - 1;
     do
     {
         i = 0;
@@ -45,10 +45,10 @@ int PickBotName__11CBotManagerPc(st_53e390_0 *a0, int a1)
             v2 = &a0[1].padding_0[33 * v5];
             do
             {
-                v7 = sub_48a500(v6);
+                v7 = UTIL_PlayerByIndex(v6);
                 *(unsigned short *)&v1 = 0;
                 *(unsigned short *)&v0 = 0;
-                if ((char)sub_489a70(v7, v0, v1) && !sub_488af0(v2, *v7->field_1d0 + gpGlobals->field_98))
+                if ((char)UTIL_IsValidPlayer(v7, v0, v1) && !strcmp@GLIBC_2.0(v2, *v7->field_1d0 + gpGlobals->field_98))
                 {
                     i = 1;
                     goto LABEL_53e46e;
@@ -65,6 +65,6 @@ LABEL_53e46e:
         if (v3 == a0->field_3e)
             i = 0;
     } while (i);
-    return sub_48e110(a1, &a0[1].padding_0[33 * v5]);
+    return strcpy@GLIBC_2.0(a1, &a0[1].padding_0[33 * v5]);
 }
 

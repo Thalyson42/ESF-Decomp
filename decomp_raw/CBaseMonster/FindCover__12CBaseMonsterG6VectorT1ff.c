@@ -31,13 +31,13 @@ typedef struct st_4d7b30_4 {
     unsigned int field_98;
 } st_4d7b30_4;
 
-extern st_4d7b30_2 *g_6168b4;
+extern st_4d7b30_2 *g_engfuncs.pfnAlertMessage;
 extern st_4d7b30_4 *gpGlobals;
 extern unsigned int WorldGraph;
-extern unsigned int g_617164;
-extern unsigned int g_61716c;
-extern unsigned int g_617178;
-extern unsigned int g_619228;
+extern unsigned int WorldGraph+4;
+extern unsigned int WorldGraph+12;
+extern unsigned int WorldGraph+24;
+extern unsigned int WorldGraph+8392;
 
 unsigned int FindCover__12CBaseMonsterG6VectorT1ff(st_4d7b30_3 *a0, float *a1, float *a2, float a3, float a4)
 {
@@ -73,18 +73,18 @@ unsigned int FindCover__12CBaseMonsterG6VectorT1ff(st_4d7b30_3 *a0, float *a1, f
     v16 = 0.5 * a4;
     if (v16 < a3)
         a3 = (float)v16;
-    if (!WorldGraph || !g_617164)
+    if (!WorldGraph || !WorldGraph+4)
     {
-        g_6168b4(2, "Graph not ready for findcover!\n");
+        g_engfuncs.pfnAlertMessage(2, "Graph not ready for findcover!\n");
     }
     else
     {
-        v4 = sub_488f40(&WorldGraph, &a0->field_0->field_8, a0);
-        v3 = sub_488f40(&WorldGraph, a1, a0);
-        v5 = sub_488e90(&WorldGraph, a0);
+        v4 = CGraph::FindNearestNode(&WorldGraph, &a0->field_0->field_8, a0);
+        v3 = CGraph::FindNearestNode(&WorldGraph, a1, a0);
+        v5 = CGraph::HullIndex(&WorldGraph, a0);
         if (v4 == -0x1)
         {
-            g_6168b4(2, "FindCover() - %s has no nearest node!\n", a0->field_0->field_0 + gpGlobals->field_98);
+            g_engfuncs.pfnAlertMessage(2, "FindCover() - %s has no nearest node!\n", a0->field_0->field_0 + gpGlobals->field_98);
         }
         else
         {
@@ -98,14 +98,14 @@ unsigned int FindCover__12CBaseMonsterG6VectorT1ff(st_4d7b30_3 *a0, float *a1, f
             v14 = v8;
             v15 = v9;
             v6 = 0;
-            if ((int)v6 < (int)g_617178)
+            if ((int)v6 < (int)WorldGraph+24)
             {
                 v1 = &v7;
                 do
                 {
-                    v2 = (v6 + g_619228) % g_617178;
-                    v18 = g_61716c + v2 * 88;
-                    g_619228 = v2 + 1;
+                    v2 = (v6 + WorldGraph+8392) % WorldGraph+24;
+                    v18 = WorldGraph+12 + v2 * 88;
+                    WorldGraph+8392 = v2 + 1;
                     v19 = &a0->field_0->field_8;
                     v20 = a0->field_0->field_8 - *v18;
                     v7 = v20;
@@ -116,7 +116,7 @@ unsigned int FindCover__12CBaseMonsterG6VectorT1ff(st_4d7b30_3 *a0, float *a1, f
                     v23 = v20 * v20 + v21 * v21 + v22 * v22;
                     v24 = sqrt(v23);
                     if (isnan(v24))
-                        sub_487dc0(*(unsigned int *)&v23);
+                        sqrt(*(unsigned int *)&v23);
                     else
                         v23 = v24;
                     v10 = (float)v23;
@@ -128,21 +128,21 @@ unsigned int FindCover__12CBaseMonsterG6VectorT1ff(st_4d7b30_3 *a0, float *a1, f
                         v7 = *v18 + *v25;
                         v8 = v18[1] + v25[1];
                         v9 = v18[2] + v25[2];
-                        sub_488820(v1, &v13, 1, 1, a0->field_0->field_208, &v11);
+                        UTIL_TraceLine(v1, &v13, 1, 1, a0->field_0->field_208, &v11);
                         if (1.0 == v12)
                             continue;
                         if (v4 != v3)
                         {
-                            sub_489980(&WorldGraph, v4, v2, v5, a0->field_260);
+                            CGraph::PathLength(&WorldGraph, v4, v2, v5, a0->field_260);
                             v0 = v12;
-                            sub_489980(&WorldGraph, v3, v2, v5, a0->field_260);
+                            CGraph::PathLength(&WorldGraph, v3, v2, v5, a0->field_260);
                             if (v12 < v0)
                                 continue;
                         }
-                        if (a0->field_60->field_194(a0, v18) && sub_4893b0(a0, 4, 0, v18))
+                        if (a0->field_60->field_194(a0, v18) && CBaseMonster::MoveToLocation(a0, 4, 0, v18))
                             return 1;
                     }
-                } while ((v6 += 1, (int)v6 < (int)g_617178));
+                } while ((v6 += 1, (int)v6 < (int)WorldGraph+24));
             }
         }
     }

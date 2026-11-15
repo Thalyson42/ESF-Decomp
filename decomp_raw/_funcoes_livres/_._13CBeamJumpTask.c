@@ -9,6 +9,6 @@ extern char __vt_13CBeamJumpTask;
 int _._13CBeamJumpTask(st_587040_0 *a0, int a1)
 {
     a0->field_14 = &__vt_13CBeamJumpTask;
-    return sub_488170(a0, a1);
+    return _._9CBaseTask(a0, a1);
 }
 

@@ -34,7 +34,7 @@ typedef struct st_4f8e50_6 {
 } st_4f8e50_6;
 
 extern st_4f8e50_6 *g_pGameRules;
-extern st_4f8e50_2 *g_6168dc;
+extern st_4f8e50_2 *g_engfuncs.pfnIndexOfEdict;
 extern st_4f8e50_0 *gpGlobals;
 
 st_4f8e50_0 * AddPointsToTeam__11CBasePlayerii(st_4f8e50_1 **a0, unsigned int a1, unsigned int a2)
@@ -43,11 +43,11 @@ st_4f8e50_0 * AddPointsToTeam__11CBasePlayerii(st_4f8e50_1 **a0, unsigned int a1
     st_4f8e50_4 *v2;  // esi
     int v0;  // [bp-0x8]
 
-    v0 = g_6168dc(*a0->field_208);
+    v0 = g_engfuncs.pfnIndexOfEdict(*a0->field_208);
     iter = 1;
     while (iter <= (int)gpGlobals->field_90)
     {
-        v2 = sub_48a500(iter);
+        v2 = UTIL_PlayerByIndex(iter);
         if (!v2)
         {
             iter += 1;

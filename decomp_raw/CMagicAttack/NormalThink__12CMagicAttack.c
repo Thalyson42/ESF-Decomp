@@ -9,8 +9,8 @@ unsigned int * NormalThink__12CMagicAttack(float a0)
 {
     if ((*(int *)(*(int *)(*(unsigned int *)&a0 + 96) + 156))(a0))
     {
-        sub_487d50(a0);
-        sub_48b390(a0);
+        CMagicAttack::DrawBubbles(a0);
+        CMagicAttack::AnimateSprite(a0);
         *(float *)(*(int *)a0 + 260) = (float)(0.4 + *(float *)gpGlobals);
         return gpGlobals;
     }

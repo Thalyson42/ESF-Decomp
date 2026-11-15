@@ -8,12 +8,12 @@ double SecondaryAttack__12CGenericBeam(float idx)
 
     if (*(int *)(*(unsigned int *)&idx + 196) == 2)
     {
-        sub_489cf0(idx);
+        CControlledBeam::SecondaryAttack(idx);
         return v4;
     }
     *(char *)(*(unsigned int *)&idx + 528) = 1;
-    sub_48a630(idx);
-    sub_488640(idx);
+    CControlledBeam::Charge(idx);
+    UTIL_WeaponTimeBase(idx);
     v0 = (float)(v2 + 0.2);
     v3 = v0;
     *(float *)(*(unsigned int *)&idx + 160) = (float)v3;

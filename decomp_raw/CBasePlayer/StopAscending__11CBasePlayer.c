@@ -19,10 +19,10 @@ typedef struct st_4f1390_2 {
 } st_4f1390_2;
 
 extern unsigned int gmsgStopTransformFX;
-extern st_4f1390_2 *g_616878;
-extern st_4f1390_2 *g_61687c;
-extern st_4f1390_2 *g_616880;
-extern st_4f1390_2 *g_6168dc;
+extern st_4f1390_2 *g_engfuncs.pfnMessageBegin;
+extern st_4f1390_2 *g_engfuncs.pfnMessageEnd;
+extern st_4f1390_2 *g_engfuncs.pfnWriteByte;
+extern st_4f1390_2 *g_engfuncs.pfnIndexOfEdict;
 
 int StopAscending__11CBasePlayer(st_4f1390_1 *a0)
 {
@@ -34,10 +34,10 @@ int StopAscending__11CBasePlayer(st_4f1390_1 *a0)
     a0->field_770 = 0;
     if (!a0->field_33c)
         a0->field_754 = 0x3f800000;
-    g_616878(2, gmsgStopTransformFX, &a0->field_0->padding_0[8], 0);
-    v0 = g_6168dc(a0->field_0->field_208);
-    g_616880(v0);
-    g_61687c(v0);
-    return sub_48b090(g_6168dc(a0->field_0->field_208));
+    g_engfuncs.pfnMessageBegin(2, gmsgStopTransformFX, &a0->field_0->padding_0[8], 0);
+    v0 = g_engfuncs.pfnIndexOfEdict(a0->field_0->field_208);
+    g_engfuncs.pfnWriteByte(v0);
+    g_engfuncs.pfnMessageEnd(v0);
+    return UTIL_Model_RemoveAll(g_engfuncs.pfnIndexOfEdict(a0->field_0->field_208));
 }
 

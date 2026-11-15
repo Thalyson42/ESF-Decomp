@@ -17,7 +17,7 @@ typedef struct st_535a70_2 {
 
 extern unsigned int gEntvarsDescription[4];
 extern char _GLOBAL_OFFSET_TABLE_;
-extern st_535a70_2 *g_6168b4;
+extern st_535a70_2 *g_engfuncs.pfnAlertMessage;
 
 unsigned int EntvarsKeyvalue__FP9entvars_sP14KeyValueData_s(unsigned int a0, st_535a70_1 *a1)
 {
@@ -30,7 +30,7 @@ unsigned int EntvarsKeyvalue__FP9entvars_sP14KeyValueData_s(unsigned int a0, st_
     while (1)
     {
         v1 = &gEntvarsDescription[4 * v0];
-        v2 = sub_48cac0(v1->field_4, a1->field_4);
+        v2 = strcasecmp@GLIBC_2.0(v1->field_4, a1->field_4);
         if (!v2)
             break;
         v0 += 1;
@@ -39,7 +39,7 @@ unsigned int EntvarsKeyvalue__FP9entvars_sP14KeyValueData_s(unsigned int a0, st_
     }
     if (v1->field_0 > 0x11)
     {
-        v3 = g_6168b4(4, "Bad field in entity!!\n");
+        v3 = g_engfuncs.pfnAlertMessage(4, "Bad field in entity!!\n");
         a1->field_c = 1;
         return v3;
     }

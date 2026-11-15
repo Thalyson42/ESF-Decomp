@@ -9,7 +9,7 @@ typedef struct st_48fbc0_0 {
 } st_48fbc0_0;
 
 extern st_48fbc0_0 *g_engfuncs;
-extern st_48fbc0_0 *g_6167c4;
+extern st_48fbc0_0 *g_engfuncs.pfnPrecacheSound;
 
 unsigned int Precache__5CAura(st_48fbc0_1 *a0)
 {
@@ -18,8 +18,8 @@ unsigned int Precache__5CAura(st_48fbc0_1 *a0)
     g_engfuncs("models/aura.mdl");
     g_engfuncs("models/aurabend.mdl");
     g_engfuncs("sprites/aura.spr");
-    g_6167c4("weapons/aura.wav");
-    g_6167c4("weapons/swoop.wav");
+    g_engfuncs.pfnPrecacheSound("weapons/aura.wav");
+    g_engfuncs.pfnPrecacheSound("weapons/swoop.wav");
     v0 = g_engfuncs("sprites/auratrail.spr");
     a0->field_2ac = v0;
     return v0;

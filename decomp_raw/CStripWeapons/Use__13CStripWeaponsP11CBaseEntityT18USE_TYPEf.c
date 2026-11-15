@@ -29,8 +29,8 @@ typedef struct st_4fe2e0_2 {
 } st_4fe2e0_2;
 
 extern st_4fe2e0_2 *g_pGameRules;
-extern st_4fe2e0_1 *g_6168d4;
-extern st_4fe2e0_1 *g_6168e0;
+extern st_4fe2e0_1 *g_engfuncs.pfnPEntityOfEntOffset;
+extern st_4fe2e0_1 *g_engfuncs.pfnPEntityOfEntIndex;
 
 st_4fe2e0_4 * Use__13CStripWeaponsP11CBaseEntityT18USE_TYPEf(unsigned int a0, st_4fe2e0_4 *a1)
 {
@@ -48,8 +48,8 @@ st_4fe2e0_4 * Use__13CStripWeaponsP11CBaseEntityT18USE_TYPEf(unsigned int a0, st
         v0 = v1;
         if (!v2)
         {
-            v3 = g_6168e0(1);
-            if (v3 || (v3 = g_6168d4(0), v3))
+            v3 = g_engfuncs.pfnPEntityOfEntIndex(1);
+            if (v3 || (v3 = g_engfuncs.pfnPEntityOfEntOffset(0), v3))
                 v0 = v3->field_7c;
             else
                 v0 = NULL;
@@ -58,7 +58,7 @@ st_4fe2e0_4 * Use__13CStripWeaponsP11CBaseEntityT18USE_TYPEf(unsigned int a0, st
     }
     v4 = v0;
     if (v4)
-        v2 = sub_48b9d0(v4, 0);
+        v2 = CBasePlayer::RemoveAllItems(v4, 0);
     return v2;
 }
 

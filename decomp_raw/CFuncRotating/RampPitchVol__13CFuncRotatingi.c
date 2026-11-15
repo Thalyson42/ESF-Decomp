@@ -82,6 +82,6 @@ int RampPitchVol__13CFuncRotatingi(st_492230_1 *a0)
     v1 = (int)((double)v2 / (double)v0 * 70.0 + 30.0);
     if (v1 == 100)
         v1 = 99;
-    return sub_489390(a0->field_0->field_208, 6, a0->field_0->field_1f4 + gpGlobals->field_98, (float)((double)v2 / (double)v0 * a0->field_6c), a0->field_68, 192, v1);
+    return EMIT_SOUND_DYN(a0->field_0->field_208, 6, a0->field_0->field_1f4 + gpGlobals->field_98, (float)((double)v2 / (double)v0 * a0->field_6c), a0->field_68, 192, v1);
 }
 

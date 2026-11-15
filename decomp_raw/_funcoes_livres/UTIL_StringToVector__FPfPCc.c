@@ -9,13 +9,13 @@ void* UTIL_StringToVector__FPfPCc(void* a0, int a1)
     char v1;  // [bp-0x84]
 
     iter = &v1;
-    sub_48e110(&v1, a1);
+    strcpy@GLIBC_2.0(&v1, a1);
     v3 = &v1;
     node = 0;
     while (1)
     {
         v0 = &v1;
-        sub_487fc0(v3, 0, 0);
+        __strtod_internal@GLIBC_2.0(v3, 0, 0);
         v3 = a0;
         *(float *)((char *)v3 + 4 * node) = (float)v5;
         while (1)

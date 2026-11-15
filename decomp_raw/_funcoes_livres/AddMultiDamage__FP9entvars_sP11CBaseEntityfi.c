@@ -1,20 +1,20 @@
 // AddMultiDamage__FP9entvars_sP11CBaseEntityfi @0x137380 size=91
 extern unsigned int gMultiDamage;
-extern float g_624374;
-extern unsigned int g_624378;
+extern float gMultiDamage+4;
+extern unsigned int gMultiDamage+8;
 
 unsigned int * AddMultiDamage__FP9entvars_sP11CBaseEntityfi(unsigned int *a0, unsigned int a1, float a2, unsigned int a3)
 {
     if (!a1)
         return a0;
-    g_624378 = g_624378 | a3;
+    gMultiDamage+8 = gMultiDamage+8 | a3;
     if (a1 != gMultiDamage)
     {
-        sub_48d630(a0, a0);
+        ApplyMultiDamage(a0, a0);
         gMultiDamage = a1;
-        *(unsigned int *)&g_624374 = 0;
+        *(unsigned int *)&gMultiDamage+4 = 0;
     }
-    g_624374 = a2 + g_624374;
+    gMultiDamage+4 = a2 + gMultiDamage+4;
     return &gMultiDamage;
 }
 

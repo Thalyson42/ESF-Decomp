@@ -84,7 +84,7 @@ double Use__14CMomentaryDoorP11CBaseEntityT18USE_TYPEf(st_4ad900_1 *a0, unsigned
         v21 = v18 * v18 + v19 * v19 + v20 * v20;
         v22 = sqrt(v21);
         if (isnan(v22))
-            sub_487dc0(*(unsigned int *)&v21);
+            sqrt(*(unsigned int *)&v21);
         else
             v21 = v22;
         v7 = (float)v21;
@@ -98,14 +98,14 @@ double Use__14CMomentaryDoorP11CBaseEntityT18USE_TYPEf(st_4ad900_1 *a0, unsigned
                 v4 = v11;
                 v5 = v12;
                 v6 = v13;
-                sub_488220(a0, &v4, v0);
+                CBaseToggle::LinearMove(a0, &v4, v0);
                 return v13;
             }
-            sub_489390(a0->field_0->field_208, 6, a0->field_0->field_1ec + gpGlobals->field_98, 0x3f800000, 0.800000011920929f, 0, 100);
+            EMIT_SOUND_DYN(a0->field_0->field_208, 6, a0->field_0->field_1ec + gpGlobals->field_98, 0x3f800000, 0.800000011920929f, 0, 100);
             v4 = v11;
             v5 = v12;
             v6 = v13;
-            sub_488220(a0, &v4, v0);
+            CBaseToggle::LinearMove(a0, &v4, v0);
             return v13;
         }
     }

@@ -13,7 +13,7 @@ double SecondaryAttack__13CShieldAttack(float idx)
     if (*(int *)(*(unsigned int *)&idx + 212) != 1)
     {
         (*(int *)(*(int *)(*(unsigned int *)&idx + 96) + 328))(idx);
-        sub_488640(idx);
+        UTIL_WeaponTimeBase(idx);
     }
     else
     {
@@ -22,17 +22,17 @@ double SecondaryAttack__13CShieldAttack(float idx)
         v2 = v3 | 0xc00;
         v1 = (int)__int_as_float(v5);
         *(int *)(*(unsigned int *)&idx + 208) = v1;
-        sub_48d080(idx);
-        if (*(int *)(*(unsigned int *)&idx + 208) && sub_48c980(*(int *)(*(unsigned int *)&idx + 128), 40))
+        CShieldAttack::RemoveShield(idx);
+        if (*(int *)(*(unsigned int *)&idx + 208) && CBasePlayer::UseKi(*(int *)(*(unsigned int *)&idx + 128), 40))
         {
             *(unsigned int *)(*(int *)(*(unsigned int *)&idx + 128) + 820) = 1;
             *(unsigned int *)(*(int *)(*(unsigned int *)&idx + 128) + 828) = 0;
             *(unsigned int *)(*(int *)(*(unsigned int *)&idx + 128) + 1724) = 1;
-            sub_488640();
+            UTIL_WeaponTimeBase();
             v6 = 1.5;
             *(float *)(*(unsigned int *)&idx + 200) = (float)(v7 + 1.5);
             *(unsigned int *)(*(unsigned int *)&idx + 212) = 2;
-            sub_488640();
+            UTIL_WeaponTimeBase();
             v0 = (float)(v8 + 5.5);
         }
         else
@@ -42,7 +42,7 @@ double SecondaryAttack__13CShieldAttack(float idx)
             *(unsigned int *)(*(int *)(*(unsigned int *)&idx + 128) + 1876) = 0x3f800000;
             *(unsigned int *)(*(unsigned int *)&idx + 212) = 0;
             *(unsigned int *)(*(unsigned int *)&idx + 200) = 0;
-            sub_488640();
+            UTIL_WeaponTimeBase();
             v6 = __int_as_float(v5) + 4.0;
         }
     }

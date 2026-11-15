@@ -26,7 +26,7 @@ typedef struct st_500820_4 {
     unsigned int field_0;
 } st_500820_4;
 
-extern st_500820_4 *g_6168dc;
+extern st_500820_4 *g_engfuncs.pfnIndexOfEdict;
 
 st_500820_0 * RemoveAnim__12CPlayerMeleeP15plrmelee_anim_s(st_500820_2 *a0, st_500820_0 *a1)
 {
@@ -36,11 +36,11 @@ st_500820_0 * RemoveAnim__12CPlayerMeleeP15plrmelee_anim_s(st_500820_2 *a0, st_5
     if (a1)
     {
         if (a1->field_298 && a0->field_124)
-            sub_48b090(g_6168dc(*(int *)(*(int *)a0->field_124 + 520)));
+            UTIL_Model_RemoveAll(g_engfuncs.pfnIndexOfEdict(*(int *)(*(int *)a0->field_124 + 520)));
         if (a0->field_84 == a1)
         {
             a0->field_84 = a1->field_2a4;
-            sub_48d4e0(a1);
+            __builtin_delete(a1);
             return a0->field_84;
         }
         for (iter = a0->field_84; iter->field_2a4; iter = iter->field_2a4)
@@ -51,7 +51,7 @@ st_500820_0 * RemoveAnim__12CPlayerMeleeP15plrmelee_anim_s(st_500820_2 *a0, st_5
                 {
                     v2 = iter->field_2a4;
                     iter->field_2a4 = v2->field_2a4;
-                    sub_48d4e0(v2);
+                    __builtin_delete(v2);
                     break;
                 }
             }

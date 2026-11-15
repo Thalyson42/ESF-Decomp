@@ -33,14 +33,14 @@ unsigned int Precache__10CBreakable(st_4c1ed0_0 *a0)
     }
     else
     {
-        sub_48d5e0(a0->field_6c);
+        CBreakable::MaterialSoundPrecache(a0->field_6c);
         if (a0->field_7c)
             v0 = gpGlobals->field_98 + a0->field_7c;
         v1 = g_engfuncs(v0);
         a0->field_74 = v1;
         if (!a0->field_80)
             return v1;
-        return sub_488de0(a0->field_80 + gpGlobals->field_98);
+        return UTIL_PrecacheOther(a0->field_80 + gpGlobals->field_98);
     }
 }
 

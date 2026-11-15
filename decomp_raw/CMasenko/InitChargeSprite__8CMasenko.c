@@ -36,7 +36,7 @@ typedef struct st_4d26f0_5 {
     unsigned int field_0;
 } st_4d26f0_5;
 
-extern st_4d26f0_5 *g_6168dc;
+extern st_4d26f0_5 *g_engfuncs.pfnIndexOfEdict;
 
 int InitChargeSprite__8CMasenko(st_4d26f0_3 *a0)
 {
@@ -49,13 +49,13 @@ int InitChargeSprite__8CMasenko(st_4d26f0_3 *a0)
     st_4d26f0_3 *v7;  // edx
     int v0;  // [bp-0x24]
 
-    v1 = sub_48c010("sprites/masenkocharge.spr", *(int *)a0->field_80 + 8, 1);
+    v1 = CSprite::SpriteCreate("sprites/masenkocharge.spr", *(int *)a0->field_80 + 8, 1);
     v2 = a0;
     v2->field_20c = v1;
     v3 = *(int *)(*(int *)v2->field_80 + 520);
     if (v3)
     {
-        v4 = g_6168dc(v3);
+        v4 = g_engfuncs.pfnIndexOfEdict(v3);
         *v1->field_110 = v4;
         *v1->field_114 = 1;
         *v1->field_194 = v3;
@@ -74,6 +74,6 @@ int InitChargeSprite__8CMasenko(st_4d26f0_3 *a0)
     v7 = a0;
     *(float *)(*(int *)v7->field_20c + 324) = 0.10000000149011612f;
     *(float *)(*(int *)v7->field_20c + 312) = 10.0f;
-    return sub_48df90(v7->field_20c);
+    return CSprite::TurnOff(v7->field_20c);
 }
 

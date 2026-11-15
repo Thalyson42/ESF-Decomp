@@ -21,8 +21,8 @@ unsigned int PlayLowPriorityAnim__12CPlayerMelee(st_4ffeb0_2 *a0)
 {
     unsigned int v0;  // [bp-0x8]
 
-    v0 = sub_487fb0(a0);
-    if (sub_48b3f0(a0) && !a0->field_124->field_330 && !a0->field_124->field_320 && *(int *)(v0 + 672) == (a0->field_124->field_0->field_1a4 & 0x200))
+    v0 = CPlayerMelee::GetCurrentAnim(a0);
+    if (CPlayerMelee::PlayMedPriorityAnim(a0) && !a0->field_124->field_330 && !a0->field_124->field_320 && *(int *)(v0 + 672) == (a0->field_124->field_0->field_1a4 & 0x200))
         return 1;
     return 0;
 }

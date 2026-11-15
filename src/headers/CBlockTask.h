@@ -1,7 +1,7 @@
 // CBlockTask.h -- reconstruído automaticamente (vtable + offsets). REVISAR.
 #pragma once
 
-class CBlockTask {
+class CBlockTask : public CBaseTask {  // base: heuristica
 public:
     virtual void _._10CBlockTask();  // vtable[0] _._10CBlockTask
     virtual void GetNesserelyChecks();  // vtable[1] GetNesserelyChecks__10CBlockTask
@@ -11,9 +11,7 @@ public:
     virtual void TaskThink();  // vtable[5] TaskThink__10CBlockTask
     virtual void TaskIdentify();  // vtable[6] TaskIdentify__10CBlockTask
     virtual void ShouldManageEnemies();  // vtable[7] ShouldManageEnemies__10CBlockTask
-    virtual void ManageEnemies();  // vtable[8] ManageEnemies__9CBaseTask
     virtual void ReactOnDanger();  // vtable[9] ReactOnDanger__10CBlockTaskP13danger_info_s
-    virtual void 0();  // vtable[10] 0
     // campos observados (offset em bytes a partir de `this`; inclui os herdados)
     int f_004;  // +0x4 (4)
     void* f_008;  // +0x8 (8)

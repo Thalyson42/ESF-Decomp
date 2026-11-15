@@ -58,17 +58,17 @@ unsigned int * ItemTouch__5CItemP11CBaseEntity(st_4c8c10_6 *a0, st_4c8c10_2 *a1)
     }
     else if (a0->field_60->field_e8(a0, a1))
     {
-        sub_48df80(a0, a1, 3, 0);
+        CBaseEntity::SUB_UseTargets(a0, a1, 3, 0);
         a0->field_14 = 0;
         a0->field_18 = 0;
         g_pGameRules->field_44->field_90(g_pGameRules, a1, a0);
-        return (g_pGameRules->field_44->field_94(g_pGameRules, a0) == 5 ? a0->field_60->field_c0(a0) : sub_48cc00(a0));
+        return (g_pGameRules->field_44->field_94(g_pGameRules, a0) == 5 ? a0->field_60->field_c0(a0) : UTIL_Remove(a0));
     }
     else
     {
         if (!gEvilImpulse101)
             return &gEvilImpulse101;
-        sub_48cc00(a0);
+        UTIL_Remove(a0);
         return &gEvilImpulse101;
     }
 }

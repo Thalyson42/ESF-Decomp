@@ -62,7 +62,7 @@ int DrainPlayer__14CDrainEntsTaskP11CBasePlayer(st_553140_3 *a0, st_553140_0 *a1
     v16 = a1->field_0->field_20 * a1->field_0->field_20 + *(float *)&v15[1] * *(float *)&v15[1] + *(float *)&v15[2] * *(float *)&v15[2];
     v17 = sqrt(v16);
     if (isnan(v17))
-        sub_487dc0(*(unsigned int *)&v16);
+        sqrt(*(unsigned int *)&v16);
     else
         v16 = v17;
     v12 = (float)v16;
@@ -92,7 +92,7 @@ LABEL_553223:
         v22 = v20[8] * v20[8] + *(float *)&v21[1] * *(float *)&v21[1] + *(float *)&v21[2] * *(float *)&v21[2];
         v23 = sqrt(v22);
         if (isnan(v23))
-            sub_487dc0(*(unsigned int *)&v22);
+            sqrt(*(unsigned int *)&v22);
         else
             v22 = v23;
         v4 = (float)v22;
@@ -113,7 +113,7 @@ LABEL_553223:
         v26 = a1->field_0->field_20 * a1->field_0->field_20 + *(float *)&v25[1] * *(float *)&v25[1] + *(float *)&v25[2] * *(float *)&v25[2];
         v27 = sqrt(v26);
         if (isnan(v27))
-            sub_487dc0(*(unsigned int *)&v26);
+            sqrt(*(unsigned int *)&v26);
         else
             v26 = v27;
         v4 = (float)v26;
@@ -133,20 +133,20 @@ LABEL_553223:
     v2 += 950;
     if (a1->field_744 <= 2850)
     {
-        sub_488be0(a0->field_8, a1, "Super bot laser", (float)(1.0 + a1->field_0->field_160));
+        UTIL_DamagePlayer(a0->field_8, a1, "Super bot laser", (float)(1.0 + a1->field_0->field_160));
     }
     else if ((int)v2 <= 0x3b9ac9fe)
     {
-        sub_487b40(a1, v3);
-        sub_487b40(a0->field_8, v2);
-        sub_48b8d0(a0->field_8, v2);
+        CBasePlayer::SetPowerLevel(a1, v3);
+        CBasePlayer::SetPowerLevel(a0->field_8, v2);
+        CBasePlayer::SetMaxPowerLevel(a0->field_8, v2);
     }
     else
     {
-        sub_48c980(a1, 3);
-        return sub_48c980(a0->field_8, 3);
+        CBasePlayer::UseKi(a1, 3);
+        return CBasePlayer::UseKi(a0->field_8, 3);
     }
-    sub_48c980(a1, 3);
-    return sub_48c980(a0->field_8, 3);
+    CBasePlayer::UseKi(a1, 3);
+    return CBasePlayer::UseKi(a0->field_8, 3);
 }
 

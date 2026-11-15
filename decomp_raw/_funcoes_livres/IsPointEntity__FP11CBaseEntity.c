@@ -14,7 +14,7 @@ extern st_4b1160_1 *gpGlobals;
 
 unsigned int IsPointEntity__FP11CBaseEntity(st_4b1160_0 **a0)
 {
-    if (*a0->field_b4 && sub_488af0(*a0->field_0 + gpGlobals->field_98, "info_target") && sub_488af0(*a0->field_0 + gpGlobals->field_98, "info_landmark") && sub_488af0(*a0->field_0 + gpGlobals->field_98, "path_corner"))
+    if (*a0->field_b4 && strcmp@GLIBC_2.0(*a0->field_0 + gpGlobals->field_98, "info_target") && strcmp@GLIBC_2.0(*a0->field_0 + gpGlobals->field_98, "info_landmark") && strcmp@GLIBC_2.0(*a0->field_0 + gpGlobals->field_98, "path_corner"))
         return 0;
     return 1;
 }

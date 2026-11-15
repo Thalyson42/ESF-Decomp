@@ -8,9 +8,9 @@ typedef struct st_53ea60_0 {
     unsigned int field_0;
 } st_53ea60_0;
 
-extern st_53ea60_0 *g_616928;
+extern st_53ea60_0 *g_engfuncs.pfnRandomLong;
 extern char cout;
-extern st_53ea60_1 *g_625f80;
+extern st_53ea60_1 *cout+512;
 
 int ChangeSBotLaserPercent__11CBotManagers(unsigned int a0, short a1)
 {
@@ -23,7 +23,7 @@ int ChangeSBotLaserPercent__11CBotManagers(unsigned int a0, short a1)
 
     v2 = a1;
     if (v2 == -0x1)
-        v2 = g_616928(1, 100);
+        v2 = g_engfuncs.pfnRandomLong(1, 100);
     v3 = 0;
     v4 = v2;
     do
@@ -32,11 +32,11 @@ int ChangeSBotLaserPercent__11CBotManagers(unsigned int a0, short a1)
         *(short *)(v5 * 16 + a0 + 4304) = v4;
         v3 = v5 + 1;
     } while (v5 + 1 <= 2);
-    g_625f80->field_14(&cout, "Super bot laser percent for EVERY superbot is now: ");
+    cout+512->field_14(&cout, "Super bot laser percent for EVERY superbot is now: ");
     v0 = 0;
-    sub_48d0e0(&v1, 0, 24);
-    sub_48d990(&v0, "%d", v4);
-    g_625f80->field_14(&cout, &v0);
-    return g_625f80->field_14(&cout, "\n");
+    memset@GLIBC_2.0(&v1, 0, 24);
+    sprintf@GLIBC_2.0(&v0, "%d", v4);
+    cout+512->field_14(&cout, &v0);
+    return cout+512->field_14(&cout, "\n");
 }
 

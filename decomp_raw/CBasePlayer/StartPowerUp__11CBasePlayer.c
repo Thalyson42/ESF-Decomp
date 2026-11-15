@@ -12,10 +12,10 @@ typedef struct st_4f28a0_1 {
 
 extern unsigned int gmsgPowerupFX;
 extern st_4f28a0_0 g_vecAuraColor;
-extern st_4f28a0_1 *g_616878;
-extern st_4f28a0_1 *g_61687c;
-extern st_4f28a0_1 *g_616880;
-extern st_4f28a0_1 *g_6168dc;
+extern st_4f28a0_1 *g_engfuncs.pfnMessageBegin;
+extern st_4f28a0_1 *g_engfuncs.pfnMessageEnd;
+extern st_4f28a0_1 *g_engfuncs.pfnWriteByte;
+extern st_4f28a0_1 *g_engfuncs.pfnIndexOfEdict;
 
 unsigned int StartPowerUp__11CBasePlayer(float idx)
 {
@@ -77,33 +77,33 @@ unsigned int StartPowerUp__11CBasePlayer(float idx)
         else if (!*(int *)(*(unsigned int *)&idx + 1724))
         {
             if (*(int *)(*(unsigned int *)&idx + 812))
-                sub_4895a0(idx);
+                CBasePlayer::StopBlock(idx);
             if (*(int *)(*(unsigned int *)&idx + 804))
-                sub_48dbc0(idx);
+                CBasePlayer::StopTurbo(idx);
             if (!(*(char *)(*(int *)idx + 421) & 2) && !*(int *)(*(unsigned int *)&idx + 800))
-                sub_488d40(idx);
+                CBasePlayer::StartFly(idx);
             *(unsigned int *)(*(unsigned int *)&idx + 1876) = 0;
             *(unsigned int *)(*(unsigned int *)&idx + 816) = 1;
             v9 = &(&g_vecAuraColor.field_0)[3 * (*(int *)(*(int *)(*(int *)(*(unsigned int *)&idx + 1892) + 4) + 56))(*(int *)(*(unsigned int *)&idx + 1892))];
             v3 = v9->field_0;
             v4 = v9->field_4;
             v5 = v9->field_8;
-            g_616878(2, gmsgPowerupFX, *(int *)idx + 8, 0);
-            v10 = g_6168dc(*(int *)(*(int *)idx + 520));
-            g_616880(v10);
+            g_engfuncs.pfnMessageBegin(2, gmsgPowerupFX, *(int *)idx + 8, 0);
+            v10 = g_engfuncs.pfnIndexOfEdict(*(int *)(*(int *)idx + 520));
+            g_engfuncs.pfnWriteByte(v10);
             v2 = __fnstcw();
             v1 = v2 | 0xc00;
             v0 = (int)v3;
-            g_616880(v0);
+            g_engfuncs.pfnWriteByte(v0);
             v2 = __fnstcw();
             v1 = v2 | 0xc00;
             v0 = (int)v4;
-            g_616880(v0);
+            g_engfuncs.pfnWriteByte(v0);
             v2 = __fnstcw();
             v1 = v2 | 0xc00;
             v0 = (int)v5;
-            g_616880(v0);
-            return g_61687c();
+            g_engfuncs.pfnWriteByte(v0);
+            return g_engfuncs.pfnMessageEnd();
         }
         else
         {

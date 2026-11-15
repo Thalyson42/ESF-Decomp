@@ -76,7 +76,7 @@ st_4d9b30_5 * ShootAtEnemy__12CBaseMonsterRC6Vector(void)
     st_4d9b30_4 *v15;  // [bp+0x8]
     float *v16;  // [bp+0xc]
 
-    v17 = sub_488810(&v15->field_108);
+    v17 = EHANDLE::__opP11CBaseEntity(&v15->field_108);
     if (v17)
     {
         v17->field_60->field_d8(&v1, v17, v16);
@@ -98,7 +98,7 @@ st_4d9b30_5 * ShootAtEnemy__12CBaseMonsterRC6Vector(void)
         v24 = v21 * v21 + v22 * v22 + v23 * v23;
         v25 = sqrt(v24);
         if (isnan(v25))
-            sub_487dc0(*(unsigned int *)&v24);
+            sqrt(*(unsigned int *)&v24);
         else
             v24 = v25;
         v0 = (float)v24;

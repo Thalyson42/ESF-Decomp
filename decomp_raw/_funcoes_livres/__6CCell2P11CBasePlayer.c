@@ -8,7 +8,7 @@ extern char __vt_6CCell2;
 
 st_49e7d0_0 * __6CCell2P11CBasePlayer(st_49e7d0_0 *a0, int a1)
 {
-    sub_489500(a0, a1);
+    __5CCellP11CBasePlayer(a0, a1);
     a0->field_4 = &__vt_6CCell2;
     return a0;
 }

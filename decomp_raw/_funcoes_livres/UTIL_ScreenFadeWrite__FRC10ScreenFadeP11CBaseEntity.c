@@ -30,10 +30,10 @@ typedef struct st_532390_4 {
 } st_532390_4;
 
 extern unsigned int gmsgFade;
-extern st_532390_2 *g_616878;
-extern st_532390_2 *g_61687c;
-extern st_532390_2 *g_616880;
-extern st_532390_2 *g_616888;
+extern st_532390_2 *g_engfuncs.pfnMessageBegin;
+extern st_532390_2 *g_engfuncs.pfnMessageEnd;
+extern st_532390_2 *g_engfuncs.pfnWriteByte;
+extern st_532390_2 *g_engfuncs.pfnWriteShort;
 
 unsigned int UTIL_ScreenFadeWrite__FRC10ScreenFadeP11CBaseEntity(st_532390_4 *a0, st_532390_3 *a1)
 {
@@ -46,15 +46,15 @@ unsigned int UTIL_ScreenFadeWrite__FRC10ScreenFadeP11CBaseEntity(st_532390_4 *a0
     v1 = a1->field_60->field_a4(a1);
     if (!v1)
         return v1;
-    g_616878(1, gmsgFade, 0, a1->field_0->field_208);
-    g_616888(a0->field_0);
-    g_616888(a0->field_2);
-    g_616888(a0->field_4);
-    g_616880(a0->field_6);
-    g_616880(a0->field_7);
-    g_616880(a0->field_8);
+    g_engfuncs.pfnMessageBegin(1, gmsgFade, 0, a1->field_0->field_208);
+    g_engfuncs.pfnWriteShort(a0->field_0);
+    g_engfuncs.pfnWriteShort(a0->field_2);
+    g_engfuncs.pfnWriteShort(a0->field_4);
+    g_engfuncs.pfnWriteByte(a0->field_6);
+    g_engfuncs.pfnWriteByte(a0->field_7);
+    g_engfuncs.pfnWriteByte(a0->field_8);
     v0 = a0->field_9;
-    g_616880(v0);
-    return g_61687c(v0);
+    g_engfuncs.pfnWriteByte(v0);
+    return g_engfuncs.pfnMessageEnd(v0);
 }
 

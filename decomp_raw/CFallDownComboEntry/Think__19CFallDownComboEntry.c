@@ -32,7 +32,7 @@ st_55c3b0_0 * Think__19CFallDownComboEntry(st_55c3b0_2 *a0)
     st_55c3b0_0 *v0;  // eax
 
     if (a0->field_4->field_320)
-        sub_48c5a0(a0->field_4);
+        CBasePlayer::StopFly(a0->field_4);
     a0->field_4->field_a10 = 0;
     a0->field_4->field_a14 = (float)(1.2 + *(float *)gpGlobals);
     if (a0->field_14 >= *(float *)gpGlobals)

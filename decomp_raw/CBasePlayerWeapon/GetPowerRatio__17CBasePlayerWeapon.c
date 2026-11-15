@@ -6,6 +6,6 @@ typedef struct st_538b90_0 {
 
 int GetPowerRatio__17CBasePlayerWeapon(st_538b90_0 *a0)
 {
-    return sub_488500(a0->field_80);
+    return CBasePlayer::GetPowerRatio(a0->field_80);
 }
 

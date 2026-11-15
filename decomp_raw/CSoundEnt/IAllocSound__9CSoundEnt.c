@@ -3,7 +3,7 @@ typedef struct st_51f020_0 {
     unsigned int field_0;
 } st_51f020_0;
 
-extern st_51f020_0 *g_6168b4;
+extern st_51f020_0 *g_engfuncs.pfnAlertMessage;
 
 unsigned int IAllocSound__9CSoundEnt(unsigned int *a0)
 {
@@ -13,7 +13,7 @@ unsigned int IAllocSound__9CSoundEnt(unsigned int *a0)
 
     if (a0[25] == 0xffffffff)
     {
-        g_6168b4(1, "Free Sound List is full!\n");
+        g_engfuncs.pfnAlertMessage(1, "Free Sound List is full!\n");
         return 0xffffffff;
     }
     v0 = a0[25];

@@ -41,10 +41,10 @@ typedef struct st_56bf60_3 {
     struct st_56bf60_2 *field_60;
 } st_56bf60_3;
 
-extern st_56bf60_0 *g_6168d4;
-extern st_56bf60_0 *g_61698c;
+extern st_56bf60_0 *g_engfuncs.pfnPEntityOfEntOffset;
+extern st_56bf60_0 *g_engfuncs.pfnIsDedicatedServer;
 extern unsigned int GatherSpotsForTeamGood[4];
-extern char g_625c4c[4];
+extern char GatherSpotsForTeamGood+12[4];
 extern unsigned int GatherSpotsForTeamEvil[4];
 
 unsigned int GetNearestDBSpotIndex__11CBotManagerP11CBasePlayerf(st_56bf60_5 *a0, unsigned int a1, float a2)
@@ -99,14 +99,14 @@ unsigned int GetNearestDBSpotIndex__11CBotManagerP11CBasePlayerf(st_56bf60_5 *a0
     float v26;  // [bp-0x20]
     float v27;  // [bp-0x1c]
 
-    if (!g_61698c(v2, v3, v4) && !(v28 = a0->field_c, !a0->field_c && !(v28 = g_6168d4(0), v28)))
+    if (!g_engfuncs.pfnIsDedicatedServer(v2, v3, v4) && !(v28 = a0->field_c, !a0->field_c && !(v28 = g_engfuncs.pfnPEntityOfEntOffset(0), v28)))
         v29 = v28->field_7c;
     else
         v29 = NULL;
     v30 = v29;
     *(unsigned short *)&v1 = 0;
     *(unsigned short *)&v0 = 0;
-    if (!(char)sub_489a70(v30, v0, v1))
+    if (!(char)UTIL_IsValidPlayer(v30, v0, v1))
         return 0xffffffff;
     v31 = v30->field_0;
     v32 = &v31->field_8;
@@ -121,7 +121,7 @@ unsigned int GetNearestDBSpotIndex__11CBotManagerP11CBasePlayerf(st_56bf60_5 *a0
         do
         {
             v34 = (short)v33 * 16;
-            if (!g_625c4c[v34])
+            if (!GatherSpotsForTeamGood+12[v34])
             {
                 v22 = v25;
                 v23 = v26;
@@ -139,7 +139,7 @@ unsigned int GetNearestDBSpotIndex__11CBotManagerP11CBasePlayerf(st_56bf60_5 *a0
                 v39 = v36 * v36 + v37 * v37 + v38 * v38;
                 v40 = sqrt(v39);
                 if (isnan(v40))
-                    sub_487dc0(*(unsigned int *)&v39);
+                    sqrt(*(unsigned int *)&v39);
                 else
                     v39 = v40;
                 v6 = (float)v39;
@@ -157,7 +157,7 @@ unsigned int GetNearestDBSpotIndex__11CBotManagerP11CBasePlayerf(st_56bf60_5 *a0
         do
         {
             v42 = (short)v41 * 16;
-            if (!g_625c4c[v42])
+            if (!GatherSpotsForTeamGood+12[v42])
             {
                 v8 = v25;
                 v9 = v26;
@@ -175,7 +175,7 @@ unsigned int GetNearestDBSpotIndex__11CBotManagerP11CBasePlayerf(st_56bf60_5 *a0
                 v47 = v44 * v44 + v45 * v45 + v46 * v46;
                 v48 = sqrt(v47);
                 if (isnan(v48))
-                    sub_487dc0(*(unsigned int *)&v47);
+                    sqrt(*(unsigned int *)&v47);
                 else
                     v47 = v48;
                 v6 = (float)v47;

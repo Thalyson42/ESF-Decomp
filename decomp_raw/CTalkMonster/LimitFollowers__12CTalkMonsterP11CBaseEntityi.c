@@ -25,11 +25,11 @@ st_525930_2 * LimitFollowers__12CTalkMonsterP11CBaseEntityi(int a0, unsigned int
     v1 = 0;
     while (1)
     {
-        v2 = sub_489900(a0, v2, v1, 0);
+        v2 = CTalkMonster::EnumFriends(a0, v2, v1, 0);
         if (v2)
         {
             v3 = v2->field_60->field_4c(v2);
-            if (v3 && sub_488810(&v3[2].padding_0[72]) == a1)
+            if (v3 && EHANDLE::__opP11CBaseEntity(&v3[2].padding_0[72]) == a1)
             {
                 v0 += 1;
                 if (v0 > a2)

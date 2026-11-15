@@ -31,8 +31,8 @@ int Next__10CGunTarget(float idx)
     *(unsigned int *)(*(unsigned int *)&idx + 12) = 0;
     *(unsigned int *)(*(unsigned int *)&idx + 16) = 0;
     v11 = *(unsigned int *)&idx + 272;
-    sub_48d960(v11, (*(int *)(*(int *)(*(unsigned int *)&idx + 96) + 172))(idx));
-    v12 = sub_488810(v11);
+    EHANDLE::__as(v11, (*(int *)(*(int *)(*(unsigned int *)&idx + 96) + 172))(idx));
+    v12 = EHANDLE::__opP11CBaseEntity(v11);
     if (v12)
     {
         *(unsigned int *)(*(unsigned int *)&idx + 220) = _INSERT(v12, 0, 0) | 0xffff0000;
@@ -52,7 +52,7 @@ int Next__10CGunTarget(float idx)
         v6 = (float)(*v12->field_8 - v17);
         v7 = (float)(*(float *)&v19[1] - v18);
         v8 = *(float *)&v19[2] - v5;
-        return sub_488220(idx, &v6, *(float *)(index + 504));
+        return CBaseToggle::LinearMove(idx, &v6, *(float *)(index + 504));
     }
     return (*(int *)(*(int *)(*(unsigned int *)&idx + 96) + 308))(idx);
 }

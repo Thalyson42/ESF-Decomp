@@ -3,6 +3,6 @@ extern int _6CLaser.m_SaveData;
 
 unsigned int Save__6CLaserR5CSave(int a0, int a1)
 {
-    return (!sub_48d900(a0, a1) ? 0 : sub_48db60(a1, "CLaser", a0, &_6CLaser.m_SaveData, 3));
+    return (!CBaseEntity::Save(a0, a1) ? 0 : CSave::WriteFields(a1, "CLaser", a0, &_6CLaser.m_SaveData, 3));
 }
 

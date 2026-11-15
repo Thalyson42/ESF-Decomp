@@ -3,11 +3,11 @@ typedef struct st_4ecd70_0 {
     unsigned int field_0;
 } st_4ecd70_0;
 
-extern st_4ecd70_0 *g_6167c4;
+extern st_4ecd70_0 *g_engfuncs.pfnPrecacheSound;
 
 int Precache__16CFuncTrackChange(int a0)
 {
-    g_6167c4("buttons/button11.wav");
-    return sub_48a250(a0);
+    g_engfuncs.pfnPrecacheSound("buttons/button11.wav");
+    return CFuncPlat::Precache(a0);
 }
 

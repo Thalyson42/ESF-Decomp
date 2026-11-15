@@ -47,7 +47,7 @@ st_4ceb50_0 ** DrawBubbles__12CMagicAttack(st_4ceb50_0 **a0)
         v0 = v10->field_8;
         v1 = *(float *)&v14[1];
         v2 = *(float *)&v14[2];
-        v9 = sub_487d60(&v6, &v0, 4);
+        v9 = UTIL_BubbleTrail(&v6, &v0, 4);
     }
     return v9;
 }

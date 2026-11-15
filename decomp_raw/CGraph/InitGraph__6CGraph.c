@@ -22,27 +22,27 @@ unsigned int InitGraph__6CGraph(st_4df100_0 *ptr)
     memset(ptr, 0, 12);
     if (ptr->field_10)
     {
-        v0 = sub_48cf10(ptr->field_10);
+        v0 = free@GLIBC_2.0(ptr->field_10);
         ptr->field_10 = 0;
     }
     if (ptr->field_c)
     {
-        v0 = sub_48cf10(ptr->field_c);
+        v0 = free@GLIBC_2.0(ptr->field_c);
         ptr->field_c = 0;
     }
     if (ptr->field_24)
     {
-        v0 = sub_48cf10(ptr->field_24);
+        v0 = free@GLIBC_2.0(ptr->field_24);
         ptr->field_24 = 0;
     }
     if (ptr->field_14)
     {
-        v0 = sub_48cf10(ptr->field_14);
+        v0 = free@GLIBC_2.0(ptr->field_14);
         ptr->field_14 = 0;
     }
     if (ptr->field_20bc)
     {
-        v0 = sub_48cf10(ptr->field_20bc);
+        v0 = free@GLIBC_2.0(ptr->field_20bc);
         ptr->field_20bc = 0;
     }
     ptr->field_18 = 0;

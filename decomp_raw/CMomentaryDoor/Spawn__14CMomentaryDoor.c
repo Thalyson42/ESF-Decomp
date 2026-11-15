@@ -16,7 +16,7 @@ typedef struct st_4ad390_1 {
     unsigned int field_0;
 } st_4ad390_1;
 
-extern st_4ad390_1 *g_6167c8;
+extern st_4ad390_1 *g_engfuncs.pfnSetModel;
 extern st_4ad390_0 *gpGlobals;
 
 int Spawn__14CMomentaryDoor(float idx)
@@ -35,11 +35,11 @@ int Spawn__14CMomentaryDoor(float idx)
     float v5;  // [bp-0x20]
     float v6;  // [bp-0x1c]
 
-    sub_48ccb0(*(int *)idx);
+    SetMovedir(*(int *)idx);
     *(unsigned int *)(*(int *)idx + 268) = 4;
     *(unsigned int *)(*(int *)idx + 264) = 7;
-    sub_48db50(*(int *)idx, *(int *)idx + 8);
-    g_6167c8(*(int *)(*(int *)idx + 520), *(int *)(*(int *)idx + 184) + gpGlobals->field_98);
+    UTIL_SetOrigin(*(int *)idx, *(int *)idx + 8);
+    g_engfuncs.pfnSetModel(*(int *)(*(int *)idx + 520), *(int *)(*(int *)idx + 184) + gpGlobals->field_98);
     if (*(float *)(*(int *)idx + 504) == 0.0f)
         *(float *)(*(int *)idx + 504) = 100.0f;
     if (*(float *)(*(int *)idx + 480) == 0.0f)
@@ -64,7 +64,7 @@ int Spawn__14CMomentaryDoor(float idx)
     *(float *)(*(unsigned int *)&idx + 176) = v6;
     if (v10[1].padding_45[75] & 1)
     {
-        sub_48db50(v10, *(unsigned int *)&idx + 168);
+        UTIL_SetOrigin(v10, *(unsigned int *)&idx + 168);
         *(int *)(*(unsigned int *)&idx + 168) = *(int *)(*(unsigned int *)&idx + 156);
         *(int *)(*(unsigned int *)&idx + 172) = *(int *)(*(unsigned int *)&idx + 160);
         *(int *)(*(unsigned int *)&idx + 176) = *(int *)(*(unsigned int *)&idx + 164);

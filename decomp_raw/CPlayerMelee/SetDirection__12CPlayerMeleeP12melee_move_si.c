@@ -12,7 +12,7 @@ st_505a40_0 * SetDirection__12CPlayerMeleeP12melee_move_si(int a0, st_505a40_0 *
     if (v0)
     {
         v0->field_4 = a2;
-        v0 = sub_489c10(a0, 6, a2);
+        v0 = CPlayerMelee::MeleeHudFlags(a0, 6, a2);
     }
     return v0;
 }

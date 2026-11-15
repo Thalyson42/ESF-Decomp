@@ -23,9 +23,9 @@ typedef struct st_4915c0_2 {
 } st_4915c0_2;
 
 extern unsigned int g_vecZero;
-extern unsigned int g_616790;
-extern unsigned int g_616794;
-extern st_4915c0_2 *g_6167c8;
+extern unsigned int g_vecZero+4;
+extern unsigned int g_vecZero+8;
+extern st_4915c0_2 *g_engfuncs.pfnSetModel;
 extern st_4915c0_1 *gpGlobals;
 
 int Spawn__16CFuncIllusionary(st_4915c0_0 **a0)
@@ -34,10 +34,10 @@ int Spawn__16CFuncIllusionary(st_4915c0_0 **a0)
 
     v0 = *a0;
     v0[20] = g_vecZero;
-    v0[21] = g_616790;
-    v0[22] = g_616794;
+    v0[21] = g_vecZero+4;
+    v0[22] = g_vecZero+8;
     *a0->field_108 = 0;
     *a0->field_10c = 0;
-    return g_6167c8(*a0->field_208, *a0->field_b8 + gpGlobals->field_98);
+    return g_engfuncs.pfnSetModel(*a0->field_208, *a0->field_b8 + gpGlobals->field_98);
 }
 

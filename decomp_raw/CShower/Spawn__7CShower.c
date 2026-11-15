@@ -48,10 +48,10 @@ typedef struct st_4b9bb0_2 {
 } st_4b9bb0_2;
 
 extern unsigned int g_vecZero;
-extern unsigned int g_616790;
-extern unsigned int g_616794;
+extern unsigned int g_vecZero+4;
+extern unsigned int g_vecZero+8;
 extern st_4b9bb0_3 g_engfuncs;
-extern st_4b9bb0_1 *g_61692c;
+extern st_4b9bb0_1 *g_engfuncs.pfnRandomFloat;
 extern st_4b9bb0_2 *gpGlobals;
 
 int Spawn__7CShower(double a0, double a1, double a2, double a3, st_4b9bb0_0 **a4)
@@ -71,7 +71,7 @@ int Spawn__7CShower(double a0, double a1, double a2, double a3, st_4b9bb0_0 **a4
 
     v6 = *a4;
     v2 = 200.0f;
-    g_61692c(200.0f, 300.0f);
+    g_engfuncs.pfnRandomFloat(200.0f, 300.0f);
     v7 = &*a4->field_50;
     v3 = (float)(200.0 * *a4->field_50);
     v8 = 200.0 * *(float *)&v7->field_8;
@@ -80,10 +80,10 @@ int Spawn__7CShower(double a0, double a1, double a2, double a3, st_4b9bb0_0 **a4
     v6->field_20 = v3;
     v6->field_24 = v4;
     v6->field_28 = v5;
-    g_61692c(0xc2c80000, 0x42c80000);
+    g_engfuncs.pfnRandomFloat(0xc2c80000, 0x42c80000);
     v9 = v8 + *a4->field_20;
     *a4->field_20 = (float)v9;
-    g_61692c(0xc2c80000, 0x42c80000);
+    g_engfuncs.pfnRandomFloat(0xc2c80000, 0x42c80000);
     *a4->field_24 = (float)(v9 + *a4->field_24);
     v10 = *a4;
     if (0.0 <= v10->field_28)
@@ -97,14 +97,14 @@ int Spawn__7CShower(double a0, double a1, double a2, double a3, st_4b9bb0_0 **a4
     *a4->field_10c = 0;
     v0 = &g_engfuncs.padding_0[0];
     v0->field_8(*a4->field_208, "models/grenade.mdl");
-    sub_48a0d0(*a4, &g_vecZero, &g_vecZero);
+    UTIL_SetSize(*a4, &g_vecZero, &g_vecZero);
     *a4->field_118 = *a4->field_118 | 128;
     v0->field_16c(v1, 1.5f);
     *(float *)&*a4->padding_119[223] = 1.5f;
     v11 = *a4;
     *(unsigned int *)&v11->field_50 = g_vecZero;
-    *(unsigned int *)&v11->field_54 = g_616790;
-    *(unsigned int *)&v11->field_58 = g_616794;
-    return g_616794;
+    *(unsigned int *)&v11->field_54 = g_vecZero+4;
+    *(unsigned int *)&v11->field_58 = g_vecZero+8;
+    return g_vecZero+8;
 }
 

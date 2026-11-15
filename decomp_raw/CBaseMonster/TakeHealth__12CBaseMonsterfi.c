@@ -15,6 +15,6 @@ unsigned int TakeHealth__12CBaseMonsterfi(st_4a57b0_1 *a0, float a1, int a2)
     if (*(float *)&a0->field_0->field_16c == 0.0f)
         return 0;
     a0->field_268 = a0->field_268 & ~(a2 & 0x3fff);
-    return sub_48c920(a0, a1, a2);
+    return CBaseEntity::TakeHealth(a0, a1, a2);
 }
 

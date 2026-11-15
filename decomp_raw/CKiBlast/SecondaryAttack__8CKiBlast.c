@@ -16,7 +16,7 @@ typedef struct st_4ccdf0_0 {
     unsigned int field_0;
 } st_4ccdf0_0;
 
-extern st_4ccdf0_0 *g_616928;
+extern st_4ccdf0_0 *g_engfuncs.pfnRandomLong;
 extern st_4ccdf0_1 *gpGlobals;
 
 float SecondaryAttack__8CKiBlast(float idx)
@@ -108,12 +108,12 @@ float SecondaryAttack__8CKiBlast(float idx)
     float v46;  // [bp-0x20]
     float v47;  // [bp-0x1c]
 
-    if (!sub_48c980(*(int *)(*(unsigned int *)&idx + 128), 15))
+    if (!CBasePlayer::UseKi(*(int *)(*(unsigned int *)&idx + 128), 15))
         return v86;
-    sub_489390(*(int *)(*(int *)*(int *)(*(unsigned int *)&idx + 128) + 520), 1, "weapons/kiblast.wav", 0x3f800000, 0.800000011920929f, 0, 100);
-    v4 = g_616928(0, 10);
-    v3 = g_616928(0xfffffff6, 10);
-    sub_48a800(*(int *)*(int *)(*(unsigned int *)&idx + 128) + 116);
+    EMIT_SOUND_DYN(*(int *)(*(int *)*(int *)(*(unsigned int *)&idx + 128) + 520), 1, "weapons/kiblast.wav", 0x3f800000, 0.800000011920929f, 0, 100);
+    v4 = g_engfuncs.pfnRandomLong(0, 10);
+    v3 = g_engfuncs.pfnRandomLong(0xfffffff6, 10);
+    UTIL_MakeVectors(*(int *)*(int *)(*(unsigned int *)&idx + 128) + 116);
     if (*(int *)(*(unsigned int *)&idx + 196))
     {
         (*(int *)(*(int *)(*(int *)(*(unsigned int *)&idx + 128) + 96) + 480))(&v32, *(int *)(*(unsigned int *)&idx + 128));
@@ -130,7 +130,7 @@ float SecondaryAttack__8CKiBlast(float idx)
         v53 = gpGlobals->field_28 * gpGlobals->field_28 + *(float *)&v52[1] * *(float *)&v52[1] + *(float *)&v52[2] * *(float *)&v52[2];
         v54 = sqrt(v53);
         if (isnan(v54))
-            sub_487dc0(*(unsigned int *)&v53);
+            sqrt(*(unsigned int *)&v53);
         else
             v53 = v54;
         v12 = (float)v53;
@@ -204,7 +204,7 @@ float SecondaryAttack__8CKiBlast(float idx)
         v71 = gpGlobals->field_28 * gpGlobals->field_28 + *(float *)&v70[1] * *(float *)&v70[1] + *(float *)&v70[2] * *(float *)&v70[2];
         v72 = sqrt(v71);
         if (isnan(v72))
-            sub_487dc0(*(unsigned int *)&v71);
+            sqrt(*(unsigned int *)&v71);
         else
             v71 = v72;
         v28 = (float)v71;
@@ -261,7 +261,7 @@ float SecondaryAttack__8CKiBlast(float idx)
         v44 = v11;
         v1 = 6;
     }
-    sub_48d680(*(int *)(*(unsigned int *)&idx + 128));
+    CBasePlayer::SetAnimation(*(int *)(*(unsigned int *)&idx + 128));
     *(unsigned int *)(*(unsigned int *)&idx + 196) = !*(int *)(*(unsigned int *)&idx + 196);
     v9 = v45;
     v10 = v46;
@@ -272,12 +272,12 @@ float SecondaryAttack__8CKiBlast(float idx)
     v2 = *(short *)(*(unsigned int *)&idx + 0xcc);
     v1 = *(short *)(*(unsigned int *)&idx + 202);
     v0 = *(short *)(*(unsigned int *)&idx + 200);
-    sub_48aef0(idx);
+    CBasePlayerWeapon::GetPowerRatio(idx);
     v7 = __fnstcw();
     v6 = v7 | 0xc00;
     v8 = (int)(v14 * 5.0);
-    sub_489210(*(int *)*(int *)(*(unsigned int *)&idx + 128), &v9, &v12, v8);
-    sub_488640();
+    CKiAttack::ShootCurvedKiAttack(*(int *)*(int *)(*(unsigned int *)&idx + 128), &v9, &v12, v8);
+    UTIL_WeaponTimeBase();
     v5 = (float)(v85 + 0.35);
     *(float *)(*(unsigned int *)&idx + 160) = v5;
     *(float *)(*(unsigned int *)&idx + 156) = v5;

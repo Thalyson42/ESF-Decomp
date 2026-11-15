@@ -4,7 +4,7 @@ typedef struct st_4c4010_0 {
 } st_4c4010_0;
 
 extern st_4c4010_0 *g_engfuncs;
-extern st_4c4010_0 *g_6167c4;
+extern st_4c4010_0 *g_engfuncs.pfnPrecacheSound;
 
 int Precache__10CGallitGun(unsigned short *a0)
 {
@@ -13,13 +13,13 @@ int Precache__10CGallitGun(unsigned short *a0)
     a0[105] = g_engfuncs("sprites/gallitgunastart.spr");
     a0[106] = g_engfuncs("sprites/gallitgunbstart.spr");
     g_engfuncs("sprites/ggunaura.spr");
-    g_6167c4("cell/gallitgun.wav");
-    g_6167c4("cell2/gallitgun.wav");
-    g_6167c4("vegeta/gallitgun.wav");
-    g_6167c4("cell/gallitgunfire.wav");
-    g_6167c4("cell2/gallitgunfire.wav");
-    g_6167c4("vegeta/gallitgunfire.wav");
+    g_engfuncs.pfnPrecacheSound("cell/gallitgun.wav");
+    g_engfuncs.pfnPrecacheSound("cell2/gallitgun.wav");
+    g_engfuncs.pfnPrecacheSound("vegeta/gallitgun.wav");
+    g_engfuncs.pfnPrecacheSound("cell/gallitgunfire.wav");
+    g_engfuncs.pfnPrecacheSound("cell2/gallitgunfire.wav");
+    g_engfuncs.pfnPrecacheSound("vegeta/gallitgunfire.wav");
     a0[0x66] = g_engfuncs("sprites/gallitguntrail.spr");
-    return sub_488bb0(a0);
+    return CControlledBeam::Precache(a0);
 }
 

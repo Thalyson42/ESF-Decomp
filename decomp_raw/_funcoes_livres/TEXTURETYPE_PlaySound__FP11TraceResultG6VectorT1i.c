@@ -59,10 +59,10 @@ typedef struct st_51dd30_2 {
 
 extern st_51dd30_2 *g_pGameRules;
 extern char _GLOBAL_OFFSET_TABLE_;
-extern st_51dd30_1 *g_616850;
-extern st_51dd30_1 *g_6168d4;
-extern st_51dd30_1 *g_616928;
-extern st_51dd30_1 *g_61692c;
+extern st_51dd30_1 *g_engfuncs.pfnTraceTexture;
+extern st_51dd30_1 *g_engfuncs.pfnPEntityOfEntOffset;
+extern st_51dd30_1 *g_engfuncs.pfnRandomLong;
+extern st_51dd30_1 *g_engfuncs.pfnRandomFloat;
 extern st_51dd30_9 *gpGlobals;
 
 double TEXTURETYPE_PlaySound__FP11TraceResultG6VectorT1i(st_51dd30_7 *a0, float *a1, float *a2)
@@ -106,7 +106,7 @@ double TEXTURETYPE_PlaySound__FP11TraceResultG6VectorT1i(st_51dd30_7 *a0, float 
     if (!g_pGameRules->field_44->field_e0(g_pGameRules))
         return 0.0;
     v28 = a0->field_30;
-    if (a0->field_30 || (v28 = g_6168d4(0), v28))
+    if (a0->field_30 || (v28 = g_engfuncs.pfnPEntityOfEntOffset(0), v28))
         v29 = v28->field_7c;
     else
         v29 = NULL;
@@ -129,14 +129,14 @@ double TEXTURETYPE_PlaySound__FP11TraceResultG6VectorT1i(st_51dd30_7 *a0, float 
             v10 = &v20;
             v9 = &v23;
             v8 = v30->field_0->field_208;
-            v31 = g_616850;
+            v31 = g_engfuncs.pfnTraceTexture;
         }
         else
         {
             v10 = &v20;
             v9 = &v23;
-            v8 = g_6168d4(0);
-            v31 = g_616850;
+            v8 = g_engfuncs.pfnPEntityOfEntOffset(0);
+            v31 = g_engfuncs.pfnTraceTexture;
         }
         iter = v31(v8, v9, v10);
         if (iter)
@@ -159,10 +159,10 @@ double TEXTURETYPE_PlaySound__FP11TraceResultG6VectorT1i(st_51dd30_7 *a0, float 
             {
                 iter += 1;
             }
-            sub_48e110(&v26, iter);
+            strcpy@GLIBC_2.0(&v26, iter);
             v27 = 0;
             v3 = &v26;
-            v17 = sub_488a10(v3);
+            v17 = TEXTURETYPE_Find(v3);
         }
     }
     if ((char)(v17 - 67) <= 22)
@@ -176,18 +176,18 @@ double TEXTURETYPE_PlaySound__FP11TraceResultG6VectorT1i(st_51dd30_7 *a0, float 
         v18 = "player/pl_step1.wav";
         v19 = "player/pl_step2.wav";
         v13 = 2;
-        if (v30 && !sub_488af0(v30->field_0->field_0 + gpGlobals->field_98, "func_breakable"))
+        if (v30 && !strcmp@GLIBC_2.0(v30->field_0->field_0 + gpGlobals->field_98, "func_breakable"))
         {
             *(float *)&*(uint32_t *)v15 = (float)((double)*(uint32_t *)v15 / 1.5);
             v14 = (float)(0.5 * v14);
         }
-        else if (v17 == 80 && a0->field_10 != 1.0 && g_616928(0, 1))
+        else if (v17 == 80 && a0->field_10 != 1.0 && g_engfuncs.pfnRandomLong(0, 1))
         {
-            sub_48a3b0(&a0->field_14);
+            UTIL_Sparks(&a0->field_14);
             strncpy(&v3, "333?", 4);
-            g_61692c(v3, 0x3f800000);
+            g_engfuncs.pfnRandomFloat(v3, 0x3f800000);
             strncpy(v11, "333?", 4);
-            v33 = g_616928(0, 1);
+            v33 = g_engfuncs.pfnRandomLong(0, 1);
             if (v33)
             {
                 if (v33 != 1)
@@ -208,16 +208,16 @@ double TEXTURETYPE_PlaySound__FP11TraceResultG6VectorT1i(st_51dd30_7 *a0, float 
             }
             v6 = v34;
             v5 = &a0->field_14;
-            sub_4897b0(g_6168d4(0));
+            UTIL_EmitAmbientSound(g_engfuncs.pfnPEntityOfEntOffset(0));
         }
 LABEL_51e2fd:
-        v6 = g_616928(0, 15) + 96;
+        v6 = g_engfuncs.pfnRandomLong(0, 15) + 96;
         v5 = 0;
         v4 = v12;
         *(uint32_t *)&v2 = *(uint32_t *)v15;
-        v1 = (&v18)[g_616928(0, v13 - 1)];
+        v1 = (&v18)[g_engfuncs.pfnRandomLong(0, v13 - 1)];
         v0 = &a0->field_14;
-        sub_4897b0(g_6168d4(0));
+        UTIL_EmitAmbientSound(g_engfuncs.pfnPEntityOfEntOffset(0));
         return v14;
     }
 }

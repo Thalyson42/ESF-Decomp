@@ -33,8 +33,8 @@ unsigned int StopStruggleAttack__12CPlayerMelee(st_50b140_1 *a0)
     if (a0->field_11c == 9)
     {
         memset(&a0->field_6c, 0, 20);
-        sub_48c1e0(a0);
-        sub_4887c0(a0);
+        CPlayerMelee::DelAllDirections(a0);
+        CPlayerMelee::RemoveAllAnims(a0);
         v3 = *(int *)a0->field_124;
         v0 = 0;
         v1 = 0;
@@ -42,13 +42,13 @@ unsigned int StopStruggleAttack__12CPlayerMelee(st_50b140_1 *a0)
         v3[162] = v0;
         v3[163] = v1;
         v3[164] = v2;
-        return sub_4899e0(a0->field_130);
+        return CPlayerMelee::StopStruggleAttack(a0->field_130);
     }
     else if (a0->field_11c == 11)
     {
         memset(&a0->field_6c, 0, 20);
-        sub_48c1e0(a0);
-        sub_4887c0(a0);
+        CPlayerMelee::DelAllDirections(a0);
+        CPlayerMelee::RemoveAllAnims(a0);
         v4 = *(int *)a0->field_124;
         v0 = 0;
         v1 = 0;

@@ -21,9 +21,9 @@ int PointEntInit__5CBeamRC6Vectori(st_4afe80_0 **a0, unsigned int *a1, int a2)
     v0->field_8 = *a1;
     v0->field_c = a1[1];
     v0->field_10 = a1[2];
-    sub_48c910(a0, a2);
+    CBeam::SetEndEntity(a0, a2);
     *a0->field_128 = *a0->field_128 & 0xfff;
     *a0->field_110 = *a0->field_110 & 0xfff;
-    return sub_48bc90(a0);
+    return CBeam::RelinkBeam(a0);
 }
 

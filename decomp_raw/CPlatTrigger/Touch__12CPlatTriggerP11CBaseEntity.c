@@ -52,7 +52,7 @@ unsigned int * Touch__12CPlatTriggerP11CBaseEntity(st_4e8fa0_7 *a0, st_4e8fa0_2 
     st_4e8fa0_5 *v2;  // edx
     float *v3;  // eax
 
-    v0 = sub_488af0(*(int *)a1->field_0 + gpGlobals->field_98, "player");
+    v0 = strcmp@GLIBC_2.0(*(int *)a1->field_0 + gpGlobals->field_98, "player");
     if (v0)
         return v0;
     v1 = a1->field_60->field_8c(a1);

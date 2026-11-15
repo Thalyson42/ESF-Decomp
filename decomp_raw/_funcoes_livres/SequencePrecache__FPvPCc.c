@@ -22,9 +22,9 @@ typedef struct st_48f110_2 {
     unsigned int field_0;
 } st_48f110_2;
 
-extern st_48f110_2 *g_6167c4;
-extern st_48f110_2 *g_6168b4;
-extern st_48f110_2 *g_6168cc;
+extern st_48f110_2 *g_engfuncs.pfnPrecacheSound;
+extern st_48f110_2 *g_engfuncs.pfnAlertMessage;
+extern st_48f110_2 *g_engfuncs.pfnAllocString;
 extern st_48f110_3 *gpGlobals;
 
 st_48f110_0 * SequencePrecache__FPvPCc(st_48f110_0 *a0, int a1)
@@ -40,7 +40,7 @@ st_48f110_0 * SequencePrecache__FPvPCc(st_48f110_0 *a0, int a1)
     st_48f110_0 *v2;  // [bp-0x10]
     st_48f110_1 *v3;  // [bp-0xc]
 
-    v4 = sub_48a6a0(a0, a1);
+    v4 = LookupSequence(a0, a1);
     if (v4 < NULL)
     {
         return v4;
@@ -59,7 +59,7 @@ st_48f110_0 * SequencePrecache__FPvPCc(st_48f110_0 *a0, int a1)
         do
         {
             v5 = v1 * 76;
-            if (*(int *)&v2->padding_2[2 + v5] <= 4999 && sub_489fb0(*(int *)&v2->padding_2[2 + v5]))
+            if (*(int *)&v2->padding_2[2 + v5] <= 4999 && IsSoundEvent(*(int *)&v2->padding_2[2 + v5]))
             {
                 v6 = &v2->padding_2[10 + v5];
                 v0 = v6;
@@ -69,9 +69,9 @@ st_48f110_0 * SequencePrecache__FPvPCc(st_48f110_0 *a0, int a1)
                     v8 = v6;
                 } while (v7 && (v7 -= 1, v6 = v8 + 1, *v8));
                 if (v7 == 0xfffffffe)
-                    g_6168b4(4, "Bad sound event %d in sequence %s :: %s (sound is \"%s\")\n", *(int *)&v2->padding_2[2 + v5], &a0->padding_2[6], a1, v0);
-                v9 = g_6168cc((char *)v2 + 0x4c * v1 + 12);
-                g_6167c4(v9 + gpGlobals->field_98);
+                    g_engfuncs.pfnAlertMessage(4, "Bad sound event %d in sequence %s :: %s (sound is \"%s\")\n", *(int *)&v2->padding_2[2 + v5], &a0->padding_2[6], a1, v0);
+                v9 = g_engfuncs.pfnAllocString((char *)v2 + 0x4c * v1 + 12);
+                g_engfuncs.pfnPrecacheSound(v9 + gpGlobals->field_98);
             }
         } while ((v1 = &v1->field_1, v1 < v3->field_30));
         return v1;

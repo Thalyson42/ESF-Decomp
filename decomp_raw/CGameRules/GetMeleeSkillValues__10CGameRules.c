@@ -1,5 +1,5 @@
 // GetMeleeSkillValues__10CGameRules @0xc4d80 size=89
-extern float g_5bd1bc;
+extern float melee_skill+12;
 
 int GetMeleeSkillValues__10CGameRules(unsigned int a0)
 {
@@ -10,7 +10,7 @@ int GetMeleeSkillValues__10CGameRules(unsigned int a0)
 
     v2 = __fnstcw();
     v1 = v2 | 0xc00;
-    v0 = (int)g_5bd1bc;
+    v0 = (int)melee_skill+12;
     v3 = v0;
     if (v3 < 0)
     {

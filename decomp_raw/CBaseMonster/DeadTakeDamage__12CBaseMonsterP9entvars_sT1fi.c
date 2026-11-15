@@ -37,10 +37,10 @@ typedef struct st_4a5eb0_6 {
 } st_4a5eb0_6;
 
 extern unsigned int g_vecAttackDir;
-extern unsigned int g_616784;
-extern unsigned int g_616788;
-extern st_4a5eb0_1 *g_6168d4;
-extern st_4a5eb0_1 *g_6168d8;
+extern unsigned int g_vecAttackDir+4;
+extern unsigned int g_vecAttackDir+8;
+extern st_4a5eb0_1 *g_engfuncs.pfnPEntityOfEntOffset;
+extern st_4a5eb0_1 *g_engfuncs.pfnEntOffsetOfPEntity;
 
 unsigned int DeadTakeDamage__12CBaseMonsterP9entvars_sT1fi(st_4a5eb0_6 *a0, st_4a5eb0_4 *a1, unsigned int a2, float a3, unsigned int a4)
 {
@@ -91,12 +91,12 @@ unsigned int DeadTakeDamage__12CBaseMonsterP9entvars_sT1fi(st_4a5eb0_6 *a0, st_4
     v24 = v16;
     v26 = v17;
     v27 = 0;
-    if (!a1 || !g_6168d8(a1->field_208))
+    if (!a1 || !g_engfuncs.pfnEntOffsetOfPEntity(a1->field_208))
         v27 = 1;
     if (!v27)
     {
         v28 = a1->field_208;
-        if (a1->field_208 || (v28 = g_6168d4(0), v28))
+        if (a1->field_208 || (v28 = g_engfuncs.pfnPEntityOfEntOffset(0), v28))
             v29 = v28->field_7c;
         else
             v29 = NULL;
@@ -119,7 +119,7 @@ unsigned int DeadTakeDamage__12CBaseMonsterP9entvars_sT1fi(st_4a5eb0_6 *a0, st_4
             v33 = v30 * v30 + v31 * v31 + v32 * v32;
             v34 = sqrt(v33);
             if (isnan(v34))
-                sub_487dc0(*(unsigned int *)&v33);
+                sqrt(*(unsigned int *)&v33);
             else
                 v33 = v34;
             v0 = (float)v33;
@@ -142,7 +142,7 @@ unsigned int DeadTakeDamage__12CBaseMonsterP9entvars_sT1fi(st_4a5eb0_6 *a0, st_4
             v36 = v21 * v21 + v23 * v23 + v25 * v25;
             v37 = sqrt(v36);
             if (isnan(v37))
-                sub_487dc0(*(unsigned int *)&v36);
+                sqrt(*(unsigned int *)&v36);
             else
                 v36 = v37;
             v0 = (float)v36;
@@ -160,11 +160,11 @@ unsigned int DeadTakeDamage__12CBaseMonsterP9entvars_sT1fi(st_4a5eb0_6 *a0, st_4
                 v20 = (float)(v38 * v25);
             }
             *(float *)&g_vecAttackDir = v18;
-            *(float *)&g_616784 = v19;
-            *(float *)&g_616788 = v20;
+            *(float *)&g_vecAttackDir+4 = v19;
+            *(float *)&g_vecAttackDir+8 = v20;
             v22 = g_vecAttackDir;
-            v24 = g_616784;
-            v26 = g_616788;
+            v24 = g_vecAttackDir+4;
+            v26 = g_vecAttackDir+8;
         }
     }
     if (a4 & 737)

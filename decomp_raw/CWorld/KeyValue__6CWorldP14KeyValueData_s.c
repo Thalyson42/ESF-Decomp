@@ -17,8 +17,8 @@ typedef struct st_53a980_1 {
     unsigned int field_0;
 } st_53a980_1;
 
-extern st_53a980_1 *g_6168ac;
-extern st_53a980_1 *g_6168b0;
+extern st_53a980_1 *g_engfuncs.pfnCVarSetFloat;
+extern st_53a980_1 *g_engfuncs.pfnCVarSetString;
 
 unsigned int * KeyValue__6CWorldP14KeyValueData_s(st_53a980_2 **a0, st_53a980_0 *a1)
 {
@@ -28,28 +28,28 @@ unsigned int * KeyValue__6CWorldP14KeyValueData_s(st_53a980_2 **a0, st_53a980_0 
     float *v3;  // eax
     double v4;  // mm7
 
-    if (!sub_488af0(a1->field_4, "skyname"))
+    if (!strcmp@GLIBC_2.0(a1->field_4, "skyname"))
     {
-        v0 = g_6168b0("sv_skyname", a1->field_8);
+        v0 = g_engfuncs.pfnCVarSetString("sv_skyname", a1->field_8);
         a1->field_c = 1;
         return v0;
     }
-    else if (!sub_488af0(a1->field_4, "WaveHeight"))
+    else if (!strcmp@GLIBC_2.0(a1->field_4, "WaveHeight"))
     {
-        sub_487fc0(a1->field_8, 0, 0);
+        __strtod_internal@GLIBC_2.0(a1->field_8, 0, 0);
         *a0->field_144 = (float)(v1 * 0.125);
         a1->field_c = 1;
-        return g_6168ac("sv_wateramp", *a0->field_144);
+        return g_engfuncs.pfnCVarSetFloat("sv_wateramp", *a0->field_144);
     }
     else
     {
-        v2 = sub_488af0(a1->field_4, "MaxRange");
+        v2 = strcmp@GLIBC_2.0(a1->field_4, "MaxRange");
         if (v2)
         {
             a1->field_c = 0;
             return v2;
         }
-        sub_487fc0(a1->field_8, 0, 0);
+        __strtod_internal@GLIBC_2.0(a1->field_8, 0, 0);
         v3 = *a0;
         v3[126] = (float)v4;
         a1->field_c = 1;

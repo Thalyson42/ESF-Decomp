@@ -10,7 +10,7 @@ typedef struct st_4d0b80_1 {
     unsigned int field_0;
 } st_4d0b80_1;
 
-extern st_4d0b80_1 *g_6168cc;
+extern st_4d0b80_1 *g_engfuncs.pfnAllocString;
 
 st_4d0b80_0 * KeyValue__16CGamePlayerEquipP14KeyValueData_s(int *a0, st_4d0b80_0 *a1)
 {
@@ -23,7 +23,7 @@ st_4d0b80_0 * KeyValue__16CGamePlayerEquipP14KeyValueData_s(int *a0, st_4d0b80_0
     int idx;  // [bp-0x88]
     char v2;  // [bp-0x84]
 
-    v3 = sub_489590(a0, a1);
+    v3 = CRuleEntity::KeyValue(a0, a1);
     if (a1->field_c)
         return v3;
     idx = 0;
@@ -37,9 +37,9 @@ st_4d0b80_0 * KeyValue__16CGamePlayerEquipP14KeyValueData_s(int *a0, st_4d0b80_0
         if (idx > 31)
             return v0;
     }
-    sub_48c9e0(a1->field_4, &v2);
-    *(unsigned int *)(v0 + v4) = g_6168cc(&v2);
-    v5 = sub_48b500(a1->field_8, 0, 10, 0);
+    UTIL_StripToken(a1->field_4, &v2);
+    *(unsigned int *)(v0 + v4) = g_engfuncs.pfnAllocString(&v2);
+    v5 = __strtol_internal@GLIBC_2.0(a1->field_8, 0, 10, 0);
     v6 = a0 + 58;
     v6[idx] = v5;
     v7 = v5;

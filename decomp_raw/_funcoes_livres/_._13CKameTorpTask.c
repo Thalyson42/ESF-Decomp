@@ -27,7 +27,7 @@ typedef struct st_551c80_3 {
 } st_551c80_3;
 
 extern char __vt_13CKameTorpTask;
-extern st_551c80_3 *g_61692c;
+extern st_551c80_3 *g_engfuncs.pfnRandomFloat;
 extern st_551c80_4 *gpGlobals;
 
 int _._13CKameTorpTask(double a0, st_551c80_2 *a1, int a2)
@@ -35,8 +35,8 @@ int _._13CKameTorpTask(double a0, st_551c80_2 *a1, int a2)
     a1->field_14 = &__vt_13CKameTorpTask;
     a1->field_c->field_201 = a1->field_c->field_201 | 8;
     a1->field_8->field_af0 = 0;
-    g_61692c(22.0f, 42.0f);
+    g_engfuncs.pfnRandomFloat(22.0f, 42.0f);
     a1->field_8->field_aec = (float)(22.0 + *(float *)gpGlobals);
-    return sub_488170(a1, a2);
+    return _._9CBaseTask(a1, a2);
 }
 

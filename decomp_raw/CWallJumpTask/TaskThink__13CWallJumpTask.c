@@ -28,7 +28,7 @@ st_5844f0_0 * TaskThink__13CWallJumpTask(st_5844f0_1 *a0)
         a0->field_4 = 2;
         return v0;
     }
-    sub_48d0d0(a0->field_8);
+    CBot::ResetMoveSpeed(a0->field_8);
     v1 = a0->field_c;
     v1->field_200 = v1->field_200 | 2;
     return v1;

@@ -18,9 +18,9 @@ typedef struct st_5067a0_3 {
 } st_5067a0_3;
 
 extern unsigned int gmsgMeleeAtkHud;
-extern st_5067a0_3 *g_616878;
-extern st_5067a0_3 *g_61687c;
-extern st_5067a0_3 *g_616880;
+extern st_5067a0_3 *g_engfuncs.pfnMessageBegin;
+extern st_5067a0_3 *g_engfuncs.pfnMessageEnd;
+extern st_5067a0_3 *g_engfuncs.pfnWriteByte;
 
 int MeleeHud__12CPlayerMeleeii(st_5067a0_1 *a0, unsigned int a1, unsigned int a2)
 {
@@ -28,9 +28,9 @@ int MeleeHud__12CPlayerMeleeii(st_5067a0_1 *a0, unsigned int a1, unsigned int a2
     unsigned int v1;  // [bp-0x18]
     unsigned int v2;  // [bp-0x14]
 
-    g_616878(1, gmsgMeleeAtkHud, 0, *(int *)(*(int *)a0->field_124 + 520), v0, v1, v2);
-    g_616880(a1);
-    g_616880(a2);
-    return g_61687c();
+    g_engfuncs.pfnMessageBegin(1, gmsgMeleeAtkHud, 0, *(int *)(*(int *)a0->field_124 + 520), v0, v1, v2);
+    g_engfuncs.pfnWriteByte(a1);
+    g_engfuncs.pfnWriteByte(a2);
+    return g_engfuncs.pfnMessageEnd();
 }
 

@@ -55,7 +55,7 @@ unsigned int PM_CheckStuck(void)
     v23 = pmove->field_4f55c(&pmove->field_38, &v11);
     if (v23 == 0xffffffff)
     {
-        sub_489160(pmove->field_0, pmove->field_4);
+        PM_ResetStuckOffsets(pmove->field_0, pmove->field_4);
     }
     else
     {
@@ -66,17 +66,17 @@ unsigned int PM_CheckStuck(void)
         if (!pmove->field_4 && (!v23 || *(int *)&pmove->padding_44[572 + 224 * v23]))
         {
             v7 = 0;
-            sub_489160(pmove->field_0, pmove->field_4);
+            PM_ResetStuckOffsets(pmove->field_0, pmove->field_4);
             do
             {
-                sub_4886a0(pmove->field_0, pmove->field_4, &v15);
+                PM_GetRandomStuckOffsets(pmove->field_0, pmove->field_4, &v15);
                 v12 = v19 + v16;
                 v13 = v20 + v17;
                 v24 = v21 + v18;
                 v14 = (float)v24;
                 if (pmove->field_4f55c(&v12, &v11) == 0xffffffff)
                 {
-                    sub_489160(pmove->field_0, pmove->field_4);
+                    PM_ResetStuckOffsets(pmove->field_0, pmove->field_4);
                     goto LABEL_59183a;
                 }
             } while ((v7 += 1, v7 <= 53));
@@ -91,14 +91,14 @@ LABEL_5919d1:
         }
         *(float *)&(&rgStuckCheckTime.296)[8 * pmove->field_0 + 4 * v9] = v10;
         pmove->field_4f570(v23, &v11);
-        v8 = sub_4886a0(pmove->field_0, pmove->field_4, &v15);
+        v8 = PM_GetRandomStuckOffsets(pmove->field_0, pmove->field_4, &v15);
         v12 = v19 + v16;
         v13 = v20 + v17;
         v14 = v21 + v18;
         v26 = pmove->field_4f55c(&v12, 0);
         if (v26 == 0xffffffff)
         {
-            sub_489160(pmove->field_0, pmove->field_4);
+            PM_ResetStuckOffsets(pmove->field_0, pmove->field_4);
             if (v8 > 26)
             {
 LABEL_59183a:

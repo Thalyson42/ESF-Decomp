@@ -49,7 +49,7 @@ typedef struct st_49c480_7 {
     float field_0;
 } st_49c480_7;
 
-extern st_49c480_1 *g_6168b4;
+extern st_49c480_1 *g_engfuncs.pfnAlertMessage;
 extern st_49c480_7 *gpGlobals;
 
 int DispatchSave__FP7edict_sP13saverestore_s(st_49c480_4 *a0, unsigned int *a1)
@@ -72,7 +72,7 @@ int DispatchSave__FP7edict_sP13saverestore_s(st_49c480_4 *a0, unsigned int *a1)
     {
         v2 = a1[10] + a1[7] * 24;
         if (v2->field_4 != a0)
-            g_6168b4(4, "ENTITY TABLE OR INDEX IS WRONG!!!!\n");
+            g_engfuncs.pfnAlertMessage(4, "ENTITY TABLE OR INDEX IS WRONG!!!!\n");
         v3 = v1->field_60->field_1c(v1);
         if (v3 < NULL)
             return v3;
@@ -85,10 +85,10 @@ int DispatchSave__FP7edict_sP13saverestore_s(st_49c480_4 *a0, unsigned int *a1)
         }
         v2->field_8 = a1[2];
         v2->field_14 = v1->field_0->field_0;
-        sub_489c20(&v0, a1);
+        __18CSaveRestoreBufferP13saverestore_s(&v0, a1);
         v1->field_60->field_14(v1, &v0);
         *(unsigned int *)&v2->padding_c[0] = a1[2] - v2->field_8;
-        return sub_48c990(&v0, 2);
+        return _._18CSaveRestoreBuffer(&v0, 2);
     }
     else
     {

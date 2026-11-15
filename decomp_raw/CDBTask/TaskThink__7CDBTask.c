@@ -18,11 +18,11 @@ int TaskThink__7CDBTask(float idx)
         *(unsigned int *)(*(unsigned int *)&idx + 4) = 2;
         return v3;
     }
-    v7 = (!(char)sub_488740(v1, v2) ? (!*(int *)(*(int *)(*(unsigned int *)&idx + 8) + 1888) ? sub_48ac30(idx) : sub_488980(idx)) : sub_4883b0(idx));
+    v7 = (!(char)UTIL_DBsAreGathered(v1, v2) ? (!*(int *)(*(int *)(*(unsigned int *)&idx + 8) + 1888) ? CDBTask::GoToDB(idx) : CDBTask::GoToDBSpot(idx)) : CDBTask::GoToGatheredSpot(idx));
     if ((char)v7)
     {
         *(unsigned short *)&v0 = 1;
-        return sub_48ab70(*(int *)(*(unsigned int *)&idx + 8), v0);
+        return CBot::ToggleTurbo(*(int *)(*(unsigned int *)&idx + 8), v0);
     }
     *(unsigned int *)(*(unsigned int *)&idx + 4) = 2;
     return v7;

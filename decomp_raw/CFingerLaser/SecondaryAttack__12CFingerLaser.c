@@ -84,13 +84,13 @@ typedef struct st_4be010_7 {
 
 extern char SUB_Remove__11CBaseEntity;
 extern unsigned int gmsgExplosion;
-extern st_4be010_1 *g_616878;
-extern st_4be010_1 *g_61687c;
-extern st_4be010_1 *g_616880;
-extern st_4be010_1 *g_61688c;
-extern st_4be010_1 *g_616894;
-extern st_4be010_1 *g_6168d4;
-extern st_4be010_1 *g_6168dc;
+extern st_4be010_1 *g_engfuncs.pfnMessageBegin;
+extern st_4be010_1 *g_engfuncs.pfnMessageEnd;
+extern st_4be010_1 *g_engfuncs.pfnWriteByte;
+extern st_4be010_1 *g_engfuncs.pfnWriteLong;
+extern st_4be010_1 *g_engfuncs.pfnWriteCoord;
+extern st_4be010_1 *g_engfuncs.pfnPEntityOfEntOffset;
+extern st_4be010_1 *g_engfuncs.pfnIndexOfEdict;
 extern st_4be010_7 *gpGlobals;
 extern char g_800000;
 
@@ -149,10 +149,10 @@ float SecondaryAttack__12CFingerLaser(float a0)
     float v30;  // [bp-0x20]
     float v31;  // [bp-0x1c]
 
-    if (!sub_48c980(*(int *)(*(unsigned int *)&a0 + 128), 200))
+    if (!CBasePlayer::UseKi(*(int *)(*(unsigned int *)&a0 + 128), 200))
         return v54;
     v33 = (st_4be010_6 *)a0;
-    sub_48a800(&v33->field_80->field_0->field_74);
+    UTIL_MakeVectors(&v33->field_80->field_0->field_74);
     v34 = &gpGlobals->field_28;
     v29 = gpGlobals->field_28;
     v30 = *(float *)&v34[1];
@@ -169,7 +169,7 @@ float SecondaryAttack__12CFingerLaser(float a0)
     v16 = v27 + v13;
     do
     {
-        sub_487b80(&v24, &v14, 0, v35->field_208, &v17);
+        UTIL_TraceLine(&v24, &v14, 0, v35->field_208, &v17);
         v24 = v19;
         v26 = v20;
         v28 = v21;
@@ -185,12 +185,12 @@ float SecondaryAttack__12CFingerLaser(float a0)
         v1 = 6;
         v39 = *(int *)(*(unsigned int *)&a0 + 128);
     }
-    sub_48d680(v39);
+    CBasePlayer::SetAnimation(v39);
     v40 = (st_4be010_9 *)a0;
     v40->field_c4 = v40->field_c4 ^ 1;
-    sub_48bac0(v40);
-    v41 = sub_48b530("sprites/fingerlaserbeam.spr", 3);
-    sub_48d2c0(v41, &v19, g_6168dc(*(int *)(*(int *)*(int *)(*(unsigned int *)&a0 + 128) + 520)));
+    CFingerLaser::EmitShootSound(v40);
+    v41 = CBeam::BeamCreate("sprites/fingerlaserbeam.spr", 3);
+    CBeam::PointEntInit(v41, &v19, g_engfuncs.pfnIndexOfEdict(*(int *)(*(int *)*(int *)(*(unsigned int *)&a0 + 128) + 520)));
     v43 = _INSERT(v41->field_0->field_110 & 0xfff, 1, (char)((v41->field_0->field_110 & 0xfff) >> 8) | 16);
     v41->field_0->field_110 = v43;
     v8 = 0xff;
@@ -208,7 +208,7 @@ float SecondaryAttack__12CFingerLaser(float a0)
     if (1.0 > v18 && v22)
     {
         v48 = v22;
-        if (v48 || (v48 = g_6168d4(0), v48))
+        if (v48 || (v48 = g_engfuncs.pfnPEntityOfEntOffset(0), v48))
             v49 = v48->field_7c;
         else
             v49 = NULL;
@@ -228,7 +228,7 @@ float SecondaryAttack__12CFingerLaser(float a0)
             }
         }
     }
-    sub_48aef0(a0);
+    CBasePlayerWeapon::GetPowerRatio(a0);
     v6 = __fnstcw();
     v5 = v6 | 0xc00;
     v3 = (int)(v47 * 15.0 * v2);
@@ -238,20 +238,20 @@ float SecondaryAttack__12CFingerLaser(float a0)
     v12 = v21;
     v3 = v51 * 2;
     v4 = v51;
-    sub_48ab00(&v9, *(int *)*(int *)(*(unsigned int *)&a0 + 128), *(int *)*(int *)(*(unsigned int *)&a0 + 128), (float)v4, (float)(int)v3, 0, &g_800000);
-    g_616878(2, gmsgExplosion, 0, 0);
-    g_616894(v19);
-    g_616894(v20);
-    g_616894(v21);
+    RadiusDamage(&v9, *(int *)*(int *)(*(unsigned int *)&a0 + 128), *(int *)*(int *)(*(unsigned int *)&a0 + 128), (float)v4, (float)(int)v3, 0, &g_800000);
+    g_engfuncs.pfnMessageBegin(2, gmsgExplosion, 0, 0);
+    g_engfuncs.pfnWriteCoord(v19);
+    g_engfuncs.pfnWriteCoord(v20);
+    g_engfuncs.pfnWriteCoord(v21);
     v3 = v51;
     v6 = __fnstcw();
     v5 = v6 | 0xc00;
     v3 = (int)((double)v3 * 2.5);
-    g_61688c(v3);
+    g_engfuncs.pfnWriteLong(v3);
     v0 = 3;
-    g_616880(v0);
-    g_61687c(v0);
-    sub_488640();
+    g_engfuncs.pfnWriteByte(v0);
+    g_engfuncs.pfnMessageEnd(v0);
+    UTIL_WeaponTimeBase();
     v7 = (float)(v52 + 0.3);
     v53 = (unsigned int *)a0;
     *(float *)&v53[40] = v7;

@@ -41,8 +41,8 @@ typedef struct st_52c690_1 {
     unsigned int field_0;
 } st_52c690_1;
 
-extern st_52c690_1 *g_616804;
-extern st_52c690_1 *g_6168d8;
+extern st_52c690_1 *g_engfuncs.pfnFindClientInPVS;
+extern st_52c690_1 *g_engfuncs.pfnEntOffsetOfPEntity;
 extern st_52c690_3 *gpGlobals;
 
 double RadiationThink__12CTriggerHurt(st_52c690_0 **a0)
@@ -113,7 +113,7 @@ double RadiationThink__12CTriggerHurt(st_52c690_0 **a0)
     v28->field_174 = v1;
     v28->field_178 = v2;
     v28->field_17c = v3;
-    v29 = g_616804(*a0->field_208);
+    v29 = g_engfuncs.pfnFindClientInPVS(*a0->field_208);
     v30 = *a0;
     v30->field_8 = v13;
     v30->field_c = v14;
@@ -123,11 +123,11 @@ double RadiationThink__12CTriggerHurt(st_52c690_0 **a0)
     v31->field_178 = v11;
     v31->field_17c = v12;
     v0 = 0;
-    if (!v29 || !g_6168d8(v29))
+    if (!v29 || !g_engfuncs.pfnEntOffsetOfPEntity(v29))
         v0 = 1;
     if (!v0)
     {
-        sub_48c260((!v29 ? 0 : (struct st_52c690_2 *)&v29->field_80));
+        GetClassPtr__H1Z11CBasePlayer_PX01_PX01((!v29 ? 0 : (struct st_52c690_2 *)&v29->field_80));
         v32 = (!v29 ? NULL : (struct st_52c690_2 *)&v29->field_80);
         v33 = *a0;
         v34 = &v33->field_c4;
@@ -160,7 +160,7 @@ double RadiationThink__12CTriggerHurt(st_52c690_0 **a0)
         v18 = v3;
         v38 = v16 * v16 + v17 * v17 + v18 * v18;
         if (isnan(sqrt(v38)))
-            sub_487dc0((unsigned int)(v38 >> 0));
+            sqrt((unsigned int)(v38 >> 0));
     }
     v39 = 0.25 + *(float *)gpGlobals;
     *a0->field_104 = (float)v39;

@@ -3,7 +3,7 @@ typedef struct st_533110_0 {
     unsigned int field_0;
 } st_533110_0;
 
-extern st_533110_0 *g_616868;
+extern st_533110_0 *g_engfuncs.pfnParticleEffect;
 
 int UTIL_ParticleEffect__FRC6VectorT0UlUl(unsigned int a0, unsigned int a1, unsigned int a2, unsigned int a3)
 {
@@ -15,6 +15,6 @@ int UTIL_ParticleEffect__FRC6VectorT0UlUl(unsigned int a0, unsigned int a1, unsi
 
     v3 = a3;
     v4 = a2;
-    return g_616868(a0, a1, (float)(double)(long long)v4, (float)(double)(long long)v3, v0, v1, v2);
+    return g_engfuncs.pfnParticleEffect(a0, a1, (float)(double)(long long)v4, (float)(double)(long long)v3, v0, v1, v2);
 }
 

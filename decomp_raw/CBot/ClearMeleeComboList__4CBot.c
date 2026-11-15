@@ -48,10 +48,10 @@ st_555d70_1 * ClearMeleeComboList__4CBot(st_555d70_1 *a0)
                 if (v3)
                     v3->field_8 = 0;
                 v2->field_4 = NULL;
-                sub_48d4e0(v2);
+                __builtin_delete(v2);
             }
         }
-        sub_48d4e0(v1);
+        __builtin_delete(v1);
     }
     v4 = a0;
     if (v4->field_b8c)
@@ -66,12 +66,12 @@ st_555d70_1 * ClearMeleeComboList__4CBot(st_555d70_1 *a0)
                 iter = iter->field_4;
                 v7->field_4 = NULL;
                 v7->field_8 = 0;
-                sub_48d4e0(v7);
+                __builtin_delete(v7);
             } while (iter);
         }
         v5[1] = NULL;
         *v5 = NULL;
-        v4 = sub_48d4e0(v5);
+        v4 = __builtin_delete(v5);
     }
     a0->field_b8c = NULL;
     return v4;

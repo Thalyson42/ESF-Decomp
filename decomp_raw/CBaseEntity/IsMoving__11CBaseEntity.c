@@ -7,8 +7,8 @@ typedef struct st_49dd40_0 {
 } st_49dd40_0;
 
 extern unsigned int g_vecZero;
-extern unsigned int g_616790;
-extern unsigned int g_616794;
+extern unsigned int g_vecZero+4;
+extern unsigned int g_vecZero+8;
 
 int IsMoving__11CBaseEntity(st_49dd40_0 **a0)
 {
@@ -17,8 +17,8 @@ int IsMoving__11CBaseEntity(st_49dd40_0 **a0)
 
     v0 = &*a0->field_20;
     v1 = 0;
-    if (*(float *)&g_vecZero == *a0->field_20 && *(float *)&g_616790 == *(float *)&v0[1])
-        v1 = *(float *)&g_616794 == *(float *)&v0[2];
+    if (*(float *)&g_vecZero == *a0->field_20 && *(float *)&g_vecZero+4 == *(float *)&v0[1])
+        v1 = *(float *)&g_vecZero+8 == *(float *)&v0[2];
     return v1 ^ 1;
 }
 

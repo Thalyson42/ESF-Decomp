@@ -40,8 +40,8 @@ typedef struct st_52b850_3 {
     unsigned int field_0;
 } st_52b850_3;
 
-extern st_52b850_3 *g_6167f8;
-extern st_52b850_3 *g_6168d8;
+extern st_52b850_3 *g_engfuncs.pfnFindEntityByString;
+extern st_52b850_3 *g_engfuncs.pfnEntOffsetOfPEntity;
 extern st_52b850_2 *gpGlobals;
 
 st_52b850_1 * Use__16CRenderFxManagerP11CBaseEntityT18USE_TYPEf(st_52b850_0 **a0)
@@ -57,10 +57,10 @@ st_52b850_1 * Use__16CRenderFxManagerP11CBaseEntityT18USE_TYPEf(st_52b850_0 **a0
     v0 = NULL;
     while (1)
     {
-        v1 = g_6167f8(v0, "targetname", *a0->field_1c8 + gpGlobals->field_98);
+        v1 = g_engfuncs.pfnFindEntityByString(v0, "targetname", *a0->field_1c8 + gpGlobals->field_98);
         v0 = v1;
         v2 = 0;
-        if (!v0 || (v1 = g_6168d8(v0), !v1))
+        if (!v0 || (v1 = g_engfuncs.pfnEntOffsetOfPEntity(v0), !v1))
             v2 = 1;
         if (v2)
             break;

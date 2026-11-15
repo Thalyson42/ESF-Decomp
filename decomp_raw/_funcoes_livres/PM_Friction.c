@@ -94,7 +94,7 @@ float PM_Friction(void)
     v15 = pmove->field_5c * pmove->field_5c + *(float *)&v14->field_4 * *(float *)&v14->field_4 + *(float *)&v14->field_8 * *(float *)&v14->field_8;
     v16 = sqrt(v15);
     if (isnan(v16))
-        sub_487dc0(*(unsigned int *)&v15);
+        sqrt(*(unsigned int *)&v15);
     else
         v15 = v16;
     v1 = (float)v15;

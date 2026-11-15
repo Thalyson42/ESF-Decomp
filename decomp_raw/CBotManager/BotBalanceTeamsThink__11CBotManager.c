@@ -90,10 +90,10 @@ unsigned int * BotBalanceTeamsThink__11CBotManager(st_53fe50_0 *a0)
         {
             do
             {
-                v7 = sub_48a500(iter);
+                v7 = UTIL_PlayerByIndex(iter);
                 *(unsigned short *)&v1 = 0;
                 *(unsigned short *)&v0 = 1;
-                if ((char)sub_489a70(v7, v0, v1))
+                if ((char)UTIL_IsValidPlayer(v7, v0, v1))
                 {
                     if (*v7->field_1ac == 1)
                         node += 1;
@@ -109,10 +109,10 @@ unsigned int * BotBalanceTeamsThink__11CBotManager(st_53fe50_0 *a0)
                 return &g_teamplay;
             while (1)
             {
-                v8 = sub_48a500(iter);
+                v8 = UTIL_PlayerByIndex(iter);
                 *(unsigned short *)&v1 = 0;
                 *(unsigned short *)&v0 = 0;
-                if ((char)sub_489a70(v8, v0, v1))
+                if ((char)UTIL_IsValidPlayer(v8, v0, v1))
                 {
                     v3 = 0;
                     if (!v8->field_60->field_a4(v8))
@@ -138,10 +138,10 @@ unsigned int * BotBalanceTeamsThink__11CBotManager(st_53fe50_0 *a0)
                 return &g_teamplay;
             while (1)
             {
-                v9 = sub_48a500(iter);
+                v9 = UTIL_PlayerByIndex(iter);
                 *(unsigned short *)&v1 = 0;
                 *(unsigned short *)&v0 = 0;
-                if ((char)sub_489a70(v9, v0, v1))
+                if ((char)UTIL_IsValidPlayer(v9, v0, v1))
                 {
                     v2 = 0;
                     if (!v9->field_60->field_a4(v9))

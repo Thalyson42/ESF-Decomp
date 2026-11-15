@@ -42,7 +42,7 @@ unsigned int ShootAttack__14CDestructoDisc(st_4aa5c0_3 *a0)
     float v5;  // [bp-0x20]
     float v6;  // [bp-0x1c]
 
-    sub_48a800(a0->field_80->field_0 + 116);
+    UTIL_MakeVectors(a0->field_80->field_0 + 116);
     v7 = &gpGlobals->field_28;
     v4 = (float)(800.0 * gpGlobals->field_28);
     v5 = (float)(800.0 * *(float *)&v7[1]);
@@ -51,7 +51,7 @@ unsigned int ShootAttack__14CDestructoDisc(st_4aa5c0_3 *a0)
     v0 = v4;
     v1 = v5;
     v2 = v6;
-    v8 = sub_48c8d0(a0->field_1d4, &v3, &v0);
+    v8 = CDestructoDiscAttack::Shoot(a0->field_1d4, &v3, &v0);
     a0->field_1d4 = 0;
     return v8;
 }

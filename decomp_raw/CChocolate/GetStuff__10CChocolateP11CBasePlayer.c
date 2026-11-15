@@ -15,6 +15,6 @@ int GetStuff__10CChocolateP11CBasePlayer(unsigned int a0, st_499f00_1 *a1)
     a1->field_0->field_160 = (float)(a1->field_0->field_160 + 40.0);
     if ((double)a1->field_24c < a1->field_0->field_160)
         a1->field_0->field_160 = (float)a1->field_24c;
-    return sub_489700(a1, 50000);
+    return CBasePlayer::IncreasePL(a1, 50000);
 }
 

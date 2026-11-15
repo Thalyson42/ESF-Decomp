@@ -70,7 +70,7 @@ double PrimaryAttack__9CBodyPart(st_494410_3 *a0)
 
     v15 = a0->field_80;
     v15->field_60->field_34(v15, v15->field_0, v15->field_0, 2.0f, &g_800000);
-    sub_48a800(a0->field_80->field_0 + 116);
+    UTIL_MakeVectors(a0->field_80->field_0 + 116);
     a0->field_80->field_60->field_1e0(&v8, a0->field_80);
     v16 = &gpGlobals->field_40;
     v17 = 10.0 * gpGlobals->field_40;
@@ -99,9 +99,9 @@ double PrimaryAttack__9CBodyPart(st_494410_3 *a0)
     v27 = v26;
     v7 = (float)v25;
     v9 = (float)v27;
-    sub_48da00(a0->field_80->field_0, &v3, &v6);
-    sub_48d680(a0->field_80, 5);
-    sub_488640();
+    CBodyPartAttack::ShootBodyPart(a0->field_80->field_0, &v3, &v6);
+    CBasePlayer::SetAnimation(a0->field_80, 5);
+    UTIL_WeaponTimeBase();
     a0->field_9c = (float)(v27 + 3.0);
     return v27 + 3.0;
 }

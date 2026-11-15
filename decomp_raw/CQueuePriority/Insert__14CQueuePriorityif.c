@@ -6,8 +6,8 @@ int Insert__14CQueuePriorityif(unsigned int *a0, unsigned int a1, float a2)
         *(float *)&a0[2 + 2 * *a0] = a2;
         a0[1 + 2 * *a0] = a1;
         *a0 = *a0 + 1;
-        return sub_487df0(a0);
+        return CQueuePriority::Heap_SiftUp(a0);
     }
-    return sub_48c360("Queue is full!\n");
+    return printf@GLIBC_2.0("Queue is full!\n");
 }
 

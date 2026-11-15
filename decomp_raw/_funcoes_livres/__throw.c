@@ -52,10 +52,10 @@ st_5953b8_2 * __throw(void)
     v5 = &v8;
     v3 = v13 - 517718;
     if (!v7->field_8)
-        sub_48d640();
-    v6 = sub_489620(v4, v6);
+        __terminate();
+    v6 = __frame_state_for(v4, v6);
     if (!v6)
-        sub_48d640();
+        __terminate();
     *v6 = &v11;
     throw_helper(v7, v10 - 1, v6, v5);
     v10 = v3;

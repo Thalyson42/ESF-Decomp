@@ -71,7 +71,7 @@ st_514f50_4 * PossessEntity__12CCineMonster(st_514f50_5 *a0)
     st_514f50_4 *v4;  // eax
     st_514f50_4 *v5;  // eax
 
-    v0 = sub_488810(&a0->field_110);
+    v0 = EHANDLE::__opP11CBaseEntity(&a0->field_110);
     v1 = v0;
     v2 = NULL;
     if (v1)
@@ -83,7 +83,7 @@ st_514f50_4 * PossessEntity__12CCineMonster(st_514f50_5 *a0)
         return v0;
     v2->field_4 = a0;
     v2->field_2a4 = a0;
-    sub_48d960(&v2->field_110, a0);
+    EHANDLE::__as(&v2->field_110, a0);
     a0->field_2cc = v2->field_0->field_108;
     a0->field_2d0 = v2->field_0->field_10c;
     a0->field_2d4 = v2->field_0->field_118;
@@ -99,7 +99,7 @@ st_514f50_4 * PossessEntity__12CCineMonster(st_514f50_5 *a0)
         if (!a0->field_2a8)
             return v3;
         a0->field_60->field_1fc(a0, v2, a0->field_2a8, 0);
-        v4 = sub_488af0(gpGlobals->field_98 + a0->field_2a8, gpGlobals->field_98 + a0->field_2ac);
+        v4 = strcmp@GLIBC_2.0(gpGlobals->field_98 + a0->field_2a8, gpGlobals->field_98 + a0->field_2ac);
         if (v4)
             return v4;
         v5 = v2->field_0;

@@ -14,8 +14,8 @@ typedef struct st_493170_0 {
 } st_493170_0;
 
 extern unsigned int g_vecZero;
-extern unsigned int g_616790;
-extern unsigned int g_616794;
+extern unsigned int g_vecZero+4;
+extern unsigned int g_vecZero+8;
 extern st_493170_0 *gpGlobals;
 
 int Swing__9CPendulum(double a0, float idx)
@@ -37,7 +37,7 @@ int Swing__9CPendulum(double a0, float idx)
     float v1;  // [bp-0x20]
     float v2;  // [bp-0x1c]
 
-    sub_4881d0(*(int *)(*(int *)idx + 416), *(int *)idx + 80, *(unsigned int *)&idx + 124);
+    CBaseToggle::AxisDelta(*(int *)(*(int *)idx + 416), *(int *)idx + 80, *(unsigned int *)&idx + 124);
     v4 = *(float *)gpGlobals - *(float *)(*(unsigned int *)&idx + 108);
     *(float *)(*(unsigned int *)&idx + 108) = *(float *)gpGlobals;
     if (0.0 < a0)
@@ -94,8 +94,8 @@ LABEL_493224:
             *(unsigned int *)(*(unsigned int *)&idx + 16) = 0;
             v14 = *(int *)idx;
             *(unsigned int *)&v14->padding_0[92] = g_vecZero;
-            *(unsigned int *)&v14->padding_0[96] = g_616790;
-            *(unsigned int *)&v14->padding_0[100] = g_616794;
+            *(unsigned int *)&v14->padding_0[96] = g_vecZero+4;
+            *(unsigned int *)&v14->padding_0[100] = g_vecZero+8;
         }
         else
         {
@@ -118,6 +118,6 @@ LABEL_493224:
     {
 LABEL_493333:
     }
-    return g_616794;
+    return g_vecZero+8;
 }
 

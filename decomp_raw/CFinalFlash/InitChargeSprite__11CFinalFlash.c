@@ -36,7 +36,7 @@ typedef struct st_4bd5c0_5 {
     unsigned int field_0;
 } st_4bd5c0_5;
 
-extern st_4bd5c0_5 *g_6168dc;
+extern st_4bd5c0_5 *g_engfuncs.pfnIndexOfEdict;
 
 int InitChargeSprite__11CFinalFlash(st_4bd5c0_3 *a0)
 {
@@ -54,13 +54,13 @@ int InitChargeSprite__11CFinalFlash(st_4bd5c0_3 *a0)
     v0 = 0;
     v1 = 0;
     v2 = 0;
-    v3 = sub_48c010("sprites/finalflashcharge.spr", &v0, 1);
+    v3 = CSprite::SpriteCreate("sprites/finalflashcharge.spr", &v0, 1);
     v4 = a0;
     v4->field_20c = v3;
     v5 = *(int *)(*(int *)v4->field_80 + 520);
     if (v5)
     {
-        v6 = g_6168dc(v5);
+        v6 = g_engfuncs.pfnIndexOfEdict(v5);
         *v3->field_110 = v6;
         *v3->field_114 = 2;
         *v3->field_194 = v5;
@@ -79,6 +79,6 @@ int InitChargeSprite__11CFinalFlash(st_4bd5c0_3 *a0)
     v9 = a0;
     *(float *)(*(int *)v9->field_20c + 324) = 0.009999999776482582f;
     *(float *)(*(int *)v9->field_20c + 312) = 10.0f;
-    return sub_48df90(v9->field_20c);
+    return CSprite::TurnOff(v9->field_20c);
 }
 

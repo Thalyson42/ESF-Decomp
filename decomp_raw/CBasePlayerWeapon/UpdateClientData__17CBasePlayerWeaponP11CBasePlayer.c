@@ -43,9 +43,9 @@ typedef struct st_5388f0_3 {
 } st_5388f0_3;
 
 extern unsigned int gmsgCurWeapon;
-extern st_5388f0_2 *g_616878;
-extern st_5388f0_2 *g_61687c;
-extern st_5388f0_2 *g_616880;
+extern st_5388f0_2 *g_engfuncs.pfnMessageBegin;
+extern st_5388f0_2 *g_engfuncs.pfnMessageEnd;
+extern st_5388f0_2 *g_engfuncs.pfnWriteByte;
 
 unsigned int UpdateClientData__17CBasePlayerWeaponP11CBasePlayer(st_5388f0_4 *a0, st_5388f0_5 *a1)
 {
@@ -69,12 +69,12 @@ unsigned int UpdateClientData__17CBasePlayerWeaponP11CBasePlayer(st_5388f0_4 *a0
         v2 = 1;
     if (v2)
     {
-        g_616878(1, gmsgCurWeapon, 0, a1->field_0->field_208);
-        g_616880(v1);
-        g_616880(a0->field_88);
+        g_engfuncs.pfnMessageBegin(1, gmsgCurWeapon, 0, a1->field_0->field_208);
+        g_engfuncs.pfnWriteByte(v1);
+        g_engfuncs.pfnWriteByte(a0->field_88);
         v0 = a0->field_b0;
-        g_616880(v0);
-        g_61687c(v0);
+        g_engfuncs.pfnWriteByte(v0);
+        g_engfuncs.pfnMessageEnd(v0);
         a0->field_b4 = a0->field_b0;
         a0->field_b8 = v1;
         a1->field_908 = 1;

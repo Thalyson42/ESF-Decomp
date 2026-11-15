@@ -13,10 +13,10 @@ int SENTENCEG_PlayRndI__FP7edict_siffii(int a0, int a1)
     if (!fSentencesInit)
         return -0x1;
     v0 = 0;
-    v5 = sub_48a9b0(a1, &v0);
+    v5 = USENTENCEG_Pick(a1, &v0);
     if (v5 <= 0)
         return v5;
-    sub_489390(a0, 2, &v0, v1, v2, v3, v4);
+    EMIT_SOUND_DYN(a0, 2, &v0, v1, v2, v3, v4);
     return v5;
 }
 

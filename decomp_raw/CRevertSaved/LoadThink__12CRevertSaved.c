@@ -3,10 +3,10 @@ typedef struct st_4fea60_1 {
     unsigned int field_0;
 } st_4fea60_1;
 
-extern st_4fea60_1 *g_61685c;
+extern st_4fea60_1 *g_engfuncs.pfnServerCommand;
 
 unsigned int LoadThink__12CRevertSaved(void)
 {
-    return g_61685c("reload\n");
+    return g_engfuncs.pfnServerCommand("reload\n");
 }
 

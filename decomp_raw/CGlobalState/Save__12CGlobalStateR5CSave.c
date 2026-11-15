@@ -17,7 +17,7 @@ unsigned int Save__12CGlobalStateR5CSave(st_539ea0_1 *a0, int a1)
     st_539ea0_0 *iter;  // esi
     int v2;  // edi
 
-    if (!sub_48db60(a1, "GLOBAL", a0, "\n", 1))
+    if (!CSave::WriteFields(a1, "GLOBAL", a0, "\n", 1))
         return 0;
     v0 = a0;
     iter = v0->field_0;
@@ -26,7 +26,7 @@ unsigned int Save__12CGlobalStateR5CSave(st_539ea0_1 *a0, int a1)
     {
         if (v2 >= v0->field_4 || !iter)
             return 1;
-        if (!sub_48db60(a1, "GENT", iter, &gGlobalEntitySaveData, 3))
+        if (!CSave::WriteFields(a1, "GENT", iter, &gGlobalEntitySaveData, 3))
             break;
         iter = iter->field_64;
         v2 += 1;

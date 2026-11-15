@@ -8,7 +8,7 @@ int Drop__9CEnvModel(float idx)
     unsigned int v1;  // [bp-0x20]
     unsigned int v2;  // [bp-0x1c]
 
-    sub_488f20(idx);
+    CEnvModel::SetBoundingBox(idx);
     v4 = *(int *)idx;
     v0 = 0;
     v1 = 0;

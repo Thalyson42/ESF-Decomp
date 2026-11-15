@@ -20,7 +20,7 @@ int CanPlayForwardWalk__11CBasePlayer(st_4f4470_0 **a0)
     unsigned int *v0;  // esi
     unsigned int *v1;  // edx
 
-    sub_48a800(&(*a0)[2].padding_0[28]);
+    UTIL_MakeVectors(&(*a0)[2].padding_0[28]);
     v0 = &*a0->field_20;
     v1 = &gpGlobals->field_28;
     return *a0->field_20 * gpGlobals->field_28 + *(float *)&v0[1] * *(float *)&v1[1] + *(float *)&v0[2] * *(float *)&v1[2] > -1.0f;

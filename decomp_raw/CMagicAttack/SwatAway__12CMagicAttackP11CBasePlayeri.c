@@ -60,7 +60,7 @@ typedef struct st_4ce810_1 {
 } st_4ce810_1;
 
 extern char NormalThink__12CMagicAttack;
-extern st_4ce810_0 *g_61692c;
+extern st_4ce810_0 *g_engfuncs.pfnRandomFloat;
 extern st_4ce810_1 *gpGlobals;
 
 float SwatAway__12CMagicAttackP11CBasePlayeri(st_4ce810_6 *a0, st_4ce810_4 *a1, unsigned int a2)
@@ -106,10 +106,10 @@ float SwatAway__12CMagicAttackP11CBasePlayeri(st_4ce810_6 *a0, st_4ce810_4 *a1, 
     float v21;  // [bp-0x20]
     float v22;  // [bp-0x1c]
 
-    sub_48a800(&a1->field_0->padding_0[116]);
+    UTIL_MakeVectors(&a1->field_0->padding_0[116]);
     if (a2)
     {
-        g_61692c(-1.0f, 0x3f800000);
+        g_engfuncs.pfnRandomFloat(-1.0f, 0x3f800000);
         v2 = -1.0f;
         v23 = &gpGlobals->field_40;
         v24 = -1.0 * gpGlobals->field_40;
@@ -126,7 +126,7 @@ float SwatAway__12CMagicAttackP11CBasePlayeri(st_4ce810_6 *a0, st_4ce810_4 *a1, 
         v29 = v26 * v26 + v27 * v27 + v28 * v28;
         v30 = sqrt(v29);
         if (isnan(v30))
-            sub_487dc0(*(unsigned int *)&v29);
+            sqrt(*(unsigned int *)&v29);
         else
             v29 = v30;
         v6 = (float)v29;
@@ -146,7 +146,7 @@ float SwatAway__12CMagicAttackP11CBasePlayeri(st_4ce810_6 *a0, st_4ce810_4 *a1, 
         v20 = v14;
         v21 = v15;
         v22 = v16;
-        sub_489390(a1->field_0->field_208, 1, "weapons/reflect.wav", 0x3f800000, 0.800000011920929f, 0, 100);
+        EMIT_SOUND_DYN(a1->field_0->field_208, 1, "weapons/reflect.wav", 0x3f800000, 0.800000011920929f, 0, 100);
         if (0.0 > v2)
         {
             v1 = 7;
@@ -166,7 +166,7 @@ float SwatAway__12CMagicAttackP11CBasePlayeri(st_4ce810_6 *a0, st_4ce810_4 *a1, 
         v1 = 9;
         v0 = a1;
     }
-    sub_48d680(v0, v1);
+    CBasePlayer::SetAnimation(v0, v1);
     a1->field_60->field_1e0(&v6, a1);
     v32 = *(float *)&a0->field_0->field_e8 + 10.0;
     v33 = &gpGlobals->field_28;
@@ -178,7 +178,7 @@ float SwatAway__12CMagicAttackP11CBasePlayeri(st_4ce810_6 *a0, st_4ce810_4 *a1, 
     v3 = (float)(v34 + v6);
     v4 = (float)(v35 + v7);
     v5 = v8 + v11;
-    sub_48db50(a0->field_0, &v3);
+    UTIL_SetOrigin(a0->field_0, &v3);
     v36 = a0->field_0;
     v36->field_198 = a1->field_0->field_208;
     a0->field_c = _INSERT(v36, 0, 0) | 0xffff0000;
@@ -194,7 +194,7 @@ float SwatAway__12CMagicAttackP11CBasePlayeri(st_4ce810_6 *a0, st_4ce810_4 *a1, 
     *(float *)&v38->field_24 = v4;
     *(float *)&v38->field_28 = v5;
     v40 = a0->field_0;
-    sub_488860(&v3, &v40->field_20);
+    UTIL_VecToAngles(&v3, &v40->field_20);
     *(float *)&v40->field_50 = v3;
     *(float *)&v40->field_54 = v4;
     *(float *)&v40->field_58 = v5;

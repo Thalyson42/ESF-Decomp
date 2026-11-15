@@ -74,14 +74,14 @@ typedef struct st_53c780_11 {
 } st_53c780_11;
 
 extern st_53c780_11 *g_pGameRules;
-extern st_53c780_10 *g_6168dc;
-extern st_53c780_10 *g_616968;
-extern st_53c780_10 *g_616974;
+extern st_53c780_10 *g_engfuncs.pfnIndexOfEdict;
+extern st_53c780_10 *g_engfuncs.pfnGetInfoKeyBuffer;
+extern st_53c780_10 *g_engfuncs.pfnSetClientKeyValue;
 extern st_53c780_12 *gpGlobals;
-extern unsigned short g_625744[4];
-extern unsigned short g_625746[4];
-extern unsigned int g_625748[4];
-extern unsigned int g_62574c[4];
+extern unsigned short BotManager+4292[4];
+extern unsigned short BotManager+4294[4];
+extern unsigned int BotManager+4296[4];
+extern unsigned int BotManager+4300[4];
 
 unsigned int CheckSBotStuff__4CBot(float idx)
 {
@@ -141,7 +141,7 @@ LABEL_53c7f6:
         }
         *(float *)(*(int *)idx + 332) = (float)*(short *)(*(unsigned int *)&idx + 2992);
     }
-    else if (*(int *)((char *)&g_62574c[4 * v15->field_ba4] - 16) == 0xffffffff)
+    else if (*(int *)((char *)&BotManager+4300[4 * v15->field_ba4] - 16) == 0xffffffff)
     {
         if (v15->field_0->field_15c != 19)
             goto LABEL_53c7f6;
@@ -149,7 +149,7 @@ LABEL_53c7f6:
     else
     {
         if (*(int *)(*(int *)idx + 348) != 19)
-            *(float *)(*(int *)idx + 332) = (float)*(int *)((char *)&g_62574c[4 * *(short *)(*(unsigned int *)&idx + 2980)] - 16);
+            *(float *)(*(int *)idx + 332) = (float)*(int *)((char *)&BotManager+4300[4 * *(short *)(*(unsigned int *)&idx + 2980)] - 16);
     }
     if (*(float *)(*(unsigned int *)&idx + 2988) < gpGlobals->field_0)
     {
@@ -157,10 +157,10 @@ LABEL_53c7f6:
         v17->field_bac = (float)(1.0 + gpGlobals->field_0);
         v18 = (v17->field_ba4 - 1) * 16;
         v19 = (st_53c780_3 *)idx;
-        if (v19->field_744 < *(int *)(v18 + (char *)&g_625748[0]))
+        if (v19->field_744 < *(int *)(v18 + (char *)&BotManager+4296[0]))
         {
-            sub_487b40(v19, *(int *)(v18 + (char *)&g_625748[0]));
-            sub_48b8d0(idx, *(int *)((char *)&g_625748[4 * *(short *)(*(unsigned int *)&idx + 2980)] - 16));
+            CBasePlayer::SetPowerLevel(v19, *(int *)(v18 + (char *)&BotManager+4296[0]));
+            CBasePlayer::SetMaxPowerLevel(idx, *(int *)((char *)&BotManager+4296[4 * *(short *)(*(unsigned int *)&idx + 2980)] - 16));
         }
         v20 = (st_53c780_1 *)idx;
         v11 = __fnstcw();
@@ -168,7 +168,7 @@ LABEL_53c7f6:
         v9 = (int)*(float *)&v20->field_0[1].padding_0[0x100];
         if (v9 <= 999)
         {
-            if (*(short *)((char *)&g_625744[8 * v20->field_ba4] - 16) == 0xffff)
+            if (*(short *)((char *)&BotManager+4292[8 * v20->field_ba4] - 16) == 0xffff)
             {
                 v9 = 1000;
                 *(float *)&v20->field_0[1].padding_0[0x100] = (float)v9;
@@ -178,7 +178,7 @@ LABEL_53c7f6:
                 v11 = __fnstcw();
                 v10 = v11 | 0xc00;
                 v9 = (int)*(float *)(*(int *)idx + 608);
-                v21 = *(short *)((char *)&g_625744[8 * *(short *)(*(unsigned int *)&idx + 2980)] - 16) + v9;
+                v21 = *(short *)((char *)&BotManager+4292[8 * *(short *)(*(unsigned int *)&idx + 2980)] - 16) + v9;
                 if (v21 > 1000)
                     v21 = 1000;
                 v9 = v21;
@@ -191,7 +191,7 @@ LABEL_53c7f6:
         v9 = (int)v22->field_0->field_160;
         if (v9 < v22->field_24c)
         {
-            if (*(short *)((char *)&g_625746[8 * v22->field_ba4] - 16) == 0xffff)
+            if (*(short *)((char *)&BotManager+4294[8 * v22->field_ba4] - 16) == 0xffff)
             {
                 v9 = v22->field_24c;
                 v22->field_0->field_160 = (float)v9;
@@ -201,7 +201,7 @@ LABEL_53c7f6:
                 v23 = (void*)idx;
                 v13 = __fnstcw();
                 v8 = v13 | 0xc00;
-                v12 = (int)((double)*(short *)((char *)&g_625746[8 * v23[2980]] - 16) + *(float *)(*(int *)v23 + 352));
+                v12 = (int)((double)*(short *)((char *)&BotManager+4294[8 * v23[2980]] - 16) + *(float *)(*(int *)v23 + 352));
                 v24 = v12;
                 if (v24 > (int)v23[588])
                     v24 = (short)v23[588];
@@ -217,24 +217,24 @@ LABEL_53c7f6:
         g_pGameRules->field_44->field_60(g_pGameRules, v25, "jointeam");
     }
     v4 = &v9;
-    sub_48d990(&v9, "[SBot%i]", *(short *)(*(unsigned int *)&idx + 2980));
+    sprintf@GLIBC_2.0(&v9, "[SBot%i]", *(short *)(*(unsigned int *)&idx + 2980));
     v6 = 0;
-    sub_48d0e0(&v7, 0, 31);
+    memset@GLIBC_2.0(&v7, 0, 31);
     v3 = &gpGlobals;
-    sub_48d990(&v6, *(int *)(*(int *)idx + 464) + gpGlobals->field_98);
-    v0 = sub_48b210(&v6, v4) != 0;
+    sprintf@GLIBC_2.0(&v6, *(int *)(*(int *)idx + 464) + gpGlobals->field_98);
+    v0 = strstr@GLIBC_2.0(&v6, v4) != 0;
     v26 = (st_53c780_13 **)idx;
-    v27 = sub_48ba50(v4, *v26->field_1d0 + *v3->field_98, 7);
+    v27 = strncmp@GLIBC_2.0(v4, *v26->field_1d0 + *v3->field_98, 7);
     if (!v27)
     {
         return v27;
     }
     else if (!v0)
     {
-        v2 = g_616968(*v26->field_208);
-        v1 = g_6168dc(*v26->field_208);
-        sub_48d990(&v5, "%s%s", v4, *v26->field_1d0 + *v3->field_98);
-        return g_616974(v1, v2, "name", &v5);
+        v2 = g_engfuncs.pfnGetInfoKeyBuffer(*v26->field_208);
+        v1 = g_engfuncs.pfnIndexOfEdict(*v26->field_208);
+        sprintf@GLIBC_2.0(&v5, "%s%s", v4, *v26->field_1d0 + *v3->field_98);
+        return g_engfuncs.pfnSetClientKeyValue(v1, v2, "name", &v5);
     }
     else
     {

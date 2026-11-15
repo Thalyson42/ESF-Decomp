@@ -50,7 +50,7 @@ st_525750_4 * EnumFriends__12CTalkMonsterP11CBaseEntityii(st_525750_4 *a0, st_52
     v6 = (&_12CTalkMonster.m_szFriends.field_0)[a0->field_60->field_200(a0, a2)];
     while (1)
     {
-        a1 = sub_487e80(a1, (&_12CTalkMonster.m_szFriends.field_0)[a0->field_60->field_200(a0, a2)]);
+        a1 = UTIL_FindEntityByClassname(a1, (&_12CTalkMonster.m_szFriends.field_0)[a0->field_60->field_200(a0, a2)]);
         if (!a1)
         {
             return NULL;
@@ -64,7 +64,7 @@ st_525750_4 * EnumFriends__12CTalkMonsterP11CBaseEntityii(st_525750_4 *a0, st_52
                 v1 = v7->field_c;
                 v2 = v7->field_10;
                 v3 = a1->field_0->field_d8;
-                sub_487b80(&a0->field_0->field_8, &v0, 1, a0->field_0->field_208, &v4);
+                UTIL_TraceLine(&a0->field_0->field_8, &v0, 1, a0->field_0->field_208, &v4);
             }
             else
             {

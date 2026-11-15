@@ -8,7 +8,7 @@ extern char __vt_17CRecoverMeleeTask;
 
 st_586e90_0 * __17CRecoverMeleeTaskP4CBot(st_586e90_0 *a0, int a1)
 {
-    sub_48ce80(a0, a1);
+    __9CBaseTaskP4CBot(a0, a1);
     a0->field_14 = &__vt_17CRecoverMeleeTask;
     return a0;
 }

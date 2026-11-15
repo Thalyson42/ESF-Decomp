@@ -45,14 +45,14 @@ int AddToTextString__13CScreenOutputPCc(st_56cd60_2 *a0, char *a1)
     v1 = 0;
     if ((short)v0 + (short)~v7 - 2 > 0x200)
     {
-        sub_48d360(&v1, v3, 0x1ff);
+        strncpy@GLIBC_2.0(&v1, v3, 0x1ff);
         v2 = 0;
     }
     else
     {
-        sub_48e110(&v1, v3);
+        strcpy@GLIBC_2.0(&v1, v3);
     }
     a0->field_200->field_10(a0, &v1);
-    return sub_48c150(a0, &v1);
+    return strcat@GLIBC_2.0(a0, &v1);
 }
 

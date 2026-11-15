@@ -4,13 +4,13 @@ typedef struct st_517fd0_0 {
 } st_517fd0_0;
 
 extern st_517fd0_0 *g_engfuncs;
-extern st_517fd0_0 *g_6167c4;
+extern st_517fd0_0 *g_engfuncs.pfnPrecacheSound;
 
 int Precache__9CShenlong(void)
 {
     g_engfuncs("models/shenlong.mdl");
     g_engfuncs("sprites/shens_eyes.spr");
-    g_6167c4("dragon/makewish1.wav");
-    return g_6167c4("dragon/grantwish.wav");
+    g_engfuncs.pfnPrecacheSound("dragon/makewish1.wav");
+    return g_engfuncs.pfnPrecacheSound("dragon/grantwish.wav");
 }
 

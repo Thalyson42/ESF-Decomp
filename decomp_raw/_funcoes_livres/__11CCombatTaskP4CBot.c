@@ -8,7 +8,7 @@ extern char __vt_11CCombatTask;
 
 st_559ad0_0 * __11CCombatTaskP4CBot(st_559ad0_0 *a0, int a1)
 {
-    sub_48ce80(a0, a1);
+    __9CBaseTaskP4CBot(a0, a1);
     a0->field_14 = &__vt_11CCombatTask;
     return a0;
 }

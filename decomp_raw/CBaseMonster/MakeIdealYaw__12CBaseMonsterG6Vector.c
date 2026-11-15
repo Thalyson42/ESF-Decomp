@@ -57,7 +57,7 @@ LABEL_4d843c:
     v0 = (float)v8;
     v1 = (float)v9;
     v2 = (float)v11;
-    sub_48c2d0(&v0);
+    UTIL_VecToYaw(&v0);
     v12 = a1->field_0;
     v12[43] = (float)v11;
     return v12;

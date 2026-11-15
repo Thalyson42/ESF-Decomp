@@ -33,8 +33,8 @@ typedef struct st_578fe0_1 {
     unsigned int field_0;
 } st_578fe0_1;
 
-extern st_578fe0_1 *g_616928;
-extern st_578fe0_1 *g_61692c;
+extern st_578fe0_1 *g_engfuncs.pfnRandomLong;
+extern st_578fe0_1 *g_engfuncs.pfnRandomFloat;
 extern st_578fe0_5 *gpGlobals;
 
 char ReactOnDanger__22CShootNonChargebleTaskP13danger_info_s(st_578fe0_4 *a0, st_578fe0_0 *a1)
@@ -43,17 +43,17 @@ char ReactOnDanger__22CShootNonChargebleTaskP13danger_info_s(st_578fe0_4 *a0, st
 
     if (a1->field_18 > 59)
     {
-        v0 = g_616928(1, 100);
+        v0 = g_engfuncs.pfnRandomLong(1, 100);
         if (v0 <= a0->field_8->field_a04->field_26)
         {
-            sub_488180(a0->field_8);
+            CBasePlayer::Teleport(a0->field_8);
         }
-        else if (a1->field_18 <= 99 && (char)sub_488bd0(a0->field_8))
+        else if (a1->field_18 <= 99 && (char)CBot::BotShouldFallDown(a0->field_8))
         {
             if (a0->field_8->field_320)
-                sub_48c5a0(a0->field_8);
+                CBasePlayer::StopFly(a0->field_8);
             a0->field_8->field_a10 = 0;
-            g_61692c(0.800000011920929f, 1.2000000476837158f);
+            g_engfuncs.pfnRandomFloat(0.800000011920929f, 1.2000000476837158f);
             a0->field_8->field_a14 = (float)(0.800000011920929 + *(float *)gpGlobals);
         }
         else

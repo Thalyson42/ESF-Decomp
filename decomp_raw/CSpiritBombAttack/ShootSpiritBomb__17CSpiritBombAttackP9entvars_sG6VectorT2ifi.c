@@ -62,11 +62,11 @@ typedef struct st_520810_5 {
 extern char ExplodeTouch__16CExplodingAttackP11CBaseEntity;
 extern char NormalThink__12CMagicAttack;
 extern unsigned int gmsgBall;
-extern st_520810_2 *g_6167c8;
-extern st_520810_2 *g_616878;
-extern st_520810_2 *g_61687c;
-extern st_520810_2 *g_616888;
-extern st_520810_2 *g_6168dc;
+extern st_520810_2 *g_engfuncs.pfnSetModel;
+extern st_520810_2 *g_engfuncs.pfnMessageBegin;
+extern st_520810_2 *g_engfuncs.pfnMessageEnd;
+extern st_520810_2 *g_engfuncs.pfnWriteShort;
+extern st_520810_2 *g_engfuncs.pfnIndexOfEdict;
 extern st_520810_5 *gpGlobals;
 
 short ShootSpiritBomb__17CSpiritBombAttackP9entvars_sG6VectorT2ifi(st_520810_4 *a0, float *a1, float *a2, int a3, float a4, unsigned int a5)
@@ -101,18 +101,18 @@ short ShootSpiritBomb__17CSpiritBombAttackP9entvars_sG6VectorT2ifi(st_520810_4 *
     float v13;  // [bp-0x14]
     float v14;  // [bp-0x10]
 
-    v15 = sub_48d6c0(0);
+    v15 = GetClassPtr__H1Z17CSpiritBombAttack_PX01_PX01(0);
     v15->field_60->field_8(v15);
     v15->field_0->field_108 = 5;
     v15->field_0->field_10c = 1;
-    g_6167c8(v15->field_0->field_208, "sprites/null.spr");
-    g_616878(2, gmsgBall, 0, 0);
-    v16 = g_6168dc(v15->field_0->field_208);
-    g_616888(v16);
-    g_616888(a5);
+    g_engfuncs.pfnSetModel(v15->field_0->field_208, "sprites/null.spr");
+    g_engfuncs.pfnMessageBegin(2, gmsgBall, 0, 0);
+    v16 = g_engfuncs.pfnIndexOfEdict(v15->field_0->field_208);
+    g_engfuncs.pfnWriteShort(v16);
+    g_engfuncs.pfnWriteShort(a5);
     v0 = 26;
-    g_616888(v0);
-    g_61687c(v0);
+    g_engfuncs.pfnWriteShort(v0);
+    g_engfuncs.pfnMessageEnd(v0);
     v15->field_2d0 = 5;
     v15->field_2d4 = 6;
     v17 = v15->field_0;
@@ -123,12 +123,12 @@ short ShootSpiritBomb__17CSpiritBombAttackP9entvars_sG6VectorT2ifi(st_520810_4 *
     v19 = *v18 * *v18 + v18[1] * v18[1] + v18[2] * v18[2];
     v20 = sqrt(v19);
     if (isnan(v20))
-        sub_487dc0(*(unsigned int *)&v19);
+        sqrt(*(unsigned int *)&v19);
     else
         v19 = v20;
     v15->field_2a8 = (float)v19;
     v21 = v15->field_0;
-    sub_488860(&v7, a2);
+    UTIL_VecToAngles(&v7, a2);
     v21->field_50 = v7;
     v21->field_54 = v9;
     v21->field_58 = v11;
@@ -139,7 +139,7 @@ short ShootSpiritBomb__17CSpiritBombAttackP9entvars_sG6VectorT2ifi(st_520810_4 *
     v22 = *a2 * *a2 + a2[1] * a2[1] + a2[2] * a2[2];
     v23 = sqrt(v22);
     if (isnan(v23))
-        sub_487dc0(*(unsigned int *)&v22);
+        sqrt(*(unsigned int *)&v22);
     else
         v22 = v23;
     v2 = (float)v22;
@@ -163,7 +163,7 @@ short ShootSpiritBomb__17CSpiritBombAttackP9entvars_sG6VectorT2ifi(st_520810_4 *
     v6 = *a1 + v12;
     v8 = a1[1] + v13;
     v10 = a1[2] + v14;
-    sub_48db50(v15->field_0, &v6);
+    UTIL_SetOrigin(v15->field_0, &v6);
     v26 = v1;
     v6 = v26;
     v8 = v26;
@@ -172,7 +172,7 @@ short ShootSpiritBomb__17CSpiritBombAttackP9entvars_sG6VectorT2ifi(st_520810_4 *
     v12 = (float)v27;
     v13 = (float)v27;
     v14 = (float)v27;
-    sub_48a0d0(v15->field_0, &v12, &v6);
+    UTIL_SetSize(v15->field_0, &v12, &v6);
     if (a3 > 9999)
         a3 = 9999;
     v7 = a3;

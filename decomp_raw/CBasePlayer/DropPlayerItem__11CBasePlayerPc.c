@@ -33,7 +33,7 @@ typedef struct st_4fdd50_2 {
     struct st_4fdd50_0 *field_44;
 } st_4fdd50_2;
 
-extern float g_5bd0cc;
+extern float weaponstay+12;
 extern st_4fdd50_2 *g_pGameRules;
 extern st_4fdd50_5 *gpGlobals;
 
@@ -51,7 +51,7 @@ int DropPlayerItem__11CBasePlayerPc(st_4fdd50_4 *a0, char *a1)
     if (!v0)
         return v1;
     v1 = _INSERT(v0, 0, 0);
-    if (0.0 < g_5bd0cc)
+    if (0.0 < weaponstay+12)
         return v1;
     v2 = 0xffffffff;
     v3 = a1;
@@ -77,7 +77,7 @@ LABEL_4fde40:
             }
             if (a1)
             {
-                if (!sub_488af0(a1, *(int *)iter->field_0 + gpGlobals->field_98))
+                if (!strcmp@GLIBC_2.0(a1, *(int *)iter->field_0 + gpGlobals->field_98))
                     goto LABEL_4fde0b;
             }
             else
@@ -88,7 +88,7 @@ LABEL_4fde0b:
                     if (iter)
                     {
                         g_pGameRules->field_44->field_14(g_pGameRules, a0, iter);
-                        sub_48a800(a0->field_0 + 80);
+                        UTIL_MakeVectors(a0->field_0 + 80);
                         return v1;
                     }
                     goto LABEL_4fde40;

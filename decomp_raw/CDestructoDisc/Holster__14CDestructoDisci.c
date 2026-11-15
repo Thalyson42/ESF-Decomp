@@ -22,6 +22,6 @@ int Holster__14CDestructoDisci(st_4aa330_3 *a0, int a1)
 {
     if (a0->field_1d4)
         a0->field_1d4->field_60->field_1fc(a0->field_1d4);
-    return sub_48b470(a0, a1);
+    return CChargedAttack::Holster(a0, a1);
 }
 

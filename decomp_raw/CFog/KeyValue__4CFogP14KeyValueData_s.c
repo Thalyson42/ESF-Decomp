@@ -26,39 +26,39 @@ unsigned int KeyValue__4CFogP14KeyValueData_s(st_4bf1d0_1 *a0, st_4bf1d0_0 *a1)
     unsigned int v6;  // eax
     double v7;  // mm7
 
-    if (!sub_488af0(a1->field_4, "m_iColorR"))
+    if (!strcmp@GLIBC_2.0(a1->field_4, "m_iColorR"))
     {
-        v0 = sub_48b500(a1->field_8, 0, 10, 0);
+        v0 = __strtol_internal@GLIBC_2.0(a1->field_8, 0, 10, 0);
         a0->field_64 = v0;
         return v0;
     }
-    else if (!sub_488af0(a1->field_4, "m_iColorG"))
+    else if (!strcmp@GLIBC_2.0(a1->field_4, "m_iColorG"))
     {
-        v1 = sub_48b500(a1->field_8, 0, 10, 0);
+        v1 = __strtol_internal@GLIBC_2.0(a1->field_8, 0, 10, 0);
         a0->field_68 = v1;
         return v1;
     }
-    else if (!sub_488af0(a1->field_4, "m_iColorB"))
+    else if (!strcmp@GLIBC_2.0(a1->field_4, "m_iColorB"))
     {
-        v2 = sub_48b500(a1->field_8, 0, 10, 0);
+        v2 = __strtol_internal@GLIBC_2.0(a1->field_8, 0, 10, 0);
         a0->field_6c = v2;
         return v2;
     }
-    else if (!sub_488af0(a1->field_4, "m_flNear"))
+    else if (!strcmp@GLIBC_2.0(a1->field_4, "m_flNear"))
     {
-        v3 = sub_487fc0(a1->field_8, 0, 0);
+        v3 = __strtod_internal@GLIBC_2.0(a1->field_8, 0, 0);
         a0->field_74 = (float)v4;
         return v3;
     }
     else
     {
-        v5 = sub_488af0(a1->field_4, "m_flFar");
+        v5 = strcmp@GLIBC_2.0(a1->field_4, "m_flFar");
         if (v5)
         {
             a1->field_c = 0;
             return v5;
         }
-        v6 = sub_487fc0(a1->field_8, 0, 0);
+        v6 = __strtod_internal@GLIBC_2.0(a1->field_8, 0, 0);
         a0->field_70 = (float)v7;
         return v6;
     }

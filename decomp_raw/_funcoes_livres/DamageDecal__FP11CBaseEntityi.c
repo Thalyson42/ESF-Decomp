@@ -13,7 +13,7 @@ typedef struct st_537440_0 {
     struct st_537440_1 *field_74;
 } st_537440_0;
 
-extern st_537440_1 *g_616928;
+extern st_537440_1 *g_engfuncs.pfnRandomLong;
 
 int DamageDecal__FP11CBaseEntityi(st_537440_2 *a0, unsigned int v0)
 {
@@ -29,7 +29,7 @@ int DamageDecal__FP11CBaseEntityi(st_537440_2 *a0, unsigned int v0)
     {
         v0 = 4;
         v1 = NULL;
-        v2 = g_616928;
+        v2 = g_engfuncs.pfnRandomLong;
     }
     return v2(v1, v0);
 }

@@ -41,7 +41,7 @@ unsigned int HasNamedPlayerItem__11CBasePlayerPCc(st_4fdef0_2 *a0, int a1)
             do
             {
                 v2 = v1;
-                if (!sub_488af0(a1, *(int *)*(int *)&v2->padding_0[0] + gpGlobals->field_98))
+                if (!strcmp@GLIBC_2.0(a1, *(int *)*(int *)&v2->padding_0[0] + gpGlobals->field_98))
                     return 1;
             } while ((v1 = v2->field_84, v2->field_84));
         }

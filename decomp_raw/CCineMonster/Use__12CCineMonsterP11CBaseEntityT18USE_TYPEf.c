@@ -27,7 +27,7 @@ unsigned int * Use__12CCineMonsterP11CBaseEntityT18USE_TYPEf(float idx)
     st_514ba0_2 *v1;  // edx
     unsigned int *v2;  // eax
 
-    v1 = sub_488810(*(unsigned int *)&idx + 272);
+    v1 = EHANDLE::__opP11CBaseEntity(*(unsigned int *)&idx + 272);
     v2 = NULL;
     if (v1)
         v2 = v1->field_60->field_4c(v1);

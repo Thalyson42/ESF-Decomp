@@ -15,6 +15,6 @@ int Spawn__6CBlood(st_4b5290_0 **a0)
     *a0->field_108 = 0;
     *a0->field_118 = 0;
     *a0->field_130 = 0;
-    return sub_48ccb0(*a0);
+    return SetMovedir(*a0);
 }
 

@@ -16,7 +16,7 @@ typedef struct st_549950_0 {
 } st_549950_0;
 
 extern char cout;
-extern st_549950_0 *g_625f80;
+extern st_549950_0 *cout+512;
 
 int PrintChatSentence__10CChatClassPQ210CChatClass13CChatSentence(unsigned int a0, st_549950_2 *a1)
 {
@@ -27,22 +27,22 @@ int PrintChatSentence__10CChatClassPQ210CChatClass13CChatSentence(unsigned int a
     char v4;  // [bp-0x24]
     char v5;  // [bp-0x23]
 
-    g_625f80->field_14(&cout, "Sentence: ");
-    g_625f80->field_14(&cout, a1->field_24);
-    g_625f80->field_14(&cout, " CanModify: ");
+    cout+512->field_14(&cout, "Sentence: ");
+    cout+512->field_14(&cout, a1->field_24);
+    cout+512->field_14(&cout, " CanModify: ");
     v3 = a1->field_28;
     v4 = 0;
     v2 = &v5;
-    sub_48d0e0(&v5, 0, 24);
+    memset@GLIBC_2.0(&v5, 0, 24);
     v1 = "%d";
     v0 = &v4;
-    sub_48d990(&v4, "%d", v3);
-    g_625f80->field_14(&cout, v0);
-    g_625f80->field_14(&cout, " UV: ");
+    sprintf@GLIBC_2.0(&v4, "%d", v3);
+    cout+512->field_14(&cout, v0);
+    cout+512->field_14(&cout, " UV: ");
     v4 = 0;
-    sub_48d0e0(v2, 0, 24);
-    sub_48d990(v0, v1, a1->field_29);
-    g_625f80->field_14(&cout, v0);
-    return g_625f80->field_14(&cout, "\n");
+    memset@GLIBC_2.0(v2, 0, 24);
+    sprintf@GLIBC_2.0(v0, v1, a1->field_29);
+    cout+512->field_14(&cout, v0);
+    return cout+512->field_14(&cout, "\n");
 }
 

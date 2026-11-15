@@ -9,7 +9,7 @@ char IsNull__FP11CBaseEntity(st_579b40_0 **a0)
     char v0;  // [bp-0x5]
 
     v0 = 0;
-    if (a0 && *a0 && !(char)sub_48b960(*a0->field_208))
+    if (a0 && *a0 && !(char)IsNull(*a0->field_208))
         return v0;
     v0 = 1;
     return v0;

@@ -17,12 +17,12 @@ typedef struct st_4e1980_0 {
 
 extern char CallBuildNodeGraph__9CTestHull;
 extern st_4e1980_0 *gpGlobals;
-extern int g_61716c;
+extern int WorldGraph+12;
 
 short DropDelay__9CTestHull(st_4e1980_2 *a0)
 {
-    sub_48a4b0(4, "Node Graph out of Date. Rebuilding...", 0, 0, 0, 0);
-    a0->field_c = _INSERT(sub_48db50(a0->field_0, g_61716c), 0, 0) | 0xffff0000;
+    UTIL_ClientPrintAll(4, "Node Graph out of Date. Rebuilding...", 0, 0, 0, 0);
+    a0->field_c = _INSERT(UTIL_SetOrigin(a0->field_0, WorldGraph+12), 0, 0) | 0xffff0000;
     a0->field_10 = &CallBuildNodeGraph__9CTestHull;
     a0->field_0->field_104 = (float)(1.0 + *(float *)gpGlobals);
     return (unsigned short)gpGlobals;

@@ -70,7 +70,7 @@ typedef struct st_4ede60_4 {
 } st_4ede60_4;
 
 extern char Start__10CGunTarget;
-extern st_4ede60_4 *g_6167c8;
+extern st_4ede60_4 *g_engfuncs.pfnSetModel;
 extern st_4ede60_3 *gpGlobals;
 
 st_4ede60_0 * Spawn__10CGunTarget(st_4ede60_2 *a0)
@@ -80,8 +80,8 @@ st_4ede60_0 * Spawn__10CGunTarget(st_4ede60_2 *a0)
 
     a0->field_0->field_10c = 4;
     a0->field_0->field_108 = 7;
-    sub_48db50(a0->field_0, &a0->field_0->field_8);
-    g_6167c8(a0->field_0->field_208, a0->field_0->field_b8 + gpGlobals->field_98);
+    UTIL_SetOrigin(a0->field_0, &a0->field_0->field_8);
+    g_engfuncs.pfnSetModel(a0->field_0->field_208, a0->field_0->field_b8 + gpGlobals->field_98);
     if (*(float *)&a0->field_0->field_1f8 == 0.0f)
         *(float *)&a0->field_0->field_1f8 = 100.0f;
     a0->field_0->field_16c = 0;

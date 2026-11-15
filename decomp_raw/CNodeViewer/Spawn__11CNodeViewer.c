@@ -42,11 +42,11 @@ typedef struct st_4e5e90_5 {
 } st_4e5e90_5;
 
 extern char DrawThink__11CNodeViewer;
-extern st_4e5e90_5 *g_6168b4;
+extern st_4e5e90_5 *g_engfuncs.pfnAlertMessage;
 extern st_4e5e90_1 *gpGlobals;
 extern st_4e5e90_0 WorldGraph;
-extern unsigned int g_617164;
-extern int g_617178;
+extern unsigned int WorldGraph+4;
+extern int WorldGraph+24;
 
 unsigned int * Spawn__11CNodeViewer(float idx)
 {
@@ -69,9 +69,9 @@ unsigned int * Spawn__11CNodeViewer(float idx)
     float v2;  // [bp-0x20]
     float v3;  // [bp-0x1c]
 
-    if (WorldGraph.field_0 && g_617164)
+    if (WorldGraph.field_0 && WorldGraph+4)
     {
-        if (!sub_488af0(*(int *)*(int *)idx + gpGlobals->field_98, "node_viewer_fly"))
+        if (!strcmp@GLIBC_2.0(*(int *)*(int *)idx + gpGlobals->field_98, "node_viewer_fly"))
         {
             v5 = (unsigned int *)idx;
             v5[284] = 3;
@@ -81,7 +81,7 @@ unsigned int * Spawn__11CNodeViewer(float idx)
             v8 = 255.0;
             goto LABEL_4e5fec;
         }
-        else if (!sub_488af0(*(int *)*(int *)idx + gpGlobals->field_98, "node_viewer_large"))
+        else if (!strcmp@GLIBC_2.0(*(int *)*(int *)idx + gpGlobals->field_98, "node_viewer_large"))
         {
             v9 = (st_4e5e90_4 *)idx;
             v9->field_470 = 2;
@@ -109,23 +109,23 @@ LABEL_4e5fec:
             *(float *)&v5[287] = v2;
             *(float *)&v5[288] = v3;
         }
-        v10 = sub_48c090(&WorldGraph.field_0, *(int *)idx + 8, *(int *)(*(unsigned int *)&idx + 1140));
+        v10 = CGraph::FindNearestNode(&WorldGraph.field_0, *(int *)idx + 8, *(int *)(*(unsigned int *)&idx + 1140));
         *(int *)(*(unsigned int *)&idx + 100) = v10;
         if (v10 < 0)
-            return g_6168b4(1, "No nearby node\n");
+            return g_engfuncs.pfnAlertMessage(1, "No nearby node\n");
         v11 = (unsigned int *)idx;
         v11[27] = 0;
-        g_6168b4(2, "basenode %d\n", v11[25]);
+        g_engfuncs.pfnAlertMessage(2, "basenode %d\n", v11[25]);
         v12 = &WorldGraph.field_0;
-        if (g_617178 <= 127)
+        if (WorldGraph+24 <= 127)
         {
             i = 0;
-            if (0 < g_617178)
+            if (0 < WorldGraph+24)
             {
                 do
                 {
                     v14 = v12;
-                    sub_4899b0(idx, i, sub_4889b0(v14, i, *(int *)(*(unsigned int *)&idx + 100), *(int *)(*(unsigned int *)&idx + 1136), 0));
+                    CNodeViewer::AddNode(idx, i, CGraph::NextNodeInRoute(v14, i, *(int *)(*(unsigned int *)&idx + 100), *(int *)(*(unsigned int *)&idx + 1136), 0));
                     i += 1;
                     v12 = v14;
                 } while (i < v14->field_18);
@@ -133,7 +133,7 @@ LABEL_4e5fec:
         }
         else
         {
-            sub_48baf0(idx, *(int *)(*(unsigned int *)&idx + 100));
+            CNodeViewer::FindNodeConnections(idx, *(int *)(*(unsigned int *)&idx + 100));
             k = 0;
             do
             {
@@ -143,14 +143,14 @@ LABEL_4e5fec:
                     do
                     {
                         v17 = k * 4;
-                        sub_48baf0(idx, *(int *)(v17 + *(unsigned int *)&idx + 112));
-                        sub_48baf0(idx, *(int *)(v17 + *(unsigned int *)&idx + 624));
+                        CNodeViewer::FindNodeConnections(idx, *(int *)(v17 + *(unsigned int *)&idx + 112));
+                        CNodeViewer::FindNodeConnections(idx, *(int *)(v17 + *(unsigned int *)&idx + 624));
                         k += 1;
                     } while ((int)k < (int)j);
                 }
             } while (j != *(int *)(*(unsigned int *)&idx + 108));
         }
-        g_6168b4(2, "%d nodes\n", *(int *)(*(unsigned int *)&idx + 108));
+        g_engfuncs.pfnAlertMessage(2, "%d nodes\n", *(int *)(*(unsigned int *)&idx + 108));
         v18 = (st_4e5e90_6 *)idx;
         v18->field_68 = 0;
         v20 = (st_4e5e90_3 *)idx;
@@ -159,7 +159,7 @@ LABEL_4e5fec:
         *(float *)&v20->field_0->field_104 = gpGlobals->field_0;
         return gpGlobals;
     }
-    g_6168b4(1, "Graph not ready!\n");
-    return sub_48cc00(idx);
+    g_engfuncs.pfnAlertMessage(1, "Graph not ready!\n");
+    return UTIL_Remove(idx);
 }
 

@@ -10,6 +10,6 @@ int RadiusDamage__12CBaseMonsterG6VectorP9entvars_sT2fii(unsigned int a0, float 
     v2 = a1[1];
     v3 = a1[2];
     v0 = (float)(2.5 * a4);
-    return sub_48ab00(&v1, a2, a3, a4, v0, a5, a6);
+    return RadiusDamage(&v1, a2, a3, a4, v0, a5, a6);
 }
 

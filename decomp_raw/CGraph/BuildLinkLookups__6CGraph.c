@@ -13,7 +13,7 @@ typedef struct st_4e4a90_1 {
     unsigned int field_0;
 } st_4e4a90_1;
 
-extern st_4e4a90_1 *g_6168b4;
+extern st_4e4a90_1 *g_engfuncs.pfnAlertMessage;
 
 unsigned int BuildLinkLookups__6CGraph(st_4e4a90_0 *a0)
 {
@@ -26,11 +26,11 @@ unsigned int BuildLinkLookups__6CGraph(st_4e4a90_0 *a0)
 
     v0 = a0->field_1c * 3 / 2 + 3;
     a0->field_20c0 = v0;
-    sub_4891a0(a0, v0);
-    v1 = sub_48ccc0(2, a0->field_20c0);
+    CGraph::HashChoosePrimes(a0, v0);
+    v1 = calloc@GLIBC_2.0(2, a0->field_20c0);
     a0->field_20bc = v1;
     if (!v1)
-        return g_6168b4(2, "Couldn't allocated Link Lookup Table.\n");
+        return g_engfuncs.pfnAlertMessage(2, "Couldn't allocated Link Lookup Table.\n");
     idx = 0;
     if (0 < a0->field_20c0)
     {
@@ -47,7 +47,7 @@ unsigned int BuildLinkLookups__6CGraph(st_4e4a90_0 *a0)
     do
     {
         v4 = a0->field_10 + j * 24;
-        v5 = sub_48c660(a0, *v4, v4[1], j);
+        v5 = CGraph::HashInsert(a0, *v4, v4[1], j);
         j += 1;
     } while (j < a0->field_1c);
     return v5;

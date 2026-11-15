@@ -56,14 +56,14 @@ unsigned int CutTags__10CChatClassPCcPc(int a0, int a1, st_548630_2 *a2)
     char v7;  // [bp-0x44]
 
     v3 = 0;
-    sub_48d360(&v6, a1, 31);
+    strncpy@GLIBC_2.0(&v6, a1, 31);
     v7 = 0;
     iter1 = 0;
     do
     {
         v2 = &tag1.field_0;
         v8 = iter1 * 4;
-        v9 = sub_48b210(&v6, *(int *)(v8 + (char *)&tag1.field_0));
+        v9 = strstr@GLIBC_2.0(&v6, *(int *)(v8 + (char *)&tag1.field_0));
         if (v9)
         {
             v0 = *(int *)(v8 + (char *)&tag2.field_0);
@@ -73,7 +73,7 @@ unsigned int CutTags__10CChatClassPCcPc(int a0, int a1, st_548630_2 *a2)
             {
                 v12 = v10;
             } while (v11 && (v11 -= 1, v10 = v12 + 1, *v12));
-            v4 = sub_48b210(&v9[~v11] - 1);
+            v4 = strstr@GLIBC_2.0(&v9[~v11] - 1);
         }
         else
         {
@@ -104,8 +104,8 @@ unsigned int CutTags__10CChatClassPCcPc(int a0, int a1, st_548630_2 *a2)
         iter1 += 1;
     } while (iter1 <= 21);
     v18 = &v6;
-    sub_48e110(a2, &v6);
-    sub_48a3c0(a0, a2, &v6);
+    strcpy@GLIBC_2.0(a2, &v6);
+    CChatClass::CutSpaces(a0, a2, &v6);
     v19 = 0xffffffff;
     do
     {
@@ -113,14 +113,14 @@ unsigned int CutTags__10CChatClassPCcPc(int a0, int a1, st_548630_2 *a2)
     } while (v19 && (v19 -= 1, v18 = v20 + 1, *v20));
     if (v19 == 0xfffffffe)
     {
-        sub_48d360(&v6, a1, 31);
+        strncpy@GLIBC_2.0(&v6, a1, 31);
         v7 = 0;
         iter1 = 0;
         do
         {
             v1 = &tag1.field_0;
             v21 = iter1 * 4;
-            v22 = sub_48b210(&v6, *(int *)(v21 + (char *)&tag1.field_0));
+            v22 = strstr@GLIBC_2.0(&v6, *(int *)(v21 + (char *)&tag1.field_0));
             if (v22)
             {
                 v0 = *(int *)(v21 + (char *)&tag2.field_0);
@@ -130,7 +130,7 @@ unsigned int CutTags__10CChatClassPCcPc(int a0, int a1, st_548630_2 *a2)
                 {
                     v25 = v23;
                 } while (v24 && (v24 -= 1, v23 = v25 + 1, *v25));
-                v4 = sub_48b210(&v22[~v24] - 1);
+                v4 = strstr@GLIBC_2.0(&v22[~v24] - 1);
             }
             else
             {
@@ -167,7 +167,7 @@ unsigned int CutTags__10CChatClassPCcPc(int a0, int a1, st_548630_2 *a2)
             iter1 += 1;
         } while (iter1 <= 21);
     }
-    sub_48a3c0(a0, &v6, a2);
+    CChatClass::CutSpaces(a0, &v6, a2);
     a2->field_1f = 0;
     return v3;
 }

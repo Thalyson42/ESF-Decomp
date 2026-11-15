@@ -26,6 +26,6 @@ int _._7CDBTask(st_585ad0_0 *a0, int a1)
     v0 = a0->field_8;
     v0[1033] = 0xffffffff;
     v0[1026] = 0xffffffff;
-    return sub_488170(a0, a1);
+    return _._9CBaseTask(a0, a1);
 }
 

@@ -46,7 +46,7 @@ typedef struct st_50a230_7 {
     unsigned int field_0;
 } st_50a230_7;
 
-extern st_50a230_7 *g_6168d4;
+extern st_50a230_7 *g_engfuncs.pfnPEntityOfEntOffset;
 extern st_50a230_4 *gpGlobals;
 
 unsigned int CanThrow__12CPlayerMeleeiR6Vector(st_50a230_1 *a0, int a1, st_50a230_3 *a2)
@@ -91,7 +91,7 @@ unsigned int CanThrow__12CPlayerMeleeiR6Vector(st_50a230_1 *a0, int a1, st_50a23
     float v20;  // [bp-0x18]
     st_50a230_6 *v21;  // [bp-0x14]
 
-    sub_48a800(*(int *)a0->field_124 + 116);
+    UTIL_MakeVectors(*(int *)a0->field_124 + 116);
     v22 = a0->field_124;
     v23 = &*v22->field_8;
     v10 = *v22->field_8;
@@ -108,14 +108,14 @@ unsigned int CanThrow__12CPlayerMeleeiR6Vector(st_50a230_1 *a0, int a1, st_50a23
     v7 = (float)(v26 + v10);
     v8 = (float)(v27 + v11);
     v9 = v12 + v3;
-    sub_488460(&v10, &v7, 0, 1, *v22->field_208, &v13);
+    UTIL_TraceHull(&v10, &v7, 0, 1, *v22->field_208, &v13);
     a2->field_0 = v15;
     *(float *)&a2->field_4 = v16;
     a2->field_8 = v17;
     if (1.0 <= v14)
         return 1;
     v28 = v21;
-    if (v28 || (v28 = g_6168d4(0), v28))
+    if (v28 || (v28 = g_engfuncs.pfnPEntityOfEntOffset(0), v28))
         v29 = v28->field_7c;
     else
         v29 = NULL;
@@ -150,14 +150,14 @@ unsigned int CanThrow__12CPlayerMeleeiR6Vector(st_50a230_1 *a0, int a1, st_50a23
     v7 = v1;
     v8 = v2;
     v9 = v3;
-    sub_488460(&v10, &v7, 0, 1, *(int *)(*(int *)a0->field_124 + 520), &v13);
+    UTIL_TraceHull(&v10, &v7, 0, 1, *(int *)(*(int *)a0->field_124 + 520), &v13);
     if (1.0 > v14)
         return 0;
     v38 = *(int *)a0->field_124;
     v38->field_8 = v15;
     v38->field_c = v16;
     v38->field_10 = v17;
-    sub_48db50(*(int *)a0->field_124, *(int *)a0->field_124 + 8);
+    UTIL_SetOrigin(*(int *)a0->field_124, *(int *)a0->field_124 + 8);
     return 1;
 }
 

@@ -30,15 +30,15 @@ unsigned int BotPerformTasks__4CBot(float idx)
         }
         else
         {
-            sub_48d0d0(idx);
+            CBot::ResetMoveSpeed(idx);
         }
         if (*(short *)(*(int *)(*(unsigned int *)&idx + 4196) + 4) != 2)
             return *(int *)(*(unsigned int *)&idx + 4196);
     }
-    v2 = sub_487cc0(idx);
+    v2 = CBot::KillCurrentTask(idx);
     if (*(int *)(*(unsigned int *)&idx + 4200) == 33)
         return v2;
-    v3 = sub_48acb0(idx, *(int *)(*(unsigned int *)&idx + 4200));
+    v3 = CBot::MakeTask(idx, *(int *)(*(unsigned int *)&idx + 4200));
     *(unsigned int *)(*(unsigned int *)&idx + 4200) = 33;
     return v3;
 }

@@ -38,7 +38,7 @@ typedef struct st_516ec0_5 {
     unsigned int field_98;
 } st_516ec0_5;
 
-extern st_516ec0_1 *g_6168b4;
+extern st_516ec0_1 *g_engfuncs.pfnAlertMessage;
 extern st_516ec0_5 *gpGlobals;
 
 unsigned int StartSentence__17CScriptedSentenceP12CBaseMonster(st_516ec0_4 *a0, st_516ec0_2 *a1)
@@ -48,20 +48,20 @@ unsigned int StartSentence__17CScriptedSentenceP12CBaseMonster(st_516ec0_4 *a0, 
 
     if (!a1)
     {
-        g_6168b4(2, "Not Playing sentence %s\n", a0->field_104 + gpGlobals->field_98);
+        g_engfuncs.pfnAlertMessage(2, "Not Playing sentence %s\n", a0->field_104 + gpGlobals->field_98);
         return 0;
     }
     v1 = 0;
     if (a0->field_124)
     {
         v0 = a0->field_10c;
-        if (!sub_488af0(a0->field_124 + gpGlobals->field_98, "player"))
+        if (!strcmp@GLIBC_2.0(a0->field_124 + gpGlobals->field_98, "player"))
             v0 = 4096.0f;
-        v1 = sub_489dd0(a0->field_124 + gpGlobals->field_98, a1->field_0 + 8, v0);
+        v1 = UTIL_FindEntityGeneric(a0->field_124 + gpGlobals->field_98, a1->field_0 + 8, v0);
     }
     a1->field_60->field_16c(a1, a0->field_104 + gpGlobals->field_98, a0->field_110, a0->field_11c, a0->field_118, !(a0->field_0->field_1a0 & 8), v1);
-    g_6168b4(2, "Playing sentence %s (%.1f)\n", a0->field_104 + gpGlobals->field_98, (unsigned int)(a0->field_110 >> 0));
-    sub_48d150(a0, 0, 3, 0);
+    g_engfuncs.pfnAlertMessage(2, "Playing sentence %s (%.1f)\n", a0->field_104 + gpGlobals->field_98, (unsigned int)(a0->field_110 >> 0));
+    CBaseDelay::SUB_UseTargets(a0, 0, 3, 0);
     return 1;
 }
 

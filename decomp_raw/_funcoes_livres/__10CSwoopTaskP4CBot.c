@@ -31,7 +31,7 @@ st_54d680_1 * __10CSwoopTaskP4CBot(st_54d680_1 *a0, int a1)
 {
     double v0;  // mm7
 
-    sub_48ce80(a0, a1);
+    __9CBaseTaskP4CBot(a0, a1);
     a0->field_14 = &__vt_10CSwoopTask;
     *(float *)&a0->field_0 = *(float *)gpGlobals;
     v0 = *(float *)gpGlobals + 0.75;
@@ -41,12 +41,12 @@ st_54d680_1 * __10CSwoopTaskP4CBot(st_54d680_1 *a0, int a1)
     a0->field_30 = 0;
     if (a0->field_8->field_504 != 4)
     {
-        sub_489910(a0);
+        CSwoopTask::GetSwoopLifeTime(a0);
         a0->field_28 = (float)v0;
     }
     else
     {
-        sub_48b0d0(a0);
+        CSwoopTask::SelectSwoopType(a0);
     }
     *(float *)&a0->field_34 = *(float *)&a0->field_0;
     return a0;

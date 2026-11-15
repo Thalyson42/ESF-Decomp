@@ -14,9 +14,9 @@ unsigned int * Spread__11CDragonBall(float idx)
     unsigned int v1;  // [bp-0x20]
     float v2;  // [bp-0x1c]
 
-    sub_48d9a0(idx);
+    CDragonBall::UnGlow(idx);
     *(unsigned int *)(*(int *)idx + 272) = 1;
-    sub_489390(*(int *)(*(int *)idx + 520), 4, "weapons/db_flying.wav", 0x3f800000, 0.800000011920929f, 0, 100);
+    EMIT_SOUND_DYN(*(int *)(*(int *)idx + 520), 4, "weapons/db_flying.wav", 0x3f800000, 0.800000011920929f, 0, 100);
     *(unsigned int *)(*(int *)idx + 264) = 6;
     v4 = *(int *)idx;
     v0 = 0;

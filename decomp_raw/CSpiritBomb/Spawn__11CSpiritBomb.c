@@ -28,6 +28,6 @@ int Spawn__11CSpiritBomb(st_520b50_2 *a0)
     a0->field_c8 = 0;
     a0->field_c0 = 0;
     a0->field_b0 = 0xffffffff;
-    return sub_48cf50(a0);
+    return CBasePlayerItem::FallInit(a0);
 }
 

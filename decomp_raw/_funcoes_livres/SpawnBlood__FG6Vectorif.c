@@ -12,6 +12,6 @@ int SpawnBlood__FG6Vectorif(int a0, int a1, float a2)
     v4 = __fnstcw();
     v3 = v4 | 0xc00;
     v2 = (int)a2;
-    return sub_489d30(a0, &g_vecAttackDir, a1, v2, v0, v1);
+    return UTIL_BloodDrips(a0, &g_vecAttackDir, a1, v2, v0, v1);
 }
 

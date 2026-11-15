@@ -20,21 +20,21 @@ unsigned int * KeyValue__5CFadeP14KeyValueData_s(st_4b5f00_1 **a0, st_4b5f00_0 *
     float *v3;  // eax
     double v4;  // mm7
 
-    if (!sub_488af0(a1->field_4, "duration"))
+    if (!strcmp@GLIBC_2.0(a1->field_4, "duration"))
     {
-        sub_487fc0(a1->field_8, 0, 0);
+        __strtod_internal@GLIBC_2.0(a1->field_8, 0, 0);
         v0 = *a0;
         v0[118] = (float)v1;
         a1->field_c = 1;
         return v0;
     }
-    v2 = sub_488af0(a1->field_4, "holdtime");
+    v2 = strcmp@GLIBC_2.0(a1->field_4, "holdtime");
     if (v2)
     {
         a1->field_c = 0;
         return v2;
     }
-    sub_487fc0(a1->field_8, 0, 0);
+    __strtod_internal@GLIBC_2.0(a1->field_8, 0, 0);
     v3 = *a0;
     v3[0x77] = (float)v4;
     a1->field_c = 1;

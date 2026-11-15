@@ -12,6 +12,6 @@ int TurnOff__15CFuncWallToggle(st_491120_0 **a0)
 {
     *a0->field_10c = 0;
     *a0->field_118 = *a0->field_118 | 128;
-    return sub_48db50(*a0, &*a0->field_8);
+    return UTIL_SetOrigin(*a0, &*a0->field_8);
 }
 

@@ -12,7 +12,7 @@ typedef struct st_52c450_0 {
     unsigned int field_0;
 } st_52c450_0;
 
-extern st_52c450_0 *g_6168e0;
+extern st_52c450_0 *g_engfuncs.pfnPEntityOfEntIndex;
 extern st_52c450_1 *gpGlobals;
 
 float Think__14CTargetCDAudio(float a0)
@@ -32,7 +32,7 @@ float Think__14CTargetCDAudio(float a0)
     float v2;  // [bp-0x30]
     float v3;  // [bp-0x2c]
 
-    v5 = g_6168e0(1);
+    v5 = g_engfuncs.pfnPEntityOfEntIndex(1);
     if (!v5)
         return v14;
     *(float *)(*(int *)a0 + 260) = (float)(0.5 + *(float *)gpGlobals);
@@ -47,13 +47,13 @@ float Think__14CTargetCDAudio(float a0)
     v11 = v8 * v8 + v9 * v9 + v10 * v10;
     v12 = sqrt(v11);
     if (isnan(v12))
-        sub_487dc0(*(unsigned int *)&v11);
+        sqrt(*(unsigned int *)&v11);
     else
         v11 = v12;
     v0 = (float)v11;
     if (v0 > *(float *)(*(int *)a0 + 324))
         return v13;
-    sub_488880(a0);
+    CTargetCDAudio::Play(a0);
     return v13;
 }
 

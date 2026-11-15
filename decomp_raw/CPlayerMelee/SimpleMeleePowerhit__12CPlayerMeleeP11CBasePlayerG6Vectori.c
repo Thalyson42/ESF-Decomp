@@ -50,6 +50,6 @@ int SimpleMeleePowerhit__12CPlayerMeleeP11CBasePlayerG6Vectori(st_50c7e0_1 *a0, 
     v2 = 400.0f;
     v1 = 500.0f;
     v0 = 1600.0f;
-    return sub_48ad90(a0, a1, &v5, v10, (float)(__double_as_longlong((!a1->field_3a8 ? 15.0 : 22.5)) & 0xffffffff));
+    return CPlayerMelee::Powerhit(a0, a1, &v5, v10, (float)(__double_as_longlong((!a1->field_3a8 ? 15.0 : 22.5)) & 0xffffffff));
 }
 

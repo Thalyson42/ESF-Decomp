@@ -55,12 +55,12 @@ typedef struct st_4a3570_4 {
 
 extern char StickyGibTouch__4CGibP11CBaseEntity;
 extern float g_vecAttackDir;
-extern float g_616784;
-extern float g_616788;
+extern float g_vecAttackDir+4;
+extern float g_vecAttackDir+8;
 extern unsigned int g_Language;
-extern st_4a3570_2 *g_6168d4;
-extern st_4a3570_2 *g_616928;
-extern st_4a3570_2 *g_61692c;
+extern st_4a3570_2 *g_engfuncs.pfnPEntityOfEntOffset;
+extern st_4a3570_2 *g_engfuncs.pfnRandomLong;
+extern st_4a3570_2 *g_engfuncs.pfnRandomFloat;
 
 unsigned int * SpawnStickyGibs__4CGibP9entvars_sG6Vectori(st_4a3570_6 *a0, float *a1, unsigned int *a2)
 {
@@ -102,35 +102,35 @@ unsigned int * SpawnStickyGibs__4CGibP9entvars_sG6Vectori(st_4a3570_6 *a0, float
         return a2;
     do
     {
-        v11 = sub_48a010(0);
-        sub_48d700(v11, "models/stickygib.mdl");
-        v12 = g_616928(0, 2);
+        v11 = GetClassPtr__H1Z4CGib_PX01_PX01(0);
+        CGib::Spawn(v11, "models/stickygib.mdl");
+        v12 = g_engfuncs.pfnRandomLong(0, 2);
         v11->field_0->field_114 = v12;
         if (!a0)
             continue;
-        g_61692c(0xc0400000, 0x40400000);
+        g_engfuncs.pfnRandomFloat(0xc0400000, 0x40400000);
         v13 = v10 + *a1;
         v11->field_0->field_8 = (float)v13;
-        g_61692c(0xc0400000, 0x40400000);
+        g_engfuncs.pfnRandomFloat(0xc0400000, 0x40400000);
         v14 = v13 + a1[1];
         v11->field_0->field_c = (float)v14;
-        g_61692c(0xc0400000, 0x40400000);
+        g_engfuncs.pfnRandomFloat(0xc0400000, 0x40400000);
         v11->field_0->field_10 = (float)(v14 + a1[2]);
         v15 = v11->field_0;
         v2 = (float)(-1.0 * g_vecAttackDir);
-        v16 = -1.0 * g_616788;
-        v4 = (float)(-1.0 * g_616784);
+        v16 = -1.0 * g_vecAttackDir+8;
+        v4 = (float)(-1.0 * g_vecAttackDir+4);
         v5 = (float)v16;
         v15->field_20 = v2;
         v15->field_24 = v4;
         v15->field_28 = v5;
-        g_61692c(3189348762, 1041865114);
+        g_engfuncs.pfnRandomFloat(3189348762, 1041865114);
         v17 = v16 + v11->field_0->field_20;
         v11->field_0->field_20 = (float)v17;
-        g_61692c(3189348762, 1041865114);
+        g_engfuncs.pfnRandomFloat(3189348762, 1041865114);
         v18 = v17 + v11->field_0->field_24;
         v11->field_0->field_24 = (float)v18;
-        g_61692c(3189348762, 1041865114);
+        g_engfuncs.pfnRandomFloat(3189348762, 1041865114);
         v11->field_0->field_28 = (float)(v18 + v11->field_0->field_28);
         v19 = v11->field_0;
         v20 = &v19->field_20;
@@ -141,12 +141,12 @@ unsigned int * SpawnStickyGibs__4CGibP9entvars_sG6Vectori(st_4a3570_6 *a0, float
         v19->field_20 = v2;
         v19->field_24 = v4;
         v19->field_28 = v5;
-        g_61692c(0x437a0000, 0x43c80000);
+        g_engfuncs.pfnRandomFloat(0x437a0000, 0x43c80000);
         v11->field_0->field_5c = (float)v21;
-        g_61692c(0x437a0000, 0x43c80000);
+        g_engfuncs.pfnRandomFloat(0x437a0000, 0x43c80000);
         v11->field_0->field_60 = (float)v21;
         v22 = a0->field_208;
-        if (a0->field_208 || (v22 = g_6168d4(0), v22))
+        if (a0->field_208 || (v22 = g_engfuncs.pfnPEntityOfEntOffset(0), v22))
             v23 = v22->field_7c;
         else
             v23 = NULL;
@@ -189,11 +189,11 @@ LABEL_4a3827:
         v7 = 0;
         v8 = 0;
         v9 = 0;
-        v11->field_14 = _INSERT(sub_48a0d0(v11->field_0, &v7, &v1), 0, 0) | 0xffff0000;
+        v11->field_14 = _INSERT(UTIL_SetSize(v11->field_0, &v7, &v1), 0, 0) | 0xffff0000;
         v11->field_18 = &StickyGibTouch__4CGibP11CBaseEntity;
         v11->field_c = 0;
         v11->field_10 = 0;
-    } while ((v30 = sub_487e00(v11), v0 = (char *)v0 + 1, v0 < a2));
-    return sub_487e00(v11);
+    } while ((v30 = CGib::LimitVelocity(v11), v0 = (char *)v0 + 1, v0 < a2));
+    return CGib::LimitVelocity(v11);
 }
 

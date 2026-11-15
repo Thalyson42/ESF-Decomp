@@ -3,7 +3,7 @@ typedef struct st_531820_0 {
     unsigned int field_0;
 } st_531820_0;
 
-extern st_531820_0 *g_6167ec;
+extern st_531820_0 *g_engfuncs.pfnMoveToOrigin;
 
 int UTIL_MoveToOrigin__FP7edict_sRC6Vectorfi(unsigned int a0, float *a1, float a2, unsigned int a3)
 {
@@ -16,6 +16,6 @@ int UTIL_MoveToOrigin__FP7edict_sRC6Vectorfi(unsigned int a0, float *a1, float a
     v2 = *a1;
     v3 = a1[1];
     v4 = a1[2];
-    return g_6167ec(a0, &v2, a2, a3, v0, v1);
+    return g_engfuncs.pfnMoveToOrigin(a0, &v2, a2, a3, v0, v1);
 }
 

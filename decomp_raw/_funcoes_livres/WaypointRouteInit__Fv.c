@@ -18,10 +18,10 @@ typedef struct st_58b2d0_1 {
 
 extern int shortest_path[4];
 extern int from_to[4];
-extern st_58b2d0_1 *g_6168b4;
+extern st_58b2d0_1 *g_engfuncs.pfnAlertMessage;
 extern st_58b2d0_0 *gpGlobals;
 extern void waypoints;
-extern unsigned int g_626824[4];
+extern unsigned int waypoints+4[4];
 extern unsigned int num_waypoints;
 extern unsigned int paths[4];
 extern unsigned int route_num_waypoints;
@@ -94,9 +94,9 @@ unsigned int * WaypointRouteInit__Fv(void)
     if (!num_waypoints)
         return &num_waypoints;
     route_num_waypoints = num_waypoints;
-    sub_48e110(&v27, gpGlobals->field_c + gpGlobals->field_98);
-    sub_48c150(&v27, ".ESF_wpt");
-    sub_489050(&v29, "waypoints", &v27);
+    strcpy@GLIBC_2.0(&v27, gpGlobals->field_c + gpGlobals->field_98);
+    strcat@GLIBC_2.0(&v27, ".ESF_wpt");
+    BuildBotFileName(&v29, "waypoints", &v27);
     v15 = 1;
     v17 = 0;
     v18 = 0;
@@ -135,60 +135,60 @@ unsigned int * WaypointRouteInit__Fv(void)
         if (!*(char *)(&v15 + v34))
             continue;
         v7 = (char *)v34 + 1;
-        sub_48d990(&v26, ".ESF_wp%d", v7);
-        sub_48e110(&v27, gpGlobals->field_c + gpGlobals->field_98);
-        sub_48c150(&v27, &v26);
-        sub_489050(&v28, "waypoints", &v27);
-        v34 = sub_488b10(&v28);
-        if ((char)v34 && (v34 = sub_489a00(&v29, &v28), (char)v34))
+        sprintf@GLIBC_2.0(&v26, ".ESF_wp%d", v7);
+        strcpy@GLIBC_2.0(&v27, gpGlobals->field_c + gpGlobals->field_98);
+        strcat@GLIBC_2.0(&v27, &v26);
+        BuildBotFileName(&v28, "waypoints", &v27);
+        v34 = IsValidFile(&v28);
+        if ((char)v34 && (v34 = FileIsOlder(&v29, &v28), (char)v34))
         {
-            sub_48d990(v6, "loading ESF bot waypoint paths for team %d\n", v7);
-            g_6168b4(1, v6);
-            v35 = sub_489f30(v13 * 2);
+            sprintf@GLIBC_2.0(v6, "loading ESF bot waypoint paths for team %d\n", v7);
+            g_engfuncs.pfnAlertMessage(1, v6);
+            v35 = malloc@GLIBC_2.0(v13 * 2);
             shortest_path[v14] = v35;
             if (!v35)
-                g_6168b4(4, "ESF_bot - Error allocating memory for shortest path!");
-            v36 = sub_489f30(v13 * 2);
+                g_engfuncs.pfnAlertMessage(4, "ESF_bot - Error allocating memory for shortest path!");
+            v36 = malloc@GLIBC_2.0(v13 * 2);
             from_to[v14] = v36;
             if (!v36)
-                g_6168b4(4, "ESF_bot - Error allocating memory for from to matrix!");
-            v8 = sub_48d440(&v28, "rb");
+                g_engfuncs.pfnAlertMessage(4, "ESF_bot - Error allocating memory for from to matrix!");
+            v8 = fopen@GLIBC_2.1(&v28, "rb");
             if (v8)
             {
                 v5 = &shortest_path[0];
                 index = v14 * 4;
-                if (sub_48a160(*(int *)(index + (char *)&shortest_path[0]), 2, v13, v8) != v13)
+                if (fread@GLIBC_2.0(*(int *)(index + (char *)&shortest_path[0]), 2, v13, v8) != v13)
                 {
-                    g_6168b4(1, "error reading enough path items, recalculating...\n");
-                    sub_48cf10(*(int *)(index + (char *)v5));
+                    g_engfuncs.pfnAlertMessage(1, "error reading enough path items, recalculating...\n");
+                    free@GLIBC_2.0(*(int *)(index + (char *)v5));
                     *(unsigned int *)(index + (char *)v5) = 0;
                 }
                 else
                 {
                     v4 = &from_to[0];
                     v38 = v14 * 4;
-                    if (sub_48a160(*(int *)(v38 + (char *)&from_to[0]), 2, v13, v8) == v13)
+                    if (fread@GLIBC_2.0(*(int *)(v38 + (char *)&from_to[0]), 2, v13, v8) == v13)
                         goto LABEL_58b711;
-                    g_6168b4(1, "error reading enough path items, recalculating...\n");
-                    sub_48cf10(*(int *)(v38 + (char *)&shortest_path[0]));
+                    g_engfuncs.pfnAlertMessage(1, "error reading enough path items, recalculating...\n");
+                    free@GLIBC_2.0(*(int *)(v38 + (char *)&shortest_path[0]));
                     *(unsigned int *)(v38 + (char *)&shortest_path[0]) = 0;
-                    sub_48cf10(*(int *)(v38 + (char *)v4));
+                    free@GLIBC_2.0(*(int *)(v38 + (char *)v4));
                     *(unsigned int *)(v38 + (char *)v4) = 0;
                     goto LABEL_58b70e;
                 }
             }
             else
             {
-                g_6168b4(1, "ESF_bot - Error reading waypoint paths!\n");
+                g_engfuncs.pfnAlertMessage(1, "ESF_bot - Error reading waypoint paths!\n");
                 index = v14 * 4;
-                sub_48cf10(*(int *)(index + (char *)&shortest_path[0]));
+                free@GLIBC_2.0(*(int *)(index + (char *)&shortest_path[0]));
                 *(unsigned int *)(index + (char *)&shortest_path[0]) = 0;
             }
-            sub_48cf10(*(int *)(index + (char *)&from_to[0]));
+            free@GLIBC_2.0(*(int *)(index + (char *)&from_to[0]));
             *(unsigned int *)(index + (char *)&from_to[0]) = 0;
 LABEL_58b70e:
 LABEL_58b711:
-            v34 = sub_48c560(v8);
+            v34 = fclose@GLIBC_2.1(v8);
             goto LABEL_58b723;
         }
         else
@@ -198,16 +198,16 @@ LABEL_58b723:
             v39 = v14 * 4;
             if (*(int *)(v39 + (char *)&shortest_path[0]))
                 continue;
-            sub_48d990(v6, "calculating ESF bot waypoint paths for team %d...\n", v14 + 1);
-            g_6168b4(1, v6);
-            v40 = sub_489f30(v13 * 2);
+            sprintf@GLIBC_2.0(v6, "calculating ESF bot waypoint paths for team %d...\n", v14 + 1);
+            g_engfuncs.pfnAlertMessage(1, v6);
+            v40 = malloc@GLIBC_2.0(v13 * 2);
             *(unsigned int *)(v39 + (char *)v3) = v40;
             if (!v40)
-                g_6168b4(4, "ESF_bot - Error allocating memory for shortest path!");
-            v41 = sub_489f30(v13 * 2);
+                g_engfuncs.pfnAlertMessage(4, "ESF_bot - Error allocating memory for shortest path!");
+            v41 = malloc@GLIBC_2.0(v13 * 2);
             from_to[v14] = v41;
             if (!v41)
-                g_6168b4(4, "ESF_bot - Error allocating memory for from to matrix!");
+                g_engfuncs.pfnAlertMessage(4, "ESF_bot - Error allocating memory for from to matrix!");
             idx = v14 * 4;
             v10 = *(int *)(idx + (char *)&shortest_path[0]);
             v9 = *(int *)(idx + (char *)&from_to[0]);
@@ -252,8 +252,8 @@ LABEL_58b723:
                                     v50 = v49 * 16;
                                     if (!((&waypoints)[v50] & 4) || (*(int *)&(&waypoints)[v50] & 3) == v14)
                                     {
-                                        v51 = &g_626824[4 * node];
-                                        v52 = &g_626824[4 * v49];
+                                        v51 = &waypoints+4[4 * node];
+                                        v52 = &waypoints+4[4 * v49];
                                         v53 = *v51 - *v52;
                                         v23 = v53;
                                         v54 = v51[1] - v52[1];
@@ -263,7 +263,7 @@ LABEL_58b723:
                                         v56 = v53 * v53 + v54 * v54 + v55 * v55;
                                         v57 = sqrt(v56);
                                         if (isnan(v57))
-                                            sub_487dc0(*(unsigned int *)&v56);
+                                            sqrt(*(unsigned int *)&v56);
                                         else
                                             v56 = v57;
                                         v22 = (float)v56;
@@ -274,8 +274,8 @@ LABEL_58b723:
                                         {
                                             v1 = v49;
                                             v0 = node;
-                                            sub_48d990(v2, "Waypoint path distance > %4.1f at from %d to %d\n", (unsigned int)(400.0 >> 0));
-                                            g_6168b4(1, v2);
+                                            sprintf@GLIBC_2.0(v2, "Waypoint path distance > %4.1f at from %d to %d\n", (unsigned int)(400.0 >> 0));
+                                            g_engfuncs.pfnAlertMessage(1, v2);
                                         }
                                         else
                                         {
@@ -303,7 +303,7 @@ LABEL_58b723:
                     node += 1;
                 }
             }
-            sub_48a120(v10, v9);
+            WaypointFloyds(v10, v9);
             v59 = 0;
             if (0 < route_num_waypoints)
             {
@@ -321,28 +321,28 @@ LABEL_58b723:
                     }
                 } while ((v59 += 1, v59 < route_num_waypoints));
             }
-            v8 = sub_48d440(&v28, "wb");
+            v8 = fopen@GLIBC_2.1(&v28, "wb");
             if (v8)
             {
-                if (sub_48d9f0(shortest_path[v14], 2, v13, v8) != v13)
+                if (fwrite@GLIBC_2.0(shortest_path[v14], 2, v13, v8) != v13)
                 {
-                    sub_48c560(v8);
-                    sub_48a230(&v28);
+                    fclose@GLIBC_2.1(v8);
+                    remove@GLIBC_2.0(&v28);
                     goto LABEL_58bbbf;
                 }
-                v62 = sub_48d9f0(from_to[v14], 2, v13, v8);
-                sub_48c560(v8);
+                v62 = fwrite@GLIBC_2.0(from_to[v14], 2, v13, v8);
+                fclose@GLIBC_2.1(v8);
                 if (v62 == v13)
                     goto LABEL_58bbbf;
-                sub_48a230(&v28);
+                remove@GLIBC_2.0(&v28);
             }
             else
             {
-                g_6168b4(1, "ESF_bot - Error writing waypoint paths!\n");
+                g_engfuncs.pfnAlertMessage(1, "ESF_bot - Error writing waypoint paths!\n");
             }
 LABEL_58bbbf:
-            sub_48d990(v6, "ESF bot waypoint path calculations for team %d complete!\n", v14 + 1);
-            v34 = g_6168b4(1, v6);
+            sprintf@GLIBC_2.0(v6, "ESF bot waypoint path calculations for team %d complete!\n", v14 + 1);
+            v34 = g_engfuncs.pfnAlertMessage(1, v6);
         }
     } while ((v14 += 1, (int)v14 <= 3));
     return v34;

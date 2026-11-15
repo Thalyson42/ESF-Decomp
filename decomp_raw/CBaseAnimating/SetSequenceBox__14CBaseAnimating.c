@@ -55,19 +55,19 @@ float SetSequenceBox__14CBaseAnimating(float a0)
     float v34;  // [bp-0x20]
     float v35;  // [bp-0x1c]
 
-    if (!sub_489440(a0, *(int *)(*(int *)a0 + 296), &v32, &v29, v0, v1, v2))
+    if (!CBaseAnimating::ExtractBbox(a0, *(int *)(*(int *)a0 + 296), &v32, &v29, v0, v1, v2))
         return v54;
     v28 = (float)(0.017453292519943295 * *(float *)(*(int *)a0 + 84));
     v37 = v28;
     v3 = v37;
-    sub_48a9e0(*(unsigned int *)&v3, *(unsigned int *)((void*)&v3 + 4));
+    cos(*(unsigned int *)&v3, *(unsigned int *)((void*)&v3 + 4));
     v26 = v37;
-    sub_48aeb0(*(unsigned int *)&v3, *(unsigned int *)((void*)&v3 + 4));
+    sin(*(unsigned int *)&v3, *(unsigned int *)((void*)&v3 + 4));
     v27 = v37;
-    sub_48aeb0(*(unsigned int *)&v3, *(unsigned int *)((void*)&v3 + 4));
+    sin(*(unsigned int *)&v3, *(unsigned int *)((void*)&v3 + 4));
     v38 = -v37;
     v24 = (float)v38;
-    sub_48a9e0(*(unsigned int *)&v3, *(unsigned int *)((void*)&v3 + 4));
+    cos(*(unsigned int *)&v3, *(unsigned int *)((void*)&v3 + 4));
     v25 = (float)v38;
     v39 = 1;
     do
@@ -131,7 +131,7 @@ float SetSequenceBox__14CBaseAnimating(float a0)
     } while (idx <= 1);
     v17 = 0;
     v13 = 0x3f800000;
-    sub_48a0d0(*(int *)a0, &v14, &v10);
+    UTIL_SetSize(*(int *)a0, &v14, &v10);
     return v25 * v8 + v43 * v27;
 }
 

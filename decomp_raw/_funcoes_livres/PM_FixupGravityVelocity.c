@@ -29,7 +29,7 @@ unsigned int PM_FixupGravityVelocity(void)
     if (v1 == 0.0)
         v1 = 1.0;
     pmove->field_64 = (float)(pmove->field_64 - v1 * *(float *)pmove->field_4f4f0 * pmove->field_10 * 0.5);
-    v2 = sub_489840();
+    v2 = PM_CheckVelocity();
     return v2;
 }
 

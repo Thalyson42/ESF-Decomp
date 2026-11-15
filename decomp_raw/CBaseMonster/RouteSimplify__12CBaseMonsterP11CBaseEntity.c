@@ -128,7 +128,7 @@ st_4d4a90_2 * RouteSimplify__12CBaseMonsterP11CBaseEntity(st_4d4a90_2 *a0, unsig
         v1 = &v20;
         do
         {
-            if (!sub_48aff0((&a0->field_1a0)[4 * a0->field_218 + 4 * v35]))
+            if (!ShouldSimplify((&a0->field_1a0)[4 * a0->field_218 + 4 * v35]))
             {
                 v36 = &(&v25)[16 * node];
                 v37 = &(&a0->field_0)[4 * a0->field_218 + 4 * v35];

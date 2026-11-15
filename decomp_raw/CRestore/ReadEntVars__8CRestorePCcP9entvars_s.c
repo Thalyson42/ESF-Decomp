@@ -3,6 +3,6 @@ extern int gEntvarsDescription;
 
 int ReadEntVars__8CRestorePCcP9entvars_s(int a0, int a1, int a2)
 {
-    return sub_48a980(a0, a1, a2, &gEntvarsDescription, 86);
+    return CRestore::ReadFields(a0, a1, a2, &gEntvarsDescription, 86);
 }
 

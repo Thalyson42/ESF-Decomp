@@ -7,7 +7,7 @@ int MeleePercentMenu__5NMenuv(void)
     int v0;  // [bp-0x1c]
 
     if (_5NMenu.CurrentMenuChoice <= 8)
-        sub_489f90(&BotManager, 1, (short)sub_48cb20("melee_percent"));
-    return sub_48d6f0(v0);
+        CBotManager::ChangePersoPercentSetting(&BotManager, 1, (short)NMenu::GetPercentFromMenu("melee_percent"));
+    return NMenu::ResetMenu(v0);
 }
 

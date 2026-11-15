@@ -8,10 +8,10 @@ typedef struct st_4c3190_1 {
     unsigned int field_0;
 } st_4c3190_1;
 
-extern st_4c3190_1 *g_616928;
+extern st_4c3190_1 *g_engfuncs.pfnRandomLong;
 
 unsigned int DamageDecal__10CBreakablei(st_4c3190_0 *a0, int a1)
 {
-    return (!a0->field_6c ? g_616928(0, 2) + 25 : a0->field_6c == 7 ? 35 : sub_4893f0(a0, a1));
+    return (!a0->field_6c ? g_engfuncs.pfnRandomLong(0, 2) + 25 : a0->field_6c == 7 ? 35 : CBaseEntity::DamageDecal(a0, a1));
 }
 

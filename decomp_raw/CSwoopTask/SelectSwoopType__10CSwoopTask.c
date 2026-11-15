@@ -54,9 +54,9 @@ typedef struct st_54e590_6 {
 
 extern unsigned int FindSelection__t12TMultiChoice1Z6VectorPQ2t12TMultiChoice1Z6Vector12SMultiChoicei;
 extern float g_vecZero;
-extern float g_616790;
-extern float g_616794;
-extern st_54e590_6 *g_616928;
+extern float g_vecZero+4;
+extern float g_vecZero+8;
+extern st_54e590_6 *g_engfuncs.pfnRandomLong;
 
 double SelectSwoopType__10CSwoopTask(st_54e590_2 *a0)
 {
@@ -158,12 +158,12 @@ double SelectSwoopType__10CSwoopTask(st_54e590_2 *a0)
     v43 = v40 * v40 + v41 * v41 + v42 * v42;
     v44 = sqrt(v43);
     if (isnan(v44))
-        sub_487dc0(*(unsigned int *)&v43);
+        sqrt(*(unsigned int *)&v43);
     else
         v43 = v44;
     v22 = (float)v43;
     a0->field_8->field_be4 = 0;
-    if ((int)g_616928(1, 100) > 70)
+    if ((int)g_engfuncs.pfnRandomLong(1, 100) > 70)
     {
         return v43;
     }
@@ -175,61 +175,61 @@ double SelectSwoopType__10CSwoopTask(st_54e590_2 *a0)
     {
         return v43;
     }
-    else if (g_616928(0, 1))
+    else if (g_engfuncs.pfnRandomLong(0, 1))
     {
         a0->field_8->field_be4 = 2;
         v45 = a0->field_8;
         *(float *)&v45->field_be8 = g_vecZero;
-        *(float *)&v45->field_bec = g_616790;
-        *(float *)&v45->field_bf0 = g_616794;
-        if (g_616928(0, 1))
+        *(float *)&v45->field_bec = g_vecZero+4;
+        *(float *)&v45->field_bf0 = g_vecZero+8;
+        if (g_engfuncs.pfnRandomLong(0, 1))
         {
-            v25 = g_616928(16, 18);
+            v25 = g_engfuncs.pfnRandomLong(16, 18);
             a0->field_20 = (float)v25;
             v1 = 3;
             v0 = 2;
         }
         else
         {
-            v25 = g_616928(0xffffffee, 0xfffffff0);
+            v25 = g_engfuncs.pfnRandomLong(0xffffffee, 0xfffffff0);
             a0->field_20 = (float)v25;
             v1 = 0xfffffffe;
             v0 = 0xfffffffd;
         }
-        a0->field_1a = g_616928(v0, v1);
-        if (g_616928(0, 1))
+        a0->field_1a = g_engfuncs.pfnRandomLong(v0, v1);
+        if (g_engfuncs.pfnRandomLong(0, 1))
         {
-            v25 = g_616928(16, 18);
+            v25 = g_engfuncs.pfnRandomLong(16, 18);
             a0->field_24 = (float)v25;
             v1 = 3;
             v0 = 2;
         }
         else
         {
-            v25 = g_616928(0xffffffee, 0xfffffff0);
+            v25 = g_engfuncs.pfnRandomLong(0xffffffee, 0xfffffff0);
             a0->field_24 = (float)v25;
             v1 = 0xfffffffe;
             v0 = 0xfffffffd;
         }
-        a0->field_1c = g_616928(v0, v1);
+        a0->field_1c = g_engfuncs.pfnRandomLong(v0, v1);
         return v43;
     }
     else
     {
         iter = 0;
-        v46 = sub_48d6a0(8);
+        v46 = __builtin_new(8);
         *v46 = NULL;
         v46[1] = NULL;
         v24 = v46;
         v26 = g_vecZero;
-        v27 = g_616790;
-        v28 = g_616794;
-        if (!(char)sub_487c70(a0->field_c, 2, 200.0f))
+        v27 = g_vecZero+4;
+        v28 = g_vecZero+8;
+        if (!(char)CheckForCollide(a0->field_c, 2, 200.0f))
         {
             v29 = 0;
             v30 = 20.0f;
             v31 = 0;
-            v47 = sub_48d6a0(20);
+            v47 = __builtin_new(20);
             *v47 = 0;
             v47[1] = 0;
             v21 = v47;
@@ -241,15 +241,15 @@ double SelectSwoopType__10CSwoopTask(st_54e590_2 *a0)
             v48 = v24;
             if (!*v48)
             {
-                v49 = sub_48d6a0(12);
+                v49 = __builtin_new(12);
                 v20 = 1;
                 v49->field_4 = NULL;
                 v49->field_8 = NULL;
-                sub_48d0e0(v49, 0, 4);
+                memset@GLIBC_2.0(v49, 0, 4);
                 v20 = 0;
                 *v48 = v49;
                 if (v20)
-                    sub_48d4e0(v49);
+                    __builtin_delete(v49);
                 *v48->field_0 = v21;
                 *v48->field_4 = NULL;
                 *v48->field_8 = NULL;
@@ -258,15 +258,15 @@ double SelectSwoopType__10CSwoopTask(st_54e590_2 *a0)
             else
             {
                 v19 = v48[1];
-                v50 = sub_48d6a0(12);
+                v50 = __builtin_new(12);
                 v18 = 1;
                 v50->field_4 = NULL;
                 v50->field_8 = NULL;
-                sub_48d0e0(v50, 0, 4);
+                memset@GLIBC_2.0(v50, 0, 4);
                 v18 = 0;
                 v19->field_4 = v50;
                 if (v18)
-                    sub_48d4e0(v50);
+                    __builtin_delete(v50);
                 v48[1]->field_4->field_8 = v48[1];
                 v51 = v48[1]->field_4;
                 v48[1] = v51;
@@ -275,12 +275,12 @@ double SelectSwoopType__10CSwoopTask(st_54e590_2 *a0)
             }
             iter += 50;
         }
-        if (!(char)sub_487c70(a0->field_c, 4, 200.0f))
+        if (!(char)CheckForCollide(a0->field_c, 4, 200.0f))
         {
             v29 = 0;
             v30 = -20.0f;
             v31 = 0;
-            v52 = sub_48d6a0(20);
+            v52 = __builtin_new(20);
             *v52 = 0;
             v52[1] = 0;
             v17 = v52;
@@ -292,15 +292,15 @@ double SelectSwoopType__10CSwoopTask(st_54e590_2 *a0)
             v53 = v24;
             if (!*v53)
             {
-                v54 = sub_48d6a0(12);
+                v54 = __builtin_new(12);
                 v16 = 1;
                 v54->field_4 = NULL;
                 v54->field_8 = NULL;
-                sub_48d0e0(v54, 0, 4);
+                memset@GLIBC_2.0(v54, 0, 4);
                 v16 = 0;
                 *v53 = v54;
                 if (v16)
-                    sub_48d4e0(v54);
+                    __builtin_delete(v54);
                 *v53->field_0 = v17;
                 *v53->field_4 = NULL;
                 *v53->field_8 = NULL;
@@ -309,15 +309,15 @@ double SelectSwoopType__10CSwoopTask(st_54e590_2 *a0)
             else
             {
                 v15 = v53[1];
-                v55 = sub_48d6a0(12);
+                v55 = __builtin_new(12);
                 v14 = 1;
                 v55->field_4 = NULL;
                 v55->field_8 = NULL;
-                sub_48d0e0(v55, 0, 4);
+                memset@GLIBC_2.0(v55, 0, 4);
                 v14 = 0;
                 v15->field_4 = v55;
                 if (v14)
-                    sub_48d4e0(v55);
+                    __builtin_delete(v55);
                 v53[1]->field_4->field_8 = v53[1];
                 v56 = v53[1]->field_4;
                 v53[1] = v56;
@@ -326,12 +326,12 @@ double SelectSwoopType__10CSwoopTask(st_54e590_2 *a0)
             }
             iter += 50;
         }
-        if (!(char)sub_487c70(a0->field_c, 32, 200.0f))
+        if (!(char)CheckForCollide(a0->field_c, 32, 200.0f))
         {
             v29 = 20.0f;
             v30 = 0;
             v31 = 0;
-            v57 = sub_48d6a0(20);
+            v57 = __builtin_new(20);
             *v57 = 0;
             v57[1] = 0;
             v13 = v57;
@@ -343,15 +343,15 @@ double SelectSwoopType__10CSwoopTask(st_54e590_2 *a0)
             v58 = v24;
             if (!*v58)
             {
-                v59 = sub_48d6a0(12);
+                v59 = __builtin_new(12);
                 v12 = 1;
                 v59->field_4 = NULL;
                 v59->field_8 = NULL;
-                sub_48d0e0(v59, 0, 4);
+                memset@GLIBC_2.0(v59, 0, 4);
                 v12 = 0;
                 *v58 = v59;
                 if (v12)
-                    sub_48d4e0(v59);
+                    __builtin_delete(v59);
                 *v58->field_0 = v13;
                 *v58->field_4 = NULL;
                 *v58->field_8 = NULL;
@@ -360,15 +360,15 @@ double SelectSwoopType__10CSwoopTask(st_54e590_2 *a0)
             else
             {
                 v11 = v58[1];
-                v60 = sub_48d6a0(12);
+                v60 = __builtin_new(12);
                 v10 = 1;
                 v60->field_4 = NULL;
                 v60->field_8 = NULL;
-                sub_48d0e0(v60, 0, 4);
+                memset@GLIBC_2.0(v60, 0, 4);
                 v10 = 0;
                 v11->field_4 = v60;
                 if (v10)
-                    sub_48d4e0(v60);
+                    __builtin_delete(v60);
                 v58[1]->field_4->field_8 = v58[1];
                 v61 = v58[1]->field_4;
                 v58[1] = v61;
@@ -377,12 +377,12 @@ double SelectSwoopType__10CSwoopTask(st_54e590_2 *a0)
             }
             iter += 50;
         }
-        if (!(char)sub_487c70(a0->field_c, 64, 200.0f))
+        if (!(char)CheckForCollide(a0->field_c, 64, 200.0f))
         {
             v29 = -20.0f;
             v30 = 0;
             v31 = 0;
-            v62 = sub_48d6a0(20);
+            v62 = __builtin_new(20);
             *v62 = 0;
             v62[1] = 0;
             v9 = v62;
@@ -394,15 +394,15 @@ double SelectSwoopType__10CSwoopTask(st_54e590_2 *a0)
             v63 = v24;
             if (!*v63)
             {
-                v64 = sub_48d6a0(12);
+                v64 = __builtin_new(12);
                 v8 = 1;
                 v64->field_4 = NULL;
                 v64->field_8 = NULL;
-                sub_48d0e0(v64, 0, 4);
+                memset@GLIBC_2.0(v64, 0, 4);
                 v8 = 0;
                 *v63 = v64;
                 if (v8)
-                    sub_48d4e0(v64);
+                    __builtin_delete(v64);
                 *v63->field_0 = v9;
                 *v63->field_4 = NULL;
                 *v63->field_8 = NULL;
@@ -411,15 +411,15 @@ double SelectSwoopType__10CSwoopTask(st_54e590_2 *a0)
             else
             {
                 v7 = v63[1];
-                v65 = sub_48d6a0(12);
+                v65 = __builtin_new(12);
                 v6 = 1;
                 v65->field_4 = NULL;
                 v65->field_8 = NULL;
-                sub_48d0e0(v65, 0, 4);
+                memset@GLIBC_2.0(v65, 0, 4);
                 v6 = 0;
                 v7->field_4 = v65;
                 if (v6)
-                    sub_48d4e0(v65);
+                    __builtin_delete(v65);
                 v63[1]->field_4->field_8 = v63[1];
                 v66 = v63[1]->field_4;
                 v63[1] = v66;
@@ -428,7 +428,7 @@ double SelectSwoopType__10CSwoopTask(st_54e590_2 *a0)
             }
             iter += 50;
         }
-        v5 = g_616928(0, iter);
+        v5 = g_engfuncs.pfnRandomLong(0, iter);
         v3 = _INSERT(v5, 0, 0) | 0xffff0000;
         v4 = &FindSelection__t12TMultiChoice1Z6VectorPQ2t12TMultiChoice1Z6Vector12SMultiChoicei;
         v68 = *v24;
@@ -472,12 +472,12 @@ LABEL_54f0df:
                 if (v76)
                     v76->field_8 = NULL;
                 v75->field_4 = NULL;
-                sub_48d4e0(v75);
+                __builtin_delete(v75);
             }
             v77 = v74;
             if (!v77)
                 break;
-            sub_48d4e0(v77);
+            __builtin_delete(v77);
         }
         if (v24)
         {
@@ -491,12 +491,12 @@ LABEL_54f0df:
                     node = node->field_4;
                     v80->field_4 = NULL;
                     v80->field_8 = NULL;
-                    sub_48d4e0(v80);
+                    __builtin_delete(v80);
                 } while (node);
             }
             v78[1] = NULL;
             *v78 = NULL;
-            sub_48d4e0(v78);
+            __builtin_delete(v78);
         }
         v24 = 0;
         return v43;

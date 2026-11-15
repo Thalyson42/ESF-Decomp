@@ -30,7 +30,7 @@ typedef struct st_52eda0_5 {
     unsigned int field_98;
 } st_52eda0_5;
 
-extern st_52eda0_1 *g_616944;
+extern st_52eda0_1 *g_engfuncs.pfnEndSection;
 extern st_52eda0_5 *gpGlobals;
 
 unsigned int EndSectionUse__18CTriggerEndSectionP11CBaseEntityT18USE_TYPEf(st_52eda0_4 *a0, st_52eda0_2 *a1)
@@ -46,7 +46,7 @@ unsigned int EndSectionUse__18CTriggerEndSectionP11CBaseEntityT18USE_TYPEf(st_52
     a0->field_1c = 0;
     a0->field_20 = 0;
     if (a0->field_0->field_1d4)
-        g_616944(a0->field_0->field_1d4 + gpGlobals->field_98);
-    return sub_48cc00(a0);
+        g_engfuncs.pfnEndSection(a0->field_0->field_1d4 + gpGlobals->field_98);
+    return UTIL_Remove(a0);
 }
 

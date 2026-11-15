@@ -34,7 +34,7 @@ unsigned int PM_ViewEntity(void)
     float v12;  // [bp-0x24]
 
     v3 = 256.0f;
-    sub_4896c0(&pmove->field_44, &v12, &v11, &v10, v0, v1, v2);
+    AngleVectors(&pmove->field_44, &v12, &v11, &v10, v0, v1, v2);
     v7 = pmove->field_38;
     v8 = pmove->field_3c;
     v9 = pmove->field_40;
@@ -47,6 +47,6 @@ unsigned int PM_ViewEntity(void)
     v15 = pmove->field_4f580(&v4, &v7, &v6, 2, 0xffffffff);
     if (v5 <= 0)
         return v15;
-    return sub_48d260(v5, 111, 0.30000001192092896f);
+    return PM_DrawPhysEntBBox(v5, 111, 0.30000001192092896f);
 }
 

@@ -11,7 +11,7 @@ typedef struct st_50c0c0_0 {
 
 unsigned int BlocksAttack__12CPlayerMeleeP11CBasePlayer(st_50c0c0_1 *a0, st_50c0c0_0 *a1)
 {
-    if (a1->field_32c && sub_48bea0(&a1[1].padding_0[80], a0->field_124))
+    if (a1->field_32c && CPlayerMelee::GetEnemyPrepunch(&a1[1].padding_0[80], a0->field_124))
         return 1;
     return 0;
 }

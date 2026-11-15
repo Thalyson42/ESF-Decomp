@@ -10,8 +10,8 @@ typedef struct st_53e140_1 {
     unsigned int field_0;
 } st_53e140_1;
 
-extern st_53e140_1 *g_6168a4;
-extern st_53e140_1 *g_6168ac;
+extern st_53e140_1 *g_engfuncs.pfnCVarGetFloat;
+extern st_53e140_1 *g_engfuncs.pfnCVarSetFloat;
 extern st_53e140_1 *gpGlobals;
 
 double SBotRulesThink__11CBotManager(st_53e140_0 *a0)
@@ -27,10 +27,10 @@ double SBotRulesThink__11CBotManager(st_53e140_0 *a0)
     else if (a0->field_2c)
     {
         a0->field_30 = (float)(0.75 + *(float *)gpGlobals);
-        g_6168a4("mp_plcatchup");
+        g_engfuncs.pfnCVarGetFloat("mp_plcatchup");
         if (v1 != 1.0)
             return 1.0;
-        g_6168ac("mp_plcatchup", 0);
+        g_engfuncs.pfnCVarSetFloat("mp_plcatchup", 0);
         return 1.0;
     }
     else

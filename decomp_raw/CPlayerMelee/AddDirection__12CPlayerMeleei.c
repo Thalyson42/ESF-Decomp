@@ -35,15 +35,15 @@ st_5058f0_0 * AddDirection__12CPlayerMeleei(st_5058f0_1 *a0, int a1)
     st_5058f0_0 *v1;  // esi
     st_5058f0_0 *v2;  // eax
 
-    v0 = sub_48cf80(a0);
+    v0 = CPlayerMelee::CanAddDirection(a0);
     if (!v0)
         return v0;
-    v1 = sub_48d6a0(36);
+    v1 = __builtin_new(36);
     *(int *)&v1->field_1 = a1;
     *(float *)&v1->field_4 = *(float *)gpGlobals;
     *(float *)&v1->field_8 = *(float *)gpGlobals;
     memset(&v1->field_c, 0, 20);
-    if (sub_48c4f0(a0))
+    if (CPlayerMelee::UseAttackerMoves(a0))
     {
         v2 = a0->field_c8;
         v1->field_0 = v2;
@@ -71,6 +71,6 @@ st_5058f0_0 * AddDirection__12CPlayerMeleei(st_5058f0_1 *a0, int a1)
     }
     if (a0->field_78)
         return v2;
-    return (!sub_48c4f0(a0) ? sub_48b8f0(a0, v1) : sub_489c10(a0, 1, a1));
+    return (!CPlayerMelee::UseAttackerMoves(a0) ? CPlayerMelee::UpdateBlockClient(a0, v1) : CPlayerMelee::MeleeHudFlags(a0, 1, a1));
 }
 

@@ -23,7 +23,7 @@ st_531cf0_0 ** UTIL_FindEntityGeneric__FPCcR6Vectorf(int a0, float *a1, float a2
     float v3;  // [bp-0x20]
     float v4;  // [bp-0x1c]
 
-    v5 = sub_48cce0(0, a0);
+    v5 = UTIL_FindEntityByTargetname(0, a0);
     if (v5)
         return v5;
     v6 = NULL;
@@ -33,7 +33,7 @@ st_531cf0_0 ** UTIL_FindEntityGeneric__FPCcR6Vectorf(int a0, float *a1, float a2
         v0 = (float)v7;
         while (1)
         {
-            v6 = sub_487e80(v6, a0);
+            v6 = UTIL_FindEntityByClassname(v6, a0);
             if (!v6)
                 return v5;
             v8 = &*v6->field_8;
@@ -46,7 +46,7 @@ st_531cf0_0 ** UTIL_FindEntityGeneric__FPCcR6Vectorf(int a0, float *a1, float a2
             v12 = v9 * v9 + v10 * v10 + v11 * v11;
             v13 = sqrt(v12);
             if (isnan(v13))
-                sub_487dc0(*(unsigned int *)&v12);
+                sqrt(*(unsigned int *)&v12);
             else
                 v12 = v13;
             v1 = (float)v12;

@@ -19,7 +19,7 @@ void* Use__10CPathTrackP11CBaseEntityT18USE_TYPEf(st_4e6d00_0 *a0, unsigned int 
     if (a0->field_74)
     {
         v0 = ((unsigned int)((int)a0->field_0[416]) >> 15 ^ 1) & 1;
-        v1 = sub_48ab90(a0, a3, v0);
+        v1 = CBaseEntity::ShouldToggle(a0, a3, v0);
         if (!v1)
         {
             return v1;
@@ -40,7 +40,7 @@ void* Use__10CPathTrackP11CBaseEntityT18USE_TYPEf(st_4e6d00_0 *a0, unsigned int 
     else
     {
         v5 = 1 & _INSERT(a0->field_0, 0, (char)a0->field_0[416] ^ 1);
-        v6 = sub_48ab90(a0, a3, v5);
+        v6 = CBaseEntity::ShouldToggle(a0, a3, v5);
         if (!v6)
         {
             return v6;

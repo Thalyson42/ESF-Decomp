@@ -3,8 +3,8 @@ typedef struct st_48e6f0_0 {
     unsigned int field_0;
 } st_48e6f0_0;
 
-extern st_48e6f0_0 *g_6168b4;
-extern st_48e6f0_0 *g_6168e8;
+extern st_48e6f0_0 *g_engfuncs.pfnAlertMessage;
+extern st_48e6f0_0 *g_engfuncs.pfnGetModelPtr;
 
 int DispatchAnimEvents__14CBaseAnimatingf(float idx)
 {
@@ -16,9 +16,9 @@ int DispatchAnimEvents__14CBaseAnimatingf(float idx)
     int v2;  // [bp-0x20]
     char v3;  // [bp-0x1c]
 
-    v2 = g_6168e8(*(int *)(*(int *)idx + 520));
+    v2 = g_engfuncs.pfnGetModelPtr(*(int *)(*(int *)idx + 520));
     if (!v2)
-        return g_6168b4(2, "Gibbed monster is thinking!\n");
+        return g_engfuncs.pfnAlertMessage(2, "Gibbed monster is thinking!\n");
     index = *(int *)idx;
     v1 = (*(float *)(*(unsigned int *)&idx + 116) - *(float *)(index + 308)) * *(float *)(*(unsigned int *)&idx + 108) * *(float *)(index + 312) + *(float *)(index + 304);
     v6 = 0.10000000149011612 * *(float *)(*(unsigned int *)&idx + 108) * *(float *)(index + 312) + *(float *)(index + 304);
@@ -30,7 +30,7 @@ int DispatchAnimEvents__14CBaseAnimatingf(float idx)
     v7 = 0;
     while (1)
     {
-        v7 = sub_48acc0(v2, *(int *)idx, &v3, v1, v0, v7);
+        v7 = GetAnimationEvent(v2, *(int *)idx, &v3, v1, v0, v7);
         if (!v7)
             break;
         (*(int *)(*(int *)(*(unsigned int *)&idx + 96) + 232))(idx, &v3);

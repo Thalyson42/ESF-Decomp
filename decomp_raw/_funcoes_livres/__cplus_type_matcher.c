@@ -25,7 +25,7 @@ unsigned int __cplus_type_matcher(st_595720_1 *a0, unsigned int *a1, st_595720_0
     if (a1 == 0xffffffff)
         return a0->field_8;
     v2 = a1();
-    v3 = sub_48a8d0(v2, a0->field_c, a0->field_20);
+    v3 = __throw_type_match_rtti(v2, a0->field_c, a0->field_20);
     if (!v3)
         return v3;
     a0->field_8 = v3;

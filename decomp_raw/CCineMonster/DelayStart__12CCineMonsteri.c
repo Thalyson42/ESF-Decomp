@@ -20,8 +20,8 @@ typedef struct st_515b30_2 {
     unsigned int field_0;
 } st_515b30_2;
 
-extern st_515b30_2 *g_6167f8;
-extern st_515b30_2 *g_6168d8;
+extern st_515b30_2 *g_engfuncs.pfnFindEntityByString;
+extern st_515b30_2 *g_engfuncs.pfnEntOffsetOfPEntity;
 extern st_515b30_1 *gpGlobals;
 
 unsigned int * DelayStart__12CCineMonsteri(st_515b30_0 **a0, unsigned int a1)
@@ -38,12 +38,12 @@ unsigned int * DelayStart__12CCineMonsteri(st_515b30_0 **a0, unsigned int a1)
     v0 = NULL;
     while (1)
     {
-        v3 = g_6167f8(v0, v1, v2);
+        v3 = g_engfuncs.pfnFindEntityByString(v0, v1, v2);
         v0 = v3;
         v4 = 0;
         if (v0)
         {
-            v3 = g_6168d8(v0);
+            v3 = g_engfuncs.pfnEntOffsetOfPEntity(v0);
             if (v3)
                 goto LABEL_515ba5;
         }
@@ -51,9 +51,9 @@ unsigned int * DelayStart__12CCineMonsteri(st_515b30_0 **a0, unsigned int a1)
 LABEL_515ba5:
         if (v4)
             break;
-        if (!sub_488af0(*(!v0 ? NULL : v0 + 32) + gpGlobals->field_98, "scripted_sequence"))
+        if (!strcmp@GLIBC_2.0(*(!v0 ? NULL : v0 + 32) + gpGlobals->field_98, "scripted_sequence"))
         {
-            v5 = sub_48c6d0((!v0 ? 0 : v0 + 32));
+            v5 = GetClassPtr__H1Z12CCineMonster_PX01_PX01((!v0 ? 0 : v0 + 32));
             if (a1)
             {
                 v5->field_2c4 = v5->field_2c4 + 1;

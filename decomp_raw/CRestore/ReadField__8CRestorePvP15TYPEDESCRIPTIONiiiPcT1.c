@@ -27,7 +27,7 @@ typedef struct st_5363d0_3 {
 } st_5363d0_3;
 
 extern char _GLOBAL_OFFSET_TABLE_;
-extern st_5363d0_3 *g_6168b4;
+extern st_5363d0_3 *g_engfuncs.pfnAlertMessage;
 
 unsigned int ReadField__8CRestorePvP15TYPEDESCRIPTIONiiiPcT1(st_5363d0_1 *a0, unsigned int a1, unsigned int a2, unsigned int a3, unsigned int a4, unsigned int a5, int a6, unsigned int a7)
 {
@@ -69,7 +69,7 @@ unsigned int ReadField__8CRestorePvP15TYPEDESCRIPTIONiiiPcT1(st_5363d0_1 *a0, un
         {
             v2 = (a4 + v11) % a3;
             v1 = v2 * 16 + a2;
-            if (!sub_48cac0(v1->field_4, a6))
+            if (!strcasecmp@GLIBC_2.0(v1->field_4, a6))
             {
                 if (!a0->field_4 || !(v1->field_e & 1))
                 {
@@ -80,7 +80,7 @@ unsigned int ReadField__8CRestorePvP15TYPEDESCRIPTIONiiiPcT1(st_5363d0_1 *a0, un
                         {
                             if (v1->field_0 <= 0x11)
                                 goto *((void *)(&(&_GLOBAL_OFFSET_TABLE_)[-1 * *(int *)(&(&_GLOBAL_OFFSET_TABLE_)[4 * v1->field_0] - 906716)]));
-                        } while ((g_6168b4(4, "Bad field type\n"), v3 += 1, (int)v3 < v1->field_c));
+                        } while ((g_engfuncs.pfnAlertMessage(4, "Bad field type\n"), v3 += 1, (int)v3 < v1->field_c));
                     }
                 }
                 return v2;

@@ -27,7 +27,7 @@ typedef struct st_4fecf0_4 {
     unsigned int field_8;
 } st_4fecf0_4;
 
-extern st_4fecf0_1 *g_61692c;
+extern st_4fecf0_1 *g_engfuncs.pfnRandomFloat;
 
 st_4fecf0_4 * BodyTarget__11CBasePlayerRC6Vector(void)
 {
@@ -42,7 +42,7 @@ st_4fecf0_4 * BodyTarget__11CBasePlayerRC6Vector(void)
     st_4fecf0_2 *v6;  // [bp+0x8]
 
     v6->field_60->field_cc(&v1, v6);
-    g_61692c(0.5f, 1.100000023841858f);
+    g_engfuncs.pfnRandomFloat(0.5f, 1.100000023841858f);
     v7 = v6->field_0;
     v8 = 0.5 * v7[94];
     v0 = (float)(0.5 * v7[95]);

@@ -92,7 +92,7 @@ typedef struct st_4ea2e0_6 {
 } st_4ea2e0_6;
 
 extern char Next__10CFuncTrain;
-extern st_4ea2e0_6 *g_6167f8;
+extern st_4ea2e0_6 *g_engfuncs.pfnFindEntityByString;
 extern st_4ea2e0_5 *gpGlobals;
 
 st_4ea2e0_4 * Activate__10CFuncTrain(st_4ea2e0_2 *a0)
@@ -122,7 +122,7 @@ st_4ea2e0_4 * Activate__10CFuncTrain(st_4ea2e0_2 *a0)
     if (a0->field_114)
         return v20;
     a0->field_114 = 1;
-    v9 = g_6167f8(0, "targetname", a0->field_0->field_1c8 + gpGlobals->field_98);
+    v9 = g_engfuncs.pfnFindEntityByString(0, "targetname", a0->field_0->field_1c8 + gpGlobals->field_98);
     v10 = (!v9 ? NULL : (struct st_4ea2e0_3 *)&v9->field_80);
     a0->field_0->field_1c8 = v10->field_1c8;
     a0->field_10c = v10;
@@ -141,7 +141,7 @@ st_4ea2e0_4 * Activate__10CFuncTrain(st_4ea2e0_2 *a0)
     v6 = (float)(v10->field_8 - v14);
     v7 = (float)(*(float *)&v16[1] - v15);
     v8 = *(float *)&v16[2] - v5;
-    sub_48db50(v11, &v6);
+    UTIL_SetOrigin(v11, &v6);
     v17 = a0->field_0;
     if (v17->field_1cc)
     {

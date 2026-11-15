@@ -95,7 +95,7 @@ typedef struct st_4ae130_9 {
 } st_4ae130_9;
 
 extern st_4ae130_9 *g_pGameRules;
-extern st_4ae130_5 *g_6168dc;
+extern st_4ae130_5 *g_engfuncs.pfnIndexOfEdict;
 extern st_4ae130_7 *gpGlobals;
 
 st_4ae130_1 * PickupTouch__11CDragonBallP11CBaseEntity(st_4ae130_3 *a0, st_4ae130_6 *a1)
@@ -133,18 +133,18 @@ st_4ae130_1 * PickupTouch__11CDragonBallP11CBaseEntity(st_4ae130_3 *a0, st_4ae13
         v5 = a1;
         if (!v5->field_364 && !v5->field_760 && !v5->field_334 && !v5->field_33c && !v5->field_330 && !v5->field_32c && !v5->field_770 && v5->field_60->field_8c(v5) && !a1->field_350)
         {
-            sub_489390(a0->field_0->field_208, 4, "common/null.wav", 0x3f800000, 0.800000011920929f, 0, 100);
-            sub_48cc00(a0);
+            EMIT_SOUND_DYN(a0->field_0->field_208, 4, "common/null.wav", 0x3f800000, 0.800000011920929f, 0, 100);
+            UTIL_Remove(a0);
             v6 = a1;
             v6->field_760 = a0->field_6c;
             v6->field_6c0 = (float)(1.0 + gpGlobals->field_0);
-            sub_48a270(v6, "weapon_dragonball");
-            sub_48ce10(a1, "weapon_dragonball");
-            v7 = g_6168dc(a1->field_0->field_208);
+            CBasePlayer::GiveNamedItem(v6, "weapon_dragonball");
+            CBasePlayer::SelectItem(a1, "weapon_dragonball");
+            v7 = g_engfuncs.pfnIndexOfEdict(a1->field_0->field_208);
             return g_pGameRules->field_44->field_f4(g_pGameRules, a0->field_6c, v7);
         }
     }
-    v8 = sub_488af0(a1->field_0->field_0 + gpGlobals->field_98, "dragonball");
+    v8 = strcmp@GLIBC_2.0(a1->field_0->field_0 + gpGlobals->field_98, "dragonball");
     if (!v8)
         return v8;
     v9 = a0->field_0;

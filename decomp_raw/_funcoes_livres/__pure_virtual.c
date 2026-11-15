@@ -5,7 +5,7 @@ int __pure_virtual(void)
     int v0;  // [bp-0x1c]
 
     sub_596fec(v0);
-    sub_488a50(2, v2 + 118715, 27);
-    return sub_48d640(2, v2 + 118715, 27);
+    __write@GLIBC_2.0(2, v2 + 118715, 27);
+    return __terminate(2, v2 + 118715, 27);
 }
 

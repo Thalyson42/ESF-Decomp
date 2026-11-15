@@ -37,10 +37,10 @@ typedef struct st_53ded0_1 {
 } st_53ded0_1;
 
 extern char PrintingInGameHelp;
-extern float g_5cb324;
+extern float _11CBotManager.sv_bot_skill+12;
 extern char g_waypoint_on;
-extern st_53ded0_2 *g_6168d4;
-extern st_53ded0_2 *g_61698c;
+extern st_53ded0_2 *g_engfuncs.pfnPEntityOfEntOffset;
+extern st_53ded0_2 *g_engfuncs.pfnIsDedicatedServer;
 extern st_53ded0_1 *gpGlobals;
 
 st_53ded0_0 * Think__11CBotManager(float idx)
@@ -60,40 +60,40 @@ st_53ded0_0 * Think__11CBotManager(float idx)
     unsigned short v7;  // [bp-0x18]
     unsigned short v8;  // [bp-0x16]
 
-    sub_487c40(idx);
-    sub_489640(idx);
-    sub_4884d0(idx);
-    sub_488700(idx);
+    CBotManager::CalcMSec(idx);
+    CBotManager::BotFillThink(idx);
+    CBotManager::BotBalanceTeamsThink(idx);
+    CBotManager::SBotRulesThink(idx);
     if (PrintingInGameHelp)
-        sub_48bb10();
+        ShowInGameBotHelpWindow();
     if (*(int *)(*(unsigned int *)&idx + 56) && 1.0 <= *(float *)(*(unsigned int *)&idx + 52) && *(float *)(*(unsigned int *)&idx + 52) <= gpGlobals->field_0)
-        sub_488690(idx);
+        CBotManager::BotCFGFileThink(idx);
     if (g_waypoint_on)
     {
         *(unsigned short *)&v3 = 0;
         *(unsigned short *)&v2 = 0;
-        if (!g_61698c(v2, v3) && !(v10 = *(int *)(*(unsigned int *)&idx + 12), !*(int *)(*(unsigned int *)&idx + 12) && !(v0 = 0, v10 = g_6168d4(v0), v10)))
+        if (!g_engfuncs.pfnIsDedicatedServer(v2, v3) && !(v10 = *(int *)(*(unsigned int *)&idx + 12), !*(int *)(*(unsigned int *)&idx + 12) && !(v0 = 0, v10 = g_engfuncs.pfnPEntityOfEntOffset(v0), v10)))
             v11 = v10->field_7c;
         else
             v11 = 0;
-        if ((char)sub_489a70(v11))
+        if ((char)UTIL_IsValidPlayer(v11))
         {
-            if (!g_61698c() && !(v12 = *(int *)(*(unsigned int *)&idx + 12), !*(int *)(*(unsigned int *)&idx + 12) && !(v0 = 0, v12 = g_6168d4(v0), v12)))
+            if (!g_engfuncs.pfnIsDedicatedServer() && !(v12 = *(int *)(*(unsigned int *)&idx + 12), !*(int *)(*(unsigned int *)&idx + 12) && !(v0 = 0, v12 = g_engfuncs.pfnPEntityOfEntOffset(v0), v12)))
                 v13 = v12->field_7c;
             else
                 v13 = 0;
-            sub_48a9a0(*(int *)(*(int *)v13 + 520));
+            WaypointThink(*(int *)(*(int *)v13 + 520));
         }
     }
-    if (g_5cb324 != (double)*(short *)(*(unsigned int *)&idx + 3372))
+    if (_11CBotManager.sv_bot_skill+12 != (double)*(short *)(*(unsigned int *)&idx + 3372))
     {
         v8 = __fnstcw();
         v7 = v8 | 0xc00;
-        v6 = (int)(1.0 + g_5cb324);
-        sub_48d3f0(idx, (short)v6);
+        v6 = (int)(1.0 + _11CBotManager.sv_bot_skill+12);
+        CBotManager::ChangeBotSkill(idx, (short)v6);
         v8 = __fnstcw();
         v7 = v8 | 0xc00;
-        v6 = (int)g_5cb324;
+        v6 = (int)_11CBotManager.sv_bot_skill+12;
         *(unsigned short *)(*(unsigned int *)&idx + 3372) = v6;
     }
     v5 = 1;
@@ -101,18 +101,18 @@ st_53ded0_0 * Think__11CBotManager(float idx)
         return gpGlobals;
     do
     {
-        v14 = sub_48a500(v5);
+        v14 = UTIL_PlayerByIndex(v5);
         *(unsigned short *)&v1 = 0;
         *(unsigned short *)&v0 = 0;
-        if ((char)sub_489a70(v14, v0, v1))
+        if ((char)UTIL_IsValidPlayer(v14, v0, v1))
         {
             v4 = 0;
             if (!v14->field_60->field_a4(v14))
                 v4 = (v14->field_0->field_1a5 & 32) != 0;
             if (v4)
             {
-                sub_489460(v14);
-                sub_487ea0(v14);
+                CBot::BotPreThink(v14);
+                CBot::BotThink(v14);
             }
         }
     } while ((v5 += 1, v5 <= gpGlobals->field_90));

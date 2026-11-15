@@ -88,7 +88,7 @@ typedef struct st_4c3980_9 {
 } st_4c3980_9;
 
 extern st_4c3980_9 _9CPushable.m_soundNames;
-extern st_4c3980_3 *g_616928;
+extern st_4c3980_3 *g_engfuncs.pfnRandomLong;
 extern st_4c3980_8 *gpGlobals;
 
 double Move__9CPushableP11CBaseEntityi(st_4c3980_7 *a0, st_4c3980_4 *a1, unsigned int a2)
@@ -146,7 +146,7 @@ double Move__9CPushableP11CBaseEntityi(st_4c3980_7 *a0, st_4c3980_4 *a1, unsigne
     v8 = a0->field_0->field_20 * a0->field_0->field_20 + a0->field_0->field_24 * a0->field_0->field_24;
     v9 = sqrt(v8);
     if (isnan(v9))
-        sub_487dc0(*(unsigned int *)&v8);
+        sqrt(*(unsigned int *)&v8);
     else
         v8 = v9;
     v1 = (float)v8;
@@ -164,12 +164,12 @@ double Move__9CPushableP11CBaseEntityi(st_4c3980_7 *a0, st_4c3980_4 *a1, unsigne
         *(float *)((char *)&a0->field_88 + 4) = *(float *)gpGlobals;
         if (0.0 < v1 && a0->field_0->field_1a5 & 2)
         {
-            v10 = g_616928(0, 2);
+            v10 = g_engfuncs.pfnRandomLong(0, 2);
             a0->field_84 = v10;
-            sub_489390(a0->field_0->field_208, 1, (&_9CPushable.m_soundNames.field_0)[v10], 0.5f, 0.800000011920929f, 0, 100);
+            EMIT_SOUND_DYN(a0->field_0->field_208, 1, (&_9CPushable.m_soundNames.field_0)[v10], 0.5f, 0.800000011920929f, 0, 100);
             return 0.5;
         }
-        sub_489390(a0->field_0->field_208, 1, (&_9CPushable.m_soundNames.field_0)[a0->field_84], 0, 0, 32, 100);
+        EMIT_SOUND_DYN(a0->field_0->field_208, 1, (&_9CPushable.m_soundNames.field_0)[a0->field_84], 0, 0, 32, 100);
         return v1;
     }
     return v1;

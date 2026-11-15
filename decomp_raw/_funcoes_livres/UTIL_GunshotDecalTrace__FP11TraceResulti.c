@@ -20,13 +20,13 @@ typedef struct st_533c10_0 {
     unsigned int field_c;
 } st_533c10_0;
 
-extern st_533c10_0 g_5cae44;
-extern st_533c10_2 *g_616878;
-extern st_533c10_2 *g_61687c;
-extern st_533c10_2 *g_616880;
-extern st_533c10_2 *g_616888;
-extern st_533c10_2 *g_616894;
-extern st_533c10_2 *g_6168dc;
+extern st_533c10_0 gDecals+4;
+extern st_533c10_2 *g_engfuncs.pfnMessageBegin;
+extern st_533c10_2 *g_engfuncs.pfnMessageEnd;
+extern st_533c10_2 *g_engfuncs.pfnWriteByte;
+extern st_533c10_2 *g_engfuncs.pfnWriteShort;
+extern st_533c10_2 *g_engfuncs.pfnWriteCoord;
+extern st_533c10_2 *g_engfuncs.pfnIndexOfEdict;
 
 unsigned int UTIL_GunshotDecalTrace__FP11TraceResulti(st_533c10_1 *a0, int idx)
 {
@@ -36,20 +36,20 @@ unsigned int UTIL_GunshotDecalTrace__FP11TraceResulti(st_533c10_1 *a0, int idx)
 
     if (idx < 0)
         return v2;
-    v0 = (&g_5cae44.field_0)[2 * idx];
-    if ((&g_5cae44.field_0)[2 * idx] < 0)
+    v0 = (&gDecals+4.field_0)[2 * idx];
+    if ((&gDecals+4.field_0)[2 * idx] < 0)
         return v2;
     if (a0->field_10 == 1.0f)
         return v2;
-    g_616878(5, 23, &a0->field_14, 0);
-    g_616880(109);
-    g_616894(a0->field_14);
-    g_616894(a0->field_18);
-    g_616894(a0->field_1c);
-    v1 = g_6168dc(a0->field_30);
-    g_616888(v1);
-    g_616880(v0);
-    v2 = g_61687c();
+    g_engfuncs.pfnMessageBegin(5, 23, &a0->field_14, 0);
+    g_engfuncs.pfnWriteByte(109);
+    g_engfuncs.pfnWriteCoord(a0->field_14);
+    g_engfuncs.pfnWriteCoord(a0->field_18);
+    g_engfuncs.pfnWriteCoord(a0->field_1c);
+    v1 = g_engfuncs.pfnIndexOfEdict(a0->field_30);
+    g_engfuncs.pfnWriteShort(v1);
+    g_engfuncs.pfnWriteByte(v0);
+    v2 = g_engfuncs.pfnMessageEnd();
     return v2;
 }
 

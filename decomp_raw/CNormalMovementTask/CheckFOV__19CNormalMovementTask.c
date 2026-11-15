@@ -98,7 +98,7 @@ unsigned int * CheckFOV__19CNormalMovementTask(float a0)
         v26 = v24->field_c;
         if (0.1 < v26->field_19c && v26->field_240 != 3 && 45.0 > *(float *)&v25->padding_d94[316] && !(v26->field_225 & 2))
         {
-            sub_48a800(&v26->field_f4);
+            UTIL_MakeVectors(&v26->field_f4);
             v0 = 0;
             v1 = 0;
             v2 = 200.0f;
@@ -122,11 +122,11 @@ unsigned int * CheckFOV__19CNormalMovementTask(float a0)
             v9 = v0;
             v10 = v1;
             v11 = v2;
-            sub_488460(&v17, &v9, 1, 1, v27->field_288, &v21);
+            UTIL_TraceHull(&v17, &v9, 1, 1, v27->field_288, &v21);
             if (1.0 <= v22)
                 goto LABEL_57221a;
         }
-        sub_4898c0(v24->field_8);
+        CBot::TurnAround(v24->field_8);
         v24->field_8->field_d88 = (float)(1.0 + *(float *)&gpGlobals->field_0);
         v24->field_8->field_d88 = (float)(1.0 + *(float *)&gpGlobals->field_0);
     }
@@ -138,7 +138,7 @@ LABEL_5720d0:
             v32 = v24->field_c;
             if (0.1 < v32->field_19c && v32->field_240 != 3 && !(v32->field_225 & 2))
             {
-                sub_48a800(&v32->field_f4);
+                UTIL_MakeVectors(&v32->field_f4);
                 v18 = 0;
                 v19 = 0;
                 v20 = 200.0f;
@@ -162,7 +162,7 @@ LABEL_5720d0:
                 v12 = v15;
                 v13 = v16;
                 v14 = v17;
-                sub_488460(&v9, &v12, 1, 1, v33->field_288, &v0);
+                UTIL_TraceHull(&v9, &v12, 1, 1, v33->field_288, &v0);
                 if (1.0 > v4)
                     goto LABEL_572226;
 LABEL_57221a:
@@ -171,7 +171,7 @@ LABEL_57221a:
             else
             {
 LABEL_572226:
-                sub_48bd50(v24, &v24->field_8->field_ee4);
+                CNormalMovementTask::BotTurnAtWall(v24, &v24->field_8->field_ee4);
                 v24->field_8->field_d88 = (float)(1.0 + *(float *)&gpGlobals->field_0);
                 v24->field_8->field_aec = (float)(1.5 + v24->field_8->field_aec);
             }

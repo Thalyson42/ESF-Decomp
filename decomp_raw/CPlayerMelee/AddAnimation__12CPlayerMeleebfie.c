@@ -75,7 +75,7 @@ typedef struct st_5001c0_1 {
     unsigned int field_0;
 } st_5001c0_1;
 
-extern st_5001c0_1 *g_6168dc;
+extern st_5001c0_1 *g_engfuncs.pfnIndexOfEdict;
 
 st_5001c0_2 * AddAnimation__12CPlayerMeleebfie(st_5001c0_6 *a0, char a1, float a2, int a3, int a4)
 {
@@ -87,11 +87,11 @@ st_5001c0_2 * AddAnimation__12CPlayerMeleebfie(st_5001c0_6 *a0, char a1, float a
     int *v1;  // [bp-0xc]
     char v2;  // [bp-0x5]
 
-    v3 = sub_487fb0(a0);
+    v3 = CPlayerMelee::GetCurrentAnim(a0);
     if (v3 && v3->field_298 && a0->field_124)
-        sub_48b090(g_6168dc(a0->field_124->field_0->field_208));
+        UTIL_Model_RemoveAll(g_engfuncs.pfnIndexOfEdict(a0->field_124->field_0->field_208));
     v2 = 1;
-    v5 = sub_48d6a0(680);
+    v5 = __builtin_new(680);
     if (a3 > 16)
         a3 = 16;
     v5->field_280 = 0;
@@ -111,7 +111,7 @@ st_5001c0_2 * AddAnimation__12CPlayerMeleebfie(st_5001c0_6 *a0, char a1, float a
         do
         {
             v1 += 1;
-            sub_48e110(&v5->padding_0[32 * idx], *(int *)((char *)v1 - 4));
+            strcpy@GLIBC_2.0(&v5->padding_0[32 * idx], *(int *)((char *)v1 - 4));
             if (idx)
             {
                 if (v2)
@@ -130,9 +130,9 @@ st_5001c0_2 * AddAnimation__12CPlayerMeleebfie(st_5001c0_6 *a0, char a1, float a
             }
         } while ((idx += 1, idx < a3));
     }
-    if (sub_48afe0(a0->field_124, v5) == 0xffffffff && !a0->field_144)
+    if (CBaseAnimating::LookupSequence(a0->field_124, v5) == 0xffffffff && !a0->field_144)
     {
-        sub_48d4e0(v5);
+        __builtin_delete(v5);
         return NULL;
     }
     v7 = a0;
@@ -142,7 +142,7 @@ st_5001c0_2 * AddAnimation__12CPlayerMeleebfie(st_5001c0_6 *a0, char a1, float a
         v5->field_2a4 = v7->field_84;
     }
     v7->field_84 = v5;
-    sub_488cd0(a0);
+    CPlayerMelee::ManageList(a0);
     return v5;
 }
 

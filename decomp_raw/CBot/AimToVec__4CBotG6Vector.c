@@ -11,7 +11,7 @@ int AimToVec__4CBotG6Vector(unsigned int *a0, float *a1)
     v0 = *a1;
     v1 = a1[1];
     v2 = a1[2];
-    sub_48a170(&v3, a0, &v0);
+    CBot::GetAimAngles(&v3, a0, &v0);
     a0[772] = v3;
     a0[773] = v4;
     a0[774] = v5;

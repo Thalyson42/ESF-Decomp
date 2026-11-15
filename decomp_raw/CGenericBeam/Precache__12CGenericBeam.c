@@ -4,7 +4,7 @@ typedef struct st_4c5680_0 {
 } st_4c5680_0;
 
 extern st_4c5680_0 *g_engfuncs;
-extern st_4c5680_0 *g_6167c4;
+extern st_4c5680_0 *g_engfuncs.pfnPrecacheSound;
 
 int Precache__12CGenericBeam(unsigned short *a0)
 {
@@ -45,8 +45,8 @@ int Precache__12CGenericBeam(unsigned short *a0)
     g_engfuncs("sprites/purplecharge.spr");
     g_engfuncs("sprites/redcharge.spr");
     g_engfuncs("sprites/yellowcharge.spr");
-    g_6167c4("weapons/basicbeam_charge.wav");
-    g_6167c4("weapons/basicbeam_fire.wav");
-    return sub_488bb0(a0);
+    g_engfuncs.pfnPrecacheSound("weapons/basicbeam_charge.wav");
+    g_engfuncs.pfnPrecacheSound("weapons/basicbeam_fire.wav");
+    return CControlledBeam::Precache(a0);
 }
 

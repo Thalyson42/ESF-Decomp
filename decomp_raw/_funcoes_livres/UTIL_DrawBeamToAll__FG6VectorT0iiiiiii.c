@@ -13,7 +13,7 @@ typedef struct st_579670_1 {
     unsigned int field_0;
 } st_579670_1;
 
-extern st_579670_1 *g_6168e0;
+extern st_579670_1 *g_engfuncs.pfnPEntityOfEntIndex;
 extern st_579670_0 *gpGlobals;
 
 st_579670_0 * UTIL_DrawBeamToAll__FG6VectorT0iiiiiii(float *a0, float *a1, int a2, int a3, int a4, int a5, int a6, int a7, int a8)
@@ -30,8 +30,8 @@ st_579670_0 * UTIL_DrawBeamToAll__FG6VectorT0iiiiiii(float *a0, float *a1, int a
     iter = 1;
     while (iter <= (int)gpGlobals->field_90)
     {
-        v7 = g_6168e0(iter);
-        if ((char)sub_48b960(v7))
+        v7 = g_engfuncs.pfnPEntityOfEntIndex(iter);
+        if ((char)IsNull(v7))
         {
             iter += 1;
         }
@@ -43,7 +43,7 @@ st_579670_0 * UTIL_DrawBeamToAll__FG6VectorT0iiiiiii(float *a0, float *a1, int a
             v0 = *a1;
             v1 = a1[1];
             v2 = a1[2];
-            sub_4892f0(v7, &v3, &v0, a2, a3, a4, a5, a6, a7, a8, 4);
+            UTIL_DrawBeam(v7, &v3, &v0, a2, a3, a4, a5, a6, a7, a8, 4);
             iter += 1;
         }
         else

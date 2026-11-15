@@ -39,20 +39,20 @@ st_55c0c0_0 * Think__19CTeleportComboEntry(st_55c0c0_2 *a0)
     {
         if (a0->field_14 <= *(float *)gpGlobals || a0->field_4->field_a18 > 159)
         {
-            v0 = sub_488180(a0->field_4);
+            v0 = CBasePlayer::Teleport(a0->field_4);
         }
         else
         {
             v1 = a0->field_4;
             if (!v1->field_b6c)
-                return sub_488e30(a0->field_4, a0->field_18);
+                return CBot::SetMoveDir(a0->field_4, a0->field_18);
             if (a0->field_1c)
-                sub_48b720(v1, v1->field_b6c);
+                CBot::AimAtEnemy(v1, v1->field_b6c);
             if (!a0->field_1e)
-                return sub_488e30(a0->field_4, a0->field_18);
+                return CBot::SetMoveDir(a0->field_4, a0->field_18);
             v0 = *(int *)a0->field_4->field_b6c;
             if (*(int *)(*(int *)a0->field_4->field_b6c + 264) != 11)
-                return sub_488e30(a0->field_4, a0->field_18);
+                return CBot::SetMoveDir(a0->field_4, a0->field_18);
         }
     }
     a0->field_0 = 2;

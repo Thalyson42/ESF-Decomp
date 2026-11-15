@@ -18,17 +18,17 @@ typedef struct st_506eb0_3 {
 } st_506eb0_3;
 
 extern unsigned int gmsgMeleeAtkHud;
-extern st_506eb0_3 *g_616878;
-extern st_506eb0_3 *g_61687c;
-extern st_506eb0_3 *g_616880;
+extern st_506eb0_3 *g_engfuncs.pfnMessageBegin;
+extern st_506eb0_3 *g_engfuncs.pfnMessageEnd;
+extern st_506eb0_3 *g_engfuncs.pfnWriteByte;
 
 int MeleeHudDisable__12CPlayerMelee(st_506eb0_1 *a0)
 {
     unsigned int v0;  // [bp-0x1c]
     unsigned int v1;  // [bp-0x18]
 
-    g_616878(1, gmsgMeleeAtkHud, 0, *(int *)(*(int *)a0->field_124 + 520), v0, v1);
-    g_616880(0);
-    return g_61687c(0);
+    g_engfuncs.pfnMessageBegin(1, gmsgMeleeAtkHud, 0, *(int *)(*(int *)a0->field_124 + 520), v0, v1);
+    g_engfuncs.pfnWriteByte(0);
+    return g_engfuncs.pfnMessageEnd(0);
 }
 

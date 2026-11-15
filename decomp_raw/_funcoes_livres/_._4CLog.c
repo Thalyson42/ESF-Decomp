@@ -15,10 +15,10 @@ unsigned int _._4CLog(st_56cce0_0 *a0, unsigned int a1)
 
     a0->field_8 = &__vt_4CLog;
     if (a0->field_1 && a0->field_4)
-        sub_48c560(a0->field_4);
+        fclose@GLIBC_2.1(a0->field_4);
     v0 = a1;
     if ((char)v0 & 1)
-        v0 = sub_48d4e0(a0);
+        v0 = __builtin_delete(a0);
     return v0;
 }
 

@@ -21,15 +21,15 @@ unsigned int * ManagePriority__12CPlayerMelee(st_4fff30_0 *a0)
     unsigned int *v3;  // eax
     unsigned int *v4;  // eax
 
-    v0 = sub_48ae90(a0);
+    v0 = CPlayerMelee::CanPlayAnimation(a0);
     if (!v0)
         return v0;
-    v1 = sub_487fb0(a0);
+    v1 = CPlayerMelee::GetCurrentAnim(a0);
     if (!v1[167])
         return v1;
     if (v1[160] == 2)
     {
-        v2 = sub_48b3f0(a0);
+        v2 = CPlayerMelee::PlayMedPriorityAnim(a0);
         if (v2)
             return v2;
         if (a0->field_124->field_330)
@@ -37,21 +37,21 @@ unsigned int * ManagePriority__12CPlayerMelee(st_4fff30_0 *a0)
     }
     else if (v1[160] == 1)
     {
-        v3 = sub_48b3f0(a0);
+        v3 = CPlayerMelee::PlayMedPriorityAnim(a0);
         if (v3)
             return v3;
     }
     else if (v1[160] == 3)
     {
-        v4 = sub_48cd30(a0);
+        v4 = CPlayerMelee::PlayLowPriorityAnim(a0);
         if (v4)
             return v4;
-        return sub_48b460(a0, v1);
+        return CPlayerMelee::RemoveAnim(a0, v1);
     }
     else
     {
         return v1;
     }
-    return sub_48b460(a0, v1);
+    return CPlayerMelee::RemoveAnim(a0, v1);
 }
 

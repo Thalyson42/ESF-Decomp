@@ -24,11 +24,11 @@ unsigned int TaskThink__13CTeleportTask(st_5827d0_1 *a0)
     unsigned int v0;  // eax
 
     a0->field_8->field_c10 = 0;
-    sub_48d0d0(a0->field_8);
-    sub_488e30(a0->field_8, a0->field_8->field_b0c);
+    CBot::ResetMoveSpeed(a0->field_8);
+    CBot::SetMoveDir(a0->field_8, a0->field_8->field_b0c);
     if (a0->field_8->field_b08 <= *(float *)gpGlobals)
     {
-        v0 = sub_488180(a0->field_8);
+        v0 = CBasePlayer::Teleport(a0->field_8);
         a0->field_4 = 2;
     }
     return v0;

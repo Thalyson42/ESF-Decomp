@@ -14,9 +14,9 @@ unsigned int TouchChangeLevel__12CChangeLevelP11CBaseEntity(int a0, st_52dcd0_0 
 {
     unsigned int v0;  // eax
 
-    v0 = sub_488af0(*(int *)*a1 + gpGlobals->field_98, "player");
+    v0 = strcmp@GLIBC_2.0(*(int *)*a1 + gpGlobals->field_98, "player");
     if (v0)
         return v0;
-    return sub_48d090(a0, a1);
+    return CChangeLevel::ChangeLevelNow(a0, a1);
 }
 

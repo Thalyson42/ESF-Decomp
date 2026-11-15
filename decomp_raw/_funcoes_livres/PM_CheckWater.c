@@ -71,7 +71,7 @@ int PM_CheckWater(void)
     if (v1 + 14 <= 5)
     {
         v2 = (float)((double)pmove->field_e4 * 50.0);
-        sub_48c590(&pmove->field_74, v2, &(&current_table.283)[0xbffffff94 + -12 * v1], &pmove->field_74);
+        VectorMA(&pmove->field_74, v2, &(&current_table.283)[0xbffffff94 + -12 * v1], &pmove->field_74);
     }
     return pmove->field_e4 > 1;
 }

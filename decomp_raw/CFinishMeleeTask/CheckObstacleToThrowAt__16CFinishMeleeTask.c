@@ -29,8 +29,8 @@ typedef struct st_54a4c0_2 {
 
 extern unsigned int _GLOBAL_OFFSET_TABLE_;
 extern float g_vecZero;
-extern float g_616790;
-extern float g_616794;
+extern float g_vecZero+4;
+extern float g_vecZero+8;
 extern st_54a4c0_2 *gpGlobals;
 
 st_54a4c0_0 * CheckObstacleToThrowAt__16CFinishMeleeTask(st_54a4c0_0 *a0)
@@ -100,8 +100,8 @@ st_54a4c0_0 * CheckObstacleToThrowAt__16CFinishMeleeTask(st_54a4c0_0 *a0)
     v5 = 0;
     v3 = 9999.0f;
     v27 = g_vecZero;
-    v28 = g_616790;
-    v29 = g_616794;
+    v28 = g_vecZero+4;
+    v29 = g_vecZero+8;
     i = 0;
     do
     {
@@ -117,15 +117,15 @@ st_54a4c0_0 * CheckObstacleToThrowAt__16CFinishMeleeTask(st_54a4c0_0 *a0)
             v7 = a0->field_c->field_f4;
             v8 = *(float *)&v39[1];
             v9 = *(float *)&v39[2];
-            sub_489120(v0, &v7);
+            WrapAngles(v0, &v7);
             v36 = v14;
             v37 = v15;
             v38 = v16;
             v40 = v5 + v37;
-            sub_48d430(v40);
+            UTIL_WrapAngle(v40);
             v37 = v40;
             v36 = v6;
-            sub_48a800(&v36);
+            UTIL_MakeVectors(&v36);
             v41 = &gpGlobals->field_28;
             v10 = (float)(3000.0 * gpGlobals->field_28);
             v11 = (float)(3000.0 * *(float *)&v41[1]);
@@ -149,8 +149,8 @@ st_54a4c0_0 * CheckObstacleToThrowAt__16CFinishMeleeTask(st_54a4c0_0 *a0)
             v30 = v7;
             v31 = v8;
             v32 = v9;
-            sub_488460(v43, &v33, 1, 1, v42, &v22);
-            sub_488460(&a0->field_c->field_88, &v30, 1, 1, a0->field_c, &v17);
+            UTIL_TraceHull(v43, &v33, 1, 1, v42, &v22);
+            UTIL_TraceHull(&a0->field_c->field_88, &v30, 1, 1, a0->field_c, &v17);
             v46 = &a0->field_c->field_88;
             v47 = v24 - a0->field_c->field_88;
             v7 = v47;
@@ -161,7 +161,7 @@ st_54a4c0_0 * CheckObstacleToThrowAt__16CFinishMeleeTask(st_54a4c0_0 *a0)
             v50 = v47 * v47 + v48 * v48 + v49 * v49;
             v51 = sqrt(v50);
             if (isnan(v51))
-                sub_487dc0(*(unsigned int *)&v50);
+                sqrt(*(unsigned int *)&v50);
             else
                 v50 = v51;
             v4 = (float)v50;
@@ -175,7 +175,7 @@ st_54a4c0_0 * CheckObstacleToThrowAt__16CFinishMeleeTask(st_54a4c0_0 *a0)
             v56 = v53 * v53 + v54 * v54 + v55 * v55;
             v57 = sqrt(v56);
             if (isnan(v57))
-                sub_487dc0(*(unsigned int *)&v56);
+                sqrt(*(unsigned int *)&v56);
             else
                 v56 = v57;
             v13 = (float)v56;
@@ -212,8 +212,8 @@ LABEL_54a976:
         i += 1;
     } while (i <= 4);
     v59 = 0;
-    if (g_vecZero == v27 && g_616790 == v28)
-        v59 = g_616794 == v29;
+    if (g_vecZero == v27 && g_vecZero+4 == v28)
+        v59 = g_vecZero+8 == v29;
     if (!v59)
     {
         *(float *)&a0->field_30 = v27;

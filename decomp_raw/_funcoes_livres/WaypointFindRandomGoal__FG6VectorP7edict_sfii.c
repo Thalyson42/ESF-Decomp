@@ -3,10 +3,10 @@ typedef struct st_588dc0_0 {
     unsigned int field_0;
 } st_588dc0_0;
 
-extern st_588dc0_0 *g_616928;
+extern st_588dc0_0 *g_engfuncs.pfnRandomLong;
 extern void waypoints;
-extern char g_626821[4];
-extern unsigned int g_626824[4];
+extern char waypoints+1[4];
+extern unsigned int waypoints+4[4];
 extern int num_waypoints;
 
 unsigned int WaypointFindRandomGoal__FG6VectorP7edict_sfii(float *a0, unsigned int a1, float a2, unsigned int a3, unsigned int a4)
@@ -41,7 +41,7 @@ unsigned int WaypointFindRandomGoal__FG6VectorP7edict_sfii(float *a0, unsigned i
         {
             iter += 1;
         }
-        else if (g_626821[v8] & 64)
+        else if (waypoints+1[v8] & 64)
         {
             iter += 1;
         }
@@ -50,7 +50,7 @@ unsigned int WaypointFindRandomGoal__FG6VectorP7edict_sfii(float *a0, unsigned i
             v9 = iter * 16;
             if ((a4 & *(int *)&(&waypoints)[v9]) == a4)
             {
-                idx = v9 + (char *)&g_626824[0];
+                idx = v9 + (char *)&waypoints+4[0];
                 v11 = *(float *)idx - *a0;
                 v1 = v11;
                 v12 = *(float *)(idx + 4) - a0[1];
@@ -60,7 +60,7 @@ unsigned int WaypointFindRandomGoal__FG6VectorP7edict_sfii(float *a0, unsigned i
                 v14 = v11 * v11 + v12 * v12 + v13 * v13;
                 v15 = sqrt(v14);
                 if (isnan(v15))
-                    sub_487dc0(*(unsigned int *)&v14);
+                    sqrt(*(unsigned int *)&v14);
                 else
                     v14 = v15;
                 v0 = (float)v14;
@@ -91,9 +91,9 @@ unsigned int WaypointFindRandomGoal__FG6VectorP7edict_sfii(float *a0, unsigned i
     }
     if (index)
     {
-        v16 = *(int *)&(&v4)[4 * g_616928(1, index)];
-        v17 = *(int *)&(&v4)[4 * g_616928(1, index)];
-        return *(int *)&(&v4)[4 * g_616928(1, index)];
+        v16 = *(int *)&(&v4)[4 * g_engfuncs.pfnRandomLong(1, index)];
+        v17 = *(int *)&(&v4)[4 * g_engfuncs.pfnRandomLong(1, index)];
+        return *(int *)&(&v4)[4 * g_engfuncs.pfnRandomLong(1, index)];
     }
     return 0xffffffff;
 }

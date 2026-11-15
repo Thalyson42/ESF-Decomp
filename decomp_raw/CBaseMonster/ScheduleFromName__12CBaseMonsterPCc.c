@@ -5,6 +5,6 @@ int ScheduleFromName__12CBaseMonsterPCc(int a0, int a1)
 {
     int v0;  // [bp-0x1c]
 
-    return sub_48ca50(a0, a1, &_12CBaseMonster.m_scheduleList, 38, v0);
+    return CBaseMonster::ScheduleInList(a0, a1, &_12CBaseMonster.m_scheduleList, 38, v0);
 }
 

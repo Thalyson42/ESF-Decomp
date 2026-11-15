@@ -6,6 +6,6 @@ typedef struct st_51fdb0_0 {
 
 int EnableChargeSprite__18CSpecialBeamCannon(st_51fdb0_0 *a0)
 {
-    return sub_487b90(a0->field_1d4);
+    return CSprite::TurnOn(a0->field_1d4);
 }
 

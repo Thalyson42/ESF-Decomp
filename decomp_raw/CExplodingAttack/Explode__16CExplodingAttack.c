@@ -145,10 +145,10 @@ typedef struct st_4bb0e0_13 {
 
 extern st_4bb0e0_13 *g_pGameRules;
 extern unsigned int gmsgPowerStruggle;
-extern st_4bb0e0_2 *g_616878;
-extern st_4bb0e0_2 *g_61687c;
-extern st_4bb0e0_2 *g_616884;
-extern st_4bb0e0_2 *g_6168d4;
+extern st_4bb0e0_2 *g_engfuncs.pfnMessageBegin;
+extern st_4bb0e0_2 *g_engfuncs.pfnMessageEnd;
+extern st_4bb0e0_2 *g_engfuncs.pfnWriteChar;
+extern st_4bb0e0_2 *g_engfuncs.pfnPEntityOfEntOffset;
 extern char g_800000;
 
 st_4bb0e0_0 * Explode__16CExplodingAttack(float idx)
@@ -244,10 +244,10 @@ st_4bb0e0_0 * Explode__16CExplodingAttack(float idx)
             v37->field_0->field_108 = 14;
         else
             *(unsigned int *)(*(int *)*(int *)(*(unsigned int *)&idx + 700) + 264) = 3;
-        g_616878(1, gmsgPowerStruggle, 0, *(int *)(*(int *)*(int *)(*(unsigned int *)&idx + 700) + 520));
+        g_engfuncs.pfnMessageBegin(1, gmsgPowerStruggle, 0, *(int *)(*(int *)*(int *)(*(unsigned int *)&idx + 700) + 520));
         v0 = 127;
-        g_616884(v0);
-        g_61687c(v0);
+        g_engfuncs.pfnWriteChar(v0);
+        g_engfuncs.pfnMessageEnd(v0);
         *(unsigned int *)(*(int *)(*(unsigned int *)&idx + 700) + 856) = 0;
     }
     (*(int *)(*(int *)(*(unsigned int *)&idx + 96) + 516))(idx);
@@ -259,14 +259,14 @@ st_4bb0e0_0 * Explode__16CExplodingAttack(float idx)
     v4 = NULL;
     while (1)
     {
-        v4 = sub_48bba0(v4, &v29, v6);
+        v4 = UTIL_FindEntityInSphere(v4, &v29, v6);
         if (!v4)
             break;
         if (v4->field_60->field_a0(v4) && (v39 = v4, 15.0f <= *(float *)(*(int *)idx + 480)))
         {
             v1 = v39;
             v40 = *(int *)(v5 + 520);
-            if (*(int *)(v5 + 520) || (v40 = g_6168d4(0), v40))
+            if (*(int *)(v5 + 520) || (v40 = g_engfuncs.pfnPEntityOfEntOffset(0), v40))
                 v41 = *(int *)(v40 + 124);
             else
                 v41 = 0;
@@ -282,18 +282,18 @@ st_4bb0e0_0 * Explode__16CExplodingAttack(float idx)
                 v46 = v43 * v43 + v44 * v44 + v45 * v45;
                 v47 = sqrt(v46);
                 if (isnan(v47))
-                    sub_487dc0(*(unsigned int *)&v46);
+                    sqrt(*(unsigned int *)&v46);
                 else
                     v46 = v47;
                 v3 = (float)v46;
                 v48 = v39->field_33c;
                 v39->field_33c = 0;
                 if (v39->field_6c8)
-                    sub_48daa0(v39);
+                    CBasePlayer::RemoveWallJump(v39);
                 if (v6 * 0.5 > v3 && v39->field_508)
-                    sub_48a7a0(v39);
+                    CBasePlayer::StopSwoop(v39);
                 if (v6 * 0.25 > v3 && v39->field_320)
-                    sub_48c5a0(v39);
+                    CBasePlayer::StopFly(v39);
                 v39->field_33c = v48;
                 v2 = (v6 - v3) / v6;
                 v13 = __fnstcw();
@@ -309,7 +309,7 @@ st_4bb0e0_0 * Explode__16CExplodingAttack(float idx)
                 v53 = v50 * v50 + v51 * v51 + v52 * v52;
                 v54 = sqrt(v53);
                 if (isnan(v54))
-                    sub_487dc0(*(unsigned int *)&v53);
+                    sqrt(*(unsigned int *)&v53);
                 else
                     v53 = v54;
                 v10 = (float)v53;
@@ -355,7 +355,7 @@ st_4bb0e0_0 * Explode__16CExplodingAttack(float idx)
     v7 = v29;
     v8 = v30;
     v9 = v32;
-    sub_48ab00(&v7, *(int *)idx, v5, *(float *)(*(int *)idx + 480), v6, 0, &g_800000);
+    RadiusDamage(&v7, *(int *)idx, v5, *(float *)(*(int *)idx + 480), v6, 0, &g_800000);
     v63 = (st_4bb0e0_14 *)idx;
     if (v63->field_2c8)
     {

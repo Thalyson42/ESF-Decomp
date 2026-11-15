@@ -21,8 +21,8 @@ extern st_582560_2 *gpGlobals;
 int _._12CPowerUpTask(st_582560_1 *a0, int a1)
 {
     a0->field_14 = &__vt_12CPowerUpTask;
-    sub_48ba60(a0->field_8);
+    CBasePlayer::StopPowerUp(a0->field_8);
     a0->field_8->field_b10 = (float)(0.6 + *(float *)gpGlobals);
-    return sub_488170(a0, a1);
+    return _._9CBaseTask(a0, a1);
 }
 

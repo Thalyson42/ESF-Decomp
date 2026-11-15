@@ -25,6 +25,6 @@ int Spawn__13CRegeneration(st_50dca0_2 *a0)
     a0->field_88 = 29;
     a0->field_c0 = 0;
     a0->field_b0 = 0xffffffff;
-    return sub_48cf50(a0);
+    return CBasePlayerItem::FallInit(a0);
 }
 

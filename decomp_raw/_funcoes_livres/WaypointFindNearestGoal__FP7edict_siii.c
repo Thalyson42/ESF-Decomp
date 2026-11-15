@@ -1,6 +1,6 @@
 // WaypointFindNearestGoal__FP7edict_siii @0x188760 size=192
 extern void waypoints;
-extern char g_626821[4];
+extern char waypoints+1[4];
 extern int num_waypoints;
 
 int WaypointFindNearestGoal__FP7edict_siii(unsigned int a0, int a1, unsigned int a2, unsigned int a3)
@@ -25,7 +25,7 @@ int WaypointFindNearestGoal__FP7edict_siii(unsigned int a0, int a1, unsigned int
             {
                 iter += 1;
             }
-            else if (g_626821[v3] & 64)
+            else if (waypoints+1[v3] & 64)
             {
                 iter += 1;
             }
@@ -35,7 +35,7 @@ int WaypointFindNearestGoal__FP7edict_siii(unsigned int a0, int a1, unsigned int
             }
             else if ((a3 & *(int *)&(&waypoints)[16 * iter]) == a3)
             {
-                v4 = sub_48dd70(a1, iter, a2);
+                v4 = WaypointDistanceFromTo(a1, iter, a2);
                 if (v4 < v0)
                 {
                     v1 = iter;

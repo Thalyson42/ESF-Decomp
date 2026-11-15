@@ -98,7 +98,7 @@ unsigned int * SplitThink__14CScatterAttack(float idx)
             iter = 1;
             while (iter <= gpGlobals->field_90)
             {
-                v15 = sub_48a500(iter);
+                v15 = UTIL_PlayerByIndex(iter);
                 if (!v15)
                 {
                     iter += 1;
@@ -120,7 +120,7 @@ unsigned int * SplitThink__14CScatterAttack(float idx)
                     v0 = 0;
                     for (j = 0; (int)j < *(int *)(*(unsigned int *)&idx + 944); j += 1)
                     {
-                        if (sub_488810(*(unsigned int *)&idx + j * 8 + 744) == v15)
+                        if (EHANDLE::__opP11CBaseEntity(*(unsigned int *)&idx + j * 8 + 744) == v15)
                         {
                             v0 = 1;
                             break;
@@ -140,8 +140,8 @@ unsigned int * SplitThink__14CScatterAttack(float idx)
                         v5 = __fnstcw();
                         v4 = v5 | 0xc00;
                         v3 = (int)(*(float *)&v17[1].padding_2c[24] * 0.5);
-                        sub_48a3d0(v2, &v9, &v6, v3, *(short *)(*(unsigned int *)&idx + 734), *(short *)(*(unsigned int *)&idx + 736), *(short *)(*(unsigned int *)&idx + 732), *(float *)(*(unsigned int *)&idx + 740), v15);
-                        sub_48d960(*(unsigned int *)&idx + *(int *)(*(unsigned int *)&idx + 944) * 8 + 744, v15);
+                        CScatterSplit::ShootScatterSplit(v2, &v9, &v6, v3, *(short *)(*(unsigned int *)&idx + 734), *(short *)(*(unsigned int *)&idx + 736), *(short *)(*(unsigned int *)&idx + 732), *(float *)(*(unsigned int *)&idx + 740), v15);
+                        EHANDLE::__as(*(unsigned int *)&idx + *(int *)(*(unsigned int *)&idx + 944) * 8 + 744, v15);
                         *(unsigned int *)(*(unsigned int *)&idx + 944) = *(int *)(*(unsigned int *)&idx + 944) + 1;
                         break;
                     }
@@ -157,7 +157,7 @@ unsigned int * SplitThink__14CScatterAttack(float idx)
             }
         }
     }
-    sub_487d50(idx);
+    CMagicAttack::DrawBubbles(idx);
     *(float *)(*(int *)idx + 260) = (float)(0.2 + gpGlobals->field_0);
     return gpGlobals;
 }

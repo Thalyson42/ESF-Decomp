@@ -42,8 +42,8 @@ int SequenceDone__12CCineMonsterP12CBaseMonster(st_5156e0_3 *a0, int a1)
         a0->field_10 = &SUB_Remove__11CBaseEntity;
         v0->field_104 = (float)(0.1 + *(float *)gpGlobals);
     }
-    sub_489520(a1);
+    CBaseMonster::CineCleanup(a1);
     a0->field_60->field_204(a0, a1);
-    return sub_48d150(a0, 0, 3, 0);
+    return CBaseDelay::SUB_UseTargets(a0, 0, 3, 0);
 }
 

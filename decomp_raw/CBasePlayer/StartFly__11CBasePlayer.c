@@ -33,7 +33,7 @@ unsigned int StartFly__11CBasePlayer(float a0)
             else if (!*(int *)(*(unsigned int *)&a0 + 856))
             {
                 if (*(int *)(*(unsigned int *)&a0 + 812))
-                    sub_4895a0(a0);
+                    CBasePlayer::StopBlock(a0);
                 *(unsigned int *)(*(unsigned int *)&a0 + 800) = 1;
                 *(float *)(*(int *)a0 + 284) = 1.0000000116860974e-07f;
                 v3 = *(int *)a0;

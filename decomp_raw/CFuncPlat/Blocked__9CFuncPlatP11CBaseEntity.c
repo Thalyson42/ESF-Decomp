@@ -62,7 +62,7 @@ unsigned int * Blocked__9CFuncPlatP11CBaseEntity(st_4e9460_4 *a0, st_4e9460_7 *a
     a1->field_60->field_34(a1, a0->field_0, a0->field_0, 0x3f800000, 1);
     v4 = a0->field_0;
     if (v4->field_1e8)
-        v4 = sub_489390(v4->field_208, 6, v4->field_1e8 + gpGlobals->field_98, 0, 0, 32, 100);
+        v4 = EMIT_SOUND_DYN(v4->field_208, 6, v4->field_1e8 + gpGlobals->field_98, 0, 0, 32, 100);
     if (a0->field_80 == 2)
     {
         v4 = a0->field_60->field_f4(a0);

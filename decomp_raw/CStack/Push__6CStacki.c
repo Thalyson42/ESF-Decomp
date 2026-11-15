@@ -13,6 +13,6 @@ int Push__6CStacki(st_4e3730_0 *a0, unsigned int a1)
         a0->field_190 = a0->field_190 + 1;
         return a1;
     }
-    return sub_48c360("Error!\n");
+    return printf@GLIBC_2.0("Error!\n");
 }
 

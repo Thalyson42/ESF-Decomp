@@ -60,13 +60,13 @@ typedef struct st_490450_5 {
 extern char ExplodeTouch__16CExplodingAttackP11CBaseEntity;
 extern char NormalThink__12CMagicAttack;
 extern unsigned int gmsgFlare;
-extern st_490450_2 *g_6167c8;
-extern st_490450_2 *g_616878;
-extern st_490450_2 *g_61687c;
-extern st_490450_2 *g_616888;
-extern st_490450_2 *g_61688c;
-extern st_490450_2 *g_616894;
-extern st_490450_2 *g_6168dc;
+extern st_490450_2 *g_engfuncs.pfnSetModel;
+extern st_490450_2 *g_engfuncs.pfnMessageBegin;
+extern st_490450_2 *g_engfuncs.pfnMessageEnd;
+extern st_490450_2 *g_engfuncs.pfnWriteShort;
+extern st_490450_2 *g_engfuncs.pfnWriteLong;
+extern st_490450_2 *g_engfuncs.pfnWriteCoord;
+extern st_490450_2 *g_engfuncs.pfnIndexOfEdict;
 extern st_490450_5 *gpGlobals;
 
 short ShootBigBang__14CBigBangAttackP9entvars_sG6VectorT2ifsss(st_490450_4 *a0, float *a1, float *a2, unsigned int a3, float a4, short a5, short a6, short a7)
@@ -105,11 +105,11 @@ short ShootBigBang__14CBigBangAttackP9entvars_sG6VectorT2ifsss(st_490450_4 *a0, 
     float v17;  // [bp-0x14]
     float v18;  // [bp-0x10]
 
-    v19 = sub_4888b0(0);
+    v19 = GetClassPtr__H1Z14CBigBangAttack_PX01_PX01(0);
     v19->field_60->field_8(v19);
     v19->field_0->field_108 = 5;
     v19->field_0->field_10c = 1;
-    g_6167c8(v19->field_0->field_208, "sprites/null.spr");
+    g_engfuncs.pfnSetModel(v19->field_0->field_208, "sprites/null.spr");
     v19->field_2d4 = 0;
     v19->field_2d0 = 6;
     v20 = a3;
@@ -125,12 +125,12 @@ short ShootBigBang__14CBigBangAttackP9entvars_sG6VectorT2ifsss(st_490450_4 *a0, 
     v23 = *v22 * *v22 + v22[1] * v22[1] + v22[2] * v22[2];
     v24 = sqrt(v23);
     if (isnan(v24))
-        sub_487dc0(*(unsigned int *)&v23);
+        sqrt(*(unsigned int *)&v23);
     else
         v23 = v24;
     v19->field_2a8 = (float)v23;
     v25 = v19->field_0;
-    sub_488860(&v10, &v25->field_20);
+    UTIL_VecToAngles(&v10, &v25->field_20);
     v25->field_50 = v10;
     v25->field_54 = v13;
     v25->field_58 = v15;
@@ -141,7 +141,7 @@ short ShootBigBang__14CBigBangAttackP9entvars_sG6VectorT2ifsss(st_490450_4 *a0, 
     v26 = *a2 * *a2 + a2[1] * a2[1] + a2[2] * a2[2];
     v27 = sqrt(v26);
     if (isnan(v27))
-        sub_487dc0(*(unsigned int *)&v26);
+        sqrt(*(unsigned int *)&v26);
     else
         v26 = v27;
     v6 = (float)v26;
@@ -165,7 +165,7 @@ short ShootBigBang__14CBigBangAttackP9entvars_sG6VectorT2ifsss(st_490450_4 *a0, 
     v11 = *a1 + v16;
     v12 = a1[1] + v17;
     v14 = a1[2] + v18;
-    sub_48db50(v19->field_0, &v11);
+    UTIL_SetOrigin(v19->field_0, &v11);
     v30 = v1;
     v11 = v30;
     v12 = v30;
@@ -174,27 +174,27 @@ short ShootBigBang__14CBigBangAttackP9entvars_sG6VectorT2ifsss(st_490450_4 *a0, 
     v16 = (float)v31;
     v17 = (float)v31;
     v18 = (float)v31;
-    v19->field_14 = _INSERT(sub_48a0d0(v19->field_0, &v16, &v11), 0, 0) | 0xffff0000;
+    v19->field_14 = _INSERT(UTIL_SetSize(v19->field_0, &v16, &v11), 0, 0) | 0xffff0000;
     v19->field_18 = &ExplodeTouch__16CExplodingAttackP11CBaseEntity;
-    g_616878(2, gmsgFlare, 0, 0);
-    v33 = g_6168dc(v19->field_0->field_208);
-    g_61688c(v33);
-    g_616888(a5);
-    g_616888(a6);
+    g_engfuncs.pfnMessageBegin(2, gmsgFlare, 0, 0);
+    v33 = g_engfuncs.pfnIndexOfEdict(v19->field_0->field_208);
+    g_engfuncs.pfnWriteLong(v33);
+    g_engfuncs.pfnWriteShort(a5);
+    g_engfuncs.pfnWriteShort(a6);
     v5 = __fnstcw();
     v4 = v5 | 0xc00;
     v3 = (int)(0.1 * v2);
-    g_616888(v3);
-    g_616888(a7);
+    g_engfuncs.pfnWriteShort(v3);
+    g_engfuncs.pfnWriteShort(a7);
     v5 = __fnstcw();
     v4 = v5 | 0xc00;
     v3 = (int)(a4 * 80.0);
-    g_616888(v3);
-    g_616894(*a1);
-    g_616894(a1[1]);
+    g_engfuncs.pfnWriteShort(v3);
+    g_engfuncs.pfnWriteCoord(*a1);
+    g_engfuncs.pfnWriteCoord(a1[1]);
     v0 = a1[2];
-    g_616894(v0);
-    v19->field_c = _INSERT(g_61687c(v0), 0, 0) | 0xffff0000;
+    g_engfuncs.pfnWriteCoord(v0);
+    v19->field_c = _INSERT(g_engfuncs.pfnMessageEnd(v0), 0, 0) | 0xffff0000;
     v19->field_10 = &NormalThink__12CMagicAttack;
     *(float *)&v19->field_0->field_104 = gpGlobals->field_0;
     return (unsigned short)v19;

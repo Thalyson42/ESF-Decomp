@@ -34,6 +34,6 @@ int Spawn__9CEyelaser(st_4bc5c0_2 *a0)
     a0->field_c8 = 0;
     a0->field_cc = 0;
     a0->field_d4 = 0;
-    return sub_48cf50(a0);
+    return CBasePlayerItem::FallInit(a0);
 }
 

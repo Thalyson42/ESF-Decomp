@@ -42,24 +42,24 @@ void __check_eh_spec(st_5958e0_0 **a0, int *a1)
     st_5958e0_0 *v4;  // [bp-0x24]
 
     sub_5958dc(v5, v6, v7);
-    v8 = *(int *)sub_4895f0(v5, v6, v7);
+    v8 = *(int *)__get_eh_info(v5, v6, v7);
     v9 = NULL;
     if (0 < a0)
     {
         do
         {
-            if (sub_48a8d0(*(int *)((char *)a1 + 0x4 * v9), v8[3], v8[2]))
+            if (__throw_type_match_rtti(*(int *)((char *)a1 + 0x4 * v9), v8[3], v8[2]))
             {
-                sub_489150();
-                sub_48a220();
+                __uncatch_exception();
+                __throw();
             }
         } while ((v9 = (char *)v9 + 1, v9 < a0));
     }
-    sub_488d10();
-    sub_48a220();
+    unexpected();
+    __throw();
     sub_5958dc();
     iter = &v5->field_fc380;
-    v11 = sub_48b3e0();
+    v11 = __start_cp_handler();
     v3 = v11;
     if (v8 != v11)
     {
@@ -69,25 +69,25 @@ void __check_eh_spec(st_5958e0_0 **a0, int *a1)
         {
             do
             {
-                if (sub_48a8d0(*(int *)((char *)a1 + 0x4 * v12), v3[3], v3[2]))
+                if (__throw_type_match_rtti(*(int *)((char *)a1 + 0x4 * v12), v3[3], v3[2]))
                 {
-                    sub_489150();
-                    sub_48a220();
+                    __uncatch_exception();
+                    __throw();
                 }
             } while ((v12 = (char *)v12 + 1, v8 = v11, v12 < a0));
         }
     }
-    v2 = sub_488250();
+    v2 = __tf13bad_exception();
     node = NULL;
     if (NULL >= a0)
         goto LABEL_595a3f;
     do
     {
-        if (sub_48a8d0(*(int *)((char *)a1 + 0x4 * node), v2, v8[2]))
+        if (__throw_type_match_rtti(*(int *)((char *)a1 + 0x4 * node), v2, v8[2]))
         {
             v4 = *(int *)&iter[1].padding_0[424];
             v4 = iter->field_27bc;
-            node = sub_48df10(4);
+            node = __eh_alloc(4);
             *node = *(int *)&iter[1].padding_0[424];
             *node = iter->field_27bc;
 LABEL_595a06:
@@ -95,18 +95,18 @@ LABEL_595a06:
             v4 = *(int *)&iter[1].padding_0[424];
             v1 = *node->field_4(*(int *)&iter[1].padding_0[92]);
             v0 = node;
-            sub_488580(v0, v1);
-            sub_48a220(v0, v1);
+            __cp_push_exception(v0, v1);
+            __throw(v0, v1);
         }
     } while ((node = (char *)node + 1, node < a0));
 LABEL_595a3f:
-    sub_48a720();
-    sub_48a220();
+    terminate();
+    __throw();
     sub_5958dc();
     iter = &iter[50].padding_0[7431];
     v4 = iter->field_27bc;
     v4 = *(int *)&iter[1].padding_0[424];
-    sub_48a220();
+    __throw();
     goto LABEL_595a06;
 }
 

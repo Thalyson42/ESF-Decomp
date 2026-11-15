@@ -39,7 +39,7 @@ unsigned int execute_cfa_insn(char *a0, st_5964d4_0 *a1, unsigned int *a2, unsig
     }
     if (v5 > 46)
     {
-        sub_48a650();
+        abort@GLIBC_2.0();
         return a0;
     }
     goto *((void *)(v6 + 513530 - *(int *)(v6 + 513530 + v5 * 4 - 513372)));

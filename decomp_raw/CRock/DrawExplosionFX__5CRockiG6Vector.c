@@ -13,11 +13,11 @@ typedef struct st_529890_1 {
 } st_529890_1;
 
 extern short g_sRockGibs;
-extern st_529890_1 *g_616878;
-extern st_529890_1 *g_61687c;
-extern st_529890_1 *g_616880;
-extern st_529890_1 *g_616888;
-extern st_529890_1 *g_616894;
+extern st_529890_1 *g_engfuncs.pfnMessageBegin;
+extern st_529890_1 *g_engfuncs.pfnMessageEnd;
+extern st_529890_1 *g_engfuncs.pfnWriteByte;
+extern st_529890_1 *g_engfuncs.pfnWriteShort;
+extern st_529890_1 *g_engfuncs.pfnWriteCoord;
 
 double DrawExplosionFX__5CRockiG6Vector(st_529890_0 **a0, int a1, float *a2)
 {
@@ -66,7 +66,7 @@ double DrawExplosionFX__5CRockiG6Vector(st_529890_0 **a0, int a1, float *a2)
     v28 = *a0->field_20 * *a0->field_20 + *(float *)&v27[1] * *(float *)&v27[1] + *(float *)&v27[2] * *(float *)&v27[2];
     v29 = sqrt(v28);
     if (isnan(v29))
-        sub_487dc0(*(unsigned int *)&v28);
+        sqrt(*(unsigned int *)&v28);
     else
         v28 = v29;
     v4 = (float)v28;
@@ -91,7 +91,7 @@ double DrawExplosionFX__5CRockiG6Vector(st_529890_0 **a0, int a1, float *a2)
     v33 = *a0->field_20 * *a0->field_20 + *(float *)&v32[1] * *(float *)&v32[1] + *(float *)&v32[2] * *(float *)&v32[2];
     v34 = sqrt(v33);
     if (isnan(v34))
-        sub_487dc0(*(unsigned int *)&v33);
+        sqrt(*(unsigned int *)&v33);
     else
         v33 = v34;
     v10 = (float)v33;
@@ -130,30 +130,30 @@ double DrawExplosionFX__5CRockiG6Vector(st_529890_0 **a0, int a1, float *a2)
     v4 = (float)(v38 + v10);
     v6 = (float)(v39 + v11);
     v8 = v12 + v15;
-    sub_487b80(a2, &v4, 1, *a0->field_208, &v19);
+    UTIL_TraceLine(a2, &v4, 1, *a0->field_208, &v19);
     v5 = v21;
     v7 = v22;
     v9 = v23;
     if (1.0 <= v20)
         return 1.0;
-    g_616878(2, 23, 0, 0);
-    g_616880(108);
-    g_616894(v5);
-    g_616894(v7);
-    g_616894(v9);
-    g_616894(0x42480000);
-    g_616894(0x42480000);
-    g_616894(0x42480000);
-    g_616894((float)(200.0 * v24));
-    g_616894((float)(200.0 * v25));
-    g_616894(200.0f * v26);
-    g_616880(30);
-    g_616888(g_sRockGibs);
-    g_616880(20);
-    g_616880(50);
+    g_engfuncs.pfnMessageBegin(2, 23, 0, 0);
+    g_engfuncs.pfnWriteByte(108);
+    g_engfuncs.pfnWriteCoord(v5);
+    g_engfuncs.pfnWriteCoord(v7);
+    g_engfuncs.pfnWriteCoord(v9);
+    g_engfuncs.pfnWriteCoord(0x42480000);
+    g_engfuncs.pfnWriteCoord(0x42480000);
+    g_engfuncs.pfnWriteCoord(0x42480000);
+    g_engfuncs.pfnWriteCoord((float)(200.0 * v24));
+    g_engfuncs.pfnWriteCoord((float)(200.0 * v25));
+    g_engfuncs.pfnWriteCoord(200.0f * v26);
+    g_engfuncs.pfnWriteByte(30);
+    g_engfuncs.pfnWriteShort(g_sRockGibs);
+    g_engfuncs.pfnWriteByte(20);
+    g_engfuncs.pfnWriteByte(50);
     v0 = 0;
-    g_616880(v0);
-    g_61687c(v0);
+    g_engfuncs.pfnWriteByte(v0);
+    g_engfuncs.pfnMessageEnd(v0);
     return 200.0f * v26;
 }
 

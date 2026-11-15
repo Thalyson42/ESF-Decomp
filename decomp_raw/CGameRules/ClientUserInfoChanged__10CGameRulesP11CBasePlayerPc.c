@@ -29,11 +29,11 @@ typedef struct st_4c4b00_3 {
 } st_4c4b00_3;
 
 extern int g_59f95c;
-extern st_4c4b00_0 *g_6168a4;
-extern st_4c4b00_0 *g_6168dc;
-extern st_4c4b00_0 *g_616968;
-extern st_4c4b00_0 *g_61696c;
-extern st_4c4b00_0 *g_616974;
+extern st_4c4b00_0 *g_engfuncs.pfnCVarGetFloat;
+extern st_4c4b00_0 *g_engfuncs.pfnIndexOfEdict;
+extern st_4c4b00_0 *g_engfuncs.pfnGetInfoKeyBuffer;
+extern st_4c4b00_0 *g_engfuncs.pfnInfoKeyValue;
+extern st_4c4b00_0 *g_engfuncs.pfnSetClientKeyValue;
 
 unsigned int ClientUserInfoChanged__10CGameRulesP11CBasePlayerPc(double a0, unsigned int a1, st_4c4b00_4 *a2, unsigned int a3)
 {
@@ -47,14 +47,14 @@ unsigned int ClientUserInfoChanged__10CGameRulesP11CBasePlayerPc(double a0, unsi
     int v4;  // [bp-0x108]
     char v5;  // [bp-0x104]
 
-    v4 = g_61696c(a3, "model");
-    if (sub_48cac0(&a2->field_5a0, g_61696c(a3, "model")))
+    v4 = g_engfuncs.pfnInfoKeyValue(a3, "model");
+    if (strcasecmp@GLIBC_2.0(&a2->field_5a0, g_engfuncs.pfnInfoKeyValue(a3, "model")))
     {
         v3 = 0;
         iter = 0;
-        while (iter <= 19 && sub_48cac0(32 * iter + 5896896, &g_59f95c))
+        while (iter <= 19 && strcasecmp@GLIBC_2.0(32 * iter + 5896896, &g_59f95c))
         {
-            if (!sub_48cac0(32 * iter + 5896896, v4))
+            if (!strcasecmp@GLIBC_2.0(32 * iter + 5896896, v4))
             {
                 v3 = 1;
                 iter += 1;
@@ -65,24 +65,24 @@ unsigned int ClientUserInfoChanged__10CGameRulesP11CBasePlayerPc(double a0, unsi
             }
         }
         if (v3)
-            sub_48cdb0(a2, g_61696c(a3, "model"));
+            UTIL_SetPlayerModel(a2, g_engfuncs.pfnInfoKeyValue(a3, "model"));
     }
-    g_6168a4("mp_lockmodels");
+    g_engfuncs.pfnCVarGetFloat("mp_lockmodels");
     if (a0 == 0.0)
     {
         return v10;
     }
     else if ((int)a2->field_764->field_4->field_34(a2->field_764) >= 0)
     {
-        sub_48e110(&v5, a2->field_764->field_4->field_3c(a2->field_764));
-        if (!sub_48cac0(v4, &v5))
+        strcpy@GLIBC_2.0(&v5, a2->field_764->field_4->field_3c(a2->field_764));
+        if (!strcasecmp@GLIBC_2.0(v4, &v5))
             return v10;
         v2 = &v5;
         v1 = "model";
-        v0 = g_616968(a2->field_0->field_208);
-        v9 = g_6168dc(a2->field_0->field_208);
-        g_616974(v9);
-        v10 = sub_48cdb0(a2, &v5);
+        v0 = g_engfuncs.pfnGetInfoKeyBuffer(a2->field_0->field_208);
+        v9 = g_engfuncs.pfnIndexOfEdict(a2->field_0->field_208);
+        g_engfuncs.pfnSetClientKeyValue(v9);
+        v10 = UTIL_SetPlayerModel(a2, &v5);
         return v10;
     }
     else

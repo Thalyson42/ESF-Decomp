@@ -5,7 +5,7 @@ int UTIL_VarArgs__FPce(int a0)
 {
     char v0;  // [bp+0x8]
 
-    sub_488160(&string.1783, a0, &v0);
+    vsprintf@GLIBC_2.0(&string.1783, a0, &v0);
     return &string.1783;
 }
 

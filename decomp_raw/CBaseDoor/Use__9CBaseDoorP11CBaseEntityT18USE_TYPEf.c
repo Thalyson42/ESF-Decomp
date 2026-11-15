@@ -14,7 +14,7 @@ st_4ac3d0_0 * Use__9CBaseDoorP11CBaseEntityT18USE_TYPEf(st_4ac3d0_1 *a0, int a1)
 {
     st_4ac3d0_0 *v0;  // eax
 
-    sub_48d960(&a0[1].padding_4[76], a1);
+    EHANDLE::__as(&a0[1].padding_4[76], a1);
     if (a0->field_80 != 1)
     {
         v0 = a0->field_0;
@@ -27,6 +27,6 @@ st_4ac3d0_0 * Use__9CBaseDoorP11CBaseEntityT18USE_TYPEf(st_4ac3d0_1 *a0, int a1)
             return v0;
         }
     }
-    return sub_48a240(a0);
+    return CBaseDoor::DoorActivate(a0);
 }
 

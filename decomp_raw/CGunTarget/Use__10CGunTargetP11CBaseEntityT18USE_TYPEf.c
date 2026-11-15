@@ -38,7 +38,7 @@ unsigned int Use__10CGunTargetP11CBaseEntityT18USE_TYPEf(st_4ee3a0_2 *a0, unsign
     st_4ee3a0_4 *v2;  // esi
     unsigned int v3;  // eax
 
-    v0 = sub_48ab90(a0, a3, a0->field_2a8);
+    v0 = CBaseEntity::ShouldToggle(a0, a3, a0->field_2a8);
     if (!v0)
     {
         return v0;
@@ -51,12 +51,12 @@ unsigned int Use__10CGunTargetP11CBaseEntityT18USE_TYPEf(st_4ee3a0_2 *a0, unsign
     {
         *(float *)&a0->field_0->padding_164[8] = 2.0f;
         v2 = &a0->field_110;
-        sub_48d960(v2, a0->field_60->field_ac(a0));
-        v3 = sub_48d8b0(v2);
+        EHANDLE::__as(v2, a0->field_60->field_ac(a0));
+        v3 = EHANDLE::__opi(v2);
         if (!v3)
             return v3;
         *(float *)&a0->field_0->field_160 = *(float *)&a0->field_0->field_1b0;
-        return sub_488100(a0);
+        return CGunTarget::Next(a0);
     }
 }
 

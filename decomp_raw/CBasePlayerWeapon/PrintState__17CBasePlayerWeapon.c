@@ -14,13 +14,13 @@ typedef struct st_539060_1 {
     unsigned int field_0;
 } st_539060_1;
 
-extern st_539060_1 *g_6168b4;
+extern st_539060_1 *g_engfuncs.pfnAlertMessage;
 
 int PrintState__17CBasePlayerWeapon(st_539060_0 *a0)
 {
-    g_6168b4(1, "primary:  %f\n", (unsigned int)(a0->field_9c >> 0));
-    g_6168b4(1, "idle   :  %f\n", (unsigned int)(a0->field_a4 >> 0));
-    g_6168b4(1, "m_finre:  %i\n", a0->field_bc);
-    return g_6168b4(1, "m_iclip:  %i\n", a0->field_b0);
+    g_engfuncs.pfnAlertMessage(1, "primary:  %f\n", (unsigned int)(a0->field_9c >> 0));
+    g_engfuncs.pfnAlertMessage(1, "idle   :  %f\n", (unsigned int)(a0->field_a4 >> 0));
+    g_engfuncs.pfnAlertMessage(1, "m_finre:  %i\n", a0->field_bc);
+    return g_engfuncs.pfnAlertMessage(1, "m_iclip:  %i\n", a0->field_b0);
 }
 

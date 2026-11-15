@@ -6,6 +6,6 @@ typedef struct st_50d080_0 {
 
 int EmitShootSound__10CPowerBeam(st_50d080_0 *a0)
 {
-    return sub_48d4f0(a0->field_80, "powerbeamha.wav");
+    return CBasePlayer::EmitClassSound(a0->field_80, "powerbeamha.wav");
 }
 

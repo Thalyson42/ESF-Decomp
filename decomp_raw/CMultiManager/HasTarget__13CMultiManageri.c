@@ -24,7 +24,7 @@ unsigned int HasTarget__13CMultiManageri(st_52b4f0_0 *a0, unsigned int a1)
         v0 = &a0->field_110;
         do
         {
-            if (!sub_488af0(a1 + gpGlobals->field_98, gpGlobals->field_98 + v0[v1]))
+            if (!strcmp@GLIBC_2.0(a1 + gpGlobals->field_98, gpGlobals->field_98 + v0[v1]))
                 return 1;
         } while ((v1 += 1, v1 < a0->field_104));
     }

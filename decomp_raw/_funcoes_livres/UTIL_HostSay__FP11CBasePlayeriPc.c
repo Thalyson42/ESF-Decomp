@@ -18,14 +18,14 @@ typedef struct st_57ee40_1 {
 } st_57ee40_1;
 
 extern unsigned int gmsgSayText;
-extern st_57ee40_1 *g_616878;
-extern st_57ee40_1 *g_61687c;
-extern st_57ee40_1 *g_616880;
-extern st_57ee40_1 *g_616898;
-extern st_57ee40_1 *g_6168d8;
-extern st_57ee40_1 *g_6168dc;
-extern st_57ee40_1 *g_6168ec;
-extern st_57ee40_1 *g_616904;
+extern st_57ee40_1 *g_engfuncs.pfnMessageBegin;
+extern st_57ee40_1 *g_engfuncs.pfnMessageEnd;
+extern st_57ee40_1 *g_engfuncs.pfnWriteByte;
+extern st_57ee40_1 *g_engfuncs.pfnWriteString;
+extern st_57ee40_1 *g_engfuncs.pfnEntOffsetOfPEntity;
+extern st_57ee40_1 *g_engfuncs.pfnIndexOfEdict;
+extern st_57ee40_1 *g_engfuncs.pfnRegUserMsg;
+extern st_57ee40_1 *g_engfuncs.pfnServerPrint;
 extern st_57ee40_0 *gpGlobals;
 extern int ChatClass;
 
@@ -78,13 +78,13 @@ LABEL_57eeac:
         }
         if (*iter)
         {
-            v3 = sub_488970(*iter);
+            v3 = isprint@GLIBC_2.0(*iter);
             if (!v3)
             {
                 iter += 1;
                 continue;
             }
-            v3 = sub_488b30(*iter);
+            v3 = isspace@GLIBC_2.0(*iter);
             if (v3)
             {
                 iter += 1;
@@ -103,7 +103,7 @@ LABEL_57eea4:
             goto LABEL_57eeac;
         }
     }
-    sub_48d990(&v2, v5);
+    sprintf@GLIBC_2.0(&v2, v5);
     v6 = &v2;
     v7 = 0xffffffff;
     do
@@ -119,36 +119,36 @@ LABEL_57eea4:
     } while (v10 && (v10 -= 1, v11 = v12 + 1, *v12));
     if (~v10 - 1 > v9)
         a2[v9] = 0;
-    sub_48ac50(&ChatClass, *a0->field_208, a2);
-    sub_48c150(&v2, a2);
-    sub_48c150(&v2, "\n");
+    CChatClass::StoreChatMsg(&ChatClass, *a0->field_208, a2);
+    strcat@GLIBC_2.0(&v2, a2);
+    strcat@GLIBC_2.0(&v2, "\n");
     if (!gmsgSayText)
-        gmsgSayText = g_6168ec("SayText", 0xffffffff);
+        gmsgSayText = g_engfuncs.pfnRegUserMsg("SayText", 0xffffffff);
     v13 = NULL;
     while (1)
     {
-        v13 = sub_487e80(v13, "player");
+        v13 = UTIL_FindEntityByClassname(v13, "player");
         if (!v13)
             break;
         v14 = 0;
-        if (!*v13->field_208 || !g_6168d8(*v13->field_208))
+        if (!*v13->field_208 || !g_engfuncs.pfnEntOffsetOfPEntity(*v13->field_208))
             v14 = 1;
         if (v14)
             break;
         if (v13 != a0 && (!a1 || *a0->field_1ac == *v13->field_1ac))
         {
-            g_616878(1, gmsgSayText, 0, *v13->field_208);
-            v15 = g_6168dc(*a0->field_208);
-            g_616880(v15);
-            g_616898(&v2);
-            g_61687c();
+            g_engfuncs.pfnMessageBegin(1, gmsgSayText, 0, *v13->field_208);
+            v15 = g_engfuncs.pfnIndexOfEdict(*a0->field_208);
+            g_engfuncs.pfnWriteByte(v15);
+            g_engfuncs.pfnWriteString(&v2);
+            g_engfuncs.pfnMessageEnd();
         }
     }
-    g_616878(1, gmsgSayText, 0, *a0->field_208);
-    v16 = g_6168dc(*a0->field_208);
-    g_616880(v16);
-    g_616898(&v2);
-    g_61687c();
-    return g_616904(&v2);
+    g_engfuncs.pfnMessageBegin(1, gmsgSayText, 0, *a0->field_208);
+    v16 = g_engfuncs.pfnIndexOfEdict(*a0->field_208);
+    g_engfuncs.pfnWriteByte(v16);
+    g_engfuncs.pfnWriteString(&v2);
+    g_engfuncs.pfnMessageEnd();
+    return g_engfuncs.pfnServerPrint(&v2);
 }
 

@@ -72,12 +72,12 @@ typedef struct st_4dcbf0_9 {
 } st_4dcbf0_9;
 
 extern unsigned int gmsgScoreInfo;
-extern st_4dcbf0_1 *g_616878;
-extern st_4dcbf0_1 *g_61687c;
-extern st_4dcbf0_1 *g_616880;
-extern st_4dcbf0_1 *g_616888;
-extern st_4dcbf0_1 *g_6168d4;
-extern st_4dcbf0_1 *g_6168dc;
+extern st_4dcbf0_1 *g_engfuncs.pfnMessageBegin;
+extern st_4dcbf0_1 *g_engfuncs.pfnMessageEnd;
+extern st_4dcbf0_1 *g_engfuncs.pfnWriteByte;
+extern st_4dcbf0_1 *g_engfuncs.pfnWriteShort;
+extern st_4dcbf0_1 *g_engfuncs.pfnPEntityOfEntOffset;
+extern st_4dcbf0_1 *g_engfuncs.pfnIndexOfEdict;
 extern st_4dcbf0_9 *gpGlobals;
 
 int PlayerKilled__18CHalfLifeMultiplayP11CBasePlayerP9entvars_sT2(st_4dcbf0_2 *a0, st_4dcbf0_8 *a1, st_4dcbf0_7 *a2, unsigned int a3)
@@ -101,10 +101,10 @@ int PlayerKilled__18CHalfLifeMultiplayP11CBasePlayerP9entvars_sT2(st_4dcbf0_2 *a
 
     a0->field_44->field_70(a0, a1, a2, a3, v0, v1, v2);
     a1->field_984 = a1->field_984 + 1;
-    sub_48c1b0("game_playerdie", a1, a1, 3, 0);
+    FireTargets("game_playerdie", a1, a1, 3, 0);
     v3 = NULL;
     v7 = a2->field_208;
-    if (a2->field_208 || (v7 = g_6168d4(0), v7))
+    if (a2->field_208 || (v7 = g_engfuncs.pfnPEntityOfEntOffset(0), v7))
         v8 = *(int *)(v7 + 124);
     else
         v8 = NULL;
@@ -119,45 +119,45 @@ int PlayerKilled__18CHalfLifeMultiplayP11CBasePlayerP9entvars_sT2(st_4dcbf0_2 *a
     {
         v6 = a0->field_44->field_68(a0, v3, a1);
         a2->field_164 = (float)((double)v6 + a2->field_164);
-        sub_48c1b0("game_playerkill", v9, v9, 3, 0);
+        FireTargets("game_playerkill", v9, v9, 3, 0);
     }
     else
     {
         a2->field_164 = (float)(a2->field_164 - 1.0);
     }
-    g_616878(2, gmsgScoreInfo, 0, 0);
-    v10 = g_6168dc(a1->field_0->field_208);
-    g_616880(v10);
+    g_engfuncs.pfnMessageBegin(2, gmsgScoreInfo, 0, 0);
+    v10 = g_engfuncs.pfnIndexOfEdict(a1->field_0->field_208);
+    g_engfuncs.pfnWriteByte(v10);
     v5 = __fnstcw();
     v4 = v5 | 0xc00;
     v6 = (int)a1->field_0->field_164;
-    g_616888(v6);
-    g_616888(a1->field_984);
-    g_616888(a1->field_738);
-    g_616888(a1->field_0->field_20c);
+    g_engfuncs.pfnWriteShort(v6);
+    g_engfuncs.pfnWriteShort(a1->field_984);
+    g_engfuncs.pfnWriteShort(a1->field_738);
+    g_engfuncs.pfnWriteShort(a1->field_0->field_20c);
     v11 = a0->field_44->field_cc(a0, &a1[1].padding_4[16]);
-    g_616888(v11 + 1);
-    g_61687c();
+    g_engfuncs.pfnWriteShort(v11 + 1);
+    g_engfuncs.pfnMessageEnd();
     v12 = a2->field_208;
-    if (a2->field_208 || (v12 = g_6168d4(0), v12))
+    if (a2->field_208 || (v12 = g_engfuncs.pfnPEntityOfEntOffset(0), v12))
         v13 = *(int *)(v12 + 124);
     else
         v13 = NULL;
     if (!v13 || v13->field_60->field_28(v13) != 2)
         return a0->field_44->field_f0(a0);
-    g_616878(2, gmsgScoreInfo, 0, 0);
-    v14 = g_6168dc(v13->field_0->field_208);
-    g_616880(v14);
+    g_engfuncs.pfnMessageBegin(2, gmsgScoreInfo, 0, 0);
+    v14 = g_engfuncs.pfnIndexOfEdict(v13->field_0->field_208);
+    g_engfuncs.pfnWriteByte(v14);
     v5 = __fnstcw();
     v4 = v5 | 0xc00;
     v6 = (int)*(float *)&v13->field_0->field_164;
-    g_616888(v6);
-    g_616888(v13->field_984);
-    g_616888(v13->field_738);
-    g_616888(v13->field_0->field_20c);
+    g_engfuncs.pfnWriteShort(v6);
+    g_engfuncs.pfnWriteShort(v13->field_984);
+    g_engfuncs.pfnWriteShort(v13->field_738);
+    g_engfuncs.pfnWriteShort(v13->field_0->field_20c);
     v15 = a0->field_44->field_cc(a0, v13 + 1);
-    g_616888(v15 + 1);
-    g_61687c();
+    g_engfuncs.pfnWriteShort(v15 + 1);
+    g_engfuncs.pfnMessageEnd();
     *(float *)&v13->field_998 = *(float *)gpGlobals;
     return a0->field_44->field_f0(a0);
 }

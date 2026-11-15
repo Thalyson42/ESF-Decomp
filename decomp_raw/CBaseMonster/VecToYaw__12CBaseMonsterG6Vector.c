@@ -8,7 +8,7 @@ double VecToYaw__12CBaseMonsterG6Vector(st_4d8680_0 **a0, float *a1)
 {
     if (*a1 == 0.0f && a1[1] == 0.0f && a1[2] == 0.0f)
         return *a0->field_54;
-    sub_48c2d0(a1);
+    UTIL_VecToYaw(a1);
     return 0.0;
 }
 

@@ -10,7 +10,7 @@ int SpectatorConnect__FP7edict_s(st_4a1c00_0 *a0)
 
     v0 = (!a0 ? 0 : a0->field_7c);
     if (v0)
-        v0 = sub_48bda0(v0);
+        v0 = CBaseSpectator::SpectatorConnect(v0);
     return v0;
 }
 

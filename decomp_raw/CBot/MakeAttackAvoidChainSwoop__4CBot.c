@@ -27,7 +27,7 @@ typedef struct st_558280_4 {
 } st_558280_4;
 
 extern unsigned int FindSelection__t12TMultiChoice1Z10EComboTypePQ2t12TMultiChoice1Z10EComboType12SMultiChoicei;
-extern st_558280_4 *g_616928;
+extern st_558280_4 *g_engfuncs.pfnRandomLong;
 
 unsigned int MakeAttackAvoidChainSwoop__4CBot(st_558280_3 *a0)
 {
@@ -101,15 +101,15 @@ unsigned int MakeAttackAvoidChainSwoop__4CBot(st_558280_3 *a0)
     st_558280_0 **v26;  // [bp-0x8], Other Possible Types: unsigned int
 
     iter1 = 0;
-    v27 = sub_48d6a0(8);
+    v27 = __builtin_new(8);
     *v27 = NULL;
     v27[1] = NULL;
     v26 = v27;
     v23 = a0->field_0->field_208;
     v22 = a0->field_504;
-    if (a0->field_504 != 2 && !(char)sub_487c70(a0->field_0->field_208, 2, 650.0f))
+    if (a0->field_504 != 2 && !(char)CheckForCollide(a0->field_0->field_208, 2, 650.0f))
     {
-        v28 = sub_48d6a0(12);
+        v28 = __builtin_new(12);
         *v28 = 0;
         v28[1] = 0;
         v21 = v28;
@@ -119,15 +119,15 @@ unsigned int MakeAttackAvoidChainSwoop__4CBot(st_558280_3 *a0)
         v29 = v26;
         if (!*v29)
         {
-            v30 = sub_48d6a0(12);
+            v30 = __builtin_new(12);
             v20 = 1;
             v30->field_4 = NULL;
             v30->field_8 = NULL;
-            sub_48d0e0(v30, 0, 4);
+            memset@GLIBC_2.0(v30, 0, 4);
             v20 = 0;
             *v29 = v30;
             if (v20)
-                sub_48d4e0(v30);
+                __builtin_delete(v30);
             *v29->field_0 = v21;
             *v29->field_4 = NULL;
             *v29->field_8 = NULL;
@@ -136,15 +136,15 @@ unsigned int MakeAttackAvoidChainSwoop__4CBot(st_558280_3 *a0)
         else
         {
             v19 = v29[1];
-            v31 = sub_48d6a0(12);
+            v31 = __builtin_new(12);
             v18 = 1;
             v31->field_4 = NULL;
             v31->field_8 = NULL;
-            sub_48d0e0(v31, 0, 4);
+            memset@GLIBC_2.0(v31, 0, 4);
             v18 = 0;
             v19->field_4 = v31;
             if (v18)
-                sub_48d4e0(v31);
+                __builtin_delete(v31);
             v29[1]->field_4->field_8 = v29[1];
             v32 = v29[1]->field_4;
             v29[1] = v32;
@@ -153,9 +153,9 @@ unsigned int MakeAttackAvoidChainSwoop__4CBot(st_558280_3 *a0)
         }
         iter1 += 50;
     }
-    if (v22 != 3 && !(char)sub_487c70(v23, 4, 650.0f))
+    if (v22 != 3 && !(char)CheckForCollide(v23, 4, 650.0f))
     {
-        v33 = sub_48d6a0(12);
+        v33 = __builtin_new(12);
         *v33 = 0;
         v33[1] = 0;
         v17 = v33;
@@ -165,15 +165,15 @@ unsigned int MakeAttackAvoidChainSwoop__4CBot(st_558280_3 *a0)
         v34 = v26;
         if (!*v34)
         {
-            v35 = sub_48d6a0(12);
+            v35 = __builtin_new(12);
             v16 = 1;
             v35->field_4 = NULL;
             v35->field_8 = NULL;
-            sub_48d0e0(v35, 0, 4);
+            memset@GLIBC_2.0(v35, 0, 4);
             v16 = 0;
             *v34 = v35;
             if (v16)
-                sub_48d4e0(v35);
+                __builtin_delete(v35);
             *v34->field_0 = v17;
             *v34->field_4 = NULL;
             *v34->field_8 = NULL;
@@ -182,15 +182,15 @@ unsigned int MakeAttackAvoidChainSwoop__4CBot(st_558280_3 *a0)
         else
         {
             v15 = v34[1];
-            v36 = sub_48d6a0(12);
+            v36 = __builtin_new(12);
             v14 = 1;
             v36->field_4 = NULL;
             v36->field_8 = NULL;
-            sub_48d0e0(v36, 0, 4);
+            memset@GLIBC_2.0(v36, 0, 4);
             v14 = 0;
             v15->field_4 = v36;
             if (v14)
-                sub_48d4e0(v36);
+                __builtin_delete(v36);
             v34[1]->field_4->field_8 = v34[1];
             v37 = v34[1]->field_4;
             v34[1] = v37;
@@ -199,9 +199,9 @@ unsigned int MakeAttackAvoidChainSwoop__4CBot(st_558280_3 *a0)
         }
         iter1 += 50;
     }
-    if (v22 && !(char)sub_487c70(v23, 32, 650.0f))
+    if (v22 && !(char)CheckForCollide(v23, 32, 650.0f))
     {
-        v38 = sub_48d6a0(12);
+        v38 = __builtin_new(12);
         *v38 = 0;
         v38[1] = 0;
         v13 = v38;
@@ -211,15 +211,15 @@ unsigned int MakeAttackAvoidChainSwoop__4CBot(st_558280_3 *a0)
         v39 = v26;
         if (!*v39)
         {
-            v40 = sub_48d6a0(12);
+            v40 = __builtin_new(12);
             v12 = 1;
             v40->field_4 = NULL;
             v40->field_8 = NULL;
-            sub_48d0e0(v40, 0, 4);
+            memset@GLIBC_2.0(v40, 0, 4);
             v12 = 0;
             *v39 = v40;
             if (v12)
-                sub_48d4e0(v40);
+                __builtin_delete(v40);
             *v39->field_0 = v13;
             *v39->field_4 = NULL;
             *v39->field_8 = NULL;
@@ -228,15 +228,15 @@ unsigned int MakeAttackAvoidChainSwoop__4CBot(st_558280_3 *a0)
         else
         {
             v11 = v39[1];
-            v41 = sub_48d6a0(12);
+            v41 = __builtin_new(12);
             v10 = 1;
             v41->field_4 = NULL;
             v41->field_8 = NULL;
-            sub_48d0e0(v41, 0, 4);
+            memset@GLIBC_2.0(v41, 0, 4);
             v10 = 0;
             v11->field_4 = v41;
             if (v10)
-                sub_48d4e0(v41);
+                __builtin_delete(v41);
             v39[1]->field_4->field_8 = v39[1];
             v42 = v39[1]->field_4;
             v39[1] = v42;
@@ -245,9 +245,9 @@ unsigned int MakeAttackAvoidChainSwoop__4CBot(st_558280_3 *a0)
         }
         iter1 += 50;
     }
-    if (v22 != 1 && !(char)sub_487c70(v23, 64, 650.0f))
+    if (v22 != 1 && !(char)CheckForCollide(v23, 64, 650.0f))
     {
-        v43 = sub_48d6a0(12);
+        v43 = __builtin_new(12);
         *v43 = 0;
         v43[1] = 0;
         v9 = v43;
@@ -257,15 +257,15 @@ unsigned int MakeAttackAvoidChainSwoop__4CBot(st_558280_3 *a0)
         v44 = v26;
         if (!*v44)
         {
-            v45 = sub_48d6a0(12);
+            v45 = __builtin_new(12);
             v8 = 1;
             v45->field_4 = NULL;
             v45->field_8 = NULL;
-            sub_48d0e0(v45, 0, 4);
+            memset@GLIBC_2.0(v45, 0, 4);
             v8 = 0;
             *v44 = v45;
             if (v8)
-                sub_48d4e0(v45);
+                __builtin_delete(v45);
             *v44->field_0 = v9;
             *v44->field_4 = NULL;
             *v44->field_8 = NULL;
@@ -274,15 +274,15 @@ unsigned int MakeAttackAvoidChainSwoop__4CBot(st_558280_3 *a0)
         else
         {
             v7 = v44[1];
-            v46 = sub_48d6a0(12);
+            v46 = __builtin_new(12);
             v6 = 1;
             v46->field_4 = NULL;
             v46->field_8 = NULL;
-            sub_48d0e0(v46, 0, 4);
+            memset@GLIBC_2.0(v46, 0, 4);
             v6 = 0;
             v7->field_4 = v46;
             if (v6)
-                sub_48d4e0(v46);
+                __builtin_delete(v46);
             v44[1]->field_4->field_8 = v44[1];
             v47 = v44[1]->field_4;
             v44[1] = v47;
@@ -292,7 +292,7 @@ unsigned int MakeAttackAvoidChainSwoop__4CBot(st_558280_3 *a0)
         iter1 += 50;
     }
     v5 = &v24;
-    v4 = g_616928(0, iter1);
+    v4 = g_engfuncs.pfnRandomLong(0, iter1);
     v2 = _INSERT(v4, 0, 0) | 0xffff0000;
     v3 = &FindSelection__t12TMultiChoice1Z10EComboTypePQ2t12TMultiChoice1Z10EComboType12SMultiChoicei;
     v49 = *v26;
@@ -328,12 +328,12 @@ LABEL_558a63:
                     if (v56)
                         v56->field_8 = NULL;
                     v55->field_4 = NULL;
-                    sub_48d4e0(v55);
+                    __builtin_delete(v55);
                 }
                 v57 = v54;
                 if (!v57)
                     break;
-                sub_48d4e0(v57);
+                __builtin_delete(v57);
             }
             if (v26)
             {
@@ -347,12 +347,12 @@ LABEL_558a63:
                         node = node->field_4;
                         v60->field_4 = NULL;
                         v60->field_8 = NULL;
-                        sub_48d4e0(v60);
+                        __builtin_delete(v60);
                     } while (node);
                 }
                 v58[1] = NULL;
                 *v58 = NULL;
-                sub_48d4e0(v58);
+                __builtin_delete(v58);
             }
             v26 = 0;
             return v0;
@@ -371,12 +371,12 @@ LABEL_558a63:
             if (v64)
                 v64->field_8 = NULL;
             v63->field_4 = NULL;
-            sub_48d4e0(v63);
+            __builtin_delete(v63);
         }
         v65 = v62;
         if (!v65)
             break;
-        sub_48d4e0(v65);
+        __builtin_delete(v65);
     }
     if (v26)
     {
@@ -390,12 +390,12 @@ LABEL_558a63:
                 iter = iter->field_4;
                 v68->field_4 = NULL;
                 v68->field_8 = NULL;
-                sub_48d4e0(v68);
+                __builtin_delete(v68);
             } while (iter);
         }
         v66[1] = NULL;
         *v66 = NULL;
-        sub_48d4e0(v66);
+        __builtin_delete(v66);
     }
     v26 = 0;
     return 38;

@@ -20,7 +20,7 @@ unsigned int DisableChargeSprite__12CTelekinesis(st_52a0b0_0 *a0)
         v0 = &a0->field_1d4;
         do
         {
-            v2 = sub_488520(v0[i]);
+            v2 = CExplodingAttack::Vaporize(v0[i]);
             i += 1;
         } while (i < a0->field_1ec);
     }

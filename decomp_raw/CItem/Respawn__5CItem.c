@@ -44,7 +44,7 @@ st_4c8d20_1 * Respawn__5CItem(double a0, st_4c8d20_1 *a1)
     a1->field_0->field_118 = a1->field_0->field_118 | 128;
     v0 = &g_pGameRules;
     g_pGameRules->field_44->field_9c(&v1, *v0, a1);
-    a1->field_c = _INSERT(sub_48db50(a1->field_0, &v1), 0, 0) | 0xffff0000;
+    a1->field_c = _INSERT(UTIL_SetOrigin(a1->field_0, &v1), 0, 0) | 0xffff0000;
     a1->field_10 = &Materialize__5CItem;
     *v0->field_44->field_98(*v0, a1);
     a1->field_0->field_104 = (float)v3;

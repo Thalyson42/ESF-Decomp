@@ -25,7 +25,7 @@ typedef struct st_5824e0_4 {
     unsigned int field_0;
 } st_5824e0_4;
 
-extern st_5824e0_4 *g_61692c;
+extern st_5824e0_4 *g_engfuncs.pfnRandomFloat;
 extern st_5824e0_3 *gpGlobals;
 
 double SetGeneralDelay__9CBaseTask(st_5824e0_2 *a0)
@@ -38,7 +38,7 @@ double SetGeneralDelay__9CBaseTask(st_5824e0_2 *a0)
     }
     else
     {
-        g_61692c(*(float *)&a0->field_8->field_a00->field_0, *(float *)&a0->field_8->field_a00->field_4);
+        g_engfuncs.pfnRandomFloat(*(float *)&a0->field_8->field_a00->field_0, *(float *)&a0->field_8->field_a00->field_4);
         v0 = *(float *)&a0->field_8->field_a00->field_0 + *(float *)gpGlobals;
     }
     a0->field_0 = (float)v0;

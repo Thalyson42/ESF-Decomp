@@ -22,23 +22,23 @@ typedef struct st_52d7d0_2 {
 extern char UseChangeLevel__12CChangeLevelP11CBaseEntityT18USE_TYPEf;
 extern char TouchChangeLevel__12CChangeLevelP11CBaseEntity;
 extern int g_5a9f1c;
-extern st_52d7d0_2 *g_6168b4;
+extern st_52d7d0_2 *g_engfuncs.pfnAlertMessage;
 
 st_52d7d0_0 * Spawn__12CChangeLevel(st_52d7d0_1 *a0)
 {
     st_52d7d0_0 *v1;  // eax
     unsigned int v2;  // eax
 
-    if (!sub_488af0(&a0[7].padding_4[4], &g_5a9f1c))
-        g_6168b4(1, "a trigger_changelevel doesn't have a map");
-    if (!sub_488af0(a0[8].padding_4, &g_5a9f1c))
-        g_6168b4(1, "trigger_changelevel to %s doesn't have a landmark", &a0[7].padding_4[4]);
+    if (!strcmp@GLIBC_2.0(&a0[7].padding_4[4], &g_5a9f1c))
+        g_engfuncs.pfnAlertMessage(1, "a trigger_changelevel doesn't have a map");
+    if (!strcmp@GLIBC_2.0(a0[8].padding_4, &g_5a9f1c))
+        g_engfuncs.pfnAlertMessage(1, "trigger_changelevel to %s doesn't have a landmark", &a0[7].padding_4[4]);
     if (a0->field_0->field_1cc)
     {
         a0->field_1c = _INSERT(a0->field_0, 0, 0) | 0xffff0000;
         a0->field_20 = &UseChangeLevel__12CChangeLevelP11CBaseEntityT18USE_TYPEf;
     }
-    sub_489e50(a0);
+    CBaseTrigger::InitTrigger(a0);
     v1 = a0->field_0;
     if (v1->field_1a0 & 2)
         return v1;

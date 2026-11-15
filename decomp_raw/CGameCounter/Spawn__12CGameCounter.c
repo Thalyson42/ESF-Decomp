@@ -9,6 +9,6 @@ int Spawn__12CGameCounter(float a0)
     v1 = v2 | 0xc00;
     v0 = (int)*(float *)(*(int *)a0 + 356);
     *(float *)(*(int *)a0 + 480) = (float)v0;
-    return sub_48d210(a0);
+    return CRulePointEntity::Spawn(a0);
 }
 

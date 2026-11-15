@@ -44,7 +44,7 @@ unsigned int _._9CBotCombo(st_564dc0_3 **a0, unsigned int a1)
                 if (v2)
                     v2->field_8 = 0;
                 v1->field_4 = NULL;
-                sub_48d4e0(v1);
+                __builtin_delete(v1);
             }
             v3 = v0;
             if (v3)
@@ -60,14 +60,14 @@ unsigned int _._9CBotCombo(st_564dc0_3 **a0, unsigned int a1)
             iter = iter->field_4;
             v5->field_4 = NULL;
             v5->field_8 = 0;
-            sub_48d4e0(v5);
+            __builtin_delete(v5);
         } while (iter);
     }
     a0[1] = NULL;
     *a0 = NULL;
     v6 = a1;
     if ((char)v6 & 1)
-        v6 = sub_48d4e0(a0);
+        v6 = __builtin_delete(a0);
     return v6;
 }
 

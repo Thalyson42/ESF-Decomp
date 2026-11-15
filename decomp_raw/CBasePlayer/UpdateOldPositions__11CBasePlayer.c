@@ -67,7 +67,7 @@ float UpdateOldPositions__11CBasePlayer(st_4f7800_1 *a0)
     v14 = v11 * v11 + v12 * v12 + v13 * v13;
     v15 = sqrt(v14);
     if (isnan(v15))
-        sub_487dc0(*(unsigned int *)&v14);
+        sqrt(*(unsigned int *)&v14);
     else
         v14 = v15;
     v0 = (float)v14;

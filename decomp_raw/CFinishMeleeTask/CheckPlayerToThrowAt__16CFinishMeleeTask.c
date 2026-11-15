@@ -50,8 +50,8 @@ typedef struct st_54a280_2 {
 
 extern unsigned int g_teamplay;
 extern float g_vecZero;
-extern float g_616790;
-extern float g_616794;
+extern float g_vecZero+4;
+extern float g_vecZero+8;
 
 int CheckPlayerToThrowAt__16CFinishMeleeTask(float idx)
 {
@@ -82,11 +82,11 @@ int CheckPlayerToThrowAt__16CFinishMeleeTask(float idx)
 
     v3 = 9999.0f;
     v11 = g_vecZero;
-    v12 = g_616790;
-    v13 = g_616794;
+    v12 = g_vecZero+4;
+    v13 = g_vecZero+8;
     v1 = NULL;
     if (!*(char *)(*(int *)(*(unsigned int *)&idx + 8) + 2592))
-        sub_48bf40(*(int *)(*(unsigned int *)&idx + 8));
+        CBot::MakePlayerList(*(int *)(*(unsigned int *)&idx + 8));
     v15 = *(int *)(*(unsigned int *)&idx + 8);
     if (v15->field_aac)
     {
@@ -111,7 +111,7 @@ int CheckPlayerToThrowAt__16CFinishMeleeTask(float idx)
                 v23 = v20 * v20 + v21 * v21 + v22 * v22;
                 v24 = sqrt(v23);
                 if (isnan(v24))
-                    sub_487dc0(*(unsigned int *)&v23);
+                    sqrt(*(unsigned int *)&v23);
                 else
                     v23 = v24;
                 v4 = (float)v23;
@@ -120,7 +120,7 @@ int CheckPlayerToThrowAt__16CFinishMeleeTask(float idx)
                     v0 = 0;
                     if (v4 <= 2300.0f || *(short *)(*(int *)(*(unsigned int *)&idx + 8) + 2980) > 0)
                         v0 = 1;
-                    if (((char)sub_489330(*(int *)(*(unsigned int *)&idx + 8), v17) || v0) && (char)sub_489d60(idx, v17))
+                    if (((char)EntIsInFieldOfView(*(int *)(*(unsigned int *)&idx + 8), v17) || v0) && (char)CFinishMeleeTask::IsValidThrowVictim(idx, v17))
                     {
                         v3 = v4;
                         v1 = v17;

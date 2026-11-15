@@ -6,7 +6,7 @@ typedef struct st_4ccb10_0 {
 
 int Holster__8CKiBlasti(st_4ccb10_0 *a0)
 {
-    sub_488e80(a0->field_80, 5);
-    return sub_488e80(a0->field_80, 6);
+    CBasePlayer::StopAniTrigger(a0->field_80, 5);
+    return CBasePlayer::StopAniTrigger(a0->field_80, 6);
 }
 

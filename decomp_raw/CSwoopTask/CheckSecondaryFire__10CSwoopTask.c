@@ -31,8 +31,8 @@ typedef struct st_54e460_0 {
     float field_260;
 } st_54e460_0;
 
-extern st_54e460_4 *g_6168a4;
-extern st_54e460_4 *g_616928;
+extern st_54e460_4 *g_engfuncs.pfnCVarGetFloat;
+extern st_54e460_4 *g_engfuncs.pfnRandomLong;
 
 int CheckSecondaryFire__10CSwoopTask(double a0, st_54e460_3 *a1)
 {
@@ -46,7 +46,7 @@ int CheckSecondaryFire__10CSwoopTask(double a0, st_54e460_3 *a1)
     unsigned short v6;  // [bp-0x6]
 
     a1->field_18 = 1;
-    g_6168a4("mp_simplemelee");
+    g_engfuncs.pfnCVarGetFloat("mp_simplemelee");
     if (a0 != 1.0)
     {
         v7 = a1->field_8->field_a04->field_16;
@@ -69,7 +69,7 @@ int CheckSecondaryFire__10CSwoopTask(double a0, st_54e460_3 *a1)
             v3 = (int)((double)v5 * 1.2000000476837158);
             v7 = v3;
         }
-        if ((int)g_616928(1, 100) > v7)
+        if ((int)g_engfuncs.pfnRandomLong(1, 100) > v7)
             return v7;
     }
     a1->field_19 = 1;

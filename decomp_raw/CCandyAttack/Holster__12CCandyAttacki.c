@@ -22,11 +22,11 @@ unsigned int Holster__12CCandyAttacki(st_49a8c0_1 *a0)
     unsigned int v0;  // eax
     unsigned int v1;  // eax
 
-    sub_48cc00(a0->field_c4);
-    v0 = sub_48cc00(a0->field_c8);
+    UTIL_Remove(a0->field_c4);
+    v0 = UTIL_Remove(a0->field_c8);
     if (!a0->field_cc)
         return v0;
-    v1 = sub_489390(*(int *)(*(int *)a0->field_80 + 520), 1, "common/null.wav", 0x3f800000, 0.800000011920929f, 0, 100);
+    v1 = EMIT_SOUND_DYN(*(int *)(*(int *)a0->field_80 + 520), 1, "common/null.wav", 0x3f800000, 0.800000011920929f, 0, 100);
     a0->field_cc = 0;
     return v1;
 }

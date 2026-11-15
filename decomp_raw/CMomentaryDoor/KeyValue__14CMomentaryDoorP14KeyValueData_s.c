@@ -18,9 +18,9 @@ int KeyValue__14CMomentaryDoorP14KeyValueData_s(st_4ad760_1 *a0, st_4ad760_0 *a1
     unsigned short v0;  // [bp-0x8]
     unsigned short v1;  // [bp-0x6]
 
-    if (!sub_488af0(a1->field_4, "movesnd"))
+    if (!strcmp@GLIBC_2.0(a1->field_4, "movesnd"))
     {
-        sub_487fc0(a1->field_8, 0, 0);
+        __strtod_internal@GLIBC_2.0(a1->field_8, 0, 0);
         v1 = __fnstcw();
         v0 = v1 | 0xc00;
         v3 = (int)v2;
@@ -28,12 +28,12 @@ int KeyValue__14CMomentaryDoorP14KeyValueData_s(st_4ad760_1 *a0, st_4ad760_0 *a1
     }
     else
     {
-        v3 = sub_488af0(a1->field_4, "stopsnd");
+        v3 = strcmp@GLIBC_2.0(a1->field_4, "stopsnd");
         if (v3)
         {
-            v3 = sub_488af0(a1->field_4, "healthvalue");
+            v3 = strcmp@GLIBC_2.0(a1->field_4, "healthvalue");
             if (v3)
-                return sub_48ba40(a0, a1);
+                return CBaseToggle::KeyValue(a0, a1);
         }
     }
     a1->field_c = 1;

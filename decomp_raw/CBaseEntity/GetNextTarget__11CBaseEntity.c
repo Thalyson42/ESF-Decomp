@@ -18,9 +18,9 @@ typedef struct st_49d2d0_2 {
     unsigned int field_0;
 } st_49d2d0_2;
 
-extern st_49d2d0_2 *g_6167f8;
-extern st_49d2d0_2 *g_6168d4;
-extern st_49d2d0_2 *g_6168d8;
+extern st_49d2d0_2 *g_engfuncs.pfnFindEntityByString;
+extern st_49d2d0_2 *g_engfuncs.pfnPEntityOfEntOffset;
+extern st_49d2d0_2 *g_engfuncs.pfnEntOffsetOfPEntity;
 extern st_49d2d0_1 *gpGlobals;
 
 unsigned int GetNextTarget__11CBaseEntity(st_49d2d0_0 **a0)
@@ -31,16 +31,16 @@ unsigned int GetNextTarget__11CBaseEntity(st_49d2d0_0 **a0)
 
     if (!*a0->field_1c8)
         return 0;
-    v0 = g_6167f8(0, "targetname", *a0->field_1c8 + gpGlobals->field_98);
+    v0 = g_engfuncs.pfnFindEntityByString(0, "targetname", *a0->field_1c8 + gpGlobals->field_98);
     v1 = 0;
-    if (!v0 || !g_6168d8(v0))
+    if (!v0 || !g_engfuncs.pfnEntOffsetOfPEntity(v0))
         v1 = 1;
     if (!v1)
     {
         v2 = v0;
         if (!v2)
         {
-            v2 = g_6168d4(0);
+            v2 = g_engfuncs.pfnPEntityOfEntOffset(0);
             if (!v2)
                 return 0;
         }

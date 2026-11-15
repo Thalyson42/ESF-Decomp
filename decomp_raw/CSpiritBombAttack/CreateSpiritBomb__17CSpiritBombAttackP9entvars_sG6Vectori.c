@@ -53,11 +53,11 @@ typedef struct st_520670_5 {
 
 extern char NormalThink__12CMagicAttack;
 extern unsigned int gmsgBall;
-extern st_520670_1 *g_6167c8;
-extern st_520670_1 *g_616878;
-extern st_520670_1 *g_61687c;
-extern st_520670_1 *g_616888;
-extern st_520670_1 *g_6168dc;
+extern st_520670_1 *g_engfuncs.pfnSetModel;
+extern st_520670_1 *g_engfuncs.pfnMessageBegin;
+extern st_520670_1 *g_engfuncs.pfnMessageEnd;
+extern st_520670_1 *g_engfuncs.pfnWriteShort;
+extern st_520670_1 *g_engfuncs.pfnIndexOfEdict;
 extern st_520670_5 *gpGlobals;
 
 st_520670_2 * CreateSpiritBomb__17CSpiritBombAttackP9entvars_sG6Vectori(st_520670_4 *a0, int a1, unsigned int a2)
@@ -71,21 +71,21 @@ st_520670_2 * CreateSpiritBomb__17CSpiritBombAttackP9entvars_sG6Vectori(st_52067
     unsigned int v2;  // [bp-0x20]
     unsigned int v3;  // [bp-0x1c]
 
-    v4 = sub_48d6c0(0);
+    v4 = GetClassPtr__H1Z17CSpiritBombAttack_PX01_PX01(0);
     v4->field_60->field_8(v4);
     v4->field_0->field_108 = 5;
     v4->field_0->field_10c = 0;
-    g_6167c8(v4->field_0->field_208, "sprites/null.spr");
-    g_616878(2, gmsgBall, 0, 0);
-    v5 = g_6168dc(v4->field_0->field_208);
-    g_616888(v5);
-    g_616888(a2);
+    g_engfuncs.pfnSetModel(v4->field_0->field_208, "sprites/null.spr");
+    g_engfuncs.pfnMessageBegin(2, gmsgBall, 0, 0);
+    v5 = g_engfuncs.pfnIndexOfEdict(v4->field_0->field_208);
+    g_engfuncs.pfnWriteShort(v5);
+    g_engfuncs.pfnWriteShort(a2);
     v0 = 26;
-    g_616888(v0);
-    g_61687c(v0);
+    g_engfuncs.pfnWriteShort(v0);
+    g_engfuncs.pfnMessageEnd(v0);
     v4->field_2d0 = 5;
     v4->field_2d4 = 6;
-    sub_48db50(v4->field_0, a1);
+    UTIL_SetOrigin(v4->field_0, a1);
     v6 = &v4->field_0->field_0;
     v1 = 0;
     v2 = 0;

@@ -46,13 +46,13 @@ typedef struct st_4ba180_1 {
 } st_4ba180_1;
 
 extern char Smoke__13CEnvExplosion;
-extern st_4ba180_1 *g_616878;
-extern st_4ba180_1 *g_61687c;
-extern st_4ba180_1 *g_616880;
-extern st_4ba180_1 *g_616888;
-extern st_4ba180_1 *g_616894;
-extern st_4ba180_1 *g_616928;
-extern st_4ba180_1 *g_61692c;
+extern st_4ba180_1 *g_engfuncs.pfnMessageBegin;
+extern st_4ba180_1 *g_engfuncs.pfnMessageEnd;
+extern st_4ba180_1 *g_engfuncs.pfnWriteByte;
+extern st_4ba180_1 *g_engfuncs.pfnWriteShort;
+extern st_4ba180_1 *g_engfuncs.pfnWriteCoord;
+extern st_4ba180_1 *g_engfuncs.pfnRandomLong;
+extern st_4ba180_1 *g_engfuncs.pfnRandomFloat;
 extern st_4ba180_6 *gpGlobals;
 extern short g_sModelIndexFireball;
 
@@ -119,7 +119,7 @@ double Use__13CEnvExplosionP11CBaseEntityT18USE_TYPEf(float a0)
     v3 = v14 + v6;
     v4 = v15 + v7;
     v5 = v16 + v8;
-    sub_487b80(&v14, &v3, 1, v27->field_208, &v17);
+    UTIL_TraceLine(&v14, &v3, 1, v27->field_208, &v17);
     v29 = v18;
     if (v29 != 1.0)
     {
@@ -144,43 +144,43 @@ double Use__13CEnvExplosionP11CBaseEntityT18USE_TYPEf(float a0)
     }
     if (!(*(char *)(*(int *)a0 + 416) & 16))
     {
-        g_61692c(0, 0x3f800000);
+        g_engfuncs.pfnRandomFloat(0, 0x3f800000);
         if (v29 < 0.5)
             v0 = 11;
         else
             v0 = 12;
-        sub_48d7a0(&v17);
+        UTIL_DecalTrace(&v17);
     }
     if (!(*(char *)(*(int *)a0 + 416) & 4))
     {
-        g_616878(5, 23, *(int *)a0 + 8, 0);
-        g_616880(3);
-        g_616894(*(float *)(*(int *)a0 + 8));
-        g_616894(*(float *)(*(int *)a0 + 12));
-        g_616894(*(float *)(*(int *)a0 + 16));
-        g_616888(g_sModelIndexFireball);
-        g_616880(*(char *)(*(unsigned int *)&a0 + 684));
-        g_616880(15);
-        g_616880(0);
-        g_61687c();
+        g_engfuncs.pfnMessageBegin(5, 23, *(int *)a0 + 8, 0);
+        g_engfuncs.pfnWriteByte(3);
+        g_engfuncs.pfnWriteCoord(*(float *)(*(int *)a0 + 8));
+        g_engfuncs.pfnWriteCoord(*(float *)(*(int *)a0 + 12));
+        g_engfuncs.pfnWriteCoord(*(float *)(*(int *)a0 + 16));
+        g_engfuncs.pfnWriteShort(g_sModelIndexFireball);
+        g_engfuncs.pfnWriteByte(*(char *)(*(unsigned int *)&a0 + 684));
+        g_engfuncs.pfnWriteByte(15);
+        g_engfuncs.pfnWriteByte(0);
+        g_engfuncs.pfnMessageEnd();
     }
     else
     {
-        g_616878(5, 23, *(int *)a0 + 8, 0);
-        g_616880(3);
-        g_616894(*(float *)(*(int *)a0 + 8));
-        g_616894(*(float *)(*(int *)a0 + 12));
-        g_616894(*(float *)(*(int *)a0 + 16));
-        g_616888(g_sModelIndexFireball);
-        g_616880(0);
-        g_616880(15);
-        g_616880(0);
-        g_61687c();
+        g_engfuncs.pfnMessageBegin(5, 23, *(int *)a0 + 8, 0);
+        g_engfuncs.pfnWriteByte(3);
+        g_engfuncs.pfnWriteCoord(*(float *)(*(int *)a0 + 8));
+        g_engfuncs.pfnWriteCoord(*(float *)(*(int *)a0 + 12));
+        g_engfuncs.pfnWriteCoord(*(float *)(*(int *)a0 + 16));
+        g_engfuncs.pfnWriteShort(g_sModelIndexFireball);
+        g_engfuncs.pfnWriteByte(0);
+        g_engfuncs.pfnWriteByte(15);
+        g_engfuncs.pfnWriteByte(0);
+        g_engfuncs.pfnMessageEnd();
     }
     v34 = (st_4ba180_3 *)a0;
     v35 = v34->field_0;
     if (!(v35->field_1a0 & 1))
-        sub_488f90(v34, v35, v35, (float)v34->field_2a8, 0, 64);
+        CBaseMonster::RadiusDamage(v34, v35, v35, (float)v34->field_2a8, 0, 64);
     v38 = (st_4ba180_5 *)a0;
     v38->field_c = _INSERT(v36, 0, 0) | 0xffff0000;
     v38->field_10 = &Smoke__13CEnvExplosion;
@@ -188,14 +188,14 @@ double Use__13CEnvExplosionP11CBaseEntityT18USE_TYPEf(float a0)
     v38->field_0->field_104 = (float)v39;
     if (v38->field_0->field_1a0 & 32)
         return v39;
-    v40 = g_616928(0, 3);
+    v40 = g_engfuncs.pfnRandomLong(0, 3);
     i = 0;
     if (0 >= v40)
         return v39;
     v1 = &v22;
     do
     {
-        sub_48a0f0("spark_shower", *(int *)a0 + 8, v1, 0);
+        CBaseEntity::Create("spark_shower", *(int *)a0 + 8, v1, 0);
         i += 1;
     } while (i < v40);
     return v39;

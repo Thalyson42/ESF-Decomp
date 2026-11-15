@@ -63,10 +63,10 @@ typedef struct st_4fa570_2 {
 } st_4fa570_2;
 
 extern st_4fa570_2 *g_pGameRules;
-extern st_4fa570_1 *g_6168b4;
-extern st_4fa570_1 *g_6168d8;
-extern st_4fa570_1 *g_6168e0;
-extern st_4fa570_1 *g_616928;
+extern st_4fa570_1 *g_engfuncs.pfnAlertMessage;
+extern st_4fa570_1 *g_engfuncs.pfnEntOffsetOfPEntity;
+extern st_4fa570_1 *g_engfuncs.pfnPEntityOfEntIndex;
+extern st_4fa570_1 *g_engfuncs.pfnRandomLong;
 extern st_4fa570_9 *gpGlobals;
 extern st_4fa570_4 *g_pLastSpawn;
 
@@ -128,12 +128,12 @@ unsigned int EntSelectSpawnPoint__FP11CBaseEntity(float a0)
     v17 = *(int *)(*(int *)a0 + 520);
     if (g_pGameRules->field_44->field_24(g_pGameRules))
     {
-        v4 = sub_487e80(g_pLastSpawn, "info_player_coop");
+        v4 = UTIL_FindEntityByClassname(g_pLastSpawn, "info_player_coop");
         v16 = 0;
         if (v4)
         {
             v26 = 0;
-            if (!*v4->field_208 || !g_6168d8(*v4->field_208))
+            if (!*v4->field_208 || !g_engfuncs.pfnEntOffsetOfPEntity(*v4->field_208))
                 v26 = 1;
             if (!v26)
                 goto LABEL_4fa621;
@@ -142,12 +142,12 @@ unsigned int EntSelectSpawnPoint__FP11CBaseEntity(float a0)
 LABEL_4fa621:
         if (v16)
         {
-            v4 = sub_487e80(g_pLastSpawn, "info_player_start");
+            v4 = UTIL_FindEntityByClassname(g_pLastSpawn, "info_player_start");
             v15 = 0;
             if (v4)
             {
                 v27 = 0;
-                if (!*v4->field_208 || !g_6168d8(*v4->field_208))
+                if (!*v4->field_208 || !g_engfuncs.pfnEntOffsetOfPEntity(*v4->field_208))
                     v27 = 1;
                 if (!v27)
                     goto LABEL_4fa697;
@@ -164,12 +164,12 @@ LABEL_4fa6a4:
         if (g_pGameRules->field_44->field_20(g_pGameRules))
         {
             v4 = g_pLastSpawn;
-            if (!sub_488af0(*(unsigned int *)&a0 + 2460, "Good"))
+            if (!strcmp@GLIBC_2.0(*(unsigned int *)&a0 + 2460, "Good"))
             {
                 v28 = "info_good_start";
                 goto LABEL_4fa72a;
             }
-            else if (!sub_488af0(*(unsigned int *)&a0 + 2460, "Evil"))
+            else if (!strcmp@GLIBC_2.0(*(unsigned int *)&a0 + 2460, "Evil"))
             {
                 v28 = "info_evil_start";
 LABEL_4fa72a:
@@ -191,13 +191,13 @@ LABEL_4fa72a:
                 *(short *)iter = *(short *)i;
                 *(char *)&iter[2] = (char)i[2];
             }
-            j = g_616928(1, 5);
+            j = g_engfuncs.pfnRandomLong(1, 5);
             if (j > 0)
             {
                 v14 = &v21;
                 do
                 {
-                    v4 = sub_487e80(v4, v14);
+                    v4 = UTIL_FindEntityByClassname(v4, v14);
                     j -= 1;
                 } while (j > 0);
             }
@@ -205,7 +205,7 @@ LABEL_4fa72a:
             if (v4)
             {
                 v33 = 0;
-                if (!*v4->field_208 || !g_6168d8(*v4->field_208))
+                if (!*v4->field_208 || !g_engfuncs.pfnEntOffsetOfPEntity(*v4->field_208))
                     v33 = 1;
                 if (!v33)
                     goto LABEL_4fa80a;
@@ -213,11 +213,11 @@ LABEL_4fa72a:
             v13 = 1;
 LABEL_4fa80a:
             if (v13)
-                v4 = sub_487e80(v4, &v21);
+                v4 = UTIL_FindEntityByClassname(v4, &v21);
             v12 = v4;
             do
             {
-                if (v4 && sub_48d020(a0, v4))
+                if (v4 && IsSpawnPointValid(a0, v4))
                 {
                     v18 = 0;
                     v19 = 0;
@@ -237,12 +237,12 @@ LABEL_4fa80a:
                     v3 = &v21;
                     v2 = v4;
                 }
-            } while ((v4 = sub_487e80(v2, v3), v4 != v12));
+            } while ((v4 = UTIL_FindEntityByClassname(v2, v3), v4 != v12));
             v11 = 0;
             if (v4)
             {
                 v36 = 0;
-                if (!*v4->field_208 || !g_6168d8(*v4->field_208))
+                if (!*v4->field_208 || !g_engfuncs.pfnEntOffsetOfPEntity(*v4->field_208))
                     v36 = 1;
                 if (!v36)
                     goto LABEL_4fa963;
@@ -254,7 +254,7 @@ LABEL_4fa963:
                 v37 = NULL;
                 while (1)
                 {
-                    v37 = sub_48bba0(v37, &*v4->field_8, 128.0f);
+                    v37 = UTIL_FindEntityInSphere(v37, &*v4->field_8, 128.0f);
                     if (!v37)
                         break;
                     if (v37->field_60->field_a0(v37) && v37->field_0->field_208 != v17)
@@ -262,9 +262,9 @@ LABEL_4fa963:
                         v10 = v37->field_60;
                         v2 = 0;
                         v1 = 300.0f;
-                        v38 = g_6168e0(0);
+                        v38 = g_engfuncs.pfnPEntityOfEntIndex(0);
                         v0 = (!v38 ? 0 : v38 + 128);
-                        v39 = g_6168e0(0);
+                        v39 = g_engfuncs.pfnPEntityOfEntIndex(0);
                         v10->field_34(v37, (!v39 ? 0 : v39 + 128));
                     }
                 }
@@ -274,12 +274,12 @@ LABEL_4fa963:
         if (g_pGameRules->field_44->field_1c(g_pGameRules))
         {
             v5 = g_pLastSpawn;
-            k = g_616928(1, 5);
+            k = g_engfuncs.pfnRandomLong(1, 5);
             if (k > 0)
             {
                 do
                 {
-                    v5 = sub_487e80(v5, "info_player_deathmatch");
+                    v5 = UTIL_FindEntityByClassname(v5, "info_player_deathmatch");
                     k -= 1;
                 } while (k > 0);
             }
@@ -287,7 +287,7 @@ LABEL_4fa963:
             if (v5)
             {
                 v41 = 0;
-                if (!*v5->field_208 || !g_6168d8(*v5->field_208))
+                if (!*v5->field_208 || !g_engfuncs.pfnEntOffsetOfPEntity(*v5->field_208))
                     v41 = 1;
                 if (!v41)
                     goto LABEL_4fab07;
@@ -295,11 +295,11 @@ LABEL_4fa963:
             v9 = 1;
 LABEL_4fab07:
             if (v9)
-                v5 = sub_487e80(v5, "info_player_deathmatch");
+                v5 = UTIL_FindEntityByClassname(v5, "info_player_deathmatch");
             v4 = v5;
             do
             {
-                if (v4 && sub_48d020(a0, v4))
+                if (v4 && IsSpawnPointValid(a0, v4))
                 {
                     v18 = 0;
                     v19 = 0;
@@ -319,12 +319,12 @@ LABEL_4fab07:
                     v3 = "info_player_deathmatch";
                     v2 = v4;
                 }
-            } while ((v4 = sub_487e80(v2, v3), v4 != v5));
+            } while ((v4 = UTIL_FindEntityByClassname(v2, v3), v4 != v5));
             v8 = 0;
             if (v4)
             {
                 v44 = 0;
-                if (!*v4->field_208 || !g_6168d8(*v4->field_208))
+                if (!*v4->field_208 || !g_engfuncs.pfnEntOffsetOfPEntity(*v4->field_208))
                     v44 = 1;
                 if (!v44)
                     goto LABEL_4fac54;
@@ -336,7 +336,7 @@ LABEL_4fac54:
             v45 = NULL;
             while (1)
             {
-                v45 = sub_48bba0(v45, &*v4->field_8, 128.0f);
+                v45 = UTIL_FindEntityInSphere(v45, &*v4->field_8, 128.0f);
                 if (!v45)
                     break;
                 if (v45->field_60->field_a0(v45) && v45->field_0->field_208 != v17)
@@ -344,9 +344,9 @@ LABEL_4fac54:
                     v7 = v45->field_60;
                     v2 = 0;
                     v1 = 300.0f;
-                    v46 = g_6168e0(0);
+                    v46 = g_engfuncs.pfnPEntityOfEntIndex(0);
                     v0 = (!v46 ? 0 : v46 + 128);
-                    v47 = g_6168e0(0);
+                    v47 = g_engfuncs.pfnPEntityOfEntIndex(0);
                     v7->field_34(v45, (!v47 ? 0 : v47 + 128));
                 }
             }
@@ -364,12 +364,12 @@ LABEL_4fad30:
                 } while (v49 && (v49 -= 1, v48 = v50 + 1, *v50));
                 if (v49 == 0xfffffffe)
                     goto LABEL_4fad56;
-                v51 = sub_48cce0(0, gpGlobals->field_10 + gpGlobals->field_98);
+                v51 = UTIL_FindEntityByTargetname(0, gpGlobals->field_10 + gpGlobals->field_98);
             }
             else
             {
 LABEL_4fad56:
-                v51 = sub_487e80(0, "info_player_start");
+                v51 = UTIL_FindEntityByClassname(0, "info_player_start");
             }
             v4 = v51;
         }
@@ -379,7 +379,7 @@ LABEL_4fadc5:
     if (v4)
     {
         v52 = 0;
-        if (!*v4->field_208 || !g_6168d8(*v4->field_208))
+        if (!*v4->field_208 || !g_engfuncs.pfnEntOffsetOfPEntity(*v4->field_208))
             v52 = 1;
         if (!v52)
             goto LABEL_4fae18;
@@ -388,8 +388,8 @@ LABEL_4fadc5:
 LABEL_4fae18:
     if (v6)
     {
-        g_6168b4(4, "PutClientInServer: no info_player_start on level");
-        return g_6168e0(0);
+        g_engfuncs.pfnAlertMessage(4, "PutClientInServer: no info_player_start on level");
+        return g_engfuncs.pfnPEntityOfEntIndex(0);
     }
     g_pLastSpawn = v4;
     return *v4->field_208;

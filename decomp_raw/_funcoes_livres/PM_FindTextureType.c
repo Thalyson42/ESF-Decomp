@@ -14,7 +14,7 @@ unsigned int PM_FindTextureType(int a0)
 
     if (!pm_shared_initialized)
     {
-        sub_4892a0("pm_shared_initialized", "../pm_shared/pm_shared.c", 325, "PM_FindTextureType");
+        __assert_fail@GLIBC_2.0("pm_shared_initialized", "../pm_shared/pm_shared.c", 325, "PM_FindTextureType");
     }
     else
     {
@@ -25,7 +25,7 @@ unsigned int PM_FindTextureType(int a0)
             if (v0 > v1)
                 return 67;
             v2 = (v0 + v1) / 2;
-            v3 = sub_48d130(a0, &(&grgszTextureName)[13 * v2], 12);
+            v3 = strncasecmp@GLIBC_2.0(a0, &(&grgszTextureName)[13 * v2], 12);
             if (!v3)
                 break;
             v4 = _ccall(14, 15, v3, 0, 0);

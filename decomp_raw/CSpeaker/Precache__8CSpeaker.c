@@ -14,7 +14,7 @@ typedef struct st_51e590_1 {
     unsigned int field_0;
 } st_51e590_1;
 
-extern st_51e590_1 *g_61692c;
+extern st_51e590_1 *g_engfuncs.pfnRandomFloat;
 extern st_51e590_2 *gpGlobals;
 
 double Precache__8CSpeaker(st_51e590_0 **a0)
@@ -24,7 +24,7 @@ double Precache__8CSpeaker(st_51e590_0 **a0)
 
     if (!!(*a0->field_1a0 & 1))
         return v1;
-    g_61692c(5.0f, 15.0f);
+    g_engfuncs.pfnRandomFloat(5.0f, 15.0f);
     v0 = 5.0 + *(float *)gpGlobals;
     *a0->field_104 = (float)v0;
     return v0;

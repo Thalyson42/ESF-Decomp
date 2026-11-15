@@ -8,7 +8,7 @@ extern char __vt_5CBuu2;
 
 st_499820_0 * __5CBuu2P11CBasePlayer(st_499820_0 *a0, int a1)
 {
-    sub_48a430(a0, a1);
+    __4CBuuP11CBasePlayer(a0, a1);
     a0->field_4 = &__vt_5CBuu2;
     return a0;
 }

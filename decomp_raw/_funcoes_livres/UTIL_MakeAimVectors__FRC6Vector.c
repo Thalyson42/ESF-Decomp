@@ -3,7 +3,7 @@ typedef struct st_531e70_0 {
     unsigned int field_0;
 } st_531e70_0;
 
-extern st_531e70_0 *g_61680c;
+extern st_531e70_0 *g_engfuncs.pfnMakeVectors;
 
 int UTIL_MakeAimVectors__FRC6Vector(float *a0)
 {
@@ -14,6 +14,6 @@ int UTIL_MakeAimVectors__FRC6Vector(float *a0)
     v1 = a0[1];
     v2 = a0[2];
     v0 = -*a0;
-    return g_61680c(&v0);
+    return g_engfuncs.pfnMakeVectors(&v0);
 }
 

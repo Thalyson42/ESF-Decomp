@@ -13,7 +13,7 @@ double PM_CalcRoll(int a0, float *a1, float a2, float a3)
     float v6;  // [bp-0x3c]
     char v7;  // [bp-0x24]
 
-    sub_4896c0(a0, &v7, &v3, &v2, v0, v1);
+    AngleVectors(a0, &v7, &v3, &v2, v0, v1);
     v8 = *a1 * v4 + a1[1] * v5 + a1[2] * v6;
     v9 = fabs(v8);
     v10 = a2;

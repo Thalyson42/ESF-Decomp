@@ -26,9 +26,9 @@ typedef struct st_502e00_4 {
 } st_502e00_4;
 
 extern unsigned int gmsgPowerStruggle;
-extern st_502e00_4 *g_616878;
-extern st_502e00_4 *g_61687c;
-extern st_502e00_4 *g_616884;
+extern st_502e00_4 *g_engfuncs.pfnMessageBegin;
+extern st_502e00_4 *g_engfuncs.pfnMessageEnd;
+extern st_502e00_4 *g_engfuncs.pfnWriteChar;
 extern st_502e00_3 *gpGlobals;
 
 unsigned int UpdateStruggleBar__12CPlayerMeleei(st_502e00_1 *a0, unsigned int a1)
@@ -37,9 +37,9 @@ unsigned int UpdateStruggleBar__12CPlayerMeleei(st_502e00_1 *a0, unsigned int a1
     {
         *(float *)&a0->field_a4 = *(float *)gpGlobals;
         a0->field_38 = 1;
-        g_616878(1, gmsgPowerStruggle, 0, *(int *)(*(int *)a0->field_124 + 520));
-        g_616884(a1);
+        g_engfuncs.pfnMessageBegin(1, gmsgPowerStruggle, 0, *(int *)(*(int *)a0->field_124 + 520));
+        g_engfuncs.pfnWriteChar(a1);
     }
-    return g_61687c(a1);
+    return g_engfuncs.pfnMessageEnd(a1);
 }
 

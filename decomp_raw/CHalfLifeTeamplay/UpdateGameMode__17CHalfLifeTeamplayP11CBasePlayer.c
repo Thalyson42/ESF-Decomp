@@ -8,11 +8,11 @@ typedef struct st_5280d0_1 {
     unsigned int field_0;
 } st_5280d0_1;
 
-extern float g_5bd07c;
+extern float characterlimit+12;
 extern unsigned int gmsgGameMode;
-extern st_5280d0_1 *g_616878;
-extern st_5280d0_1 *g_61687c;
-extern st_5280d0_1 *g_616880;
+extern st_5280d0_1 *g_engfuncs.pfnMessageBegin;
+extern st_5280d0_1 *g_engfuncs.pfnMessageEnd;
+extern st_5280d0_1 *g_engfuncs.pfnWriteByte;
 
 int UpdateGameMode__17CHalfLifeTeamplayP11CBasePlayer(unsigned int a0, st_5280d0_0 **a1)
 {
@@ -31,7 +31,7 @@ int UpdateGameMode__17CHalfLifeTeamplayP11CBasePlayer(unsigned int a0, st_5280d0
         v2 = 0;
         v1 = gmsgGameMode;
         v0 = 1;
-        v7 = g_616878;
+        v7 = g_engfuncs.pfnMessageBegin;
     }
     else
     {
@@ -39,14 +39,14 @@ int UpdateGameMode__17CHalfLifeTeamplayP11CBasePlayer(unsigned int a0, st_5280d0
         v2 = 0;
         v1 = gmsgGameMode;
         v0 = 2;
-        v7 = g_616878;
+        v7 = g_engfuncs.pfnMessageBegin;
     }
     v7(v0, v1, v2, v3);
-    g_616880(1);
+    g_engfuncs.pfnWriteByte(1);
     v6 = __fnstcw();
     v5 = v6 | 0xc00;
-    v4 = (int)g_5bd07c;
-    g_616880(v4 & 0xff);
-    return g_61687c();
+    v4 = (int)characterlimit+12;
+    g_engfuncs.pfnWriteByte(v4 & 0xff);
+    return g_engfuncs.pfnMessageEnd();
 }
 

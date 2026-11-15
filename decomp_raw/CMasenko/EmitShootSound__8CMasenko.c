@@ -6,6 +6,6 @@ typedef struct st_4d2830_0 {
 
 int EmitShootSound__8CMasenko(st_4d2830_0 *a0)
 {
-    return sub_48d4f0(a0->field_80, "ha.wav");
+    return CBasePlayer::EmitClassSound(a0->field_80, "ha.wav");
 }
 

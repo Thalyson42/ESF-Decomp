@@ -61,9 +61,9 @@ typedef struct st_4b2470_1 {
     unsigned int field_0;
 } st_4b2470_1;
 
-extern st_4b2470_1 *g_6167f8;
-extern st_4b2470_1 *g_6168d4;
-extern st_4b2470_1 *g_6168dc;
+extern st_4b2470_1 *g_engfuncs.pfnFindEntityByString;
+extern st_4b2470_1 *g_engfuncs.pfnPEntityOfEntOffset;
+extern st_4b2470_1 *g_engfuncs.pfnIndexOfEdict;
 extern st_4b2470_0 *gpGlobals;
 
 unsigned int BeamUpdateVars__10CLightning(float a0)
@@ -90,20 +90,20 @@ unsigned int BeamUpdateVars__10CLightning(float a0)
     unsigned int v4;  // [bp-0x2c]
     unsigned int v5;  // [bp-0x24]
 
-    v2 = g_6167f8(0, "targetname", *(int *)(*(unsigned int *)&a0 + 104) + gpGlobals->field_98);
-    v7 = g_6167f8(0, "targetname", *(int *)(*(unsigned int *)&a0 + 108) + gpGlobals->field_98);
+    v2 = g_engfuncs.pfnFindEntityByString(0, "targetname", *(int *)(*(unsigned int *)&a0 + 104) + gpGlobals->field_98);
+    v7 = g_engfuncs.pfnFindEntityByString(0, "targetname", *(int *)(*(unsigned int *)&a0 + 108) + gpGlobals->field_98);
     v8 = v2;
-    if (v8 || (v8 = g_6168d4(0), v8))
+    if (v8 || (v8 = g_engfuncs.pfnPEntityOfEntOffset(0), v8))
         v9 = v8->field_7c;
     else
         v9 = 0;
-    v4 = sub_4888c0(v9);
+    v4 = IsPointEntity(v9);
     v10 = v7;
-    if (v10 || (v10 = g_6168d4(0), v10))
+    if (v10 || (v10 = g_engfuncs.pfnPEntityOfEntOffset(0), v10))
         v11 = v10->field_7c;
     else
         v11 = 0;
-    v12 = sub_4888c0(v11);
+    v12 = IsPointEntity(v11);
     v13 = (st_4b2470_6 *)a0;
     v13->field_0->field_110 = 0;
     v13->field_0->field_128 = 0;
@@ -141,20 +141,20 @@ LABEL_4b25bf:
         }
         else
         {
-            v1 = g_6168dc(v7);
+            v1 = g_engfuncs.pfnIndexOfEdict(v7);
             v0 = a0;
 LABEL_4b2696:
-            sub_48c910(v0, v1);
+            CBeam::SetEndEntity(v0, v1);
         }
     }
     else
     {
-        sub_489030(a0, g_6168dc(v2));
-        v1 = g_6168dc(v7);
+        CBeam::SetStartEntity(a0, g_engfuncs.pfnIndexOfEdict(v2));
+        v1 = g_engfuncs.pfnIndexOfEdict(v7);
         v0 = a0;
         goto LABEL_4b2696;
     }
-    sub_48bc90(a0);
+    CBeam::RelinkBeam(a0);
     v5 = *(int *)(*(unsigned int *)&a0 + 116);
     *(float *)(*(int *)a0 + 324) = (float)(int)v5;
     v20 = (st_4b2470_4 *)a0;

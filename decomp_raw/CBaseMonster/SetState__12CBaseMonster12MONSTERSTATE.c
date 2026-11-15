@@ -11,7 +11,7 @@ typedef struct st_4dac30_1 {
     unsigned int field_0;
 } st_4dac30_1;
 
-extern st_4dac30_1 *g_6168b4;
+extern st_4dac30_1 *g_engfuncs.pfnAlertMessage;
 
 st_4dac30_0 * SetState__12CBaseMonster12MONSTERSTATE(st_4dac30_0 *a0, unsigned int a1)
 {
@@ -20,10 +20,10 @@ st_4dac30_0 * SetState__12CBaseMonster12MONSTERSTATE(st_4dac30_0 *a0, unsigned i
     if (a1 == 1)
     {
         v0 = &a0->field_108;
-        if (sub_48d8b0(v0))
+        if (EHANDLE::__opi(v0))
         {
-            sub_48d960(v0, 0);
-            g_6168b4(2, "Stripped\n");
+            EHANDLE::__as(v0, 0);
+            g_engfuncs.pfnAlertMessage(2, "Stripped\n");
         }
     }
     a0->field_180 = a1;

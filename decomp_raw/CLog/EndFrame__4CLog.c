@@ -11,7 +11,7 @@ unsigned int EndFrame__4CLog(st_56dc30_0 *a0)
     unsigned int v0;  // eax
 
     if (a0->field_4)
-        v0 = sub_48c560(a0->field_4);
+        v0 = fclose@GLIBC_2.1(a0->field_4);
     a0->field_1 = 0;
     return v0;
 }

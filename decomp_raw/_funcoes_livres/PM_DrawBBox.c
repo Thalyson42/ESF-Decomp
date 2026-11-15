@@ -1,8 +1,8 @@
 // PM_DrawBBox @0x18d2b0 size=304
 extern unsigned int PM_boxpnt[4];
-extern unsigned int g_5ccd24[4];
-extern unsigned int g_5ccd28[4];
-extern unsigned int g_5ccd2c[4];
+extern unsigned int PM_boxpnt+4[4];
+extern unsigned int PM_boxpnt+8[4];
+extern unsigned int PM_boxpnt+12[4];
 
 unsigned int PM_DrawBBox(float *a0, float *a1, float *a2, int a3, int a4)
 {
@@ -39,7 +39,7 @@ unsigned int PM_DrawBBox(float *a0, float *a1, float *a2, int a3, int a4)
     j = 0;
     do
     {
-        v11 = sub_489c70(&(&v2)[3 * g_5ccd24[4 * j]], &(&v2)[3 * PM_boxpnt[4 * j]], &(&v2)[3 * g_5ccd28[4 * j]], &(&v2)[3 * g_5ccd2c[4 * j]], a3, a4);
+        v11 = PM_DrawRectangle(&(&v2)[3 * PM_boxpnt+4[4 * j]], &(&v2)[3 * PM_boxpnt[4 * j]], &(&v2)[3 * PM_boxpnt+8[4 * j]], &(&v2)[3 * PM_boxpnt+12[4 * j]], a3, a4);
         j += 1;
     } while (j <= 5);
     return v11;

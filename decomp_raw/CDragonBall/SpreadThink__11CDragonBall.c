@@ -34,12 +34,12 @@ typedef struct st_4ae4b0_2 {
 } st_4ae4b0_2;
 
 extern char SUB_Remove__11CBaseEntity;
-extern st_4ae4b0_2 *g_616878;
-extern st_4ae4b0_2 *g_61687c;
-extern st_4ae4b0_2 *g_616880;
-extern st_4ae4b0_2 *g_616888;
-extern st_4ae4b0_2 *g_6168dc;
-extern st_4ae4b0_2 *g_61692c;
+extern st_4ae4b0_2 *g_engfuncs.pfnMessageBegin;
+extern st_4ae4b0_2 *g_engfuncs.pfnMessageEnd;
+extern st_4ae4b0_2 *g_engfuncs.pfnWriteByte;
+extern st_4ae4b0_2 *g_engfuncs.pfnWriteShort;
+extern st_4ae4b0_2 *g_engfuncs.pfnIndexOfEdict;
+extern st_4ae4b0_2 *g_engfuncs.pfnRandomFloat;
 extern st_4ae4b0_3 *gpGlobals;
 
 double SpreadThink__11CDragonBall(st_4ae4b0_1 *a0)
@@ -75,16 +75,16 @@ double SpreadThink__11CDragonBall(st_4ae4b0_1 *a0)
     }
     a0->field_0->field_108 = 8;
     a0->field_0->field_10c = 0;
-    g_61692c(0xbf800000, 0x3f800000);
+    g_engfuncs.pfnRandomFloat(0xbf800000, 0x3f800000);
     v7 = v10;
-    g_61692c(0xbf800000, 0x3f800000);
+    g_engfuncs.pfnRandomFloat(0xbf800000, 0x3f800000);
     v8 = v10;
     v9 = 0;
     v11 = a0->field_0;
     v12 = v7 * v7 + v10 * v10 + 0.0;
     v13 = sqrt(v12);
     if (isnan(v13))
-        sub_487dc0(*(unsigned int *)&v12);
+        sqrt(*(unsigned int *)&v12);
     else
         v12 = v13;
     v0 = (float)v12;
@@ -107,18 +107,18 @@ double SpreadThink__11CDragonBall(st_4ae4b0_1 *a0)
     *(float *)&v11->field_20 = v4;
     *(float *)&v11->field_24 = v5;
     *(float *)&v11->field_28 = v6;
-    g_616878(0, 23, 0, 0);
-    g_616880(22);
-    v15 = g_6168dc(a0->field_0->field_208);
-    g_616888(v15);
-    g_616888(a0->field_70);
-    g_616880(50);
-    g_616880(5);
-    g_616880(200);
-    g_616880(200);
-    g_616880(200);
-    g_616880(254);
-    a0->field_c = _INSERT(g_61687c(), 0, 0) | 0xffff0000;
+    g_engfuncs.pfnMessageBegin(0, 23, 0, 0);
+    g_engfuncs.pfnWriteByte(22);
+    v15 = g_engfuncs.pfnIndexOfEdict(a0->field_0->field_208);
+    g_engfuncs.pfnWriteShort(v15);
+    g_engfuncs.pfnWriteShort(a0->field_70);
+    g_engfuncs.pfnWriteByte(50);
+    g_engfuncs.pfnWriteByte(5);
+    g_engfuncs.pfnWriteByte(200);
+    g_engfuncs.pfnWriteByte(200);
+    g_engfuncs.pfnWriteByte(200);
+    g_engfuncs.pfnWriteByte(254);
+    a0->field_c = _INSERT(g_engfuncs.pfnMessageEnd(), 0, 0) | 0xffff0000;
     a0->field_10 = &SUB_Remove__11CBaseEntity;
     v17 = *(float *)gpGlobals + 30.0;
     a0->field_0->field_104 = (float)v17;

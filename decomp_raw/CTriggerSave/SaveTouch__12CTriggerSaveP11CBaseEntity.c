@@ -21,14 +21,14 @@ typedef struct st_52ece0_3 {
     struct st_52ece0_1 *field_60;
 } st_52ece0_3;
 
-extern st_52ece0_2 *g_61685c;
+extern st_52ece0_2 *g_engfuncs.pfnServerCommand;
 
 unsigned int SaveTouch__12CTriggerSaveP11CBaseEntity(st_52ece0_0 *a0, st_52ece0_3 *a1)
 {
     unsigned int v0;  // eax
     unsigned int v1;  // eax
 
-    v0 = sub_488a80(a0->field_100, a1);
+    v0 = UTIL_IsMasterTriggered(a0->field_100, a1);
     if (!v0)
         return v0;
     v1 = a1->field_60->field_a0(a1);
@@ -36,7 +36,7 @@ unsigned int SaveTouch__12CTriggerSaveP11CBaseEntity(st_52ece0_0 *a0, st_52ece0_
         return v1;
     a0->field_14 = 0;
     a0->field_18 = 0;
-    sub_48cc00(a0);
-    return g_61685c("autosave\n");
+    UTIL_Remove(a0);
+    return g_engfuncs.pfnServerCommand("autosave\n");
 }
 

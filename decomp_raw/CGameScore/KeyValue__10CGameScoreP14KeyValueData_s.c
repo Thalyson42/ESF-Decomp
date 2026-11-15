@@ -22,9 +22,9 @@ st_4cf0b0_2 * KeyValue__10CGameScoreP14KeyValueData_s(st_4cf0b0_1 **a0, st_4cf0b
     st_4cf0b0_1 *v2;  // eax
     int v0;  // [bp-0x24]
 
-    if (sub_488af0(a1->field_4, "points"))
-        return sub_489590(a0, a1);
-    v1 = sub_48b500(a1->field_8, 0, 10, 0);
+    if (strcmp@GLIBC_2.0(a1->field_4, "points"))
+        return CRuleEntity::KeyValue(a0, a1);
+    v1 = __strtol_internal@GLIBC_2.0(a1->field_8, 0, 10, 0);
     v2 = *a0;
     v0 = v1;
     v2->field_164 = (float)v0;

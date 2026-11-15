@@ -51,7 +51,7 @@ st_54a060_0 ** TaskThink__16CFinishMeleeTask(float idx)
         v11 = *(int *)(*(unsigned int *)&idx + 8);
         if (v11->field_49c == 1 || v11->field_49c == 3 || v11->field_49c == 5)
         {
-            sub_48d0d0(*(int *)(*(unsigned int *)&idx + 8));
+            CBot::ResetMoveSpeed(*(int *)(*(unsigned int *)&idx + 8));
             v12 = *(int *)(*(unsigned int *)&idx + 8);
             if (v12->field_49c == 1 && (int)v12->field_438 < *(char *)(*(unsigned int *)&idx + 42))
             {
@@ -67,20 +67,20 @@ st_54a060_0 ** TaskThink__16CFinishMeleeTask(float idx)
                     return &gpGlobals;
                 if (*(float *)(*(int *)(*(unsigned int *)&idx + 8) + 1052) * 100.0 >= 30.0)
                 {
-                    if (!(char)sub_489f70(*(int *)(*(unsigned int *)&idx + 8), *(int *)(*(unsigned int *)&idx + 44)) || !(char)sub_489d60(idx, *(int *)(*(unsigned int *)&idx + 44)))
+                    if (!(char)CBot::IsValidEnemy(*(int *)(*(unsigned int *)&idx + 8), *(int *)(*(unsigned int *)&idx + 44)) || !(char)CFinishMeleeTask::IsValidThrowVictim(idx, *(int *)(*(unsigned int *)&idx + 44)))
                         *(unsigned int *)(*(unsigned int *)&idx + 44) = 0;
                     if (!*(int *)(*(unsigned int *)&idx + 44))
-                        sub_4891e0(idx);
+                        CFinishMeleeTask::CheckPlayerToThrowAt(idx);
                     if (!*(char *)(*(unsigned int *)&idx + 60))
                     {
                         if (*(int *)(*(unsigned int *)&idx + 44))
                             goto LABEL_54a206;
-                        sub_488ab0(idx);
+                        CFinishMeleeTask::CheckObstacleToThrowAt(idx);
                     }
                     if (*(int *)(*(unsigned int *)&idx + 44))
                     {
 LABEL_54a206:
-                        sub_48b720(*(int *)(*(unsigned int *)&idx + 8), *(int *)(*(unsigned int *)&idx + 44));
+                        CBot::AimAtEnemy(*(int *)(*(unsigned int *)&idx + 8), *(int *)(*(unsigned int *)&idx + 44));
                     }
                     else
                     {
@@ -92,7 +92,7 @@ LABEL_54a206:
                         *(float *)&v0 = *(float *)(*(unsigned int *)&idx + 48);
                         *(float *)&v1 = *(float *)&v13->field_4;
                         *(float *)&v2 = *(float *)&v13->field_8;
-                        sub_48a170(&v3, v14, &v0);
+                        CBot::GetAimAngles(&v3, v14, &v0);
                         *(unsigned int *)&v14[1].padding_0[124] = v3;
                         *(unsigned int *)&v14[1].padding_0[128] = v4;
                         *(unsigned int *)&v14[1].padding_0[132] = v5;
@@ -101,7 +101,7 @@ LABEL_54a206:
                 *(unsigned int *)(*(int *)(*(unsigned int *)&idx + 12) + 0x200) = 0x800;
                 return &gpGlobals;
             }
-            sub_48c710(*(int *)(*(unsigned int *)&idx + 8));
+            CBot::ChargeMeleeCombo(*(int *)(*(unsigned int *)&idx + 8));
             v15 = *(int *)(*(unsigned int *)&idx + 8);
             if (!v15->field_b8c)
             {

@@ -16,9 +16,9 @@ int SetPowerhitAnim__12CPlayerMeleeG6Vectori(int a0, float *a1, unsigned int a2)
     strcpy(v5, "blow_");
     if (a2 > 5)
     {
-        sub_48c150(v5, (0.45 <= a1[2] ? "up" : -0.45 >= a1[2] ? "down" : "kick_front"));
+        strcat@GLIBC_2.0(v5, (0.45 <= a1[2] ? "up" : -0.45 >= a1[2] ? "down" : "kick_front"));
         *(unsigned short *)&v0 = 0;
-        return sub_48b670(a0, v0, *(float *)gpGlobals, 1, v5);
+        return CPlayerMelee::AddAnimation(a0, v0, *(float *)gpGlobals, 1, v5);
     }
     goto *((void *)(&(&_GLOBAL_OFFSET_TABLE_)[-1 * *(int *)(&(&_GLOBAL_OFFSET_TABLE_)[4 * a2] - 1079660)]));
 }

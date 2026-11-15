@@ -8,16 +8,16 @@ typedef struct st_4f6f40_1 {
     unsigned int field_0;
 } st_4f6f40_1;
 
-extern st_4f6f40_1 *g_6168dc;
+extern st_4f6f40_1 *g_engfuncs.pfnIndexOfEdict;
 
 void RemoveWallJump__11CBasePlayer(st_4f6f40_0 **a0)
 {
     unsigned int v1;  // esi
 
-    sub_48b090(g_6168dc(*a0->field_208));
+    UTIL_Model_RemoveAll(g_engfuncs.pfnIndexOfEdict(*a0->field_208));
     v1 = a0 + 224;
-    sub_48b460(v1, sub_487fb0(v1));
-    sub_489f10(a0);
+    CPlayerMelee::RemoveAnim(v1, CPlayerMelee::GetCurrentAnim(v1));
+    CBasePlayer::ResetWallJumpVars(a0);
     return;
 }
 

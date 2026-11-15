@@ -51,7 +51,7 @@ unsigned int FRefreshRoute__12CBaseMonster(float a0)
     float v5;  // [bp-0x20]
     float v6;  // [bp-0x1c]
 
-    sub_489a80(a0);
+    CBaseMonster::RouteNew(a0);
     v8 = *(int *)(*(unsigned int *)&a0 + 532);
     if (v8 != 16)
     {
@@ -61,7 +61,7 @@ unsigned int FRefreshRoute__12CBaseMonster(float a0)
             {
                 if (v8 == 2)
                 {
-                    v1 = sub_488810(*(unsigned int *)&a0 + 264);
+                    v1 = EHANDLE::__opP11CBaseEntity(*(unsigned int *)&a0 + 264);
                     v0 = 2;
                     v9 = *(unsigned int *)&a0 + 592;
                 }
@@ -73,13 +73,13 @@ unsigned int FRefreshRoute__12CBaseMonster(float a0)
             else
             {
                 v10 = *(unsigned int *)&a0 + 272;
-                if (!sub_48d8b0(v10))
+                if (!EHANDLE::__opi(v10))
                     return 0;
-                v1 = sub_488810(v10);
+                v1 = EHANDLE::__opP11CBaseEntity(v10);
                 v0 = 1;
-                v9 = *(int *)sub_489fd0(v10) + 8;
+                v9 = *(int *)EHANDLE::__rf(v10) + 8;
             }
-            v11 = sub_48bfa0(a0, v9);
+            v11 = CBaseMonster::BuildRoute(a0, v9);
         }
         else if (v8 == 32)
         {
@@ -87,11 +87,11 @@ unsigned int FRefreshRoute__12CBaseMonster(float a0)
             v4 = v12[0x88];
             v5 = v12[137];
             v6 = v12[138];
-            v11 = sub_48de90(v12, &v4);
+            v11 = CBaseMonster::FGetNodeRoute(v12, &v4);
         }
         else if (v8 == 64)
         {
-            v11 = sub_48bfa0(a0, *(unsigned int *)&a0 + 544, 64, 0);
+            v11 = CBaseMonster::BuildRoute(a0, *(unsigned int *)&a0 + 544, 64, 0);
         }
         else
         {

@@ -9,9 +9,9 @@ unsigned int * new_eh_context(void)
     int v2;  // [bp-0x14]
 
     sub_5949e4(v0, v1, v2);
-    v4 = sub_489f30(24);
+    v4 = malloc@GLIBC_2.0(24);
     if (!v4)
-        sub_48d640();
+        __terminate();
     v5 = 6;
     for (iter = v4; v5; iter += 1)
     {

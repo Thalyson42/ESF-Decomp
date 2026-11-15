@@ -80,10 +80,10 @@ st_554e20_1 ** GetNearestHostileAttack__4CBotff(st_554e20_5 *a0, float a1, float
         {
             do
             {
-                v9 = sub_48bd10(v9, "globalname", "magic_attack");
+                v9 = UTIL_FindEntityByString(v9, "globalname", "magic_attack");
                 if (!v9)
                     return v2;
-            } while ((char)sub_48b140(v9) || g_teamplay && !(char)sub_48b960(*v9->field_198) && *v9->field_198->field_22c == a0->field_0->field_1ac);
+            } while ((char)IsNull(v9) || g_teamplay && !(char)IsNull(*v9->field_198) && *v9->field_198->field_22c == a0->field_0->field_1ac);
             v11 = &*v9->field_8;
             *(float *)&v6 = *v9->field_8;
             *(float *)&v7 = *(float *)&v11->field_4;
@@ -98,13 +98,13 @@ st_554e20_1 ** GetNearestHostileAttack__4CBotff(st_554e20_5 *a0, float a1, float
             v16 = v13 * v13 + v14 * v14 + v15 * v15;
             v17 = sqrt(v16);
             if (isnan(v17))
-                sub_487dc0(*(unsigned int *)&v16);
+                sqrt(*(unsigned int *)&v16);
             else
                 v16 = v17;
             v0 = (float)v16;
             if (v0 >= a1 && v0 <= a2)
             {
-                if (v0 > v1 || (short)sub_48aab0(a0, v9) <= 64 || a0->field_9fc && !(char)sub_489330(a0, v9) || !a0->field_60->field_e4(a0, &*v9->field_8))
+                if (v0 > v1 || (short)UTIL_GetHeadingPercentage(a0, v9) <= 64 || a0->field_9fc && !(char)EntIsInFieldOfView(a0, v9) || !a0->field_60->field_e4(a0, &*v9->field_8))
                     continue;
                 v2 = v9;
                 v10 = v0;

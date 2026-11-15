@@ -111,8 +111,8 @@ st_4f6b40_3 * EnableWallJump__11CBasePlayerG6Vector(st_4f6b40_3 *a0, float *a1)
     if (!v10->field_364 && !v10->field_334 && !v10->field_330 && !v10->field_32c && !v10->field_340 && !v10->field_770 && !v10->field_37c && !v10->field_6bc && v10->field_60->field_8c(a0) && !a0->field_33c && !a0->field_354)
     {
         if (a0->field_320)
-            sub_48c5a0(a0);
-        sub_48a800(a0->field_0 + 80);
+            CBasePlayer::StopFly(a0);
+        UTIL_MakeVectors(a0->field_0 + 80);
         v11 = a0;
         v11->field_6c8 = 1;
         v11->field_37c = 1;
@@ -121,16 +121,16 @@ st_4f6b40_3 * EnableWallJump__11CBasePlayerG6Vector(st_4f6b40_3 *a0, float *a1)
         *(float *)&v11->field_3d0 = gpGlobals->field_2c;
         *(float *)&v11->field_3d4 = gpGlobals->field_30;
         *(float *)&v11->field_3a0 = gpGlobals->field_0;
-        sub_489d40(&v11->field_504);
-        sub_4887c0(&a0->field_380);
+        CSwoop::ResetAllDT(&v11->field_504);
+        CPlayerMelee::RemoveAllAnims(&a0->field_380);
         v12 = a1;
         *(float *)&v2 = *v12;
         *(float *)&v4 = v12[1];
         *(float *)&v5 = v12[2];
         v13 = &v9;
-        sub_487ca0(a0, "grabwall_", &v2, &v9);
+        CBasePlayer::GetWallJumpAnim(a0, "grabwall_", &v2, &v9);
         v0 = a1;
-        sub_488860(&v2, v0);
+        UTIL_VecToAngles(&v2, v0);
         v14 = "grabwall_forward";
         v15 = 0x11;
         v16 = 15;
@@ -235,17 +235,17 @@ LABEL_4f6d8c:
             }
         }
         *(unsigned int *)&v3 = -v2;
-        sub_48a800(&v3);
+        UTIL_MakeVectors(&v3);
         v46 = &gpGlobals->field_28;
         v6 = gpGlobals->field_28;
         v7 = *(float *)&v46[1];
         v8 = *(float *)&v46[2];
         *(unsigned short *)&v0 = 1;
-        return sub_488dc0(&a0->field_380, &v6, v0, gpGlobals->field_0, &v9);
+        return CPlayerMelee::AddAnimationAFix(&a0->field_380, &v6, v0, gpGlobals->field_0, &v9);
     }
     v47 = a0;
     v1 = v47->field_754;
-    sub_489f10(v47);
+    CBasePlayer::ResetWallJumpVars(v47);
     a0->field_754 = v1;
     return a0;
 }

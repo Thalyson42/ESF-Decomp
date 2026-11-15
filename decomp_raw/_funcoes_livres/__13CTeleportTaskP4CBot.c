@@ -24,28 +24,28 @@ typedef struct st_582640_2 {
 } st_582640_2;
 
 extern char __vt_13CTeleportTask;
-extern st_582640_2 *g_61692c;
+extern st_582640_2 *g_engfuncs.pfnRandomFloat;
 extern st_582640_2 *gpGlobals;
 
 st_582640_1 * __13CTeleportTaskP4CBot(st_582640_1 *a0, int a1)
 {
     unsigned int v0;  // eax
 
-    sub_48ce80(a0, a1);
+    __9CBaseTaskP4CBot(a0, a1);
     a0->field_14 = &__vt_13CTeleportTask;
     if (!a0->field_8->field_b0c)
     {
-        v0 = sub_48a810(a0);
+        v0 = CTeleportTask::GetRandomTeleDir(a0);
         a0->field_8->field_b0c = v0;
     }
     if (a0->field_8->field_b08 < *(float *)gpGlobals)
         a0->field_8->field_b08 = (float)(0.2 + a0->field_0);
-    if (!(char)sub_488bd0(a0->field_8))
+    if (!(char)CBot::BotShouldFallDown(a0->field_8))
         return a0;
     if (a0->field_8->field_320)
-        sub_48c5a0(a0->field_8);
+        CBasePlayer::StopFly(a0->field_8);
     a0->field_8->field_a10 = 0;
-    g_61692c(0.800000011920929f, 1.2000000476837158f);
+    g_engfuncs.pfnRandomFloat(0.800000011920929f, 1.2000000476837158f);
     a0->field_8->field_a14 = (float)(0.800000011920929 + *(float *)gpGlobals);
     return a0;
 }

@@ -16,7 +16,7 @@ extern st_55a3a0_1 *gpGlobals;
 
 st_55a3a0_0 * __14CHuntEnemyTaskP4CBot(st_55a3a0_0 *a0, int a1)
 {
-    sub_48ce80(a0, a1);
+    __9CBaseTaskP4CBot(a0, a1);
     a0->field_14 = &__vt_14CHuntEnemyTask;
     a0->field_18 = (float)(*(float *)gpGlobals + 1.5);
     *(float *)&a0->field_1c = *(float *)&a0->field_0;

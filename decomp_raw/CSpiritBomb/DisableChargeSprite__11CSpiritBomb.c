@@ -19,7 +19,7 @@ st_521c60_0 * DisableChargeSprite__11CSpiritBomb(st_521c60_1 *a0)
 {
     st_521c60_0 *v0;  // eax
 
-    sub_48df90(a0->field_d4);
+    CSprite::TurnOff(a0->field_d4);
     v0 = *(int *)a0->field_80;
     v0->field_15c = 0;
     return v0;

@@ -8,7 +8,7 @@ typedef struct st_48e930_1 {
     unsigned int field_0;
 } st_48e930_1;
 
-extern st_48e930_1 *g_6168f4;
+extern st_48e930_1 *g_engfuncs.pfnGetBonePosition;
 
 int GetBonePosition__14CBaseAnimatingiR6VectorT2(st_48e930_0 **a0, unsigned int a1, unsigned int a2, unsigned int a3)
 {
@@ -16,6 +16,6 @@ int GetBonePosition__14CBaseAnimatingiR6VectorT2(st_48e930_0 **a0, unsigned int 
     unsigned int v1;  // [bp-0x18]
     unsigned int v2;  // [bp-0x14]
 
-    return g_6168f4(*a0->field_208, a1, a2, a3, v0, v1, v2);
+    return g_engfuncs.pfnGetBonePosition(*a0->field_208, a1, a2, a3, v0, v1, v2);
 }
 

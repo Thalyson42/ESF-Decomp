@@ -74,14 +74,14 @@ float BreakTouch__10CBreakableP11CBaseEntity(st_4c2310_6 *a0, st_4c2310_2 *a1)
     {
         return v11;
     }
-    else if (sub_48c7c0(a0))
+    else if (CBreakable::IsBreakable(a0))
     {
         if (a0->field_0->field_1a0 & 2)
         {
             v3 = v2[8] * v2[8] + v2[9] * v2[9] + v2[10] * v2[10];
             v4 = sqrt(v3);
             if (isnan(v4))
-                sub_487dc0(*(unsigned int *)&v3);
+                sqrt(*(unsigned int *)&v3);
             else
                 v3 = v4;
             v1 = (float)v3;
@@ -100,7 +100,7 @@ float BreakTouch__10CBreakableP11CBaseEntity(st_4c2310_6 *a0, st_4c2310_2 *a1)
         }
         else if (((char)((0x3800 | (unsigned short)(CmpF(__double_as_longlong((double)*(float *)&a0->field_0->field_f0 - 2.0), __double_as_longlong((double)v2[0x33])) * 0x100 & 0x4500) & 0x4700) >> 8) & 69) - 1 < 64)
         {
-            a0->field_c = _INSERT(sub_48cba0(a0), 0, 0) | 0xffff0000;
+            a0->field_c = _INSERT(CBreakable::DamageSound(a0), 0, 0) | 0xffff0000;
             a0->field_10 = &Die__10CBreakable;
             a0->field_14 = 0;
             a0->field_18 = 0;

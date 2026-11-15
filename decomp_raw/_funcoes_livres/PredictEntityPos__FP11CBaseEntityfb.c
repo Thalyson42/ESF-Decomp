@@ -61,7 +61,7 @@ st_57c920_1 * PredictEntityPos__FP11CBaseEntityfb(void)
     v23 = *v19->field_20 * *v19->field_20 + *(float *)&v22[1] * *(float *)&v22[1] + *(float *)&v22[2] * *(float *)&v22[2];
     v24 = sqrt(v23);
     if (isnan(v24))
-        sub_487dc0(*(unsigned int *)&v23);
+        sqrt(*(unsigned int *)&v23);
     else
         v23 = v24;
     v15 = (float)v23;
@@ -78,7 +78,7 @@ st_57c920_1 * PredictEntityPos__FP11CBaseEntityfb(void)
         v28 = *v19->field_20 * *v19->field_20 + *(float *)&v27[1] * *(float *)&v27[1] + *(float *)&v27[2] * *(float *)&v27[2];
         v29 = sqrt(v28);
         if (isnan(v29))
-            sub_487dc0(*(unsigned int *)&v28);
+            sqrt(*(unsigned int *)&v28);
         else
             v28 = v29;
         v15 = (float)v28;
@@ -92,7 +92,7 @@ st_57c920_1 * PredictEntityPos__FP11CBaseEntityfb(void)
         v33 = v30->field_20 * v30->field_20 + *(float *)&v32[1] * *(float *)&v32[1] + *(float *)&v32[2] * *(float *)&v32[2];
         v34 = sqrt(v33);
         if (isnan(v34))
-            sub_487dc0(*(unsigned int *)&v33);
+            sqrt(*(unsigned int *)&v33);
         else
             v33 = v34;
         v2 = (float)v33;
@@ -117,7 +117,7 @@ st_57c920_1 * PredictEntityPos__FP11CBaseEntityfb(void)
         v17 = v14 + v11;
         if (v21)
         {
-            sub_488460(&v12, &v15, 0, 1, *v19->field_208, &v1);
+            UTIL_TraceHull(&v12, &v15, 0, 1, *v19->field_208, &v1);
             *(float *)&idx->field_0 = v3;
             *(float *)&idx->field_4 = v4;
             v26 = v5;

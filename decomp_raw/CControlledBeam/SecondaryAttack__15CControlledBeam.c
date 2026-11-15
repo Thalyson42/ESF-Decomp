@@ -8,8 +8,8 @@ unsigned int SecondaryAttack__15CControlledBeam(double a0, float idx)
     float v2;  // [bp-0x8]
 
     if (*(int *)(*(unsigned int *)&idx + 200) && *(int *)(*(unsigned int *)&idx + 196) == 2 && !*(int *)(*(int *)(*(unsigned int *)&idx + 200) + 684) && !*(int *)(*(int *)(*(unsigned int *)&idx + 200) + 688))
-        sub_4888d0(idx);
-    v4 = sub_488640(v0, v1);
+        CControlledBeam::ReleaseAttack(idx);
+    v4 = UTIL_WeaponTimeBase(v0, v1);
     v2 = (float)(a0 + 0.2);
     v5 = v2;
     *(float *)(*(unsigned int *)&idx + 160) = (float)v5;

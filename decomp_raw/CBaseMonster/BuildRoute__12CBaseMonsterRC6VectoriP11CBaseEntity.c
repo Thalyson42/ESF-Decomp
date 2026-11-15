@@ -42,8 +42,8 @@ unsigned int BuildRoute__12CBaseMonsterRC6VectoriP11CBaseEntity(st_4d6150_2 *a0,
     unsigned int v5;  // [bp-0x20]
     unsigned int v6;  // [bp-0x1c]
 
-    sub_489a80(a0);
-    a0->field_214 = sub_48b1f0(a0, a2);
+    CBaseMonster::RouteNew(a0);
+    a0->field_214 = CBaseMonster::RouteClassify(a0, a2);
     *(float *)&a0->field_194 = *a1;
     *(float *)&a0->field_198 = a1[1];
     *(float *)&a0->field_19c = a1[2];
@@ -67,13 +67,13 @@ unsigned int BuildRoute__12CBaseMonsterRC6VectoriP11CBaseEntity(st_4d6150_2 *a0,
         v1 = *a1;
         v2 = a1[1];
         v3 = a1[2];
-        if (!sub_48de90(a0, &v1))
+        if (!CBaseMonster::FGetNodeRoute(a0, &v1))
             return 0;
         *(float *)&a0->field_220 = *a1;
         *(float *)&a0->field_224 = a1[1];
         *(float *)&a0->field_228 = a1[2];
     }
-    sub_489670(a0, a3);
+    CBaseMonster::RouteSimplify(a0, a3);
     return 1;
 }
 

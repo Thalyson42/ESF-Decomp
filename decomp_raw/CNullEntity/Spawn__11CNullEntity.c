@@ -8,10 +8,10 @@ typedef struct st_521f40_1 {
     unsigned int field_0;
 } st_521f40_1;
 
-extern st_521f40_1 *g_616818;
+extern st_521f40_1 *g_engfuncs.pfnRemoveEntity;
 
 int Spawn__11CNullEntity(st_521f40_0 **a0)
 {
-    return g_616818(*a0->field_208);
+    return g_engfuncs.pfnRemoveEntity(*a0->field_208);
 }
 

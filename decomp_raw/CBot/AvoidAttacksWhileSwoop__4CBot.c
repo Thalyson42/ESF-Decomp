@@ -14,7 +14,7 @@ typedef struct st_554b90_2 {
     unsigned int field_0;
 } st_554b90_2;
 
-extern st_554b90_2 *g_61692c;
+extern st_554b90_2 *g_engfuncs.pfnRandomFloat;
 extern st_554b90_0 *gpGlobals;
 
 unsigned int AvoidAttacksWhileSwoop__4CBot(float idx)
@@ -41,7 +41,7 @@ unsigned int AvoidAttacksWhileSwoop__4CBot(float idx)
     if (*(float *)(*(unsigned int *)&idx + 3060) > *(float *)gpGlobals)
         return 38;
     *(float *)(*(unsigned int *)&idx + 3060) = (float)(*(float *)gpGlobals + 0.15000000596046448);
-    v8 = sub_48d470(idx, 50.0f, 2250.0f);
+    v8 = CBot::GetNearestHostileAttack(idx, 50.0f, 2250.0f);
     if (v8)
     {
         v9 = &*v8->field_8;
@@ -58,13 +58,13 @@ unsigned int AvoidAttacksWhileSwoop__4CBot(float idx)
         v14 = v11 * v11 + v12 * v12 + v13 * v13;
         v15 = sqrt(v14);
         if (isnan(v15))
-            sub_487dc0(*(unsigned int *)&v14);
+            sqrt(*(unsigned int *)&v14);
         else
             v14 = v15;
         v0 = (float)v14;
         if (v0 > 350.0f && *(char *)(*(int *)(*(unsigned int *)&idx + 0xa00) + 64))
         {
-            v16 = sub_48dd40(idx);
+            v16 = CBot::MakeAttackAvoidChainSwoop(idx);
             if (v16 != 38)
                 return v16;
         }
@@ -73,29 +73,29 @@ unsigned int AvoidAttacksWhileSwoop__4CBot(float idx)
             if (!*(int *)(*(unsigned int *)&idx + 0xff0))
             {
 LABEL_554d90:
-                g_61692c(85.0f, 95.0f);
+                g_engfuncs.pfnRandomFloat(85.0f, 95.0f);
                 v18 = 85.0 + *(float *)(*(unsigned int *)&idx + 3092);
                 goto LABEL_554df6;
             }
 LABEL_554dc4:
-            g_61692c(85.0f, 95.0f);
+            g_engfuncs.pfnRandomFloat(85.0f, 95.0f);
             v18 = *(float *)(*(unsigned int *)&idx + 3092) - 85.0;
 LABEL_554df6:
-            sub_48d430((float)v18);
+            UTIL_WrapAngle((float)v18);
             *(float *)(*(unsigned int *)&idx + 3092) = (float)v18;
         }
         else if (0.0 > *(float *)(*(unsigned int *)&idx + 3048))
         {
-            g_61692c(85.0f, 95.0f);
+            g_engfuncs.pfnRandomFloat(85.0f, 95.0f);
             v17 = *(float *)(*(unsigned int *)&idx + 3088) - 85.0;
             goto LABEL_554d44;
         }
         else if (0.0 < *(float *)(*(unsigned int *)&idx + 3048))
         {
-            g_61692c(85.0f, 95.0f);
+            g_engfuncs.pfnRandomFloat(85.0f, 95.0f);
             v17 = 85.0 + *(float *)(*(unsigned int *)&idx + 3088);
 LABEL_554d44:
-            sub_48d430((float)v17);
+            UTIL_WrapAngle((float)v17);
             *(float *)(*(unsigned int *)&idx + 3088) = (float)v17;
         }
         else

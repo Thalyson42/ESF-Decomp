@@ -84,8 +84,8 @@ typedef struct st_546400_13 {
 
 extern unsigned int FindSelection__t12TMultiChoice1ZPQ210CChatClass13CChatSentencePQ2t12TMultiChoice1ZPQ210CChatClass13CChatSentence12SMultiChoicei;
 extern unsigned int FindSelection__t12TMultiChoice1ZPt12TMultiChoice1ZPQ210CChatClass13CChatSentencePQ2t12TMultiChoice1ZPt12TMultiChoice1ZPQ210CChatClass13CChatSentence12SMultiChoicei;
-extern st_546400_13 *g_616928;
-extern st_546400_13 *g_61692c;
+extern st_546400_13 *g_engfuncs.pfnRandomLong;
+extern st_546400_13 *g_engfuncs.pfnRandomFloat;
 extern st_546400_8 *gpGlobals;
 
 unsigned int * LetBotCheckForReply__10CChatClassP4CBot(st_546400_9 *a0, st_546400_7 *a1)
@@ -184,28 +184,28 @@ unsigned int * LetBotCheckForReply__10CChatClassP4CBot(st_546400_9 *a0, st_54640
     {
         i = v40;
         node->field_0 = 0;
-        v42 = sub_48d6a0(8);
+        v42 = __builtin_new(8);
         *v42 = 0;
         v42[1] = 0;
         node->field_4 = v42;
         node += 1;
         v40 = i - 1;
     } while (i >= 1);
-    v43 = sub_48d6a0(8);
+    v43 = __builtin_new(8);
     v22 = 1;
     v43->field_0 = 0;
-    v44 = sub_48d6a0(8);
+    v44 = __builtin_new(8);
     *v44 = NULL;
     v44[1] = NULL;
     v43->field_4 = v44;
     v22 = 0;
     v23 = v43;
     if (v22)
-        sub_48d4e0(v23);
+        __builtin_delete(v23);
     v25 = 0;
     v34 = 0;
-    sub_48d0e0(&v35, 0, 32);
-    sub_48e110(&v34, a1->field_0->field_1d0 + gpGlobals->field_98);
+    memset@GLIBC_2.0(&v35, 0, 32);
+    strcpy@GLIBC_2.0(&v34, a1->field_0->field_1d0 + gpGlobals->field_98);
     if (a0 != 0xffffffdf && a0->field_21 && gpGlobals->field_0 - 5.0 < a0->field_a4)
     {
         v21 = 0;
@@ -215,7 +215,7 @@ unsigned int * LetBotCheckForReply__10CChatClassP4CBot(st_546400_9 *a0, st_54640
             v46 = v45 * 5;
             v47 = (v45 + v46 * 4) * 8;
             v48 = &(&a0->field_0)[v47];
-            if (v48 != 0xffffffdf && v48->field_21 && gpGlobals->field_0 - 5.0 < *(float *)&(&a0->field_0)[v47 + 164] && v48 && v48->field_0 && sub_488af0(&v34, v48))
+            if (v48 != 0xffffffdf && v48->field_21 && gpGlobals->field_0 - 5.0 < *(float *)&(&a0->field_0)[v47 + 164] && v48 && v48->field_0 && strcmp@GLIBC_2.0(&v34, v48))
             {
                 v19 = 50 - (char)(v46 * 2);
                 v20 = 1;
@@ -225,14 +225,14 @@ unsigned int * LetBotCheckForReply__10CChatClassP4CBot(st_546400_9 *a0, st_54640
                     v18 = v49 * 21;
                     do
                     {
-                        v50 = sub_48a500(v20);
+                        v50 = UTIL_PlayerByIndex(v20);
                         *(unsigned short *)&v1 = 0;
                         *(unsigned short *)&v0 = 0;
-                        if (!(char)sub_489a70(v50, v0, v1))
+                        if (!(char)UTIL_IsValidPlayer(v50, v0, v1))
                             continue;
-                        sub_48e110(&v32, *v50->field_1d0 + gpGlobals->field_98);
+                        strcpy@GLIBC_2.0(&v32, *v50->field_1d0 + gpGlobals->field_98);
                         v0 = &v32;
-                        if (sub_48b210(&(&a0->field_0)[8 * v18 + 33], v0))
+                        if (strstr@GLIBC_2.0(&(&a0->field_0)[8 * v18 + 33], v0))
                         {
                             v31 = v19;
                             v30 = __fnstcw();
@@ -242,7 +242,7 @@ unsigned int * LetBotCheckForReply__10CChatClassP4CBot(st_546400_9 *a0, st_54640
                         }
                         else
                         {
-                            if (!sub_48b210(&a0[v49].field_21, &v34))
+                            if (!strstr@GLIBC_2.0(&a0[v49].field_21, &v34))
                                 continue;
                             v31 = v19;
                             v30 = __fnstcw();
@@ -254,12 +254,12 @@ unsigned int * LetBotCheckForReply__10CChatClassP4CBot(st_546400_9 *a0, st_54640
                     } while ((v20 += 1, v20 <= (int)gpGlobals->field_90));
                 }
                 v52 = v21;
-                if ((char)sub_488590(a0, &a0[v52], &(&v36)[2 * v52]))
+                if ((char)CChatClass::CreateResponseList(a0, &a0[v52], &(&v36)[2 * v52]))
                 {
                     v17 = v19;
                     if (v17)
                     {
-                        v53 = sub_48d6a0(12);
+                        v53 = __builtin_new(12);
                         *v53 = 0;
                         v53[1] = 0;
                         v16 = v53;
@@ -270,15 +270,15 @@ unsigned int * LetBotCheckForReply__10CChatClassP4CBot(st_546400_9 *a0, st_54640
                         v55 = v23->field_4;
                         if (!*v55)
                         {
-                            v56 = sub_48d6a0(12);
+                            v56 = __builtin_new(12);
                             v15 = 1;
                             v56->field_4 = NULL;
                             v56->field_8 = NULL;
-                            sub_48d0e0(v56, 0, 4);
+                            memset@GLIBC_2.0(v56, 0, 4);
                             v15 = 0;
                             *v55 = v56;
                             if (v15)
-                                sub_48d4e0(v56);
+                                __builtin_delete(v56);
                             *v55->field_0 = v16;
                             *v55->field_4 = NULL;
                             *v55->field_8 = NULL;
@@ -287,15 +287,15 @@ unsigned int * LetBotCheckForReply__10CChatClassP4CBot(st_546400_9 *a0, st_54640
                         else
                         {
                             v14 = v55[1];
-                            v57 = sub_48d6a0(12);
+                            v57 = __builtin_new(12);
                             v13 = 1;
                             v57->field_4 = NULL;
                             v57->field_8 = NULL;
-                            sub_48d0e0(v57, 0, 4);
+                            memset@GLIBC_2.0(v57, 0, 4);
                             v13 = 0;
                             v14->field_4 = v57;
                             if (v13)
-                                sub_48d4e0(v57);
+                                __builtin_delete(v57);
                             v55[1]->field_4->field_8 = v55[1];
                             v58 = v55[1]->field_4;
                             v55[1] = v58;
@@ -310,7 +310,7 @@ unsigned int * LetBotCheckForReply__10CChatClassP4CBot(st_546400_9 *a0, st_54640
     }
     v26 = NULL;
     v12 = &v26;
-    v11 = g_616928(0, v23->field_0);
+    v11 = g_engfuncs.pfnRandomLong(0, v23->field_0);
     v9 = _INSERT(v11, 0, 0) | 0xffff0000;
     v10 = &FindSelection__t12TMultiChoice1ZPt12TMultiChoice1ZPQ210CChatClass13CChatSentencePQ2t12TMultiChoice1ZPt12TMultiChoice1ZPQ210CChatClass13CChatSentence12SMultiChoicei;
     v60 = v23->field_4->field_0;
@@ -350,12 +350,12 @@ LABEL_546a53:
                 if (v68)
                     v68->field_8 = NULL;
                 v67->field_4 = NULL;
-                sub_48d4e0(v67);
+                __builtin_delete(v67);
             }
             v69 = v66;
             if (!v69)
                 break;
-            sub_48d4e0(v69);
+            __builtin_delete(v69);
         }
         if (v23->field_4)
         {
@@ -369,23 +369,23 @@ LABEL_546a53:
                     iter = iter->field_4;
                     v72->field_4 = NULL;
                     v72->field_8 = NULL;
-                    sub_48d4e0(v72);
+                    __builtin_delete(v72);
                 } while (iter);
             }
             v70[1] = NULL;
             *v70 = NULL;
-            sub_48d4e0(v70);
+            __builtin_delete(v70);
         }
         v73 = v23;
         v73->field_4 = NULL;
-        sub_48d4e0(v73);
+        __builtin_delete(v73);
     }
     v25 = NULL;
     if (v26)
     {
         v74 = v26;
         v7 = &v25;
-        v6 = g_616928(0, v74->field_0);
+        v6 = g_engfuncs.pfnRandomLong(0, v74->field_0);
         v4 = _INSERT(v6, 0, 0) | 0xffff0000;
         v5 = &FindSelection__t12TMultiChoice1ZPQ210CChatClass13CChatSentencePQ2t12TMultiChoice1ZPQ210CChatClass13CChatSentence12SMultiChoicei;
         v76 = v74->field_4->field_0;
@@ -410,26 +410,26 @@ LABEL_546bef:
     }
     if (v25)
     {
-        sub_488d20(a0, &a0[5].padding_1[15], v25);
+        CChatClass::StoreRecentUsedSentence(a0, &a0[5].padding_1[15], v25);
         a1->field_c44 = 1;
-        g_61692c(0x3f800000, 2.5f);
+        g_engfuncs.pfnRandomFloat(0x3f800000, 2.5f);
         a1->field_c48 = (float)(2.5 + gpGlobals->field_0);
-        g_61692c(10.0f, 20.0f);
+        g_engfuncs.pfnRandomFloat(10.0f, 20.0f);
         a1->field_d4c = (float)(10.0 + a1->field_d4c);
         v32 = 0;
-        sub_48d0e0(&v33, 0, 32);
+        memset@GLIBC_2.0(&v33, 0, 32);
         if (v25->field_0)
             v80 = v25;
         else
             v80 = a1->field_0->field_1d0 + gpGlobals->field_98;
-        sub_48e110(&v32, v80);
+        strcpy@GLIBC_2.0(&v32, v80);
         v27 = 0;
-        sub_48d0e0(&v28, 0, 0xff);
+        memset@GLIBC_2.0(&v28, 0, 0xff);
         if (v25->field_28)
-            sub_48c290(a0, a1->field_a04, v25->field_24, &v27);
+            CChatClass::MakeChatSentence(a0, a1->field_a04, v25->field_24, &v27);
         else
-            sub_48e110(&v27, v25->field_24);
-        sub_48c5d0(a0, a1, &v27, &a1->field_c4c, &v32, &v34);
+            strcpy@GLIBC_2.0(&v27, v25->field_24);
+        CChatClass::FillInNames(a0, a1, &v27, &a1->field_c4c, &v32, &v34);
     }
     iter2 = &v37 + 12;
     if (&v36 == &v37 + 12)
@@ -450,12 +450,12 @@ LABEL_546bef:
                 if (v84)
                     v84->field_8 = 0;
                 v83->field_4 = NULL;
-                sub_48d4e0(v83);
+                __builtin_delete(v83);
             }
             v85 = v82;
             if (!v85)
                 break;
-            sub_48d4e0(v85);
+            __builtin_delete(v85);
         }
         if (iter2[1])
         {
@@ -469,12 +469,12 @@ LABEL_546bef:
                     iter1 = iter1->field_4;
                     v88->field_4 = NULL;
                     v88->field_8 = 0;
-                    sub_48d4e0(v88);
+                    __builtin_delete(v88);
                 } while (iter1);
             }
             v86->field_4 = NULL;
             v86->field_0 = NULL;
-            sub_48d4e0(v86);
+            __builtin_delete(v86);
         }
         iter2[1] = NULL;
     } while (&v36 != iter2);

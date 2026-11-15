@@ -24,7 +24,7 @@ unsigned int MakeCandy__11CBasePlayerPCc(st_4f0320_1 *a0, int a1)
     }
     else
     {
-        v0 = sub_4893c0(a0->field_728, a1, a0);
+        v0 = CBasePlayer::BecomeCandy(a0->field_728, a1, a0);
         if (!v0)
             return v0;
         a0->field_728 = NULL;

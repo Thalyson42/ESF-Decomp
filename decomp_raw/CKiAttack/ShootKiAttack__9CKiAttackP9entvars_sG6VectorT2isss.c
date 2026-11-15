@@ -60,13 +60,13 @@ typedef struct st_4cbaf0_1 {
 extern char ExplodeTouch__16CExplodingAttackP11CBaseEntity;
 extern char NormalThink__12CMagicAttack;
 extern unsigned int gmsgFlare;
-extern st_4cbaf0_4 *g_6167c8;
-extern st_4cbaf0_4 *g_616878;
-extern st_4cbaf0_4 *g_61687c;
-extern st_4cbaf0_4 *g_616888;
-extern st_4cbaf0_4 *g_61688c;
-extern st_4cbaf0_4 *g_616894;
-extern st_4cbaf0_4 *g_6168dc;
+extern st_4cbaf0_4 *g_engfuncs.pfnSetModel;
+extern st_4cbaf0_4 *g_engfuncs.pfnMessageBegin;
+extern st_4cbaf0_4 *g_engfuncs.pfnMessageEnd;
+extern st_4cbaf0_4 *g_engfuncs.pfnWriteShort;
+extern st_4cbaf0_4 *g_engfuncs.pfnWriteLong;
+extern st_4cbaf0_4 *g_engfuncs.pfnWriteCoord;
+extern st_4cbaf0_4 *g_engfuncs.pfnIndexOfEdict;
 extern st_4cbaf0_1 *gpGlobals;
 
 float ShootKiAttack__9CKiAttackP9entvars_sG6VectorT2isss(st_4cbaf0_0 *a0, float *a1, float *a2, int a3, short a4, short a5, short a6)
@@ -123,12 +123,12 @@ float ShootKiAttack__9CKiAttackP9entvars_sG6VectorT2isss(st_4cbaf0_0 *a0, float 
     float v24;  // [bp-0x14]
     float v25;  // [bp-0x10]
 
-    v3 = sub_48cc30(0);
+    v3 = GetClassPtr__H1Z9CKiAttack_PX01_PX01(0);
     v3->field_60->field_8(v3);
     v26 = v3;
     v26->field_0->field_108 = 5;
     v26->field_0->field_10c = 1;
-    g_6167c8(v26->field_0->field_208, "sprites/null.spr");
+    g_engfuncs.pfnSetModel(v26->field_0->field_208, "sprites/null.spr");
     v27 = a3;
     if (v27 > 9999)
         v27 = 9999;
@@ -137,7 +137,7 @@ float ShootKiAttack__9CKiAttackP9entvars_sG6VectorT2isss(st_4cbaf0_0 *a0, float 
     v28 = *a2 * *a2 + a2[1] * a2[1] + a2[2] * a2[2];
     v29 = sqrt(v28);
     if (isnan(v29))
-        sub_487dc0(*(unsigned int *)&v28);
+        sqrt(*(unsigned int *)&v28);
     else
         v28 = v29;
     v10 = (float)v28;
@@ -163,13 +163,13 @@ float ShootKiAttack__9CKiAttackP9entvars_sG6VectorT2isss(st_4cbaf0_0 *a0, float 
     v19 = (float)(v31 + *v33);
     v21 = (float)(v32 + v33[1]);
     v22 = v33[2] + v25;
-    sub_48db50(v3->field_0, &v19);
+    UTIL_SetOrigin(v3->field_0, &v19);
     v2 = 25.0f;
     v1 = (float)(0.25 * v2);
     v34 = *a2 * *a2 + a2[1] * a2[1] + a2[2] * a2[2];
     v35 = sqrt(v34);
     if (isnan(v35))
-        sub_487dc0(*(unsigned int *)&v34);
+        sqrt(*(unsigned int *)&v34);
     else
         v34 = v35;
     v18 = (float)v34;
@@ -193,7 +193,7 @@ float ShootKiAttack__9CKiAttackP9entvars_sG6VectorT2isss(st_4cbaf0_0 *a0, float 
     v7 = *v37 + v10;
     v8 = v37[1] + v11;
     v9 = v37[2] + v12;
-    sub_48db50(v3->field_0, &v7);
+    UTIL_SetOrigin(v3->field_0, &v7);
     v38 = v1;
     v7 = v38;
     v8 = v38;
@@ -202,7 +202,7 @@ float ShootKiAttack__9CKiAttackP9entvars_sG6VectorT2isss(st_4cbaf0_0 *a0, float 
     v10 = (float)v39;
     v11 = (float)v39;
     v12 = (float)v39;
-    sub_48a0d0(v3->field_0, &v10, &v7);
+    UTIL_SetSize(v3->field_0, &v10, &v7);
     v40 = &v3->field_0->field_0;
     *(float *)&v40[8] = *a2;
     *(float *)&v40[9] = a2[1];
@@ -210,13 +210,13 @@ float ShootKiAttack__9CKiAttackP9entvars_sG6VectorT2isss(st_4cbaf0_0 *a0, float 
     v41 = *a2 * *a2 + a2[1] * a2[1] + a2[2] * a2[2];
     v42 = sqrt(v41);
     if (isnan(v42))
-        sub_487dc0(*(unsigned int *)&v41);
+        sqrt(*(unsigned int *)&v41);
     else
         v41 = v42;
     v43 = v3;
     v43->field_2a8 = (float)v41;
     v44 = &v43->field_0->field_0;
-    sub_488860(&v7, v44 + 8);
+    UTIL_VecToAngles(&v7, v44 + 8);
     *(float *)&v44[20] = v7;
     *(float *)&v44[21] = v8;
     *(float *)&v44[22] = v9;
@@ -229,23 +229,23 @@ float ShootKiAttack__9CKiAttackP9entvars_sG6VectorT2isss(st_4cbaf0_0 *a0, float 
     v48 = v3;
     v48->field_14 = _INSERT(v46, 0, 0) | 0xffff0000;
     v48->field_18 = &ExplodeTouch__16CExplodingAttackP11CBaseEntity;
-    g_616878(2, gmsgFlare, 0, 0);
-    v49 = g_6168dc(v3->field_0->field_208);
-    g_61688c(v49);
-    g_616888(a4);
-    g_616888(a5);
+    g_engfuncs.pfnMessageBegin(2, gmsgFlare, 0, 0);
+    v49 = g_engfuncs.pfnIndexOfEdict(v3->field_0->field_208);
+    g_engfuncs.pfnWriteLong(v49);
+    g_engfuncs.pfnWriteShort(a4);
+    g_engfuncs.pfnWriteShort(a5);
     v6 = __fnstcw();
     v5 = v6 | 0xc00;
     v4 = (int)(0.1 * v2);
-    g_616888(v4);
-    g_616888(a6);
-    g_616888(70);
-    g_616894(*a1);
-    g_616894(a1[1]);
+    g_engfuncs.pfnWriteShort(v4);
+    g_engfuncs.pfnWriteShort(a6);
+    g_engfuncs.pfnWriteShort(70);
+    g_engfuncs.pfnWriteCoord(*a1);
+    g_engfuncs.pfnWriteCoord(a1[1]);
     v0 = a1[2];
-    g_616894(v0);
+    g_engfuncs.pfnWriteCoord(v0);
     v51 = v3;
-    v51->field_c = _INSERT(g_61687c(v0), 0, 0) | 0xffff0000;
+    v51->field_c = _INSERT(g_engfuncs.pfnMessageEnd(v0), 0, 0) | 0xffff0000;
     v51->field_10 = &NormalThink__12CMagicAttack;
     v52 = gpGlobals->field_0;
     *(float *)&v51->field_0->field_104 = v52;

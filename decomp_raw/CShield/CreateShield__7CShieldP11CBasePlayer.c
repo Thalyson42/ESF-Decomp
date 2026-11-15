@@ -77,7 +77,7 @@ st_518ae0_2 * CreateShield__7CShieldP11CBasePlayer(st_518ae0_4 **a0)
     float v7;  // [bp-0x14]
     float v8;  // [bp-0x10]
 
-    v9 = sub_487f10(0);
+    v9 = GetClassPtr__H1Z7CShield_PX01_PX01(0);
     v9->field_60->field_8(v9);
     v10 = &v9->field_0->field_0;
     v0 = 0;
@@ -110,9 +110,9 @@ st_518ae0_2 * CreateShield__7CShieldP11CBasePlayer(st_518ae0_4 **a0)
     v6 = -40.0f;
     v7 = -40.0f;
     v8 = -40.0f;
-    sub_48a0d0(v9->field_0, &v6, &v1);
-    sub_48db50(v9->field_0, &v9->field_0->field_8);
-    sub_488200(v9);
+    UTIL_SetSize(v9->field_0, &v6, &v1);
+    UTIL_SetOrigin(v9->field_0, &v9->field_0->field_8);
+    CShield::CreateExplosion(v9);
     return v9;
 }
 

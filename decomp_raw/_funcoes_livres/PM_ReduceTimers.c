@@ -37,7 +37,7 @@ unsigned int PM_ReduceTimers(void)
         if (0.0 >= pmove->field_8c)
         {
             if (pmove->field_204 == 1)
-                sub_48d160();
+                PM_WallJumpPush();
             pmove->field_8c = 0;
             pmove->field_204 = 0;
             idx = 0;

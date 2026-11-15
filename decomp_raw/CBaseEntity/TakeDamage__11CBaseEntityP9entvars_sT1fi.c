@@ -54,9 +54,9 @@ typedef struct st_49cee0_3 {
 } st_49cee0_3;
 
 extern unsigned int g_vecAttackDir;
-extern unsigned int g_616784;
-extern unsigned int g_616788;
-extern st_49cee0_2 *g_6168d8;
+extern unsigned int g_vecAttackDir+4;
+extern unsigned int g_vecAttackDir+8;
+extern st_49cee0_2 *g_engfuncs.pfnEntOffsetOfPEntity;
 
 unsigned int TakeDamage__11CBaseEntityP9entvars_sT1fi(st_49cee0_3 *a0, st_49cee0_4 *a1, st_49cee0_4 *a2, float a3)
 {
@@ -104,7 +104,7 @@ unsigned int TakeDamage__11CBaseEntityP9entvars_sT1fi(st_49cee0_3 *a0, st_49cee0
         return 0;
     if (a2 == a1)
     {
-        sub_48b610(&v1, a0->field_0);
+        VecBModelOrigin(&v1, a0->field_0);
         v16 = &a2->field_8;
         v10 = a2->field_8 - v1;
         v11 = *(float *)&v16[1] - v2;
@@ -115,7 +115,7 @@ unsigned int TakeDamage__11CBaseEntityP9entvars_sT1fi(st_49cee0_3 *a0, st_49cee0
     }
     else
     {
-        sub_48b610(&v4, a0->field_0);
+        VecBModelOrigin(&v4, a0->field_0);
         v18 = &a1->field_8;
         v1 = a1->field_8 - v5;
         v2 = *(float *)&v18[1] - v6;
@@ -128,7 +128,7 @@ unsigned int TakeDamage__11CBaseEntityP9entvars_sT1fi(st_49cee0_3 *a0, st_49cee0
     v19 = v13 * v13 + v14 * v14 + v15 * v15;
     v20 = sqrt(v19);
     if (isnan(v20))
-        sub_487dc0(*(unsigned int *)&v19);
+        sqrt(*(unsigned int *)&v19);
     else
         v19 = v20;
     v8 = (float)v19;
@@ -146,10 +146,10 @@ unsigned int TakeDamage__11CBaseEntityP9entvars_sT1fi(st_49cee0_3 *a0, st_49cee0
         v3 = (float)(v21 * v15);
     }
     *(float *)&g_vecAttackDir = v1;
-    *(float *)&g_616784 = v2;
-    *(float *)&g_616788 = v3;
+    *(float *)&g_vecAttackDir+4 = v2;
+    *(float *)&g_vecAttackDir+8 = v3;
     v22 = 0;
-    if (!a1 || !g_6168d8(a1->field_208))
+    if (!a1 || !g_engfuncs.pfnEntOffsetOfPEntity(a1->field_208))
         v22 = 1;
     if (!v22)
     {
@@ -176,7 +176,7 @@ unsigned int TakeDamage__11CBaseEntityP9entvars_sT1fi(st_49cee0_3 *a0, st_49cee0
             v32 = v29 * v29 + v30 * v30 + v31 * v31;
             v33 = sqrt(v32);
             if (isnan(v33))
-                sub_487dc0(*(unsigned int *)&v32);
+                sqrt(*(unsigned int *)&v32);
             else
                 v32 = v33;
             v11 = (float)v32;

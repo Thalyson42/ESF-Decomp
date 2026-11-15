@@ -32,9 +32,9 @@ typedef struct st_4df450_5 {
     unsigned int field_98;
 } st_4df450_5;
 
-extern st_4df450_1 *g_6168b4;
-extern st_4df450_1 *g_6168d4;
-extern st_4df450_1 *g_6168d8;
+extern st_4df450_1 *g_engfuncs.pfnAlertMessage;
+extern st_4df450_1 *g_engfuncs.pfnPEntityOfEntOffset;
+extern st_4df450_1 *g_engfuncs.pfnEntOffsetOfPEntity;
 extern st_4df450_5 *gpGlobals;
 
 unsigned int HandleLinkEnt__6CGraphiP9entvars_siQ26CGraph9NODEQUERY(unsigned int *a0, unsigned int a1, st_4df450_4 *a2, unsigned short a3, unsigned int a4)
@@ -52,20 +52,20 @@ unsigned int HandleLinkEnt__6CGraphiP9entvars_siQ26CGraph9NODEQUERY(unsigned int
     {
         v1 = "Graph not ready!\n";
         v0 = 2;
-        v4 = g_6168b4;
+        v4 = g_engfuncs.pfnAlertMessage;
         goto LABEL_4df63a;
     }
     v3 = 0;
-    if (!a2 || !g_6168d8(a2->field_208))
+    if (!a2 || !g_engfuncs.pfnEntOffsetOfPEntity(a2->field_208))
         v3 = 1;
     if (v3)
     {
-        g_6168b4(2, "dead path ent!\n");
+        g_engfuncs.pfnAlertMessage(2, "dead path ent!\n");
     }
-    else if (!sub_488af0(a2->field_0 + gpGlobals->field_98, "func_door") || !sub_488af0(a2->field_0 + gpGlobals->field_98, "func_door_rotating"))
+    else if (!strcmp@GLIBC_2.0(a2->field_0 + gpGlobals->field_98, "func_door") || !strcmp@GLIBC_2.0(a2->field_0 + gpGlobals->field_98, "func_door_rotating"))
     {
         v5 = a2->field_208;
-        if (a2->field_208 || (v5 = g_6168d4(0), v5))
+        if (a2->field_208 || (v5 = g_engfuncs.pfnPEntityOfEntOffset(0), v5))
             v6 = v5->field_7c;
         else
             v6 = NULL;
@@ -81,12 +81,12 @@ unsigned int HandleLinkEnt__6CGraphiP9entvars_siQ26CGraph9NODEQUERY(unsigned int
                 goto LABEL_4df63c;
         }
     }
-    else if (sub_488af0(a2->field_0 + gpGlobals->field_98, "func_breakable") || a4 != 1)
+    else if (strcmp@GLIBC_2.0(a2->field_0 + gpGlobals->field_98, "func_breakable") || a4 != 1)
     {
         v2 = a2->field_0 + gpGlobals->field_98;
         v1 = "Unhandled Ent in Path %s\n";
         v0 = 2;
-        v4 = g_6168b4;
+        v4 = g_engfuncs.pfnAlertMessage;
 LABEL_4df63a:
         v4(v0, v1);
 LABEL_4df63c:

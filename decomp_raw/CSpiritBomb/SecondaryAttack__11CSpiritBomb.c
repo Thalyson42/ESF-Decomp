@@ -44,7 +44,7 @@ double SecondaryAttack__11CSpiritBomb(float idx)
         *(unsigned int *)(*(unsigned int *)&idx + 208) = 1;
         *(unsigned int *)(*(int *)(*(unsigned int *)&idx + 128) + 1876) = 0;
         *(unsigned int *)(*(unsigned int *)&idx + 196) = 0;
-        sub_48d4f0(*(int *)(*(unsigned int *)&idx + 128), "spiritbomb2_charge.wav");
+        CBasePlayer::EmitClassSound(*(int *)(*(unsigned int *)&idx + 128), "spiritbomb2_charge.wav");
         v6 = *(int *)(*(unsigned int *)&idx + 128);
         if (!v6->field_324)
         {
@@ -60,11 +60,11 @@ double SecondaryAttack__11CSpiritBomb(float idx)
             *(unsigned int *)(*(int *)*(int *)(*(unsigned int *)&idx + 128) + 348) = 19;
         }
     }
-    else if (!sub_48c980(*(int *)(*(unsigned int *)&idx + 128), 0))
+    else if (!CBasePlayer::UseKi(*(int *)(*(unsigned int *)&idx + 128), 0))
     {
         if (*(int *)(*(int *)(*(unsigned int *)&idx + 128) + 820))
         {
-            sub_48ce90(idx);
+            CSpiritBomb::Shoot2(idx);
             return v8;
         }
         return v9;
@@ -97,10 +97,10 @@ LABEL_521bb4:
             }
 LABEL_521bc0:
             *(unsigned int *)(*(unsigned int *)&idx + 196) = *(int *)(*(unsigned int *)&idx + 196) + 1;
-            sub_48c680(*(int *)(*(unsigned int *)&idx + 128), *(int *)(*(unsigned int *)&idx + 196) * 20 / 9);
+            CBasePlayer::DrawChargeBar(*(int *)(*(unsigned int *)&idx + 128), *(int *)(*(unsigned int *)&idx + 196) * 20 / 9);
         }
     }
-    sub_488640();
+    UTIL_WeaponTimeBase();
     *(float *)(*(unsigned int *)&idx + 160) = (float)(v12 + 0.2);
     return 0.2;
 }

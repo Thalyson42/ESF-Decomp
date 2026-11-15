@@ -37,16 +37,16 @@ extern char g_waypoint_on;
 extern char g_auto_waypoint;
 extern char g_path_waypoint;
 extern unsigned int f_path_time;
-extern st_58aa50_1 *g_6168d4;
-extern st_58aa50_1 *g_61698c;
+extern st_58aa50_1 *g_engfuncs.pfnPEntityOfEntOffset;
+extern st_58aa50_1 *g_engfuncs.pfnIsDedicatedServer;
 extern st_58aa50_0 *gpGlobals;
-extern st_58aa50_3 *g_62468c;
+extern st_58aa50_3 *BotManager+12;
 extern void waypoints;
-extern char g_626821[4];
-extern unsigned int g_626824[4];
+extern char waypoints+1[4];
+extern unsigned int waypoints+4[4];
 extern float last_waypoint;
-extern float g_62a824;
-extern float g_62a828;
+extern float last_waypoint+4;
+extern float last_waypoint+8;
 extern int num_waypoints;
 extern st_58aa50_6 paths;
 extern float wp_display_time[4];
@@ -119,14 +119,14 @@ double WaypointThink__FP7edict_s(float idx)
         v22 = *(unsigned int *)&idx + 0x88;
         v23 = last_waypoint - *(float *)(*(unsigned int *)&idx + 0x88);
         v11 = v23;
-        v24 = g_62a824 - *(float *)&v22[1];
+        v24 = last_waypoint+4 - *(float *)&v22[1];
         v12 = v24;
-        v25 = g_62a828 - *(float *)&v22[2];
+        v25 = last_waypoint+8 - *(float *)&v22[2];
         v13 = v25;
         v26 = v23 * v23 + v24 * v24 + v25 * v25;
         v27 = sqrt(v26);
         if (isnan(v27))
-            sub_487dc0(*(unsigned int *)&v26);
+            sqrt(*(unsigned int *)&v26);
         else
             v26 = v27;
         v6 = (float)v26;
@@ -141,17 +141,17 @@ double WaypointThink__FP7edict_s(float idx)
                 {
                     iter += 1;
                 }
-                else if (!(g_626821[v28] & 64))
+                else if (!(waypoints+1[v28] & 64))
                 {
                     v29 = *(unsigned int *)&idx + 0x88;
                     *(float *)&v3 = *(float *)(*(unsigned int *)&idx + 0x88);
                     *(float *)&v4 = *(float *)&v29[1];
                     *(float *)&v5 = *(float *)&v29[2];
-                    index = v28 + (char *)&g_626824[0];
+                    index = v28 + (char *)&waypoints+4[0];
                     v6 = *(float *)index;
                     v7 = *(float *)(index + 4);
                     v8 = *(float *)(index + 8);
-                    if ((char)sub_48c5f0(&v3, &v6, idx))
+                    if ((char)WaypointReachable(&v3, &v6, idx))
                     {
                         v31 = *(float *)index - *(float *)(*(unsigned int *)&idx + 0x88);
                         v3 = v31;
@@ -162,7 +162,7 @@ double WaypointThink__FP7edict_s(float idx)
                         v34 = v31 * v31 + v32 * v32 + v33 * v33;
                         v35 = sqrt(v34);
                         if (isnan(v35))
-                            sub_487dc0(*(unsigned int *)&v34);
+                            sqrt(*(unsigned int *)&v34);
                         else
                             v34 = v35;
                         v9 = (float)v34;
@@ -187,7 +187,7 @@ double WaypointThink__FP7edict_s(float idx)
                 }
             }
             if (v2 >= 200.0f)
-                sub_48af70(idx);
+                WaypointAdd(idx);
         }
     }
     v36 = 9999.0;
@@ -202,7 +202,7 @@ double WaypointThink__FP7edict_s(float idx)
             v37 = iter * 16;
             if (*(int *)&(&waypoints)[v37] >= NULL)
             {
-                idx1 = v37 + (char *)&g_626824[0];
+                idx1 = v37 + (char *)&waypoints+4[0];
                 v39 = *(unsigned int *)&idx + 0x88;
                 v40 = *(float *)idx1 - *(float *)(*(unsigned int *)&idx + 0x88);
                 v3 = v40;
@@ -213,7 +213,7 @@ double WaypointThink__FP7edict_s(float idx)
                 v43 = v40 * v40 + v41 * v41 + v42 * v42;
                 v44 = sqrt(v43);
                 if (isnan(v44))
-                    sub_487dc0(*(unsigned int *)&v43);
+                    sqrt(*(unsigned int *)&v43);
                 else
                     v43 = v44;
                 v9 = (float)v43;
@@ -234,7 +234,7 @@ double WaypointThink__FP7edict_s(float idx)
                             v6 = 0;
                             v7 = 0;
                             v8 = 17.0f;
-                            idx2 = v45 + (char *)&g_626824[0];
+                            idx2 = v45 + (char *)&waypoints+4[0];
                             v3 = *(float *)idx2 - v6;
                             v4 = *(float *)(idx2 + 4) - v7;
                             v5 = *(float *)(idx2 + 8) - v8;
@@ -246,12 +246,12 @@ double WaypointThink__FP7edict_s(float idx)
                         else
                         {
                             v48 = iter * 16;
-                            if (g_626821[v48] & 64)
+                            if (waypoints+1[v48] & 64)
                             {
                                 v6 = 0;
                                 v7 = 0;
                                 v8 = 10.0f;
-                                v49 = v48 + (char *)&g_626824[0];
+                                v49 = v48 + (char *)&waypoints+4[0];
                                 v3 = *(float *)v49 + v6;
                                 v4 = *(float *)(v49 + 4) + v7;
                                 v5 = *(float *)(v49 + 8) + v8;
@@ -265,7 +265,7 @@ double WaypointThink__FP7edict_s(float idx)
                                 v6 = 0;
                                 v7 = 0;
                                 v8 = 34.0f;
-                                v50 = &g_626824[4 * iter];
+                                v50 = &waypoints+4[4 * iter];
                                 v3 = *v50 - v6;
                                 v4 = v50[1] - v7;
                                 v5 = v50[2] - v8;
@@ -290,11 +290,11 @@ double WaypointThink__FP7edict_s(float idx)
                         v6 = v15;
                         v7 = v16;
                         v8 = v17;
-                        if (!g_61698c(&v3, &v6, 30, 0, 0, 0, 0xff, 250, 5) && !(v51 = g_62468c, !g_62468c && !(v51 = g_6168d4(0), v51)))
+                        if (!g_engfuncs.pfnIsDedicatedServer(&v3, &v6, 30, 0, 0, 0, 0xff, 250, 5) && !(v51 = BotManager+12, !BotManager+12 && !(v51 = g_engfuncs.pfnPEntityOfEntOffset(0), v51)))
                             v52 = v51->field_7c;
                         else
                             v52 = NULL;
-                        sub_48a5d0(*v52->field_208);
+                        WaypointDrawBeam(*v52->field_208);
                         v36 = *(float *)gpGlobals;
                         wp_display_time[iter] = (float)v36;
                     }
@@ -325,11 +325,11 @@ double WaypointThink__FP7edict_s(float idx)
                 v55 = iter * 2;
                 if (*(short *)(v55 + node) != -0x1)
                 {
-                    v56 = &g_626824[4 * v0];
+                    v56 = &waypoints+4[4 * v0];
                     v3 = *v56;
                     v4 = v56[1];
                     v5 = v56[2];
-                    v57 = &g_626824[4 * *(short *)(v55 + node)];
+                    v57 = &waypoints+4[4 * *(short *)(v55 + node)];
                     v6 = *v57;
                     v7 = v57[1];
                     v8 = v57[2];
@@ -340,11 +340,11 @@ double WaypointThink__FP7edict_s(float idx)
                     v12 = *v57;
                     v13 = v57[1];
                     v14 = (float)v53;
-                    if (!g_61698c(&v9, &v12, 10, 2, 250, 250, 250, 200, 10) && !(v58 = g_62468c, !g_62468c && !(v58 = g_6168d4(0), v58)))
+                    if (!g_engfuncs.pfnIsDedicatedServer(&v9, &v12, 10, 2, 250, 250, 250, 200, 10) && !(v58 = BotManager+12, !BotManager+12 && !(v58 = g_engfuncs.pfnPEntityOfEntOffset(0), v58)))
                         v59 = v58->field_7c;
                     else
                         v59 = NULL;
-                    sub_48a5d0(*v59->field_208);
+                    WaypointDrawBeam(*v59->field_208);
                 }
             } while ((iter += 1, iter <= 3));
             node = node->field_8;

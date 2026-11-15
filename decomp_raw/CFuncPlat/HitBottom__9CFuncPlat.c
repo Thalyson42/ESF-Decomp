@@ -30,10 +30,10 @@ unsigned int HitBottom__9CFuncPlat(st_4e91d0_1 *a0)
 
     v0 = a0->field_0;
     if (v0->field_1e8)
-        v1 = sub_489390(v0->field_208, 6, v0->field_1e8 + gpGlobals->field_98, 0, 0, 32, 100);
+        v1 = EMIT_SOUND_DYN(v0->field_208, 6, v0->field_1e8 + gpGlobals->field_98, 0, 0, 32, 100);
     v2 = a0->field_0;
     if (v2->field_1ec)
-        v1 = sub_489390(v2->field_208, 1, v2->field_1ec + gpGlobals->field_98, a0->field_108, 0.800000011920929f, 0, 100);
+        v1 = EMIT_SOUND_DYN(v2->field_208, 1, v2->field_1ec + gpGlobals->field_98, a0->field_108, 0.800000011920929f, 0, 100);
     a0->field_80 = 1;
     return v1;
 }

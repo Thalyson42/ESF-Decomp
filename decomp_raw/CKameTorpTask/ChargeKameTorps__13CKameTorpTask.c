@@ -21,7 +21,7 @@ typedef struct st_552240_0 {
     unsigned int field_0;
 } st_552240_0;
 
-extern st_552240_0 *g_61692c;
+extern st_552240_0 *g_engfuncs.pfnRandomFloat;
 extern st_552240_1 *gpGlobals;
 
 double ChargeKameTorps__13CKameTorpTask(float idx)
@@ -38,16 +38,16 @@ double ChargeKameTorps__13CKameTorpTask(float idx)
         if (*(int *)(*(int *)(*(unsigned int *)&idx + 8) + 1744) == 100)
         {
             *(char *)(*(int *)(*(unsigned int *)&idx + 8) + 2800) = 0;
-            if (!(char)sub_487f70(idx))
+            if (!(char)CKameTorpTask::SetMoveAwayDir(idx))
                 return v2;
             *(unsigned int *)(*(unsigned int *)&idx + 44) = 3;
-            g_61692c(0.12999999523162842f, 0.25f);
+            g_engfuncs.pfnRandomFloat(0.12999999523162842f, 0.25f);
             *(float *)(*(unsigned int *)&idx + 24) = (float)(0.12999999523162842 + *(float *)gpGlobals);
             return v1;
         }
         else
         {
-            v3 = sub_48dae0(idx);
+            v3 = CKameTorpTask::CountTorps(idx);
             if (v3 >= *(short *)(*(unsigned int *)&idx + 56))
             {
                 *(unsigned int *)(*(unsigned int *)&idx + 44) = 2;
@@ -58,7 +58,7 @@ double ChargeKameTorps__13CKameTorpTask(float idx)
             *(char *)(*(int *)(*(unsigned int *)&idx + 8) + 2800) = 1;
             v5 = *(int *)(*(unsigned int *)&idx + 8);
             if (v5->field_968 && v5->field_968->field_88 != 32)
-                sub_48ce10(v5, "weapon_kametorpedo");
+                CBasePlayer::SelectItem(v5, "weapon_kametorpedo");
         }
     }
     *(char *)(*(int *)(*(unsigned int *)&idx + 12) + 0x200) = *(char *)(*(int *)(*(unsigned int *)&idx + 12) + 0x200) | 1;

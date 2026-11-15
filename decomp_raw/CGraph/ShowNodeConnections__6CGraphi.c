@@ -27,11 +27,11 @@ typedef struct st_4e0cb0_3 {
 } st_4e0cb0_3;
 
 extern int g_vecZero;
-extern st_4e0cb0_3 *g_616878;
-extern st_4e0cb0_3 *g_61687c;
-extern st_4e0cb0_3 *g_616880;
-extern st_4e0cb0_3 *g_616894;
-extern st_4e0cb0_3 *g_6168b4;
+extern st_4e0cb0_3 *g_engfuncs.pfnMessageBegin;
+extern st_4e0cb0_3 *g_engfuncs.pfnMessageEnd;
+extern st_4e0cb0_3 *g_engfuncs.pfnWriteByte;
+extern st_4e0cb0_3 *g_engfuncs.pfnWriteCoord;
+extern st_4e0cb0_3 *g_engfuncs.pfnAlertMessage;
 
 int ShowNodeConnections__6CGraphi(st_4e0cb0_0 *a0, int a1)
 {
@@ -59,9 +59,9 @@ int ShowNodeConnections__6CGraphi(st_4e0cb0_0 *a0, int a1)
     else
     {
         v3 = &a0->field_c[22 * a1];
-        sub_48a150(v3, &g_vecZero, 0xff, 20);
+        UTIL_ParticleEffect(v3, &g_vecZero, 0xff, 20);
         if (v3->field_20 <= 0)
-            g_6168b4(2, "**No Connections!\n");
+            g_engfuncs.pfnAlertMessage(2, "**No Connections!\n");
         i = 0;
         if (i >= v3->field_20)
             return i;
@@ -73,20 +73,20 @@ int ShowNodeConnections__6CGraphi(st_4e0cb0_0 *a0, int a1)
             v4 = v10->field_0;
             v5 = v10->field_4;
             v6 = v10->field_8;
-            g_616878(0, 23, 0, 0);
-            g_616880(0x66);
-            g_616894(*(float *)((char *)a0->field_c + v8));
-            g_616894(*(float *)((char *)a0->field_c + v8 + 4));
-            g_616894((float)(8.0 + *(float *)((char *)a0->field_c + v8 + 8)));
-            g_616894(v4);
-            g_616894(v5);
+            g_engfuncs.pfnMessageBegin(0, 23, 0, 0);
+            g_engfuncs.pfnWriteByte(0x66);
+            g_engfuncs.pfnWriteCoord(*(float *)((char *)a0->field_c + v8));
+            g_engfuncs.pfnWriteCoord(*(float *)((char *)a0->field_c + v8 + 4));
+            g_engfuncs.pfnWriteCoord((float)(8.0 + *(float *)((char *)a0->field_c + v8 + 8)));
+            g_engfuncs.pfnWriteCoord(v4);
+            g_engfuncs.pfnWriteCoord(v5);
             v0 = (float)(8.0 + v6);
-            g_616894(v0);
-            g_61687c(v0);
+            g_engfuncs.pfnWriteCoord(v0);
+            g_engfuncs.pfnMessageEnd(v0);
             i += 1;
         } while (i < v3->field_20);
         return i;
     }
-    return g_6168b4(2, v7);
+    return g_engfuncs.pfnAlertMessage(2, v7);
 }
 

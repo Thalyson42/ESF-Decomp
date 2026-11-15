@@ -26,7 +26,7 @@ st_543dd0_0 * __Q210CChatClass9CChatNodePCcQ210CChatClass8EKeyType(st_543dd0_0 *
     char *v4;  // edi
     char *v5;  // eax
 
-    v0 = sub_48d6a0(8);
+    v0 = __builtin_new(8);
     *v0 = 0;
     v0[1] = 0;
     a0->field_0 = v0;
@@ -36,7 +36,7 @@ st_543dd0_0 * __Q210CChatClass9CChatNodePCcQ210CChatClass8EKeyType(st_543dd0_0 *
     a0->field_10 = 0;
     if (a2 == 2)
     {
-        v1 = sub_48c340(2);
+        v1 = __builtin_vec_new(2);
         a0->field_4 = v1;
         *v1 = *a1;
         v1[1] = 0;
@@ -48,9 +48,9 @@ st_543dd0_0 * __Q210CChatClass9CChatNodePCcQ210CChatClass8EKeyType(st_543dd0_0 *
     {
         v4 = v3;
     } while (v2 && (v2 -= 1, v3 = v4 + 1, *v4));
-    v5 = sub_48c340(~v2);
+    v5 = __builtin_vec_new(~v2);
     a0->field_4 = v5;
-    sub_48e110(v5, a1);
+    strcpy@GLIBC_2.0(v5, a1);
     return a0;
 }
 

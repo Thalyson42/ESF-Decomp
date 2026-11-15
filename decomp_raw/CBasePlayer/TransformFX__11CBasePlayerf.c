@@ -9,11 +9,11 @@ typedef struct st_4f0ef0_1 {
 } st_4f0ef0_1;
 
 extern unsigned int gmsgTransformFX;
-extern st_4f0ef0_1 *g_616878;
-extern st_4f0ef0_1 *g_61687c;
-extern st_4f0ef0_1 *g_616880;
-extern st_4f0ef0_1 *g_616894;
-extern st_4f0ef0_1 *g_6168dc;
+extern st_4f0ef0_1 *g_engfuncs.pfnMessageBegin;
+extern st_4f0ef0_1 *g_engfuncs.pfnMessageEnd;
+extern st_4f0ef0_1 *g_engfuncs.pfnWriteByte;
+extern st_4f0ef0_1 *g_engfuncs.pfnWriteCoord;
+extern st_4f0ef0_1 *g_engfuncs.pfnIndexOfEdict;
 
 int TransformFX__11CBasePlayerf(st_4f0ef0_0 **a0, unsigned int a1)
 {
@@ -22,10 +22,10 @@ int TransformFX__11CBasePlayerf(st_4f0ef0_0 **a0, unsigned int a1)
     unsigned int v1;  // [bp-0x18]
     unsigned int v2;  // [bp-0x14]
 
-    g_616878(2, gmsgTransformFX, &*a0->padding_0[8], 0, v0, v1, v2);
-    v3 = g_6168dc(*a0->field_208);
-    g_616880(v3);
-    g_616894(a1);
-    return g_61687c();
+    g_engfuncs.pfnMessageBegin(2, gmsgTransformFX, &*a0->padding_0[8], 0, v0, v1, v2);
+    v3 = g_engfuncs.pfnIndexOfEdict(*a0->field_208);
+    g_engfuncs.pfnWriteByte(v3);
+    g_engfuncs.pfnWriteCoord(a1);
+    return g_engfuncs.pfnMessageEnd();
 }
 

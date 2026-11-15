@@ -48,11 +48,11 @@ double DefaultDeploy__17CBasePlayerWeaponPcT1iT1ii(st_538bc0_4 *a0, unsigned int
         return v2;
     a0->field_80->field_0->field_bc = a1 - gpGlobals->field_98;
     a0->field_80->field_0->field_c0 = a2 - gpGlobals->field_98;
-    sub_48e110(&a0->field_80[4].padding_4[8], a4);
+    strcpy@GLIBC_2.0(&a0->field_80[4].padding_4[8], a4);
     a0->field_60->field_13c(a0, a3, a5, a6);
-    sub_488640();
+    UTIL_WeaponTimeBase();
     a0->field_80->field_264 = (float)(v0 + 0.5);
-    sub_488640();
+    UTIL_WeaponTimeBase();
     a0->field_a4 = (float)(v1 + 1.0);
     return 0.5;
 }

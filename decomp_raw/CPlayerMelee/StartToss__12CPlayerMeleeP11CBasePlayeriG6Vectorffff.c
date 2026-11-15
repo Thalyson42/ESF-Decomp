@@ -135,7 +135,7 @@ float StartToss__12CPlayerMeleeP11CBasePlayeriG6Vectorffff(st_5012b0_6 *a0, unsi
         if (a0->field_28)
         {
             v0 = 1;
-            sub_48c8e0(a0, v0);
+            CPlayerMelee::StopThrow(a0, v0);
             a0->field_0 = a0->field_0;
             a0->field_0 = a0->field_0 + 1;
         }
@@ -144,20 +144,20 @@ float StartToss__12CPlayerMeleeP11CBasePlayeriG6Vectorffff(st_5012b0_6 *a0, unsi
             a0->field_0 = 1;
         }
         if (a0->field_124->field_508)
-            sub_48a7a0(a0->field_124);
+            CBasePlayer::StopSwoop(a0->field_124);
         if (a0->field_124->field_770)
         {
             *(unsigned short *)&v0 = 1;
-            sub_4886c0(a0->field_124, v0);
+            CBasePlayer::Descend(a0->field_124, v0);
         }
         if (a0->field_124->field_330)
-            sub_48ba60(a0->field_124);
+            CBasePlayer::StopPowerUp(a0->field_124);
         if (a0->field_124->field_320)
-            sub_48c5a0(a0->field_124);
+            CBasePlayer::StopFly(a0->field_124);
         if (a0->field_124->field_324)
-            sub_48dbc0(a0->field_124);
+            CBasePlayer::StopTurbo(a0->field_124);
         if (a0->field_124->field_6c8)
-            sub_48daa0(a0->field_124);
+            CBasePlayer::RemoveWallJump(a0->field_124);
         if (a0->field_124)
         {
             v11 = a0->field_124->field_968;
@@ -189,7 +189,7 @@ float StartToss__12CPlayerMeleeP11CBasePlayeriG6Vectorffff(st_5012b0_6 *a0, unsi
         v12 = *a3 * *a3 + a3[1] * a3[1] + a3[2] * a3[2];
         v13 = sqrt(v12);
         if (isnan(v13))
-            sub_487dc0(*(unsigned int *)&v12);
+            sqrt(*(unsigned int *)&v12);
         else
             v12 = v13;
         v1 = (float)v12;
@@ -218,7 +218,7 @@ float StartToss__12CPlayerMeleeP11CBasePlayeriG6Vectorffff(st_5012b0_6 *a0, unsi
         *(float *)&v15[162] = v8;
         *(float *)&v15[163] = v9;
         *(float *)&v15[164] = v10;
-        sub_4887c0(a0);
+        CPlayerMelee::RemoveAllAnims(a0);
         return v18;
     }
     else

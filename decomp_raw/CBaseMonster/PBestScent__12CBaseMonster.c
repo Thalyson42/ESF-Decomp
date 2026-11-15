@@ -24,7 +24,7 @@ typedef struct st_4d4410_3 {
     unsigned int field_0;
 } st_4d4410_3;
 
-extern st_4d4410_3 *g_6168b4;
+extern st_4d4410_3 *g_engfuncs.pfnAlertMessage;
 
 unsigned int PBestScent__12CBaseMonster(st_4d4410_0 *a0)
 {
@@ -48,13 +48,13 @@ unsigned int PBestScent__12CBaseMonster(st_4d4410_0 *a0)
     v6 = a0->field_230;
     if (a0->field_230 == -0x1)
     {
-        g_6168b4(2, "ERROR! PBestScent() has empty soundlist!\n");
+        g_engfuncs.pfnAlertMessage(2, "ERROR! PBestScent() has empty soundlist!\n");
         return 0;
     }
     do
     {
-        v7 = sub_488470(v6);
-        if (sub_48da10(v7))
+        v7 = CSoundEnt::SoundPointerForIndex(v6);
+        if (CSound::FIsScent(v7))
         {
             v8 = &a0->field_0->field_8;
             v9 = v7->field_0 - a0->field_0->field_8;
@@ -66,7 +66,7 @@ unsigned int PBestScent__12CBaseMonster(st_4d4410_0 *a0)
             v12 = v9 * v9 + v10 * v10 + v11 * v11;
             v13 = sqrt(v12);
             if (isnan(v13))
-                sub_487dc0(*(unsigned int *)&v12);
+                sqrt(*(unsigned int *)&v12);
             else
                 v12 = v13;
             v2 = (float)v12;
@@ -77,6 +77,6 @@ unsigned int PBestScent__12CBaseMonster(st_4d4410_0 *a0)
             }
         }
     } while ((v6 = v7->field_1c, v7->field_1c != -0x1));
-    return (v1 < 0 ? 0 : sub_488470(v1));
+    return (v1 < 0 ? 0 : CSoundEnt::SoundPointerForIndex(v1));
 }
 

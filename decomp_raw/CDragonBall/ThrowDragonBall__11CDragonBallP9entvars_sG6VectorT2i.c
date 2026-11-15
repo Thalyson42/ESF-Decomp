@@ -52,8 +52,8 @@ typedef struct st_4ae8b0_7 {
 
 extern char PickupTouch__11CDragonBallP11CBaseEntity;
 extern st_4ae8b0_7 *g_pGameRules;
-extern st_4ae8b0_1 *g_6167c8;
-extern st_4ae8b0_1 *g_6168b4;
+extern st_4ae8b0_1 *g_engfuncs.pfnSetModel;
+extern st_4ae8b0_1 *g_engfuncs.pfnAlertMessage;
 extern st_4ae8b0_5 *gpGlobals;
 
 st_4ae8b0_2 * ThrowDragonBall__11CDragonBallP9entvars_sG6VectorT2i(st_4ae8b0_4 *a0, int a1, unsigned int *a2, int a3)
@@ -71,22 +71,22 @@ st_4ae8b0_2 * ThrowDragonBall__11CDragonBallP9entvars_sG6VectorT2i(st_4ae8b0_4 *
 
     if ((unsigned int)(a3 - 1) > 6)
     {
-        g_6168b4(1, "Attempting to create Dragonball with invalid nr\n");
+        g_engfuncs.pfnAlertMessage(1, "Attempting to create Dragonball with invalid nr\n");
         return NULL;
     }
-    v7 = sub_489e30(0);
+    v7 = GetClassPtr__H1Z11CDragonBall_PX01_PX01(0);
     v7->field_60->field_8(v7);
-    sub_48d990(&v6, "models/db%d.mdl", a3);
-    g_6167c8(v7->field_0->field_208, &v6);
+    sprintf@GLIBC_2.0(&v6, "models/db%d.mdl", a3);
+    g_engfuncs.pfnSetModel(v7->field_0->field_208, &v6);
     v3 = 0x3f800000;
     v4 = 0x3f800000;
     v5 = 2.0f;
     v0 = -1.0f;
     v1 = -1.0f;
     v2 = 0;
-    sub_48a0d0(v7->field_0, &v0, &v3);
+    UTIL_SetSize(v7->field_0, &v0, &v3);
     v7->field_0->field_198 = a0->field_208;
-    sub_48db50(v7->field_0, a1);
+    UTIL_SetOrigin(v7->field_0, a1);
     v8 = v7->field_0;
     v8[8] = *a2;
     v8[9] = a2[1];

@@ -45,19 +45,19 @@ unsigned int PrimaryAttack__14CChargedAttack(double a0, float a1)
     if (!v2->field_80->field_334)
     {
         v2->field_80->field_334 = 1;
-        sub_488e80(v2->field_80, 5);
-        sub_488e80(v2->field_80, 6);
+        CBasePlayer::StopAniTrigger(v2->field_80, 5);
+        CBasePlayer::StopAniTrigger(v2->field_80, 6);
         *(float *)&v2->field_80->field_754 = *(float *)&v2->field_cc;
         v2->field_c4 = 0;
         v2->field_60->field_160(v2);
     }
     else if (v2->field_c4 >= (int)v2->field_c8)
     {
-        v4 = sub_488640();
+        v4 = UTIL_WeaponTimeBase();
         v2->field_9c = (float)(a0 + 0.2);
         return v4;
     }
-    else if (!sub_48c980(v2->field_80, v2->field_d0))
+    else if (!CBasePlayer::UseKi(v2->field_80, v2->field_d0))
     {
         v2->field_60->field_15c(v2);
     }
@@ -78,9 +78,9 @@ unsigned int PrimaryAttack__14CChargedAttack(double a0, float a1)
         v3(v0);
 LABEL_49ee99:
         v2->field_c4 = v2->field_c4 + 1;
-        sub_48c680(v2->field_80, v2->field_c4 * 100 / v2->field_c8);
+        CBasePlayer::DrawChargeBar(v2->field_80, v2->field_c4 * 100 / v2->field_c8);
     }
-    v4 = sub_488640();
+    v4 = UTIL_WeaponTimeBase();
     v2->field_9c = (float)(a0 + 0.2);
     return v4;
 }

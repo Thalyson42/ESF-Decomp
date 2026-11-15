@@ -6,10 +6,10 @@ void WeaponIdle__9CEyelaser(float idx)
 
     if (*(int *)(*(unsigned int *)&idx + 0xcc))
     {
-        sub_48d7d0(idx, *(int *)(*(unsigned int *)&idx + 196));
-        sub_48d7d0(idx, *(int *)(*(unsigned int *)&idx + 200));
+        CEyelaser::SetRedEye(idx, *(int *)(*(unsigned int *)&idx + 196));
+        CEyelaser::SetRedEye(idx, *(int *)(*(unsigned int *)&idx + 200));
         *(unsigned int *)(*(unsigned int *)&idx + 0xcc) = 0;
-        sub_488640();
+        UTIL_WeaponTimeBase();
         v1 = (double)*(int *)(*(unsigned int *)&idx + 208);
         *(float *)(*(unsigned int *)&idx + 156) = (float)(v2 + (v1 + v1) / 5.0);
         *(unsigned int *)(*(unsigned int *)&idx + 208) = 0;

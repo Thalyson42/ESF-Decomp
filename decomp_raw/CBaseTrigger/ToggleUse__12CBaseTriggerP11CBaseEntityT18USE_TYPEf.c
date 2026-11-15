@@ -22,6 +22,6 @@ int ToggleUse__12CBaseTriggerP11CBaseEntityT18USE_TYPEf(st_52ca30_0 **a0)
     {
         *a0->field_10c = 0;
     }
-    return sub_48db50(*a0, &*a0->padding_0[8]);
+    return UTIL_SetOrigin(*a0, &*a0->padding_0[8]);
 }
 

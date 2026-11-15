@@ -49,17 +49,17 @@ st_503660_4 * EmitComboDamage__12CPlayerMeleeP17melee_combo_hit_s(st_503660_3 *a
         a1->field_c = 1;
         if (a1->field_8 != 0.0f)
         {
-            sub_48c080(a0, a0->field_128);
+            CPlayerMelee::GetPowerRatio(a0, a0->field_128);
             v0 = a1->field_8 * a1->field_8;
             v4 = 1.0;
             if (1.0 > v0 || (v4 = 6.0, 6.0 < v0))
                 v0 = (float)v4;
             a0->field_128->field_60->field_34(a0->field_128, *(int *)a0->field_124, *(int *)a0->field_124, v0, 0x2000000);
-            sub_489250(a0, sub_48be70(a0));
+            CPlayerMelee::EmitExeSound(a0, CPlayerMelee::GetSoundEdict(a0));
             v3 = __fnstcw();
             v2 = v3 | 0xc00;
             v1 = (int)v0;
-            sub_488530(a0, 3, v1);
+            CPlayerMelee::MeleeText(a0, 3, v1);
         }
         if (!a1->field_14)
             return a1;

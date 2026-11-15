@@ -29,7 +29,7 @@ float GetDistance__4CBotG6Vector(st_543ab0_0 **a0, float *a1)
     v8 = v5 * v5 + v6 * v6 + v7 * v7;
     v9 = sqrt(v8);
     if (isnan(v9))
-        sub_487dc0(*(unsigned int *)&v8);
+        sqrt(*(unsigned int *)&v8);
     else
         v8 = v9;
     v0 = (float)v8;

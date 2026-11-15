@@ -37,7 +37,7 @@ typedef struct st_4f9d90_3 {
     unsigned int field_0;
 } st_4f9d90_3;
 
-extern st_4f9d90_3 *g_6168b4;
+extern st_4f9d90_3 *g_engfuncs.pfnAlertMessage;
 extern st_4f9d90_2 *gpGlobals;
 
 double UpdatePlayerSound__11CBasePlayer(st_4f9d90_1 *a0)
@@ -56,10 +56,10 @@ double UpdatePlayerSound__11CBasePlayer(st_4f9d90_1 *a0)
     unsigned short v2;  // [bp-0x26]
     float v3;  // [bp-0x18]
 
-    v4 = sub_488470(sub_48a340(a0->field_0->field_208));
+    v4 = CSoundEnt::SoundPointerForIndex(CSoundEnt::ClientSoundIndex(a0->field_0->field_208));
     if (!v4)
     {
-        g_6168b4(1, "Client lost reserved sound!\n");
+        g_engfuncs.pfnAlertMessage(1, "Client lost reserved sound!\n");
         return v5;
     }
     *(unsigned int *)&v4[12] = 0;
@@ -69,7 +69,7 @@ double UpdatePlayerSound__11CBasePlayer(st_4f9d90_1 *a0)
         v7 = *(float *)&v6->field_20 * *(float *)&v6->field_20 + *(float *)&v6->field_24 * *(float *)&v6->field_24 + *(float *)&v6->field_28 * *(float *)&v6->field_28;
         v8 = sqrt(v7);
         if (isnan(v8))
-            sub_487dc0(*(unsigned int *)&v7);
+            sqrt(*(unsigned int *)&v7);
         else
             v7 = v8;
         v3 = (float)v7;

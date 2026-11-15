@@ -11,7 +11,7 @@ short Spawn__15CTriggerGravity(st_52f010_0 *a0)
 {
     unsigned int v0;  // eax
 
-    v0 = _INSERT(sub_489e50(a0), 0, 0);
+    v0 = _INSERT(CBaseTrigger::InitTrigger(a0), 0, 0);
     a0->field_14 = v0 | 0xffff0000;
     a0->field_18 = &GravityTouch__15CTriggerGravityP11CBaseEntity;
     return v0;

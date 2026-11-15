@@ -8,16 +8,16 @@ typedef struct st_49e1e0_0 {
     unsigned int field_0;
 } st_49e1e0_0;
 
-extern st_49e1e0_0 *g_6168d4;
+extern st_49e1e0_0 *g_engfuncs.pfnPEntityOfEntOffset;
 
 unsigned int Instance__11CBaseEntityi(unsigned int a0)
 {
     st_49e1e0_1 *v0;  // eax
 
-    v0 = g_6168d4(a0);
+    v0 = g_engfuncs.pfnPEntityOfEntOffset(a0);
     if (!v0)
     {
-        v0 = g_6168d4(0);
+        v0 = g_engfuncs.pfnPEntityOfEntOffset(0);
         if (!v0)
             return 0;
     }

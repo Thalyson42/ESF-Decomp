@@ -17,7 +17,7 @@ unsigned int ResetDirection__12CPlayerMeleeiP12melee_move_s(int a0, unsigned sho
             {
                 a2->field_4 = a2->field_4 & 254;
                 a2->field_5 = a2->field_5 | 8;
-                sub_48a860(a0, a2);
+                CPlayerMelee::MeleeHudSwitchAtk(a0, a2);
                 return 1;
             }
         }
@@ -27,7 +27,7 @@ unsigned int ResetDirection__12CPlayerMeleeiP12melee_move_s(int a0, unsigned sho
             {
                 a2->field_5 = a2->field_5 & 247;
                 a2->field_4 = a2->field_4 | 1;
-                sub_48a860(a0, a2);
+                CPlayerMelee::MeleeHudSwitchAtk(a0, a2);
                 return 1;
             }
         }

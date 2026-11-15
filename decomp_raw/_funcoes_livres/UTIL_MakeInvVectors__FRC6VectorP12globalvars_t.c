@@ -3,7 +3,7 @@ typedef struct st_531ec0_0 {
     unsigned int field_0;
 } st_531ec0_0;
 
-extern st_531ec0_0 *g_61680c;
+extern st_531ec0_0 *g_engfuncs.pfnMakeVectors;
 
 float UTIL_MakeInvVectors__FRC6VectorP12globalvars_t(unsigned int a0, unsigned int *a1)
 {
@@ -15,7 +15,7 @@ float UTIL_MakeInvVectors__FRC6VectorP12globalvars_t(unsigned int a0, unsigned i
     float v1;  // [bp-0x20]
     float v2;  // [bp-0x1c]
 
-    g_61680c(a0);
+    g_engfuncs.pfnMakeVectors(a0);
     v3 = a1 + 16;
     v0 = (float)(-1.0 * *(float *)&a1[16]);
     v1 = (float)(-1.0 * *(float *)&v3[1]);

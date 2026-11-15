@@ -74,7 +74,7 @@ typedef struct st_54f750_6 {
 
 extern unsigned int g_teamplay;
 extern st_54f750_1 *gpGlobals;
-extern unsigned int g_626824[4];
+extern unsigned int waypoints+4[4];
 extern unsigned int num_waypoints;
 
 unsigned int TaskThink__14CHuntEnemyTask(st_54f750_7 *a0)
@@ -152,7 +152,7 @@ unsigned int TaskThink__14CHuntEnemyTask(st_54f750_7 *a0)
 
     *(unsigned short *)&v2 = 1;
     *(unsigned short *)&v1 = 1;
-    v28 = sub_489a70(a0->field_8->field_1034, v1, v2);
+    v28 = UTIL_IsValidPlayer(a0->field_8->field_1034, v1, v2);
     if ((char)v28)
     {
         if (a0->field_8->field_1024 == 0xffffffff || !num_waypoints)
@@ -171,7 +171,7 @@ unsigned int TaskThink__14CHuntEnemyTask(st_54f750_7 *a0)
             v40 = v37 * v37 + v38 * v38 + v39 * v39;
             v41 = sqrt(v40);
             if (isnan(v41))
-                sub_487dc0(*(unsigned int *)&v40);
+                sqrt(*(unsigned int *)&v40);
             else
                 v40 = v41;
             v10 = (float)v40;
@@ -218,7 +218,7 @@ unsigned int TaskThink__14CHuntEnemyTask(st_54f750_7 *a0)
                             v54 = v51 * v51 + v52 * v52 + v53 * v53;
                             v55 = sqrt(v54);
                             if (isnan(v55))
-                                sub_487dc0(*(unsigned int *)&v54);
+                                sqrt(*(unsigned int *)&v54);
                             else
                                 v54 = v55;
                             v10 = (float)v54;
@@ -304,31 +304,31 @@ LABEL_54fc0f:
                 *(float *)&v15 = *(float *)&v69->field_103c;
                 *(float *)&v16 = *(float *)&v69->field_1040;
                 v0 = &v20;
-                sub_48a170(v0, v69, &v14);
+                CBot::GetAimAngles(v0, v69, &v14);
                 v69->field_c10 = v20;
                 v69->field_c14 = v21;
                 v69->field_c18 = v22;
                 *(unsigned short *)&v0 = 1;
-                return sub_48ab70(a0->field_8, v0);
+                return CBot::ToggleTurbo(a0->field_8, v0);
             }
-            v28 = sub_48b7b0(a0->field_8);
+            v28 = CBot::CheckForHuntEnemy(a0->field_8);
             goto LABEL_54fcac;
         }
-        v28 = sub_488b70(a0->field_8);
+        v28 = CBot::ReachedGoalWP(a0->field_8);
         if (!(char)v28)
         {
-            if (!(char)sub_48b150(a0->field_8))
+            if (!(char)CBot::CurrentWPIsValid(a0->field_8))
             {
-                v28 = sub_489f20(a0->field_c, 1250.0f, a0->field_c->field_22c);
+                v28 = WaypointFindReachable(a0->field_c, 1250.0f, a0->field_c->field_22c);
                 v29 = v28;
                 if (v29 != 0xffffffff)
                 {
                     a0->field_8->field_1008 = v29;
                     v30 = a0->field_8;
                     v31 = v29 * 16;
-                    v30->field_ff8 = *(int *)((char *)&g_626824[0] + v31);
-                    v30->field_ffc = *(int *)((char *)&g_626824[0] + v31 + 4);
-                    v30->field_1000 = *(int *)((char *)&g_626824[0] + v31 + 8);
+                    v30->field_ff8 = *(int *)((char *)&waypoints+4[0] + v31);
+                    v30->field_ffc = *(int *)((char *)&waypoints+4[0] + v31 + 4);
+                    v30->field_1000 = *(int *)((char *)&waypoints+4[0] + v31 + 8);
                     *(float *)&a0->field_8->field_1004 = *(float *)gpGlobals;
                     goto LABEL_54f84f;
                 }
@@ -343,15 +343,15 @@ LABEL_54f84f:
                     *(float *)&v25 = *(float *)(*(int *)a0->field_8->field_1034 + 8);
                     *(float *)&v26 = *(float *)&v32[1];
                     *(float *)&v27 = *(float *)&v32[2];
-                    v33 = sub_48a280(&v25, *(int *)(*(int *)a0->field_8->field_1034 + 520), 750.0f, (!g_teamplay ? 0xffffffff : a0->field_c->field_22c));
+                    v33 = WaypointFindNearest(&v25, *(int *)(*(int *)a0->field_8->field_1034 + 520), 750.0f, (!g_teamplay ? 0xffffffff : a0->field_c->field_22c));
                     if (v33 != -0x1)
                     {
                         v34 = v33;
-                        if ((unsigned short)sub_48cef0(a0->field_8->field_1008, v34, a0->field_c->field_22c) != -0x1)
+                        if ((unsigned short)WaypointRouteFromTo(a0->field_8->field_1008, v34, a0->field_c->field_22c) != -0x1)
                             a0->field_8->field_1024 = v34;
                     }
                 }
-                v28 = sub_48b5b0(a0->field_8);
+                v28 = CBot::HeadToWaypoint(a0->field_8);
 LABEL_54fcac:
                 if ((char)v28)
                     return v28;

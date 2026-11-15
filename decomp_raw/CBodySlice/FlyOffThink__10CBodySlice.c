@@ -8,7 +8,7 @@ typedef struct st_4a38e0_1 {
 } st_4a38e0_1;
 
 extern char WaitTillLand__4CGib;
-extern st_4a38e0_1 *g_61692c;
+extern st_4a38e0_1 *g_engfuncs.pfnRandomFloat;
 extern st_4a38e0_0 *gpGlobals;
 
 short FlyOffThink__10CBodySlice(double a0, double a1, double a2, float index)
@@ -35,14 +35,14 @@ short FlyOffThink__10CBodySlice(double a0, double a1, double a2, float index)
     float v14;  // [bp-0x1c]
 
     memset(*(int *)index + 296, 0, 12);
-    sub_488850(index);
+    CBaseAnimating::ResetSequenceInfo(index);
     *(float *)(*(int *)index + 284) = 5.0f;
     idx = *(int *)index;
-    g_61692c(0, 0x43480000);
+    g_engfuncs.pfnRandomFloat(0, 0x43480000);
     v6 = (float)(5.0 * *(float *)(*(unsigned int *)&index + 708));
     v7 = (float)(5.0 * *(float *)(*(unsigned int *)&index + 712));
     v8 = (float)(5.0 * *(float *)(*(unsigned int *)&index + 716));
-    g_61692c(-200.0f, 0x43480000);
+    g_engfuncs.pfnRandomFloat(-200.0f, 0x43480000);
     v17 = -200.0 * *(float *)(*(unsigned int *)&index + 696);
     v3 = (float)v17;
     v18 = -200.0 * *(float *)(*(unsigned int *)&index + 700);
@@ -51,7 +51,7 @@ short FlyOffThink__10CBodySlice(double a0, double a1, double a2, float index)
     v9 = (float)(v17 + v6);
     v10 = (float)(v18 + v7);
     v11 = v8 + v5;
-    g_61692c(0, 100.0f);
+    g_engfuncs.pfnRandomFloat(0, 100.0f);
     v19 = 100.0 * *(float *)(*(unsigned int *)&index + 720);
     v0 = (float)v19;
     v20 = 100.0 * *(float *)(*(unsigned int *)&index + 724);
@@ -63,7 +63,7 @@ short FlyOffThink__10CBodySlice(double a0, double a1, double a2, float index)
     *(float *)(idx + 32) = v12;
     *(float *)(idx + 36) = v13;
     *(float *)(idx + 40) = v14;
-    *(unsigned int *)(*(unsigned int *)&index + 12) = _INSERT(sub_487e00(index), 0, 0) | 0xffff0000;
+    *(unsigned int *)(*(unsigned int *)&index + 12) = _INSERT(CGib::LimitVelocity(index), 0, 0) | 0xffff0000;
     *(char **)(*(unsigned int *)&index + 16) = &WaitTillLand__4CGib;
     *(float *)(*(int *)index + 260) = *(float *)gpGlobals;
     return (unsigned short)gpGlobals;

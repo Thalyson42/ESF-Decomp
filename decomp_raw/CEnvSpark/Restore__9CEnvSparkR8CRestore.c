@@ -3,6 +3,6 @@ extern int _9CEnvSpark.m_SaveData;
 
 unsigned int Restore__9CEnvSparkR8CRestore(int a0, int a1)
 {
-    return (!sub_48be60(a0, a1) ? 0 : sub_48a980(a1, "CEnvSpark", a0, &_9CEnvSpark.m_SaveData, 1));
+    return (!CBaseEntity::Restore(a0, a1) ? 0 : CRestore::ReadFields(a1, "CEnvSpark", a0, &_9CEnvSpark.m_SaveData, 1));
 }
 

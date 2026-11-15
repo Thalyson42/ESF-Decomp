@@ -39,7 +39,7 @@ int SizeInc__5CBlobi(st_4cb3e0_1 *a0, int a1)
         }
         else
         {
-            return sub_48ae80(a0);
+            return CBlob::Remove(a0);
         }
     }
     else
@@ -50,11 +50,11 @@ int SizeInc__5CBlobi(st_4cb3e0_1 *a0, int a1)
     if (a0->field_64 > 200.0f)
         a0->field_64 = 2.8e-43;
     if (20.0f < a0->field_0->field_1e0)
-        return sub_48ae80(a0);
+        return CBlob::Remove(a0);
     *(float *)&a0->field_68 = *(float *)gpGlobals;
     if (!v7)
         a0->field_0->field_1e0 = (float)(a0->field_0->field_1e0 + 2.0);
-    sub_48dca0(a0);
+    CBlob::UpdateExplosion(a0);
     v3 = a0->field_64;
     v4 = a0->field_64;
     v5 = a0->field_64;
@@ -63,6 +63,6 @@ int SizeInc__5CBlobi(st_4cb3e0_1 *a0, int a1)
     v0 = (float)v8;
     v1 = (float)v8;
     v2 = (float)v8;
-    return sub_48a0d0(a0->field_0, &v0, &v3);
+    return UTIL_SetSize(a0->field_0, &v0, &v3);
 }
 

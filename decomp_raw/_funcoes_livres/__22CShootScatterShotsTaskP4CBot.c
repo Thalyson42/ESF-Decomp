@@ -20,17 +20,17 @@ typedef struct st_5504c0_2 {
 } st_5504c0_2;
 
 extern char __vt_22CShootScatterShotsTask;
-extern st_5504c0_2 *g_616928;
-extern st_5504c0_2 *g_61692c;
+extern st_5504c0_2 *g_engfuncs.pfnRandomLong;
+extern st_5504c0_2 *g_engfuncs.pfnRandomFloat;
 
 st_5504c0_1 * __22CShootScatterShotsTaskP4CBot(double a0, st_5504c0_1 *a1, int a2)
 {
-    sub_48ce80(a1, a2);
+    __9CBaseTaskP4CBot(a1, a2);
     a1->field_14 = &__vt_22CShootScatterShotsTask;
-    g_61692c(2.75f, 3.450000047683716f);
+    g_engfuncs.pfnRandomFloat(2.75f, 3.450000047683716f);
     a1->field_18 = (float)(2.75 + *(float *)&a1->field_0);
     *(float *)&a1->field_1c = *(float *)&a1->field_0;
-    if (a1->field_8->field_9fc <= 1 && (int)g_616928(1, 100) <= 19)
+    if (a1->field_8->field_9fc <= 1 && (int)g_engfuncs.pfnRandomLong(1, 100) <= 19)
     {
         a1->field_20 = 1;
         return a1;

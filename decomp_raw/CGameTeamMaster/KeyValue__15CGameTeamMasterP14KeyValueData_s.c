@@ -10,14 +10,14 @@ unsigned int KeyValue__15CGameTeamMasterP14KeyValueData_s(unsigned int *a0, st_4
 {
     unsigned int v0;  // eax
 
-    if (!sub_488af0(a1->field_4, "teamindex"))
+    if (!strcmp@GLIBC_2.0(a1->field_4, "teamindex"))
     {
-        v0 = sub_48b500(a1->field_8, 0, 10, 0);
+        v0 = __strtol_internal@GLIBC_2.0(a1->field_8, 0, 10, 0);
         a0[26] = v0;
     }
-    else if (!sub_488af0(a1->field_4, "triggerstate"))
+    else if (!strcmp@GLIBC_2.0(a1->field_4, "triggerstate"))
     {
-        v0 = sub_48b500(a1->field_8, 0, 10, 0);
+        v0 = __strtol_internal@GLIBC_2.0(a1->field_8, 0, 10, 0);
         switch (v0)
         {
         case 0:
@@ -33,7 +33,7 @@ unsigned int KeyValue__15CGameTeamMasterP14KeyValueData_s(unsigned int *a0, st_4
     }
     else
     {
-        return sub_489590(a0, a1);
+        return CRuleEntity::KeyValue(a0, a1);
     }
     a1->field_c = 1;
     return v0;

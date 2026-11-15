@@ -22,13 +22,13 @@ unsigned int * WaypointFree__Fv(void)
         v2 = node * 4;
         if (*(int *)(v2 + (char *)&shortest_path[0]))
         {
-            sub_48cf10(*(int *)(v2 + (char *)&shortest_path[0]));
+            free@GLIBC_2.0(*(int *)(v2 + (char *)&shortest_path[0]));
             *(unsigned int *)(v2 + (char *)&shortest_path[0]) = 0;
         }
         v3 = node * 4;
         if (*(int *)(v3 + (char *)&from_to[0]))
         {
-            sub_48cf10(*(int *)(v3 + (char *)&from_to[0]));
+            free@GLIBC_2.0(*(int *)(v3 + (char *)&from_to[0]));
             *(unsigned int *)(v3 + (char *)&from_to[0]) = 0;
         }
         node += 1;
@@ -44,7 +44,7 @@ unsigned int * WaypointFree__Fv(void)
             {
                 do
                 {
-                    sub_48cf10(iter);
+                    free@GLIBC_2.0(iter);
                     iter = iter->field_8;
                 } while (iter);
             }

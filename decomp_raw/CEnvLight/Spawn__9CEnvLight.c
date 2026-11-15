@@ -23,14 +23,14 @@ int Spawn__9CEnvLight(float a0)
     st_4ce330_1 *v0;  // [bp-0x58]
     char v1;  // [bp-0x44]
 
-    sub_488e40(*(int *)a0 + 80);
-    sub_48d990(&v1, "%f", (unsigned int)(gpGlobals->field_28 >> 0));
+    UTIL_MakeAimVectors(*(int *)a0 + 80);
+    sprintf@GLIBC_2.0(&v1, "%f", (unsigned int)(gpGlobals->field_28 >> 0));
     v0 = &g_engfuncs.padding_0[0];
     v0->field_f0("sv_skyvec_x", &v1);
-    sub_48d990(&v1, "%f", (unsigned int)(gpGlobals->field_2c >> 0));
+    sprintf@GLIBC_2.0(&v1, "%f", (unsigned int)(gpGlobals->field_2c >> 0));
     v0->field_f0("sv_skyvec_y", &v1);
-    sub_48d990(&v1, "%f", (unsigned int)(gpGlobals->field_30 >> 0));
+    sprintf@GLIBC_2.0(&v1, "%f", (unsigned int)(gpGlobals->field_30 >> 0));
     v0->field_f0("sv_skyvec_z", &v1);
-    return sub_489240(a0);
+    return CLight::Spawn(a0);
 }
 

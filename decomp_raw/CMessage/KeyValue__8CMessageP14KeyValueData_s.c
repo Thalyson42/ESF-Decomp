@@ -19,7 +19,7 @@ typedef struct st_4b63f0_1 {
     unsigned int field_0;
 } st_4b63f0_1;
 
-extern st_4b63f0_1 *g_6168cc;
+extern st_4b63f0_1 *g_engfuncs.pfnAllocString;
 
 double KeyValue__8CMessageP14KeyValueData_s(st_4b63f0_2 **a0, st_4b63f0_0 *a1)
 {
@@ -30,23 +30,23 @@ double KeyValue__8CMessageP14KeyValueData_s(st_4b63f0_2 **a0, st_4b63f0_0 *a1)
     double v4;  // mm7
     double v5;  // mm7
 
-    if (!sub_488af0(a1->field_4, "messagesound"))
+    if (!strcmp@GLIBC_2.0(a1->field_4, "messagesound"))
     {
-        v0 = g_6168cc(a1->field_8);
+        v0 = g_engfuncs.pfnAllocString(a1->field_8);
         *a0->field_1e8 = v0;
         a1->field_c = 1;
         return v1;
     }
-    else if (!sub_488af0(a1->field_4, "messagevolume"))
+    else if (!strcmp@GLIBC_2.0(a1->field_4, "messagevolume"))
     {
-        sub_487fc0(a1->field_8, 0, 0);
+        __strtod_internal@GLIBC_2.0(a1->field_8, 0, 0);
         *a0->field_144 = (float)(v2 * 0.1);
         a1->field_c = 1;
         return v2 * 0.1;
     }
-    else if (!sub_488af0(a1->field_4, "messageattenuation"))
+    else if (!strcmp@GLIBC_2.0(a1->field_4, "messageattenuation"))
     {
-        v3 = sub_48b500(a1->field_8, 0, 10, 0);
+        v3 = __strtol_internal@GLIBC_2.0(a1->field_8, 0, 10, 0);
         *a0->field_184 = v3;
         a1->field_c = 1;
         return v4;

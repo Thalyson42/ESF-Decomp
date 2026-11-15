@@ -8,7 +8,7 @@ typedef struct st_48e9d0_1 {
     unsigned int field_0;
 } st_48e9d0_1;
 
-extern st_48e9d0_1 *g_6168e8;
+extern st_48e9d0_1 *g_engfuncs.pfnGetModelPtr;
 
 unsigned int FindTransition__14CBaseAnimatingiiPi(st_48e9d0_0 **a0, int a1, int a2, int a3)
 {
@@ -16,10 +16,10 @@ unsigned int FindTransition__14CBaseAnimatingiiPi(st_48e9d0_0 **a0, int a1, int 
     unsigned int v2;  // eax
     char v0;  // [bp-0x8], Other Possible Types: unsigned int
 
-    v1 = g_6168e8(*a0->field_208);
+    v1 = g_engfuncs.pfnGetModelPtr(*a0->field_208);
     if (a3)
-        return sub_48b840(v1, a1, a2, a3);
-    v2 = sub_48b840(v1, a1, a2, &v0);
+        return FindTransition(v1, a1, a2, a3);
+    v2 = FindTransition(v1, a1, a2, &v0);
     if (v0 == 1)
         return v2;
     return 0xffffffff;

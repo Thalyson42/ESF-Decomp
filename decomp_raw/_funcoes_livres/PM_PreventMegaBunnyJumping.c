@@ -14,11 +14,11 @@ double PM_PreventMegaBunnyJumping(void)
     v0 = (float)(pmove->field_1f4 * 1.7000000476837158);
     if (0.0 >= v0)
         return 0.0;
-    sub_48c330(&pmove->padding_0[92]);
+    Length(&pmove->padding_0[92]);
     if ((isnan(v0) ? 0x44 : 0.0 == v0 ? 63 : 0.0 < v0 ? 0 : 0xff) < 64)
         return 0.0;
     v1 = (float)(v0 / 0.0 * 0.65);
-    sub_48d230(&pmove->padding_0[92], v1, &pmove->padding_0[92]);
+    VectorScale(&pmove->padding_0[92], v1, &pmove->padding_0[92]);
     return v1;
 }
 

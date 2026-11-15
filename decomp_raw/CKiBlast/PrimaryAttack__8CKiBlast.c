@@ -60,11 +60,11 @@ float PrimaryAttack__8CKiBlast(float idx)
     float v26;  // [bp-0x20]
     float v27;  // [bp-0x1c]
 
-    if (!sub_48c980(*(int *)(*(unsigned int *)&idx + 128), 20))
+    if (!CBasePlayer::UseKi(*(int *)(*(unsigned int *)&idx + 128), 20))
         return v45;
-    sub_489390(*(int *)(*(int *)*(int *)(*(unsigned int *)&idx + 128) + 520), 1, "weapons/kiblast.wav", 0x3f800000, 0.800000011920929f, 0, 100);
-    sub_48d680(*(int *)(*(unsigned int *)&idx + 128), 5);
-    sub_48a800(*(int *)*(int *)(*(unsigned int *)&idx + 128) + 116);
+    EMIT_SOUND_DYN(*(int *)(*(int *)*(int *)(*(unsigned int *)&idx + 128) + 520), 1, "weapons/kiblast.wav", 0x3f800000, 0.800000011920929f, 0, 100);
+    CBasePlayer::SetAnimation(*(int *)(*(unsigned int *)&idx + 128), 5);
+    UTIL_MakeVectors(*(int *)*(int *)(*(unsigned int *)&idx + 128) + 116);
     (*(int *)(*(int *)(*(int *)(*(unsigned int *)&idx + 128) + 96) + 480))(&v18, *(int *)(*(unsigned int *)&idx + 128));
     v29 = &gpGlobals->field_40;
     v30 = 10.0 * gpGlobals->field_40;
@@ -105,12 +105,12 @@ float PrimaryAttack__8CKiBlast(float idx)
     v2 = *(short *)(*(unsigned int *)&idx + 0xcc);
     v1 = *(short *)(*(unsigned int *)&idx + 202);
     v0 = *(short *)(*(unsigned int *)&idx + 200);
-    sub_48aef0(idx);
+    CBasePlayerWeapon::GetPowerRatio(idx);
     v6 = __fnstcw();
     v5 = v6 | 0xc00;
     v4 = (int)(v43 * 7.0);
-    sub_48b900(*(int *)*(int *)(*(unsigned int *)&idx + 128), &v10, &v13, v4);
-    sub_488640();
+    CKiAttack::ShootKiAttack(*(int *)*(int *)(*(unsigned int *)&idx + 128), &v10, &v13, v4);
+    UTIL_WeaponTimeBase();
     v3 = (float)(v44 + 0.5);
     *(float *)(*(unsigned int *)&idx + 160) = v3;
     *(float *)(*(unsigned int *)&idx + 156) = v3;

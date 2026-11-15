@@ -19,7 +19,7 @@ typedef struct st_52d100_3 {
     unsigned int field_98;
 } st_52d100_3;
 
-extern st_52d100_2 *g_6168b4;
+extern st_52d100_2 *g_engfuncs.pfnAlertMessage;
 extern st_52d100_3 *gpGlobals;
 
 unsigned int CounterUse__12CBaseTriggerP11CBaseEntityT18USE_TYPEf(st_52d100_1 *a0, int a1)
@@ -34,15 +34,15 @@ unsigned int CounterUse__12CBaseTriggerP11CBaseEntityT18USE_TYPEf(st_52d100_1 *a
 
     a0->field_cc = a0->field_cc - 1;
     v1 = a0[1].padding_4;
-    v2 = sub_48d960(v1, a1);
+    v2 = EHANDLE::__as(v1, a1);
     if (a0->field_cc < 0)
         return v2;
     v0 = 0;
-    v3 = sub_48d8b0(v1);
+    v3 = EHANDLE::__opi(v1);
     if (v3)
     {
-        v4 = sub_489fd0(v1);
-        v3 = sub_488af0(*(int *)*v4 + gpGlobals->field_98, "player");
+        v4 = EHANDLE::__rf(v1);
+        v3 = strcmp@GLIBC_2.0(*(int *)*v4 + gpGlobals->field_98, "player");
         if (!v3)
         {
             v3 = _INSERT(a0->field_0, 0, a0->field_0->field_1a0 ^ 1);
@@ -52,9 +52,9 @@ unsigned int CounterUse__12CBaseTriggerP11CBaseEntityT18USE_TYPEf(st_52d100_1 *a
     if (!a0->field_cc)
     {
         if (!v0)
-            return sub_48b770(a0, sub_488810(a0[1].padding_4));
-        g_6168b4(1, "Sequence completed!");
-        return sub_48b770(a0, sub_488810(a0[1].padding_4));
+            return CBaseTrigger::ActivateMultiTrigger(a0, EHANDLE::__opP11CBaseEntity(a0[1].padding_4));
+        g_engfuncs.pfnAlertMessage(1, "Sequence completed!");
+        return CBaseTrigger::ActivateMultiTrigger(a0, EHANDLE::__opP11CBaseEntity(a0[1].padding_4));
     }
     else if (v0)
     {
@@ -78,7 +78,7 @@ unsigned int CounterUse__12CBaseTriggerP11CBaseEntityT18USE_TYPEf(st_52d100_1 *a
 LABEL_52d203:
             v6 = "There are more to go...";
         }
-        return g_6168b4(1, v6);
+        return g_engfuncs.pfnAlertMessage(1, v6);
     }
     else
     {

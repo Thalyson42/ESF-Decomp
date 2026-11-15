@@ -32,7 +32,7 @@ int ClientConnect__FP7edict_sPCcT1Pc(unsigned int a0, unsigned int a1, char *a2,
     int v0;  // [bp-0x8]
 
     v0 = &BotManager;
-    sub_488940(&BotManager, a2);
+    CBotManager::PlayerConnect(&BotManager, a2);
     v1 = "loopback";
     v2 = 9;
     v3 = 15;

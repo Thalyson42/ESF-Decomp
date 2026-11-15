@@ -6,6 +6,6 @@ typedef struct st_521c30_0 {
 
 int EnableChargeSprite__11CSpiritBomb(st_521c30_0 *a0)
 {
-    return sub_487b90(a0->field_d4);
+    return CSprite::TurnOn(a0->field_d4);
 }
 

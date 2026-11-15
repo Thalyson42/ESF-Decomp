@@ -18,11 +18,11 @@ typedef struct st_53cda0_3 {
 } st_53cda0_3;
 
 extern st_53cda0_3 *g_pGameRules;
-extern st_53cda0_1 *g_616928;
-extern st_53cda0_1 *g_616960;
+extern st_53cda0_1 *g_engfuncs.pfnRandomLong;
+extern st_53cda0_1 *g_engfuncs.pfnRunPlayerMove;
 extern st_53cda0_0 *gpGlobals;
-extern float g_6253b8;
-extern char g_6253c8;
+extern float BotManager+3384;
+extern char BotManager+3400;
 
 unsigned int BotThink__4CBot(float idx)
 {
@@ -48,38 +48,38 @@ unsigned int BotThink__4CBot(float idx)
             {
                 if (*(int *)(*(unsigned int *)&idx + 2540) != 2)
                     goto LABEL_53ce09;
-                sub_488140(idx);
+                CBot::LetBotPickAClass(idx);
             }
             else
             {
-                sub_48aba0(idx);
+                CBot::LetBotJoinTeam(idx);
             }
 LABEL_53ce09:
             *(float *)(*(unsigned int *)&idx + 2532) = (float)(*(float *)gpGlobals + 0.15000000596046448);
         }
         v7 = __fnstcw();
         v6 = v7 | 0xc00;
-        v5 = (int)g_6253b8;
+        v5 = (int)BotManager+3384;
         v4 = v5 & 0xff;
         v3 = 0;
         v2 = *(short *)(*(int *)idx + 384);
         v1 = 0;
         v0 = 0;
-        v5 = sub_48a780(idx);
-        return g_616960(*(int *)(*(int *)idx + 520), *(int *)idx + 116, (float)v5);
+        v5 = CBasePlayer::GetMaxSpeed(idx);
+        return g_engfuncs.pfnRunPlayerMove(*(int *)(*(int *)idx + 520), *(int *)idx + 116, (float)v5);
     }
     else
     {
         if (1.0 > *(float *)(*(int *)idx + 352) || *(int *)(*(int *)idx + 368) || *(int *)(*(unsigned int *)&idx + 808))
         {
-            if ((int)g_616928(1, 100) > 50)
+            if ((int)g_engfuncs.pfnRandomLong(1, 100) > 50)
                 *(unsigned int *)(*(int *)idx + 384) = 1;
         }
         else
         {
             if (*(int *)(*(unsigned int *)&idx + 840))
             {
-                v9 = g_616928(1, 3);
+                v9 = g_engfuncs.pfnRandomLong(1, 3);
                 if (v9 == 2)
                 {
                     v10 = "strength";
@@ -101,43 +101,43 @@ LABEL_53ce09:
                 if (*(int *)(*(unsigned int *)&idx + 1832) && *(int *)(*(int *)(*(unsigned int *)&idx + 1832) + 868))
                 {
                     v2 = (80.0f > *(float *)(*(int *)idx + 352) ? "cookie" : 120.0f > *(float *)(*(int *)idx + 352) ? "chocolate" : "donut");
-                    sub_489e10(idx, v2);
+                    CBasePlayer::MakeCandy(idx, v2);
                 }
                 if (*(float *)(*(unsigned int *)&idx + 2740) < *(float *)gpGlobals && 0.0 < *(float *)(*(unsigned int *)&idx + 2740))
                 {
                     *(unsigned short *)&v2 = 0;
-                    sub_48ab70(idx, v2);
+                    CBot::ToggleTurbo(idx, v2);
                     *(unsigned int *)(*(unsigned int *)&idx + 2740) = 0;
                 }
-                v5 = sub_48a780(idx);
+                v5 = CBasePlayer::GetMaxSpeed(idx);
                 *(float *)(*(unsigned int *)&idx + 3440) = (float)v5;
-                sub_48b8b0(idx);
-                sub_48aaf0(idx);
-                sub_48db80(idx);
-                sub_48ade0(idx);
+                CBot::CheckNecessarilyThings(idx);
+                CBot::BotSense(idx);
+                CBot::CheckBotInternalStatus(idx);
+                CBot::CheckBotMiscThings(idx);
                 if (!*(int *)(*(unsigned int *)&idx + 4196))
-                    sub_48acb0(idx, 6);
-                sub_48a610(idx);
-                sub_48baa0(idx);
-                if (!g_6253c8)
+                    CBot::MakeTask(idx, 6);
+                CBot::BotPerformTasks(idx);
+                CBot::BotAim(idx);
+                if (!BotManager+3400)
                     memset(*(unsigned int *)&idx + 3432, 0, 12);
                 if (*(int *)(*(int *)idx + 264) == 11 && *(float *)(*(unsigned int *)&idx + 0xbfc) != 0.0f)
                 {
-                    if (g_6253c8)
-                        sub_48c350(idx);
+                    if (BotManager+3400)
+                        CBot::SetSwoopButton(idx);
                     else
-                        sub_48d0d0(idx);
+                        CBot::ResetMoveSpeed(idx);
                 }
-                v5 = sub_48a780(idx);
+                v5 = CBasePlayer::GetMaxSpeed(idx);
                 if ((double)v5 < *(float *)(*(unsigned int *)&idx + 3432))
                 {
-                    v5 = sub_48a780(idx);
+                    v5 = CBasePlayer::GetMaxSpeed(idx);
                     *(float *)(*(unsigned int *)&idx + 3432) = (float)v5;
                 }
-                v5 = sub_48a780(idx);
+                v5 = CBasePlayer::GetMaxSpeed(idx);
                 if ((double)v5 < *(float *)(*(unsigned int *)&idx + 3440))
                 {
-                    v5 = sub_48a780(idx);
+                    v5 = CBasePlayer::GetMaxSpeed(idx);
                     *(float *)(*(unsigned int *)&idx + 3440) = (float)v5;
                 }
                 if (0.0 < *(float *)(*(unsigned int *)&idx + 3440))
@@ -157,13 +157,13 @@ LABEL_53ce09:
                     *(char *)(*(int *)idx + 385) = *(char *)(*(int *)idx + 385) | 2;
                 }
                 *(float *)(*(unsigned int *)&idx + 3460) = *(float *)(*(unsigned int *)&idx + 3440);
-                v5 = sub_48a780(idx);
+                v5 = CBasePlayer::GetMaxSpeed(idx);
                 *(float *)(*(int *)idx + 528) = (float)v5;
                 v7 = __fnstcw();
                 v6 = v7 | 0xc00;
-                v5 = (int)g_6253b8;
+                v5 = (int)BotManager+3384;
                 v11 = *(int *)idx;
-                v12 = g_616960((int)v11[520], v11 + 116, *(float *)(*(unsigned int *)&idx + 3440), *(float *)(*(unsigned int *)&idx + 3432), *(float *)(*(unsigned int *)&idx + 3436), (short)v11[384], 0, v5 & 0xff);
+                v12 = g_engfuncs.pfnRunPlayerMove((int)v11[520], v11 + 116, *(float *)(*(unsigned int *)&idx + 3440), *(float *)(*(unsigned int *)&idx + 3432), *(float *)(*(unsigned int *)&idx + 3436), (short)v11[384], 0, v5 & 0xff);
                 *(unsigned int *)(*(unsigned int *)&idx + 3432) = 0;
                 *(unsigned int *)(*(unsigned int *)&idx + 3436) = 0;
                 *(unsigned int *)(*(unsigned int *)&idx + 2724) = 0;
@@ -173,9 +173,9 @@ LABEL_53ce09:
         }
         v7 = __fnstcw();
         v6 = v7 | 0xc00;
-        v5 = (int)g_6253b8;
+        v5 = (int)BotManager+3384;
         v13 = *(int *)idx;
-        return g_616960((int)v13[520], v13 + 116, 0, 0, 0, (short)v13[384], 0, v5 & 0xff);
+        return g_engfuncs.pfnRunPlayerMove((int)v13[520], v13 + 116, 0, 0, 0, (short)v13[384], 0, v5 & 0xff);
     }
 }
 

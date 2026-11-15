@@ -6,9 +6,9 @@ typedef struct st_5248c0_0 {
 
 void Spawn__6CSword(st_5248c0_0 *a0)
 {
-    sub_488fb0(a0);
+    CMelee::Spawn(a0);
     a0->field_88 = 2;
-    sub_48cf50(a0);
+    CBasePlayerItem::FallInit(a0);
     return;
 }
 

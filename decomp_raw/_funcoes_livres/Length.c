@@ -15,7 +15,7 @@ float Length(float *a0)
     } while (i <= 2);
     v3 = sqrt(v1);
     if (isnan(v3))
-        sub_487dc0(*(unsigned int *)&v1);
+        sqrt(*(unsigned int *)&v1);
     else
         v1 = v3;
     v0 = (float)v1;

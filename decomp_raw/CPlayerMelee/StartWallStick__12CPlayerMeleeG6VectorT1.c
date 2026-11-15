@@ -54,7 +54,7 @@ int StartWallStick__12CPlayerMeleeG6VectorT1(st_5029d0_2 *a0, int a1, float *a2)
     *(float *)&a0->field_54 = a2[2];
     *(float *)&a0->field_20 = *(float *)gpGlobals;
     v1 = a1;
-    sub_48db50(a0->field_124->field_0, v1);
+    UTIL_SetOrigin(a0->field_124->field_0, v1);
     v8 = a0->field_124->field_0;
     v2 = 0;
     v4 = 0;
@@ -66,8 +66,8 @@ int StartWallStick__12CPlayerMeleeG6VectorT1(st_5029d0_2 *a0, int a1, float *a2)
     v5 = a2[1];
     v7 = a2[2];
     *(unsigned short *)&v0 = 1;
-    sub_488dc0(a0, &v3, v0, *(float *)gpGlobals, "wall_collide");
+    CPlayerMelee::AddAnimationAFix(a0, &v3, v0, *(float *)gpGlobals, "wall_collide");
     *(unsigned short *)&v1 = 1;
-    return sub_4898e0(a0, v1, "wall_idle");
+    return CPlayerMelee::AddToCurAnim(a0, v1, "wall_idle");
 }
 

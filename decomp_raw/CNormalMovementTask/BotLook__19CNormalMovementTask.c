@@ -83,7 +83,7 @@ double BotLook__19CNormalMovementTask(st_571ad0_1 *a0)
     *(float *)&v6 = *(float *)v50;
     *(float *)&v7 = *(float *)&v50[1];
     v8 = *(float *)&v50[2];
-    sub_48a170(&v9, v49, &v6);
+    CBot::GetAimAngles(&v9, v49, &v6);
     v49->field_c10 = v9;
     v49->field_c14 = v10;
     v49->field_c18 = v11;

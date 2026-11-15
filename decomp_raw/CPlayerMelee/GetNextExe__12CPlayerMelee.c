@@ -15,8 +15,8 @@ typedef struct st_505310_0 {
 
 int GetNextExe__12CPlayerMelee(st_505310_1 *a0)
 {
-    if (a0->field_17c->field_4c == 3 && sub_487f50(a0, a0->field_17c))
-        sub_48a480(a0, a0->field_17c, a0->field_17c->field_24);
+    if (a0->field_17c->field_4c == 3 && CPlayerMelee::CanEXECombo(a0, a0->field_17c))
+        CPlayerMelee::AddCombo(a0, a0->field_17c, a0->field_17c->field_24);
     return a0->field_17c->field_358;
 }
 

@@ -23,37 +23,37 @@ st_506f20_0 * SetMode__12CPlayerMelee16ADV_MELEE_STATUS(st_506f20_1 *a0, unsigne
         if (a1 == 1)
         {
             a0->field_130->field_11c = 2;
-            v0 = sub_48d670(a0);
+            v0 = CPlayerMelee::StartPrePunchAttack(a0);
         }
         if (a1 == 3)
         {
             a0->field_130->field_11c = 4;
-            v0 = sub_4896d0(a0);
+            v0 = CPlayerMelee::StartChargedAttack(a0);
         }
         if (a1 == 5)
         {
             a0->field_130->field_11c = 6;
-            v0 = sub_489710(a0);
+            v0 = CPlayerMelee::StartGrabbedAttack(a0);
         }
         if (a1 == 7)
         {
             a0->field_130->field_11c = 8;
-            v0 = sub_48ab50(a0);
+            v0 = CPlayerMelee::StartExeAttack(a0);
         }
         if (a1 == 9)
         {
             a0->field_130->field_11c = 11;
-            v0 = sub_489a90(a0);
+            v0 = CPlayerMelee::StartStruggleAttack(a0);
         }
         if (a1 == 10)
         {
             a0->field_130->field_11c = 11;
-            v0 = sub_48c4c0(a0);
+            v0 = CPlayerMelee::StartBurstStruggleAttack(a0);
         }
         if (a1 == 12)
         {
             a0->field_130->field_11c = 13;
-            v0 = sub_48b1b0(a0);
+            v0 = CPlayerMelee::StartKnockPreStruggle(a0);
         }
     }
     return v0;

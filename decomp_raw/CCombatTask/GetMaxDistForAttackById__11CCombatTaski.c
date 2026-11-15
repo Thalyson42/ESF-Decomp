@@ -6,10 +6,10 @@ typedef struct st_54d010_0 {
     unsigned int field_c;
 } st_54d010_0;
 
-extern st_54d010_0 g_5cb770;
+extern st_54d010_0 BotWeaponInfoTable+80;
 
 double GetMaxDistForAttackById__11CCombatTaski(int a0, int a1)
 {
-    return (&g_5cb770.field_0)[21 * sub_48d810(a0, a1)];
+    return (&BotWeaponInfoTable+80.field_0)[21 * CCombatTask::GetAttackIndex(a0, a1)];
 }
 

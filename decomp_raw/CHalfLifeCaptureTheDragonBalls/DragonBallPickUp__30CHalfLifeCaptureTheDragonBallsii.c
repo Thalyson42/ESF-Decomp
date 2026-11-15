@@ -4,10 +4,10 @@ typedef struct st_49b920_0 {
 } st_49b920_0;
 
 extern unsigned int gmsgDragonBallEnt;
-extern st_49b920_0 *g_616878;
-extern st_49b920_0 *g_61687c;
-extern st_49b920_0 *g_616880;
-extern st_49b920_0 *g_616888;
+extern st_49b920_0 *g_engfuncs.pfnMessageBegin;
+extern st_49b920_0 *g_engfuncs.pfnMessageEnd;
+extern st_49b920_0 *g_engfuncs.pfnWriteByte;
+extern st_49b920_0 *g_engfuncs.pfnWriteShort;
 
 int DragonBallPickUp__30CHalfLifeCaptureTheDragonBallsii(unsigned int a0, unsigned int a1, unsigned int a2)
 {
@@ -18,9 +18,9 @@ int DragonBallPickUp__30CHalfLifeCaptureTheDragonBallsii(unsigned int a0, unsign
     if (idx > 6)
         return v1;
     *(unsigned int *)(a0 + 632 + idx * 4) = 0;
-    g_616878(2, gmsgDragonBallEnt, 0, 0);
-    g_616880(idx);
-    g_616888(a2);
-    return g_61687c();
+    g_engfuncs.pfnMessageBegin(2, gmsgDragonBallEnt, 0, 0);
+    g_engfuncs.pfnWriteByte(idx);
+    g_engfuncs.pfnWriteShort(a2);
+    return g_engfuncs.pfnMessageEnd();
 }
 

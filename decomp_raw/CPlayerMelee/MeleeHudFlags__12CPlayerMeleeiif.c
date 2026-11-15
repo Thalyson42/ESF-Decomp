@@ -18,10 +18,10 @@ typedef struct st_506c60_3 {
 } st_506c60_3;
 
 extern unsigned int gmsgMeleeAtkHud;
-extern st_506c60_3 *g_616878;
-extern st_506c60_3 *g_61687c;
-extern st_506c60_3 *g_616880;
-extern st_506c60_3 *g_616888;
+extern st_506c60_3 *g_engfuncs.pfnMessageBegin;
+extern st_506c60_3 *g_engfuncs.pfnMessageEnd;
+extern st_506c60_3 *g_engfuncs.pfnWriteByte;
+extern st_506c60_3 *g_engfuncs.pfnWriteShort;
 
 int MeleeHudFlags__12CPlayerMeleeiif(st_506c60_1 *a0, unsigned int a1, int a2, float a3)
 {
@@ -30,14 +30,14 @@ int MeleeHudFlags__12CPlayerMeleeiif(st_506c60_1 *a0, unsigned int a1, int a2, f
     unsigned short v1;  // [bp-0x8]
     unsigned short v2;  // [bp-0x6]
 
-    v3 = sub_488390(a0, a2);
-    g_616878(1, gmsgMeleeAtkHud, 0, *(int *)(*(int *)a0->field_124 + 520));
-    g_616880(a1);
-    g_616880(v3);
+    v3 = CPlayerMelee::FlagsToDirections(a0, a2);
+    g_engfuncs.pfnMessageBegin(1, gmsgMeleeAtkHud, 0, *(int *)(*(int *)a0->field_124 + 520));
+    g_engfuncs.pfnWriteByte(a1);
+    g_engfuncs.pfnWriteByte(v3);
     v2 = __fnstcw();
     v1 = v2 | 0xc00;
     v0 = (int)(a3 * 100.0);
-    g_616888(v0);
-    return g_61687c(v0);
+    g_engfuncs.pfnWriteShort(v0);
+    return g_engfuncs.pfnMessageEnd(v0);
 }
 

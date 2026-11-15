@@ -15,10 +15,10 @@ int ClearStates__12CGlobalState(st_53a090_0 **a0)
         do
         {
             v1 = v0;
-            sub_48cf10(v1);
+            free@GLIBC_2.0(v1);
             v0 = v1->field_64;
         } while (v1->field_64);
     }
-    return sub_4890d0(a0);
+    return CGlobalState::Reset(a0);
 }
 

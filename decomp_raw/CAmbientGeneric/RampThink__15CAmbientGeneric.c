@@ -48,7 +48,7 @@ typedef struct st_51aad0_3 {
     unsigned int field_0;
 } st_51aad0_3;
 
-extern st_51aad0_3 *g_616928;
+extern st_51aad0_3 *g_engfuncs.pfnRandomLong;
 extern st_51aad0_2 *gpGlobals;
 
 unsigned int * RampThink__15CAmbientGeneric(st_51aad0_1 *a0)
@@ -196,7 +196,7 @@ LABEL_51ada0:
                     if (v15 != 3)
                         goto LABEL_51ada0;
                     if (v12 == 0xff)
-                        a0->field_c8 = g_616928(0, 0xff);
+                        a0->field_c8 = g_engfuncs.pfnRandomLong(0, 0xff);
                 }
                 if (a0->field_94)
                 {
@@ -230,12 +230,12 @@ LABEL_51ada0:
                 if (v7 == 100)
                     v7 = 101;
                 v6 = (float)((double)v3 * 0.01);
-                sub_4897b0(a0->field_0->field_208, &a0->field_0->field_8, v5, v6, *(float *)&a0->field_64, v2, v7);
+                UTIL_EmitAmbientSound(a0->field_0->field_208, &a0->field_0->field_8, v5, v6, *(float *)&a0->field_64, v2, v7);
             }
             a0->field_0->field_104 = (float)(0.2 + gpGlobals->field_0);
             return gpGlobals;
         }
     }
-    return sub_4897b0(a0->field_0->field_208, &a0->field_0->field_8, v5, 0, 0, 32, 0);
+    return UTIL_EmitAmbientSound(a0->field_0->field_208, &a0->field_0->field_8, v5, 0, 0, 32, 0);
 }
 

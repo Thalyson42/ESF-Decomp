@@ -26,14 +26,14 @@ unsigned int ReadFields__8CRestorePCcPvP15TYPEDESCRIPTIONi(st_536820_2 *a0, int 
     unsigned short v3;  // [bp-0xa]
     int v4;  // [bp-0x8]
 
-    sub_4894a0(a0);
-    v5 = sub_4894a0(a0);
-    if (v5 != (unsigned short)sub_48b290(a0, a1))
+    CRestore::ReadShort(a0);
+    v5 = CRestore::ReadShort(a0);
+    if (v5 != (unsigned short)CSaveRestoreBuffer::TokenHash(a0, a1))
     {
-        sub_48b8e0(a0, 4);
+        CSaveRestoreBuffer::BufferRewind(a0, 4);
         return 0;
     }
-    i = sub_48c100(a0);
+    i = CRestore::ReadInt(a0);
     v1 = 0;
     v6 = 0;
     if (v1 < a4)
@@ -41,7 +41,7 @@ unsigned int ReadFields__8CRestorePCcPvP15TYPEDESCRIPTIONi(st_536820_2 *a0, int 
         do
         {
             if (!a0->field_4 || !(*((char *)&a3[3 + 4 * (unsigned short)v6] + 2) & 1))
-                sub_48d0e0(a2 + a3[2 + 4 * (unsigned short)v6], 0, gSizes[a3[4 * (unsigned short)v6]] * (short)a3[3 + 4 * (unsigned short)v6]);
+                memset@GLIBC_2.0(a2 + a3[2 + 4 * (unsigned short)v6], 0, gSizes[a3[4 * (unsigned short)v6]] * (short)a3[3 + 4 * (unsigned short)v6]);
         } while ((v6 += 1, (unsigned short)v6 < a4));
     }
     v7 = 0;
@@ -49,8 +49,8 @@ unsigned int ReadFields__8CRestorePCcPvP15TYPEDESCRIPTIONi(st_536820_2 *a0, int 
         return 1;
     do
     {
-        sub_489ba0(a0, &v2);
-        v1 = sub_48b480(a0, a2, a3, a4, v1, v2, *(int *)&a0->field_0->field_18[v3], v4);
+        CRestore::BufferReadHeader(a0, &v2);
+        v1 = CRestore::ReadField(a0, a2, a3, a4, v1, v2, *(int *)&a0->field_0->field_18[v3], v4);
         v1 += 1;
         v7 += 1;
     } while ((unsigned short)v7 < i);

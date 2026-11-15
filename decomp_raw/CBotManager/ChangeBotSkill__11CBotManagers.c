@@ -40,11 +40,11 @@ typedef struct st_53e6c0_2 {
 
 extern char _GLOBAL_OFFSET_TABLE_;
 extern st_53e6c0_6 g_engfuncs;
-extern st_53e6c0_0 *g_6168a4;
-extern st_53e6c0_0 *g_616928;
+extern st_53e6c0_0 *g_engfuncs.pfnCVarGetFloat;
+extern st_53e6c0_0 *g_engfuncs.pfnRandomLong;
 extern st_53e6c0_2 *gpGlobals;
 extern char cout;
-extern st_53e6c0_1 *g_625f80;
+extern st_53e6c0_1 *cout+512;
 
 int ChangeBotSkill__11CBotManagers(unsigned int a0, unsigned short a1)
 {
@@ -63,18 +63,18 @@ int ChangeBotSkill__11CBotManagers(unsigned int a0, unsigned short a1)
 
     v8 = a1;
     if (v8 == 0xffff)
-        v8 = g_616928(1, 5);
+        v8 = g_engfuncs.pfnRandomLong(1, 5);
     if (v8 - 1 > 4)
-        return g_625f80->field_14(&cout, "Invalid botskill ! Choose a number between 1(best) and 5(worst)\n");
+        return cout+512->field_14(&cout, "Invalid botskill ! Choose a number between 1(best) and 5(worst)\n");
     v4 = 1;
     if ((int)gpGlobals->field_90 > 0)
     {
         do
         {
-            v9 = sub_48a500(v4);
+            v9 = UTIL_PlayerByIndex(v4);
             *(unsigned short *)&v1 = 0;
             *(unsigned short *)&v0 = 0;
-            if ((char)sub_489a70(v9, v0, v1))
+            if ((char)UTIL_IsValidPlayer(v9, v0, v1))
             {
                 v3 = 0;
                 if (!v9->field_60->field_a4(v9))
@@ -88,18 +88,18 @@ int ChangeBotSkill__11CBotManagers(unsigned int a0, unsigned short a1)
         } while ((v4 += 1, v4 <= (int)gpGlobals->field_90));
     }
     v2 = &g_engfuncs.padding_0[0];
-    g_6168a4("sv_botskill");
+    g_engfuncs.pfnCVarGetFloat("sv_botskill");
     v7 = v8 - 1;
     v10 = (double)(int)v7;
     if (v10 != v11)
         v2->field_ec("sv_botskill", (float)v10);
     v5 = 0;
-    sub_48d0e0(&v6, 0, 9);
+    memset@GLIBC_2.0(&v6, 0, 9);
     if (v8 - 1 > 4)
     {
-        g_625f80->field_14(&cout, "EVERY bot has now the skill ");
-        g_625f80->field_14(&cout, &v5);
-        return g_625f80->field_14(&cout, "\n");
+        cout+512->field_14(&cout, "EVERY bot has now the skill ");
+        cout+512->field_14(&cout, &v5);
+        return cout+512->field_14(&cout, "\n");
     }
     goto *((void *)(&(&_GLOBAL_OFFSET_TABLE_)[-1 * *(int *)(&(&_GLOBAL_OFFSET_TABLE_)[4 * v8] - 873072)]));
 }

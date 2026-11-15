@@ -12,16 +12,16 @@ unsigned int KeyValue__9CEnvSoundP14KeyValueData_s(float *a0, st_51c590_0 *a1)
     unsigned int v1;  // eax
     unsigned int v2;  // eax
 
-    if (!sub_488af0(a1->field_4, "radius"))
+    if (!strcmp@GLIBC_2.0(a1->field_4, "radius"))
     {
-        sub_487fc0(a1->field_8, 0, 0);
+        __strtod_internal@GLIBC_2.0(a1->field_8, 0, 0);
         a0[25] = (float)v0;
         a1->field_c = 1;
     }
-    v1 = sub_488af0(a1->field_4, "roomtype");
+    v1 = strcmp@GLIBC_2.0(a1->field_4, "roomtype");
     if (v1)
         return v1;
-    v2 = sub_487fc0(a1->field_8, 0, 0);
+    v2 = __strtod_internal@GLIBC_2.0(a1->field_8, 0, 0);
     a0[26] = (float)v0;
     a1->field_c = 1;
     return v2;

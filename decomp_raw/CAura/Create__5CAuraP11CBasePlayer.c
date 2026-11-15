@@ -52,7 +52,7 @@ typedef struct st_48fd70_6 {
 } st_48fd70_6;
 
 extern char RemoveThink__5CAura;
-extern st_48fd70_2 *g_6168dc;
+extern st_48fd70_2 *g_engfuncs.pfnIndexOfEdict;
 extern st_48fd70_6 *gpGlobals;
 
 st_48fd70_5 * Create__5CAuraP11CBasePlayer(st_48fd70_4 *a0)
@@ -62,9 +62,9 @@ st_48fd70_5 * Create__5CAuraP11CBasePlayer(st_48fd70_4 *a0)
     unsigned int v3;  // edx
     int v4;  // eax
 
-    v0 = sub_488da0(0);
+    v0 = GetClassPtr__H1Z5CAura_PX01_PX01(0);
     v0->field_60->field_8(v0);
-    sub_48db50(v0->field_0, &a0->field_0->field_8);
+    UTIL_SetOrigin(v0->field_0, &a0->field_0->field_8);
     v0->field_2a8 = a0;
     v1 = v0->field_0;
     v1->field_198 = a0->field_0->field_208;
@@ -73,7 +73,7 @@ st_48fd70_5 * Create__5CAuraP11CBasePlayer(st_48fd70_4 *a0)
     v0->field_0->field_104 = (float)(0.5 + *(float *)gpGlobals);
     v0->field_0->field_194 = a0->field_0->field_208;
     v0->field_0->field_108 = 12;
-    sub_48a9d0(v0);
+    CAura::SetColor(v0);
     v0->field_0->field_15c = 19;
     v0->field_2a8->field_0->field_148 = 2;
     *(float *)&v0->field_2a8->field_0->padding_14c[0] = 255.0f;
@@ -87,8 +87,8 @@ st_48fd70_5 * Create__5CAuraP11CBasePlayer(st_48fd70_4 *a0)
         v3 = v0->field_2a8->field_0->field_208;
         v4 = "weapons/aura.wav";
     }
-    sub_489390(v3, 3, v4, 0x3f800000, 0.800000011920929f, 0, 100);
-    sub_48a420(g_6168dc(v0->field_0->field_208));
+    EMIT_SOUND_DYN(v3, 3, v4, 0x3f800000, 0.800000011920929f, 0, 100);
+    UTIL_Model_AuraBend(g_engfuncs.pfnIndexOfEdict(v0->field_0->field_208));
     return v0;
 }
 

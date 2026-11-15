@@ -15,7 +15,7 @@ typedef struct st_4a9630_0 {
 
 int EmitShootSound__10CDeathBall(st_4a9630_1 *a0)
 {
-    sub_48d4f0(a0->field_80, "deathball.wav");
-    return sub_489390(*(int *)(*(int *)a0->field_80 + 520), 1, "weapons/deathball_fire.wav", 0x3f800000, 0.800000011920929f, 0, 100);
+    CBasePlayer::EmitClassSound(a0->field_80, "deathball.wav");
+    return EMIT_SOUND_DYN(*(int *)(*(int *)a0->field_80 + 520), 1, "weapons/deathball_fire.wav", 0x3f800000, 0.800000011920929f, 0, 100);
 }
 

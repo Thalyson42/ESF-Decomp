@@ -39,8 +39,8 @@ typedef struct st_52d560_2 {
     unsigned int field_0;
 } st_52d560_2;
 
-extern st_52d560_2 *g_6168b4;
-extern st_52d560_2 *g_6168cc;
+extern st_52d560_2 *g_engfuncs.pfnAlertMessage;
+extern st_52d560_2 *g_engfuncs.pfnAllocString;
 
 st_52d560_3 * KeyValue__12CChangeLevelP14KeyValueData_s(st_52d560_3 *a0, st_52d560_0 *a1)
 {
@@ -56,7 +56,7 @@ st_52d560_3 * KeyValue__12CChangeLevelP14KeyValueData_s(st_52d560_3 *a0, st_52d5
     double v10;  // mm7
     char *v0;  // [bp-0x28]
 
-    if (!sub_488af0(a1->field_4, "map"))
+    if (!strcmp@GLIBC_2.0(a1->field_4, "map"))
     {
         v1 = a1->field_8;
         v2 = 0xffffffff;
@@ -65,11 +65,11 @@ st_52d560_3 * KeyValue__12CChangeLevelP14KeyValueData_s(st_52d560_3 *a0, st_52d5
             v3 = v1;
         } while (v2 && (v2 -= 1, v1 = v3 + 1, *v3));
         if (~v2 - 1 > 31)
-            g_6168b4(4, "Map name '%s' too long (32 chars)\n", a1->field_8);
+            g_engfuncs.pfnAlertMessage(4, "Map name '%s' too long (32 chars)\n", a1->field_8);
         v0 = a1->field_8;
         v4 = &a0->field_104;
     }
-    else if (!sub_488af0(a1->field_4, "landmark"))
+    else if (!strcmp@GLIBC_2.0(a1->field_4, "landmark"))
     {
         v5 = a1->field_8;
         v6 = 0xffffffff;
@@ -78,29 +78,29 @@ st_52d560_3 * KeyValue__12CChangeLevelP14KeyValueData_s(st_52d560_3 *a0, st_52d5
             v7 = v5;
         } while (v6 && (v6 -= 1, v5 = v7 + 1, *v7));
         if (~v6 - 1 > 31)
-            g_6168b4(4, "Landmark name '%s' too long (32 chars)\n", a1->field_8);
+            g_engfuncs.pfnAlertMessage(4, "Landmark name '%s' too long (32 chars)\n", a1->field_8);
         v0 = a1->field_8;
         v4 = &a0->field_124;
     }
-    else if (!sub_488af0(a1->field_4, "changetarget"))
+    else if (!strcmp@GLIBC_2.0(a1->field_4, "changetarget"))
     {
-        v9 = g_6168cc(a1->field_8);
+        v9 = g_engfuncs.pfnAllocString(a1->field_8);
         a0->field_144 = v9;
         a1->field_c = 1;
         return v9;
     }
-    else if (!sub_488af0(a1->field_4, "changedelay"))
+    else if (!strcmp@GLIBC_2.0(a1->field_4, "changedelay"))
     {
-        sub_487fc0(a1->field_8, 0, 0);
+        __strtod_internal@GLIBC_2.0(a1->field_8, 0, 0);
         a0->field_148 = (float)v10;
         a1->field_c = 1;
         return a0;
     }
     else
     {
-        return sub_489a50(a0, a1);
+        return CBaseTrigger::KeyValue(a0, a1);
     }
-    v8 = sub_48e110(v4);
+    v8 = strcpy@GLIBC_2.0(v4);
     a1->field_c = 1;
     return v8;
 }

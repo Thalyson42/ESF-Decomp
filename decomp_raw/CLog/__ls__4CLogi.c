@@ -16,16 +16,16 @@ st_56d680_0 * __ls__4CLogi(st_56d680_0 *a0, int a1)
     {
         a0->field_1 = 1;
         v0 = 0;
-        sub_48d0e0(&v1, 0, 0xff);
-        sub_489050(&v0, "bot_log.txt", 0);
-        v2 = sub_48d440(&v0, "a");
+        memset@GLIBC_2.0(&v1, 0, 0xff);
+        BuildBotFileName(&v0, "bot_log.txt", 0);
+        v2 = fopen@GLIBC_2.1(&v0, "a");
         a0->field_4 = v2;
-        sub_488d60(v2, "\n----------------------------------------------------------\n\n");
+        fprintf@GLIBC_2.0(v2, "\n----------------------------------------------------------\n\n");
     }
     if (a0->field_4)
     {
-        sub_488d60(a0->field_4, "%i", a1);
-        sub_488e60(a0->field_4);
+        fprintf@GLIBC_2.0(a0->field_4, "%i", a1);
+        fflush@GLIBC_2.0(a0->field_4);
     }
     return a0;
 }

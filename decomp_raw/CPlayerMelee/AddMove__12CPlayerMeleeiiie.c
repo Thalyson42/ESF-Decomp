@@ -36,7 +36,7 @@ st_503220_1 ** AddMove__12CPlayerMeleeiiie(st_503220_1 **a0, unsigned int idx, u
 
     if (a3 <= 0)
         return v10;
-    v1 = sub_48d6a0(80);
+    v1 = __builtin_new(80);
     v1->field_0 = a3;
     v3 = v1;
     v3->field_4 = a2;
@@ -53,7 +53,7 @@ st_503220_1 ** AddMove__12CPlayerMeleeiiie(st_503220_1 **a0, unsigned int idx, u
             v6 = v4 + 1;
             *(int *)(v5 + v0) = *(int *)(v6 - 4);
             v4 = v6 + 4;
-            *(unsigned int *)(v5 + v1 + 8) = sub_48ddc0(a0, *(int *)((char *)v4 - 4));
+            *(unsigned int *)(v5 + v1 + 8) = CPlayerMelee::DirectionsToFlags(a0, *(int *)((char *)v4 - 4));
             i += 1;
         } while (i < a3);
     }

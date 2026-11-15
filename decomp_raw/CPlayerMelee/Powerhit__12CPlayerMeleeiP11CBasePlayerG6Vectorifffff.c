@@ -94,7 +94,7 @@ unsigned int Powerhit__12CPlayerMeleeiP11CBasePlayerG6Vectorifffff(st_50c310_2 *
         {
             v11 = a2->field_60;
             v0 = &g_400000;
-            sub_48c080(a0, a2);
+            CPlayerMelee::GetPowerRatio(a0, a2);
             v9 = __fnstcw();
             v8 = v9 | 0xc00;
             v7 = (int)(v10 * a5);
@@ -105,21 +105,21 @@ unsigned int Powerhit__12CPlayerMeleeiP11CBasePlayerG6Vectorifffff(st_50c310_2 *
         {
             v11 = a2->field_60;
             v0 = &g_400000;
-            sub_48c080(a0, a2);
+            CPlayerMelee::GetPowerRatio(a0, a2);
             v9 = __fnstcw();
             v8 = v9 | 0xc00;
             v7 = (int)(v10 * a5);
             v12 = __int_as_float((unsigned int)__double_as_longlong((double)v7));
         }
         v11->field_34(a2, a0->field_124->field_0, a0->field_124->field_0, v12);
-        sub_48dc30(a0);
+        CPlayerMelee::EmitShockwave(a0);
         if (a1)
         {
             v13 = a3;
             v3 = *v13;
             v4 = v13[1];
             v5 = v13[2];
-            sub_487e10(a0, &v3, a4);
+            CPlayerMelee::SetPowerhitAnim(a0, &v3, a4);
         }
         if (!a2->field_60->field_8c(a2))
         {
@@ -132,13 +132,13 @@ unsigned int Powerhit__12CPlayerMeleeiP11CBasePlayerG6Vectorifffff(st_50c310_2 *
             *(float *)&v16[9] = v4;
             *(float *)&v16[10] = v5;
         }
-        else if (!sub_489e20(a0, a2) || !sub_48c980(a2, 75))
+        else if (!CPlayerMelee::BlocksAttack(a0, a2) || !CBasePlayer::UseKi(a2, 75))
         {
             v15 = a3;
             v3 = *v15;
             v4 = v15[1];
             v5 = v15[2];
-            sub_48c240(&a2->field_380, a0->field_124, 1, &v3, a6, a7, a8, a9);
+            CPlayerMelee::StartToss(&a2->field_380, a0->field_124, 1, &v3, a6, a7, a8, a9);
         }
         else
         {

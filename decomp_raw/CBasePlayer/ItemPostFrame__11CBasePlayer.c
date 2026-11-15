@@ -9,7 +9,7 @@ unsigned int ItemPostFrame__11CBasePlayer(float a0)
 {
     unsigned int v1;  // eax
 
-    if (sub_48d8b0(*(unsigned int *)&a0 + 2316))
+    if (EHANDLE::__opi(*(unsigned int *)&a0 + 2316))
     {
         return v1;
     }

@@ -70,7 +70,7 @@ unsigned int GetThrowDirection__12CPlayerMeleei(st_500a10_1 *a0, unsigned int a1
         i = v24;
         v24 = i - 1;
     } while (i >= 1);
-    sub_48a800(*(int *)a0->field_124 + 116);
+    UTIL_MakeVectors(*(int *)a0->field_124 + 116);
     v1 = 0;
     v3 = 0;
     v5 = 1.0;

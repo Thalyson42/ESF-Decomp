@@ -38,7 +38,7 @@ typedef struct st_586100_5 {
     unsigned int field_0;
 } st_586100_5;
 
-extern st_586100_5 *g_61692c;
+extern st_586100_5 *g_engfuncs.pfnRandomFloat;
 extern st_586100_6 *gpGlobals;
 
 float ManageEnemies__16CShootLaser1Task(st_586100_4 *a0)
@@ -54,7 +54,7 @@ float ManageEnemies__16CShootLaser1Task(st_586100_4 *a0)
     int v1;  // [bp-0x24]
 
     v2 = a0->field_8->field_b6c;
-    v3 = sub_48ad00(a0->field_8);
+    v3 = CBot::GetBestEnemyFromList(a0->field_8);
     v4 = a0->field_8;
     a0->field_10 = v3;
     v4->field_b6c = v3;
@@ -62,9 +62,9 @@ float ManageEnemies__16CShootLaser1Task(st_586100_4 *a0)
     {
         *(unsigned short *)&v1 = 1;
         *(unsigned short *)&v0 = 0;
-        if (!(char)sub_489a70(v2, v0, v1))
+        if (!(char)UTIL_IsValidPlayer(v2, v0, v1))
             return v6;
-        g_61692c(*(float *)&a0->field_8->field_a00->field_30, *(float *)&a0->field_8->field_a00->field_34);
+        g_engfuncs.pfnRandomFloat(*(float *)&a0->field_8->field_a00->field_30, *(float *)&a0->field_8->field_a00->field_34);
         *(float *)&a0->field_8->field_b3c = *(float *)&a0->field_8->field_a00->field_30 + *(float *)gpGlobals;
         return v5;
     }
@@ -72,7 +72,7 @@ float ManageEnemies__16CShootLaser1Task(st_586100_4 *a0)
     {
         *(unsigned short *)&v1 = 0;
         *(unsigned short *)&v0 = 0;
-        if (!(char)sub_489a70(v2, v0, v1))
+        if (!(char)UTIL_IsValidPlayer(v2, v0, v1))
             return v7;
         *v2->field_1a5 = *v2->field_1a5 & 239;
         return v7;

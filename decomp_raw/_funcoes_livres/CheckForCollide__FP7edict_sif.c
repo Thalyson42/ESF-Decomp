@@ -90,7 +90,7 @@ char CheckForCollide__FP7edict_sif(st_57d330_0 *a0, unsigned int a1, float a2)
     char v18;  // [bp-0x44]
     float v19;  // [bp-0x34]
 
-    sub_48a800(&a0->field_f4);
+    UTIL_MakeVectors(&a0->field_f4);
     if (a1 & 2 || a1 == 128)
     {
         v15 = a0->field_88;
@@ -109,7 +109,7 @@ char CheckForCollide__FP7edict_sif(st_57d330_0 *a0, unsigned int a1, float a2)
         v12 = v9;
         v13 = v10;
         v14 = v11;
-        sub_488460(&v15, &v12, 0, 1, a0->field_288, &v18);
+        UTIL_TraceHull(&v15, &v12, 0, 1, a0->field_288, &v18);
         if (1.0 > v19)
             return 1;
     }
@@ -128,7 +128,7 @@ char CheckForCollide__FP7edict_sif(st_57d330_0 *a0, unsigned int a1, float a2)
         v12 = v1;
         v13 = v2;
         v14 = v3;
-        sub_488460(&v15, &v12, 0, 1, a0->field_288, &v18);
+        UTIL_TraceHull(&v15, &v12, 0, 1, a0->field_288, &v18);
         if (1.0 > v19)
             return 1;
     }
@@ -150,7 +150,7 @@ char CheckForCollide__FP7edict_sif(st_57d330_0 *a0, unsigned int a1, float a2)
         v12 = v1;
         v13 = v2;
         v14 = v3;
-        sub_488460(&v15, &v12, 0, 1, a0->field_288, &v18);
+        UTIL_TraceHull(&v15, &v12, 0, 1, a0->field_288, &v18);
         if (1.0 > v19)
             return 1;
     }
@@ -169,7 +169,7 @@ char CheckForCollide__FP7edict_sif(st_57d330_0 *a0, unsigned int a1, float a2)
         v12 = v1;
         v13 = v2;
         v14 = v3;
-        sub_488460(&v15, &v12, 0, 1, a0->field_288, &v18);
+        UTIL_TraceHull(&v15, &v12, 0, 1, a0->field_288, &v18);
         if (1.0 > v19)
             return 1;
     }
@@ -188,7 +188,7 @@ char CheckForCollide__FP7edict_sif(st_57d330_0 *a0, unsigned int a1, float a2)
         v12 = v1;
         v13 = v2;
         v14 = v3;
-        sub_488460(&v15, &v12, 0, 1, a0->field_288, &v18);
+        UTIL_TraceHull(&v15, &v12, 0, 1, a0->field_288, &v18);
         if (1.0 > v19)
             goto LABEL_57e9fe;
     }
@@ -207,7 +207,7 @@ char CheckForCollide__FP7edict_sif(st_57d330_0 *a0, unsigned int a1, float a2)
         v12 = v1;
         v13 = v2;
         v14 = v3;
-        sub_488460(&v15, &v12, 0, 1, a0->field_288, &v18);
+        UTIL_TraceHull(&v15, &v12, 0, 1, a0->field_288, &v18);
         if (1.0 <= v19)
             goto LABEL_57d884;
     }
@@ -224,7 +224,7 @@ LABEL_57d884:
             v2 = *(float *)&v32[1];
             v3 = *(float *)&v32[2];
             v1 = -45.0f;
-            sub_48a800(&v1);
+            UTIL_MakeVectors(&v1);
             v33 = &gpGlobals->field_28;
             v7 = a2 * gpGlobals->field_28;
             v8 = a2 * *(float *)&v33[1];
@@ -235,7 +235,7 @@ LABEL_57d884:
             v12 = v4;
             v13 = v5;
             v14 = v6;
-            sub_488460(&v15, &v12, 0, 1, a0->field_288, &v18);
+            UTIL_TraceHull(&v15, &v12, 0, 1, a0->field_288, &v18);
             if (1.0 <= v19)
                 goto LABEL_57d9a2;
         }
@@ -252,7 +252,7 @@ LABEL_57d9a2:
                 v2 = *(float *)&v34[1];
                 v3 = *(float *)&v34[2];
                 v1 = 45.0f;
-                sub_48a800(&v1);
+                UTIL_MakeVectors(&v1);
                 v35 = &gpGlobals->field_28;
                 v7 = a2 * gpGlobals->field_28;
                 v8 = a2 * *(float *)&v35[1];
@@ -263,7 +263,7 @@ LABEL_57d9a2:
                 v12 = v4;
                 v13 = v5;
                 v14 = v6;
-                sub_488460(&v15, &v12, 0, 1, a0->field_288, &v18);
+                UTIL_TraceHull(&v15, &v12, 0, 1, a0->field_288, &v18);
                 if (1.0 <= v19)
                     goto LABEL_57dac0;
             }
@@ -281,9 +281,9 @@ LABEL_57dac0:
                     v3 = *(float *)&v36[2];
                     v1 = -45.0f;
                     v0 = (float)(v2 - 45.0);
-                    sub_48d430(v0);
+                    UTIL_WrapAngle(v0);
                     v2 = v0;
-                    sub_48a800(&v1);
+                    UTIL_MakeVectors(&v1);
                     v37 = &gpGlobals->field_28;
                     v7 = a2 * gpGlobals->field_28;
                     v8 = a2 * *(float *)&v37[1];
@@ -294,7 +294,7 @@ LABEL_57dac0:
                     v12 = v4;
                     v13 = v5;
                     v14 = v6;
-                    sub_488460(&v15, &v12, 0, 1, a0->field_288, &v18);
+                    UTIL_TraceHull(&v15, &v12, 0, 1, a0->field_288, &v18);
                     if (1.0 <= v19)
                         goto LABEL_57dc0a;
                 }
@@ -312,9 +312,9 @@ LABEL_57dc0a:
                         v3 = *(float *)&v38[2];
                         v1 = -45.0f;
                         v0 = (float)(45.0 + v2);
-                        sub_48d430(v0);
+                        UTIL_WrapAngle(v0);
                         v2 = v0;
-                        sub_48a800(&v1);
+                        UTIL_MakeVectors(&v1);
                         v39 = &gpGlobals->field_28;
                         v7 = a2 * gpGlobals->field_28;
                         v8 = a2 * *(float *)&v39[1];
@@ -325,7 +325,7 @@ LABEL_57dc0a:
                         v12 = v4;
                         v13 = v5;
                         v14 = v6;
-                        sub_488460(&v15, &v12, 0, 1, a0->field_288, &v18);
+                        UTIL_TraceHull(&v15, &v12, 0, 1, a0->field_288, &v18);
                         if (1.0 <= v19)
                             goto LABEL_57dd54;
                     }
@@ -343,9 +343,9 @@ LABEL_57dd54:
                             v3 = *(float *)&v40[2];
                             v1 = -45.0f;
                             v0 = (float)(v2 - 45.0);
-                            sub_48d430(v0);
+                            UTIL_WrapAngle(v0);
                             v2 = v0;
-                            sub_48a800(&v1);
+                            UTIL_MakeVectors(&v1);
                             v41 = &gpGlobals->field_28;
                             v7 = a2 * gpGlobals->field_28;
                             v8 = a2 * *(float *)&v41[1];
@@ -356,7 +356,7 @@ LABEL_57dd54:
                             v12 = v4;
                             v13 = v5;
                             v14 = v6;
-                            sub_488460(&v15, &v12, 0, 1, a0->field_288, &v18);
+                            UTIL_TraceHull(&v15, &v12, 0, 1, a0->field_288, &v18);
                             if (1.0 <= v19)
                                 goto LABEL_57de9e;
                         }
@@ -374,9 +374,9 @@ LABEL_57de9e:
                                 v3 = *(float *)&v42[2];
                                 v1 = -45.0f;
                                 v0 = (float)(45.0 + v2);
-                                sub_48d430(v0);
+                                UTIL_WrapAngle(v0);
                                 v2 = v0;
-                                sub_48a800(&v1);
+                                UTIL_MakeVectors(&v1);
                                 v43 = &gpGlobals->field_28;
                                 v7 = a2 * gpGlobals->field_28;
                                 v8 = a2 * *(float *)&v43[1];
@@ -387,7 +387,7 @@ LABEL_57de9e:
                                 v12 = v4;
                                 v13 = v5;
                                 v14 = v6;
-                                sub_488460(&v15, &v12, 0, 1, a0->field_288, &v18);
+                                UTIL_TraceHull(&v15, &v12, 0, 1, a0->field_288, &v18);
                                 if (1.0 <= v19)
                                     goto LABEL_57dfe8;
                             }
@@ -405,9 +405,9 @@ LABEL_57dfe8:
                                     v3 = *(float *)&v44[2];
                                     v1 = 45.0f;
                                     v0 = (float)(v2 - 45.0);
-                                    sub_48d430(v0);
+                                    UTIL_WrapAngle(v0);
                                     v2 = v0;
-                                    sub_48a800(&v1);
+                                    UTIL_MakeVectors(&v1);
                                     v45 = &gpGlobals->field_28;
                                     v7 = a2 * gpGlobals->field_28;
                                     v8 = a2 * *(float *)&v45[1];
@@ -418,7 +418,7 @@ LABEL_57dfe8:
                                     v12 = v4;
                                     v13 = v5;
                                     v14 = v6;
-                                    sub_488460(&v15, &v12, 0, 1, a0->field_288, &v18);
+                                    UTIL_TraceHull(&v15, &v12, 0, 1, a0->field_288, &v18);
                                     if (1.0 <= v19)
                                         goto LABEL_57e132;
                                 }
@@ -436,9 +436,9 @@ LABEL_57e132:
                                         v3 = *(float *)&v46[2];
                                         v1 = 45.0f;
                                         v0 = (float)(45.0 + v2);
-                                        sub_48d430(v0);
+                                        UTIL_WrapAngle(v0);
                                         v2 = v0;
-                                        sub_48a800(&v1);
+                                        UTIL_MakeVectors(&v1);
                                         v47 = &gpGlobals->field_28;
                                         v7 = a2 * gpGlobals->field_28;
                                         v8 = a2 * *(float *)&v47[1];
@@ -449,7 +449,7 @@ LABEL_57e132:
                                         v12 = v4;
                                         v13 = v5;
                                         v14 = v6;
-                                        sub_488460(&v15, &v12, 0, 1, a0->field_288, &v18);
+                                        UTIL_TraceHull(&v15, &v12, 0, 1, a0->field_288, &v18);
                                         if (1.0 <= v19)
                                             goto LABEL_57e279;
                                     }
@@ -467,9 +467,9 @@ LABEL_57e279:
                                             v3 = *(float *)&v48[2];
                                             v1 = 45.0f;
                                             v0 = (float)(v2 - 45.0);
-                                            sub_48d430(v0);
+                                            UTIL_WrapAngle(v0);
                                             v2 = v0;
-                                            sub_48a800(&v1);
+                                            UTIL_MakeVectors(&v1);
                                             v49 = &gpGlobals->field_28;
                                             v7 = a2 * gpGlobals->field_28;
                                             v8 = a2 * *(float *)&v49[1];
@@ -480,7 +480,7 @@ LABEL_57e279:
                                             v12 = v4;
                                             v13 = v5;
                                             v14 = v6;
-                                            sub_488460(&v15, &v12, 0, 1, a0->field_288, &v18);
+                                            UTIL_TraceHull(&v15, &v12, 0, 1, a0->field_288, &v18);
                                             if (1.0 <= v19)
                                                 goto LABEL_57e3c3;
                                         }
@@ -498,9 +498,9 @@ LABEL_57e3c3:
                                                 v3 = *(float *)&v50[2];
                                                 v1 = 45.0f;
                                                 v0 = (float)(45.0 + v2);
-                                                sub_48d430(v0);
+                                                UTIL_WrapAngle(v0);
                                                 v2 = v0;
-                                                sub_48a800(&v1);
+                                                UTIL_MakeVectors(&v1);
                                                 v51 = &gpGlobals->field_28;
                                                 v7 = a2 * gpGlobals->field_28;
                                                 v8 = a2 * *(float *)&v51[1];
@@ -511,7 +511,7 @@ LABEL_57e3c3:
                                                 v12 = v4;
                                                 v13 = v5;
                                                 v14 = v6;
-                                                sub_488460(&v15, &v12, 0, 1, a0->field_288, &v18);
+                                                UTIL_TraceHull(&v15, &v12, 0, 1, a0->field_288, &v18);
                                                 if (1.0 <= v19)
                                                     goto LABEL_57e50d;
                                             }
@@ -528,9 +528,9 @@ LABEL_57e50d:
                                                     v2 = *(float *)&v52[1];
                                                     v3 = *(float *)&v52[2];
                                                     v0 = (float)(v2 - 45.0);
-                                                    sub_48d430(v0);
+                                                    UTIL_WrapAngle(v0);
                                                     v2 = v0;
-                                                    sub_48a800(&v1);
+                                                    UTIL_MakeVectors(&v1);
                                                     v53 = &gpGlobals->field_28;
                                                     v7 = a2 * gpGlobals->field_28;
                                                     v8 = a2 * *(float *)&v53[1];
@@ -541,7 +541,7 @@ LABEL_57e50d:
                                                     v12 = v4;
                                                     v13 = v5;
                                                     v14 = v6;
-                                                    sub_488460(&v15, &v12, 0, 1, a0->field_288, &v18);
+                                                    UTIL_TraceHull(&v15, &v12, 0, 1, a0->field_288, &v18);
                                                     if (1.0 <= v19)
                                                         goto LABEL_57e64b;
                                                 }
@@ -558,9 +558,9 @@ LABEL_57e64b:
                                                         v2 = *(float *)&v54[1];
                                                         v3 = *(float *)&v54[2];
                                                         v0 = (float)(45.0 + v2);
-                                                        sub_48d430(v0);
+                                                        UTIL_WrapAngle(v0);
                                                         v2 = v0;
-                                                        sub_48a800(&v1);
+                                                        UTIL_MakeVectors(&v1);
                                                         v55 = &gpGlobals->field_28;
                                                         v7 = a2 * gpGlobals->field_28;
                                                         v8 = a2 * *(float *)&v55[1];
@@ -571,7 +571,7 @@ LABEL_57e64b:
                                                         v12 = v4;
                                                         v13 = v5;
                                                         v14 = v6;
-                                                        sub_488460(&v15, &v12, 0, 1, a0->field_288, &v18);
+                                                        UTIL_TraceHull(&v15, &v12, 0, 1, a0->field_288, &v18);
                                                         if (1.0 <= v19)
                                                             goto LABEL_57e789;
                                                     }
@@ -588,9 +588,9 @@ LABEL_57e789:
                                                             v2 = *(float *)&v56[1];
                                                             v3 = *(float *)&v56[2];
                                                             v0 = (float)(45.0 + v2);
-                                                            sub_48d430(v0);
+                                                            UTIL_WrapAngle(v0);
                                                             v2 = v0;
-                                                            sub_48a800(&v1);
+                                                            UTIL_MakeVectors(&v1);
                                                             v57 = &gpGlobals->field_28;
                                                             v7 = a2 * gpGlobals->field_28;
                                                             v8 = a2 * *(float *)&v57[1];
@@ -601,7 +601,7 @@ LABEL_57e789:
                                                             v12 = v4;
                                                             v13 = v5;
                                                             v14 = v6;
-                                                            sub_488460(&v15, &v12, 0, 1, a0->field_288, &v18);
+                                                            UTIL_TraceHull(&v15, &v12, 0, 1, a0->field_288, &v18);
                                                             if (1.0 <= v19)
                                                                 goto LABEL_57e8c7;
                                                         }
@@ -618,9 +618,9 @@ LABEL_57e8c7:
                                                             v2 = *(float *)&v58[1];
                                                             v3 = *(float *)&v58[2];
                                                             v0 = (float)(45.0 + v2);
-                                                            sub_48d430(v0);
+                                                            UTIL_WrapAngle(v0);
                                                             v2 = v0;
-                                                            sub_48a800(&v1);
+                                                            UTIL_MakeVectors(&v1);
                                                             v59 = &gpGlobals->field_28;
                                                             v7 = a2 * gpGlobals->field_28;
                                                             v8 = a2 * *(float *)&v59[1];
@@ -631,7 +631,7 @@ LABEL_57e8c7:
                                                             v12 = v4;
                                                             v13 = v5;
                                                             v14 = v6;
-                                                            sub_488460(&v15, &v12, 0, 1, a0->field_288, &v18);
+                                                            UTIL_TraceHull(&v15, &v12, 0, 1, a0->field_288, &v18);
                                                             if (1.0 <= v19)
                                                                 return 0;
                                                         }

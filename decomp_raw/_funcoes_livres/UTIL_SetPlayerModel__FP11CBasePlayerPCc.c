@@ -14,7 +14,7 @@ typedef struct st_5347d0_1 {
     unsigned int field_0;
 } st_5347d0_1;
 
-extern st_5347d0_1 *g_6167cc;
+extern st_5347d0_1 *g_engfuncs.pfnModelIndex;
 extern st_5347d0_2 *gpGlobals;
 
 int UTIL_SetPlayerModel__FP11CBasePlayerPCc(st_5347d0_0 **a0, char *a1)
@@ -66,10 +66,10 @@ int UTIL_SetPlayerModel__FP11CBasePlayerPCc(st_5347d0_0 **a0, char *a1)
         v0 = a1;
         v11 = "models/%s.mdl";
     }
-    sub_48d990(&v1, v11);
-    v12 = g_6167cc(&v1);
+    sprintf@GLIBC_2.0(&v1, v11);
+    v12 = g_engfuncs.pfnModelIndex(&v1);
     *a0->field_b4 = v12;
     *a0->field_b8 = &(&v1)[-1 * gpGlobals->field_98];
-    return sub_48e110(a0 + 360, a1);
+    return strcpy@GLIBC_2.0(a0 + 360, a1);
 }
 

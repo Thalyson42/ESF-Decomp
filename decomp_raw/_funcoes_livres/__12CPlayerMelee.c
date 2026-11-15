@@ -7,8 +7,8 @@ unsigned int * __12CPlayerMelee(unsigned int *a0)
     a0[82] = 0;
     a0[83] = 0;
     a0[32] = 0;
-    sub_48b000(a0);
-    sub_488ce0(a0);
+    CPlayerMelee::Reset(a0);
+    CPlayerMelee::AddComboMoves(a0);
     return a0;
 }
 

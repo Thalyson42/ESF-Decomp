@@ -9,9 +9,9 @@ typedef struct st_4f5ef0_1 {
 } st_4f5ef0_1;
 
 extern unsigned int gmsgMaxHealth;
-extern st_4f5ef0_1 *g_616878;
-extern st_4f5ef0_1 *g_61687c;
-extern st_4f5ef0_1 *g_616880;
+extern st_4f5ef0_1 *g_engfuncs.pfnMessageBegin;
+extern st_4f5ef0_1 *g_engfuncs.pfnMessageEnd;
+extern st_4f5ef0_1 *g_engfuncs.pfnWriteByte;
 
 int SetMaxHealth__11CBasePlayeri(st_4f5ef0_0 **a0, unsigned int a1)
 {
@@ -19,8 +19,8 @@ int SetMaxHealth__11CBasePlayeri(st_4f5ef0_0 **a0, unsigned int a1)
     unsigned int v1;  // [bp-0x18]
     unsigned int v2;  // [bp-0x14]
 
-    g_616878(1, gmsgMaxHealth, 0, *a0->field_208, v0, v1, v2);
-    g_616880(a1);
-    return g_61687c(a1);
+    g_engfuncs.pfnMessageBegin(1, gmsgMaxHealth, 0, *a0->field_208, v0, v1, v2);
+    g_engfuncs.pfnWriteByte(a1);
+    return g_engfuncs.pfnMessageEnd(a1);
 }
 

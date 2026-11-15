@@ -40,7 +40,7 @@ typedef struct st_511ea0_2 {
     int field_8;
 } st_511ea0_2;
 
-extern st_511ea0_1 *g_6168b4;
+extern st_511ea0_1 *g_engfuncs.pfnAlertMessage;
 
 unsigned int MaintainSchedule__12CBaseMonster(st_511ea0_3 *a0)
 {
@@ -57,11 +57,11 @@ unsigned int MaintainSchedule__12CBaseMonster(st_511ea0_3 *a0)
     do
     {
         if (a0->field_188 && a0->field_184 == 4)
-            sub_48c2c0(a0);
-        if (!sub_487e50(a0) || a0->padding_17c != a0->field_180)
+            CBaseMonster::NextScheduledTask(a0);
+        if (!CBaseMonster::FScheduleValid(a0) || a0->padding_17c != a0->field_180)
         {
             a0->field_60->field_15c(a0);
-            if (a0->field_180 != 8 && (a0->field_180 != 6 || a0->padding_17c == 6) && (a0->field_104 && a0->field_104 >= 0 || a0->field_188 && *(int *)(a0->field_188 + 8) < 0 || a0->padding_17c == 2 && !sub_48d8b0(&a0->field_107)))
+            if (a0->field_180 != 8 && (a0->field_180 != 6 || a0->padding_17c == 6) && (a0->field_104 && a0->field_104 >= 0 || a0->field_188 && *(int *)(a0->field_188 + 8) < 0 || a0->padding_17c == 2 && !EHANDLE::__opi(&a0->field_107)))
                 a0->field_60->field_174(a0);
             if (*((char *)&a0->field_104 + 3) & 64 && a0->padding_17c == a0->field_180)
             {
@@ -76,31 +76,31 @@ unsigned int MaintainSchedule__12CBaseMonster(st_511ea0_3 *a0)
                     v0 = 41;
                 }
                 v3 = v2->field_154(a0);
-                g_6168b4(2, "Schedule Failed at %d!\n", a0->field_18c);
-                sub_48b250(a0, v3);
+                g_engfuncs.pfnAlertMessage(2, "Schedule Failed at %d!\n", a0->field_18c);
+                CBaseMonster::ChangeSchedule(a0, v3);
             }
             else
             {
-                sub_48ad20(a0, a0->field_180);
+                CBaseMonster::SetState(a0, a0->field_180);
                 if (a0->padding_17c == 6 || a0->padding_17c == 8)
-                    v4 = sub_487c30(a0);
+                    v4 = CBaseMonster::GetSchedule(a0);
                 else
                     v4 = a0->field_60->field_158(a0);
-                sub_48b250(a0, v4);
+                CBaseMonster::ChangeSchedule(a0, v4);
             }
         }
         if (!a0->field_184)
         {
-            v5 = sub_48bbb0(a0);
+            v5 = CBaseMonster::GetTask(a0);
             a0->field_184 = 1;
             a0->field_60->field_14c(a0, v5);
         }
         if (*(int *)&a0->padding_109[106] != a0->field_174)
             a0->field_60->field_178(a0, a0->field_174);
     } while ((a0->field_184 == 4 || !a0->field_184) && (v1 += 1, v1 <= 9));
-    if (sub_487bb0(a0))
+    if (CBaseMonster::TaskIsRunning(a0))
     {
-        v6 = sub_48bbb0(a0);
+        v6 = CBaseMonster::GetTask(a0);
         a0->field_60->field_150(a0, v6);
     }
     v7 = *(int *)&a0->padding_109[106];

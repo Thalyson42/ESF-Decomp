@@ -10,7 +10,7 @@ typedef struct st_57c390_1 {
     unsigned int field_0;
 } st_57c390_1;
 
-extern st_57c390_1 *g_616830;
+extern st_57c390_1 *g_engfuncs.pfnSetOrigin;
 extern st_57c390_0 *gpGlobals;
 
 unsigned int TelePortPlayerToPlayer__FP7edict_sT0(float a0)
@@ -36,7 +36,7 @@ unsigned int TelePortPlayerToPlayer__FP7edict_sT0(float a0)
     float v15;  // [bp-0x1c]
     unsigned int v17;  // [bp+0x8]
 
-    sub_48a800(*(unsigned int *)&a0 + 244);
+    UTIL_MakeVectors(*(unsigned int *)&a0 + 244);
     v18 = *(unsigned int *)&a0 + 0x88;
     v13 = *(float *)(*(unsigned int *)&a0 + 0x88);
     v14 = *(float *)&v18[1];
@@ -56,7 +56,7 @@ unsigned int TelePortPlayerToPlayer__FP7edict_sT0(float a0)
     v10 = (float)(v20 + v7);
     v11 = (float)(v21 + v8);
     v12 = v9 + v2;
-    sub_488460(&v13, &v10, 0, 1, a0, &v0);
-    return g_616830(v17, &v10);
+    UTIL_TraceHull(&v13, &v10, 0, 1, a0, &v0);
+    return g_engfuncs.pfnSetOrigin(v17, &v10);
 }
 

@@ -27,7 +27,7 @@ st_58f1e0_0 * PM_WallJumpPush(double a0)
     int i;  // ecx
     int v0;  // [bp-0x1c]
 
-    sub_48cd40(v0);
+    PM_WalljumpExtra(v0);
     v3 = v2 + 600.0;
     v4 = v3 + v3;
     if (1400.0 < v4)

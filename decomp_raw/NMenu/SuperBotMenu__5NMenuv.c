@@ -4,7 +4,7 @@ typedef struct st_56e760_0 {
 } st_56e760_0;
 
 extern unsigned short _5NMenu.SBotType;
-extern st_56e760_0 *g_616928;
+extern st_56e760_0 *g_engfuncs.pfnRandomLong;
 extern short _5NMenu.CurrentMenuChoice;
 
 int SuperBotMenu__5NMenuv(void)
@@ -17,16 +17,16 @@ int SuperBotMenu__5NMenuv(void)
         if (_5NMenu.CurrentMenuChoice <= 4)
         {
             if (_5NMenu.CurrentMenuChoice == 4)
-                _5NMenu.SBotType = g_616928(1, 3);
+                _5NMenu.SBotType = g_engfuncs.pfnRandomLong(1, 3);
             else
                 _5NMenu.SBotType = _5NMenu.CurrentMenuChoice;
-            return sub_48c740(3);
+            return NMenu::SetNewMenu(3);
         }
         else if (_5NMenu.CurrentMenuChoice == 5)
         {
-            return sub_48c740(22);
+            return NMenu::SetNewMenu(22);
         }
     }
-    return sub_48d6f0(v0, v1);
+    return NMenu::ResetMenu(v0, v1);
 }
 

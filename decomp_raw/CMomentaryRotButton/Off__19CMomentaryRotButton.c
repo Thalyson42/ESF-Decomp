@@ -24,8 +24,8 @@ typedef struct st_4985a0_0 {
 
 extern unsigned int Return__19CMomentaryRotButton;
 extern unsigned int g_vecZero;
-extern unsigned int g_616790;
-extern unsigned int g_616794;
+extern unsigned int g_vecZero+4;
+extern unsigned int g_vecZero+8;
 
 unsigned int Off__19CMomentaryRotButton(st_4985a0_1 *a0)
 {
@@ -36,13 +36,13 @@ unsigned int Off__19CMomentaryRotButton(st_4985a0_1 *a0)
 
     v0 = a0->field_0;
     v0->field_5c = g_vecZero;
-    v0->field_60 = g_616790;
-    v0->field_64 = g_616794;
+    v0->field_60 = g_vecZero+4;
+    v0->field_64 = g_vecZero+8;
     a0->field_104 = 0;
     v1 = a0->field_0;
-    if (v1->field_1a0 & 16 && !(v2 = _INSERT(g_616794, 0, 0), 0.0 >= *(float *)&a0->field_10c))
+    if (v1->field_1a0 & 16 && !(v2 = _INSERT(g_vecZero+8, 0, 0), 0.0 >= *(float *)&a0->field_10c))
     {
-        v3 = _INSERT(_INSERT(g_616794, 0, 0), 0, 0);
+        v3 = _INSERT(_INSERT(g_vecZero+8, 0, 0), 0, 0);
         a0->field_c = v3 | 0xffff0000;
         a0->field_10 = &Return__19CMomentaryRotButton;
         v1->field_104 = (float)(0.1 + *(float *)&v1->field_100);

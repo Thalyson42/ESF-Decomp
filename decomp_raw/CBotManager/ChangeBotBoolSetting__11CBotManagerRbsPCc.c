@@ -9,7 +9,7 @@ typedef struct st_53e4d0_0 {
 } st_53e4d0_0;
 
 extern char cout;
-extern st_53e4d0_0 *g_625f80;
+extern st_53e4d0_0 *cout+512;
 
 int ChangeBotBoolSetting__11CBotManagerRbsPCc(unsigned int a0, char *a1, unsigned short a2, unsigned int a3)
 {
@@ -30,10 +30,10 @@ int ChangeBotBoolSetting__11CBotManagerRbsPCc(unsigned int a0, char *a1, unsigne
 LABEL_53e510:
     if (!*a1)
     {
-        g_625f80->field_14(&cout, a3);
-        return g_625f80->field_14(&cout, " is now DISABLED\n");
+        cout+512->field_14(&cout, a3);
+        return cout+512->field_14(&cout, " is now DISABLED\n");
     }
-    g_625f80->field_14(&cout, a3);
-    return g_625f80->field_14(&cout, " is now ENABLED\n");
+    cout+512->field_14(&cout, a3);
+    return cout+512->field_14(&cout, " is now ENABLED\n");
 }
 

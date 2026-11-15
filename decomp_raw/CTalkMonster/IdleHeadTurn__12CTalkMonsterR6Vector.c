@@ -29,13 +29,13 @@ double IdleHeadTurn__12CTalkMonsterR6Vector(st_5263f0_0 *a0, float *a1)
     v0 = *a1 - a0->field_0->field_8;
     v1 = a1[1] - *(float *)&v3[1];
     v2 = a1[2] - *(float *)&v3[2];
-    sub_48dd80(a0, &v0);
+    CBaseMonster::VecToYaw(a0, &v0);
     iter = v2 - a0->field_0->field_54;
     if (iter > 180.0)
         iter -= 360.0;
     if (iter < -180.0)
         iter += 360.0;
-    sub_489b40(a0, 0, (float)iter);
+    CBaseAnimating::SetBoneController(a0, 0, (float)iter);
     return iter;
 }
 

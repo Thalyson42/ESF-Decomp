@@ -4,12 +4,12 @@ char SetTurnActivity__12CBaseMonster(double a0, float idx)
     double v1;  // mm7
     unsigned int v2;  // eax
 
-    sub_48df60(idx);
-    if (v1 <= -45.0 && !(v2 = sub_488bc0(idx, 16), v2 == 0xffffffff))
+    CBaseMonster::FlYawDiff(idx);
+    if (v1 <= -45.0 && !(v2 = CBaseAnimating::LookupActivity(idx, 16), v2 == 0xffffffff))
     {
         *(unsigned int *)(*(unsigned int *)&idx + 376) = 16;
     }
-    else if ((float)v1 > 45.0f && sub_488bc0(idx, 15) != 0xffffffff)
+    else if ((float)v1 > 45.0f && CBaseAnimating::LookupActivity(idx, 15) != 0xffffffff)
     {
         *(unsigned int *)(*(unsigned int *)&idx + 376) = 15;
     }

@@ -40,11 +40,11 @@ typedef struct st_54d7e0_0 {
     unsigned int field_0;
 } st_54d7e0_0;
 
-extern st_54d7e0_0 *g_616928;
-extern st_54d7e0_0 *g_61692c;
+extern st_54d7e0_0 *g_engfuncs.pfnRandomLong;
+extern st_54d7e0_0 *g_engfuncs.pfnRandomFloat;
 extern st_54d7e0_1 *gpGlobals;
-extern char g_6253c6;
-extern char g_6253c7;
+extern char BotManager+3398;
+extern char BotManager+3399;
 
 unsigned int TaskThink__10CSwoopTask(float idx)
 {
@@ -124,10 +124,10 @@ unsigned int TaskThink__10CSwoopTask(float idx)
     float v26;  // [bp-0x14]
     float v27;  // [bp-0x10]
 
-    sub_48d0d0(*(int *)(*(unsigned int *)&idx + 8));
+    CBot::ResetMoveSpeed(*(int *)(*(unsigned int *)&idx + 8));
     if (*(float *)(*(int *)(*(unsigned int *)&idx + 8) + 0xbfc) != 0.0f && *(int *)(*(int *)(*(unsigned int *)&idx + 12) + 392) == 11 && *(int *)(*(unsigned int *)&idx + 16))
     {
-        sub_48b300(*(int *)(*(unsigned int *)&idx + 8) + 1284);
+        CSwoop::GetSwoopTime(*(int *)(*(unsigned int *)&idx + 8) + 1284);
         if (*(float *)(*(int *)(*(unsigned int *)&idx + 8) + 0xbfc) > 2.25f)
         {
             v29 = *(int *)(*(unsigned int *)&idx + 8);
@@ -162,7 +162,7 @@ unsigned int TaskThink__10CSwoopTask(float idx)
                         }
                         v30 = v16;
 LABEL_54d959:
-                        if ((int)g_616928(1, 100) <= v30 && (char)sub_489330(*(int *)(*(unsigned int *)&idx + 8), *(int *)(*(unsigned int *)&idx + 16)))
+                        if ((int)g_engfuncs.pfnRandomLong(1, 100) <= v30 && (char)EntIsInFieldOfView(*(int *)(*(unsigned int *)&idx + 8), *(int *)(*(unsigned int *)&idx + 16)))
                         {
                             v31 = *(int *)*(int *)(*(unsigned int *)&idx + 16) + 8;
                             *(float *)&v20 = *(float *)(*(int *)*(int *)(*(unsigned int *)&idx + 16) + 8);
@@ -178,14 +178,14 @@ LABEL_54d959:
                             v36 = v33 * v33 + v34 * v34 + v35 * v35;
                             v37 = sqrt(v36);
                             if (isnan(v37))
-                                sub_487dc0(*(unsigned int *)&v36);
+                                sqrt(*(unsigned int *)&v36);
                             else
                                 v36 = v37;
                             v11 = (float)v36;
                             if (v11 < 1500.0f)
                             {
                                 v3 = 2;
-                                v56 = sub_48c020(idx);
+                                v56 = CBaseTask::MakeCombo(idx);
                                 *(char *)(*(unsigned int *)&idx + 48) = 1;
                                 return v56;
                             }
@@ -215,12 +215,12 @@ LABEL_54d959:
                         }
                         v38 = v16;
 LABEL_54dad2:
-                        if ((int)g_616928(1, 100) <= v38)
+                        if ((int)g_engfuncs.pfnRandomLong(1, 100) <= v38)
                         {
                             v22 = __fnstcw();
                             v21 = v22 | 0xc00;
                             v20 = (int)*(float *)(*(int *)*(int *)(*(unsigned int *)&idx + 8) + 608);
-                            if (v20 > 250 && (char)sub_489330(*(int *)(*(unsigned int *)&idx + 8), *(int *)(*(unsigned int *)&idx + 16)))
+                            if (v20 > 250 && (char)EntIsInFieldOfView(*(int *)(*(unsigned int *)&idx + 8), *(int *)(*(unsigned int *)&idx + 16)))
                             {
                                 v39 = *(int *)*(int *)(*(unsigned int *)&idx + 16) + 8;
                                 *(float *)&v20 = *(float *)(*(int *)*(int *)(*(unsigned int *)&idx + 16) + 8);
@@ -236,17 +236,17 @@ LABEL_54dad2:
                                 v44 = v41 * v41 + v42 * v42 + v43 * v43;
                                 v45 = sqrt(v44);
                                 if (isnan(v45))
-                                    sub_487dc0(*(unsigned int *)&v44);
+                                    sqrt(*(unsigned int *)&v44);
                                 else
                                     v44 = v45;
                                 v11 = (float)v44;
                                 if (v11 > 1250.0f)
                                 {
-                                    v46 = sub_48a210(*(int *)(*(unsigned int *)&idx + 8));
+                                    v46 = CBot::MakeAttackChainSwoop(*(int *)(*(unsigned int *)&idx + 8));
                                     if (v46 != 38)
                                     {
                                         v2 = v46;
-                                        v56 = sub_48c020(idx);
+                                        v56 = CBaseTask::MakeCombo(idx);
                                         *(char *)(*(unsigned int *)&idx + 48) = 1;
                                         return v56;
                                     }
@@ -259,7 +259,7 @@ LABEL_54dad2:
         }
         if (*(int *)(*(int *)(*(unsigned int *)&idx + 8) + 1284) == 4)
         {
-            if (!*(short *)*(int *)(*(int *)(*(unsigned int *)&idx + 8) + 2564) || !g_6253c7 || !g_6253c6)
+            if (!*(short *)*(int *)(*(int *)(*(unsigned int *)&idx + 8) + 2564) || !BotManager+3399 || !BotManager+3398)
             {
                 *(unsigned int *)(*(unsigned int *)&idx + 4) = 2;
                 v76 = *(int *)(*(unsigned int *)&idx + 8);
@@ -267,21 +267,21 @@ LABEL_54dad2:
                     return v56;
                 if (v76->field_968->field_88 - 1 <= 1)
                 {
-                    sub_48ce10(v76, "weapon_genericbeam");
+                    CBasePlayer::SelectItem(v76, "weapon_genericbeam");
                     return v56;
                 }
                 return v56;
             }
-            if (sub_4897e0(*(int *)(*(unsigned int *)&idx + 8), *(int *)(*(unsigned int *)&idx + 16)))
+            if (CBasePlayer::CanMelee(*(int *)(*(unsigned int *)&idx + 8), *(int *)(*(unsigned int *)&idx + 16)))
             {
                 if (20.0 > *(float *)(*(int *)(*(unsigned int *)&idx + 8) + 3112) && 20.0 > *(float *)(*(int *)(*(unsigned int *)&idx + 8) + 3116))
                 {
                     *(float *)(*(unsigned int *)&idx + 52) = *(float *)gpGlobals;
                     goto LABEL_54e080;
                 }
-                if (1.0 < *(float *)gpGlobals - *(float *)(*(unsigned int *)&idx + 52) && (v57 = *(int *)(*(unsigned int *)&idx + 8), v57->field_a00->field_40 && (v22 = __fnstcw(), v21 = v22 | 0xc00, v20 = (int)*(float *)(v57->field_0 + 608), v20 > 250 && (v58 = sub_488c10(v57, *(int *)(*(unsigned int *)&idx + 16)), v58 != 38))))
+                if (1.0 < *(float *)gpGlobals - *(float *)(*(unsigned int *)&idx + 52) && (v57 = *(int *)(*(unsigned int *)&idx + 8), v57->field_a00->field_40 && (v22 = __fnstcw(), v21 = v22 | 0xc00, v20 = (int)*(float *)(v57->field_0 + 608), v20 > 250 && (v58 = CBot::MakeAwayChainSwoop(v57, *(int *)(*(unsigned int *)&idx + 16)), v58 != 38))))
                 {
-                    sub_48c020(idx, v58);
+                    CBaseTask::MakeCombo(idx, v58);
                     *(char *)(*(unsigned int *)&idx + 48) = 1;
                 }
                 else
@@ -301,7 +301,7 @@ LABEL_54e080:
                     v64 = v61 * v61 + v62 * v62 + v63 * v63;
                     v65 = sqrt(v64);
                     if (isnan(v65))
-                        sub_487dc0(*(unsigned int *)&v64);
+                        sqrt(*(unsigned int *)&v64);
                     else
                         v64 = v65;
                     v4 = (float)v64;
@@ -321,7 +321,7 @@ LABEL_54e080:
                                     goto LABEL_54e191;
                                 v67 = "weapon_melee";
                             }
-                            sub_48ce10(v66, v67);
+                            CBasePlayer::SelectItem(v66, v67);
                         }
 LABEL_54e191:
                         if (*(int *)(*(int *)(*(unsigned int *)&idx + 8) + 3044))
@@ -346,7 +346,7 @@ LABEL_54e191:
                                 *(float *)&v8 = *(float *)(*(int *)*(int *)(*(unsigned int *)&idx + 16) + 8);
                                 *(float *)&v9 = *(float *)&v71[1];
                                 *(float *)&v10 = *(float *)&v71[2];
-                                sub_48a170(&v13, v72, &v8);
+                                CBot::GetAimAngles(&v13, v72, &v8);
                                 *(float *)&v72[1].padding_4[12] = v13;
                                 *(float *)&v72[1].padding_4[16] = v14;
                                 *(float *)&v72[1].padding_4[20] = v15;
@@ -356,7 +356,7 @@ LABEL_54e191:
                                     {
                                         if (*(float *)(*(int *)(*(unsigned int *)&idx + 8) + 3048) < *(float *)(*(unsigned int *)&idx + 32))
                                             goto LABEL_54e2dc;
-                                        v16 = g_616928(0xffffffee, 0xfffffff0);
+                                        v16 = g_engfuncs.pfnRandomLong(0xffffffee, 0xfffffff0);
                                         *(float *)(*(unsigned int *)&idx + 32) = (float)v16;
                                         v1 = 0xfffffffd;
                                         v0 = 0xfffffffe;
@@ -366,12 +366,12 @@ LABEL_54e191:
                                     {
                                         if (*(float *)(*(int *)(*(unsigned int *)&idx + 8) + 3048) <= *(float *)(*(unsigned int *)&idx + 32))
                                         {
-                                            v16 = g_616928(16, 18);
+                                            v16 = g_engfuncs.pfnRandomLong(16, 18);
                                             *(float *)(*(unsigned int *)&idx + 32) = (float)v16;
                                             v1 = 3;
                                             v0 = 2;
 LABEL_54e2cd:
-                                            *(unsigned short *)(*(unsigned int *)&idx + 26) = g_616928(v0, v1);
+                                            *(unsigned short *)(*(unsigned int *)&idx + 26) = g_engfuncs.pfnRandomLong(v0, v1);
                                         }
                                     }
 LABEL_54e2dc:
@@ -379,7 +379,7 @@ LABEL_54e2dc:
                                     {
                                         if (*(float *)(*(int *)(*(unsigned int *)&idx + 8) + 3052) < *(float *)(*(unsigned int *)&idx + 36))
                                             goto LABEL_54e36c;
-                                        v16 = g_616928(0xffffffee, 0xfffffff0);
+                                        v16 = g_engfuncs.pfnRandomLong(0xffffffee, 0xfffffff0);
                                         *(float *)(*(unsigned int *)&idx + 36) = (float)v16;
                                         v1 = 0xfffffffd;
                                         v0 = 0xfffffffe;
@@ -389,12 +389,12 @@ LABEL_54e2dc:
                                     {
                                         if (*(float *)(*(int *)(*(unsigned int *)&idx + 8) + 3052) <= *(float *)(*(unsigned int *)&idx + 36))
                                         {
-                                            v16 = g_616928(16, 18);
+                                            v16 = g_engfuncs.pfnRandomLong(16, 18);
                                             *(float *)(*(unsigned int *)&idx + 36) = (float)v16;
                                             v1 = 3;
                                             v0 = 2;
 LABEL_54e35d:
-                                            *(unsigned short *)(*(unsigned int *)&idx + 28) = g_616928(v0, v1);
+                                            *(unsigned short *)(*(unsigned int *)&idx + 28) = g_engfuncs.pfnRandomLong(v0, v1);
                                         }
                                     }
 LABEL_54e36c:
@@ -405,7 +405,7 @@ LABEL_54e36c:
                                 v24 = *(float *)&v73[1].padding_4[12] + *(float *)&v73->padding_be8[0];
                                 v26 = *(float *)&v73[1].padding_4[16] + *(float *)&v73->padding_be8[4];
                                 v27 = *(float *)&v73[1].padding_4[20] + *(float *)&v73->padding_be8[8];
-                                sub_489120(&v20, &v24);
+                                WrapAngles(&v20, &v24);
                                 v74 = *(int *)(*(unsigned int *)&idx + 8);
                                 *(unsigned int *)&v74[1].padding_4[12] = v20;
                                 *(unsigned int *)&v74[1].padding_4[16] = v21;
@@ -413,15 +413,15 @@ LABEL_54e36c:
                             }
                         }
 LABEL_54e3f7:
-                        sub_48c350(*(int *)(*(unsigned int *)&idx + 8));
+                        CBot::SetSwoopButton(*(int *)(*(unsigned int *)&idx + 8));
                         if (!*(char *)(*(unsigned int *)&idx + 24))
-                            sub_48cd50(idx);
+                            CSwoopTask::CheckSecondaryFire(idx);
                         if (*(char *)(*(unsigned int *)&idx + 25))
                             *(char *)(*(int *)(*(unsigned int *)&idx + 12) + 513) = *(char *)(*(int *)(*(unsigned int *)&idx + 12) + 513) | 8;
-                        v75 = sub_48df40(*(int *)(*(unsigned int *)&idx + 8));
+                        v75 = CBot::AvoidAttacksWhileSwoop(*(int *)(*(unsigned int *)&idx + 8));
                         if (v75 == 38)
                             return v56;
-                        sub_48c020(idx, v75);
+                        CBaseTask::MakeCombo(idx, v75);
                         return v56;
                     }
                 }
@@ -431,7 +431,7 @@ LABEL_54e3f7:
         {
             if (*(float *)(*(unsigned int *)&idx + 44) >= *(float *)gpGlobals || !*(char *)(*(int *)(*(int *)(*(unsigned int *)&idx + 8) + 0xa00) + 64) || !(v22 = __fnstcw(), v21 = v22 | 0xc00, v20 = (int)*(float *)(*(int *)*(int *)(*(unsigned int *)&idx + 8) + 608), v20 > 250))
                 goto LABEL_54e3f7;
-            g_61692c(0.20000000298023224f, 0.5f);
+            g_engfuncs.pfnRandomFloat(0.20000000298023224f, 0.5f);
             *(float *)(*(unsigned int *)&idx + 44) = (float)(0.20000000298023224 + *(float *)gpGlobals);
             v7 = 9999.900390625f;
             if (*(int *)(*(unsigned int *)&idx + 16))
@@ -450,11 +450,11 @@ LABEL_54e3f7:
                 v52 = v49 * v49 + v50 * v50 + v51 * v51;
                 v53 = sqrt(v52);
                 if (isnan(v53))
-                    sub_487dc0(*(unsigned int *)&v52);
+                    sqrt(*(unsigned int *)&v52);
                 else
                     v52 = v53;
                 v7 = (float)v52;
-                if (!*(int *)(*(unsigned int *)&idx + 16) || !(v54 = g_616928(1, 100), (int)g_616928(1, 100) <= *(short *)(*(int *)(*(int *)(*(unsigned int *)&idx + 8) + 2564) + 40) && (char)sub_489330(*(int *)(*(unsigned int *)&idx + 8), *(int *)(*(unsigned int *)&idx + 16)) && v7 < 750.0f))
+                if (!*(int *)(*(unsigned int *)&idx + 16) || !(v54 = g_engfuncs.pfnRandomLong(1, 100), (int)g_engfuncs.pfnRandomLong(1, 100) <= *(short *)(*(int *)(*(int *)(*(unsigned int *)&idx + 8) + 2564) + 40) && (char)EntIsInFieldOfView(*(int *)(*(unsigned int *)&idx + 8), *(int *)(*(unsigned int *)&idx + 16)) && v7 < 750.0f))
                     goto LABEL_54de54;
                 v6 = 50;
                 if (*(int *)(*(int *)(*(int *)(*(unsigned int *)&idx + 8) + 2564) + 52) == 2)
@@ -466,20 +466,20 @@ LABEL_54e3f7:
                     v6 = 75;
                 }
                 v5 = 0;
-                if (*(short *)*(int *)(*(int *)(*(unsigned int *)&idx + 8) + 2564) > 0 && g_6253c7 && g_6253c6)
-                    v5 = (char)sub_48bf70(*(int *)(*(unsigned int *)&idx + 8), *(int *)(*(unsigned int *)&idx + 16)) != 0;
-                if ((int)g_616928(1, 100) <= v6 && v5)
+                if (*(short *)*(int *)(*(int *)(*(unsigned int *)&idx + 8) + 2564) > 0 && BotManager+3399 && BotManager+3398)
+                    v5 = (char)CBot::CanAttackPlayer(*(int *)(*(unsigned int *)&idx + 8), *(int *)(*(unsigned int *)&idx + 16)) != 0;
+                if ((int)g_engfuncs.pfnRandomLong(1, 100) <= v6 && v5)
                 {
                     v3 = 2;
-                    v56 = sub_48c020(idx);
+                    v56 = CBaseTask::MakeCombo(idx);
                     *(char *)(*(unsigned int *)&idx + 48) = 1;
                     return v56;
                 }
-                v46 = sub_48b2a0(*(int *)(*(unsigned int *)&idx + 8));
+                v46 = CBot::MakeNormalChainSwoop(*(int *)(*(unsigned int *)&idx + 8));
                 if (v46 != 38)
                 {
                     v2 = v46;
-                    v56 = sub_48c020(idx);
+                    v56 = CBaseTask::MakeCombo(idx);
                     *(char *)(*(unsigned int *)&idx + 48) = 1;
                     return v56;
                 }
@@ -488,23 +488,23 @@ LABEL_54e3f7:
             else
             {
 LABEL_54de54:
-                sub_489b10(&v25, *(int *)(*(unsigned int *)&idx + 8) + 1284);
+                CSwoop::GetCurrentDirection(&v25, *(int *)(*(unsigned int *)&idx + 8) + 1284);
                 v20 = (float)(50.0 * v24);
                 v21 = (float)(50.0 * v26);
                 v23 = (float)(50.0 * v27);
-                sub_488460(*(int *)(*(unsigned int *)&idx + 12) + 0x88, &v20, 1, 1, *(int *)(*(unsigned int *)&idx + 12), &v8);
+                UTIL_TraceHull(*(int *)(*(unsigned int *)&idx + 12) + 0x88, &v20, 1, 1, *(int *)(*(unsigned int *)&idx + 12), &v8);
                 if (1.0 <= v12)
                     goto LABEL_54e3f7;
                 if (v7 < 750.0f)
                 {
-                    v55 = g_616928(1, 100);
+                    v55 = g_engfuncs.pfnRandomLong(1, 100);
                     if ((int)v55 <= *(short *)(*(int *)(*(int *)(*(unsigned int *)&idx + 8) + 2564) + 40))
                     {
-                        v46 = sub_48b2a0(*(int *)(*(unsigned int *)&idx + 8));
+                        v46 = CBot::MakeNormalChainSwoop(*(int *)(*(unsigned int *)&idx + 8));
                         if (v46 != 38)
                         {
                             v2 = v46;
-                            v56 = sub_48c020(idx);
+                            v56 = CBaseTask::MakeCombo(idx);
                             *(char *)(*(unsigned int *)&idx + 48) = 1;
                             return v56;
                         }

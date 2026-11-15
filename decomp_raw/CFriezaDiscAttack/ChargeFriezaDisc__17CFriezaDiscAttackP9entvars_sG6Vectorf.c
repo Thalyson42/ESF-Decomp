@@ -57,8 +57,8 @@ typedef struct st_4bfdf0_5 {
 } st_4bfdf0_5;
 
 extern char AuraCheck__11CDiscAttack;
-extern st_4bfdf0_2 *g_6167c8;
-extern st_4bfdf0_2 *g_6168dc;
+extern st_4bfdf0_2 *g_engfuncs.pfnSetModel;
+extern st_4bfdf0_2 *g_engfuncs.pfnIndexOfEdict;
 extern st_4bfdf0_5 *gpGlobals;
 
 st_4bfdf0_3 * ChargeFriezaDisc__17CFriezaDiscAttackP9entvars_sG6Vectorf(st_4bfdf0_4 *a0, int a1, float a2)
@@ -72,16 +72,16 @@ st_4bfdf0_3 * ChargeFriezaDisc__17CFriezaDiscAttackP9entvars_sG6Vectorf(st_4bfdf
     unsigned int v2;  // [bp-0x20]
     unsigned int v3;  // [bp-0x1c]
 
-    v4 = sub_488310(0);
+    v4 = GetClassPtr__H1Z17CFriezaDiscAttack_PX01_PX01(0);
     v4->field_60->field_8(v4);
     v4->field_0->field_118 = v4->field_0->field_118 & 251;
     *(float *)&v4->field_0->padding_148[4] = 100.0f;
     v4->field_0->field_10c = 1;
     v4->field_0->field_108 = 8;
-    g_6167c8(v4->field_0->field_208, "models/w_friezadisc.mdl");
+    g_engfuncs.pfnSetModel(v4->field_0->field_208, "models/w_friezadisc.mdl");
     v4->field_0->field_144 = a2;
     *(float *)&v4->field_0->padding_19c[0x44] = 999.0f;
-    sub_48db50(v4->field_0, a1);
+    UTIL_SetOrigin(v4->field_0, a1);
     v4->field_0->field_198 = a0->field_208;
     v5 = v4->field_0;
     v1 = 0;
@@ -90,11 +90,11 @@ st_4bfdf0_3 * ChargeFriezaDisc__17CFriezaDiscAttackP9entvars_sG6Vectorf(st_4bfdf
     v5->field_20 = v1;
     v5->field_24 = v2;
     v5->field_28 = v3;
-    v0 = g_6168dc(a0->field_208);
+    v0 = g_engfuncs.pfnIndexOfEdict(a0->field_208);
     v4->field_0->field_150 = (float)v0;
     v4->field_0->field_0 = -1 * gpGlobals->field_98 + 5892829;
     memset(&v4->field_0->field_128, 0, 12);
-    v6 = sub_488850(v4);
+    v6 = CBaseAnimating::ResetSequenceInfo(v4);
     v4->field_2ac = 0;
     v4->field_14 = 0;
     v4->field_18 = 0;
@@ -102,7 +102,7 @@ st_4bfdf0_3 * ChargeFriezaDisc__17CFriezaDiscAttackP9entvars_sG6Vectorf(st_4bfdf
     v4->field_c = v7 | 0xffff0000;
     v4->field_10 = &AuraCheck__11CDiscAttack;
     *(float *)&v4->field_0->field_104 = gpGlobals->field_0;
-    sub_48d9d0(v4);
+    CDiscAttack::AuraCheck(v4);
     return v4;
 }
 

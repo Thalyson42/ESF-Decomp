@@ -3,9 +3,9 @@ typedef struct st_588bd0_0 {
     unsigned int field_0;
 } st_588bd0_0;
 
-extern st_588bd0_0 *g_616928;
+extern st_588bd0_0 *g_engfuncs.pfnRandomLong;
 extern void waypoints;
-extern char g_626821[4];
+extern char waypoints+1[4];
 extern int num_waypoints;
 
 unsigned int WaypointFindRandomGoal__FP7edict_sii(unsigned int a0, unsigned int a1, unsigned int a2)
@@ -29,7 +29,7 @@ unsigned int WaypointFindRandomGoal__FP7edict_sii(unsigned int a0, unsigned int 
         {
             iter += 1;
         }
-        else if (g_626821[v4] & 64)
+        else if (waypoints+1[v4] & 64)
         {
             iter += 1;
         }
@@ -54,9 +54,9 @@ unsigned int WaypointFindRandomGoal__FP7edict_sii(unsigned int a0, unsigned int 
     }
     if (idx)
     {
-        v5 = *(int *)&(&v0)[4 * g_616928(1, idx)];
-        v6 = *(int *)&(&v0)[4 * g_616928(1, idx)];
-        return *(int *)&(&v0)[4 * g_616928(1, idx)];
+        v5 = *(int *)&(&v0)[4 * g_engfuncs.pfnRandomLong(1, idx)];
+        v6 = *(int *)&(&v0)[4 * g_engfuncs.pfnRandomLong(1, idx)];
+        return *(int *)&(&v0)[4 * g_engfuncs.pfnRandomLong(1, idx)];
     }
     return 0xffffffff;
 }

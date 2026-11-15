@@ -44,11 +44,11 @@ typedef struct st_49ba70_0 {
 
 extern unsigned int gmsgScoreInfo;
 extern unsigned int gmsgDragonBallEnt;
-extern st_49ba70_4 *g_616878;
-extern st_49ba70_4 *g_61687c;
-extern st_49ba70_4 *g_616880;
-extern st_49ba70_4 *g_616888;
-extern st_49ba70_4 *g_6168dc;
+extern st_49ba70_4 *g_engfuncs.pfnMessageBegin;
+extern st_49ba70_4 *g_engfuncs.pfnMessageEnd;
+extern st_49ba70_4 *g_engfuncs.pfnWriteByte;
+extern st_49ba70_4 *g_engfuncs.pfnWriteShort;
+extern st_49ba70_4 *g_engfuncs.pfnIndexOfEdict;
 extern st_49ba70_0 *gpGlobals;
 
 unsigned int * FinishWish__30CHalfLifeCaptureTheDragonBallsP11CBasePlayeri(st_49ba70_5 *a0, st_49ba70_1 *a1, unsigned int a2)
@@ -66,28 +66,28 @@ unsigned int * FinishWish__30CHalfLifeCaptureTheDragonBallsP11CBasePlayeri(st_49
     a1->field_348 = 0;
     a0->field_26c = 0;
     a1->field_738 = a1->field_738 + a2;
-    g_616878(2, gmsgScoreInfo, 0, 0, v0, v1, v2);
-    v6 = g_6168dc(a1->field_0->field_208);
-    g_616880(v6);
+    g_engfuncs.pfnMessageBegin(2, gmsgScoreInfo, 0, 0, v0, v1, v2);
+    v6 = g_engfuncs.pfnIndexOfEdict(a1->field_0->field_208);
+    g_engfuncs.pfnWriteByte(v6);
     v5 = __fnstcw();
     v4 = v5 | 0xc00;
     v3 = (int)*(float *)&a1->field_0->field_164;
-    g_616888(v3);
-    g_616888(a1->field_984);
-    g_616888(a1->field_738);
-    g_616888(a1->field_0->field_20c);
+    g_engfuncs.pfnWriteShort(v3);
+    g_engfuncs.pfnWriteShort(a1->field_984);
+    g_engfuncs.pfnWriteShort(a1->field_738);
+    g_engfuncs.pfnWriteShort(a1->field_0->field_20c);
     v7 = a0->field_44->field_cc(a0, &a1[1].padding_4[16]);
-    g_616888(v7 + 1);
-    g_61687c();
-    sub_487c90(a0->field_294);
+    g_engfuncs.pfnWriteShort(v7 + 1);
+    g_engfuncs.pfnMessageEnd();
+    CShenlong::GrantWish(a0->field_294);
     a0->field_294 = 0;
     i = 0;
     do
     {
-        g_616878(2, gmsgDragonBallEnt, 0, 0);
-        g_616880(i);
-        g_616888(0);
-        g_61687c();
+        g_engfuncs.pfnMessageBegin(2, gmsgDragonBallEnt, 0, 0);
+        g_engfuncs.pfnWriteByte(i);
+        g_engfuncs.pfnWriteShort(0);
+        g_engfuncs.pfnMessageEnd();
         i += 1;
     } while (i <= 6);
     a0->field_268 = 1;

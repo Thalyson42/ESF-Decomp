@@ -26,7 +26,7 @@ typedef struct st_499f70_0 {
     struct st_499f70_1 *field_8;
 } st_499f70_0;
 
-extern st_499f70_1 *g_6167c8;
+extern st_499f70_1 *g_engfuncs.pfnSetModel;
 
 st_499f70_2 * CreateCookie__7CCookieG6VectorP9entvars_s(int a0, st_499f70_4 *a1)
 {
@@ -38,18 +38,18 @@ st_499f70_2 * CreateCookie__7CCookieG6VectorP9entvars_s(int a0, st_499f70_4 *a1)
     float v4;  // [bp-0x20]
     float v5;  // [bp-0x1c]
 
-    v6 = sub_48b680(0);
+    v6 = GetClassPtr__H1Z7CCookie_PX01_PX01(0);
     v6->field_60->field_8(v6);
     v6->field_0->field_198 = a1->field_208;
-    g_6167c8(v6->field_0->field_208, "models/cookie.mdl");
+    g_engfuncs.pfnSetModel(v6->field_0->field_208, "models/cookie.mdl");
     v3 = 5.0f;
     v4 = 5.0f;
     v5 = 5.0f;
     v0 = -5.0f;
     v1 = -5.0f;
     v2 = 0;
-    sub_48a0d0(v6->field_0, &v0, &v3);
-    sub_48db50(v6->field_0, a0);
+    UTIL_SetSize(v6->field_0, &v0, &v3);
+    UTIL_SetOrigin(v6->field_0, a0);
     return v6;
 }
 

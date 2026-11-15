@@ -17,10 +17,10 @@ typedef struct st_579c80_3 {
     unsigned int field_0;
 } st_579c80_3;
 
-extern st_579c80_3 *g_6168d4;
-extern st_579c80_3 *g_616904;
-extern st_579c80_3 *g_61698c;
-extern st_579c80_1 *g_62468c;
+extern st_579c80_3 *g_engfuncs.pfnPEntityOfEntOffset;
+extern st_579c80_3 *g_engfuncs.pfnServerPrint;
+extern st_579c80_3 *g_engfuncs.pfnIsDedicatedServer;
+extern st_579c80_1 *BotManager+12;
 
 int UTIL_Printf__FPCciP7edict_s(int a0, int a1, int a2)
 {
@@ -31,23 +31,23 @@ int UTIL_Printf__FPCciP7edict_s(int a0, int a1, int a2)
     st_579c80_0 **v4;  // eax
 
     v0 = a2;
-    if ((char)sub_48b960(v0))
+    if ((char)IsNull(v0))
     {
-        if (!g_61698c() && !(v1 = g_62468c, !g_62468c && !(v1 = g_6168d4(0), v1)))
+        if (!g_engfuncs.pfnIsDedicatedServer() && !(v1 = BotManager+12, !BotManager+12 && !(v1 = g_engfuncs.pfnPEntityOfEntOffset(0), v1)))
             v2 = v1->field_7c;
         else
             v2 = NULL;
-        if (!(char)sub_48b140(v2))
+        if (!(char)IsNull(v2))
         {
-            if (!g_61698c() && !(v3 = g_62468c, !g_62468c && !(v3 = g_6168d4(0), v3)))
+            if (!g_engfuncs.pfnIsDedicatedServer() && !(v3 = BotManager+12, !BotManager+12 && !(v3 = g_engfuncs.pfnPEntityOfEntOffset(0), v3)))
                 v4 = v3->field_7c;
             else
                 v4 = NULL;
             v0 = *v4->field_208;
         }
     }
-    if ((unsigned int)(a1 - 1) > 1 && !(char)sub_48b960(v0))
-        return sub_489e90(v0 + 128, a1, a0, 0, 0, 0, 0);
-    return g_616904(a0);
+    if ((unsigned int)(a1 - 1) > 1 && !(char)IsNull(v0))
+        return ClientPrint(v0 + 128, a1, a0, 0, 0, 0, 0);
+    return g_engfuncs.pfnServerPrint(a0);
 }
 

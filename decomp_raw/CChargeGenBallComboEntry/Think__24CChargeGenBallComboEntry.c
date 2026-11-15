@@ -42,7 +42,7 @@ st_55c930_2 * Think__24CChargeGenBallComboEntry(st_55c930_3 *a0)
         v1 = a0->field_4;
         if (v1->field_968 && v1->field_968->field_88 != 4)
         {
-            sub_48ce10(v1, "weapon_genericbeam");
+            CBasePlayer::SelectItem(v1, "weapon_genericbeam");
         }
         else
         {
@@ -53,9 +53,9 @@ st_55c930_2 * Think__24CChargeGenBallComboEntry(st_55c930_3 *a0)
                 return v0;
             }
         }
-        sub_48b720(a0->field_4, a0->field_4->field_b6c);
+        CBot::AimAtEnemy(a0->field_4, a0->field_4->field_b6c);
         a0->field_4->field_0->field_181 = a0->field_4->field_0->field_181 | 8;
-        return sub_488e30(a0->field_4, 8);
+        return CBot::SetMoveDir(a0->field_4, 8);
     }
     else
     {

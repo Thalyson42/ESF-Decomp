@@ -6,6 +6,6 @@ typedef struct st_50d1b0_0 {
 
 int DisableChargeSprite__10CPowerBeam(st_50d1b0_0 *a0)
 {
-    return sub_48df90(a0->field_20c);
+    return CSprite::TurnOff(a0->field_20c);
 }
 

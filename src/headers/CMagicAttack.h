@@ -1,9 +1,14 @@
 // CMagicAttack.h -- reconstruído automaticamente (vtable + offsets). REVISAR.
 #pragma once
 
-class CMagicAttack : public CPowerStruggle {  // base: heuristica
+class CMagicAttack : public CBaseMonster {  // base: heuristica
 public:
+    virtual void Spawn();  // vtable[0] Spawn__12CMagicAttack
+    virtual void Precache();  // vtable[1] Precache__12CMagicAttack
+    virtual void BloodColor();  // vtable[14] BloodColor__12CMagicAttack
+    virtual void SwatAway();  // vtable[124] SwatAway__12CMagicAttackP11CBasePlayeri
     virtual void Remove();  // vtable[125] Remove__12CMagicAttack
+    virtual void 0();  // vtable[126] 0
     // campos observados (offset em bytes a partir de `this`; inclui os herdados)
     int f_00c;  // +0xc (12)
     int f_010;  // +0x10 (16)

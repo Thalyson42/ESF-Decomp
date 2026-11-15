@@ -10,8 +10,8 @@ unsigned int HandleLandRecover__12CPlayerMelee(float a0)
     if (*(float *)(*(unsigned int *)&a0 + 28) + 1.0 < *(float *)gpGlobals)
     {
         *(unsigned int *)(*(unsigned int *)&a0 + 28) = 0;
-        sub_48d400(a0);
+        CPlayerMelee::StopThrow(a0);
     }
-    return sub_48ac60(a0);
+    return CPlayerMelee::LandRecoverDash(a0);
 }
 

@@ -72,7 +72,7 @@ void Reset__12CPlayerMelee(st_4ff6e0_0 *a0)
     unsigned int v1;  // [bp-0x20]
     unsigned int v2;  // [bp-0x1c]
 
-    sub_4887c0(a0);
+    CPlayerMelee::RemoveAllAnims(a0);
     a0->field_0 = 0;
     a0->field_4 = 0;
     a0->field_8 = 0;
@@ -137,10 +137,10 @@ void Reset__12CPlayerMelee(st_4ff6e0_0 *a0)
     a0->field_178 = 0;
     a0->field_17c = 0;
     a0->field_120 = 0;
-    sub_487b50(a0, 0);
-    sub_488660(a0, 0);
-    sub_48b7e0(a0, 0);
-    sub_48c1e0(a0);
+    CPlayerMelee::SetAttacker(a0, 0);
+    CPlayerMelee::SetAttackerOther(a0, 0);
+    CPlayerMelee::SetDefender(a0, 0);
+    CPlayerMelee::DelAllDirections(a0);
     return;
 }
 

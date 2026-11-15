@@ -35,8 +35,8 @@ typedef struct st_4d87e0_3 {
     unsigned int field_0;
 } st_4d87e0_3;
 
-extern st_4d87e0_3 *g_6168b4;
-extern st_4d87e0_3 *g_616928;
+extern st_4d87e0_3 *g_engfuncs.pfnAlertMessage;
+extern st_4d87e0_3 *g_engfuncs.pfnRandomLong;
 extern st_4d87e0_4 *gpGlobals;
 
 st_4d87e0_0 * HandleAnimEvent__12CBaseMonsterP14MonsterEvent_t(st_4d87e0_2 *a0, st_4d87e0_1 *a1)
@@ -56,7 +56,7 @@ st_4d87e0_0 * HandleAnimEvent__12CBaseMonsterP14MonsterEvent_t(st_4d87e0_2 *a0, 
     switch (v6)
     {
     case 1005:
-        return sub_48d620(a0->field_0->field_208, a1->field_4, 0x3f800000, 2.0f, 0, 100);
+        return SENTENCEG_PlayRndSz(a0->field_0->field_208, a1->field_4, 0x3f800000, 2.0f, 0, 100);
     default:
         if (v6 <= 0x3ed)
         {
@@ -78,7 +78,7 @@ st_4d87e0_0 * HandleAnimEvent__12CBaseMonsterP14MonsterEvent_t(st_4d87e0_2 *a0, 
                         if (a0->field_2a4)
                         {
                             v4 = 0;
-                            return sub_489430(a0->field_2a4);
+                            return CCineMonster::AllowInterrupt(a0->field_2a4);
                         }
                         return v6;
                     }
@@ -87,7 +87,7 @@ st_4d87e0_0 * HandleAnimEvent__12CBaseMonsterP14MonsterEvent_t(st_4d87e0_2 *a0, 
                 {
                     if (v6 == 0x3eb)
                     {
-                        return sub_48c1b0(a1->field_4, a0, a0, 3, 0);
+                        return FireTargets(a1->field_4, a0, a0, 3, 0);
                     }
                     else if (v6 == 0x3ec)
                     {
@@ -97,7 +97,7 @@ st_4d87e0_0 * HandleAnimEvent__12CBaseMonsterP14MonsterEvent_t(st_4d87e0_2 *a0, 
                         v2 = 0x3f800000;
                         v1 = a1->field_4;
                         v0 = 4;
-                        return sub_489390(a0->field_0->field_208);
+                        return EMIT_SOUND_DYN(a0->field_0->field_208);
                     }
                 }
             }
@@ -106,7 +106,7 @@ st_4d87e0_0 * HandleAnimEvent__12CBaseMonsterP14MonsterEvent_t(st_4d87e0_2 *a0, 
                 if (a0->field_2a4)
                 {
                     v4 = 1;
-                    return sub_489430(a0->field_2a4);
+                    return CCineMonster::AllowInterrupt(a0->field_2a4);
                 }
                 return v6;
             }
@@ -131,14 +131,14 @@ st_4d87e0_0 * HandleAnimEvent__12CBaseMonsterP14MonsterEvent_t(st_4d87e0_2 *a0, 
                     v2 = 0x3f800000;
                     v1 = a1->field_4;
                     v0 = 2;
-                    return sub_489390(a0->field_0->field_208);
+                    return EMIT_SOUND_DYN(a0->field_0->field_208);
                 }
                 else if (v6 == 0x3f1)
                 {
-                    v11 = g_616928(0, 2);
+                    v11 = g_engfuncs.pfnRandomLong(0, 2);
                     if (!v11)
                         return v11;
-                    return sub_48d620(a0->field_0->field_208, a1->field_4, 0x3f800000, 2.0f, 0, 100);
+                    return SENTENCEG_PlayRndSz(a0->field_0->field_208, a1->field_4, 0x3f800000, 2.0f, 0, 100);
                 }
             }
             else
@@ -153,7 +153,7 @@ st_4d87e0_0 * HandleAnimEvent__12CBaseMonsterP14MonsterEvent_t(st_4d87e0_2 *a0, 
                             {
                                 return a0->field_0;
                             }
-                            else if (!g_616928(0, 1))
+                            else if (!g_engfuncs.pfnRandomLong(0, 1))
                             {
                                 v5 = 100;
                                 v4 = 0;
@@ -161,7 +161,7 @@ st_4d87e0_0 * HandleAnimEvent__12CBaseMonsterP14MonsterEvent_t(st_4d87e0_2 *a0, 
                                 v2 = 0x3f800000;
                                 v1 = "common/bodydrop3.wav";
                                 v0 = 4;
-                                return sub_489390(a0->field_0->field_208);
+                                return EMIT_SOUND_DYN(a0->field_0->field_208);
                             }
                             else
                             {
@@ -171,7 +171,7 @@ st_4d87e0_0 * HandleAnimEvent__12CBaseMonsterP14MonsterEvent_t(st_4d87e0_2 *a0, 
                                 v2 = 0x3f800000;
                                 v1 = "common/bodydrop4.wav";
                                 v0 = 4;
-                                return sub_489390(a0->field_0->field_208);
+                                return EMIT_SOUND_DYN(a0->field_0->field_208);
                             }
                         }
                     }
@@ -185,7 +185,7 @@ st_4d87e0_0 * HandleAnimEvent__12CBaseMonsterP14MonsterEvent_t(st_4d87e0_2 *a0, 
                             v2 = 0x3f800000;
                             v1 = "zombie/claw_miss2.wav";
                             v0 = 4;
-                            return sub_489390(a0->field_0->field_208);
+                            return EMIT_SOUND_DYN(a0->field_0->field_208);
                         }
                     }
                 }
@@ -193,7 +193,7 @@ st_4d87e0_0 * HandleAnimEvent__12CBaseMonsterP14MonsterEvent_t(st_4d87e0_2 *a0, 
                 {
                     if (a0->field_0->field_1a5 & 2)
                     {
-                        if (!g_616928(0, 1))
+                        if (!g_engfuncs.pfnRandomLong(0, 1))
                         {
                             v5 = 90;
                             v4 = 0;
@@ -209,7 +209,7 @@ st_4d87e0_0 * HandleAnimEvent__12CBaseMonsterP14MonsterEvent_t(st_4d87e0_2 *a0, 
                             v2 = 0x3f800000;
                             v12 = "common/bodydrop4.wav";
                         }
-                        return sub_489390(a0->field_0->field_208, 4, v12);
+                        return EMIT_SOUND_DYN(a0->field_0->field_208, 4, v12);
                     }
                     else
                     {
@@ -218,7 +218,7 @@ st_4d87e0_0 * HandleAnimEvent__12CBaseMonsterP14MonsterEvent_t(st_4d87e0_2 *a0, 
                 }
             }
         }
-        return g_6168b4(2, "Unhandled animation event %d for %s\n", a1->field_0, a0->field_0->field_0 + gpGlobals->field_98);
+        return g_engfuncs.pfnAlertMessage(2, "Unhandled animation event %d for %s\n", a1->field_0, a0->field_0->field_0 + gpGlobals->field_98);
     }
 }
 

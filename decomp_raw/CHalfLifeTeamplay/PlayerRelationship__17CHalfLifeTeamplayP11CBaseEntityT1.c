@@ -30,7 +30,7 @@ unsigned int PlayerRelationship__17CHalfLifeTeamplayP11CBaseEntityT1(st_528810_4
     if (a1 && a2 && a2->field_60->field_a0(a2) && *(char *)a0->field_44->field_c4(a0, a1) && *(char *)a0->field_44->field_c4(a0, a2))
     {
         v0 = a0->field_44->field_c4(a0, a2);
-        if (!sub_48cac0(a0->field_44->field_c4(a0, a1)))
+        if (!strcasecmp@GLIBC_2.0(a0->field_44->field_c4(a0, a1)))
             return 1;
     }
     return 0;

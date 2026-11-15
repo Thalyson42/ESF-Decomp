@@ -15,8 +15,8 @@ typedef struct st_4c20f0_2 {
 } st_4c20f0_2;
 
 extern char _GLOBAL_OFFSET_TABLE_;
-extern st_4c20f0_2 *g_616928;
-extern st_4c20f0_2 *g_61692c;
+extern st_4c20f0_2 *g_engfuncs.pfnRandomLong;
+extern st_4c20f0_2 *g_engfuncs.pfnRandomFloat;
 
 unsigned int DamageSound__10CBreakable(double a0, st_4c20f0_1 *a1)
 {
@@ -33,12 +33,12 @@ unsigned int DamageSound__10CBreakable(double a0, st_4c20f0_1 *a1)
     int v7;  // [bp-0x24]
 
     v8 = a1->field_6c;
-    v6 = (!g_616928(0, 2) ? g_616928(0, 0x22) + 95 : 100);
-    v9 = g_61692c(0.75f, 0x3f800000);
+    v6 = (!g_engfuncs.pfnRandomLong(0, 2) ? g_engfuncs.pfnRandomLong(0, 0x22) + 95 : 100);
+    v9 = g_engfuncs.pfnRandomFloat(0.75f, 0x3f800000);
     v5 = 0.75f;
     if (v8 == 6)
     {
-        v9 = g_616928(0, 1);
+        v9 = g_engfuncs.pfnRandomLong(0, 1);
         if (v9)
             v8 = 2;
     }
@@ -52,8 +52,8 @@ unsigned int DamageSound__10CBreakable(double a0, st_4c20f0_1 *a1)
         v2 = 0;
         v1 = 0.800000011920929f;
         v0 = v5;
-        v10 = g_616928(0, v4 - 1);
-        return sub_489390(a1->field_0->field_208, 2, (&v7)[v10]);
+        v10 = g_engfuncs.pfnRandomLong(0, v4 - 1);
+        return EMIT_SOUND_DYN(a1->field_0->field_208, 2, (&v7)[v10]);
     }
     else
     {

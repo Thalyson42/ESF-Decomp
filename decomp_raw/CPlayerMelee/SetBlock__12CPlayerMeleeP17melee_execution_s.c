@@ -46,7 +46,7 @@ unsigned int SetBlock__12CPlayerMeleeP17melee_execution_s(st_504d10_2 *a0, st_50
     if (a1->field_30 <= 1 || (v1 = 2, 2 > a1->field_30))
     {
 LABEL_504d6f:
-        if (iter && sub_48b240(a0, a1->field_20, iter->field_4))
+        if (iter && CPlayerMelee::Block(a0, a1->field_20, iter->field_4))
         {
             if (a1->field_54 == 1)
                 return 1;

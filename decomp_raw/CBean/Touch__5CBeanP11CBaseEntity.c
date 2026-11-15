@@ -55,8 +55,8 @@ st_5176e0_5 * Touch__5CBeanP11CBaseEntity(st_5176e0_4 **a0, st_5176e0_3 *a1)
 
     if (a1->field_0->field_208 == *a0->field_198)
         return *a0;
-    if (a1->field_60->field_a0(a1) && sub_4887d0(a1, 1))
-        sub_48cc00(a0);
+    if (a1->field_60->field_a0(a1) && CBasePlayer::GiveBean(a1, 1))
+        UTIL_Remove(a0);
     *a0->field_198 = 0;
     v3 = *a0;
     v4 = &v3->field_20;

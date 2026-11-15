@@ -20,9 +20,9 @@ typedef struct st_4aec80_1 {
 
 extern char DestroyItem__15CBasePlayerItem;
 extern unsigned int gmsgWeaponUpdate;
-extern st_4aec80_1 *g_616878;
-extern st_4aec80_1 *g_61687c;
-extern st_4aec80_1 *g_616884;
+extern st_4aec80_1 *g_engfuncs.pfnMessageBegin;
+extern st_4aec80_1 *g_engfuncs.pfnMessageEnd;
+extern st_4aec80_1 *g_engfuncs.pfnWriteChar;
 extern st_4aec80_0 *gpGlobals;
 
 unsigned int * Holster__17CCariedDragonBalli(double a0, float idx)
@@ -33,14 +33,14 @@ unsigned int * Holster__17CCariedDragonBalli(double a0, float idx)
     unsigned int v2;  // [bp-0x28]
     unsigned int v3;  // [bp-0x24]
 
-    g_616878(1, gmsgWeaponUpdate, 0, *(int *)(*(int *)*(int *)(*(unsigned int *)&idx + 128) + 520), v1, v2, v3);
+    g_engfuncs.pfnMessageBegin(1, gmsgWeaponUpdate, 0, *(int *)(*(int *)*(int *)(*(unsigned int *)&idx + 128) + 520), v1, v2, v3);
     v0 = -*(int *)(*(unsigned int *)&idx + 0x88);
-    g_616884(v0);
-    g_61687c(v0);
-    sub_488ba0(idx);
+    g_engfuncs.pfnWriteChar(v0);
+    g_engfuncs.pfnMessageEnd(v0);
+    CCariedDragonBall::DropBall(idx);
     *(unsigned int *)(*(int *)*(int *)(*(unsigned int *)&idx + 128) + 192) = 0;
     *(unsigned int *)(*(int *)(*(unsigned int *)&idx + 128) + 1728) = 0;
-    sub_488640();
+    UTIL_WeaponTimeBase();
     v5 = *(int *)(*(unsigned int *)&idx + 128);
     *(float *)&v5->padding_4[608] = (float)(a0 + 0.5);
     *(unsigned int *)(*(unsigned int *)&idx + 12) = _INSERT(v5, 0, 0) | 0xffff0000;

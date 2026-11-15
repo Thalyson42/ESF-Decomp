@@ -40,7 +40,7 @@ float Wait__10CGunTarget(float idx)
     float v6;  // 128
     float v7;  // 128
 
-    v1 = sub_488810(*(unsigned int *)&idx + 272);
+    v1 = EHANDLE::__opP11CBaseEntity(*(unsigned int *)&idx + 272);
     if (!v1)
     {
         (*(int *)(*(int *)(*(unsigned int *)&idx + 96) + 308))(idx);
@@ -48,7 +48,7 @@ float Wait__10CGunTarget(float idx)
     }
     if (v1->field_0->field_1d4)
     {
-        sub_48c1b0(v1->field_0->field_1d4 + gpGlobals->field_98, idx, idx, 3, 0);
+        FireTargets(v1->field_0->field_1d4 + gpGlobals->field_98, idx, idx, 3, 0);
         if (v1->field_0->field_1a0 & 4)
             v1->field_0->field_1d4 = 0;
     }
@@ -61,7 +61,7 @@ float Wait__10CGunTarget(float idx)
     v6 = *(float *)(*(unsigned int *)&idx + 140);
     if (v6 == 0.0f)
     {
-        sub_488100(idx);
+        CGunTarget::Next(idx);
         return v6;
     }
     v7 = v6 + *(float *)(*(int *)idx + 0x100);

@@ -10,9 +10,9 @@ int EntityUpdate__12CGlobalStateii(int a0, int a1, unsigned int a2)
 {
     int v0;  // ecx
 
-    v0 = sub_48d370(a0, a1);
+    v0 = CGlobalState::Find(a0, a1);
     if (!v0)
         return v0;
-    return sub_48e110(v0 + 64, a2 + gpGlobals->field_98);
+    return strcpy@GLIBC_2.0(v0 + 64, a2 + gpGlobals->field_98);
 }
 

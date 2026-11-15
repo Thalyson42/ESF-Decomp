@@ -14,7 +14,7 @@ typedef struct st_515ef0_0 {
     unsigned int field_0;
 } st_515ef0_0;
 
-extern st_515ef0_0 *g_616828;
+extern st_515ef0_0 *g_engfuncs.pfnDropToFloor;
 
 unsigned int CineCleanup__12CBaseMonster(float idx)
 {
@@ -44,7 +44,7 @@ unsigned int CineCleanup__12CBaseMonster(float idx)
     v14 = *(int *)(*(unsigned int *)&idx + 676);
     if (v14)
     {
-        sub_48d960(&v14->padding_4[268], 0);
+        EHANDLE::__as(&v14->padding_4[268], 0);
         *(int *)(*(int *)idx + 264) = *(int *)(*(int *)(*(unsigned int *)&idx + 676) + 716);
         *(int *)(*(int *)idx + 268) = *(int *)(*(int *)(*(unsigned int *)&idx + 676) + 720);
         *(int *)(*(int *)idx + 280) = *(int *)(*(int *)(*(unsigned int *)&idx + 676) + 724);
@@ -55,24 +55,24 @@ unsigned int CineCleanup__12CBaseMonster(float idx)
         *(unsigned int *)(*(int *)idx + 268) = 3;
     }
     *(st_515ef0_2 **)(*(unsigned int *)&idx + 676) = NULL;
-    sub_48d960(*(unsigned int *)&idx + 272, 0);
+    EHANDLE::__as(*(unsigned int *)&idx + 272, 0);
     *(unsigned int *)(*(unsigned int *)&idx + 4) = 0;
     if (*(int *)(*(int *)idx + 368) == 1)
     {
         *(unsigned int *)(*(int *)idx + 352) = 0;
         *(unsigned int *)(*(int *)idx + 312) = 0;
         *(unsigned int *)(*(int *)idx + 268) = 0;
-        sub_48ad20(idx, 8);
+        CBaseMonster::SetState(idx, 8);
         *(unsigned int *)(*(int *)idx + 368) = 2;
         v15 = *(int *)idx;
         *(float *)&v7 = *(float *)&v15[58];
         *(float *)&v10 = *(float *)&v15[59];
         v11 = (float)(*(float *)&v15[57] + 2.0);
-        sub_48a0d0(v15, v15 + 55, &v7);
+        UTIL_SetSize(v15, v15 + 55, &v7);
         if (v14 && v14->field_0->field_1a0 & 8)
             memset(*(unsigned int *)&idx + 12, 0, 24);
         else
-            sub_48b5d0(idx);
+            CBaseEntity::SUB_StartFadeOut(idx);
         *(unsigned int *)(*(int *)idx + 312) = 0;
         *(unsigned int *)(*(int *)idx + 264) = 0;
         *(char *)(*(int *)idx + 280) = *(char *)(*(int *)idx + 280) | 32;
@@ -84,7 +84,7 @@ unsigned int CineCleanup__12CBaseMonster(float idx)
         {
             if ((char)v14->field_0->field_1a0 >= 0)
             {
-                sub_488c40(idx, 0, &v7, &v12);
+                CBaseAnimating::GetBonePosition(idx, 0, &v7, &v12);
                 v16 = *(int *)idx + 8;
                 *(float *)&v4 = *(float *)(*(int *)idx + 8);
                 *(float *)&v5 = *(float *)&v16[1];
@@ -97,7 +97,7 @@ unsigned int CineCleanup__12CBaseMonster(float idx)
                 v19 = v17 * v17 + v18 * v18;
                 v20 = sqrt(v19);
                 if (isnan(v20))
-                    sub_487dc0(*(unsigned int *)&v19);
+                    sqrt(*(unsigned int *)&v19);
                 else
                     v19 = v20;
                 v0 = (float)v19;
@@ -111,7 +111,7 @@ unsigned int CineCleanup__12CBaseMonster(float idx)
                 *(float *)(*(int *)idx + 12) = v9;
                 *(float *)(*(int *)idx + 16) = (float)(1.0 + *(float *)(*(int *)idx + 16));
                 *(char *)(*(int *)idx + 421) = *(char *)(*(int *)idx + 421) | 2;
-                v21 = g_616828(*(int *)(*(int *)idx + 520));
+                v21 = g_engfuncs.pfnDropToFloor(*(int *)(*(int *)idx + 520));
                 if (v21 < NULL)
                 {
                     v22 = *(int *)idx;
@@ -124,7 +124,7 @@ unsigned int CineCleanup__12CBaseMonster(float idx)
                     *(float *)(*(int *)idx + 16) = v11;
                     *(char *)(*(int *)idx + 421) = *(char *)(*(int *)idx + 421) & 253;
                 }
-                sub_48db50(*(int *)idx, *(int *)idx + 8);
+                UTIL_SetOrigin(*(int *)idx, *(int *)idx + 8);
                 *(char *)(*(int *)idx + 280) = *(char *)(*(int *)idx + 280) | 32;
             }
             *(unsigned int *)(*(unsigned int *)&idx + 372) = 0;
@@ -139,7 +139,7 @@ unsigned int CineCleanup__12CBaseMonster(float idx)
             *(unsigned int *)(*(unsigned int *)&idx + 388) = 8;
             *(char *)(*(unsigned int *)&idx + 261) = *(char *)(*(unsigned int *)&idx + 261) | 1;
             *(unsigned int *)(*(int *)idx + 368) = 1;
-            sub_48d420(idx);
+            CBaseMonster::FCheckAITrigger(idx);
             *(unsigned int *)(*(int *)idx + 368) = 0;
         }
         *(char *)(*(int *)idx + 416) = *(char *)(*(int *)idx + 416) & 127;

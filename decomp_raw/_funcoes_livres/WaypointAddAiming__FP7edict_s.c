@@ -16,10 +16,10 @@ typedef struct st_589580_2 {
     unsigned int field_0;
 } st_589580_2;
 
-extern st_589580_2 *g_616834;
+extern st_589580_2 *g_engfuncs.pfnEmitSound;
 extern st_589580_0 *gpGlobals;
 extern unsigned int waypoints[4];
-extern unsigned int g_626824;
+extern unsigned int waypoints+4;
 extern int num_waypoints;
 extern unsigned int wp_display_time;
 
@@ -68,7 +68,7 @@ int * WaypointAddAiming__FP7edict_s(float a0)
     v16 = v20[62];
     v15 = 0;
     v17 = 0;
-    sub_48a800(&v15);
+    UTIL_MakeVectors(&v15);
     v21 = &gpGlobals->field_28;
     v22 = 25.0 * gpGlobals->field_28;
     v2 = (float)v22;
@@ -79,9 +79,9 @@ int * WaypointAddAiming__FP7edict_s(float a0)
     v10 = (float)(v22 + *(float *)(*(unsigned int *)&a0 + 0x88));
     v11 = (float)(v23 + *(float *)(idx + 4));
     v12 = *(float *)(idx + 8) + v4;
-    *(float *)((char *)&g_626824 + index) = v10;
-    *(float *)((char *)&g_626824 + index + 4) = v11;
-    *(float *)((char *)&g_626824 + index + 8) = v12;
+    *(float *)((char *)&waypoints+4 + index) = v10;
+    *(float *)((char *)&waypoints+4 + index + 4) = v11;
+    *(float *)((char *)&waypoints+4 + index + 8) = v12;
     *(float *)&(&wp_display_time)[idx1] = gpGlobals->field_0;
     v11 = 0;
     v12 = 0;
@@ -109,8 +109,8 @@ int * WaypointAddAiming__FP7edict_s(float a0)
     v12 = v6;
     v13 = v7;
     v0 = 5;
-    sub_48a5d0(v25, &v8, &v11, 30, 0, 0, 0, 0xff, 250);
-    g_616834(v25, 1, "weapons/xbow_hit1.wav", 0x3f800000, 0.800000011920929f, 0, 100);
+    WaypointDrawBeam(v25, &v8, &v11, 30, 0, 0, 0, 0xff, 250);
+    g_engfuncs.pfnEmitSound(v25, 1, "weapons/xbow_hit1.wav", 0x3f800000, 0.800000011920929f, 0, 100);
     if (idx1 != num_waypoints)
         return &num_waypoints;
     num_waypoints = num_waypoints + 1;

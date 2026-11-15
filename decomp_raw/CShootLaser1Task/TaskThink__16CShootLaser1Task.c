@@ -44,16 +44,16 @@ st_586000_0 * TaskThink__16CShootLaser1Task(st_586000_2 *a0)
 
     if (a0->field_10 && a0->field_18 >= *(float *)gpGlobals && (double)a0->field_8->field_24c > a0->field_c->field_1e0 && 150.0 <= a0->field_c->field_2e0)
     {
-        if (!(char)sub_48bf70(a0->field_8, a0->field_10))
+        if (!(char)CBot::CanAttackPlayer(a0->field_8, a0->field_10))
         {
             v0 = *(int *)a0->field_10;
             v0->field_1a5 = v0->field_1a5 & 239;
         }
         else
         {
-            sub_48d0d0(a0->field_8);
+            CBot::ResetMoveSpeed(a0->field_8);
             *(char *)(*(int *)a0->field_10 + 421) = *(char *)(*(int *)a0->field_10 + 421) | 16;
-            sub_4888e0(a0->field_8, a0->field_10);
+            CBot::ShootHealthBeam(a0->field_8, a0->field_10);
             if (a0->field_8->field_bb4 > *(float *)gpGlobals)
                 return v0;
             a0->field_8->field_bb4 = (float)(0.1 + *(float *)gpGlobals);

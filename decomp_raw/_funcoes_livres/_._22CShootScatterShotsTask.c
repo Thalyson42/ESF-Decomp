@@ -17,8 +17,8 @@ extern char __vt_22CShootScatterShotsTask;
 int _._22CShootScatterShotsTask(st_5505a0_1 *a0, int a1)
 {
     a0->field_14 = &__vt_22CShootScatterShotsTask;
-    sub_48bf00(a0->field_8);
+    CBot::AddShootDelay(a0->field_8);
     a0->field_c->field_201 = a0->field_c->field_201 | 8;
-    return sub_488170(a0, a1);
+    return _._9CBaseTask(a0, a1);
 }
 

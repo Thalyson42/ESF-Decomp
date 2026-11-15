@@ -9,7 +9,7 @@ typedef struct st_4adeb0_0 {
 } st_4adeb0_0;
 
 extern st_4adeb0_0 *g_engfuncs;
-extern st_4adeb0_0 *g_6167c4;
+extern st_4adeb0_0 *g_engfuncs.pfnPrecacheSound;
 
 int Precache__11CDragonBall(st_4adeb0_1 *a0)
 {
@@ -21,7 +21,7 @@ int Precache__11CDragonBall(st_4adeb0_1 *a0)
     g_engfuncs("models/db6.mdl");
     g_engfuncs("models/db7.mdl");
     a0->field_70 = g_engfuncs("sprites/dragonballtrail.spr");
-    g_6167c4("weapons/db_glowing.wav");
-    return g_6167c4("weapons/db_flying.wav");
+    g_engfuncs.pfnPrecacheSound("weapons/db_glowing.wav");
+    return g_engfuncs.pfnPrecacheSound("weapons/db_flying.wav");
 }
 

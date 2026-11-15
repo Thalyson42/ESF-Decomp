@@ -4,7 +4,7 @@ typedef struct st_496f30_0 {
 } st_496f30_0;
 
 extern char _GLOBAL_OFFSET_TABLE_;
-extern st_496f30_0 *g_61692c;
+extern st_496f30_0 *g_engfuncs.pfnRandomFloat;
 
 int DoSpark__FP9entvars_sRC6Vector(double a0, double a1, float *a2, float *a3)
 {
@@ -32,11 +32,11 @@ int DoSpark__FP9entvars_sRC6Vector(double a0, double a1, float *a2, float *a3)
     v7 = (float)(v11 + *a3);
     v8 = (float)(v12 + a3[1]);
     v9 = a3[2] + v6;
-    sub_48a3b0(&v7);
-    g_61692c(0.25f, 0.75f);
+    UTIL_Sparks(&v7);
+    g_engfuncs.pfnRandomFloat(0.25f, 0.75f);
     v13 = a0 * 0.4;
     v0 = (float)v13;
-    g_61692c(0, 0x3f800000);
+    g_engfuncs.pfnRandomFloat(0, 0x3f800000);
     v3 = __fnstcw();
     v2 = v3 | 0xc00;
     v1 = (int)(v13 * 6.0);

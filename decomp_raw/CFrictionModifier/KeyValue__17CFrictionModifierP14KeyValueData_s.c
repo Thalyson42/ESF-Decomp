@@ -16,12 +16,12 @@ double KeyValue__17CFrictionModifierP14KeyValueData_s(st_52a890_1 *a0, st_52a890
     double v0;  // mm7
     double v1;  // mm7
 
-    if (sub_488af0(a1->field_4, "modifier"))
+    if (strcmp@GLIBC_2.0(a1->field_4, "modifier"))
     {
         a1->field_c = 0;
         return v1;
     }
-    sub_487fc0(a1->field_8, 0, 0);
+    __strtod_internal@GLIBC_2.0(a1->field_8, 0, 0);
     a0->field_64 = (float)(v0 / 100.0);
     a1->field_c = 1;
     return v0 / 100.0;

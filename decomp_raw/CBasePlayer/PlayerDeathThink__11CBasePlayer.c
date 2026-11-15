@@ -85,11 +85,11 @@ typedef struct st_4f7970_10 {
     struct st_4f7970_8 *field_44;
 } st_4f7970_10;
 
-extern float g_5bd0e0;
+extern float forcerespawn+12;
 extern st_4f7970_10 *g_pGameRules;
 extern unsigned int g_vecZero;
-extern unsigned int g_616790;
-extern unsigned int g_616794;
+extern unsigned int g_vecZero+4;
+extern unsigned int g_vecZero+8;
 extern st_4f7970_4 *gpGlobals;
 
 double PlayerDeathThink__11CBasePlayer(float a0)
@@ -151,7 +151,7 @@ double PlayerDeathThink__11CBasePlayer(float a0)
         v12 = *(float *)&v11->field_20 * *(float *)&v11->field_20 + *(float *)&v11->padding_21[3] * *(float *)&v11->padding_21[3] + *(float *)&v11->padding_21[7] * *(float *)&v11->padding_21[7];
         v13 = sqrt(v12);
         if (isnan(v13))
-            sub_487dc0(*(unsigned int *)&v12);
+            sqrt(*(unsigned int *)&v12);
         else
             v12 = v13;
         v7 = (float)v12;
@@ -160,8 +160,8 @@ double PlayerDeathThink__11CBasePlayer(float a0)
         {
             v14 = *(int *)a0;
             *(unsigned int *)&v14->field_20 = g_vecZero;
-            *(unsigned int *)&v14->padding_21[3] = g_616790;
-            *(unsigned int *)&v14->padding_21[7] = g_616794;
+            *(unsigned int *)&v14->padding_21[3] = g_vecZero+4;
+            *(unsigned int *)&v14->padding_21[7] = g_vecZero+8;
         }
         else
         {
@@ -170,7 +170,7 @@ double PlayerDeathThink__11CBasePlayer(float a0)
             v17 = *(float *)&v15->field_20 * *(float *)&v15->field_20 + *(float *)&v16[1] * *(float *)&v16[1] + *(float *)&v16[2] * *(float *)&v16[2];
             v18 = sqrt(v17);
             if (isnan(v18))
-                sub_487dc0(*(unsigned int *)&v17);
+                sqrt(*(unsigned int *)&v17);
             else
                 v17 = v18;
             v3 = (float)v17;
@@ -195,8 +195,8 @@ double PlayerDeathThink__11CBasePlayer(float a0)
             *(float *)&v15->padding_21[7] = v6;
         }
     }
-    if (sub_48a5f0(a0) || *(int *)(*(unsigned int *)&a0 + 1884) > 0)
-        sub_48d5a0(a0);
+    if (CBasePlayer::HasWeapons(a0) || *(int *)(*(unsigned int *)&a0 + 1884) > 0)
+        CBasePlayer::PackDeadPlayerItems(a0);
     v20 = (st_4f7970_0 *)a0;
     if (v20->field_754 != 0.0f)
     {
@@ -207,16 +207,16 @@ double PlayerDeathThink__11CBasePlayer(float a0)
     if (*(int *)(*(int *)a0 + 180))
     {
         v21 = *(unsigned int *)&a0 + 896;
-        if (sub_48ae90(v21))
+        if (CPlayerMelee::CanPlayAnimation(v21))
         {
             v22 = (st_4f7970_2 **)a0;
             if (*v22->field_1a5 & 2 && *v22->field_118 >= 0)
             {
-                v1 = sub_487fb0(v21);
+                v1 = CPlayerMelee::GetCurrentAnim(v21);
                 if (v1)
                 {
                     if (!v21[73])
-                        sub_487b50(v21, v22);
+                        CPlayerMelee::SetAttacker(v21, v22);
                     v23 = &(&v1->field_0)[32 * v1->field_288];
                     v24 = "die_fall_up";
                     v25 = 12;
@@ -268,15 +268,15 @@ double PlayerDeathThink__11CBasePlayer(float a0)
                         v32 = "die_fall_down_hit";
                     }
                     *(unsigned short *)&v0 = 1;
-                    sub_48b670(*(unsigned int *)&a0 + 896, v0, *(float *)gpGlobals, 1, v32);
-                    sub_489390(*(int *)(*(int *)a0 + 520), 1, "weapons/deathfall.wav", 0x3f800000, 0.800000011920929f, 0, 100);
+                    CPlayerMelee::AddAnimation(*(unsigned int *)&a0 + 896, v0, *(float *)gpGlobals, 1, v32);
+                    EMIT_SOUND_DYN(*(int *)(*(int *)a0 + 520), 1, "weapons/deathfall.wav", 0x3f800000, 0.800000011920929f, 0, 100);
                 }
             }
         }
 LABEL_4f7c61:
         v42 = (st_4f7970_7 *)a0;
-        sub_48a200(v42);
-        sub_48bd90(v42, 0);
+        CBasePlayer::PlayAnimation(v42);
+        CBaseAnimating::StudioFrameAdvance(v42, 0);
         v43 = 1.0 + v42->field_988;
         v42->field_988 = (float)v43;
         if (v43 < 120.0)
@@ -302,13 +302,13 @@ LABEL_4f7c61:
         {
             v47 = *(float *)(*(unsigned int *)&a0 + 2324) + 12.0;
             if (v47 < *(float *)gpGlobals && !(*(char *)(*(unsigned int *)&a0 + 784) & 32))
-                sub_489a60(a0);
+                CBasePlayer::StartDeathCam(a0);
         }
         if (!v48)
         {
             if (g_pGameRules->field_44->field_18(g_pGameRules))
             {
-                if (0.0 < g_5bd0e0)
+                if (0.0 < forcerespawn+12)
                 {
                     if (*(float *)(*(unsigned int *)&a0 + 2324) + 5.0 >= *(float *)gpGlobals)
                         return v47;
@@ -327,7 +327,7 @@ LABEL_4f7c61:
         v50->field_0->field_180 = 0;
         v50->field_988 = 0;
         v50->field_0->field_148 = 0;
-        sub_487e90(v50->field_0, 0);
+        respawn(v50->field_0, 0);
         *(float *)(*(int *)a0 + 260) = -1.0f;
         return -1.0;
     }

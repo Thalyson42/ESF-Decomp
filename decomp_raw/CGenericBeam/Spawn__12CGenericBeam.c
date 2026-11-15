@@ -19,6 +19,6 @@ int Spawn__12CGenericBeam(float idx)
     *(unsigned int *)(*(unsigned int *)&idx + 252) = 7168357;
     *(float *)(*(unsigned int *)&idx + 500) = 0.25f;
     *(unsigned int *)(*(unsigned int *)&idx + 504) = 1;
-    return sub_48cf50(idx);
+    return CBasePlayerItem::FallInit(idx);
 }
 

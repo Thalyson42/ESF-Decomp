@@ -5,8 +5,8 @@ typedef struct st_5885d0_0 {
 } st_5885d0_0;
 
 extern void waypoints;
-extern char g_626821[4];
-extern unsigned int g_626824[4];
+extern char waypoints+1[4];
+extern unsigned int waypoints+4[4];
 extern int num_waypoints;
 
 int WaypointFindNearest__FG6VectorP7edict_sfi(float *a0, st_5885d0_0 *a1, float a2, unsigned int a3)
@@ -40,13 +40,13 @@ int WaypointFindNearest__FG6VectorP7edict_sfi(float *a0, st_5885d0_0 *a1, float 
         {
             iter += 1;
         }
-        else if (g_626821[v9] & 64)
+        else if (waypoints+1[v9] & 64)
         {
             iter += 1;
         }
         else if (a3 == 0xffffffff || !((&waypoints)[v9] & 4) || (*(int *)&(&waypoints)[v9] & 3) == a3)
         {
-            v10 = &g_626824[4 * iter];
+            v10 = &waypoints+4[4 * iter];
             v11 = *v10 - *a0;
             v3 = v11;
             v12 = v10[1] - a0[1];
@@ -56,7 +56,7 @@ int WaypointFindNearest__FG6VectorP7edict_sfi(float *a0, st_5885d0_0 *a1, float 
             v14 = v11 * v11 + v12 * v12 + v13 * v13;
             v15 = sqrt(v14);
             if (isnan(v15))
-                sub_487dc0(*(unsigned int *)&v14);
+                sqrt(*(unsigned int *)&v14);
             else
                 v14 = v15;
             v0 = (float)v14;
@@ -66,7 +66,7 @@ int WaypointFindNearest__FG6VectorP7edict_sfi(float *a0, st_5885d0_0 *a1, float 
             }
             else if (v0 < a2)
             {
-                sub_487b80(a0, &g_626824[4 * iter], 1, a1->field_288, &v6);
+                UTIL_TraceLine(a0, &waypoints+4[4 * iter], 1, a1->field_288, &v6);
                 if ((isnan(v7) ? 0x44 : 1.0 == v7 ? 63 : 1.0 < v7 ? 0 : 0xff) < 64)
                 {
                     v2 = iter;

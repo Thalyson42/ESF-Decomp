@@ -14,19 +14,19 @@ char CheckDragonBalls__4CBot(float a0)
     if (*(float *)(*(unsigned int *)&a0 + 2868) <= *(float *)gpGlobals)
     {
         *(float *)(*(unsigned int *)&a0 + 2868) = (float)(*(float *)gpGlobals + 0.75);
-        if ((char)sub_488740(v0, v1))
+        if ((char)UTIL_DBsAreGathered(v0, v1))
         {
-            v3 = sub_48bf30(a0);
+            v3 = CBot::SearchGatheredSpot(a0);
             return v3;
         }
         else if (*(int *)(*(unsigned int *)&a0 + 1888))
         {
-            sub_4882d0(a0);
+            CBot::SearchDBGatherSpot(a0);
             return v3;
         }
         else if (!*(int *)(*(unsigned int *)&a0 + 2924))
         {
-            sub_48ac20(a0);
+            CBot::SearchDragonBall(a0);
             return v3;
         }
     }

@@ -31,11 +31,11 @@ typedef struct st_4f8cc0_4 {
 
 extern st_4f8cc0_4 *g_pGameRules;
 extern unsigned int gmsgScoreInfo;
-extern st_4f8cc0_2 *g_616878;
-extern st_4f8cc0_2 *g_61687c;
-extern st_4f8cc0_2 *g_616880;
-extern st_4f8cc0_2 *g_616888;
-extern st_4f8cc0_2 *g_6168dc;
+extern st_4f8cc0_2 *g_engfuncs.pfnMessageBegin;
+extern st_4f8cc0_2 *g_engfuncs.pfnMessageEnd;
+extern st_4f8cc0_2 *g_engfuncs.pfnWriteByte;
+extern st_4f8cc0_2 *g_engfuncs.pfnWriteShort;
+extern st_4f8cc0_2 *g_engfuncs.pfnIndexOfEdict;
 
 unsigned int AddPoints__11CBasePlayerii(st_4f8cc0_1 *a0, float a1, unsigned int a2)
 {
@@ -63,19 +63,19 @@ unsigned int AddPoints__11CBasePlayerii(st_4f8cc0_1 *a0, float a1, unsigned int 
         }
     }
     a0->field_0->field_164 = (float)((double)v2 + a0->field_0->field_164);
-    g_616878(2, gmsgScoreInfo, 0, 0);
-    v5 = g_6168dc(a0->field_0->field_208);
-    g_616880(v5);
+    g_engfuncs.pfnMessageBegin(2, gmsgScoreInfo, 0, 0);
+    v5 = g_engfuncs.pfnIndexOfEdict(a0->field_0->field_208);
+    g_engfuncs.pfnWriteByte(v5);
     v1 = __fnstcw();
     v0 = v1 | 0xc00;
     v2 = (int)a0->field_0->field_164;
-    g_616888(v2);
-    g_616888(a0->field_984);
-    g_616888(a0->field_738);
-    g_616888(a0->field_0->field_20c);
+    g_engfuncs.pfnWriteShort(v2);
+    g_engfuncs.pfnWriteShort(a0->field_984);
+    g_engfuncs.pfnWriteShort(a0->field_738);
+    g_engfuncs.pfnWriteShort(a0->field_0->field_20c);
     v6 = g_pGameRules->field_44->field_cc(g_pGameRules, &a0[1].padding_4[16]);
-    g_616888(v6 + 1);
-    v7 = g_61687c();
+    g_engfuncs.pfnWriteShort(v6 + 1);
+    v7 = g_engfuncs.pfnMessageEnd();
     return v7;
 }
 

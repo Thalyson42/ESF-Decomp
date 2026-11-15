@@ -47,14 +47,14 @@ unsigned int * __rethrow(unsigned int a0)
     v7 = (*(int *)(v12 - 290024))(v0, v1, v2);
     v6 = &v9;
     if (!v7[2])
-        sub_48d640();
+        __terminate();
     v7[3] = a0;
     v5 = v12 - 517577;
     v3 = &v8;
     v4 = v12 - 517476;
-    v6 = sub_489620(v5, v6);
+    v6 = __frame_state_for(v5, v6);
     if (!v6)
-        sub_48d640();
+        __terminate();
     *v6 = &a0;
     throw_helper(v7, v10 - 1, v6, v3);
     v10 = v4;

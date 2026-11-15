@@ -29,12 +29,12 @@ int AddToTextString__11CBaseOutputPCc(st_56d430_2 *a0, char *a1)
     } while (v1 && (v1 -= 1, v2 = v3 + 1, *v3));
     if (~v1 - 1 <= 0x1ff)
     {
-        sub_48d360(a0, v0, 0x200);
+        strncpy@GLIBC_2.0(a0, v0, 0x200);
         *(char *)&a0->field_200 = (char)NULL;
     }
     else
     {
-        sub_48e110(a0, v0);
+        strcpy@GLIBC_2.0(a0, v0);
     }
     return a0->field_200->field_c(a0);
 }

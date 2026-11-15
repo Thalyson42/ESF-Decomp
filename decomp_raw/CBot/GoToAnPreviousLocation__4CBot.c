@@ -28,9 +28,9 @@ unsigned int GoToAnPreviousLocation__4CBot(float a0)
             v2 = *(float *)v7;
             *(float *)&v3 = *(float *)&v7[1];
             *(float *)&v4 = *(float *)&v7[2];
-            v8 = sub_4880e0(a0, &v2);
-            sub_48d0d0(a0);
-            v9 = sub_488e30(a0, v8);
+            v8 = UTIL_EntDir(a0, &v2);
+            CBot::ResetMoveSpeed(a0);
+            v9 = CBot::SetMoveDir(a0, v8);
         }
     } while ((v0 = v1 - 1, v1 - 1 >= 0));
     return v9;

@@ -51,12 +51,12 @@ typedef struct st_53afc0_3 {
 } st_53afc0_3;
 
 extern unsigned int g_teamplay;
-extern st_53afc0_3 *g_616928;
+extern st_53afc0_3 *g_engfuncs.pfnRandomLong;
 extern st_53afc0_2 *gpGlobals;
-extern unsigned int g_625394;
-extern char g_6255ac;
-extern unsigned short g_6255ec;
-extern char g_625744;
+extern unsigned int BotManager+3348;
+extern char BotManager+3884;
+extern unsigned short BotManager+3948;
+extern char BotManager+4292;
 
 unsigned int CreateInit__4CBotsssss(st_53afc0_1 *a0, unsigned short a1, unsigned short a2, short a3, short a4, unsigned short a5)
 {
@@ -80,7 +80,7 @@ unsigned int CreateInit__4CBotsssss(st_53afc0_1 *a0, unsigned short a1, unsigned
     a0->field_9e0 = 0;
     a0->field_b70 = 0;
     a0->field_d50 = 0;
-    a0->field_a00 = &(&g_6255ac)[0x44 * a3];
+    a0->field_a00 = &(&BotManager+3884)[0x44 * a3];
     a0->field_9fc = (char)a3 - 1;
     a0->field_1060 = 0xffff;
     a0->field_9f0 = 0xffff;
@@ -89,9 +89,9 @@ unsigned int CreateInit__4CBotsssss(st_53afc0_1 *a0, unsigned short a1, unsigned
     if ((unsigned short)v0 - 1 <= 8)
         a0->field_9f0 = v0;
     if ((unsigned short)(v1 - 1) > 8)
-        v1 = (g_6255ec - 1 <= 8 ? g_6255ec : (unsigned short)g_616928(1, 9));
-    v3 = &g_625394;
-    a0->field_a04 = &(&g_625394)[15 * v1];
+        v1 = (BotManager+3948 - 1 <= 8 ? BotManager+3948 : (unsigned short)g_engfuncs.pfnRandomLong(1, 9));
+    v3 = &BotManager+3348;
+    a0->field_a04 = &(&BotManager+3348)[15 * v1];
     a0->field_aa8 = 0;
     a0->field_aa4 = 0;
     a0->field_1064 = 0;
@@ -99,14 +99,14 @@ unsigned int CreateInit__4CBotsssss(st_53afc0_1 *a0, unsigned short a1, unsigned
     a0->field_1070 = 0;
     if ((short)v2 > 3)
     {
-        v3 = g_616928(1, 3);
+        v3 = g_engfuncs.pfnRandomLong(1, 3);
         v2 = v3;
     }
     a0->field_ba4 = v2;
     v4 = _ccall(14, 14, v2, 0, 0);
     if (!(v4 & 1))
     {
-        v3 = &(&g_625744)[16 * v2];
+        v3 = &(&BotManager+4292)[16 * v2];
         a0->field_ba8 = v3;
     }
     a0->field_a08 = 0;

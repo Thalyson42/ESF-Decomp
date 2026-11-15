@@ -22,10 +22,10 @@ unsigned int NextExeMove__12CPlayerMelee(st_505370_1 *a0)
     unsigned int v3;  // eax
 
     if (!a0->field_17c)
-        return sub_488190(a0);
+        return CPlayerMelee::NewExeMovePost(a0);
     if (!a0->field_17c->field_40)
     {
-        v0 = sub_488c70(a0);
+        v0 = CPlayerMelee::EmitDamage(a0);
         if (!a0->field_144)
             return v0;
         goto LABEL_5053ff;
@@ -40,7 +40,7 @@ unsigned int NextExeMove__12CPlayerMelee(st_505370_1 *a0)
             {
                 do
                 {
-                    v3 = sub_48be40(a0, &v1->padding_0[24 * v2 + 88]);
+                    v3 = CPlayerMelee::EmitComboDamage(a0, &v1->padding_0[24 * v2 + 88]);
                     if (!a0->field_144)
                         return v3;
                 } while ((v2 += 1, v1 = a0->field_17c, v2 < a0->field_17c->field_28));
@@ -48,8 +48,8 @@ unsigned int NextExeMove__12CPlayerMelee(st_505370_1 *a0)
         }
 LABEL_5053ff:
         if (a0->field_17c)
-            a0->field_17c = sub_48aa90(a0);
+            a0->field_17c = CPlayerMelee::GetNextExe(a0);
     }
-    return sub_488190(a0);
+    return CPlayerMelee::NewExeMovePost(a0);
 }
 

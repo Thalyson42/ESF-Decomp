@@ -24,7 +24,7 @@ typedef struct st_4a30c0_4 {
     unsigned int field_0;
 } st_4a30c0_4;
 
-extern st_4a30c0_4 *g_6168d4;
+extern st_4a30c0_4 *g_engfuncs.pfnPEntityOfEntOffset;
 
 st_4a30c0_1 * CmdStart__FPC7edict_sPC9usercmd_sUi(st_4a30c0_3 *a0, unsigned int a1, st_4a30c0_1 *a2)
 {
@@ -33,7 +33,7 @@ st_4a30c0_1 * CmdStart__FPC7edict_sPC9usercmd_sUi(st_4a30c0_3 *a0, unsigned int 
     st_4a30c0_1 *v2;  // esi
 
     v0 = a0->field_288;
-    if (a0->field_288 || (v0 = g_6168d4(0), v0))
+    if (a0->field_288 || (v0 = g_engfuncs.pfnPEntityOfEntOffset(0), v0))
         v1 = v0->field_7c;
     else
         v1 = NULL;
@@ -41,7 +41,7 @@ st_4a30c0_1 * CmdStart__FPC7edict_sPC9usercmd_sUi(st_4a30c0_3 *a0, unsigned int 
     if (!v2)
         return v1;
     if (v2->field_0->field_240)
-        sub_48cfc0(v2->field_0->field_240, 0);
+        UTIL_SetGroupTrace(v2->field_0->field_240, 0);
     v2->field_2a8 = a2;
     return a2;
 }

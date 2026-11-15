@@ -7,7 +7,7 @@ typedef struct st_4f3840_0 {
 int PackDeadPlayerItems__11CBasePlayer(st_4f3840_0 *a0)
 {
     if (a0->field_75c > 0)
-        sub_48bdc0(a0->field_75c, a0);
-    return sub_48b9d0(a0, 1);
+        CPlayerBag::CreateBag(a0->field_75c, a0);
+    return CBasePlayer::RemoveAllItems(a0, 1);
 }
 

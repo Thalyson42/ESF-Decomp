@@ -46,7 +46,7 @@ typedef struct st_4f71c0_5 {
     struct st_4f71c0_4 *field_464;
 } st_4f71c0_5;
 
-extern float g_5bd310;
+extern float melee_swoop_minstrugtime+12;
 
 float Swoop__11CBasePlayer(float a0)
 {
@@ -121,18 +121,18 @@ float Swoop__11CBasePlayer(float a0)
         v21 = (st_4f71c0_0 *)a0;
         if (v21->field_400)
         {
-            v22 = sub_48bea0(&v21->padding_0[896], 0);
+            v22 = CPlayerMelee::GetEnemyPrepunch(&v21->padding_0[896], 0);
             if (!v22)
                 return v37;
             v23 = (st_4f71c0_1 **)a0;
             if (*v23->field_181 & 8)
             {
-                if (!sub_4897e0(v23, v22))
+                if (!CBasePlayer::CanMelee(v23, v22))
                     return v24;
             }
             else
             {
-                if (!sub_4897e0(a0, v22))
+                if (!CBasePlayer::CanMelee(a0, v22))
                 {
                     return v36;
                 }
@@ -143,35 +143,35 @@ float Swoop__11CBasePlayer(float a0)
             }
             v8 = 0;
             v25 = *(unsigned int *)&a0 + 1284;
-            sub_48b300(v25);
+            CSwoop::GetSwoopTime(v25);
             v10 = (float)v26;
-            sub_489b10(&v11, v25);
+            CSwoop::GetCurrentDirection(&v11, v25);
             v17 = v11;
             v18 = v12;
             v19 = v13;
-            sub_48a7a0(a0);
-            if (sub_48bea0(&v22->field_380, a0) == *(unsigned int *)&a0 && v22->field_508)
+            CBasePlayer::StopSwoop(a0);
+            if (CPlayerMelee::GetEnemyPrepunch(&v22->field_380, a0) == *(unsigned int *)&a0 && v22->field_508)
             {
                 v27 = v10;
-                v28 = (isunordered(v27, g_5bd310) ? 0x4500 : v27 == g_5bd310 ? 0x4000 : v27 < g_5bd310 ? 0x100 : 0);
+                v28 = (isunordered(v27, melee_swoop_minstrugtime+12) ? 0x4500 : v27 == melee_swoop_minstrugtime+12 ? 0x4000 : v27 < melee_swoop_minstrugtime+12 ? 0x100 : 0);
                 if (((char)((0x3800 | (unsigned short)v28 & 0x4700) >> 8) & 69) - 1 < 64 && !*(int *)(*(unsigned int *)&a0 + 1292))
                 {
-                    sub_48b300(&v22->field_504);
+                    CSwoop::GetSwoopTime(&v22->field_504);
                     if (v27 > v10 && !v22->field_50c)
                         goto LABEL_4f7558;
                 }
                 else
                 {
-                    sub_48b300(&v22->field_504);
-                    if (v27 > g_5bd310 && !v22->field_50c)
+                    CSwoop::GetSwoopTime(&v22->field_504);
+                    if (v27 > melee_swoop_minstrugtime+12 && !v22->field_50c)
                         v8 = 1;
                 }
             }
             if (v8)
             {
-                sub_48b300(&v22->field_504);
+                CSwoop::GetSwoopTime(&v22->field_504);
                 v9 = (float)v27;
-                sub_48a7a0(v22);
+                CBasePlayer::StopSwoop(v22);
                 v11 = v17;
                 v12 = v18;
                 v13 = v19;
@@ -188,7 +188,7 @@ float Swoop__11CBasePlayer(float a0)
                 {
                     return v34;
                 }
-                else if (!sub_48c980(v30, 35))
+                else if (!CBasePlayer::UseKi(v30, 35))
                 {
                     return v33;
                 }
@@ -197,7 +197,7 @@ float Swoop__11CBasePlayer(float a0)
                     v11 = v17;
                     v12 = v18;
                     v13 = v19;
-                    sub_48c3f0(*(unsigned int *)&a0 + 896, v22, &v11, *(int *)(*(unsigned int *)&a0 + 1284));
+                    CPlayerMelee::SimpleMeleePowerhit(*(unsigned int *)&a0 + 896, v22, &v11, *(int *)(*(unsigned int *)&a0 + 1284));
                     return v31;
                 }
                 else
@@ -208,18 +208,18 @@ float Swoop__11CBasePlayer(float a0)
         }
         else
         {
-            v22 = sub_48bea0(*(unsigned int *)&a0 + 896, 0);
+            v22 = CPlayerMelee::GetEnemyPrepunch(*(unsigned int *)&a0 + 896, 0);
             if (!v22)
                 return v60;
             v38 = (st_4f71c0_1 **)a0;
             if (*v38->field_181 & 8)
             {
-                if (!sub_4897e0(v38, v22))
+                if (!CBasePlayer::CanMelee(v38, v22))
                     return v39;
             }
             else
             {
-                if (!sub_4897e0(a0, v22))
+                if (!CBasePlayer::CanMelee(a0, v22))
                 {
                     return v59;
                 }
@@ -230,43 +230,43 @@ float Swoop__11CBasePlayer(float a0)
             }
             v5 = 0;
             v40 = *(unsigned int *)&a0 + 1284;
-            sub_48b300(v40);
+            CSwoop::GetSwoopTime(v40);
             v7 = (float)v27;
-            sub_489b10(&v14, v40);
+            CSwoop::GetCurrentDirection(&v14, v40);
             v11 = v14;
             v12 = v15;
             v13 = v16;
-            sub_48a7a0(a0);
-            if (sub_48bea0(&v22->field_380, a0) == *(unsigned int *)&a0 && v22->field_508 && v22->field_504 != 5)
+            CBasePlayer::StopSwoop(a0);
+            if (CPlayerMelee::GetEnemyPrepunch(&v22->field_380, a0) == *(unsigned int *)&a0 && v22->field_508 && v22->field_504 != 5)
             {
                 v27 = v7;
-                v41 = (isunordered(v27, g_5bd310) ? 0x4500 : v27 == g_5bd310 ? 0x4000 : v27 < g_5bd310 ? 0x100 : 0);
+                v41 = (isunordered(v27, melee_swoop_minstrugtime+12) ? 0x4500 : v27 == melee_swoop_minstrugtime+12 ? 0x4000 : v27 < melee_swoop_minstrugtime+12 ? 0x100 : 0);
                 if (((char)((0x3800 | (unsigned short)v41 & 0x4700) >> 8) & 69) - 1 < 64 && !*(int *)(*(unsigned int *)&a0 + 1292))
                 {
-                    sub_48b300(&v22->field_504);
+                    CSwoop::GetSwoopTime(&v22->field_504);
                     if (v27 > v7 || v22->field_50c)
                     {
 LABEL_4f7558:
-                        sub_48a740(v22);
+                        CBasePlayer::Swoop(v22);
                         return v42;
                     }
                 }
                 else
                 {
-                    sub_48b300(&v22->field_504);
-                    if (v27 > g_5bd310 || v22->field_50c)
+                    CSwoop::GetSwoopTime(&v22->field_504);
+                    if (v27 > melee_swoop_minstrugtime+12 || v22->field_50c)
                         v5 = 1;
                 }
             }
             if (v5)
             {
-                sub_48b300(&v22->field_504);
+                CSwoop::GetSwoopTime(&v22->field_504);
                 v6 = (float)v27;
-                sub_48a7a0(v22);
+                CBasePlayer::StopSwoop(v22);
                 if (!(v22->field_0->field_181 & 8) && (v43 = (st_4f71c0_1 **)a0, !(*v43->field_181 & 8)))
                 {
                     v44 = v43 + 224;
-                    sub_48c220(v44, v22);
+                    CPlayerMelee::InitMelee(v44, v22);
                     v0 = 9;
                 }
                 else
@@ -298,18 +298,18 @@ LABEL_4f7655:
                         v29 = &v14;
 LABEL_4f7674:
                         v46 = *(unsigned int *)&a0 + 896;
-                        sub_48d9c0(v46, v29);
-                        sub_488530(v46, 15, 0);
-                        sub_488530(v46, 16, 0);
+                        CPlayerMelee::BlowbackStruggle(v46, v29);
+                        CPlayerMelee::MeleeText(v46, 15, 0);
+                        CPlayerMelee::MeleeText(v46, 16, 0);
                         v47 = &v22->field_380;
-                        sub_488530(v47, 15, 0);
-                        sub_488530(v47, 16, 0);
+                        CPlayerMelee::MeleeText(v47, 15, 0);
+                        CPlayerMelee::MeleeText(v47, 16, 0);
                         return v48;
                     }
                     v4 = v22;
                     v44 = v45 + 224;
 LABEL_4f7645:
-                    sub_48c220(v44);
+                    CPlayerMelee::InitMelee(v44);
                     v0 = 12;
                 }
             }
@@ -319,7 +319,7 @@ LABEL_4f7645:
                 if (!(*v49->field_181 & 8) && v22->field_0->field_108 != 15)
                 {
                     v44 = v49 + 224;
-                    sub_48c220(v44, v22);
+                    CPlayerMelee::InitMelee(v44, v22);
                     v50 = (unsigned int *)a0;
                     v50[292] = v11;
                     v50[293] = v12;
@@ -331,12 +331,12 @@ LABEL_4f7645:
                     v52 = (st_4f71c0_1 **)a0;
                     if (!(*v52->field_181 & 8))
                         return v55;
-                    if (!sub_48c980(v52, 35))
+                    if (!CBasePlayer::UseKi(v52, 35))
                         return v53;
                     v14 = v11;
                     v15 = v12;
                     v16 = v13;
-                    sub_489100(*(unsigned int *)&a0 + 896, v22, &v14, *(int *)(*(unsigned int *)&a0 + 1284));
+                    CPlayerMelee::Powerhit(*(unsigned int *)&a0 + 896, v22, &v14, *(int *)(*(unsigned int *)&a0 + 1284));
                     return v53;
                 }
                 else
@@ -348,7 +348,7 @@ LABEL_4f7645:
             {
                 return v57;
             }
-            sub_489610(v44);
+            CPlayerMelee::SetMode(v44);
             return v51;
         }
     }

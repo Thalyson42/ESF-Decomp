@@ -14,7 +14,7 @@ typedef struct st_4f00c0_2 {
     unsigned int field_0;
 } st_4f00c0_2;
 
-extern st_4f00c0_2 *g_6168dc;
+extern st_4f00c0_2 *g_engfuncs.pfnIndexOfEdict;
 
 unsigned int * Spectator_SetMode__11CBasePlayeri(st_4f00c0_0 **a0, unsigned int a1)
 {
@@ -34,13 +34,13 @@ unsigned int * Spectator_SetMode__11CBasePlayeri(st_4f00c0_0 **a0, unsigned int 
     if (v1 != 3 && v1 != 5)
     {
         v2 = a0 + 482;
-        if (!sub_48d8b0(v2))
+        if (!EHANDLE::__opi(v2))
         {
             *(unsigned short *)&v0 = 0;
-            sub_4898a0(a0, v0);
-            if (!sub_48d8b0(v2))
+            CBasePlayer::Spectator_FindNextPlayer(a0, v0);
+            if (!EHANDLE::__opi(v2))
             {
-                sub_489e90(*a0, 4, "#Spec_NoTarget", 0, 0, 0, 0);
+                ClientPrint(*a0, 4, "#Spec_NoTarget", 0, 0, 0, 0);
                 v1 = 3;
             }
         }
@@ -48,8 +48,8 @@ unsigned int * Spectator_SetMode__11CBasePlayeri(st_4f00c0_0 **a0, unsigned int 
     *a0->field_244 = v1;
     if (v1 != 3 && v1 != 5)
     {
-        v3 = sub_489fd0(a0 + 482);
-        v4 = g_6168dc(*v3->field_208);
+        v3 = EHANDLE::__rf(a0 + 482);
+        v4 = g_engfuncs.pfnIndexOfEdict(*v3->field_208);
         v5 = *a0;
         v5[146] = v4;
         return v5;

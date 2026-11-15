@@ -49,12 +49,12 @@ typedef struct st_4bc860_4 {
     unsigned int field_3e4;
 } st_4bc860_4;
 
-extern st_4bc860_3 *g_616878;
-extern st_4bc860_3 *g_61687c;
-extern st_4bc860_3 *g_616880;
-extern st_4bc860_3 *g_616888;
-extern st_4bc860_3 *g_616894;
-extern st_4bc860_3 *g_6168d4;
+extern st_4bc860_3 *g_engfuncs.pfnMessageBegin;
+extern st_4bc860_3 *g_engfuncs.pfnMessageEnd;
+extern st_4bc860_3 *g_engfuncs.pfnWriteByte;
+extern st_4bc860_3 *g_engfuncs.pfnWriteShort;
+extern st_4bc860_3 *g_engfuncs.pfnWriteCoord;
+extern st_4bc860_3 *g_engfuncs.pfnPEntityOfEntOffset;
 extern short g_sModelIndexSmoke;
 extern char g_800000;
 
@@ -107,7 +107,7 @@ double ShootLaser__9CEyelaserP5CBeamG6VectorT2(st_4bc860_6 *a0, st_4bc860_0 **a1
     v25 = v22 * v22 + v23 * v23 + v24 * v24;
     v26 = sqrt(v25);
     if (isnan(v26))
-        sub_487dc0(*(unsigned int *)&v25);
+        sqrt(*(unsigned int *)&v25);
     else
         v25 = v26;
     v5 = (float)v25;
@@ -138,7 +138,7 @@ double ShootLaser__9CEyelaserP5CBeamG6VectorT2(st_4bc860_6 *a0, st_4bc860_0 **a1
     v7 = a2[2] + v10;
     do
     {
-        sub_487b80(&v2, &v5, 0, v28->field_208, &v16);
+        UTIL_TraceLine(&v2, &v5, 0, v28->field_208, &v16);
         *(unsigned int *)&v2 = v18;
         v3 = v19;
         v4 = v20;
@@ -147,20 +147,20 @@ double ShootLaser__9CEyelaserP5CBeamG6VectorT2(st_4bc860_6 *a0, st_4bc860_0 **a1
     v31[2] = v18;
     v31[3] = v19;
     *(float *)&v31[4] = v20;
-    g_616878(4, 23, &v18, 0);
-    g_616880(5);
-    g_616894(v18);
-    g_616894(v19);
+    g_engfuncs.pfnMessageBegin(4, 23, &v18, 0);
+    g_engfuncs.pfnWriteByte(5);
+    g_engfuncs.pfnWriteCoord(v18);
+    g_engfuncs.pfnWriteCoord(v19);
     v32 = v20;
-    g_616894((float)v32);
-    g_616888(g_sModelIndexSmoke);
-    g_616880(2);
+    g_engfuncs.pfnWriteCoord((float)v32);
+    g_engfuncs.pfnWriteShort(g_sModelIndexSmoke);
+    g_engfuncs.pfnWriteByte(2);
     v0 = 5;
-    g_616880(v0);
-    g_61687c(v0);
-    sub_48d7a0(&v16, 0);
+    g_engfuncs.pfnWriteByte(v0);
+    g_engfuncs.pfnMessageEnd(v0);
+    UTIL_DecalTrace(&v16, 0);
     v33 = v21;
-    if (v33 || (v33 = g_6168d4(0), v33))
+    if (v33 || (v33 = g_engfuncs.pfnPEntityOfEntOffset(0), v33))
         v34 = v33->field_7c;
     else
         v34 = NULL;
@@ -182,9 +182,9 @@ double ShootLaser__9CEyelaserP5CBeamG6VectorT2(st_4bc860_6 *a0, st_4bc860_0 **a1
         }
     }
     v0 = &g_800000;
-    sub_48aef0(a0);
+    CBasePlayerWeapon::GetPowerRatio(a0);
     v35->field_60->field_34(v35, *(int *)a0->field_80, *(int *)a0->field_80, (float)(v32 * 3.0 * (1.0 - v17) * v1));
-    sub_489390(v35->field_0->field_208, 1, "weapons/melt.wav", 0x3f800000, 0.800000011920929f, 0, 100);
+    EMIT_SOUND_DYN(v35->field_0->field_208, 1, "weapons/melt.wav", 0x3f800000, 0.800000011920929f, 0, 100);
     return 0.800000011920929;
 }
 

@@ -14,6 +14,6 @@ extern st_4b0550_0 *gpGlobals;
 int Precache__10CLightning(unsigned int *a0)
 {
     a0[0x22] = g_engfuncs(a0[35] + gpGlobals->field_98);
-    return sub_48d8c0(a0);
+    return CBeam::Precache(a0);
 }
 

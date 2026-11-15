@@ -21,8 +21,8 @@ unsigned int Restore__12CGlobalStateR8CRestore(st_539f40_0 *a0, int a1)
     char v2;  // [bp-0x44]
     int v3;  // [bp-0x24]
 
-    sub_48a450(a0);
-    if (!sub_48a980(a1, "GLOBAL", a0, &_12CGlobalState.m_SaveData, 1))
+    CGlobalState::ClearStates(a0);
+    if (!CRestore::ReadFields(a1, "GLOBAL", a0, &_12CGlobalState.m_SaveData, 1))
         return 0;
     v0 = a0->field_4;
     a0->field_4 = 0;
@@ -31,9 +31,9 @@ unsigned int Restore__12CGlobalStateR8CRestore(st_539f40_0 *a0, int a1)
         return 1;
     do
     {
-        if (!sub_48a980(a1, "GENT", &v1, &gGlobalEntitySaveData, 3))
+        if (!CRestore::ReadFields(a1, "GENT", &v1, &gGlobalEntitySaveData, 3))
             return 0;
-    } while ((sub_48aad0(a0, &(&v1)[-1 * gpGlobals->field_98], &(&v2)[-1 * gpGlobals->field_98], v3), v4 += 1, v4 < v0));
+    } while ((CGlobalState::EntityAdd(a0, &(&v1)[-1 * gpGlobals->field_98], &(&v2)[-1 * gpGlobals->field_98], v3), v4 += 1, v4 < v0));
     return 1;
 }
 

@@ -42,14 +42,14 @@ unsigned int KeyValue__15CAmbientGenericP14KeyValueData_s(st_51b3f0_1 *a0, st_51
     int v7;  // eax
     unsigned int v8;  // eax
 
-    if (!sub_488af0(a1->field_4, "preset"))
+    if (!strcmp@GLIBC_2.0(a1->field_4, "preset"))
     {
-        v0 = sub_48b500(a1->field_8, 0, 10, 0);
+        v0 = __strtol_internal@GLIBC_2.0(a1->field_8, 0, 10, 0);
         a0->field_68 = v0;
     }
-    else if (!sub_488af0(a1->field_4, "pitch"))
+    else if (!strcmp@GLIBC_2.0(a1->field_4, "pitch"))
     {
-        v1 = sub_48b500(a1->field_8, 0, 10, 0);
+        v1 = __strtol_internal@GLIBC_2.0(a1->field_8, 0, 10, 0);
         a0->field_6c = v1;
         a1->field_c = 1;
         if (a0->field_6c > 0xff)
@@ -59,9 +59,9 @@ unsigned int KeyValue__15CAmbientGenericP14KeyValueData_s(st_51b3f0_1 *a0, st_51
         a0->field_6c = 0;
         return v1;
     }
-    else if (!sub_488af0(a1->field_4, "pitchstart"))
+    else if (!strcmp@GLIBC_2.0(a1->field_4, "pitchstart"))
     {
-        v2 = sub_48b500(a1->field_8, 0, 10, 0);
+        v2 = __strtol_internal@GLIBC_2.0(a1->field_8, 0, 10, 0);
         a0->field_70 = v2;
         a1->field_c = 1;
         if (a0->field_70 > 0xff)
@@ -71,9 +71,9 @@ unsigned int KeyValue__15CAmbientGenericP14KeyValueData_s(st_51b3f0_1 *a0, st_51
         a0->field_70 = 0;
         return v2;
     }
-    else if (!sub_488af0(a1->field_4, "spinup"))
+    else if (!strcmp@GLIBC_2.0(a1->field_4, "spinup"))
     {
-        v3 = sub_48b500(a1->field_8, 0, 10, 0);
+        v3 = __strtol_internal@GLIBC_2.0(a1->field_8, 0, 10, 0);
         a0->field_74 = v3;
         if (v3 > 100)
             a0->field_74 = 100;
@@ -84,9 +84,9 @@ unsigned int KeyValue__15CAmbientGenericP14KeyValueData_s(st_51b3f0_1 *a0, st_51
         v0 = a0->field_74;
         a0->field_a8 = v0;
     }
-    else if (!sub_488af0(a1->field_4, "spindown"))
+    else if (!strcmp@GLIBC_2.0(a1->field_4, "spindown"))
     {
-        v4 = sub_48b500(a1->field_8, 0, 10, 0);
+        v4 = __strtol_internal@GLIBC_2.0(a1->field_8, 0, 10, 0);
         a0->field_78 = v4;
         if (v4 > 100)
             a0->field_78 = 100;
@@ -97,9 +97,9 @@ unsigned int KeyValue__15CAmbientGenericP14KeyValueData_s(st_51b3f0_1 *a0, st_51
         v0 = a0->field_78;
         a0->field_ac = v0;
     }
-    else if (!sub_488af0(a1->field_4, "volstart"))
+    else if (!strcmp@GLIBC_2.0(a1->field_4, "volstart"))
     {
-        v5 = sub_48b500(a1->field_8, 0, 10, 0);
+        v5 = __strtol_internal@GLIBC_2.0(a1->field_8, 0, 10, 0);
         a0->field_80 = v5;
         if (v5 > 10)
             a0->field_80 = 10;
@@ -108,9 +108,9 @@ unsigned int KeyValue__15CAmbientGenericP14KeyValueData_s(st_51b3f0_1 *a0, st_51
         v0 = a0->field_80 * 10;
         a0->field_80 = v0;
     }
-    else if (!sub_488af0(a1->field_4, "fadein"))
+    else if (!strcmp@GLIBC_2.0(a1->field_4, "fadein"))
     {
-        v6 = sub_48b500(a1->field_8, 0, 10, 0);
+        v6 = __strtol_internal@GLIBC_2.0(a1->field_8, 0, 10, 0);
         a0->field_84 = v6;
         if (v6 > 100)
             a0->field_84 = 100;
@@ -121,9 +121,9 @@ unsigned int KeyValue__15CAmbientGenericP14KeyValueData_s(st_51b3f0_1 *a0, st_51
         v0 = a0->field_84;
         a0->field_b8 = v0;
     }
-    else if (!sub_488af0(a1->field_4, "fadeout"))
+    else if (!strcmp@GLIBC_2.0(a1->field_4, "fadeout"))
     {
-        v7 = sub_48b500(a1->field_8, 0, 10, 0);
+        v7 = __strtol_internal@GLIBC_2.0(a1->field_8, 0, 10, 0);
         a0->field_88 = v7;
         if (v7 > 100)
             a0->field_88 = 100;
@@ -134,16 +134,16 @@ unsigned int KeyValue__15CAmbientGenericP14KeyValueData_s(st_51b3f0_1 *a0, st_51
         v0 = a0->field_88;
         a0->field_bc = v0;
     }
-    else if (!sub_488af0(a1->field_4, "lfotype"))
+    else if (!strcmp@GLIBC_2.0(a1->field_4, "lfotype"))
     {
-        v0 = sub_48b500(a1->field_8, 0, 10, 0);
+        v0 = __strtol_internal@GLIBC_2.0(a1->field_8, 0, 10, 0);
         a0->field_8c = v0;
         if ((int)v0 > 4)
             a0->field_8c = 2;
     }
-    else if (!sub_488af0(a1->field_4, "lforate"))
+    else if (!strcmp@GLIBC_2.0(a1->field_4, "lforate"))
     {
-        v0 = sub_48b500(a1->field_8, 0, 10, 0);
+        v0 = __strtol_internal@GLIBC_2.0(a1->field_8, 0, 10, 0);
         a0->field_90 = v0;
         if ((int)v0 > 1000)
             a0->field_90 = 1000;
@@ -151,18 +151,18 @@ unsigned int KeyValue__15CAmbientGenericP14KeyValueData_s(st_51b3f0_1 *a0, st_51
             a0->field_90 = 0;
         a0->field_90 = a0->field_90 * 0x100;
     }
-    else if (!sub_488af0(a1->field_4, "lfomodpitch"))
+    else if (!strcmp@GLIBC_2.0(a1->field_4, "lfomodpitch"))
     {
-        v0 = sub_48b500(a1->field_8, 0, 10, 0);
+        v0 = __strtol_internal@GLIBC_2.0(a1->field_8, 0, 10, 0);
         a0->field_94 = v0;
         if ((int)v0 > 100)
             a0->field_94 = 100;
         if (a0->field_94 < 0)
             a0->field_94 = 0;
     }
-    else if (!sub_488af0(a1->field_4, "lfomodvol"))
+    else if (!strcmp@GLIBC_2.0(a1->field_4, "lfomodvol"))
     {
-        v0 = sub_48b500(a1->field_8, 0, 10, 0);
+        v0 = __strtol_internal@GLIBC_2.0(a1->field_8, 0, 10, 0);
         a0->field_98 = v0;
         if ((int)v0 > 100)
             a0->field_98 = 100;
@@ -171,13 +171,13 @@ unsigned int KeyValue__15CAmbientGenericP14KeyValueData_s(st_51b3f0_1 *a0, st_51
     }
     else
     {
-        v8 = sub_488af0(a1->field_4, "cspinup");
+        v8 = strcmp@GLIBC_2.0(a1->field_4, "cspinup");
         if (v8)
         {
             a1->field_c = 0;
             return v8;
         }
-        v0 = sub_48b500(a1->field_8, 0, 10, 0);
+        v0 = __strtol_internal@GLIBC_2.0(a1->field_8, 0, 10, 0);
         a0->field_9c = v0;
         if ((int)v0 > 100)
             a0->field_9c = 100;

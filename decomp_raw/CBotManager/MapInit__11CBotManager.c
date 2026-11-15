@@ -57,12 +57,12 @@ typedef struct st_542e80_6 {
 } st_542e80_6;
 
 extern st_542e80_6 *g_engfuncs;
-extern st_542e80_6 *g_6167c4;
-extern st_542e80_6 *g_61698c;
+extern st_542e80_6 *g_engfuncs.pfnPrecacheSound;
+extern st_542e80_6 *g_engfuncs.pfnIsDedicatedServer;
 extern st_542e80_0 *gpGlobals;
 extern int BotManager;
 extern char cout;
-extern st_542e80_5 *g_625f80;
+extern st_542e80_5 *cout+512;
 extern unsigned int m_iSpriteTexture;
 
 int MapInit__11CBotManager(st_542e80_4 *a0)
@@ -94,16 +94,16 @@ int MapInit__11CBotManager(st_542e80_4 *a0)
     v3->field_18 = 0;
     v3->field_24 = 0;
     v3->field_d24 = 1;
-    sub_48e110(&v1, gpGlobals->field_c + gpGlobals->field_98);
-    sub_48c150(&v1, "_bot.cfg");
-    sub_48d990(&v2, "esf\\maps\\%s\\", &v1);
-    v4 = sub_48d440(&v2, "r");
+    strcpy@GLIBC_2.0(&v1, gpGlobals->field_c + gpGlobals->field_98);
+    strcat@GLIBC_2.0(&v1, "_bot.cfg");
+    sprintf@GLIBC_2.0(&v2, "esf\\maps\\%s\\", &v1);
+    v4 = fopen@GLIBC_2.1(&v2, "r");
     a0->field_38 = v4;
     if (v4)
     {
-        g_625f80->field_14(&cout, "Executing ");
-        g_625f80->field_14(&cout, &v2);
-        g_625f80->field_14(&cout, "\n");
+        cout+512->field_14(&cout, "Executing ");
+        cout+512->field_14(&cout, &v2);
+        cout+512->field_14(&cout, "\n");
         while (a0->field_0->field_0)
         {
             v5 = a0->field_0;
@@ -124,13 +124,13 @@ int MapInit__11CBotManager(st_542e80_4 *a0)
                     if (v9)
                         v9->field_8 = 0;
                     v8->field_4 = NULL;
-                    sub_48d4e0(v8);
+                    __builtin_delete(v8);
                 }
                 v6 = v7;
             }
-            sub_48d4e0(v6);
+            __builtin_delete(v6);
         }
-        if (g_61698c())
+        if (g_engfuncs.pfnIsDedicatedServer())
             *(float *)&a0->field_34 = (float)(5.0 + gpGlobals->field_0);
         else
             *(float *)&a0->field_34 = (float)(20.0 + gpGlobals->field_0);
@@ -138,21 +138,21 @@ int MapInit__11CBotManager(st_542e80_4 *a0)
     else
     {
         v0 = &BotManager;
-        sub_48b6f0(v0);
-        if (g_61698c(v0))
+        CBotManager::OpenBotCFGFile(v0);
+        if (g_engfuncs.pfnIsDedicatedServer(v0))
             *(float *)&a0->field_20 = (float)(5.0 + gpGlobals->field_0);
         else
             *(float *)&a0->field_20 = (float)(30.0 + gpGlobals->field_0);
     }
-    sub_48d180();
-    sub_48b810(0);
-    g_6167c4("weapons/xbow_hit1.wav");
-    g_6167c4("weapons/mine_activate.wav");
-    g_6167c4("common/wpn_hudoff.wav");
-    g_6167c4("common/wpn_hudon.wav");
-    g_6167c4("common/wpn_moveselect.wav");
-    g_6167c4("common/wpn_denyselect.wav");
-    g_6167c4("weapons/basicbeam_chargeoriginal.wav");
+    WaypointInit();
+    WaypointLoad(0);
+    g_engfuncs.pfnPrecacheSound("weapons/xbow_hit1.wav");
+    g_engfuncs.pfnPrecacheSound("weapons/mine_activate.wav");
+    g_engfuncs.pfnPrecacheSound("common/wpn_hudoff.wav");
+    g_engfuncs.pfnPrecacheSound("common/wpn_hudon.wav");
+    g_engfuncs.pfnPrecacheSound("common/wpn_moveselect.wav");
+    g_engfuncs.pfnPrecacheSound("common/wpn_denyselect.wav");
+    g_engfuncs.pfnPrecacheSound("weapons/basicbeam_chargeoriginal.wav");
     g_engfuncs("models/mechgibs.mdl");
     m_iSpriteTexture = g_engfuncs("sprites/lgtning.spr");
     v10 = a0;

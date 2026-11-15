@@ -30,7 +30,7 @@ unsigned int * Direction__6CBlood(void)
         *(float *)&idx[2] = *(float *)&v2->field_8;
         return idx;
     }
-    sub_48b5a0(idx);
+    UTIL_RandomBloodVector(idx);
     return idx;
 }
 

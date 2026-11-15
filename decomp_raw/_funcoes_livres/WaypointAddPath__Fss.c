@@ -16,7 +16,7 @@ typedef struct st_588190_2 {
     unsigned int field_0;
 } st_588190_2;
 
-extern st_588190_2 *g_6168b4;
+extern st_588190_2 *g_engfuncs.pfnAlertMessage;
 extern struct st_588190_0 *paths[4];
 
 unsigned short * WaypointAddPath__Fss(short a0, unsigned short a1)
@@ -49,9 +49,9 @@ unsigned short * WaypointAddPath__Fss(short a0, unsigned short a1)
             v1 = v2->field_8;
         } while (v2->field_8);
     }
-    v5 = sub_489f30(12);
+    v5 = malloc@GLIBC_2.0(12);
     if (!v5)
-        g_6168b4(4, "ESF_bot - Error allocating memory for path!");
+        g_engfuncs.pfnAlertMessage(4, "ESF_bot - Error allocating memory for path!");
     v5->field_0 = a1;
     v5->field_2 = 0xffff;
     v5->field_4 = 0xffff;

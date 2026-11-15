@@ -15,7 +15,7 @@ typedef struct st_52a190_0 {
 
 int EmitChargeSound__12CTelekinesis(st_52a190_1 *a0)
 {
-    sub_489390(*(int *)(*(int *)a0->field_80 + 520), 1, "weapons/telekinesis_charge.wav", 0x3f800000, 0.800000011920929f, 0, 100);
-    return sub_48d4f0(a0->field_80, "telekinesis_charge.wav");
+    EMIT_SOUND_DYN(*(int *)(*(int *)a0->field_80 + 520), 1, "weapons/telekinesis_charge.wav", 0x3f800000, 0.800000011920929f, 0, 100);
+    return CBasePlayer::EmitClassSound(a0->field_80, "telekinesis_charge.wav");
 }
 

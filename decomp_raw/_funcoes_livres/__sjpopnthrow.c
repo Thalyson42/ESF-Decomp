@@ -79,6 +79,6 @@ void __sjpopnthrow(void)
         *v2 = v3;
     }
     *v2 = *v2->field_0;
-    sub_48a020();
+    __sjthrow();
 }
 

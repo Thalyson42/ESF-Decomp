@@ -10,7 +10,7 @@ st_4e6f90_0 * Activate__10CPathTrack(st_4e6f90_0 **a0)
 
     v0 = *a0;
     if (*a0->field_1cc)
-        v0 = sub_48b1d0(a0);
+        v0 = CPathTrack::Link(a0);
     return v0;
 }
 

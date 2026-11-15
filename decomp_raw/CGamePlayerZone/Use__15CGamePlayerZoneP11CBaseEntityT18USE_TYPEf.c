@@ -40,7 +40,7 @@ unsigned int * Use__15CGamePlayerZoneP11CBaseEntityT18USE_TYPEf(st_4d0650_1 *a0,
 
     v6 = 0;
     v5 = 0;
-    v9 = sub_48aa30(a0, a1);
+    v9 = CRuleEntity::CanFireForActivator(a0, a1);
     if (v9)
     {
         iter = 1;
@@ -49,10 +49,10 @@ unsigned int * Use__15CGamePlayerZoneP11CBaseEntityT18USE_TYPEf(st_4d0650_1 *a0,
             v9 = gpGlobals;
             if (iter > gpGlobals->field_90)
                 break;
-            v10 = sub_48a500(iter);
+            v10 = UTIL_PlayerByIndex(iter);
             if (v10)
             {
-                sub_48a960(*v10 + 8, *v10 + 8, 1, a0->field_0->field_208, &v7);
+                UTIL_TraceModel(*v10 + 8, *v10 + 8, 1, a0->field_0->field_208, &v7);
                 if (v8)
                 {
                     v6 += 1;
@@ -89,7 +89,7 @@ unsigned int * Use__15CGamePlayerZoneP11CBaseEntityT18USE_TYPEf(st_4d0650_1 *a0,
                         continue;
                     }
                 }
-                sub_48c1b0(v12 + v11->field_98);
+                FireTargets(v12 + v11->field_98);
                 iter += 1;
             }
             else
@@ -98,9 +98,9 @@ unsigned int * Use__15CGamePlayerZoneP11CBaseEntityT18USE_TYPEf(st_4d0650_1 *a0,
             }
         }
         if (a0->field_70)
-            v9 = sub_48c1b0(a0->field_70 + gpGlobals->field_98, a1, a0, 2, (float)v6);
+            v9 = FireTargets(a0->field_70 + gpGlobals->field_98, a1, a0, 2, (float)v6);
         if (a0->field_74)
-            v9 = sub_48c1b0(a0->field_74 + gpGlobals->field_98, a1, a0, 2, (float)v5);
+            v9 = FireTargets(a0->field_74 + gpGlobals->field_98, a1, a0, 2, (float)v5);
     }
     return v9;
 }

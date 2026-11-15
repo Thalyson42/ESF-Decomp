@@ -25,7 +25,7 @@ typedef struct st_49f6b0_3 {
     unsigned int field_4c4;
 } st_49f6b0_3;
 
-extern st_49f6b0_0 *g_6168d4;
+extern st_49f6b0_0 *g_engfuncs.pfnPEntityOfEntOffset;
 extern st_49f6b0_0 *gpGlobals;
 
 unsigned int ClientKill__FP7edict_s(float a0)
@@ -36,7 +36,7 @@ unsigned int ClientKill__FP7edict_s(float a0)
 
     v1 = *(unsigned int *)&a0 + 128;
     v2 = v1[130];
-    if (v1[130] || (v2 = g_6168d4(0), v2))
+    if (v1[130] || (v2 = g_engfuncs.pfnPEntityOfEntOffset(0), v2))
         v3 = *(int *)(v2 + 124);
     else
         v3 = NULL;

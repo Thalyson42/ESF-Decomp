@@ -37,9 +37,9 @@ int KeyValue__9CEnvLightP14KeyValueData_s(int a0, st_4ce0b0_0 *a1)
     int v11;  // [bp-0x48]
     char v12;  // [bp-0x44]
 
-    if (sub_488af0(a1->field_4, "_light"))
-        return sub_489340(a0, a1);
-    v13 = sub_48ce60(a1->field_8, "%d %d %d %d\n", &v5, &v6, &v7, &v8);
+    if (strcmp@GLIBC_2.0(a1->field_4, "_light"))
+        return CLight::KeyValue(a0, a1);
+    v13 = sscanf@GLIBC_2.0(a1->field_8, "%d %d %d %d\n", &v5, &v6, &v7, &v8);
     switch (v13)
     {
     case 1:
@@ -67,7 +67,7 @@ LABEL_4ce1ac:
     v3 = 0x3fe33333;
     v2 = 0x33333333;
     v14 = (double)v5 / 114.0;
-    sub_48b270(*(unsigned int *)&v14);
+    pow(*(unsigned int *)&v14);
     v10 = __fnstcw();
     v9 = v10 | 0xc00;
     v11 = (int)(v14 * 264.0);
@@ -75,7 +75,7 @@ LABEL_4ce1ac:
     v1 = 0x3fe33333;
     v0 = 0x33333333;
     v15 = (double)v6 / 114.0;
-    sub_48b270(*(unsigned int *)&v15);
+    pow(*(unsigned int *)&v15);
     v10 = __fnstcw();
     v9 = v10 | 0xc00;
     v11 = (int)(v15 * 264.0);
@@ -83,18 +83,18 @@ LABEL_4ce1ac:
     v3 = 0x3fe33333;
     v2 = 0x33333333;
     v16 = (double)v7 / 114.0;
-    sub_48b270(*(unsigned int *)&v16);
+    pow(*(unsigned int *)&v16);
     v10 = __fnstcw();
     v9 = v10 | 0xc00;
     v11 = (int)(v16 * 264.0);
     v7 = v11;
     a1->field_c = 1;
-    sub_48d990(&v12, "%d", v5);
+    sprintf@GLIBC_2.0(&v12, "%d", v5);
     v4 = &g_engfuncs.padding_0[0];
     v4->field_f0("sv_skycolor_r", &v12);
-    sub_48d990(&v12, "%d", v6);
+    sprintf@GLIBC_2.0(&v12, "%d", v6);
     v4->field_f0("sv_skycolor_g", &v12);
-    sub_48d990(&v12, "%d", v7);
+    sprintf@GLIBC_2.0(&v12, "%d", v7);
     return v4->field_f0("sv_skycolor_b", &v12);
 }
 

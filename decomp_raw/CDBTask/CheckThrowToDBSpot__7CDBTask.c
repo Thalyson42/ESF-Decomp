@@ -95,7 +95,7 @@ double CheckThrowToDBSpot__7CDBTask(st_56c7f0_2 *a0)
     v19 = v16 * v16 + v17 * v17 + v18 * v18;
     v20 = sqrt(v19);
     if (isnan(v20))
-        sub_487dc0(*(unsigned int *)&v19);
+        sqrt(*(unsigned int *)&v19);
     else
         v19 = v20;
     v1 = (float)v19;
@@ -114,7 +114,7 @@ double CheckThrowToDBSpot__7CDBTask(st_56c7f0_2 *a0)
     }
     else
     {
-        sub_48d0d0(a0->field_8);
+        CBot::ResetMoveSpeed(a0->field_8);
         v21 = *(float *)&a0->field_c->field_90 - 175.0;
         if (v21 >= *(float *)&v13)
         {
@@ -148,7 +148,7 @@ double CheckThrowToDBSpot__7CDBTask(st_56c7f0_2 *a0)
             }
         }
     }
-    sub_488e30(a0->field_8);
+    CBot::SetMoveDir(a0->field_8);
     return v21;
 }
 

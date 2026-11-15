@@ -63,10 +63,10 @@ typedef struct st_553990_5 {
 } st_553990_5;
 
 extern unsigned int g_teamplay;
-extern st_553990_2 *g_616928;
-extern st_553990_2 *g_61692c;
+extern st_553990_2 *g_engfuncs.pfnRandomLong;
+extern st_553990_2 *g_engfuncs.pfnRandomFloat;
 extern st_553990_5 *gpGlobals;
-extern char g_6253c6;
+extern char BotManager+3398;
 
 st_553990_3 * BotFindEnemy__4CBot(float a0)
 {
@@ -114,7 +114,7 @@ st_553990_3 * BotFindEnemy__4CBot(float a0)
     float v24;  // [bp-0x20]
     unsigned int v25;  // [bp-0x1c]
 
-    if (!g_6253c6)
+    if (!BotManager+3398)
         return NULL;
     v10 = NULL;
     *(unsigned short *)&v3 = 0xff9c;
@@ -122,11 +122,11 @@ st_553990_3 * BotFindEnemy__4CBot(float a0)
     v27->field_b6c = 0;
     if (v27->field_b3c <= *(float *)&gpGlobals->field_0)
     {
-        g_61692c(*(float *)(*(int *)(*(unsigned int *)&a0 + 0xa00) + 48), *(float *)(*(int *)(*(unsigned int *)&a0 + 0xa00) + 52));
+        g_engfuncs.pfnRandomFloat(*(float *)(*(int *)(*(unsigned int *)&a0 + 0xa00) + 48), *(float *)(*(int *)(*(unsigned int *)&a0 + 0xa00) + 52));
         v28 = (st_553990_6 *)a0;
         *(float *)&v28->field_b3c = *(float *)(*(int *)(*(unsigned int *)&a0 + 0xa00) + 48) + *(float *)&gpGlobals->field_0;
         if (!v28->field_a20)
-            sub_48bf40(v28);
+            CBot::MakePlayerList(v28);
         v29 = (st_553990_7 *)a0;
         if (v29->field_aac)
         {
@@ -138,7 +138,7 @@ st_553990_3 * BotFindEnemy__4CBot(float a0)
                 {
                     v4 = *(int *)(*(unsigned int *)&a0 + 2596 + idx * 4);
                     *(unsigned short *)((char *)&v3 + 2) = 1;
-                    if (!(char)sub_48c440(a0, *(int *)(*(unsigned int *)&a0 + 2596 + idx * 4)) && (!g_teamplay || *(int *)(*(int *)a0 + 428) != v4->field_0->field_1ac))
+                    if (!(char)CBot::EnemyIsInList(a0, *(int *)(*(unsigned int *)&a0 + 2596 + idx * 4)) && (!g_teamplay || *(int *)(*(int *)a0 + 428) != v4->field_0->field_1ac))
                     {
                         v1 = &v15;
                         v4->field_60->field_d0(v1, v4);
@@ -154,15 +154,15 @@ st_553990_3 * BotFindEnemy__4CBot(float a0)
                         v32 = v30 * v30 + v31 * v31 + 0.0;
                         v33 = sqrt(v32);
                         if (isnan(v33))
-                            sub_487dc0(*(unsigned int *)&v32);
+                            sqrt(*(unsigned int *)&v32);
                         else
                             v32 = v33;
                         v22 = (float)v32;
                         v7 = 0;
                         if (v22 <= 2300.0f || *(short *)(*(unsigned int *)&a0 + 2980) > 0)
                             v7 = 1;
-                        v6 = sub_489330(a0, v4);
-                        v5 = sub_489330(v4, a0);
+                        v6 = EntIsInFieldOfView(a0, v4);
+                        v5 = EntIsInFieldOfView(v4, a0);
                         v34 = &v4->field_0->field_8;
                         *(float *)&v18 = v4->field_0->field_8;
                         v20 = *(float *)&v34->padding_0[4];
@@ -177,7 +177,7 @@ st_553990_3 * BotFindEnemy__4CBot(float a0)
                         v39 = v36 * v36 + v37 * v37 + v38 * v38;
                         v40 = sqrt(v39);
                         if (isnan(v40))
-                            sub_487dc0(*(unsigned int *)&v39);
+                            sqrt(*(unsigned int *)&v39);
                         else
                             v39 = v40;
                         v11 = (float)v39;
@@ -193,13 +193,13 @@ st_553990_3 * BotFindEnemy__4CBot(float a0)
                             if (v5)
                                 *(unsigned short *)((char *)&v3 + 2) = *(unsigned short *)((void*)&v3 + 2) + 2;
                             if (*(int *)(*(unsigned int *)&a0 + 2928) && v4 == *(int *)(*(unsigned int *)&a0 + 2928))
-                                *(unsigned short *)((char *)&v3 + 2) = *(unsigned short *)((void*)&v3 + 2) + (unsigned short)g_616928(1, 4);
-                            if (!(char)sub_48bf70(a0, v4))
+                                *(unsigned short *)((char *)&v3 + 2) = *(unsigned short *)((void*)&v3 + 2) + (unsigned short)g_engfuncs.pfnRandomLong(1, 4);
+                            if (!(char)CBot::CanAttackPlayer(a0, v4))
                                 *(unsigned short *)((char *)&v3 + 2) = *(unsigned short *)((void*)&v3 + 2) - 3;
                             if (v4->field_770)
-                                *(unsigned short *)((char *)&v3 + 2) = *(unsigned short *)((void*)&v3 + 2) - (unsigned short)g_616928(1, 2);
+                                *(unsigned short *)((char *)&v3 + 2) = *(unsigned short *)((void*)&v3 + 2) - (unsigned short)g_engfuncs.pfnRandomLong(1, 2);
                             v0 = v4->field_744;
-                            if ((char)sub_489740(a0, v0))
+                            if ((char)CBot::DangerousPlForBot(a0, v0))
                             {
                                 v19 = _INSERT(v20, 2, __fnstcw());
                                 *(unsigned int *)&v20 = _INSERT(v19, 0, *(unsigned short *)((void*)&v19 + 2) | 0xc00);
@@ -210,12 +210,12 @@ st_553990_3 * BotFindEnemy__4CBot(float a0)
                             iter = 1;
                             while (iter <= gpGlobals->field_90)
                             {
-                                v42 = __int_as_float(sub_48a500(iter));
+                                v42 = __int_as_float(UTIL_PlayerByIndex(iter));
                                 if (__float_as_int(v42) != *(unsigned int *)&a0)
                                 {
                                     *(unsigned short *)&v1 = 1;
                                     *(unsigned short *)&v0 = 1;
-                                    if ((char)sub_489a70(v42, v0, v1))
+                                    if ((char)UTIL_IsValidPlayer(v42, v0, v1))
                                     {
                                         v2 = 0;
                                         if (!(*(int *)(*(int *)(__float_as_int(v42) + 96) + 164))(v42))

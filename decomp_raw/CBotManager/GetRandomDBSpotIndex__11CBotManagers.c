@@ -16,7 +16,7 @@ typedef struct st_56b170_2 {
 } st_56b170_2;
 
 extern unsigned int FindSelection__t12TMultiChoice1ZsPQ2t12TMultiChoice1Zs12SMultiChoicei;
-extern st_56b170_2 *g_616928;
+extern st_56b170_2 *g_engfuncs.pfnRandomLong;
 extern char GatherSpotsForTeamGood;
 extern char GatherSpotsForTeamEvil;
 
@@ -63,7 +63,7 @@ unsigned int GetRandomDBSpotIndex__11CBotManagers(unsigned int a0, unsigned shor
     st_56b170_1 **v12;  // [bp-0x8], Other Possible Types: unsigned int
 
     v11 = 0;
-    v13 = sub_48d6a0(8);
+    v13 = __builtin_new(8);
     *v13 = NULL;
     v13[1] = NULL;
     v12 = v13;
@@ -74,7 +74,7 @@ unsigned int GetRandomDBSpotIndex__11CBotManagers(unsigned int a0, unsigned shor
         {
             if (!((a1 == 1 ? &GatherSpotsForTeamGood : &GatherSpotsForTeamEvil))[12 + 16 * i])
             {
-                v14 = sub_48d6a0(12);
+                v14 = __builtin_new(12);
                 v14->field_0 = 0;
                 v14->field_4 = 0;
                 v9 = v14;
@@ -84,15 +84,15 @@ unsigned int GetRandomDBSpotIndex__11CBotManagers(unsigned int a0, unsigned shor
                 v15 = v12;
                 if (!*v15)
                 {
-                    v16 = sub_48d6a0(12);
+                    v16 = __builtin_new(12);
                     v8 = 1;
                     v16->field_4 = NULL;
                     v16->field_8 = NULL;
-                    sub_48d0e0(v16, 0, 4);
+                    memset@GLIBC_2.0(v16, 0, 4);
                     v8 = 0;
                     *v15 = v16;
                     if (v8)
-                        sub_48d4e0(v16);
+                        __builtin_delete(v16);
                     *v15->field_0 = v9;
                     *v15->field_4 = NULL;
                     *v15->field_8 = NULL;
@@ -101,15 +101,15 @@ unsigned int GetRandomDBSpotIndex__11CBotManagers(unsigned int a0, unsigned shor
                 else
                 {
                     v7 = v15[1];
-                    v17 = sub_48d6a0(12);
+                    v17 = __builtin_new(12);
                     v6 = 1;
                     v17->field_4 = NULL;
                     v17->field_8 = NULL;
-                    sub_48d0e0(v17, 0, 4);
+                    memset@GLIBC_2.0(v17, 0, 4);
                     v6 = 0;
                     v7->field_4 = v17;
                     if (v6)
-                        sub_48d4e0(v17);
+                        __builtin_delete(v17);
                     v15[1]->field_4->field_8 = v15[1];
                     v18 = v15[1]->field_4;
                     v15[1] = v18;
@@ -122,7 +122,7 @@ unsigned int GetRandomDBSpotIndex__11CBotManagers(unsigned int a0, unsigned shor
         } while (i <= 9);
     }
     v5 = &i;
-    v4 = g_616928(0, v11);
+    v4 = g_engfuncs.pfnRandomLong(0, v11);
     v2 = _INSERT(v4, 0, 0) | 0xffff0000;
     v3 = &FindSelection__t12TMultiChoice1ZsPQ2t12TMultiChoice1Zs12SMultiChoicei;
     v20 = *v12;
@@ -158,12 +158,12 @@ LABEL_56b413:
                     if (v27)
                         v27->field_8 = NULL;
                     v26->field_4 = NULL;
-                    sub_48d4e0(v26);
+                    __builtin_delete(v26);
                 }
                 v28 = v25;
                 if (!v28)
                     break;
-                sub_48d4e0(v28);
+                __builtin_delete(v28);
             }
             if (v12)
             {
@@ -177,12 +177,12 @@ LABEL_56b413:
                         iter = iter->field_4;
                         v31->field_4 = NULL;
                         v31->field_8 = NULL;
-                        sub_48d4e0(v31);
+                        __builtin_delete(v31);
                     } while (iter);
                 }
                 v29[1] = NULL;
                 *v29 = NULL;
-                sub_48d4e0(v29);
+                __builtin_delete(v29);
             }
             v12 = 0;
             return v0;
@@ -201,12 +201,12 @@ LABEL_56b413:
             if (v35)
                 v35->field_8 = NULL;
             v34->field_4 = NULL;
-            sub_48d4e0(v34);
+            __builtin_delete(v34);
         }
         v36 = v33;
         if (!v36)
             break;
-        sub_48d4e0(v36);
+        __builtin_delete(v36);
     }
     if (v12)
     {
@@ -220,12 +220,12 @@ LABEL_56b413:
                 node = node->field_4;
                 v39->field_4 = NULL;
                 v39->field_8 = NULL;
-                sub_48d4e0(v39);
+                __builtin_delete(v39);
             } while (node);
         }
         v37[1] = NULL;
         *v37 = NULL;
-        sub_48d4e0(v37);
+        __builtin_delete(v37);
     }
     v12 = 0;
     return 0xffffffff;

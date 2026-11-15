@@ -4,10 +4,10 @@ typedef struct st_534cb0_0 {
 } st_534cb0_0;
 
 extern unsigned int gmsgManipModel;
-extern st_534cb0_0 *g_616878;
-extern st_534cb0_0 *g_61687c;
-extern st_534cb0_0 *g_616880;
-extern st_534cb0_0 *g_616888;
+extern st_534cb0_0 *g_engfuncs.pfnMessageBegin;
+extern st_534cb0_0 *g_engfuncs.pfnMessageEnd;
+extern st_534cb0_0 *g_engfuncs.pfnWriteByte;
+extern st_534cb0_0 *g_engfuncs.pfnWriteShort;
 
 int UTIL_Model_MotionBlur__Fii(unsigned int a0, unsigned int a1)
 {
@@ -15,10 +15,10 @@ int UTIL_Model_MotionBlur__Fii(unsigned int a0, unsigned int a1)
     unsigned int v1;  // [bp-0x18]
     unsigned int v2;  // [bp-0x14]
 
-    g_616878(2, gmsgManipModel, 0, 0, v0, v1, v2);
-    g_616880(9);
-    g_616888(a0);
-    g_616888(a1);
-    return g_61687c(a1);
+    g_engfuncs.pfnMessageBegin(2, gmsgManipModel, 0, 0, v0, v1, v2);
+    g_engfuncs.pfnWriteByte(9);
+    g_engfuncs.pfnWriteShort(a0);
+    g_engfuncs.pfnWriteShort(a1);
+    return g_engfuncs.pfnMessageEnd(a1);
 }
 

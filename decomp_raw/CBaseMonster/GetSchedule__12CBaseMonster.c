@@ -10,13 +10,13 @@ typedef struct st_5140a0_1 {
 
 extern char slError;
 extern char _GLOBAL_OFFSET_TABLE_;
-extern st_5140a0_1 *g_6168b4;
+extern st_5140a0_1 *g_engfuncs.pfnAlertMessage;
 
 int GetSchedule__12CBaseMonster(st_5140a0_0 *a0)
 {
     if (a0->field_180 > 8)
     {
-        g_6168b4(2, "Invalid State for GetSchedule!\n");
+        g_engfuncs.pfnAlertMessage(2, "Invalid State for GetSchedule!\n");
         return &slError;
     }
     goto *((void *)(&(&_GLOBAL_OFFSET_TABLE_)[-1 * *(int *)(&(&_GLOBAL_OFFSET_TABLE_)[4 * a0->field_180] - 0xff9fc)]));

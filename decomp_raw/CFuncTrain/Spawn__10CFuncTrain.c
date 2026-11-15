@@ -8,8 +8,8 @@ typedef struct st_4ea430_0 {
     unsigned int field_0;
 } st_4ea430_0;
 
-extern st_4ea430_0 *g_6167c8;
-extern st_4ea430_0 *g_6168b4;
+extern st_4ea430_0 *g_engfuncs.pfnSetModel;
+extern st_4ea430_0 *g_engfuncs.pfnAlertMessage;
 extern st_4ea430_1 *gpGlobals;
 
 char Spawn__10CFuncTrain(float idx)
@@ -20,7 +20,7 @@ char Spawn__10CFuncTrain(float idx)
     if (*(float *)(*(int *)idx + 504) == 0.0f)
         *(float *)(*(int *)idx + 504) = 100.0f;
     if (!*(int *)(*(int *)idx + 456))
-        g_6168b4(1, "FuncTrain with no target");
+        g_engfuncs.pfnAlertMessage(1, "FuncTrain with no target");
     if (*(float *)(*(int *)idx + 480) == 0.0f)
         *(float *)(*(int *)idx + 480) = 2.0f;
     *(unsigned int *)(*(int *)idx + 264) = 7;
@@ -28,10 +28,10 @@ char Spawn__10CFuncTrain(float idx)
         *(unsigned int *)(*(int *)idx + 268) = 0;
     else
         *(unsigned int *)(*(int *)idx + 268) = 4;
-    g_6167c8(*(int *)(*(int *)idx + 520), *(int *)(*(int *)idx + 184) + gpGlobals->field_98);
+    g_engfuncs.pfnSetModel(*(int *)(*(int *)idx + 520), *(int *)(*(int *)idx + 184) + gpGlobals->field_98);
     v1 = *(int *)idx;
-    sub_48a0d0(v1, v1 + 55, v1 + 58);
-    sub_48db50(*(int *)idx, *(int *)idx + 8);
+    UTIL_SetSize(v1, v1 + 55, v1 + 58);
+    UTIL_SetOrigin(*(int *)idx, *(int *)idx + 8);
     *(unsigned int *)(*(unsigned int *)&idx + 276) = 0;
     if (*(float *)(*(unsigned int *)&idx + 264) == 0.0f)
         *(float *)(*(unsigned int *)&idx + 264) = 0.8500000238418579f;

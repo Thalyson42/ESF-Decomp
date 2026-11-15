@@ -20,7 +20,7 @@ unsigned int * StrikeThink__6CLaser(float idx)
     unsigned int *v3;  // edx
     char v0;  // [bp-0x44]
 
-    v2 = sub_488440(idx, *(int *)(*(int *)idx + 468) + gpGlobals->field_98);
+    v2 = CBeam::RandomTargetname(idx, *(int *)(*(int *)idx + 468) + gpGlobals->field_98);
     if (v2)
     {
         v3 = *v2;
@@ -28,8 +28,8 @@ unsigned int * StrikeThink__6CLaser(float idx)
         *(unsigned int *)(*(unsigned int *)&idx + 112) = v3[3];
         *(unsigned int *)(*(unsigned int *)&idx + 116) = v3[4];
     }
-    sub_487b80(*(int *)idx + 8, *(unsigned int *)&idx + 108, 0, 0, &v0);
-    sub_489180(idx, &v0);
+    UTIL_TraceLine(*(int *)idx + 8, *(unsigned int *)&idx + 108, 0, 0, &v0);
+    CLaser::FireAtPoint(idx, &v0);
     *(float *)(*(int *)idx + 260) = (float)(0.1 + gpGlobals->field_0);
     return gpGlobals;
 }

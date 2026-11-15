@@ -17,8 +17,8 @@ typedef struct st_522a60_2 {
     unsigned int field_0;
 } st_522a60_2;
 
-extern st_522a60_2 *g_616818;
-extern st_522a60_2 *g_6168d4;
+extern st_522a60_2 *g_engfuncs.pfnRemoveEntity;
+extern st_522a60_2 *g_engfuncs.pfnPEntityOfEntOffset;
 
 int DelayThink__10CBaseDelay(st_522a60_1 **a0)
 {
@@ -29,12 +29,12 @@ int DelayThink__10CBaseDelay(st_522a60_1 **a0)
     if (*a0->field_198)
     {
         v1 = *a0->field_198;
-        if (*a0->field_198 || (v1 = g_6168d4(0), v1))
+        if (*a0->field_198 || (v1 = g_engfuncs.pfnPEntityOfEntOffset(0), v1))
             v0 = v1->field_7c;
         else
             v0 = 0;
     }
-    sub_48d150(a0, v0, *a0->field_180, 0);
-    return g_616818(*a0->field_208);
+    CBaseDelay::SUB_UseTargets(a0, v0, *a0->field_180, 0);
+    return g_engfuncs.pfnRemoveEntity(*a0->field_208);
 }
 

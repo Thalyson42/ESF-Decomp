@@ -7,7 +7,7 @@ int SwoopPercentMenu__5NMenuv(void)
     int v0;  // [bp-0x1c]
 
     if (_5NMenu.CurrentMenuChoice <= 8)
-        sub_489f90(&BotManager, 41, (short)sub_48cb20("swoop_percent"));
-    return sub_48d6f0(v0);
+        CBotManager::ChangePersoPercentSetting(&BotManager, 41, (short)NMenu::GetPercentFromMenu("swoop_percent"));
+    return NMenu::ResetMenu(v0);
 }
 

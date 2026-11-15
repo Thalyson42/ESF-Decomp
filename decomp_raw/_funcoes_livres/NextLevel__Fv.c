@@ -26,9 +26,9 @@ typedef struct st_52e410_0 {
 
 extern char ExecuteChangeLevel__12CChangeLevel;
 extern unsigned int g_fGameOver;
-extern st_52e410_0 *g_6167f8;
-extern st_52e410_0 *g_6168cc;
-extern st_52e410_0 *g_6168d8;
+extern st_52e410_0 *g_engfuncs.pfnFindEntityByString;
+extern st_52e410_0 *g_engfuncs.pfnAllocString;
+extern st_52e410_0 *g_engfuncs.pfnEntOffsetOfPEntity;
 extern st_52e410_1 *gpGlobals;
 extern int st_szNextMap;
 
@@ -40,23 +40,23 @@ unsigned int NextLevel__Fv(void)
     st_52e410_3 *v4;  // edi
     st_52e410_2 *v5;  // esi
 
-    v1 = g_6167f8(0, "classname", "trigger_changelevel");
+    v1 = g_engfuncs.pfnFindEntityByString(0, "classname", "trigger_changelevel");
     v2 = 0;
-    if (!v1 || !g_6168d8(v1))
+    if (!v1 || !g_engfuncs.pfnEntOffsetOfPEntity(v1))
         v2 = 1;
     if (v2)
     {
-        v3 = g_6168cc("start");
+        v3 = g_engfuncs.pfnAllocString("start");
         gpGlobals->field_c = v3;
-        v4 = sub_48b830(0);
+        v4 = GetClassPtr__H1Z12CChangeLevel_PX01_PX01(0);
         v4->field_104 = 1918989427;
         v4->field_108 = 116;
     }
     else
     {
-        v4 = sub_48b830((!v1 ? 0 : v1 + 128));
+        v4 = GetClassPtr__H1Z12CChangeLevel_PX01_PX01((!v1 ? 0 : v1 + 128));
     }
-    sub_48e110(&st_szNextMap, &v4->field_104);
+    strcpy@GLIBC_2.0(&st_szNextMap, &v4->field_104);
     g_fGameOver = 1;
     v5 = v4->field_0;
     if (v5->field_104 < gpGlobals->field_0)

@@ -19,8 +19,8 @@ void PM_SortTextures(void)
             v0 = v2 * 13;
             do
             {
-                if ((int)sub_48cac0(&(&grgszTextureName)[v0], &(&grgszTextureName)[13 * v3]) > 0)
-                    sub_48a110(v2, v3);
+                if ((int)strcasecmp@GLIBC_2.0(&(&grgszTextureName)[v0], &(&grgszTextureName)[13 * v3]) > 0)
+                    PM_SwapTextures(v2, v3);
             } while ((v3 += 1, v3 < gcTextures));
         }
     } while ((v2 += 1, v2 < gcTextures));

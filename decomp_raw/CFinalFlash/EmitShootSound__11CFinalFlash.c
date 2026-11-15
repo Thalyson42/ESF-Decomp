@@ -15,7 +15,7 @@ typedef struct st_4bd840_0 {
 
 int EmitShootSound__11CFinalFlash(st_4bd840_1 *a0)
 {
-    sub_48d4f0(a0->field_80, "finalflash.wav");
-    return sub_489390(*(int *)(*(int *)a0->field_80 + 520), 1, "weapons/finalflash.wav", 0x3f800000, 0.800000011920929f, 0, 100);
+    CBasePlayer::EmitClassSound(a0->field_80, "finalflash.wav");
+    return EMIT_SOUND_DYN(*(int *)(*(int *)a0->field_80 + 520), 1, "weapons/finalflash.wav", 0x3f800000, 0.800000011920929f, 0, 100);
 }
 

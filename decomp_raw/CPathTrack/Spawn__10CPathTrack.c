@@ -28,7 +28,7 @@ unsigned int Spawn__10CPathTrack(st_4e6f20_1 *a0)
     v0 = -8.0f;
     v1 = -8.0f;
     v2 = -8.0f;
-    v6 = sub_48a0d0(a0->field_0, &v0, &v3);
+    v6 = UTIL_SetSize(a0->field_0, &v0, &v3);
     a0->field_6c = 0;
     a0->field_70 = 0;
     return v6;

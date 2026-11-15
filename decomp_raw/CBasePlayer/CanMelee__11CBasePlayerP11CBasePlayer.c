@@ -44,7 +44,7 @@ typedef struct st_4f70b0_5 {
     struct st_4f70b0_4 *field_44;
 } st_4f70b0_5;
 
-extern float g_5bd180;
+extern float nomeleehittime+12;
 extern st_4f70b0_5 *g_pGameRules;
 extern st_4f70b0_3 *gpGlobals;
 

@@ -24,13 +24,13 @@ unsigned int Think__17CAscendComboEntry(st_55c530_0 *a0)
     unsigned int v0;  // eax
 
     if (a0->field_4->field_324)
-        sub_48dbc0(a0->field_4);
+        CBasePlayer::StopTurbo(a0->field_4);
     if (!a0->field_4->field_770 && a0->field_14 >= *(float *)gpGlobals)
     {
-        v0 = sub_48c130(a0->field_4);
+        v0 = CBot::BotCanAscend(a0->field_4);
         if ((char)v0)
         {
-            sub_489400(a0->field_4);
+            CBasePlayer::StartAscend(a0->field_4);
             return v0;
         }
     }

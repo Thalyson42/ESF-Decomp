@@ -77,9 +77,9 @@ typedef struct st_494760_8 {
 
 extern char ExplodeTouch__16CExplodingAttackP11CBaseEntity;
 extern char FollowThink__13CGuidedAttack;
-extern st_494760_5 *g_6167c8;
-extern st_494760_5 *g_6168d4;
-extern st_494760_5 *g_6168dc;
+extern st_494760_5 *g_engfuncs.pfnSetModel;
+extern st_494760_5 *g_engfuncs.pfnPEntityOfEntOffset;
+extern st_494760_5 *g_engfuncs.pfnIndexOfEdict;
 extern st_494760_8 *gpGlobals;
 
 st_494760_6 * ShootBurningBeam__12CBurningBeamP9entvars_sG6VectorT2iPcfisssssifi(st_494760_7 *a0, float *a1, float *a2, unsigned int a3, unsigned int a4, float a5, unsigned int a6, short a7, short a8, short a9, short a10, short a11, unsigned int a12, float a13, unsigned int a14)
@@ -132,12 +132,12 @@ st_494760_6 * ShootBurningBeam__12CBurningBeamP9entvars_sG6VectorT2iPcfisssssifi
     float v28;  // [bp-0x14]
     float v29;  // [bp-0x10]
 
-    v30 = sub_48df70(0);
+    v30 = GetClassPtr__H1Z12CBurningBeam_PX01_PX01(0);
     v30->field_60->field_8(v30);
     v30->field_2c8 = 0;
     v30->field_0->field_108 = 5;
     v30->field_0->field_10c = 1;
-    g_6167c8(v30->field_0->field_208, "sprites/null.spr");
+    g_engfuncs.pfnSetModel(v30->field_0->field_208, "sprites/null.spr");
     v30->field_2d0 = a12;
     v30->field_2d4 = 4;
     v30->field_2e0 = a13;
@@ -152,12 +152,12 @@ st_494760_6 * ShootBurningBeam__12CBurningBeamP9entvars_sG6VectorT2iPcfisssssifi
     v32 = *a2 * *a2 + a2[1] * a2[1] + a2[2] * a2[2];
     v33 = sqrt(v32);
     if (isnan(v33))
-        sub_487dc0(*(unsigned int *)&v32);
+        sqrt(*(unsigned int *)&v32);
     else
         v32 = v33;
     v30->field_2a8 = (float)v32;
     v11 = v30->field_0;
-    sub_488860(&v21, &v11->field_20);
+    UTIL_VecToAngles(&v21, &v11->field_20);
     v11->field_50 = v21;
     v11->field_54 = v24;
     v11->field_58 = v26;
@@ -167,7 +167,7 @@ st_494760_6 * ShootBurningBeam__12CBurningBeamP9entvars_sG6VectorT2iPcfisssssifi
     v34 = *a2 * *a2 + a2[1] * a2[1] + a2[2] * a2[2];
     v35 = sqrt(v34);
     if (isnan(v35))
-        sub_487dc0(*(unsigned int *)&v34);
+        sqrt(*(unsigned int *)&v34);
     else
         v34 = v35;
     v20 = (float)v34;
@@ -192,7 +192,7 @@ st_494760_6 * ShootBurningBeam__12CBurningBeamP9entvars_sG6VectorT2iPcfisssssifi
     v28 = v37[1] + v23;
     v29 = v37[2] + v25;
     v9 = &v27;
-    sub_487b80(a1, v9, 1, a0->field_208, &v15);
+    UTIL_TraceLine(a1, v9, 1, a0->field_208, &v15);
     v38 = v16;
     v17 = v38 * v22;
     v18 = v38 * v23;
@@ -205,7 +205,7 @@ st_494760_6 * ShootBurningBeam__12CBurningBeamP9entvars_sG6VectorT2iPcfisssssifi
     *v40 = v27;
     v40[1] = v28;
     v40[2] = v29;
-    sub_48db50(v30->field_0, v40);
+    UTIL_SetOrigin(v30->field_0, v40);
     v41 = v10;
     v27 = v41;
     v28 = v41;
@@ -214,13 +214,13 @@ st_494760_6 * ShootBurningBeam__12CBurningBeamP9entvars_sG6VectorT2iPcfisssssifi
     v17 = (float)v42;
     v18 = (float)v42;
     v19 = (float)v42;
-    v44 = _INSERT(sub_48a0d0(v30->field_0, &v17, v9), 0, 0) | 0xffff0000;
+    v44 = _INSERT(UTIL_SetSize(v30->field_0, &v17, v9), 0, 0) | 0xffff0000;
     v30->field_14 = v44;
     v30->field_18 = &ExplodeTouch__16CExplodingAttackP11CBaseEntity;
     v30->field_c = _INSERT(v44, 0, 0) | 0xffff0000;
     v30->field_10 = &FollowThink__13CGuidedAttack;
     *(float *)&v30->field_0->field_104 = gpGlobals->field_0;
-    sub_489390(v30->field_0->field_208, 1, "weapons/beamhead.wav", 0x3f800000, 0.800000011920929f, 0, 100);
+    EMIT_SOUND_DYN(v30->field_0->field_208, 1, "weapons/beamhead.wav", 0x3f800000, 0.800000011920929f, 0, 100);
     v46 = a1;
     v27 = *v46;
     v28 = v46[1];
@@ -238,11 +238,11 @@ st_494760_6 * ShootBurningBeam__12CBurningBeamP9entvars_sG6VectorT2iPcfisssssifi
     v1 = a8;
     v0 = a14;
     v47 = a0->field_208;
-    if (a0->field_208 || (v47 = g_6168d4(0), v47))
+    if (a0->field_208 || (v47 = g_engfuncs.pfnPEntityOfEntOffset(0), v47))
         v48 = v47->field_7c;
     else
         v48 = NULL;
-    sub_4891b0(v30, g_6168dc(*v48->field_208));
+    CBeamAttack::AddEntEntTrail(v30, g_engfuncs.pfnIndexOfEdict(*v48->field_208));
     return v30;
 }
 

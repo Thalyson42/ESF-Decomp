@@ -42,9 +42,9 @@ double KeyValue__9CBaseDoorP14KeyValueData_s(st_4aaf20_2 *a0, st_4aaf20_0 *a1)
     unsigned short v1;  // [bp-0x8]
     unsigned short v2;  // [bp-0x6]
 
-    if (!sub_488af0(a1->field_4, "skin"))
+    if (!strcmp@GLIBC_2.0(a1->field_4, "skin"))
     {
-        sub_487fc0(a1->field_8, 0, 0);
+        __strtod_internal@GLIBC_2.0(a1->field_8, 0, 0);
         v2 = __fnstcw();
         v1 = v2 | 0xc00;
         v0 = (int)v3;
@@ -52,9 +52,9 @@ double KeyValue__9CBaseDoorP14KeyValueData_s(st_4aaf20_2 *a0, st_4aaf20_0 *a1)
         a1->field_c = 1;
         return v3;
     }
-    else if (!sub_488af0(a1->field_4, "movesnd"))
+    else if (!strcmp@GLIBC_2.0(a1->field_4, "movesnd"))
     {
-        sub_487fc0(a1->field_8, 0, 0);
+        __strtod_internal@GLIBC_2.0(a1->field_8, 0, 0);
         v2 = __fnstcw();
         v1 = v2 | 0xc00;
         v0 = (int)v4;
@@ -62,9 +62,9 @@ double KeyValue__9CBaseDoorP14KeyValueData_s(st_4aaf20_2 *a0, st_4aaf20_0 *a1)
         a1->field_c = 1;
         return v4;
     }
-    else if (!sub_488af0(a1->field_4, "stopsnd"))
+    else if (!strcmp@GLIBC_2.0(a1->field_4, "stopsnd"))
     {
-        sub_487fc0(a1->field_8, 0, 0);
+        __strtod_internal@GLIBC_2.0(a1->field_8, 0, 0);
         v2 = __fnstcw();
         v1 = v2 | 0xc00;
         v0 = (int)v5;
@@ -72,9 +72,9 @@ double KeyValue__9CBaseDoorP14KeyValueData_s(st_4aaf20_2 *a0, st_4aaf20_0 *a1)
         a1->field_c = 1;
         return v5;
     }
-    else if (!sub_488af0(a1->field_4, "healthvalue"))
+    else if (!strcmp@GLIBC_2.0(a1->field_4, "healthvalue"))
     {
-        sub_487fc0(a1->field_8, 0, 0);
+        __strtod_internal@GLIBC_2.0(a1->field_8, 0, 0);
         v2 = __fnstcw();
         v1 = v2 | 0xc00;
         v0 = (int)v6;
@@ -82,9 +82,9 @@ double KeyValue__9CBaseDoorP14KeyValueData_s(st_4aaf20_2 *a0, st_4aaf20_0 *a1)
         a1->field_c = 1;
         return v6;
     }
-    else if (!sub_488af0(a1->field_4, "locked_sound"))
+    else if (!strcmp@GLIBC_2.0(a1->field_4, "locked_sound"))
     {
-        sub_487fc0(a1->field_8, 0, 0);
+        __strtod_internal@GLIBC_2.0(a1->field_8, 0, 0);
         v2 = __fnstcw();
         v1 = v2 | 0xc00;
         v0 = (int)v7;
@@ -92,9 +92,9 @@ double KeyValue__9CBaseDoorP14KeyValueData_s(st_4aaf20_2 *a0, st_4aaf20_0 *a1)
         a1->field_c = 1;
         return v7;
     }
-    else if (!sub_488af0(a1->field_4, "locked_sentence"))
+    else if (!strcmp@GLIBC_2.0(a1->field_4, "locked_sentence"))
     {
-        sub_487fc0(a1->field_8, 0, 0);
+        __strtod_internal@GLIBC_2.0(a1->field_8, 0, 0);
         v2 = __fnstcw();
         v1 = v2 | 0xc00;
         v0 = (int)v8;
@@ -102,9 +102,9 @@ double KeyValue__9CBaseDoorP14KeyValueData_s(st_4aaf20_2 *a0, st_4aaf20_0 *a1)
         a1->field_c = 1;
         return v8;
     }
-    else if (!sub_488af0(a1->field_4, "unlocked_sound"))
+    else if (!strcmp@GLIBC_2.0(a1->field_4, "unlocked_sound"))
     {
-        sub_487fc0(a1->field_8, 0, 0);
+        __strtod_internal@GLIBC_2.0(a1->field_8, 0, 0);
         v2 = __fnstcw();
         v1 = v2 | 0xc00;
         v0 = (int)v9;
@@ -112,9 +112,9 @@ double KeyValue__9CBaseDoorP14KeyValueData_s(st_4aaf20_2 *a0, st_4aaf20_0 *a1)
         a1->field_c = 1;
         return v9;
     }
-    else if (!sub_488af0(a1->field_4, "unlocked_sentence"))
+    else if (!strcmp@GLIBC_2.0(a1->field_4, "unlocked_sentence"))
     {
-        sub_487fc0(a1->field_8, 0, 0);
+        __strtod_internal@GLIBC_2.0(a1->field_8, 0, 0);
         v2 = __fnstcw();
         v1 = v2 | 0xc00;
         v0 = (int)v10;
@@ -122,16 +122,16 @@ double KeyValue__9CBaseDoorP14KeyValueData_s(st_4aaf20_2 *a0, st_4aaf20_0 *a1)
         a1->field_c = 1;
         return v10;
     }
-    else if (!sub_488af0(a1->field_4, "WaveHeight"))
+    else if (!strcmp@GLIBC_2.0(a1->field_4, "WaveHeight"))
     {
-        sub_487fc0(a1->field_8, 0, 0);
+        __strtod_internal@GLIBC_2.0(a1->field_8, 0, 0);
         a0->field_0->field_144 = (float)(v11 * 0.125);
         a1->field_c = 1;
         return v11 * 0.125;
     }
     else
     {
-        sub_48ba40(a0, a1);
+        CBaseToggle::KeyValue(a0, a1);
         return v12;
     }
 }

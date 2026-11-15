@@ -3,6 +3,6 @@ extern int _14CMomentaryDoor.m_SaveData;
 
 unsigned int Save__14CMomentaryDoorR5CSave(int a0, int a1)
 {
-    return (!sub_48ae30(a0, a1) ? 0 : sub_48db60(a1, "CMomentaryDoor", a0, &_14CMomentaryDoor.m_SaveData, 1));
+    return (!CBaseToggle::Save(a0, a1) ? 0 : CSave::WriteFields(a1, "CMomentaryDoor", a0, &_14CMomentaryDoor.m_SaveData, 1));
 }
 

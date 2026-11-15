@@ -46,7 +46,7 @@ typedef struct st_4e9f50_0 {
 } st_4e9f50_0;
 
 extern char Wait__10CFuncTrain;
-extern st_4e9f50_1 *g_6168b4;
+extern st_4e9f50_1 *g_engfuncs.pfnAlertMessage;
 extern st_4e9f50_0 *gpGlobals;
 
 float Next__10CFuncTrain(float idx)
@@ -93,11 +93,11 @@ float Next__10CFuncTrain(float idx)
     {
         v16 = *(int *)idx;
         if (v16->field_1e8)
-            sub_489390(*(int *)&v16[1].padding_0[24], 6, v16->field_1e8 + gpGlobals->field_98, 0, 0, 32, 100);
+            EMIT_SOUND_DYN(*(int *)&v16[1].padding_0[24], 6, v16->field_1e8 + gpGlobals->field_98, 0, 0, 32, 100);
         v17 = *(int *)idx;
         if (!v17->field_1ec)
             return v18;
-        sub_489390(*(int *)&v17[1].padding_0[24], 2, v17->field_1ec + gpGlobals->field_98, *(float *)(*(unsigned int *)&idx + 264), 0.800000011920929f, 0, 100);
+        EMIT_SOUND_DYN(*(int *)&v17[1].padding_0[24], 2, v17->field_1ec + gpGlobals->field_98, *(float *)(*(unsigned int *)&idx + 264), 0.800000011920929f, 0, 100);
         return *(float *)(*(unsigned int *)&idx + 264);
     }
     else
@@ -110,7 +110,7 @@ float Next__10CFuncTrain(float idx)
         if (*(int *)(*(unsigned int *)&idx + 268) && *(float *)(*(int *)(*(unsigned int *)&idx + 268) + 504) != 0.0f)
         {
             *(float *)(*(int *)idx + 504) = *(float *)(*(int *)(*(unsigned int *)&idx + 268) + 504);
-            g_6168b4(2, "Train %s speed to %4.2f\n", *(int *)(*(int *)idx + 460) + gpGlobals->field_98, (unsigned int)(*(float *)(*(int *)idx + 504) >> 0));
+            g_engfuncs.pfnAlertMessage(2, "Train %s speed to %4.2f\n", *(int *)(*(int *)idx + 460) + gpGlobals->field_98, (unsigned int)(*(float *)(*(int *)idx + 504) >> 0));
         }
         v21 = v0;
         *(struct st_4e9f50_2 **)(*(unsigned int *)&idx + 268) = v21->field_0;
@@ -133,17 +133,17 @@ float Next__10CFuncTrain(float idx)
             v12 = (float)(v0->field_0->field_8 - v25);
             v13 = (float)(*(float *)&v27[1] - v26);
             v14 = *(float *)&v27[2] - v11;
-            sub_48db50(v22, &v12);
-            sub_487be0(idx);
+            UTIL_SetOrigin(v22, &v12);
+            CFuncTrain::Wait(idx);
             return v14;
         }
         v28 = *(int *)idx;
         if (v28->field_1e8)
         {
-            sub_489390(*(int *)&v28[1].padding_0[24], 6, v28->field_1e8 + gpGlobals->field_98, 0, 0, 32, 100);
+            EMIT_SOUND_DYN(*(int *)&v28[1].padding_0[24], 6, v28->field_1e8 + gpGlobals->field_98, 0, 0, 32, 100);
             v29 = *(int *)idx;
             if (v29->field_1e8)
-                sub_489390(*(int *)&v29[1].padding_0[24], 6, v29->field_1e8 + gpGlobals->field_98, *(float *)(*(unsigned int *)&idx + 264), 0.800000011920929f, 0, 100);
+                EMIT_SOUND_DYN(*(int *)&v29[1].padding_0[24], 6, v29->field_1e8 + gpGlobals->field_98, *(float *)(*(unsigned int *)&idx + 264), 0.800000011920929f, 0, 100);
         }
         v30 = *(int *)idx;
         v30->padding_e9[47] = v30->padding_e9[47] & 223;
@@ -164,7 +164,7 @@ float Next__10CFuncTrain(float idx)
         v1 = (float)(v0->field_0->field_8 - v35);
         v2 = (float)(*(float *)&v37[1] - v36);
         v3 = *(float *)&v37[2] - v6;
-        sub_488220(idx, &v1, *(float *)&v32[1].padding_0[8]);
+        CBaseToggle::LinearMove(idx, &v1, *(float *)&v32[1].padding_0[8]);
         return *(float *)&v32[1].padding_0[8];
     }
 }

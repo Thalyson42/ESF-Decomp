@@ -28,7 +28,7 @@ typedef struct st_543160_0 {
     unsigned int field_98;
 } st_543160_0;
 
-extern st_543160_3 *g_61685c;
+extern st_543160_3 *g_engfuncs.pfnServerCommand;
 extern st_543160_0 *gpGlobals;
 
 unsigned int * MapFree__11CBotManager(void)
@@ -44,25 +44,25 @@ unsigned int * MapFree__11CBotManager(void)
     char v6;  // [bp-0x45]
     char v7;  // [bp-0x44]
 
-    sub_4889c0(v2, v3, v4);
+    WaypointFree(v2, v3, v4);
     v9 = 1;
     if (1 > gpGlobals->field_90)
         return gpGlobals;
     v5 = &v7;
     do
     {
-        v10 = sub_48a500(v9);
+        v10 = UTIL_PlayerByIndex(v9);
         *(unsigned short *)&v1 = 0;
         *(unsigned short *)&v0 = 0;
-        if ((char)sub_489a70(v10, v0, v1))
+        if ((char)UTIL_IsValidPlayer(v10, v0, v1))
         {
             v6 = 0;
             if (!v10->field_60->field_a4(v10))
                 v6 = (v10->field_0->field_1a5 & 32) != 0;
             if (v6 && v10)
             {
-                sub_48d990(v5, "kick \"%s\"\n", v10->field_0->field_1d0 + gpGlobals->field_98);
-                g_61685c(v5);
+                sprintf@GLIBC_2.0(v5, "kick \"%s\"\n", v10->field_0->field_1d0 + gpGlobals->field_98);
+                g_engfuncs.pfnServerCommand(v5);
             }
         }
     } while ((v9 += 1, v9 <= gpGlobals->field_90));

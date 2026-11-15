@@ -63,10 +63,10 @@ typedef struct st_520ea0_8 {
 } st_520ea0_8;
 
 extern unsigned int gmsgRemoveEffect;
-extern st_520ea0_2 *g_616878;
-extern st_520ea0_2 *g_61687c;
-extern st_520ea0_2 *g_616888;
-extern st_520ea0_2 *g_6168dc;
+extern st_520ea0_2 *g_engfuncs.pfnMessageBegin;
+extern st_520ea0_2 *g_engfuncs.pfnMessageEnd;
+extern st_520ea0_2 *g_engfuncs.pfnWriteShort;
+extern st_520ea0_2 *g_engfuncs.pfnIndexOfEdict;
 extern st_520ea0_8 *gpGlobals;
 
 double Shoot1__11CSpiritBomb(st_520ea0_7 *a0)
@@ -104,21 +104,21 @@ double Shoot1__11CSpiritBomb(st_520ea0_7 *a0)
     a0->field_80->field_334 = 0;
     a0->field_80->field_368 = 0;
     a0->field_cc = 0;
-    sub_48c680(a0->field_80, 0);
-    g_616878(2, gmsgRemoveEffect, 0, 0);
-    v0 = g_6168dc(a0->field_c8->field_0->field_208);
-    g_616888(v0);
-    g_61687c(v0);
+    CBasePlayer::DrawChargeBar(a0->field_80, 0);
+    g_engfuncs.pfnMessageBegin(2, gmsgRemoveEffect, 0, 0);
+    v0 = g_engfuncs.pfnIndexOfEdict(a0->field_c8->field_0->field_208);
+    g_engfuncs.pfnWriteShort(v0);
+    g_engfuncs.pfnMessageEnd(v0);
     if (a0->field_c4 <= 29)
     {
         a0->field_c8->field_60->field_1fc(a0->field_c8);
         a0->field_c8 = NULL;
-        sub_489390(a0->field_80->field_0->field_208, 2, "common/null.wav", 0x3f800000, 0.800000011920929f, 0, 100);
+        EMIT_SOUND_DYN(a0->field_80->field_0->field_208, 2, "common/null.wav", 0x3f800000, 0.800000011920929f, 0, 100);
         return 0.800000011920929;
     }
-    sub_48d4f0(a0->field_80, "spiritbomb_shoot.wav");
-    sub_489390(a0->field_80->field_0->field_208, 1, "weapons/spiritbomb_fire.wav", 0x3f800000, 0.800000011920929f, 0, 100);
-    sub_48a800(&a0->field_80->field_0->padding_0[116]);
+    CBasePlayer::EmitClassSound(a0->field_80, "spiritbomb_shoot.wav");
+    EMIT_SOUND_DYN(a0->field_80->field_0->field_208, 1, "weapons/spiritbomb_fire.wav", 0x3f800000, 0.800000011920929f, 0, 100);
+    UTIL_MakeVectors(&a0->field_80->field_0->padding_0[116]);
     v21 = &gpGlobals->field_28;
     v18 = gpGlobals->field_28;
     v19 = *(float *)&v21[1];
@@ -132,7 +132,7 @@ double Shoot1__11CSpiritBomb(st_520ea0_7 *a0)
     v7 = (float)(v22 + v15);
     v8 = (float)(v23 + v16);
     v9 = v17 + v3;
-    sub_487b80(&v14, &v7, 0, a0->field_0->field_208, &v10);
+    UTIL_TraceLine(&v14, &v7, 0, a0->field_0->field_208, &v10);
     v24 = &a0->field_c8->field_0->field_8;
     v1 = v11 - a0->field_c8->field_0->field_8;
     v2 = v12 - *(float *)&v24[1];
@@ -140,11 +140,11 @@ double Shoot1__11CSpiritBomb(st_520ea0_7 *a0)
     v18 = v1;
     v19 = v2;
     v20 = v3;
-    sub_48d680(a0->field_80, 5);
+    CBasePlayer::SetAnimation(a0->field_80, 5);
     v25 = v18 * v18 + v19 * v19 + v20 * v20;
     v26 = sqrt(v25);
     if (isnan(v26))
-        sub_487dc0(*(unsigned int *)&v25);
+        sqrt(*(unsigned int *)&v25);
     else
         v25 = v26;
     v8 = (float)v25;
@@ -164,7 +164,7 @@ double Shoot1__11CSpiritBomb(st_520ea0_7 *a0)
     v1 = (float)(1000.0 * v4);
     v2 = (float)(1000.0 * v5);
     v3 = (float)(1000.0 * v6);
-    sub_4890b0(a0->field_c8, &v1, a0->field_c4 * 3);
+    CSpiritBombAttack::ShootSpiritBomb(a0->field_c8, &v1, a0->field_c4 * 3);
     return 1000.0 * v6;
 }
 

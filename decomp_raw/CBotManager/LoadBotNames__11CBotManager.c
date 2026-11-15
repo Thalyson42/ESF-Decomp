@@ -8,7 +8,7 @@ typedef struct st_53e1c0_1 {
     unsigned int field_0;
 } st_53e1c0_1;
 
-extern st_53e1c0_1 *g_616904;
+extern st_53e1c0_1 *g_engfuncs.pfnServerPrint;
 
 int LoadBotNames__11CBotManager(st_53e1c0_0 *a0)
 {
@@ -27,12 +27,12 @@ int LoadBotNames__11CBotManager(st_53e1c0_0 *a0)
     char v4;  // [bp-0x164]
     char v5;  // [bp-0x104]
 
-    sub_489050(&v5, "bot_names.txt", 0);
-    v3 = sub_48d440(&v5, "r");
-    g_616904("Reading bot_names file... ");
+    BuildBotFileName(&v5, "bot_names.txt", 0);
+    v3 = fopen@GLIBC_2.1(&v5, "r");
+    g_engfuncs.pfnServerPrint("Reading bot_names file... ");
     if (!v3)
-        return g_616904("file not found\n");
-    for (i = &v4; a0->field_3e <= 99 && sub_48aed0(i, 80, v3); a0->field_3e = a0->field_3e + 1)
+        return g_engfuncs.pfnServerPrint("file not found\n");
+    for (i = &v4; a0->field_3e <= 99 && fgets@GLIBC_2.0(i, 80, v3); a0->field_3e = a0->field_3e + 1)
     {
         v6 = &v4;
         v7 = 0xffffffff;
@@ -67,9 +67,9 @@ int LoadBotNames__11CBotManager(st_53e1c0_0 *a0)
             } while ((v2 += 1, v2 < v10));
         }
         if (*&v4)
-            sub_48d360(&a0[1].padding_0[33 * a0->field_3e], i, 32);
+            strncpy@GLIBC_2.0(&a0[1].padding_0[33 * a0->field_3e], i, 32);
     }
-    sub_48c560(v3);
-    return g_616904("done\n");
+    fclose@GLIBC_2.1(v3);
+    return g_engfuncs.pfnServerPrint("done\n");
 }
 

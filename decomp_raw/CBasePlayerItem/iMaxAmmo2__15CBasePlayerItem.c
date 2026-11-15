@@ -4,10 +4,10 @@ typedef struct st_539290_0 {
     unsigned int field_88;
 } st_539290_0;
 
-extern unsigned int g_62f734[4];
+extern unsigned int _15CBasePlayerItem.ItemInfoArray+20[4];
 
 int iMaxAmmo2__15CBasePlayerItem(st_539290_0 *a0)
 {
-    return g_62f734[11 * a0->field_88];
+    return _15CBasePlayerItem.ItemInfoArray+20[11 * a0->field_88];
 }
 

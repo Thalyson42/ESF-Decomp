@@ -45,12 +45,12 @@ typedef struct st_49f470_6 {
 extern st_49f470_6 *g_pGameRules;
 extern unsigned int gmsgSayText;
 extern unsigned int g_fGameOver;
-extern st_49f470_1 *g_616878;
-extern st_49f470_1 *g_61687c;
-extern st_49f470_1 *g_616880;
-extern st_49f470_1 *g_616898;
-extern st_49f470_1 *g_6168d4;
-extern st_49f470_1 *g_6168dc;
+extern st_49f470_1 *g_engfuncs.pfnMessageBegin;
+extern st_49f470_1 *g_engfuncs.pfnMessageEnd;
+extern st_49f470_1 *g_engfuncs.pfnWriteByte;
+extern st_49f470_1 *g_engfuncs.pfnWriteString;
+extern st_49f470_1 *g_engfuncs.pfnPEntityOfEntOffset;
+extern st_49f470_1 *g_engfuncs.pfnIndexOfEdict;
 extern st_49f470_4 *gpGlobals;
 extern int BotManager;
 
@@ -65,29 +65,29 @@ unsigned int * ClientDisconnect__FP7edict_s(st_49f470_3 *a0)
 
     if (g_fGameOver)
         return &g_fGameOver;
-    sub_48d3a0(&BotManager, a0);
+    CBotManager::DisconnectPlayer(&BotManager, a0);
     v1 = a0;
-    if (v1 || (v1 = g_6168d4(0), v1))
+    if (v1 || (v1 = g_engfuncs.pfnPEntityOfEntOffset(0), v1))
         v2 = v1->field_7c;
     else
         v2 = NULL;
-    sub_487b40(v2, 0);
-    sub_48b8d0(v2, 0);
+    CBasePlayer::SetPowerLevel(v2, 0);
+    CBasePlayer::SetMaxPowerLevel(v2, 0);
     v2->field_60->field_204(v2);
-    sub_48aee0(v2);
-    sub_48d990(&v0, "- %s has left the game\n", a0->field_250 + gpGlobals->field_98);
-    g_616878(2, gmsgSayText, 0, 0);
-    v3 = g_6168dc(a0);
-    g_616880(v3);
-    g_616898(&v0);
-    g_61687c();
-    v4 = sub_488470(sub_48a340(a0));
+    CBasePlayer::RemoveSpecialModes(v2);
+    sprintf@GLIBC_2.0(&v0, "- %s has left the game\n", a0->field_250 + gpGlobals->field_98);
+    g_engfuncs.pfnMessageBegin(2, gmsgSayText, 0, 0);
+    v3 = g_engfuncs.pfnIndexOfEdict(a0);
+    g_engfuncs.pfnWriteByte(v3);
+    g_engfuncs.pfnWriteString(&v0);
+    g_engfuncs.pfnMessageEnd();
+    v4 = CSoundEnt::SoundPointerForIndex(CSoundEnt::ClientSoundIndex(a0));
     if (v4)
-        sub_48bf50(v4);
+        CSound::Reset(v4);
     v5 = a0;
     v5->field_1ec = 0;
     v5->field_18c = 0;
-    sub_48db50(&a0->field_80, &v5->field_88);
+    UTIL_SetOrigin(&a0->field_80, &v5->field_88);
     return g_pGameRules->field_44->field_34(g_pGameRules, a0);
 }
 

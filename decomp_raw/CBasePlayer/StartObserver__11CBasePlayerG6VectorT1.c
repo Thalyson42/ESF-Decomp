@@ -30,8 +30,8 @@ typedef struct st_4f8080_0 {
 } st_4f8080_0;
 
 extern unsigned int g_vecZero;
-extern unsigned int g_616790;
-extern unsigned int g_616794;
+extern unsigned int g_vecZero+4;
+extern unsigned int g_vecZero+8;
 
 int StartObserver__11CBasePlayerG6VectorT1(st_4f8080_0 *a0, int a1, unsigned int *a2)
 {
@@ -42,8 +42,8 @@ int StartObserver__11CBasePlayerG6VectorT1(st_4f8080_0 *a0, int a1, unsigned int
     a0->field_310 = a0->field_310 | 32;
     v0 = a0->field_0;
     v0[93] = g_vecZero;
-    v0[94] = g_616790;
-    v0[95] = g_616794;
+    v0[94] = g_vecZero+4;
+    v0[95] = g_vecZero+8;
     v1 = a0->field_0;
     v1[29] = *a2;
     v1[30] = a2[1];
@@ -57,6 +57,6 @@ int StartObserver__11CBasePlayerG6VectorT1(st_4f8080_0 *a0, int a1, unsigned int
     a0->field_0->field_16c = 0;
     a0->field_0->field_108 = 0;
     a0->field_0->field_118 = 128;
-    return sub_48db50(a0->field_0, a1);
+    return UTIL_SetOrigin(a0->field_0, a1);
 }
 

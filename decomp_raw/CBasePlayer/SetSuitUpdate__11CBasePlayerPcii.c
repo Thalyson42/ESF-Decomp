@@ -28,7 +28,7 @@ typedef struct st_4f9b80_2 {
 } st_4f9b80_2;
 
 extern st_4f9b80_2 *g_pGameRules;
-extern st_4f9b80_1 *g_616928;
+extern st_4f9b80_1 *g_engfuncs.pfnRandomLong;
 extern st_4f9b80_1 *gpGlobals;
 
 int SetSuitUpdate__11CBasePlayerPcii(st_4f9b80_4 *a0, int a1, unsigned int a2, int a3)
@@ -71,14 +71,14 @@ int SetSuitUpdate__11CBasePlayerPcii(st_4f9b80_4 *a0, int a1, unsigned int a2, i
     {
         if (!a2)
         {
-            v5 = sub_48c380(a1, 0);
+            v5 = SENTENCEG_Lookup(a1, 0);
             v1 = v5;
             if (v1 < 0)
                 return v1;
         }
         else
         {
-            v1 = sub_487db0(a1);
+            v1 = SENTENCEG_GetIndex(a1);
             v1 = -v1;
         }
         v6 = 0;
@@ -113,7 +113,7 @@ int SetSuitUpdate__11CBasePlayerPcii(st_4f9b80_4 *a0, int a1, unsigned int a2, i
         if (a3)
         {
             if (v2 < 0)
-                v2 = g_616928(0, 31);
+                v2 = g_engfuncs.pfnRandomLong(0, 31);
             v11 = v2 * 4;
             v12 = a0;
             *(int *)(v11 + (char *)v12 + 2004) = v1;

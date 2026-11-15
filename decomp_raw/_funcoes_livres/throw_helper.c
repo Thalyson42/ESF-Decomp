@@ -119,10 +119,10 @@ unsigned int throw_helper(st_595054_0 *a0, int a1, st_595054_1 *a2, unsigned int
         v14 = v13;
         k = v11;
         if (v9)
-            sub_48a790();
+            __unwinding_cleanup();
     }
     if (!v14)
-        sub_48d640();
+        __terminate();
     a0->field_0 = v14;
     v6 = v16->field_c;
     if (k == a1)

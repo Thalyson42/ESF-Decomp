@@ -4,17 +4,17 @@ typedef struct st_51fa60_0 {
 } st_51fa60_0;
 
 extern st_51fa60_0 *g_engfuncs;
-extern st_51fa60_0 *g_6167c4;
+extern st_51fa60_0 *g_engfuncs.pfnPrecacheSound;
 
 unsigned int Precache__18CSpecialBeamCannon(unsigned short *a0)
 {
     unsigned int v0;  // eax
 
-    g_6167c4("piccolo/specialbeamcannon.wav");
-    g_6167c4("cell/specialbeamcannon.wav");
-    g_6167c4("cell2/specialbeamcannon.wav");
-    g_6167c4("weapons/sbc_fire.wav");
-    g_6167c4("weapons/sbc_charge.wav");
+    g_engfuncs.pfnPrecacheSound("piccolo/specialbeamcannon.wav");
+    g_engfuncs.pfnPrecacheSound("cell/specialbeamcannon.wav");
+    g_engfuncs.pfnPrecacheSound("cell2/specialbeamcannon.wav");
+    g_engfuncs.pfnPrecacheSound("weapons/sbc_fire.wav");
+    g_engfuncs.pfnPrecacheSound("weapons/sbc_charge.wav");
     g_engfuncs("sprites/sbccharge.spr");
     g_engfuncs("sprites/null.spr");
     a0[236] = g_engfuncs("sprites/sbctrail.spr");

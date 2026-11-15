@@ -22,8 +22,8 @@ int PrimaryAttack__12CTelekinesis(float idx)
     unsigned int v17;  // [bp-0x28]
 
     if (*(int *)(*(int *)(*(unsigned int *)&idx + 128) + 820))
-        return sub_48a400(idx);
-    sub_48a800(*(int *)*(int *)(*(unsigned int *)&idx + 128) + 116);
+        return CChargedAttack::PrimaryAttack(idx);
+    UTIL_MakeVectors(*(int *)*(int *)(*(unsigned int *)&idx + 128) + 116);
     (*(int *)(*(int *)(*(int *)(*(unsigned int *)&idx + 128) + 96) + 480))(&v9, *(int *)(*(unsigned int *)&idx + 128));
     *(char *)(*(unsigned int *)&idx + 516) = 1;
     v3 = 0;
@@ -32,7 +32,7 @@ int PrimaryAttack__12CTelekinesis(float idx)
     v6 = v10 + v3;
     v7 = v11 + v4;
     v8 = v12 + v5;
-    sub_487b80(&v9, &v6, 1, *(int *)(*(int *)*(int *)(*(unsigned int *)&idx + 128) + 520), &v13);
+    UTIL_TraceLine(&v9, &v6, 1, *(int *)(*(int *)*(int *)(*(unsigned int *)&idx + 128) + 520), &v13);
     if (1.0 > v14)
     {
         *(unsigned int *)(*(unsigned int *)&idx + 496) = v15;
@@ -57,6 +57,6 @@ int PrimaryAttack__12CTelekinesis(float idx)
 LABEL_52a3a0:
         *(unsigned int *)(*(unsigned int *)&idx + 200) = 9;
     }
-    return sub_48a400(idx);
+    return CChargedAttack::PrimaryAttack(idx);
 }
 

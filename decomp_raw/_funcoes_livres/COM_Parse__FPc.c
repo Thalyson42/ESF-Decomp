@@ -1,6 +1,6 @@
 // COM_Parse__FPc @0xddd90 size=240
 extern char com_token;
-extern char g_616b81;
+extern char com_token+1;
 
 char * COM_Parse__FPc(char *a0)
 {
@@ -38,7 +38,7 @@ char * COM_Parse__FPc(char *a0)
                     }
                 case 39: case 40: case 41: case 44: case 123: case 125:
                     com_token = v2;
-                    g_616b81 = 0;
+                    com_token+1 = 0;
                     return node + 1;
                 default:
                     do

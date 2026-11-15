@@ -159,11 +159,11 @@ typedef struct st_576cb0_19 {
 
 extern unsigned int FindSelection__t12TMultiChoice1Z18EReactOnDangerTypePQ2t12TMultiChoice1Z18EReactOnDangerType12SMultiChoicei;
 extern st_576cb0_18 g_engfuncs;
-extern st_576cb0_1 *g_616928;
-extern st_576cb0_1 *g_61692c;
+extern st_576cb0_1 *g_engfuncs.pfnRandomLong;
+extern st_576cb0_1 *g_engfuncs.pfnRandomFloat;
 extern st_576cb0_19 *gpGlobals;
-extern char g_6253c6;
-extern char g_6253c7;
+extern char BotManager+3398;
+extern char BotManager+3399;
 
 double BotSense__4CBot(float idx)
 {
@@ -404,13 +404,13 @@ double BotSense__4CBot(float idx)
     if (!v90 && !v43)
         return v93;
     if (v90 & 2 || v43)
-        sub_4890c0(idx, &v79);
+        CBot::SenseSurroundingAttacks(idx, &v79);
     if (v90 & 4 || v43)
-        sub_48ca00(idx, &v76);
+        CBot::SenseSurroundingPlayers(idx, &v76);
     if (v90 & 1 || v43)
-        sub_48c3c0(idx, &v67);
+        CBot::SenseSurroundingSounds(idx, &v67);
     if (v90 & 2 || v43)
-        sub_48c8f0(idx, &v59);
+        CBot::SenseHit(idx, &v59);
     if (v85)
     {
         v44 = &v79;
@@ -420,7 +420,7 @@ double BotSense__4CBot(float idx)
     {
         v44 = &v76;
         v94 = (st_576cb0_15 *)idx;
-        if (v94->field_b6c == *(unsigned int *)&(&v76)[5] || (char)sub_48c440(v94, (&v76)[5]))
+        if (v94->field_b6c == *(unsigned int *)&(&v76)[5] || (char)CBot::EnemyIsInList(v94, (&v76)[5]))
             *(unsigned int *)(*(unsigned int *)&idx + 2588) = 5;
         else
             *(unsigned int *)(*(unsigned int *)&idx + 2588) = 3;
@@ -468,10 +468,10 @@ double BotSense__4CBot(float idx)
         v100->field_10 = (float)((2.0 - v99) * v100->field_10);
     }
     v42 = 0;
-    if (sub_48a5f0(idx) && g_6253c7)
-        v42 = g_6253c6 != 0;
+    if (CBasePlayer::HasWeapons(idx) && BotManager+3399)
+        v42 = BotManager+3398 != 0;
     v101 = v44;
-    if (v101->field_1c && v101->field_14 && v42 && (char)sub_48b8c0(idx, v101->field_14))
+    if (v101->field_1c && v101->field_14 && v42 && (char)CBot::EnemyIsInMeleeRange(idx, v101->field_14))
     {
         v102 = v44->field_14;
         v103 = *(short *)*(int *)(*(unsigned int *)&idx + 2564);
@@ -489,7 +489,7 @@ double BotSense__4CBot(float idx)
         v109 = v106 * v106 + v107 * v107 + v108 * v108;
         v110 = sqrt(v109);
         if (isnan(v110))
-            sub_487dc0(*(unsigned int *)&v109);
+            sqrt(*(unsigned int *)&v109);
         else
             v109 = v110;
         v41 = (float)v109;
@@ -512,14 +512,14 @@ double BotSense__4CBot(float idx)
 LABEL_577277:
         if (v102->field_0->field_108 != 11)
         {
-            v40 = sub_487bd0(idx, v102);
-            if ((int)g_616928(1, 100) <= v103)
+            v40 = CBot::CanMeleeKickPlayer(idx, v102);
+            if ((int)g_engfuncs.pfnRandomLong(1, 100) <= v103)
             {
                 if (v41 < 175.0f && v40)
                 {
                     v112 = (st_576cb0_7 *)idx;
                     v112->field_b6c = v102;
-                    sub_48acb0(v112, 3);
+                    CBot::MakeTask(v112, 3);
                     return v41;
                 }
                 v113 = (st_576cb0_9 *)idx;
@@ -529,16 +529,16 @@ LABEL_577277:
                 if (v55 > 400 && v41 < 350.0f && v113->field_9fc <= 2)
                 {
                     v113->field_b6c = v102;
-                    v114 = g_616928(1, 100);
+                    v114 = g_engfuncs.pfnRandomLong(1, 100);
                     v115 = (st_576cb0_17 *)idx;
                     if (v114 <= v115->field_a04->field_26)
                     {
-                        sub_488720(v115, 20);
+                        CBot::MakeCombo(v115, 20);
                         return v41;
                     }
                     else if (v41 > 225.0f)
                     {
-                        sub_488720(idx, 2);
+                        CBot::MakeCombo(idx, 2);
                         return v41;
                     }
                     else
@@ -551,7 +551,7 @@ LABEL_577277:
         else
         {
             v39 = &g_engfuncs.padding_0[0];
-            if ((int)g_616928(1, 100) <= v103)
+            if ((int)g_engfuncs.pfnRandomLong(1, 100) <= v103)
             {
                 if (v41 > 150.0f && v41 < 850.0f && (char)*(char *)(*(unsigned int *)&idx + 2556) <= 1)
                 {
@@ -563,7 +563,7 @@ LABEL_577277:
                     {
                         v117 = v39->field_168(1, 100);
                         v118 = (st_576cb0_17 *)idx;
-                        if (v117 <= v118->field_a04->field_26 && (char)sub_489380(v118, v102))
+                        if (v117 <= v118->field_a04->field_26 && (char)CBot::MakeTeleMelee(v118, v102))
                         {
                             *(st_576cb0_5 **)(*(unsigned int *)&idx + 2924) = v102;
                             return __int_as_float(v116);
@@ -573,11 +573,11 @@ LABEL_577277:
                 if (v41 > 500.0f)
                 {
                     v119 = *(float *)(*(unsigned int *)&idx + 2932);
-                    if (v119 <= *(float *)gpGlobals && (int)g_616928(1, 100) <= 65)
+                    if (v119 <= *(float *)gpGlobals && (int)g_engfuncs.pfnRandomLong(1, 100) <= 65)
                     {
                         v120 = (st_576cb0_7 *)idx;
                         v120->field_b6c = v102;
-                        sub_488720(v120, 2);
+                        CBot::MakeCombo(v120, 2);
                         return v119;
                     }
                 }
@@ -594,7 +594,7 @@ LABEL_577277:
         *(unsigned int *)&v44->field_c = 0;
     else
         *(unsigned int *)&v44->field_10 = 0;
-    if (0.0 < v44->field_10 && (char)sub_487c70(*(int *)(*(int *)idx + 520), 64, 1200.0f))
+    if (0.0 < v44->field_10 && (char)CheckForCollide(*(int *)(*(int *)idx + 520), 64, 1200.0f))
         *(unsigned int *)&v44->field_10 = 0;
     v38 = 0;
     v37 = 0;
@@ -615,19 +615,19 @@ LABEL_577277:
         v128 = v125 * v125 + v126 * v126 + v127 * v127;
         v129 = sqrt(v128);
         if (isnan(v129))
-            sub_487dc0(*(unsigned int *)&v128);
+            sqrt(*(unsigned int *)&v128);
         else
             v128 = v129;
         v50 = (float)v128;
         v38 = 0;
-        if (v44->field_1a && !(v130 = (st_576cb0_20 **)idx, v57 = __fnstcw(), v56 = v57 | 0xc00, v55 = (int)*v130->field_260, v55 <= 600 || !v42) && v50 < 250.0f && (char)sub_48dc50(v130, 8) && !v122->field_344)
+        if (v44->field_1a && !(v130 = (st_576cb0_20 **)idx, v57 = __fnstcw(), v56 = v57 | 0xc00, v55 = (int)*v130->field_260, v55 <= 600 || !v42) && v50 < 250.0f && (char)CBot::HasWeapon(v130, 8) && !v122->field_344)
         {
-            v131 = g_616928(1, 100);
+            v131 = g_engfuncs.pfnRandomLong(1, 100);
             v38 = (int)v131 <= *(short *)(*(int *)(*(unsigned int *)&idx + 2564) + 18);
         }
     }
     iter = 0;
-    v132 = sub_48d6a0(8);
+    v132 = __builtin_new(8);
     *v132 = NULL;
     v132[1] = NULL;
     v47 = v132;
@@ -637,7 +637,7 @@ LABEL_577277:
     v36 = v54;
     if (v36)
     {
-        v133 = sub_48d6a0(12);
+        v133 = __builtin_new(12);
         *v133 = 0;
         v133[1] = 0;
         v35 = v133;
@@ -647,15 +647,15 @@ LABEL_577277:
         v134 = v47;
         if (!*v134)
         {
-            v135 = sub_48d6a0(12);
+            v135 = __builtin_new(12);
             v34 = 1;
             v135->field_4 = NULL;
             v135->field_8 = NULL;
-            sub_48d0e0(v135, 0, 4);
+            memset@GLIBC_2.0(v135, 0, 4);
             v34 = 0;
             *v134 = v135;
             if (v34)
-                sub_48d4e0(v135);
+                __builtin_delete(v135);
             *v134->field_0 = v35;
             *v134->field_4 = NULL;
             *v134->field_8 = NULL;
@@ -664,15 +664,15 @@ LABEL_577277:
         else
         {
             v33 = v134[1];
-            v136 = sub_48d6a0(12);
+            v136 = __builtin_new(12);
             v32 = 1;
             v136->field_4 = NULL;
             v136->field_8 = NULL;
-            sub_48d0e0(v136, 0, 4);
+            memset@GLIBC_2.0(v136, 0, 4);
             v32 = 0;
             v33->field_4 = v136;
             if (v32)
-                sub_48d4e0(v136);
+                __builtin_delete(v136);
             v134[1]->field_4->field_8 = v134[1];
             v137 = v134[1]->field_4;
             v134[1] = v137;
@@ -687,7 +687,7 @@ LABEL_577277:
     v31 = v54;
     if (v31)
     {
-        v138 = sub_48d6a0(12);
+        v138 = __builtin_new(12);
         *v138 = 0;
         v138[1] = 0;
         v30 = v138;
@@ -697,15 +697,15 @@ LABEL_577277:
         v139 = v47;
         if (!*v139)
         {
-            v140 = sub_48d6a0(12);
+            v140 = __builtin_new(12);
             v29 = 1;
             v140->field_4 = NULL;
             v140->field_8 = NULL;
-            sub_48d0e0(v140, 0, 4);
+            memset@GLIBC_2.0(v140, 0, 4);
             v29 = 0;
             *v139 = v140;
             if (v29)
-                sub_48d4e0(v140);
+                __builtin_delete(v140);
             *v139->field_0 = v30;
             *v139->field_4 = NULL;
             *v139->field_8 = NULL;
@@ -714,15 +714,15 @@ LABEL_577277:
         else
         {
             v28 = v139[1];
-            v141 = sub_48d6a0(12);
+            v141 = __builtin_new(12);
             v27 = 1;
             v141->field_4 = NULL;
             v141->field_8 = NULL;
-            sub_48d0e0(v141, 0, 4);
+            memset@GLIBC_2.0(v141, 0, 4);
             v27 = 0;
             v28->field_4 = v141;
             if (v27)
-                sub_48d4e0(v141);
+                __builtin_delete(v141);
             v139[1]->field_4->field_8 = v139[1];
             v142 = v139[1]->field_4;
             v139[1] = v142;
@@ -737,7 +737,7 @@ LABEL_577277:
     v26 = v54;
     if (v26)
     {
-        v143 = sub_48d6a0(12);
+        v143 = __builtin_new(12);
         *v143 = 0;
         v143[1] = 0;
         v25 = v143;
@@ -747,15 +747,15 @@ LABEL_577277:
         v144 = v47;
         if (!*v144)
         {
-            v145 = sub_48d6a0(12);
+            v145 = __builtin_new(12);
             v24 = 1;
             v145->field_4 = NULL;
             v145->field_8 = NULL;
-            sub_48d0e0(v145, 0, 4);
+            memset@GLIBC_2.0(v145, 0, 4);
             v24 = 0;
             *v144 = v145;
             if (v24)
-                sub_48d4e0(v145);
+                __builtin_delete(v145);
             *v144->field_0 = v25;
             *v144->field_4 = NULL;
             *v144->field_8 = NULL;
@@ -764,15 +764,15 @@ LABEL_577277:
         else
         {
             v23 = v144[1];
-            v146 = sub_48d6a0(12);
+            v146 = __builtin_new(12);
             v22 = 1;
             v146->field_4 = NULL;
             v146->field_8 = NULL;
-            sub_48d0e0(v146, 0, 4);
+            memset@GLIBC_2.0(v146, 0, 4);
             v22 = 0;
             v23->field_4 = v146;
             if (v22)
-                sub_48d4e0(v146);
+                __builtin_delete(v146);
             v144[1]->field_4->field_8 = v144[1];
             v147 = v144[1]->field_4;
             v144[1] = v147;
@@ -787,7 +787,7 @@ LABEL_577277:
     v21 = v54;
     if (v21)
     {
-        v148 = sub_48d6a0(12);
+        v148 = __builtin_new(12);
         *v148 = 0;
         v148[1] = 0;
         v20 = v148;
@@ -797,15 +797,15 @@ LABEL_577277:
         v149 = v47;
         if (!*v149)
         {
-            v150 = sub_48d6a0(12);
+            v150 = __builtin_new(12);
             v19 = 1;
             v150->field_4 = NULL;
             v150->field_8 = NULL;
-            sub_48d0e0(v150, 0, 4);
+            memset@GLIBC_2.0(v150, 0, 4);
             v19 = 0;
             *v149 = v150;
             if (v19)
-                sub_48d4e0(v150);
+                __builtin_delete(v150);
             *v149->field_0 = v20;
             *v149->field_4 = NULL;
             *v149->field_8 = NULL;
@@ -814,15 +814,15 @@ LABEL_577277:
         else
         {
             v18 = v149[1];
-            v151 = sub_48d6a0(12);
+            v151 = __builtin_new(12);
             v17 = 1;
             v151->field_4 = NULL;
             v151->field_8 = NULL;
-            sub_48d0e0(v151, 0, 4);
+            memset@GLIBC_2.0(v151, 0, 4);
             v17 = 0;
             v18->field_4 = v151;
             if (v17)
-                sub_48d4e0(v151);
+                __builtin_delete(v151);
             v149[1]->field_4->field_8 = v149[1];
             v152 = v149[1]->field_4;
             v149[1] = v152;
@@ -838,7 +838,7 @@ LABEL_577277:
     v16 = v54;
     if (v16)
     {
-        v154 = sub_48d6a0(12);
+        v154 = __builtin_new(12);
         *v154 = 0;
         v154[1] = 0;
         v15 = v154;
@@ -848,15 +848,15 @@ LABEL_577277:
         v155 = v47;
         if (!*v155)
         {
-            v156 = sub_48d6a0(12);
+            v156 = __builtin_new(12);
             v14 = 1;
             v156->field_4 = NULL;
             v156->field_8 = NULL;
-            sub_48d0e0(v156, 0, 4);
+            memset@GLIBC_2.0(v156, 0, 4);
             v14 = 0;
             *v155 = v156;
             if (v14)
-                sub_48d4e0(v156);
+                __builtin_delete(v156);
             *v155->field_0 = v15;
             *v155->field_4 = NULL;
             *v155->field_8 = NULL;
@@ -865,15 +865,15 @@ LABEL_577277:
         else
         {
             v13 = v155[1];
-            v157 = sub_48d6a0(12);
+            v157 = __builtin_new(12);
             v12 = 1;
             v157->field_4 = NULL;
             v157->field_8 = NULL;
-            sub_48d0e0(v157, 0, 4);
+            memset@GLIBC_2.0(v157, 0, 4);
             v12 = 0;
             v13->field_4 = v157;
             if (v12)
-                sub_48d4e0(v157);
+                __builtin_delete(v157);
             v155[1]->field_4->field_8 = v155[1];
             v158 = v155[1]->field_4;
             v155[1] = v158;
@@ -890,14 +890,14 @@ LABEL_577277:
         v55 = (int)v153;
         if (v55 > 200)
         {
-            v54 = sub_48a780(idx);
+            v54 = CBasePlayer::GetMaxSpeed(idx);
             v153 = (double)v54;
             if (0.0 < v153 && v42)
             {
                 v11 = *(short *)(*(int *)(*(unsigned int *)&idx + 2984) + 12);
                 if (*(short *)(*(int *)(*(unsigned int *)&idx + 2984) + 12))
                 {
-                    v159 = sub_48d6a0(12);
+                    v159 = __builtin_new(12);
                     *v159 = 0;
                     v159[1] = 0;
                     v10 = v159;
@@ -907,15 +907,15 @@ LABEL_577277:
                     v160 = v47;
                     if (!*v160)
                     {
-                        v161 = sub_48d6a0(12);
+                        v161 = __builtin_new(12);
                         v9 = 1;
                         v161->field_4 = NULL;
                         v161->field_8 = NULL;
-                        sub_48d0e0(v161, 0, 4);
+                        memset@GLIBC_2.0(v161, 0, 4);
                         v9 = 0;
                         *v160 = v161;
                         if (v9)
-                            sub_48d4e0(v161);
+                            __builtin_delete(v161);
                         *v160->field_0 = v10;
                         *v160->field_4 = NULL;
                         *v160->field_8 = NULL;
@@ -924,15 +924,15 @@ LABEL_577277:
                     else
                     {
                         v8 = v160[1];
-                        v162 = sub_48d6a0(12);
+                        v162 = __builtin_new(12);
                         v7 = 1;
                         v162->field_4 = NULL;
                         v162->field_8 = NULL;
-                        sub_48d0e0(v162, 0, 4);
+                        memset@GLIBC_2.0(v162, 0, 4);
                         v7 = 0;
                         v8->field_4 = v162;
                         if (v7)
-                            sub_48d4e0(v162);
+                            __builtin_delete(v162);
                         v160[1]->field_4->field_8 = v160[1];
                         v163 = v160[1]->field_4;
                         v160[1] = v163;
@@ -946,7 +946,7 @@ LABEL_577277:
     }
     v45 = 6;
     v6 = &v45;
-    v5 = g_616928(0, iter);
+    v5 = g_engfuncs.pfnRandomLong(0, iter);
     v3 = _INSERT(v5, 0, 0) | 0xffff0000;
     v4 = &FindSelection__t12TMultiChoice1Z18EReactOnDangerTypePQ2t12TMultiChoice1Z18EReactOnDangerType12SMultiChoicei;
     v165 = *v47;
@@ -973,16 +973,16 @@ LABEL_5785cc:
         if (v38)
         {
             v37 = 1;
-            sub_488180(idx);
+            CBasePlayer::Teleport(idx);
         }
         else
         {
-            v169 = g_616928(1, 100);
+            v169 = g_engfuncs.pfnRandomLong(1, 100);
             v170 = (st_576cb0_17 *)idx;
             if (v169 <= v170->field_a04->field_26 && v44->field_18 > 299)
-                sub_488720(v170, 10);
+                CBot::MakeCombo(v170, 10);
             else
-                sub_48acb0(idx, 1);
+                CBot::MakeTask(idx, 1);
         }
         if (v44->field_18 > 159)
             *(unsigned int *)(*(unsigned int *)&idx + 2824) = 0;
@@ -993,7 +993,7 @@ LABEL_5785cc:
         {
             v171 = (st_576cb0_12 *)idx;
             v171->field_bf8 = v44->field_14;
-            sub_488870(v171);
+            CBot::MakeAvoidSwoopTask(v171);
             goto LABEL_5787ca;
         }
         if (v45 == 2)
@@ -1004,8 +1004,8 @@ LABEL_5785cc:
         }
         else if (v45 == 3)
         {
-            sub_48acb0(idx, 23);
-            v172 = g_616928(1, 3);
+            CBot::MakeTask(idx, 23);
+            v172 = g_engfuncs.pfnRandomLong(1, 3);
             if (!v172)
             {
                 *(unsigned short *)(*(unsigned int *)&idx + 2808) = 2;
@@ -1015,7 +1015,7 @@ LABEL_5785cc:
                 if (v172 == 1)
                     *(unsigned short *)(*(unsigned int *)&idx + 2808) = 4;
             }
-            if (g_616928(0, 1))
+            if (g_engfuncs.pfnRandomLong(0, 1))
                 *(char *)(*(unsigned int *)&idx + 2808) = *(char *)(*(unsigned int *)&idx + 2808) | 8;
         }
         else if (v45 == 4)
@@ -1023,8 +1023,8 @@ LABEL_5785cc:
             v173 = (st_576cb0_23 *)idx;
             v173->field_a10 = 0;
             if (v173->field_320)
-                sub_48c5a0(v173);
-            g_61692c(0x3f800000, 1.399999976158142f);
+                CBasePlayer::StopFly(v173);
+            g_engfuncs.pfnRandomFloat(0x3f800000, 1.399999976158142f);
             v153 = 1.399999976158142 + *(float *)gpGlobals;
             *(float *)(*(unsigned int *)&idx + 2580) = (float)v153;
             if (v38)
@@ -1035,14 +1035,14 @@ LABEL_5785cc:
             v1 = 31;
             v0 = idx;
 LABEL_5787c5:
-            sub_48acb0(v0, v1);
+            CBot::MakeTask(v0, v1);
 LABEL_5787ca:
         }
     }
 LABEL_5787d6:
     v174 = (st_576cb0_25 *)idx;
     if (v174->field_968 && v174->field_968->field_88 != 8)
-        sub_48ce10(v174, "weapon_solarflare");
+        CBasePlayer::SelectItem(v174, "weapon_solarflare");
     *(char *)(*(int *)idx + 384) = *(char *)(*(int *)idx + 384) | 1;
     while (*v47 && (v175 = v47, *v175))
     {
@@ -1057,12 +1057,12 @@ LABEL_5787d6:
             if (v178)
                 v178->field_8 = NULL;
             v177->field_4 = NULL;
-            sub_48d4e0(v177);
+            __builtin_delete(v177);
         }
         v179 = v176;
         if (!v179)
             break;
-        sub_48d4e0(v179);
+        __builtin_delete(v179);
     }
     if (v47)
     {
@@ -1076,12 +1076,12 @@ LABEL_5787d6:
                 node = node->field_4;
                 v182->field_4 = NULL;
                 v182->field_8 = NULL;
-                sub_48d4e0(v182);
+                __builtin_delete(v182);
             } while (node);
         }
         v180[1] = NULL;
         *v180 = NULL;
-        sub_48d4e0(v180);
+        __builtin_delete(v180);
     }
     v47 = 0;
     return v153;

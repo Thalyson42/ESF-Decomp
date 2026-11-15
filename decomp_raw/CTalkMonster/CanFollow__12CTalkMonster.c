@@ -35,13 +35,13 @@ unsigned int CanFollow__12CTalkMonster(st_527390_2 *a0)
     unsigned int *v1;  // esi
     st_527390_4 *v2;  // edx
 
-    if ((a0->field_180 != 6 || sub_48b5e0(a0->field_2a4)) && a0->field_60->field_8c(a0))
+    if ((a0->field_180 != 6 || CCineMonster::CanInterrupt(a0->field_2a4)) && a0->field_60->field_8c(a0))
     {
         v0 = 0;
         v1 = &a0->field_110;
-        if (sub_48d8b0(v1))
+        if (EHANDLE::__opi(v1))
         {
-            v2 = sub_489fd0(v1);
+            v2 = EHANDLE::__rf(v1);
             v0 = v2->field_60->field_a0(v2) != 0;
         }
         return v0 ^ 1;

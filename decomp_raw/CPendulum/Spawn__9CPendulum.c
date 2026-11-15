@@ -77,7 +77,7 @@ typedef struct st_492db0_3 {
 extern char PendulumUse__9CPendulumP11CBaseEntityT18USE_TYPEf;
 extern char RopeTouch__9CPendulumP11CBaseEntity;
 extern char SUB_CallUseToggle__11CBaseEntity;
-extern st_492db0_3 *g_6167c8;
+extern st_492db0_3 *g_engfuncs.pfnSetModel;
 extern st_492db0_2 *gpGlobals;
 
 unsigned int Spawn__9CPendulum(st_492db0_1 *a0)
@@ -97,14 +97,14 @@ unsigned int Spawn__9CPendulum(st_492db0_1 *a0)
     float v5;  // [bp-0x2c]
     float v6;  // [bp-0x8]
 
-    sub_48b820(a0->field_0);
+    CBaseToggle::AxisDir(a0->field_0);
     if (a0->field_0->field_1a0 & 8)
         a0->field_0->field_10c = 0;
     else
         a0->field_0->field_10c = 4;
     a0->field_0->field_108 = 7;
-    sub_48db50(a0->field_0, &a0->field_0->field_8);
-    g_6167c8(a0->field_0->field_208, a0->field_0->field_b8 + gpGlobals->field_98);
+    UTIL_SetOrigin(a0->field_0, &a0->field_0->field_8);
+    g_engfuncs.pfnSetModel(a0->field_0->field_208, a0->field_0->field_b8 + gpGlobals->field_98);
     if (*(float *)&a0->field_68 == 0.0f)
         return v15 | 0xffff0000;
     if (a0->field_0->field_1f8 == 0.0f)

@@ -28,6 +28,6 @@ unsigned int * AttemptToMaterialize__15CBasePlayerItem(double a0, float a1)
         *(float *)(*(int *)a1 + 260) = (float)(a0 + *(float *)gpGlobals);
         return gpGlobals;
     }
-    return sub_48e040(a1);
+    return CBasePlayerItem::Materialize(a1);
 }
 

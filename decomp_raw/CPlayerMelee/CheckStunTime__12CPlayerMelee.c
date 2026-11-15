@@ -17,6 +17,6 @@ unsigned int CheckStunTime__12CPlayerMelee(float idx)
         if (*(int *)(*(unsigned int *)&idx + 316))
             *(unsigned short *)&v0 = 1;
     }
-    return sub_48b670(idx, v0, *(float *)gpGlobals, 1, "ref_stance");
+    return CPlayerMelee::AddAnimation(idx, v0, *(float *)gpGlobals, 1, "ref_stance");
 }
 

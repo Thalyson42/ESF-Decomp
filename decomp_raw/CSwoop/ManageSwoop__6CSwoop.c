@@ -42,15 +42,15 @@ unsigned int ManageSwoop__6CSwoop(float a0)
     v5 = (*(int *)(*(int *)(*(int *)(*(unsigned int *)&a0 + 120) + 96) + 140))(*(int *)(*(unsigned int *)&a0 + 120));
     if (!v5)
         return v5;
-    sub_489890(a0);
-    if (!sub_48c460(a0))
+    CSwoop::ManageNullKeyset(a0);
+    if (!CSwoop::CanUseDirections(a0))
     {
         iter = 0;
         do
         {
             v6 = iter * 16;
             if (*(float *)(v6 + *(unsigned int *)&a0 + 24) != 0.0f)
-                sub_48d4a0(a0, *(unsigned int *)&a0 + v6 + 24);
+                CSwoop::ResetDT(a0, *(unsigned int *)&a0 + v6 + 24);
         } while ((iter += 1, iter <= 5));
     }
     else
@@ -59,7 +59,7 @@ unsigned int ManageSwoop__6CSwoop(float a0)
         v2 = *(unsigned int *)&a0 + 28;
         do
         {
-            if (sub_487d10(a0, iter))
+            if (CSwoop::IsHolding(a0, iter))
             {
                 v7 = iter * 16;
                 if (!*(int *)(v7 + *(unsigned int *)&a0 + 36))
@@ -82,23 +82,23 @@ unsigned int ManageSwoop__6CSwoop(float a0)
                     }
                     else
                     {
-                        sub_488f60(a0, sub_48b040(a0, iter));
+                        CSwoop::AddToNullKeyset(a0, CSwoop::DirectionsToFlags(a0, iter));
                         v12 = *(unsigned int *)&a0 + iter * 16 + 24;
                         goto LABEL_523d8a;
                     }
                 }
-                else if (sub_48cf00(a0, *(unsigned int *)&a0 + v7 + 24, iter))
+                else if (CSwoop::CanSwoop(a0, *(unsigned int *)&a0 + v7 + 24, iter))
                 {
-                    v8 = sub_489ca0(a0);
-                    if (sub_48c980(*(int *)(*(unsigned int *)&a0 + 120), v8))
+                    v8 = CSwoop::GetSwoopStartKi(a0);
+                    if (CBasePlayer::UseKi(*(int *)(*(unsigned int *)&a0 + 120), v8))
                     {
                         if (*(int *)(*(unsigned int *)&a0 + 4))
                         {
                             *(unsigned int *)(*(unsigned int *)&a0 + 12) = 0;
-                            sub_488f60(a0, sub_48b040(a0, *(int *)a0));
+                            CSwoop::AddToNullKeyset(a0, CSwoop::DirectionsToFlags(a0, *(int *)a0));
                         }
-                        sub_48a6e0(a0, iter);
-                        sub_48b630(a0, iter);
+                        CSwoop::ResetAllDTExcept(a0, iter);
+                        CSwoop::StartSwoop(a0, iter);
                         continue;
                     }
                 }
@@ -106,11 +106,11 @@ unsigned int ManageSwoop__6CSwoop(float a0)
             }
             v15 = iter * 16;
             v1 = *(unsigned int *)&a0 + 24;
-            if (*(float *)(v15 + v1) != 0.0f && *(float *)(v15 + v2) == 0.0f && !sub_487d10(a0, iter))
+            if (*(float *)(v15 + v1) != 0.0f && *(float *)(v15 + v2) == 0.0f && !CSwoop::IsHolding(a0, iter))
             {
                 if (*(float *)gpGlobals - *(float *)(v15 + v1) >= 0.4)
                 {
-                    sub_488f60(a0, sub_48b040(a0, iter));
+                    CSwoop::AddToNullKeyset(a0, CSwoop::DirectionsToFlags(a0, iter));
                     goto LABEL_523d83;
                 }
                 else
@@ -122,29 +122,29 @@ unsigned int ManageSwoop__6CSwoop(float a0)
             }
             v15 = iter * 16;
             v0 = *(unsigned int *)&a0 + 32;
-            if (*(float *)(v15 + v0) == 0.0f || sub_487d10(a0, iter))
+            if (*(float *)(v15 + v0) == 0.0f || CSwoop::IsHolding(a0, iter))
                 continue;
             if (*(float *)gpGlobals - *(float *)(v15 + v0) < 0.05)
             {
 LABEL_523d83:
                 v12 = *(unsigned int *)&a0 + (char *)v15 + 24;
 LABEL_523d8a:
-                sub_48d4a0(a0, v12);
+                CSwoop::ResetDT(a0, v12);
                 goto LABEL_523dba;
             }
             else
             {
-                sub_48d4a0(a0, *(unsigned int *)&a0 + iter * 16 + 24);
+                CSwoop::ResetDT(a0, *(unsigned int *)&a0 + iter * 16 + 24);
                 if (iter != *(int *)a0)
                     continue;
-                sub_48a910(a0);
+                CSwoop::StopSwoop(a0);
 LABEL_523dba:
             }
         } while ((iter += 1, (int)iter <= 5));
     }
     if (!*(int *)(*(unsigned int *)&a0 + 4))
         return v5;
-    sub_488240(a0);
+    CSwoop::HandleSwoop(a0);
     return v5;
 }
 

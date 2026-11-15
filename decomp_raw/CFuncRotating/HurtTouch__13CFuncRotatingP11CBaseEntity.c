@@ -73,14 +73,14 @@ float HurtTouch__13CFuncRotatingP11CBaseEntity(st_492080_4 **a0, st_492080_3 *a1
     v16 = *a0->field_5c * *a0->field_5c + *(float *)&v15[1] * *(float *)&v15[1] + *(float *)&v15[2] * *(float *)&v15[2];
     v17 = sqrt(v16);
     if (isnan(v17))
-        sub_487dc0(*(unsigned int *)&v16);
+        sqrt(*(unsigned int *)&v16);
     else
         v16 = v17;
     v11 = (float)v16;
     *a0->field_1e0 = (float)(v11 / 10.0);
     v18 = *a0;
     a1->field_60->field_34(a1, v18, v18, v18[120], 1);
-    sub_48b610(&v1, *a0);
+    VecBModelOrigin(&v1, *a0);
     v19 = &v14->field_8;
     v20 = v14->field_8 - v2;
     v5 = v20;
@@ -91,7 +91,7 @@ float HurtTouch__13CFuncRotatingP11CBaseEntity(st_492080_4 **a0, st_492080_3 *a1
     v23 = v20 * v20 + v21 * v21 + v22 * v22;
     v24 = sqrt(v23);
     if (isnan(v24))
-        sub_487dc0(*(unsigned int *)&v23);
+        sqrt(*(unsigned int *)&v23);
     else
         v23 = v24;
     v0 = (float)v23;

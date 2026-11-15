@@ -27,8 +27,8 @@ unsigned int PrimaryAttack__17CCariedDragonBall(float idx)
         return v10;
     if (*(float *)&v8[432] >= gpGlobals->field_0)
         return v10;
-    sub_48d680(v8, 5);
-    sub_48a800(*(int *)*(int *)(*(unsigned int *)&idx + 128) + 116);
+    CBasePlayer::SetAnimation(v8, 5);
+    UTIL_MakeVectors(*(int *)*(int *)(*(unsigned int *)&idx + 128) + 116);
     v9 = &gpGlobals->field_28;
     v4 = (float)(1000.0 * gpGlobals->field_28);
     v5 = (float)(1000.0 * *(float *)&v9[1]);
@@ -37,7 +37,7 @@ unsigned int PrimaryAttack__17CCariedDragonBall(float idx)
     v0 = v4;
     v1 = v5;
     v2 = v6;
-    sub_4885c0(*(int *)*(int *)(*(unsigned int *)&idx + 128), &v3, &v0, *(int *)(*(int *)(*(unsigned int *)&idx + 128) + 1888));
+    CDragonBall::ThrowDragonBall(*(int *)*(int *)(*(unsigned int *)&idx + 128), &v3, &v0, *(int *)(*(int *)(*(unsigned int *)&idx + 128) + 1888));
     *(unsigned int *)(*(int *)(*(unsigned int *)&idx + 128) + 1888) = 0;
     v10 = (*(int *)(*(int *)(*(unsigned int *)&idx + 96) + 332))(idx);
     return v10;

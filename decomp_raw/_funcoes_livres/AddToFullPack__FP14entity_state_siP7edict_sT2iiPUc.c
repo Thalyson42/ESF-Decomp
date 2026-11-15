@@ -385,9 +385,9 @@ typedef struct st_4a1de0_3 {
 } st_4a1de0_3;
 
 extern unsigned int g_groupop;
-extern st_4a1de0_3 *g_6167cc;
-extern st_4a1de0_3 *g_6168dc;
-extern st_4a1de0_3 *g_6169b8;
+extern st_4a1de0_3 *g_engfuncs.pfnModelIndex;
+extern st_4a1de0_3 *g_engfuncs.pfnIndexOfEdict;
+extern st_4a1de0_3 *g_engfuncs.pfnDeltaSetField;
 extern st_4a1de0_1 *gpGlobals;
 
 unsigned int AddToFullPack__FP14entity_state_siP7edict_sT2iiPUc(st_4a1de0_2 *a0, unsigned int a1, st_4a1de0_0 *a2, st_4a1de0_0 *a3, char a4, unsigned int a5, unsigned int a6)
@@ -433,7 +433,7 @@ unsigned int AddToFullPack__FP14entity_state_siP7edict_sT2iiPUc(st_4a1de0_2 *a0,
     }
     else
     {
-        if (a2 == a3 || g_6169b8(a2, a6))
+        if (a2 == a3 || g_engfuncs.pfnDeltaSetField(a2, a6))
         {
 LABEL_4a1f28:
             if (!(a2->field_224[1] & 1) || !(a4 & 1) || a2->field_218 != a3)
@@ -441,7 +441,7 @@ LABEL_4a1f28:
                 if (!*(int *)&a3->padding_290[44])
                 {
 LABEL_4a1fb6:
-                    sub_48d0e0(a0, 0, 340);
+                    memset@GLIBC_2.0(a0, 0, 340);
                     a0->field_4 = a1;
                     a0->field_0 = 1;
                     if (a2->field_224[3] & 32)
@@ -527,11 +527,11 @@ LABEL_4a1fb6:
                     a0->field_52 = v3;
                     a0->field_94 = 0;
                     if (a2->field_214)
-                        a0->field_94 = g_6168dc(a2->field_214);
+                        a0->field_94 = g_engfuncs.pfnIndexOfEdict(a2->field_214);
                     a0->field_98 = 0;
                     if (a2->field_218)
                     {
-                        v28 = g_6168dc(a2->field_218);
+                        v28 = g_engfuncs.pfnIndexOfEdict(a2->field_218);
                         if (v28 > 0 && v28 <= gpGlobals->field_90)
                             a0->field_98 = v28;
                     }
@@ -546,7 +546,7 @@ LABEL_4a1fb6:
                         a0->field_bc = a2->field_ac;
                         v29[1] = v30[1];
                         v29[2] = v30[2];
-                        a0->field_b4 = g_6167cc(a2->field_140 + gpGlobals->field_98);
+                        a0->field_b4 = g_engfuncs.pfnModelIndex(a2->field_140 + gpGlobals->field_98);
                         a0->field_b8 = a2->field_1ac;
                         *(char [4])&a0->field_b0 = a2->field_224 & 0x4000000;
                         *(float *)&a0->field_9c = a2->field_1a0;
@@ -565,7 +565,7 @@ LABEL_4a1fb6:
                     }
                     return 1;
                 }
-                sub_48cfc0(*(int *)&a3->padding_290[44], 0);
+                UTIL_SetGroupTrace(*(int *)&a3->padding_290[44], 0);
                 if (*(int *)&a2->padding_290[44])
                 {
                     if (!g_groupop)
@@ -582,12 +582,12 @@ LABEL_4a1fb6:
                 else
                 {
 LABEL_4a1fb1:
-                    sub_48c750();
+                    UTIL_UnsetGroupTrace();
                     goto LABEL_4a1fb6;
                 }
             }
         }
-        else if (a5 || !sub_488af0(a2->field_80 + gpGlobals->field_98, "dragonball"))
+        else if (a5 || !strcmp@GLIBC_2.0(a2->field_80 + gpGlobals->field_98, "dragonball"))
         {
             v10 = &a2->field_88;
             v11 = &a3->field_88;
@@ -600,7 +600,7 @@ LABEL_4a1fb1:
             v15 = v12 * v12 + v13 * v13 + v14 * v14;
             v16 = sqrt(v15);
             if (isnan(v16))
-                sub_487dc0(*(unsigned int *)&v15);
+                sqrt(*(unsigned int *)&v15);
             else
                 v15 = v16;
             v6 = (float)v15;

@@ -9,7 +9,7 @@ extern int slIdleResponse;
 int SetAnswerQuestion__12CTalkMonsterP12CTalkMonster(st_526a60_0 *a0, int a1)
 {
     if (!a0->field_2a4)
-        sub_48b250(a0, &slIdleResponse);
-    return sub_48d960(&a0[1].padding_0[104], a1);
+        CBaseMonster::ChangeSchedule(a0, &slIdleResponse);
+    return EHANDLE::__as(&a0[1].padding_0[104], a1);
 }
 

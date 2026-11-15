@@ -9,14 +9,14 @@ typedef struct st_520bb0_0 {
 } st_520bb0_0;
 
 extern st_520bb0_0 *g_engfuncs;
-extern st_520bb0_0 *g_6167c4;
+extern st_520bb0_0 *g_engfuncs.pfnPrecacheSound;
 
 int Precache__11CSpiritBomb(st_520bb0_1 *a0)
 {
     a0->field_dc = g_engfuncs("sprites/spiritbomb.spr");
-    g_6167c4("goku/spiritbomb_shoot.wav");
-    g_6167c4("goku/spiritbomb_charge.wav");
-    g_6167c4("goku/spiritbomb2_charge.wav");
-    return g_6167c4("weapons/spiritbomb_fire.wav");
+    g_engfuncs.pfnPrecacheSound("goku/spiritbomb_shoot.wav");
+    g_engfuncs.pfnPrecacheSound("goku/spiritbomb_charge.wav");
+    g_engfuncs.pfnPrecacheSound("goku/spiritbomb2_charge.wav");
+    return g_engfuncs.pfnPrecacheSound("weapons/spiritbomb_fire.wav");
 }
 

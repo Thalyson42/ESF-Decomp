@@ -40,13 +40,13 @@ unsigned int * DefaultTouch__15CBasePlayerItemP11CBaseEntity(st_538300_2 *a0, st
     else if (g_pGameRules->field_44->field_74(g_pGameRules, a1, a0))
     {
         if (!a1->field_60->field_60(a1, a0))
-            return sub_48d150(a0, a1, 3, 0);
+            return CBaseDelay::SUB_UseTargets(a0, a1, 3, 0);
         (*(int *)&a0->field_60[1].padding_64[20])(a0, a1);
-        return sub_48d150(a0, a1, 3, 0);
+        return CBaseDelay::SUB_UseTargets(a0, a1, 3, 0);
     }
     else if (gEvilImpulse101)
     {
-        return sub_48cc00(a0);
+        return UTIL_Remove(a0);
     }
     else
     {

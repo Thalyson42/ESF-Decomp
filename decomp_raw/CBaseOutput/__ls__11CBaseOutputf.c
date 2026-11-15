@@ -19,8 +19,8 @@ st_56d520_2 * __ls__11CBaseOutputf(st_56d520_2 *a0, float a1)
     char v1;  // [bp-0x23]
 
     v0 = 0;
-    sub_48d0e0(&v1, 0, 24);
-    sub_48d990(&v0, "%f", (unsigned int)(a1 >> 0));
+    memset@GLIBC_2.0(&v1, 0, 24);
+    sprintf@GLIBC_2.0(&v0, "%f", (unsigned int)(a1 >> 0));
     a0->field_200->field_14(a0, &v0);
     return a0;
 }

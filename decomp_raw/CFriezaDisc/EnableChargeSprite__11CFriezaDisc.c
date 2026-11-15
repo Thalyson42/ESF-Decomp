@@ -32,7 +32,7 @@ unsigned int EnableChargeSprite__11CFriezaDisc(st_4c0d40_3 *a0)
 
     a0->field_80->field_60->field_1e0(&v1, a0->field_80);
     v0 = (float)((double)a0->field_c4 * 0.5 / (double)a0->field_c8);
-    v2 = sub_489060(a0->field_80->field_0, &v1, v0);
+    v2 = CFriezaDiscAttack::ChargeFriezaDisc(a0->field_80->field_0, &v1, v0);
     a0->field_1d8 = v2;
     return v2;
 }

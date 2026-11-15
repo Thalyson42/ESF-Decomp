@@ -9,6 +9,6 @@ extern char __vt_11CAscendTask;
 int _._11CAscendTask(st_5868b0_0 *a0, int a1)
 {
     a0->field_14 = &__vt_11CAscendTask;
-    return sub_488170(a0, a1);
+    return _._9CBaseTask(a0, a1);
 }
 

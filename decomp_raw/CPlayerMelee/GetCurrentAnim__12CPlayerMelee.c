@@ -15,7 +15,7 @@ unsigned int GetCurrentAnim__12CPlayerMelee(float a0)
     unsigned int v6;  // fc3210
 
     if (*(int *)(*(unsigned int *)&a0 + 324) && *(int *)(*(unsigned int *)&a0 + 284) == 7)
-        return sub_48d300(a0);
+        return CPlayerMelee::GetCurrentExeAnim(a0);
     v1 = 0.0;
     v2 = *(int *)(*(unsigned int *)&a0 + 132);
     v3 = 0;

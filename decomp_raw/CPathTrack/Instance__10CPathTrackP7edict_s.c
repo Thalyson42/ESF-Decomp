@@ -8,6 +8,6 @@ extern st_4e77a0_0 *gpGlobals;
 
 unsigned int Instance__10CPathTrackP7edict_s(unsigned int *a0)
 {
-    return (!sub_488af0(*(!a0 ? NULL : a0 + 32) + gpGlobals->field_98, "path_track") ? (!a0 ? 0 : a0[31]) : 0);
+    return (!strcmp@GLIBC_2.0(*(!a0 ? NULL : a0 + 32) + gpGlobals->field_98, "path_track") ? (!a0 ? 0 : a0[31]) : 0);
 }
 

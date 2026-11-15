@@ -52,9 +52,9 @@ typedef struct st_4e8b70_3 {
 } st_4e8b70_3;
 
 extern unsigned int g_vecZero;
-extern unsigned int g_616790;
-extern unsigned int g_616794;
-extern st_4e8b70_3 *g_6167c8;
+extern unsigned int g_vecZero+4;
+extern unsigned int g_vecZero+8;
+extern st_4e8b70_3 *g_engfuncs.pfnSetModel;
 extern st_4e8b70_2 *gpGlobals;
 
 char Setup__9CFuncPlat(st_4e8b70_1 *a0)
@@ -69,14 +69,14 @@ char Setup__9CFuncPlat(st_4e8b70_1 *a0)
         *(float *)&a0->field_94 = 10.0f;
     v0 = a0->field_0;
     v0->field_50 = g_vecZero;
-    v0->field_54 = g_616790;
-    v0->field_58 = g_616794;
+    v0->field_54 = g_vecZero+4;
+    v0->field_58 = g_vecZero+8;
     a0->field_0->field_10c = 4;
     a0->field_0->field_108 = 7;
-    sub_48db50(a0->field_0, &a0->field_0->field_8);
+    UTIL_SetOrigin(a0->field_0, &a0->field_0->field_8);
     v1 = a0->field_0;
-    sub_48a0d0(v1, &v1->field_dc, &v1->field_e8);
-    g_6167c8(a0->field_0->field_208, a0->field_0->field_b8 + gpGlobals->field_98);
+    UTIL_SetSize(v1, &v1->field_dc, &v1->field_e8);
+    g_engfuncs.pfnSetModel(a0->field_0->field_208, a0->field_0->field_b8 + gpGlobals->field_98);
     v2 = a0->field_0;
     a0->field_9c = v2->field_8;
     a0->field_a0 = v2->field_c;

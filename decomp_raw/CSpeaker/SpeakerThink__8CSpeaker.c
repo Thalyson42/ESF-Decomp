@@ -30,8 +30,8 @@ typedef struct st_51e600_3 {
 
 extern unsigned int _12CTalkMonster.g_talkWaitTime;
 extern char _GLOBAL_OFFSET_TABLE_;
-extern st_51e600_3 *g_6168b4;
-extern st_51e600_3 *g_61692c;
+extern st_51e600_3 *g_engfuncs.pfnAlertMessage;
+extern st_51e600_3 *g_engfuncs.pfnRandomFloat;
 extern st_51e600_2 *gpGlobals;
 
 double SpeakerThink__8CSpeaker(st_51e600_1 *a0)
@@ -44,7 +44,7 @@ double SpeakerThink__8CSpeaker(st_51e600_1 *a0)
     v0 = (float)(0.1 * a0->field_0->field_160);
     if ((isunordered(gpGlobals->field_0, *(float *)&_12CTalkMonster.g_talkWaitTime) ? 0x44 : gpGlobals->field_0 == *(float *)&_12CTalkMonster.g_talkWaitTime ? 63 : gpGlobals->field_0 < *(float *)&_12CTalkMonster.g_talkWaitTime ? 0 : 0xff) < 64)
     {
-        g_61692c(5.0f, 10.0f);
+        g_engfuncs.pfnRandomFloat(5.0f, 10.0f);
         v2 = 5.0 + *(float *)&_12CTalkMonster.g_talkWaitTime;
         *(float *)&a0->field_0->field_104 = (float)v2;
         return v2;
@@ -59,13 +59,13 @@ double SpeakerThink__8CSpeaker(st_51e600_1 *a0)
     }
     if (*v3 == 33)
     {
-        sub_4897b0(a0->field_0->field_208, &a0->field_0->field_8, v3, v0, 0.30000001192092896f, 0, 100);
+        UTIL_EmitAmbientSound(a0->field_0->field_208, &a0->field_0->field_8, v3, v0, 0.30000001192092896f, 0, 100);
         a0->field_0->field_104 = 0;
         return v0;
     }
-    if ((int)sub_48d620(a0->field_0->field_208, v3, v0, 0.30000001192092896f, 0, 100) < 0)
-        g_6168b4(1, "Level Design Error!\nSPEAKER has bad sentence group name: %s\n", v3);
-    g_61692c(15.0f, 135.0f);
+    if ((int)SENTENCEG_PlayRndSz(a0->field_0->field_208, v3, v0, 0.30000001192092896f, 0, 100) < 0)
+        g_engfuncs.pfnAlertMessage(1, "Level Design Error!\nSPEAKER has bad sentence group name: %s\n", v3);
+    g_engfuncs.pfnRandomFloat(15.0f, 135.0f);
     *(float *)&a0->field_0->field_104 = (float)(15.0 + gpGlobals->field_0);
     v4 = gpGlobals->field_0 + 5.0;
     *(float *)&_12CTalkMonster.g_talkWaitTime = (float)v4;

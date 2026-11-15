@@ -3,7 +3,7 @@ extern int buf.1719;
 
 int UTIL_dtos1__Fi(int a0)
 {
-    sub_48d990(&buf.1719, "%d", a0);
+    sprintf@GLIBC_2.0(&buf.1719, "%d", a0);
     return &buf.1719;
 }
 

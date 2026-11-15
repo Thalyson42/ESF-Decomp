@@ -5,7 +5,7 @@ typedef struct st_570ba0_0 {
 
 extern unsigned int g_teamplay;
 extern st_570ba0_0 *gpGlobals;
-extern unsigned int g_626824[4];
+extern unsigned int waypoints+4[4];
 
 char HeadToWaypoint__4CBot(float idx)
 {
@@ -55,7 +55,7 @@ char HeadToWaypoint__4CBot(float idx)
     v24 = v21 * v21 + v22 * v22 + v23 * v23;
     v25 = sqrt(v24);
     if (isnan(v25))
-        sub_487dc0(*(unsigned int *)&v24);
+        sqrt(*(unsigned int *)&v24);
     else
         v24 = v25;
     v6 = (float)v24;
@@ -69,14 +69,14 @@ char HeadToWaypoint__4CBot(float idx)
         *(unsigned int *)(*(unsigned int *)&idx + 4140) = 0;
         if (*(int *)(*(unsigned int *)&idx + 4132) != 0xffffffff)
         {
-            v26 = sub_48cef0(*(int *)(*(unsigned int *)&idx + 4104), *(int *)(*(unsigned int *)&idx + 4132), v19) & 0xffff;
+            v26 = WaypointRouteFromTo(*(int *)(*(unsigned int *)&idx + 4104), *(int *)(*(unsigned int *)&idx + 4132), v19) & 0xffff;
             if (v26 != 0xffff)
             {
                 *(unsigned int *)(*(unsigned int *)&idx + 4104) = v26;
                 v27 = v26 * 16;
-                *(int *)(*(unsigned int *)&idx + 0xff8) = *(int *)((char *)&g_626824[0] + v27);
-                *(int *)(*(unsigned int *)&idx + 0xffc) = *(int *)((char *)&g_626824[0] + v27 + 4);
-                *(int *)(*(unsigned int *)&idx + 0x1000) = *(int *)((char *)&g_626824[0] + v27 + 8);
+                *(int *)(*(unsigned int *)&idx + 0xff8) = *(int *)((char *)&waypoints+4[0] + v27);
+                *(int *)(*(unsigned int *)&idx + 0xffc) = *(int *)((char *)&waypoints+4[0] + v27 + 4);
+                *(int *)(*(unsigned int *)&idx + 0x1000) = *(int *)((char *)&waypoints+4[0] + v27 + 8);
                 *(float *)(*(unsigned int *)&idx + 4100) = *(float *)gpGlobals;
             }
         }
@@ -85,7 +85,7 @@ char HeadToWaypoint__4CBot(float idx)
             iter = 4;
             while (1)
             {
-                v28 = sub_48b7d0(idx);
+                v28 = CBot::FindWaypoint(idx);
                 if (v28)
                     break;
                 if (iter)
@@ -117,7 +117,7 @@ char HeadToWaypoint__4CBot(float idx)
     *(float *)&v5 = *(float *)(*(unsigned int *)&idx + 0xff8);
     *(float *)&v7 = *(float *)(*(unsigned int *)&idx + 0xffc);
     *(float *)&v8 = *(float *)(*(unsigned int *)&idx + 0x1000);
-    sub_48a170(&v12, idx, &v5);
+    CBot::GetAimAngles(&v12, idx, &v5);
     *(unsigned int *)(*(unsigned int *)&idx + 3088) = v12;
     *(unsigned int *)(*(unsigned int *)&idx + 3092) = v13;
     *(unsigned int *)(*(unsigned int *)&idx + 3096) = v14;
@@ -126,7 +126,7 @@ char HeadToWaypoint__4CBot(float idx)
     if (15.0 < *(float *)(*(unsigned int *)&idx + 3116) && 15.0 < *(float *)(*(unsigned int *)&idx + 3124))
     {
 LABEL_570e45:
-        sub_48d0d0(idx);
+        CBot::ResetMoveSpeed(idx);
     }
     return 1;
 }

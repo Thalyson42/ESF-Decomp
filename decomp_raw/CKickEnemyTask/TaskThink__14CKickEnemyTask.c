@@ -83,7 +83,7 @@ typedef struct st_583ac0_11 {
     unsigned int field_0;
 } st_583ac0_11;
 
-extern st_583ac0_11 *g_616928;
+extern st_583ac0_11 *g_engfuncs.pfnRandomLong;
 extern st_583ac0_9 *gpGlobals;
 
 st_583ac0_0 * TaskThink__14CKickEnemyTask(st_583ac0_7 *a0)
@@ -113,9 +113,9 @@ st_583ac0_0 * TaskThink__14CKickEnemyTask(st_583ac0_7 *a0)
     unsigned int v10;  // [bp-0x20]
     unsigned int v11;  // [bp-0x1c]
 
-    if (a0->field_8->field_b6c && *(int *)(*(int *)a0->field_10 + 264) != 11 && (char)sub_48bf70(a0->field_8, a0->field_8->field_b6c))
+    if (a0->field_8->field_b6c && *(int *)(*(int *)a0->field_10 + 264) != 11 && (char)CBot::CanAttackPlayer(a0->field_8, a0->field_8->field_b6c))
     {
-        if ((char)sub_487bd0(a0->field_8, a0->field_10))
+        if ((char)CBot::CanMeleeKickPlayer(a0->field_8, a0->field_10))
         {
             *(float *)&a0->field_18 = *(float *)gpGlobals;
         }
@@ -139,22 +139,22 @@ st_583ac0_0 * TaskThink__14CKickEnemyTask(st_583ac0_7 *a0)
         v18 = v15 * v15 + v16 * v16 + v17 * v17;
         v19 = sqrt(v18);
         if (isnan(v19))
-            sub_487dc0(*(unsigned int *)&v18);
+            sqrt(*(unsigned int *)&v18);
         else
             v18 = v19;
         v2 = (float)v18;
         if (v2 < 30.0f)
         {
             v1 = 0x8;
-            sub_488e30(a0->field_8, v1);
+            CBot::SetMoveDir(a0->field_8, v1);
         }
         else if (v2 < 350.0f)
         {
             v1 = 0x10;
-            sub_488e30(a0->field_8, v1);
-            if (v2 <= 150.0f || !(v1 = a0->field_8->field_b6c, !(char)sub_489330(a0->field_8, v1) && (v1 = a0->field_8, !(char)sub_489330(a0->field_8->field_b6c, v1))))
+            CBot::SetMoveDir(a0->field_8, v1);
+            if (v2 <= 150.0f || !(v1 = a0->field_8->field_b6c, !(char)EntIsInFieldOfView(a0->field_8, v1) && (v1 = a0->field_8, !(char)EntIsInFieldOfView(a0->field_8->field_b6c, v1))))
                 goto LABEL_583d0a;
-            sub_48d0d0(a0->field_8);
+            CBot::ResetMoveSpeed(a0->field_8);
         }
         else if (v2 < 750.0f)
         {
@@ -167,13 +167,13 @@ st_583ac0_0 * TaskThink__14CKickEnemyTask(st_583ac0_7 *a0)
                 return v23;
             }
             v1 = 0x64;
-            v20 = g_616928(1, v1);
+            v20 = g_engfuncs.pfnRandomLong(1, v1);
             if ((int)v20 > a0->field_8->field_a04->field_26)
             {
                 a0->field_4 = 2;
                 return v23;
             }
-            sub_488180(a0->field_8);
+            CBasePlayer::Teleport(a0->field_8);
         }
         else
         {
@@ -194,7 +194,7 @@ LABEL_583d0a:
                 v1 = "weapon_melee";
                 v0 = a0->field_8;
             }
-            sub_48ce10(v0, v1);
+            CBasePlayer::SelectItem(v0, v1);
         }
         v22 = a0->field_8;
         if (v22->field_a00->field_3e)
@@ -205,7 +205,7 @@ LABEL_583d0a:
             if (v3 > 200)
             {
                 *(unsigned short *)&v1 = 1;
-                sub_48ab70(v22, v1);
+                CBot::ToggleTurbo(v22, v1);
                 a0->field_8->field_ab4 = (float)(1.5 + *(float *)gpGlobals);
             }
         }

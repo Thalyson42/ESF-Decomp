@@ -22,13 +22,13 @@ st_52c270_1 * KeyValue__14CTargetCDAudioP14KeyValueData_s(st_52c270_2 **a0, st_5
     st_52c270_2 *v1;  // eax
     double v2;  // mm7
 
-    v0 = sub_488af0(a1->field_4, "radius");
+    v0 = strcmp@GLIBC_2.0(a1->field_4, "radius");
     if (v0)
     {
         a1->field_c = 0;
         return v0;
     }
-    sub_487fc0(a1->field_8, 0, 0);
+    __strtod_internal@GLIBC_2.0(a1->field_8, 0, 0);
     v1 = *a0;
     v1->field_144 = (float)v2;
     a1->field_c = 1;

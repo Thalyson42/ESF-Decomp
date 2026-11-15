@@ -35,7 +35,7 @@ unsigned int ClientCommand__30CHalfLifeCaptureTheDragonBallsP11CBasePlayerPCc(st
 {
     unsigned int v0;  // [bp-0x24]
 
-    if (!sub_488af0(a2, "immortality"))
+    if (!strcmp@GLIBC_2.0(a2, "immortality"))
     {
         if (a0->field_26c && a1->field_348 && a0->field_274)
         {
@@ -46,20 +46,20 @@ unsigned int ClientCommand__30CHalfLifeCaptureTheDragonBallsP11CBasePlayerPCc(st
     }
     else
     {
-        if (sub_488af0(a2, "strength"))
+        if (strcmp@GLIBC_2.0(a2, "strength"))
         {
-            if (sub_488af0(a2, "wishpoint"))
-                return sub_48a490(a0, a1, a2);
+            if (strcmp@GLIBC_2.0(a2, "wishpoint"))
+                return CHalfLifeTeamplay::ClientCommand(a0, a1, a2);
             if (a0->field_26c && a1->field_348 && a0->field_274)
             {
                 v0 = 2;
 LABEL_49b49a:
-                sub_48ae70(a0, a1);
+                CHalfLifeCaptureTheDragonBalls::FinishWish(a0, a1);
             }
         }
         else if (a0->field_26c && a1->field_348 && a0->field_274)
         {
-            sub_489700(a1, 1000000);
+            CBasePlayer::IncreasePL(a1, 1000000);
             a0->field_44->field_f0(a0);
 LABEL_49b455:
             v0 = 1;

@@ -41,8 +41,8 @@ unsigned int Use__6CBloodP11CBaseEntityT18USE_TYPEf(st_4b5720_0 **a0, int a1)
 
     if (*a0->field_1a0 & 2)
     {
-        sub_48dd90(&v16, a0);
-        sub_488560(&v7, a0, a1);
+        CBlood::Direction(&v16, a0);
+        CBlood::BloodPosition(&v7, a0, a1);
         v24 = *a0;
         v5 = __fnstcw();
         v4 = v5 | 0xc00;
@@ -51,21 +51,21 @@ unsigned int Use__6CBloodP11CBaseEntityT18USE_TYPEf(st_4b5720_0 **a0, int a1)
         v25 = v24->field_184;
         if (v24->field_184 == 247)
             v25 = 70;
-        sub_48d930(&v7, &v16, v25);
+        UTIL_BloodStream(&v7, &v16, v25);
     }
     else
     {
-        sub_48dd90(&v7, a0);
-        sub_488560(&v11, a0, a1);
+        CBlood::Direction(&v7, a0);
+        CBlood::BloodPosition(&v11, a0, a1);
         v5 = __fnstcw();
         v4 = v5 | 0xc00;
         v3 = (int)*a0->field_1e0;
-        sub_489d30(&v11, &v7, *a0->field_184, v3);
+        UTIL_BloodDrips(&v11, &v7, *a0->field_184, v3);
     }
     if (!(*a0->field_1a0 & 8))
         return v27;
-    sub_48dd90(&v7, a0);
-    sub_488560(&v11, a0, a1);
+    CBlood::Direction(&v7, a0);
+    CBlood::BloodPosition(&v11, a0, a1);
     v26 = *a0->field_1e0;
     v21 = v26 * v6;
     v22 = v26 * v8;
@@ -76,10 +76,10 @@ unsigned int Use__6CBloodP11CBaseEntityT18USE_TYPEf(st_4b5720_0 **a0, int a1)
     v14 = v10 + v18;
     v15 = v12 + v19;
     v17 = v13 + v20;
-    sub_487b80(&v11, &v14, 1, 0, &v1);
+    UTIL_TraceLine(&v11, &v14, 1, 0, &v1);
     if (v2 == 1.0f)
         return v27;
-    v27 = sub_48d7e0(&v1, *a0->field_184);
+    v27 = UTIL_BloodDecalTrace(&v1, *a0->field_184);
     return v27;
 }
 

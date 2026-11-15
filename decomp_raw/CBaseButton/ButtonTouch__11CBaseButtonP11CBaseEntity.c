@@ -35,30 +35,30 @@ unsigned int ButtonTouch__11CBaseButtonP11CBaseEntity(st_497290_3 *a0, st_497290
     unsigned int v0;  // [bp-0x24]
     unsigned int v1;  // [bp-0x20]
 
-    v2 = sub_488af0(*(int *)*a1 + gpGlobals->field_98, "player");
+    v2 = strcmp@GLIBC_2.0(*(int *)*a1 + gpGlobals->field_98, "player");
     if (v2)
         return v2;
-    sub_48d960(&a0->field_d4, a1);
-    v3 = sub_48b3b0(a0);
+    EHANDLE::__as(&a0->field_d4, a1);
+    v3 = CBaseButton::ButtonResponseToTouch(a0);
     if (!v3)
     {
         return v3;
     }
-    else if (!sub_488a80(a0->field_100, a1))
+    else if (!UTIL_IsMasterTriggered(a0->field_100, a1))
     {
-        return sub_48dfe0(a0->field_0, &a0[1].padding_4[8], 1, 1);
+        return PlayLockSounds(a0->field_0, &a0[1].padding_4[8], 1, 1);
     }
     else
     {
         a0->field_14 = 0;
         a0->field_18 = 0;
         if (v3 != 2)
-            return sub_48b650(a0);
-        sub_489390(a0->field_0->field_208, 2, a0->field_0->field_1e8 + gpGlobals->field_98, 0x3f800000, 0.800000011920929f, 0, 100);
+            return CBaseButton::ButtonActivate(a0);
+        EMIT_SOUND_DYN(a0->field_0->field_208, 2, a0->field_0->field_1e8 + gpGlobals->field_98, 0x3f800000, 0.800000011920929f, 0, 100);
         v1 = 0;
         v0 = 3;
-        sub_48d150(a0, sub_488810(&a0->field_d4));
-        return sub_48cc60(a0);
+        CBaseDelay::SUB_UseTargets(a0, EHANDLE::__opP11CBaseEntity(&a0->field_d4));
+        return CBaseButton::ButtonReturn(a0);
     }
 }
 

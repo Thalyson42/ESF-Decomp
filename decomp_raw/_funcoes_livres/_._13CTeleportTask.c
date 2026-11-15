@@ -19,6 +19,6 @@ int _._13CTeleportTask(st_582780_0 *a0, int a1)
     a0->field_14 = &__vt_13CTeleportTask;
     a0->field_8->field_b0c = 0;
     a0->field_8->field_b08 = 0;
-    return sub_488170(a0, a1);
+    return _._9CBaseTask(a0, a1);
 }
 

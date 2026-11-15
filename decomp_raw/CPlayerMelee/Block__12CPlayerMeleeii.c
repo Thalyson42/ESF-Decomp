@@ -17,7 +17,7 @@ unsigned int Block__12CPlayerMeleeii(st_504a80_0 *a0, unsigned int a1, unsigned 
     v1 = 2;
     while (1)
     {
-        if (!(sub_48b040(a0->field_124 + 1284, v1) & v0) && sub_48b040(a0->field_124 + 1284, v1) & a2)
+        if (!(CSwoop::DirectionsToFlags(a0->field_124 + 1284, v1) & v0) && CSwoop::DirectionsToFlags(a0->field_124 + 1284, v1) & a2)
             goto LABEL_504b00;
         else
             goto LABEL_504ada;

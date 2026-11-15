@@ -32,9 +32,9 @@ typedef struct st_496a70_0 {
 extern char ButtonSpark__11CBaseButton;
 extern char ButtonUse__11CBaseButtonP11CBaseEntityT18USE_TYPEf;
 extern char ButtonTouch__11CBaseButtonP11CBaseEntity;
-extern st_496a70_0 *g_6167c4;
-extern st_496a70_0 *g_6167c8;
-extern st_496a70_0 *g_6168cc;
+extern st_496a70_0 *g_engfuncs.pfnPrecacheSound;
+extern st_496a70_0 *g_engfuncs.pfnSetModel;
+extern st_496a70_0 *g_engfuncs.pfnAllocString;
 extern st_496a70_1 *gpGlobals;
 
 short Spawn__11CBaseButton(float idx)
@@ -66,9 +66,9 @@ short Spawn__11CBaseButton(float idx)
     float v7;  // [bp-0x2c]
     float v8;  // [bp-0x8]
 
-    v10 = sub_487cb0(*(int *)(*(unsigned int *)&idx + 312));
-    g_6167c4(v10);
-    v11 = g_6168cc(v10);
+    v10 = ButtonSound(*(int *)(*(unsigned int *)&idx + 312));
+    g_engfuncs.pfnPrecacheSound(v10);
+    v11 = g_engfuncs.pfnAllocString(v10);
     *(unsigned int *)(*(int *)idx + 488) = v11;
     v12 = (*(int *)(*(int *)(*(unsigned int *)&idx + 96) + 12))(idx);
     v13 = *(int *)idx;
@@ -79,10 +79,10 @@ short Spawn__11CBaseButton(float idx)
         *(char **)(*(unsigned int *)&idx + 16) = &ButtonSpark__11CBaseButton;
         *(float *)&v13->padding_45[191] = (float)(0.5 + gpGlobals->field_0);
     }
-    sub_48ccb0(*(int *)idx);
+    SetMovedir(*(int *)idx);
     *(unsigned int *)(*(int *)idx + 264) = 7;
     *(unsigned int *)(*(int *)idx + 268) = 4;
-    g_6167c8(*(int *)(*(int *)idx + 520), *(int *)(*(int *)idx + 184) + gpGlobals->field_98);
+    g_engfuncs.pfnSetModel(*(int *)(*(int *)idx + 520), *(int *)(*(int *)idx + 184) + gpGlobals->field_98);
     if (*(float *)(*(int *)idx + 504) == 0.0f)
         *(float *)(*(int *)idx + 504) = 40.0f;
     if (0.0 < *(float *)(*(int *)idx + 352))
@@ -120,7 +120,7 @@ short Spawn__11CBaseButton(float idx)
     v23 = v20 * v20 + v21 * v21 + v22 * v22;
     v24 = sqrt(v23);
     if (isnan(v24))
-        sub_487dc0(*(unsigned int *)&v23);
+        sqrt(*(unsigned int *)&v23);
     else
         v23 = v24;
     v4 = (float)v23;

@@ -37,10 +37,10 @@ int SetBoundingBox__9CEnvModel(double a0, double a1, st_4b9270_1 *a2)
     v10 = v9;
     v1 = -(a2->field_2ac - a2->field_2b0);
     v0 = v10;
-    sub_48a9e0(*(unsigned int *)&v0, *(unsigned int *)((void*)&v0 + 4));
+    cos(*(unsigned int *)&v0, *(unsigned int *)((void*)&v0 + 4));
     v11 = v10 * v1;
     v2 = (float)v11;
-    sub_48aeb0(*(unsigned int *)&v0, *(unsigned int *)((void*)&v0 + 4));
+    sin(*(unsigned int *)&v0, *(unsigned int *)((void*)&v0 + 4));
     v9 = (float)(v11 * v1);
     v12 = v9;
     v13 = a2->field_2b0;
@@ -59,6 +59,6 @@ int SetBoundingBox__9CEnvModel(double a0, double a1, st_4b9270_1 *a2)
     v3 = (float)v13;
     v4 = (float)v14;
     v5 = a2->field_2b8;
-    return sub_48a0d0(a2->field_0, &v3, &v6);
+    return UTIL_SetSize(a2->field_0, &v3, &v6);
 }
 

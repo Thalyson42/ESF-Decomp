@@ -34,8 +34,8 @@ unsigned int ShootAttack__12CKameTorpedo(double a0, float idx)
     float v16;  // [bp-0x20]
     float v17;  // [bp-0x1c]
 
-    sub_48d680(*(int *)(*(unsigned int *)&idx + 128), 5);
-    sub_48a800(*(int *)*(int *)(*(unsigned int *)&idx + 128) + 116);
+    CBasePlayer::SetAnimation(*(int *)(*(unsigned int *)&idx + 128), 5);
+    UTIL_MakeVectors(*(int *)*(int *)(*(unsigned int *)&idx + 128) + 116);
     (*(int *)(*(int *)(*(int *)(*(unsigned int *)&idx + 128) + 96) + 480))(&v11, *(int *)(*(unsigned int *)&idx + 128));
     v19 = &gpGlobals->field_28;
     v10 = (float)(20.0 * *(float *)&v19[2]);
@@ -52,12 +52,12 @@ unsigned int ShootAttack__12CKameTorpedo(double a0, float idx)
     v2 = *(short *)(*(unsigned int *)&idx + 496);
     v1 = *(short *)(*(unsigned int *)&idx + 494);
     v0 = *(short *)(*(unsigned int *)&idx + 492);
-    sub_48aef0(idx);
+    CBasePlayerWeapon::GetPowerRatio(idx);
     v7 = *(int *)(*(unsigned int *)&idx + 196) * 3;
     v6 = __fnstcw();
     v5 = v6 | 0xc00;
     v7 = (int)(a0 * (double)(int)v7);
-    v22 = sub_48dd10(*(int *)*(int *)(*(unsigned int *)&idx + 128), &v8, v7);
+    v22 = CKameTorpedoAttack::DropTorpedo(*(int *)*(int *)(*(unsigned int *)&idx + 128), &v8, v7);
     v23 = *(int *)(*(unsigned int *)&idx + 500);
     *(unsigned int *)(v23 * 4 + *(unsigned int *)&idx + 468) = v22;
     *(unsigned int *)(*(unsigned int *)&idx + 500) = *(int *)(*(unsigned int *)&idx + 500) + 1;

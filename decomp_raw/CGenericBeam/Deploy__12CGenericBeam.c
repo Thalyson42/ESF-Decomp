@@ -68,9 +68,9 @@ int Deploy__12CGenericBeam(st_4c5960_5 *a0)
     a0->field_d4 = *(short *)&a0[1].padding_0[41 + v1];
     if (v0 > 4)
     {
-        sub_48d990(&a0->field_f4, "%sattack", (&g_pAuraColorString.field_0)[v0]);
+        sprintf@GLIBC_2.0(&a0->field_f4, "%sattack", (&g_pAuraColorString.field_0)[v0]);
         a0->field_c4 = 0;
-        return sub_489360(a0, "genericbeam");
+        return CBasePlayerWeapon::DefaultDeploy(a0, "genericbeam");
     }
     goto *((void *)(&(&_GLOBAL_OFFSET_TABLE_)[-1 * *(int *)(&(&_GLOBAL_OFFSET_TABLE_)[4 * v0] - 1368268)]));
 }

@@ -125,7 +125,7 @@ typedef struct st_5526c0_5 {
 } st_5526c0_5;
 
 extern unsigned int g_teamplay;
-extern st_5526c0_12 *g_616834;
+extern st_5526c0_12 *g_engfuncs.pfnEmitSound;
 extern st_5526c0_5 *gpGlobals;
 
 int TaskThink__14CDrainEntsTask(float idx)
@@ -189,15 +189,15 @@ int TaskThink__14CDrainEntsTask(float idx)
     v21 = (st_5526c0_4 *)idx;
     if (v21->field_18 >= *(float *)gpGlobals && !v21->field_8->field_37c)
     {
-        v10 = sub_48a780(v21->field_8);
+        v10 = CBasePlayer::GetMaxSpeed(v21->field_8);
         if (*(float *)&v10 != 0.0f)
         {
             v5 = 0;
-            sub_48d0d0(*(int *)(*(unsigned int *)&idx + 8));
+            CBot::ResetMoveSpeed(*(int *)(*(unsigned int *)&idx + 8));
             if (*(int *)(*(int *)(*(unsigned int *)&idx + 8) + 804))
             {
                 *(unsigned short *)&v2 = 0;
-                sub_48ab70(*(int *)(*(unsigned int *)&idx + 8), v2);
+                CBot::ToggleTurbo(*(int *)(*(unsigned int *)&idx + 8), v2);
                 return v20;
             }
             v22 = (st_5526c0_7 *)idx;
@@ -230,14 +230,14 @@ int TaskThink__14CDrainEntsTask(float idx)
                 do
                 {
                     v2 = 800.0f;
-                    v23 = sub_48bba0(v23, CONCAT(*(int *)(*(unsigned int *)&idx + 12) + 0x88, v23) >> 32, v2);
+                    v23 = UTIL_FindEntityInSphere(v23, CONCAT(*(int *)(*(unsigned int *)&idx + 12) + 0x88, v23) >> 32, v2);
                     if (!v23 || !(v27 = (st_5526c0_14 *)idx, v13 = __fnstcw(), v12 = v13 | 0xc00, v11 = (int)v27->field_8->field_0->field_260, v11 > 19))
                     {
                         if (v5)
                         {
                             if (*(float *)(*(int *)(*(unsigned int *)&idx + 8) + 3004) <= *(float *)gpGlobals)
                             {
-                                g_616834(*(int *)(*(unsigned int *)&idx + 12), 1, "weapons/basicbeam_chargeoriginal.wav", 0x3f800000, 1061997773, 1061997773 >> 32, 100);
+                                g_engfuncs.pfnEmitSound(*(int *)(*(unsigned int *)&idx + 12), 1, "weapons/basicbeam_chargeoriginal.wav", 0x3f800000, 1061997773, 1061997773 >> 32, 100);
                                 *(float *)(*(int *)(*(unsigned int *)&idx + 8) + 3004) = (float)(0.3 + *(float *)gpGlobals);
                             }
                         }
@@ -286,20 +286,20 @@ int TaskThink__14CDrainEntsTask(float idx)
                                         v41->field_4 = NULL;
                                         v41->field_8 = NULL;
                                     }
-                                    sub_48d4e0(v41);
+                                    __builtin_delete(v41);
                                 }
 LABEL_552c92:
                                 iter = v39;
                                 if (v38)
                                 {
-                                    if (!(char)sub_48b140(v38->field_0))
+                                    if (!(char)IsNull(v38->field_0))
                                     {
                                         index = *(int *)v38->field_0;
                                         *(int *)(index + 32) = *(int *)&v38->padding_4[0];
                                         *(int *)(index + 36) = *(int *)&v38->padding_4[4];
                                         *(int *)(index + 40) = *(int *)&v38->padding_4[8];
                                     }
-                                    sub_48d4e0(v38);
+                                    __builtin_delete(v38);
                                     iter = v39;
                                 }
                             }
@@ -310,7 +310,7 @@ LABEL_552c92:
                         }
                         return v20;
                     }
-                } while ((v28 = NULL, v23 == v27->field_8 || (char)sub_48b140(v23) || !v23->field_60->field_a0(v23) && (!(char)sub_4882c0(v23->field_0->field_208) || (char)sub_48cee0(v23->field_0->field_208))));
+                } while ((v28 = NULL, v23 == v27->field_8 || (char)IsNull(v23) || !v23->field_60->field_a0(v23) && (!(char)IsAttack(v23->field_0->field_208) || (char)IsOtherAttack(v23->field_0->field_208))));
                 if (v23->field_60->field_a0(v23))
                 {
                     v29 = &v23->field_0->field_8;
@@ -329,7 +329,7 @@ LABEL_552c92:
                     if (isnan(v35))
                     {
                         v0 = v34;
-                        sub_487dc0(*(unsigned int *)&v0);
+                        sqrt(*(unsigned int *)&v0);
                     }
                     else
                     {
@@ -342,10 +342,10 @@ LABEL_552c92:
                     *(unsigned short *)&v2 = 1;
                     v1 = _INSERT(v0, 4, 1);
                     v0 = _INSERT(v1, 0, v23);
-                    if (!(char)sub_489a70(v0, *(unsigned int *)((void*)&v0 + 4), v2))
+                    if (!(char)UTIL_IsValidPlayer(v0, *(unsigned int *)((void*)&v0 + 4), v2))
                         continue;
                 }
-                if ((!g_teamplay || (!v28 || v28->field_0->field_1ac != *(int *)(*(int *)(*(unsigned int *)&idx + 12) + 556)) && ((char)sub_48b960(v23->field_0->field_198) || v23->field_0->field_198->field_22c != *(int *)(*(int *)(*(unsigned int *)&idx + 12) + 556))) && (!v28 || (char)sub_48bf70(*(int *)(*(unsigned int *)&idx + 8), v28)) && (*(int *)(*(int *)(*(int *)(*(unsigned int *)&idx + 8) + 96) + 228))(*(int *)(*(unsigned int *)&idx + 8), &v23->field_0->field_8))
+                if ((!g_teamplay || (!v28 || v28->field_0->field_1ac != *(int *)(*(int *)(*(unsigned int *)&idx + 12) + 556)) && ((char)IsNull(v23->field_0->field_198) || v23->field_0->field_198->field_22c != *(int *)(*(int *)(*(unsigned int *)&idx + 12) + 556))) && (!v28 || (char)CBot::CanAttackPlayer(*(int *)(*(unsigned int *)&idx + 8), v28)) && (*(int *)(*(int *)(*(int *)(*(unsigned int *)&idx + 8) + 96) + 228))(*(int *)(*(unsigned int *)&idx + 8), &v23->field_0->field_8))
                 {
                     if (!v5)
                         v5 = 1;
@@ -356,12 +356,12 @@ LABEL_552c92:
                         *(float *)&v15 = *(float *)&v23->field_0->field_8;
                         *(float *)&v16 = *(float *)&v36->field_4;
                         *(float *)&v17 = *(float *)&v36->field_8;
-                        sub_48e0f0(v3, &v15, 20, 8, 125, 0xff, 0xff, 250, 5);
+                        UTIL_DrawBeamToAll(v3, &v15, 20, 8, 125, 0xff, 0xff, 250, 5);
                     }
                     if (v28)
-                        sub_48a540(idx, v28);
+                        CDrainEntsTask::DrainPlayer(idx, v28);
                     else
-                        sub_48d2b0(idx, v23);
+                        CDrainEntsTask::DrainAttack(idx, v23);
                     *(float *)(*(unsigned int *)&idx + 24) = (float)(*(float *)(*(unsigned int *)&idx + 24) + 0.20000000298023224);
                 }
             }

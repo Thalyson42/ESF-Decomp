@@ -38,12 +38,12 @@ double TargetDistance__12CTalkMonster(float a0)
     float v3;  // [bp-0x1c]
 
     v5 = *(unsigned int *)&a0 + 272;
-    if (!sub_48d8b0(v5))
+    if (!EHANDLE::__opi(v5))
         return 1000000.0;
-    v6 = sub_489fd0(v5);
+    v6 = EHANDLE::__rf(v5);
     if (v6->field_60->field_8c(v6))
     {
-        v7 = sub_489fd0(*(unsigned int *)&a0 + 272);
+        v7 = EHANDLE::__rf(*(unsigned int *)&a0 + 272);
         v8 = &*v7->field_8;
         idx = *(int *)a0 + 8;
         v10 = *v7->field_8 - *(float *)(*(int *)a0 + 8);
@@ -55,7 +55,7 @@ double TargetDistance__12CTalkMonster(float a0)
         v13 = v10 * v10 + v11 * v11 + v12 * v12;
         v14 = sqrt(v13);
         if (isnan(v14))
-            sub_487dc0(*(unsigned int *)&v13);
+            sqrt(*(unsigned int *)&v13);
         else
             v13 = v14;
         v0 = (float)v13;

@@ -33,12 +33,12 @@ double PredictBlockRatio__12CPlayerMeleeP12melee_move_sT1f(int a0, st_504c70_0 *
         v1 += 1;
         if (node)
         {
-            if (sub_48b240(a0, iter->field_4, node->field_4))
+            if (CPlayerMelee::Block(a0, iter->field_4, node->field_4))
                 v0 += 1;
             node = node->field_20;
         }
     }
-    sub_48d580(a0, v0, v1);
+    CPlayerMelee::GetBlockRatio(a0, v0, v1);
     return v4 * a3;
     return 0.0;
 }

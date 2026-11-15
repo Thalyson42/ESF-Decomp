@@ -27,8 +27,8 @@ typedef struct st_4abd70_2 {
 } st_4abd70_2;
 
 extern char _GLOBAL_OFFSET_TABLE_;
-extern st_4abd70_2 *g_6167c4;
-extern st_4abd70_2 *g_6168cc;
+extern st_4abd70_2 *g_engfuncs.pfnPrecacheSound;
+extern st_4abd70_2 *g_engfuncs.pfnAllocString;
 
 st_4abd70_0 * Precache__9CBaseDoor(st_4abd70_0 *a0)
 {
@@ -43,7 +43,7 @@ st_4abd70_0 * Precache__9CBaseDoor(st_4abd70_0 *a0)
     }
     else
     {
-        v0 = g_6168cc("common/null.wav");
+        v0 = g_engfuncs.pfnAllocString("common/null.wav");
         a0->field_0->field_1ec = v0;
         if (a0->field_106 <= 8)
         {
@@ -51,19 +51,19 @@ st_4abd70_0 * Precache__9CBaseDoor(st_4abd70_0 *a0)
         }
         else
         {
-            v1 = g_6168cc("common/null.wav");
+            v1 = g_engfuncs.pfnAllocString("common/null.wav");
             a0->field_0->field_1f0 = v1;
             if (a0->field_12c)
             {
-                v2 = sub_487cb0(a0->field_12c);
-                g_6167c4(v2);
-                a0->field_108 = g_6168cc(v2);
+                v2 = ButtonSound(a0->field_12c);
+                g_engfuncs.pfnPrecacheSound(v2);
+                a0->field_108 = g_engfuncs.pfnAllocString(v2);
             }
             if (a0->field_12e)
             {
-                v3 = sub_487cb0(a0->field_12e);
-                g_6167c4(v3);
-                a0->field_110 = g_6168cc(v3);
+                v3 = ButtonSound(a0->field_12e);
+                g_engfuncs.pfnPrecacheSound(v3);
+                a0->field_110 = g_engfuncs.pfnAllocString(v3);
             }
             if (a0->field_12d - 1 <= 8)
             {

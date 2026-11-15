@@ -12,13 +12,13 @@ int SENTENCEG_Lookup__FPCcPc(int a0, unsigned short *a1)
     {
         do
         {
-            if (!sub_48cac0(&(&gszallsentencenames)[16 * v1], a0 + 1))
+            if (!strcasecmp@GLIBC_2.0(&(&gszallsentencenames)[16 * v1], a0 + 1))
             {
                 if (!a1)
                     return v1;
                 *a1 = 33;
-                sub_48d990(&v0, "%d", v1);
-                sub_48c150(a1, &v0);
+                sprintf@GLIBC_2.0(&v0, "%d", v1);
+                strcat@GLIBC_2.0(a1, &v0);
                 return v1;
             }
         } while ((v1 += 1, v1 < gcallsentences));

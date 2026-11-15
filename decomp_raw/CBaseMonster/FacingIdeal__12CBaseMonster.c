@@ -3,7 +3,7 @@ int FacingIdeal__12CBaseMonster(double a0, float a1)
 {
     double v1;  // mm7
 
-    sub_48df60(a1);
+    CBaseMonster::FlYawDiff(a1);
     return fabs(v1) <= 0.006;
 }
 

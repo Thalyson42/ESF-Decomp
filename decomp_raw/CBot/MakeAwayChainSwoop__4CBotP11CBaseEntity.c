@@ -34,7 +34,7 @@ typedef struct st_558cf0_5 {
 } st_558cf0_5;
 
 extern unsigned int FindSelection__t12TMultiChoice1Z10EComboTypePQ2t12TMultiChoice1Z10EComboType12SMultiChoicei;
-extern st_558cf0_5 *g_616928;
+extern st_558cf0_5 *g_engfuncs.pfnRandomLong;
 
 unsigned int MakeAwayChainSwoop__4CBotP11CBaseEntity(st_558cf0_3 *a0, st_558cf0_4 **a1)
 {
@@ -127,7 +127,7 @@ unsigned int MakeAwayChainSwoop__4CBotP11CBaseEntity(st_558cf0_3 *a0, st_558cf0_
     st_558cf0_0 **v38;  // [bp-0x8], Other Possible Types: unsigned int
 
     iter1 = 0;
-    v39 = sub_48d6a0(8);
+    v39 = __builtin_new(8);
     *v39 = NULL;
     v39[1] = NULL;
     v38 = v39;
@@ -137,7 +137,7 @@ unsigned int MakeAwayChainSwoop__4CBotP11CBaseEntity(st_558cf0_3 *a0, st_558cf0_
     v34 = *a1->field_8;
     v35 = *(float *)&v40[1];
     v36 = *(float *)&v40[2];
-    v41 = sub_4880e0(a0, &v34);
+    v41 = UTIL_EntDir(a0, &v34);
     wcsncpy(&v26, L"22222", 5);
     if (v41 & 2)
         v30 = 15;
@@ -149,9 +149,9 @@ unsigned int MakeAwayChainSwoop__4CBotP11CBaseEntity(st_558cf0_3 *a0, st_558cf0_
         v27 = 15;
     if (v41 & 8)
         v26 = 15;
-    if (v31 != 2 && !(char)sub_487c70(v32, 2, 650.0f) && v30)
+    if (v31 != 2 && !(char)CheckForCollide(v32, 2, 650.0f) && v30)
     {
-        v42 = sub_48d6a0(12);
+        v42 = __builtin_new(12);
         *v42 = 0;
         v42[1] = 0;
         v25 = v42;
@@ -161,15 +161,15 @@ unsigned int MakeAwayChainSwoop__4CBotP11CBaseEntity(st_558cf0_3 *a0, st_558cf0_
         v43 = v38;
         if (!*v43)
         {
-            v44 = sub_48d6a0(12);
+            v44 = __builtin_new(12);
             v24 = 1;
             v44->field_4 = NULL;
             v44->field_8 = NULL;
-            sub_48d0e0(v44, 0, 4);
+            memset@GLIBC_2.0(v44, 0, 4);
             v24 = 0;
             *v43 = v44;
             if (v24)
-                sub_48d4e0(v44);
+                __builtin_delete(v44);
             *v43->field_0 = v25;
             *v43->field_4 = NULL;
             *v43->field_8 = NULL;
@@ -178,15 +178,15 @@ unsigned int MakeAwayChainSwoop__4CBotP11CBaseEntity(st_558cf0_3 *a0, st_558cf0_
         else
         {
             v23 = v43[1];
-            v45 = sub_48d6a0(12);
+            v45 = __builtin_new(12);
             v22 = 1;
             v45->field_4 = NULL;
             v45->field_8 = NULL;
-            sub_48d0e0(v45, 0, 4);
+            memset@GLIBC_2.0(v45, 0, 4);
             v22 = 0;
             v23->field_4 = v45;
             if (v22)
-                sub_48d4e0(v45);
+                __builtin_delete(v45);
             v43[1]->field_4->field_8 = v43[1];
             v46 = v43[1]->field_4;
             v43[1] = v46;
@@ -195,9 +195,9 @@ unsigned int MakeAwayChainSwoop__4CBotP11CBaseEntity(st_558cf0_3 *a0, st_558cf0_
         }
         iter1 += v30;
     }
-    if (v31 != 3 && !(char)sub_487c70(v32, 4, 650.0f) && v29)
+    if (v31 != 3 && !(char)CheckForCollide(v32, 4, 650.0f) && v29)
     {
-        v47 = sub_48d6a0(12);
+        v47 = __builtin_new(12);
         *v47 = 0;
         v47[1] = 0;
         v21 = v47;
@@ -207,15 +207,15 @@ unsigned int MakeAwayChainSwoop__4CBotP11CBaseEntity(st_558cf0_3 *a0, st_558cf0_
         v48 = v38;
         if (!*v48)
         {
-            v49 = sub_48d6a0(12);
+            v49 = __builtin_new(12);
             v20 = 1;
             v49->field_4 = NULL;
             v49->field_8 = NULL;
-            sub_48d0e0(v49, 0, 4);
+            memset@GLIBC_2.0(v49, 0, 4);
             v20 = 0;
             *v48 = v49;
             if (v20)
-                sub_48d4e0(v49);
+                __builtin_delete(v49);
             *v48->field_0 = v21;
             *v48->field_4 = NULL;
             *v48->field_8 = NULL;
@@ -224,15 +224,15 @@ unsigned int MakeAwayChainSwoop__4CBotP11CBaseEntity(st_558cf0_3 *a0, st_558cf0_
         else
         {
             v19 = v48[1];
-            v50 = sub_48d6a0(12);
+            v50 = __builtin_new(12);
             v18 = 1;
             v50->field_4 = NULL;
             v50->field_8 = NULL;
-            sub_48d0e0(v50, 0, 4);
+            memset@GLIBC_2.0(v50, 0, 4);
             v18 = 0;
             v19->field_4 = v50;
             if (v18)
-                sub_48d4e0(v50);
+                __builtin_delete(v50);
             v48[1]->field_4->field_8 = v48[1];
             v51 = v48[1]->field_4;
             v48[1] = v51;
@@ -241,9 +241,9 @@ unsigned int MakeAwayChainSwoop__4CBotP11CBaseEntity(st_558cf0_3 *a0, st_558cf0_
         }
         iter1 += v29;
     }
-    if (v31 && !(char)sub_487c70(v32, 32, 650.0f) && v28)
+    if (v31 && !(char)CheckForCollide(v32, 32, 650.0f) && v28)
     {
-        v52 = sub_48d6a0(12);
+        v52 = __builtin_new(12);
         *v52 = 0;
         v52[1] = 0;
         v17 = v52;
@@ -253,15 +253,15 @@ unsigned int MakeAwayChainSwoop__4CBotP11CBaseEntity(st_558cf0_3 *a0, st_558cf0_
         v53 = v38;
         if (!*v53)
         {
-            v54 = sub_48d6a0(12);
+            v54 = __builtin_new(12);
             v16 = 1;
             v54->field_4 = NULL;
             v54->field_8 = NULL;
-            sub_48d0e0(v54, 0, 4);
+            memset@GLIBC_2.0(v54, 0, 4);
             v16 = 0;
             *v53 = v54;
             if (v16)
-                sub_48d4e0(v54);
+                __builtin_delete(v54);
             *v53->field_0 = v17;
             *v53->field_4 = NULL;
             *v53->field_8 = NULL;
@@ -270,15 +270,15 @@ unsigned int MakeAwayChainSwoop__4CBotP11CBaseEntity(st_558cf0_3 *a0, st_558cf0_
         else
         {
             v15 = v53[1];
-            v55 = sub_48d6a0(12);
+            v55 = __builtin_new(12);
             v14 = 1;
             v55->field_4 = NULL;
             v55->field_8 = NULL;
-            sub_48d0e0(v55, 0, 4);
+            memset@GLIBC_2.0(v55, 0, 4);
             v14 = 0;
             v15->field_4 = v55;
             if (v14)
-                sub_48d4e0(v55);
+                __builtin_delete(v55);
             v53[1]->field_4->field_8 = v53[1];
             v56 = v53[1]->field_4;
             v53[1] = v56;
@@ -287,9 +287,9 @@ unsigned int MakeAwayChainSwoop__4CBotP11CBaseEntity(st_558cf0_3 *a0, st_558cf0_
         }
         iter1 += v28;
     }
-    if (v31 != 1 && !(char)sub_487c70(v32, 64, 650.0f) && v27)
+    if (v31 != 1 && !(char)CheckForCollide(v32, 64, 650.0f) && v27)
     {
-        v57 = sub_48d6a0(12);
+        v57 = __builtin_new(12);
         *v57 = 0;
         v57[1] = 0;
         v13 = v57;
@@ -299,15 +299,15 @@ unsigned int MakeAwayChainSwoop__4CBotP11CBaseEntity(st_558cf0_3 *a0, st_558cf0_
         v58 = v38;
         if (!*v58)
         {
-            v59 = sub_48d6a0(12);
+            v59 = __builtin_new(12);
             v12 = 1;
             v59->field_4 = NULL;
             v59->field_8 = NULL;
-            sub_48d0e0(v59, 0, 4);
+            memset@GLIBC_2.0(v59, 0, 4);
             v12 = 0;
             *v58 = v59;
             if (v12)
-                sub_48d4e0(v59);
+                __builtin_delete(v59);
             *v58->field_0 = v13;
             *v58->field_4 = NULL;
             *v58->field_8 = NULL;
@@ -316,15 +316,15 @@ unsigned int MakeAwayChainSwoop__4CBotP11CBaseEntity(st_558cf0_3 *a0, st_558cf0_
         else
         {
             v11 = v58[1];
-            v60 = sub_48d6a0(12);
+            v60 = __builtin_new(12);
             v10 = 1;
             v60->field_4 = NULL;
             v60->field_8 = NULL;
-            sub_48d0e0(v60, 0, 4);
+            memset@GLIBC_2.0(v60, 0, 4);
             v10 = 0;
             v11->field_4 = v60;
             if (v10)
-                sub_48d4e0(v60);
+                __builtin_delete(v60);
             v58[1]->field_4->field_8 = v58[1];
             v61 = v58[1]->field_4;
             v58[1] = v61;
@@ -333,9 +333,9 @@ unsigned int MakeAwayChainSwoop__4CBotP11CBaseEntity(st_558cf0_3 *a0, st_558cf0_
         }
         iter1 += v27;
     }
-    if (v31 != 5 && !(char)sub_487c70(v32, 8, 650.0f) && v26)
+    if (v31 != 5 && !(char)CheckForCollide(v32, 8, 650.0f) && v26)
     {
-        v62 = sub_48d6a0(12);
+        v62 = __builtin_new(12);
         *v62 = 0;
         v62[1] = 0;
         v9 = v62;
@@ -345,15 +345,15 @@ unsigned int MakeAwayChainSwoop__4CBotP11CBaseEntity(st_558cf0_3 *a0, st_558cf0_
         v63 = v38;
         if (!*v63)
         {
-            v64 = sub_48d6a0(12);
+            v64 = __builtin_new(12);
             v8 = 1;
             v64->field_4 = NULL;
             v64->field_8 = NULL;
-            sub_48d0e0(v64, 0, 4);
+            memset@GLIBC_2.0(v64, 0, 4);
             v8 = 0;
             *v63 = v64;
             if (v8)
-                sub_48d4e0(v64);
+                __builtin_delete(v64);
             *v63->field_0 = v9;
             *v63->field_4 = NULL;
             *v63->field_8 = NULL;
@@ -362,15 +362,15 @@ unsigned int MakeAwayChainSwoop__4CBotP11CBaseEntity(st_558cf0_3 *a0, st_558cf0_
         else
         {
             v7 = v63[1];
-            v65 = sub_48d6a0(12);
+            v65 = __builtin_new(12);
             v6 = 1;
             v65->field_4 = NULL;
             v65->field_8 = NULL;
-            sub_48d0e0(v65, 0, 4);
+            memset@GLIBC_2.0(v65, 0, 4);
             v6 = 0;
             v7->field_4 = v65;
             if (v6)
-                sub_48d4e0(v65);
+                __builtin_delete(v65);
             v63[1]->field_4->field_8 = v63[1];
             v66 = v63[1]->field_4;
             v63[1] = v66;
@@ -380,7 +380,7 @@ unsigned int MakeAwayChainSwoop__4CBotP11CBaseEntity(st_558cf0_3 *a0, st_558cf0_
         iter1 += v26;
     }
     v5 = &v33;
-    v4 = g_616928(0, iter1);
+    v4 = g_engfuncs.pfnRandomLong(0, iter1);
     v2 = _INSERT(v4, 0, 0) | 0xffff0000;
     v3 = &FindSelection__t12TMultiChoice1Z10EComboTypePQ2t12TMultiChoice1Z10EComboType12SMultiChoicei;
     v68 = *v38;
@@ -416,12 +416,12 @@ LABEL_5597df:
                     if (v75)
                         v75->field_8 = NULL;
                     v74->field_4 = NULL;
-                    sub_48d4e0(v74);
+                    __builtin_delete(v74);
                 }
                 v76 = v73;
                 if (!v76)
                     break;
-                sub_48d4e0(v76);
+                __builtin_delete(v76);
             }
             if (v38)
             {
@@ -435,12 +435,12 @@ LABEL_5597df:
                         node = node->field_4;
                         v79->field_4 = NULL;
                         v79->field_8 = NULL;
-                        sub_48d4e0(v79);
+                        __builtin_delete(v79);
                     } while (node);
                 }
                 v77[1] = NULL;
                 *v77 = NULL;
-                sub_48d4e0(v77);
+                __builtin_delete(v77);
             }
             v38 = 0;
             return v0;
@@ -459,12 +459,12 @@ LABEL_5597df:
             if (v83)
                 v83->field_8 = NULL;
             v82->field_4 = NULL;
-            sub_48d4e0(v82);
+            __builtin_delete(v82);
         }
         v84 = v81;
         if (!v84)
             break;
-        sub_48d4e0(v84);
+        __builtin_delete(v84);
     }
     if (v38)
     {
@@ -478,12 +478,12 @@ LABEL_5597df:
                 iter = iter->field_4;
                 v87->field_4 = NULL;
                 v87->field_8 = NULL;
-                sub_48d4e0(v87);
+                __builtin_delete(v87);
             } while (iter);
         }
         v85[1] = NULL;
         *v85 = NULL;
-        sub_48d4e0(v85);
+        __builtin_delete(v85);
     }
     v38 = 0;
     return 38;

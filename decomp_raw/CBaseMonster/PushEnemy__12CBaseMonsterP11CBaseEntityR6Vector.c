@@ -13,13 +13,13 @@ int PushEnemy__12CBaseMonsterP11CBaseEntityR6Vector(unsigned int a0, int a1, uns
     for (i = 0; i <= 3; i += 1)
     {
         v2 = a0 + i * 8 + 280;
-        v3 = sub_488810(v2);
+        v3 = EHANDLE::__opP11CBaseEntity(v2);
         if (v3 == a1)
             return v3;
-        v1 = sub_48d8b0(v2);
+        v1 = EHANDLE::__opi(v2);
         if (!v1)
         {
-            sub_48d960(a0 + i * 8 + 280, a1);
+            EHANDLE::__as(a0 + i * 8 + 280, a1);
             v4 = a0 + i * 12;
             v4[78] = *a2;
             v4[79] = a2[1];

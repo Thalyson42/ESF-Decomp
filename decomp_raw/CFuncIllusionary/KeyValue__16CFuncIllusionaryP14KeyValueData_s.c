@@ -17,9 +17,9 @@ int KeyValue__16CFuncIllusionaryP14KeyValueData_s(st_491450_1 **a0, st_491450_0 
     unsigned short v0;  // [bp-0x8]
     unsigned short v1;  // [bp-0x6]
 
-    if (sub_488af0(a1->field_4, "skin"))
-        return sub_48ba40(a0, a1);
-    sub_487fc0(a1->field_8, 0, 0);
+    if (strcmp@GLIBC_2.0(a1->field_4, "skin"))
+        return CBaseToggle::KeyValue(a0, a1);
+    __strtod_internal@GLIBC_2.0(a1->field_8, 0, 0);
     v1 = __fnstcw();
     v0 = v1 | 0xc00;
     *a0->field_110 = (int)v2;

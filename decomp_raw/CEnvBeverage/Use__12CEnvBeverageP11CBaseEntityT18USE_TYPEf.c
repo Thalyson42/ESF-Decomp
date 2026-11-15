@@ -36,7 +36,7 @@ typedef struct st_4b6a30_3 {
     unsigned int field_0;
 } st_4b6a30_3;
 
-extern st_4b6a30_3 *g_616928;
+extern st_4b6a30_3 *g_engfuncs.pfnRandomLong;
 
 st_4b6a30_0 * Use__12CEnvBeverageP11CBaseEntityT18USE_TYPEf(st_4b6a30_1 **a0)
 {
@@ -53,10 +53,10 @@ st_4b6a30_0 * Use__12CEnvBeverageP11CBaseEntityT18USE_TYPEf(st_4b6a30_1 **a0)
     }
     else if (0.0 < v0->field_160)
     {
-        v1 = sub_48a0f0("item_sodacan", &v0->field_8, &v0->field_50, v0->field_208);
+        v1 = CBaseEntity::Create("item_sodacan", &v0->field_8, &v0->field_50, v0->field_208);
         if (*a0->field_110 == 6)
         {
-            v2 = g_616928(0, 5);
+            v2 = g_engfuncs.pfnRandomLong(0, 5);
             v3 = *v1;
         }
         else

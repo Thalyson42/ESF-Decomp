@@ -37,12 +37,12 @@ typedef struct st_5285e0_2 {
 } st_5285e0_2;
 
 extern unsigned int gmsgDeathMsg;
-extern st_5285e0_1 *g_616878;
-extern st_5285e0_1 *g_61687c;
-extern st_5285e0_1 *g_616880;
-extern st_5285e0_1 *g_616898;
-extern st_5285e0_1 *g_6168d4;
-extern st_5285e0_1 *g_6168dc;
+extern st_5285e0_1 *g_engfuncs.pfnMessageBegin;
+extern st_5285e0_1 *g_engfuncs.pfnMessageEnd;
+extern st_5285e0_1 *g_engfuncs.pfnWriteByte;
+extern st_5285e0_1 *g_engfuncs.pfnWriteString;
+extern st_5285e0_1 *g_engfuncs.pfnPEntityOfEntOffset;
+extern st_5285e0_1 *g_engfuncs.pfnIndexOfEdict;
 
 int DeathNotice__17CHalfLifeTeamplayP11CBasePlayerP9entvars_sT2(st_5285e0_2 *a0, st_5285e0_3 **a1, st_5285e0_6 *a2, int a3)
 {
@@ -55,22 +55,22 @@ int DeathNotice__17CHalfLifeTeamplayP11CBasePlayerP9entvars_sT2(st_5285e0_2 *a0,
     if (a0->field_58)
         return v4;
     if (!a1 || !a2 || !(a2->field_1a4 & 8))
-        return sub_48bb20(a0, a1, a2, a3);
+        return CHalfLifeMultiplay::DeathNotice(a0, a1, a2, a3);
     v0 = a2->field_208;
-    if (a2->field_208 || (v0 = g_6168d4(0), v0))
+    if (a2->field_208 || (v0 = g_engfuncs.pfnPEntityOfEntOffset(0), v0))
         v1 = v0->field_7c;
     else
         v1 = NULL;
     if (v1 && v1 != a1 && a0->field_44->field_c8(a0, a1, v1) == 1)
     {
-        g_616878(2, gmsgDeathMsg, 0, 0);
-        v2 = g_6168dc(a2->field_208);
-        g_616880(v2);
-        v3 = g_6168dc(*a1->field_208);
-        g_616880(v3);
-        g_616898("teammate");
-        return g_61687c();
+        g_engfuncs.pfnMessageBegin(2, gmsgDeathMsg, 0, 0);
+        v2 = g_engfuncs.pfnIndexOfEdict(a2->field_208);
+        g_engfuncs.pfnWriteByte(v2);
+        v3 = g_engfuncs.pfnIndexOfEdict(*a1->field_208);
+        g_engfuncs.pfnWriteByte(v3);
+        g_engfuncs.pfnWriteString("teammate");
+        return g_engfuncs.pfnMessageEnd();
     }
-    return sub_48bb20(a0, a1, a2, a3);
+    return CHalfLifeMultiplay::DeathNotice(a0, a1, a2, a3);
 }
 

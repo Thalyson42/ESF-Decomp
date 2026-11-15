@@ -50,7 +50,7 @@ unsigned int HasPlayerItem__11CBasePlayerP15CBasePlayerItem(st_4fde60_4 *a0, st_
         do
         {
             v2 = v1;
-            if (!sub_488af0(gpGlobals->field_98 + *(int *)*(int *)&v2->padding_0[0], *(int *)a1->field_0 + gpGlobals->field_98))
+            if (!strcmp@GLIBC_2.0(gpGlobals->field_98 + *(int *)*(int *)&v2->padding_0[0], *(int *)a1->field_0 + gpGlobals->field_98))
                 return 1;
         } while ((v1 = v2->field_84, v2->field_84));
     }

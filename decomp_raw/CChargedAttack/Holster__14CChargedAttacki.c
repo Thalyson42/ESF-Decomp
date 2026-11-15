@@ -30,13 +30,13 @@ int Holster__14CChargedAttacki(st_49eba0_2 *a0)
     {
         a0->field_80->field_754 = 0x3f800000;
         a0->field_80->field_334 = 0;
-        sub_48c680(a0->field_80, 0);
+        CBasePlayer::DrawChargeBar(a0->field_80, 0);
         a0->field_60->field_170(a0);
-        sub_48de80(a0);
-        sub_488840(a0);
+        CChargedAttack::SilenceVoice(a0);
+        CChargedAttack::SilenceWeaponSounds(a0);
     }
-    sub_488e80(a0->field_80, 5);
-    sub_488e80(a0->field_80, 6);
+    CBasePlayer::StopAniTrigger(a0->field_80, 5);
+    CBasePlayer::StopAniTrigger(a0->field_80, 6);
     return a0->field_60->field_178(a0);
 }
 

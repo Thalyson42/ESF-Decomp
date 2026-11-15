@@ -40,7 +40,7 @@ float UTIL_ParametricRocket__FP9entvars_sG6VectorT1P7edict_s(unsigned int *a0, u
     a0[35] = *a1;
     a0[36] = a1[1];
     a0[37] = a1[2];
-    sub_48a800(a2);
+    UTIL_MakeVectors(a2);
     v13 = &gpGlobals->field_28;
     v14 = 8192.0 * gpGlobals->field_28;
     v2 = (float)v14;
@@ -51,7 +51,7 @@ float UTIL_ParametricRocket__FP9entvars_sG6VectorT1P7edict_s(unsigned int *a0, u
     v6 = (float)(v14 + *(float *)&a0[35]);
     v7 = (float)(v15 + *(float *)&v16[1]);
     v8 = *(float *)&v16[2] + v4;
-    sub_487b80(v16, &v6, 1, a3, &v9);
+    UTIL_TraceLine(v16, &v6, 1, a3, &v9);
     a0[32] = v10;
     a0[33] = v11;
     a0[0x22] = v12;
@@ -63,7 +63,7 @@ float UTIL_ParametricRocket__FP9entvars_sG6VectorT1P7edict_s(unsigned int *a0, u
     v18 = *(float *)&a0[8] * *(float *)&a0[8] + *(float *)&a0[9] * *(float *)&a0[9] + *(float *)&a0[10] * *(float *)&a0[10];
     v19 = sqrt(v18);
     if (isnan(v19))
-        sub_487dc0(*(unsigned int *)&v18);
+        sqrt(*(unsigned int *)&v18);
     else
         v18 = v19;
     v5 = (float)v18;
@@ -72,14 +72,14 @@ float UTIL_ParametricRocket__FP9entvars_sG6VectorT1P7edict_s(unsigned int *a0, u
         v20 = v2 * v2 + v3 * v3 + v4 * v4;
         v21 = sqrt(v20);
         if (isnan(v21))
-            sub_487dc0(*(unsigned int *)&v20);
+            sqrt(*(unsigned int *)&v20);
         else
             v20 = v21;
         v0 = (float)v20;
         v22 = *(float *)&a0[8] * *(float *)&a0[8] + *(float *)&a0[9] * *(float *)&a0[9] + *(float *)&a0[10] * *(float *)&a0[10];
         v23 = sqrt(v22);
         if (isnan(v23))
-            sub_487dc0(*(unsigned int *)&v22);
+            sqrt(*(unsigned int *)&v22);
         else
             v22 = v23;
         v5 = (float)v22;

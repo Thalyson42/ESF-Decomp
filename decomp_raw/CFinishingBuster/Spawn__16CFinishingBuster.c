@@ -40,6 +40,6 @@ int Spawn__16CFinishingBuster(st_4beb10_2 *a0)
     a0->field_d8 = 1852401779;
     a0->field_dc = 1937072743;
     a0->field_e0 = 7497076;
-    return sub_48cf50(a0);
+    return CBasePlayerItem::FallInit(a0);
 }
 

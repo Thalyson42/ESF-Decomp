@@ -43,8 +43,8 @@ st_592980_0 * PM_NoClip(double a0, double a1)
 
     v1 = pmove->field_45468;
     v0 = pmove->field_4546c;
-    sub_489290(&pmove->field_14);
-    sub_489290(&pmove->field_20);
+    VectorNormalize(&pmove->field_14);
+    VectorNormalize(&pmove->field_20);
     idx = 0;
     do
     {
@@ -52,7 +52,7 @@ st_592980_0 * PM_NoClip(double a0, double a1)
         idx += 1;
     } while (idx <= 2);
     v3 += pmove->field_45470;
-    sub_48c590(&pmove->field_38, pmove->field_10, &v2, &pmove->field_38);
+    VectorMA(&pmove->field_38, pmove->field_10, &v2, &pmove->field_38);
     memset(&pmove->field_5c, 0, 12);
     return pmove;
 }

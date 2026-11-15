@@ -43,7 +43,7 @@ typedef struct st_4aaa40_5 {
     unsigned int field_0;
 } st_4aaa40_5;
 
-extern st_4aaa40_5 *g_6168d4;
+extern st_4aaa40_5 *g_engfuncs.pfnPEntityOfEntOffset;
 extern st_4aaa40_4 *gpGlobals;
 
 st_4aaa40_1 * AuraCheck__11CDiscAttack(st_4aaa40_2 *a0)
@@ -59,7 +59,7 @@ st_4aaa40_1 * AuraCheck__11CDiscAttack(st_4aaa40_2 *a0)
     if (!v0->field_198)
         return v0;
     v1 = v0->field_198;
-    if (v0->field_198 || (v1 = g_6168d4(0), v1))
+    if (v0->field_198 || (v1 = g_engfuncs.pfnPEntityOfEntOffset(0), v1))
         v2 = v1->field_7c;
     else
         v2 = NULL;

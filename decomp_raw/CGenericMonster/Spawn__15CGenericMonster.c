@@ -8,7 +8,7 @@ typedef struct st_4c6470_1 {
     unsigned int field_0;
 } st_4c6470_1;
 
-extern st_4c6470_1 *g_6167c8;
+extern st_4c6470_1 *g_engfuncs.pfnSetModel;
 extern st_4c6470_0 *gpGlobals;
 
 int Spawn__15CGenericMonster(float idx)
@@ -28,8 +28,8 @@ int Spawn__15CGenericMonster(float idx)
     float v10;  // [bp-0x1c]
 
     (*(int *)(*(int *)(*(unsigned int *)&idx + 96) + 12))(idx);
-    g_6167c8(*(int *)(*(int *)idx + 520), *(int *)(*(int *)idx + 184) + gpGlobals->field_98);
-    if (!sub_488af0(*(int *)(*(int *)idx + 184) + gpGlobals->field_98, "models/player.mdl") || !sub_488af0(*(int *)(*(int *)idx + 184) + gpGlobals->field_98, "models/holo.mdl"))
+    g_engfuncs.pfnSetModel(*(int *)(*(int *)idx + 520), *(int *)(*(int *)idx + 184) + gpGlobals->field_98);
+    if (!strcmp@GLIBC_2.0(*(int *)(*(int *)idx + 184) + gpGlobals->field_98, "models/player.mdl") || !strcmp@GLIBC_2.0(*(int *)(*(int *)idx + 184) + gpGlobals->field_98, "models/holo.mdl"))
     {
         v8 = 4.0f;
         v9 = 4.0f;
@@ -51,7 +51,7 @@ int Spawn__15CGenericMonster(float idx)
         v1 = &v2;
         v0 = &v5;
     }
-    sub_48a0d0(*(int *)idx);
+    UTIL_SetSize(*(int *)idx);
     *(unsigned int *)(*(int *)idx + 268) = 3;
     *(unsigned int *)(*(int *)idx + 264) = 4;
     *(unsigned int *)(*(unsigned int *)&idx + 632) = 247;

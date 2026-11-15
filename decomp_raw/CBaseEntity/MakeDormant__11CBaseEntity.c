@@ -19,6 +19,6 @@ int MakeDormant__11CBaseEntity(st_49d7a0_0 **a0)
     *a0->field_108 = 0;
     *a0->field_118 = *a0->field_118 | 128;
     *a0->field_104 = 0;
-    return sub_48db50(*a0, &*a0->field_8);
+    return UTIL_SetOrigin(*a0, &*a0->field_8);
 }
 

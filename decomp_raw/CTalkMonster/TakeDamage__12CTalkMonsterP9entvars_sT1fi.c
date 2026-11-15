@@ -33,10 +33,10 @@ int TakeDamage__12CTalkMonsterP9entvars_sT1fi(st_526ab0_2 *a0, int a1, st_526ab0
 
     if (a0->field_60->field_8c(a0) && a2 && a0->field_180 != 5 && a2->field_1a4 & 8)
     {
-        v0 = sub_48a530(a0, 0);
+        v0 = CTalkMonster::FindNearestFriend(a0, 0);
         if (v0 && v0->field_60->field_8c(v0))
-            sub_48b250(v0, &slIdleStopShooting);
+            CBaseMonster::ChangeSchedule(v0, &slIdleStopShooting);
     }
-    return sub_48a8f0(a0, a1, a2, a3, a4);
+    return CBaseMonster::TakeDamage(a0, a1, a2, a3, a4);
 }
 

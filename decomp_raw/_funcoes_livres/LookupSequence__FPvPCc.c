@@ -18,7 +18,7 @@ int LookupSequence__FPvPCc(st_48f060_0 *a0, int a1)
         return -0x1;
     do
     {
-        if (!sub_48cac0(176 * v1 + (char *)v0, a1))
+        if (!strcasecmp@GLIBC_2.0(176 * v1 + (char *)v0, a1))
             return v1;
     } while ((v1 += 1, v1 < a0->field_a4));
     return -0x1;

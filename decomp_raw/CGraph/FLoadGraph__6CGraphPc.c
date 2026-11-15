@@ -21,10 +21,10 @@ typedef struct st_4e3b00_0 {
     unsigned int field_0;
 } st_4e3b00_0;
 
-extern st_4e3b00_0 *g_6168b4;
-extern st_4e3b00_0 *g_61693c;
-extern st_4e3b00_0 *g_616940;
-extern st_4e3b00_0 *g_61694c;
+extern st_4e3b00_0 *g_engfuncs.pfnAlertMessage;
+extern st_4e3b00_0 *g_engfuncs.pfnLoadFileForMe;
+extern st_4e3b00_0 *g_engfuncs.pfnFreeFile;
+extern st_4e3b00_0 *g_engfuncs.pfnGetGameDir;
 
 unsigned int FLoadGraph__6CGraphPc(st_4e3b00_1 *a0, int a1)
 {
@@ -67,15 +67,15 @@ unsigned int FLoadGraph__6CGraphPc(st_4e3b00_1 *a0, int a1)
     char v8;  // [bp-0x2004]
     char v9[4096];  // [bp-0x1004]
 
-    g_61694c(&v8);
-    sub_48c150(&v8, "/maps");
-    sub_487e20(&v8, 0x1ff);
-    sub_48c150(&v8, "/graphs");
-    sub_487e20(&v8, 0x1ff);
+    g_engfuncs.pfnGetGameDir(&v8);
+    strcat@GLIBC_2.0(&v8, "/maps");
+    mkdir@GLIBC_2.0(&v8, 0x1ff);
+    strcat@GLIBC_2.0(&v8, "/graphs");
+    mkdir@GLIBC_2.0(&v8, 0x1ff);
     strcpy(v9, "maps/graphs/");
-    sub_48c150(v9, a1);
-    sub_48c150(v9, ".nod");
-    v5 = g_61693c(v9, &v7);
+    strcat@GLIBC_2.0(v9, a1);
+    strcat@GLIBC_2.0(v9, ".nod");
+    v5 = g_engfuncs.pfnLoadFileForMe(v9, &v7);
     iter2 = v5;
     if (!v5)
         return 0;
@@ -90,7 +90,7 @@ unsigned int FLoadGraph__6CGraphPc(st_4e3b00_1 *a0, int a1)
             v2 = *iter2;
             v1 = "**ERROR** Graph version is %d, expected %d\n";
             v0 = 2;
-            v11 = g_6168b4;
+            v11 = g_engfuncs.pfnAlertMessage;
             goto LABEL_4e3f03;
         }
         node -= 8396;
@@ -112,7 +112,7 @@ unsigned int FLoadGraph__6CGraphPc(st_4e3b00_1 *a0, int a1)
             v16->field_24 = 0;
             v16->field_14 = 0;
             v16->field_20bc = 0;
-            v17 = sub_48ccc0(88, v16->field_18);
+            v17 = calloc@GLIBC_2.0(88, v16->field_18);
             a0->field_c = v17;
             if (!v17)
             {
@@ -124,10 +124,10 @@ unsigned int FLoadGraph__6CGraphPc(st_4e3b00_1 *a0, int a1)
             node -= v18;
             if ((int)(node - v18) >= NULL)
             {
-                sub_48c4b0(a0->field_c, iter2, a0->field_18 * 88);
+                memcpy@GLIBC_2.0(a0->field_c, iter2, a0->field_18 * 88);
                 v19 = a0;
                 iter2 += v19->field_18 * 88;
-                v20 = sub_48ccc0(24, v19->field_1c);
+                v20 = calloc@GLIBC_2.0(24, v19->field_1c);
                 a0->field_10 = v20;
                 if (!v20)
                 {
@@ -140,10 +140,10 @@ unsigned int FLoadGraph__6CGraphPc(st_4e3b00_1 *a0, int a1)
                 node -= v22;
                 if ((int)(node - v22) >= NULL)
                 {
-                    sub_48c4b0(v21->field_10, iter2, a0->field_1c * 24);
+                    memcpy@GLIBC_2.0(v21->field_10, iter2, a0->field_1c * 24);
                     v23 = a0;
                     iter2 += v23->field_1c * 24;
-                    v24 = sub_48ccc0(16, v23->field_18);
+                    v24 = calloc@GLIBC_2.0(16, v23->field_18);
                     a0->field_24 = v24;
                     if (!v24)
                     {
@@ -156,11 +156,11 @@ unsigned int FLoadGraph__6CGraphPc(st_4e3b00_1 *a0, int a1)
                     node -= v26;
                     if ((int)(node - v26) >= NULL)
                     {
-                        sub_48c4b0(v25->field_24, iter2, a0->field_18 * 16);
+                        memcpy@GLIBC_2.0(v25->field_24, iter2, a0->field_18 * 16);
                         v27 = a0;
                         iter2 += v27->field_18 * 16;
                         v27->field_8 = 0;
-                        v28 = sub_48ccc0(1, v27->field_20);
+                        v28 = calloc@GLIBC_2.0(1, v27->field_20);
                         v29 = a0;
                         v29->field_14 = v28;
                         if (!v28)
@@ -186,11 +186,11 @@ unsigned int FLoadGraph__6CGraphPc(st_4e3b00_1 *a0, int a1)
                             node -= v32->field_20;
                             if ((int)(node - v32->field_20) >= NULL)
                             {
-                                sub_48c4b0(v32->field_14, iter2, v32->field_20);
+                                memcpy@GLIBC_2.0(v32->field_14, iter2, v32->field_20);
                                 iter2 += a0->field_20;
                                 v33 = a0;
                                 v33->field_8 = 1;
-                                v34 = sub_48ccc0(2, v33->field_20c0);
+                                v34 = calloc@GLIBC_2.0(2, v33->field_20c0);
                                 a0->field_20bc = v34;
                                 if (!v34)
                                 {
@@ -198,7 +198,7 @@ unsigned int FLoadGraph__6CGraphPc(st_4e3b00_1 *a0, int a1)
                                     v1 = "***ERROR**\nCounldn't malloc %d hash link bytes!\n";
 LABEL_4e3efa:
                                     v0 = 2;
-                                    v11 = g_6168b4;
+                                    v11 = g_engfuncs.pfnAlertMessage;
 LABEL_4e3f03:
                                     v11(v0, v1, v2, v3);
                                 }
@@ -209,14 +209,14 @@ LABEL_4e3f03:
                                     node -= v36;
                                     if ((int)(node - v36) >= NULL)
                                     {
-                                        sub_48c4b0(v35->field_20bc, iter2, a0->field_20c0 * 2);
+                                        memcpy@GLIBC_2.0(v35->field_20bc, iter2, a0->field_20c0 * 2);
                                         v37 = a0;
                                         v37->field_0 = 1;
                                         v37->field_4 = 0;
-                                        g_616940(v5);
+                                        g_engfuncs.pfnFreeFile(v5);
                                         if (!node)
                                             return 1;
-                                        g_6168b4(2, "***WARNING***:Node graph was longer than expected by %d bytes.!\n", node);
+                                        g_engfuncs.pfnAlertMessage(2, "***WARNING***:Node graph was longer than expected by %d bytes.!\n", node);
                                         return 1;
                                     }
                                 }
@@ -227,7 +227,7 @@ LABEL_4e3f03:
             }
         }
     }
-    g_616940(v5);
+    g_engfuncs.pfnFreeFile(v5);
     return 0;
 }
 

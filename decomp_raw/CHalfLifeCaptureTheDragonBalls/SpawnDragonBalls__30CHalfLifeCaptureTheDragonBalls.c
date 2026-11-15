@@ -33,15 +33,15 @@ typedef struct st_49b670_0 {
 } st_49b670_0;
 
 extern unsigned int gmsgDragonBallEnt;
-extern st_49b670_0 *g_6167f8;
-extern st_49b670_0 *g_616878;
-extern st_49b670_0 *g_61687c;
-extern st_49b670_0 *g_616880;
-extern st_49b670_0 *g_616888;
-extern st_49b670_0 *g_6168b4;
-extern st_49b670_0 *g_6168d8;
-extern st_49b670_0 *g_6168dc;
-extern st_49b670_0 *g_616928;
+extern st_49b670_0 *g_engfuncs.pfnFindEntityByString;
+extern st_49b670_0 *g_engfuncs.pfnMessageBegin;
+extern st_49b670_0 *g_engfuncs.pfnMessageEnd;
+extern st_49b670_0 *g_engfuncs.pfnWriteByte;
+extern st_49b670_0 *g_engfuncs.pfnWriteShort;
+extern st_49b670_0 *g_engfuncs.pfnAlertMessage;
+extern st_49b670_0 *g_engfuncs.pfnEntOffsetOfPEntity;
+extern st_49b670_0 *g_engfuncs.pfnIndexOfEdict;
+extern st_49b670_0 *g_engfuncs.pfnRandomLong;
 
 st_49b670_3 * SpawnDragonBalls__30CHalfLifeCaptureTheDragonBalls(st_49b670_3 *a0)
 {
@@ -67,10 +67,10 @@ st_49b670_3 * SpawnDragonBalls__30CHalfLifeCaptureTheDragonBalls(st_49b670_3 *a0
     st_49b670_2 *i;  // [bp-0x1a4]
 
     index = 0;
-    for (i = g_6167f8(0, "classname", "item_dragonball"); index <= 99; (&i)[index] = g_6167f8(*(int *)&(&v8)[4 * index], "classname", "item_dragonball"))
+    for (i = g_engfuncs.pfnFindEntityByString(0, "classname", "item_dragonball"); index <= 99; (&i)[index] = g_engfuncs.pfnFindEntityByString(*(int *)&(&v8)[4 * index], "classname", "item_dragonball"))
     {
         v10 = 0;
-        if (!(&i)[index] || !g_6168d8((&i)[index]))
+        if (!(&i)[index] || !g_engfuncs.pfnEntOffsetOfPEntity((&i)[index]))
             v10 = 1;
         if (v10)
             break;
@@ -78,7 +78,7 @@ st_49b670_3 * SpawnDragonBalls__30CHalfLifeCaptureTheDragonBalls(st_49b670_3 *a0
     }
     if (index <= 6)
     {
-        g_6168b4(1, "not enough dragonballs in this map\n");
+        g_engfuncs.pfnAlertMessage(1, "not enough dragonballs in this map\n");
         a0->field_298 = 1;
         return a0;
     }
@@ -87,7 +87,7 @@ st_49b670_3 * SpawnDragonBalls__30CHalfLifeCaptureTheDragonBalls(st_49b670_3 *a0
     {
         do
         {
-            v12 = g_616928(0, index - 1);
+            v12 = g_engfuncs.pfnRandomLong(0, index - 1);
             l = 1;
             v14 = 0;
             if (0 < idx)
@@ -109,7 +109,7 @@ st_49b670_3 * SpawnDragonBalls__30CHalfLifeCaptureTheDragonBalls(st_49b670_3 *a0
         v5 = *(float *)&v17[1];
         v6 = *(float *)&v17[2];
         j += 1;
-        v18 = sub_48bf60(&v4, j);
+        v18 = CDragonBall::CreateDragonBall(&v4, j);
         *(st_49b670_3 **)&(&a0->field_278)[v16] = v18;
         if (!v18)
             return v18;
@@ -121,13 +121,13 @@ st_49b670_3 * SpawnDragonBalls__30CHalfLifeCaptureTheDragonBalls(st_49b670_3 *a0
         v1 = &a0->field_278;
         do
         {
-            g_616878(2, gmsgDragonBallEnt, 0, 0);
-            g_616880(k);
+            g_engfuncs.pfnMessageBegin(2, gmsgDragonBallEnt, 0, 0);
+            g_engfuncs.pfnWriteByte(k);
             v19 = k * 4;
-            v0 = g_6168dc(*(int *)(*(int *)*(int *)(v19 + v1) + 520));
-            g_616888(v0);
-            g_61687c(v0);
-            sub_48a5c0(*(int *)(v19 + v1));
+            v0 = g_engfuncs.pfnIndexOfEdict(*(int *)(*(int *)*(int *)(v19 + v1) + 520));
+            g_engfuncs.pfnWriteShort(v0);
+            g_engfuncs.pfnMessageEnd(v0);
+            CDragonBall::Stonify(*(int *)(v19 + v1));
             k += 1;
         } while (k <= 6);
     }

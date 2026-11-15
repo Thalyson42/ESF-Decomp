@@ -8,7 +8,7 @@ typedef struct st_58c030_0 {
     unsigned int field_0;
 } st_58c030_0;
 
-extern st_58c030_0 *g_6168dc;
+extern st_58c030_0 *g_engfuncs.pfnIndexOfEdict;
 extern char g_SentGameRulesMasks;
 extern char g_SentBanMasks;
 extern unsigned int g_bWantModEnable;
@@ -35,11 +35,11 @@ unsigned int ClientConnected__13CVoiceGameMgrP7edict_s(unsigned int a0, unsigned
     char v7;  // [bp-0x14], Other Possible Types: unsigned long long
     unsigned int v8;  // [bp-0xc]
 
-    v5 = g_6168dc(a1) - 1;
+    v5 = g_engfuncs.pfnIndexOfEdict(a1) - 1;
     v9 = &g_bWantModEnable;
     v10 = &v8;
     if (v5 < 0 || v5 >= 32)
-        v10 = sub_4892a0("i >= 0 && i < GetNumBits()", "../game_shared/bitvec.h", 133, "class CBitVecAccessor CBitVec<32>::operator [](int)");
+        v10 = __assert_fail@GLIBC_2.0("i >= 0 && i < GetNumBits()", "../game_shared/bitvec.h", 133, "class CBitVecAccessor CBitVec<32>::operator [](int)");
     v10->field_0 = v9;
     v10->field_4 = v5;
     *(unsigned int *)(v8 + ((int)(*&(&v8)[1]) >> 5) * 4) = *(int *)(v8 + ((int)(*&(&v8)[1]) >> 5) * 4) | 1 << ((char)*&(&v8)[1] & 31);
@@ -49,7 +49,7 @@ unsigned int ClientConnected__13CVoiceGameMgrP7edict_s(unsigned int a0, unsigned
     {
         v12 = &v7;
         if (i < 0 || i >= 32)
-            v12 = sub_4892a0("i >= 0 && i < GetNumBits()", "../game_shared/bitvec.h", 133, "class CBitVecAccessor CBitVec<32>::operator [](int)");
+            v12 = __assert_fail@GLIBC_2.0("i >= 0 && i < GetNumBits()", "../game_shared/bitvec.h", 133, "class CBitVecAccessor CBitVec<32>::operator [](int)");
         *(unsigned int *)&v7 = v4;
         v12[1] = i;
         index = *(int *)((char *)&v7 + 4) >> 5;
@@ -62,7 +62,7 @@ unsigned int ClientConnected__13CVoiceGameMgrP7edict_s(unsigned int a0, unsigned
     {
         v16 = &v6;
         if (j < 0 || j >= 32)
-            v16 = sub_4892a0("i >= 0 && i < GetNumBits()", "../game_shared/bitvec.h", 133, "class CBitVecAccessor CBitVec<32>::operator [](int)");
+            v16 = __assert_fail@GLIBC_2.0("i >= 0 && i < GetNumBits()", "../game_shared/bitvec.h", 133, "class CBitVecAccessor CBitVec<32>::operator [](int)");
         *(unsigned int *)&v6 = v2;
         v16[1] = j;
         idx = *(int *)((char *)&v6 + 4) >> 5;

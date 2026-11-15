@@ -51,7 +51,7 @@ st_565950_2 * Activate__9CBotCombo(st_565950_3 *a0)
             if (v4)
                 v4->field_8 = 0;
             v3->field_4 = NULL;
-            v1 = sub_48d4e0(v3);
+            v1 = __builtin_delete(v3);
         }
         v0 = v2;
     }

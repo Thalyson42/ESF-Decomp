@@ -17,7 +17,7 @@ extern st_533e90_2 *g_pGameRules;
 
 unsigned int UTIL_TeamsMatch__FPCcT0(char *a0, char *a1)
 {
-    if (g_pGameRules->field_44->field_20(g_pGameRules) && (!*a0 || !*a1 || sub_48cac0(a0, a1)))
+    if (g_pGameRules->field_44->field_20(g_pGameRules) && (!*a0 || !*a1 || strcasecmp@GLIBC_2.0(a0, a1)))
         return 0;
     return 1;
 }

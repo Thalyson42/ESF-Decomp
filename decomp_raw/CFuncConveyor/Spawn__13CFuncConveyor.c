@@ -3,8 +3,8 @@ int Spawn__13CFuncConveyor(float a0)
 {
     unsigned int *v1;  // edx
 
-    sub_48ccb0(*(int *)a0);
-    sub_48cfb0(a0);
+    SetMovedir(*(int *)a0);
+    CFuncWall::Spawn(a0);
     v1 = *(int *)a0;
     if (!((char)v1[104] & 1))
         *(char *)&v1[105] = (char)v1[105] | 4;
@@ -15,6 +15,6 @@ int Spawn__13CFuncConveyor(float a0)
     }
     if (*(float *)(*(int *)a0 + 504) == 0.0f)
         *(float *)(*(int *)a0 + 504) = 100.0f;
-    return sub_48cb10(a0, *(float *)(*(int *)a0 + 504));
+    return CFuncConveyor::UpdateSpeed(a0, *(float *)(*(int *)a0 + 504));
 }
 

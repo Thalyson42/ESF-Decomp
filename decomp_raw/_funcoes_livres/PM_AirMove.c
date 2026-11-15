@@ -49,8 +49,8 @@ int PM_AirMove(double a0, double a1, double a2)
     v1 = pmove->field_4546c;
     pmove->field_1c = 0;
     pmove->field_28 = 0;
-    sub_489290(&pmove->field_14);
-    sub_489290(&pmove->field_20);
+    VectorNormalize(&pmove->field_14);
+    VectorNormalize(&pmove->field_20);
     idx = 0;
     do
     {
@@ -62,17 +62,17 @@ int PM_AirMove(double a0, double a1, double a2)
     v11 = *(float *)&v7;
     *(float *)&v4 = v11;
     v5 = 0;
-    sub_489290(&v3);
+    VectorNormalize(&v3);
     if (v11 > pmove->field_1f4)
     {
-        sub_48d230(&v6, pmove->field_1f4 / v11, &v6);
+        VectorScale(&v6, pmove->field_1f4 / v11, &v6);
         v11 = pmove->field_1f4;
     }
     v0 = pmove->field_4f4f0->field_14;
-    sub_48c800(&v3, v11, v0);
+    PM_AirAccelerate(&v3, v11, v0);
     pmove->field_5c = pmove->field_5c + pmove->field_74;
     pmove->field_60 = pmove->field_60 + pmove->field_78;
     pmove->field_64 = pmove->field_64 + pmove->field_7c;
-    return sub_48dbe0(&v3, v11, v0);
+    return PM_FlyMove(&v3, v11, v0);
 }
 

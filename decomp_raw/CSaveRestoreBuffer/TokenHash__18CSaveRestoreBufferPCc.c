@@ -9,7 +9,7 @@ typedef struct st_535490_1 {
     int field_0;
 } st_535490_1;
 
-extern st_535490_1 *g_6168b4;
+extern st_535490_1 *g_engfuncs.pfnAlertMessage;
 
 unsigned int TokenHash__18CSaveRestoreBufferPCc(st_535490_0 **a0, int a1)
 {
@@ -21,7 +21,7 @@ unsigned int TokenHash__18CSaveRestoreBufferPCc(st_535490_0 **a0, int a1)
     st_535490_0 *v1;  // [bp-0xc]
     unsigned short v2;  // [bp-0x6]
 
-    v3 = sub_48b050(a0, a1);
+    v3 = CSaveRestoreBuffer::HashString(a0, a1);
     v4 = *a0;
     v0 = v4;
     v1 = v4;
@@ -34,7 +34,7 @@ unsigned int TokenHash__18CSaveRestoreBufferPCc(st_535490_0 **a0, int a1)
             idx = i + v2;
             if ((int)idx >= (int)v1->field_14)
                 idx -= v1->field_14;
-            if (!*(int *)&*a0->field_18[idx] || !sub_488af0(a1, *(int *)&*a0->field_18[idx]))
+            if (!*(int *)&*a0->field_18[idx] || !strcmp@GLIBC_2.0(a1, *(int *)&*a0->field_18[idx]))
             {
                 *(int *)&*a0->field_18[idx] = a1;
                 return (unsigned short)idx;
@@ -43,7 +43,7 @@ unsigned int TokenHash__18CSaveRestoreBufferPCc(st_535490_0 **a0, int a1)
             v1 = *a0;
         } while ((int)i < (int)*a0->field_14);
     }
-    g_6168b4(4, "CSaveRestoreBuffer :: TokenHash() is COMPLETELY FULL!");
+    g_engfuncs.pfnAlertMessage(4, "CSaveRestoreBuffer :: TokenHash() is COMPLETELY FULL!");
     return 0;
 }
 
