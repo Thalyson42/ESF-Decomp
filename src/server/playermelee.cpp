@@ -2496,3 +2496,136 @@ void CPlayerMelee::SimpleSwitch(CPlayerMelee *pOther, float flStun, ADV_MELEE_ST
     else if (pOther->m_fIsAttacker)
         pOther->SimpleSwitch(this, flStun, iMode);            // [?] o decompilado chama (this, this); aqui o par é invertido
 }
+
+// ---------------------------------------------------------------------------
+// lote 21: InitMelee, ManageInvulnerability, Reset, SetMode
+// ---------------------------------------------------------------------------
+
+int CPlayerMelee::InitMelee(CBasePlayer *pDefenderPlr)   // this = atacante; pDefenderPlr = alvo
+{
+    SetDefender(pDefenderPlr);
+    SetAttackerOther(NULL);
+    m_pDefenderMelee->SetAttackerOther(m_pAttacker);      // [OK] o defensor passa a ter o atacante como "outro"
+    m_pDefenderMelee->SetDefender(NULL);
+    m_pAttacker->f_37c = 0;
+    m_pDefender->f_37c = 0;
+
+    if (!f_0f4)                                           // [OK] sem troca (SimpleSwitch): cancela tudo que o jogador faz
+    {
+        if (m_pAttacker->m_fFlying)   m_pAttacker->StopFly();
+        if (m_pAttacker->m_fPoweredUp) m_pAttacker->StopTurbo();   // [?] nome do campo +0x324
+        if (m_pDefender->f_330)       m_pDefender->StopPowerUp();
+        if (m_pDefender->m_fFlying)   m_pDefender->StopFly();
+        if (m_pDefender->m_fPoweredUp) m_pDefender->StopTurbo();
+        if (m_pDefender->m_fTurbo)    m_pDefender->StopSwoop();
+        if (m_pDefender->f_6c8)       m_pDefender->RemoveWallJump();
+        m_pDefender->m_fBlocking = m_pDefender->m_fBlocking;       // [OK] (auto-atribuição no original)
+
+        if (m_pDefender->f_968)                           // item ativo do defensor (vtable)
+        {
+            CBaseEntity *pItem = ((CBaseEntity*)m_pDefender->f_968)->vfunc_12c();   // [?] slot 0x12c
+            if (pItem)
+            {
+                if (pItem->vfunc_item_28())               // [?] "está em uso"
+                {
+                    pItem->vfunc_104(0);
+                    pItem->vfunc_fc();
+                }
+                else if (m_pDefender->f_33c)
+                {
+                    m_pDefender->f_37c = 1;
+                    pItem->vfunc_item_18();
+                }
+            }
+        }
+        RemoveAllAnims();
+        m_pDefenderMelee->RemoveAllAnims();
+    }
+
+    m_pAttacker->f_37c = 1;
+    m_pDefender->f_37c = 1;
+    m_fIsAttacker = 1;
+    m_fIsDefender = 0;
+    m_pDefenderMelee->m_fIsAttacker = 0;
+    m_pDefenderMelee->m_fIsDefender = 1;
+    m_fInAdvMelee = 1;
+    m_pDefenderMelee->m_fInAdvMelee = 1;
+
+    if (!f_0f4)
+    {
+        m_pAttacker->pev->solid = 0;                      // [OK] +0x10c (SOLID_NOT)
+        f_140 = 0;
+        m_pDefenderMelee->f_140 = 1;
+        m_pAttacker->m_flSpeedMult = 1.0f;
+        m_pDefender->m_flSpeedMult = 1.0f;
+        m_pAttacker->pev->movetype = 15;                  // [OK] MOVETYPE_PUSH? +0x108 = 15 (valor literal)
+        m_pDefender->pev->movetype = 15;
+    }
+    return 0;
+}
+
+int CPlayerMelee::ManageInvulnerability()
+{
+    if (m_pAttacker && f_10c)
+    {
+        if (f_0b4 < gpGlobals->time)                      // [OK] acabou o tempo de invulnerabilidade
+        {
+            f_10c = 0;
+            m_pIgnoreDamageFrom = NULL;
+            f_0b4 = 0;
+        }
+    }
+    return 0;
+}
+
+int CPlayerMelee::Reset()
+{
+    RemoveAllAnims();
+    f_000 = 0;
+    m_flTossStartSpeed = 0; m_flTossSpeed = 0; m_flTossMinSpeed = 0;
+    m_flTossDecel = 0; m_flTossEndTime = 0;
+    f_024 = 0;
+    m_flLayTime = 0;
+    f_0a8 = 0;
+    m_fTossing = 0; m_iTossType = 0; f_030 = 0; m_fAirRecover = 0; m_fStruggleBar = 0;
+    f_0f8 = 0;
+    f_03c = 0;
+    m_vecTossDir[0] = m_vecTossDir[1] = m_vecTossDir[2] = 0;
+    memset(&m_iThrowState, 0, 28);                        // +0x64..+0x80
+    m_vecDir[0] = m_vecDir[1] = m_vecDir[2] = 0;
+    m_Mode = (ADV_MELEE_STATUS)0;
+    f_0d0 = 0; f_0d4 = 0; f_0d8 = 0;
+    m_fIsAttacker = 0; m_fIsDefender = 0;
+    m_fStunActive = 0; m_fGrabFull = 0; m_fGrabSpinSound = 0;
+    f_0ec = 0; f_0f0 = 0; f_0f4 = 0;
+    f_140 = 0;
+    f_0fc = 0; f_100 = 0; f_104 = 0; m_fDelayEndBlock = 0; f_10c = 0;
+    m_flStunEnd = 0; m_flPrepunchStart = 0; m_flLastPunch = 0;
+    f_09c = 0; f_0a0 = 0; m_flGrabFullTime = 0;
+    m_flWallStickStart = 0;
+    memset(&m_flDelayTime, 0, 36);                        // +0xac..+0xd0
+    m_vecWallNormal[0] = m_vecWallNormal[1] = m_vecWallNormal[2] = 0;
+    m_pExeHead = NULL; m_pExeCur = NULL;
+    m_pIgnoreDamageFrom = NULL;
+    SetAttacker(NULL);
+    SetAttackerOther(NULL);
+    SetDefender(NULL);
+    DelAllDirections();
+    return 0;
+}
+
+int CPlayerMelee::SetMode(ADV_MELEE_STATUS m)
+{
+    m_Mode = m;
+    m_pDefenderMelee->m_Mode = m;
+    int r = 0;
+    if (m == 0) return 0;
+    if (m == 1)  { m_pDefenderMelee->m_Mode = (ADV_MELEE_STATUS)2;  r = StartPrePunchAttack(); }
+    if (m == 3)  { m_pDefenderMelee->m_Mode = (ADV_MELEE_STATUS)4;  r = StartChargedAttack(); }
+    if (m == 5)  { m_pDefenderMelee->m_Mode = (ADV_MELEE_STATUS)6;  r = StartGrabbedAttack(); }
+    if (m == 7)  { m_pDefenderMelee->m_Mode = (ADV_MELEE_STATUS)8;  r = StartExeAttack(); }
+    if (m == 9)  { m_pDefenderMelee->m_Mode = (ADV_MELEE_STATUS)11; r = StartStruggleAttack(); }
+    if (m == 10) { m_pDefenderMelee->m_Mode = (ADV_MELEE_STATUS)11; r = StartBurstStruggleAttack(); }
+    if (m == 12) { m_pDefenderMelee->m_Mode = (ADV_MELEE_STATUS)13; r = StartKnockPreStruggle(); }
+    return r;
+}
