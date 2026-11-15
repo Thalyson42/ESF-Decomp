@@ -27,11 +27,12 @@ public:
     virtual void iItemSlot();  // vtable[74] iItemSlot__15CBasePlayerItem
     virtual void 0();  // vtable[75] 0
     // campos observados (offset em bytes a partir de `this`; inclui os herdados)
-    int f_00c;  // +0xc (12)
+    void* m_pfnThink;  // +0xc (12) FIELD_FUNCTION  [save-table]
     int f_010;  // +0x10 (16)
-    int f_014;  // +0x14 (20)
+    void* m_pfnTouch;  // +0x14 (20) FIELD_FUNCTION  [save-table]
     int f_018;  // +0x18 (24)
     void* f_060;  // +0x60 (96)
-    int f_080;  // +0x80 (128)
-    int f_088;  // +0x88 (136)
+    CBaseEntity* m_pPlayer;  // +0x80 (128) FIELD_CLASSPTR  [save-table]
+    CBaseEntity* m_pNext;  // +0x84 (132) FIELD_CLASSPTR  [save-table]
+    int m_iId;  // +0x88 (136) FIELD_INTEGER  [save-table]
 };

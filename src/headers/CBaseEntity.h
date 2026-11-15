@@ -61,8 +61,12 @@ public:
     virtual void FVisible();  // vtable[55] FVisible__11CBaseEntityRC6Vector
     virtual void 0();  // vtable[56] 0
     // campos observados (offset em bytes a partir de `this`; inclui os herdados)
-    int f_00c;  // +0xc (12)
+    CBaseEntity* m_pGoalEnt;  // +0x4 (4) FIELD_CLASSPTR  [save-table]
+    void* m_pfnThink;  // +0xc (12) FIELD_FUNCTION  [save-table]
     int f_010;  // +0x10 (16)
+    void* m_pfnTouch;  // +0x14 (20) FIELD_FUNCTION  [save-table]
+    void* m_pfnUse;  // +0x1c (28) FIELD_FUNCTION  [save-table]
+    void* m_pfnBlocked;  // +0x24 (36) FIELD_FUNCTION  [save-table]
     int f_060;  // +0x60 (96)
     int f_07c;  // +0x7c (124)
     void* f_208;  // +0x208 (520)

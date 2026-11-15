@@ -9,8 +9,9 @@ public:
     virtual void 0();  // vtable[57] 0
     // campos observados (offset em bytes a partir de `this`; inclui os herdados)
     int f_060;  // +0x60 (96)
-    float f_06c;  // +0x6c (108)
-    float f_074;  // +0x74 (116)
-    int f_078;  // +0x78 (120)
-    int f_07c;  // +0x7c (124)
+    float m_flFrameRate;  // +0x6c (108) FIELD_FLOAT  [save-table]
+    float m_flGroundSpeed;  // +0x70 (112) FIELD_FLOAT  [save-table]
+    float m_flLastEventCheck;  // +0x74 (116) FIELD_TIME  [save-table]
+    BOOL m_fSequenceFinished;  // +0x78 (120) FIELD_BOOLEAN  [save-table]
+    BOOL m_fSequenceLoops;  // +0x7c (124) FIELD_BOOLEAN  [save-table]
 };

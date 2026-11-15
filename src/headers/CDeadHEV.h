@@ -8,6 +8,6 @@ public:
     virtual void Classify();  // vtable[8] Classify__8CDeadHEV
     // campos observados (offset em bytes a partir de `this`; inclui os herdados)
     int f_060;  // +0x60 (96)
-    int f_278;  // +0x278 (632)
+    int m_bloodColor;  // +0x278 (632) FIELD_INTEGER  [save-table]
     int f_2a8;  // +0x2a8 (680)
 };

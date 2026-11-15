@@ -12,14 +12,15 @@ public:
     virtual void CreateGib();  // vtable[56] CreateGib__11CGibShooter
     virtual void 0();  // vtable[57] 0
     // campos observados (offset em bytes a partir de `this`; inclui os herdados)
-    int f_00c;  // +0xc (12)
+    void* m_pfnThink;  // +0xc (12) FIELD_FUNCTION  [save-table]
     int f_010;  // +0x10 (16)
     int f_060;  // +0x60 (96)
-    float f_064;  // +0x64 (100)
-    int f_06c;  // +0x6c (108)
-    int f_070;  // +0x70 (112)
-    int f_078;  // +0x78 (120)
-    float f_07c;  // +0x7c (124)
-    float f_080;  // +0x80 (128)
-    float f_084;  // +0x84 (132)
+    float m_flDelay;  // +0x64 (100) FIELD_FLOAT  [save-table]
+    int m_iGibs;  // +0x6c (108) FIELD_INTEGER  [save-table]
+    int m_iGibCapacity;  // +0x70 (112) FIELD_INTEGER  [save-table]
+    int m_iGibMaterial;  // +0x74 (116) FIELD_INTEGER  [save-table]
+    int m_iGibModelIndex;  // +0x78 (120) FIELD_INTEGER  [save-table]
+    float m_flGibVelocity;  // +0x7c (124) FIELD_FLOAT  [save-table]
+    float m_flVariance;  // +0x80 (128) FIELD_FLOAT  [save-table]
+    float m_flGibLife;  // +0x84 (132) FIELD_FLOAT  [save-table]
 };

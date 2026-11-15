@@ -1,0 +1,2201 @@
+{
+ "CBaseDelay": [
+  {
+   "offset": 100,
+   "name": "m_flDelay",
+   "type": "FIELD_FLOAT",
+   "count": 1,
+   "table": "_10CBaseDelay.m_SaveData"
+  },
+  {
+   "offset": 104,
+   "name": "m_iszKillTarget",
+   "type": "FIELD_STRING",
+   "count": 1,
+   "table": "_10CBaseDelay.m_SaveData"
+  }
+ ],
+ "CBreakable": [
+  {
+   "offset": 108,
+   "name": "m_Material",
+   "type": "FIELD_INTEGER",
+   "count": 1,
+   "table": "_10CBreakable.m_SaveData"
+  },
+  {
+   "offset": 112,
+   "name": "m_Explosion",
+   "type": "FIELD_INTEGER",
+   "count": 1,
+   "table": "_10CBreakable.m_SaveData"
+  },
+  {
+   "offset": 120,
+   "name": "m_angle",
+   "type": "FIELD_FLOAT",
+   "count": 1,
+   "table": "_10CBreakable.m_SaveData"
+  },
+  {
+   "offset": 124,
+   "name": "m_iszGibModel",
+   "type": "FIELD_STRING",
+   "count": 1,
+   "table": "_10CBreakable.m_SaveData"
+  },
+  {
+   "offset": 128,
+   "name": "m_iszSpawnObject",
+   "type": "FIELD_STRING",
+   "count": 1,
+   "table": "_10CBreakable.m_SaveData"
+  }
+ ],
+ "CEnvGlobal": [
+  {
+   "offset": 100,
+   "name": "m_globalstate",
+   "type": "FIELD_STRING",
+   "count": 1,
+   "table": "_10CEnvGlobal.m_SaveData"
+  },
+  {
+   "offset": 104,
+   "name": "m_triggermode",
+   "type": "FIELD_INTEGER",
+   "count": 1,
+   "table": "_10CEnvGlobal.m_SaveData"
+  },
+  {
+   "offset": 108,
+   "name": "m_initialstate",
+   "type": "FIELD_INTEGER",
+   "count": 1,
+   "table": "_10CEnvGlobal.m_SaveData"
+  }
+ ],
+ "CFuncTrain": [
+  {
+   "offset": 272,
+   "name": "m_sounds",
+   "type": "FIELD_INTEGER",
+   "count": 1,
+   "table": "_10CFuncTrain.m_SaveData"
+  },
+  {
+   "offset": 268,
+   "name": "m_pevCurrentTarget",
+   "type": "FIELD_EVARS",
+   "count": 1,
+   "table": "_10CFuncTrain.m_SaveData"
+  },
+  {
+   "offset": 276,
+   "name": "m_activated",
+   "type": "FIELD_BOOLEAN",
+   "count": 1,
+   "table": "_10CFuncTrain.m_SaveData"
+  }
+ ],
+ "CGunTarget": [
+  {
+   "offset": 680,
+   "name": "m_on",
+   "type": "FIELD_BOOLEAN",
+   "count": 1,
+   "table": "_10CGunTarget.m_SaveData"
+  }
+ ],
+ "CLightning": [
+  {
+   "offset": 100,
+   "name": "m_active",
+   "type": "FIELD_INTEGER",
+   "count": 1,
+   "table": "_10CLightning.m_SaveData"
+  },
+  {
+   "offset": 104,
+   "name": "m_iszStartEntity",
+   "type": "FIELD_STRING",
+   "count": 1,
+   "table": "_10CLightning.m_SaveData"
+  },
+  {
+   "offset": 108,
+   "name": "m_iszEndEntity",
+   "type": "FIELD_STRING",
+   "count": 1,
+   "table": "_10CLightning.m_SaveData"
+  },
+  {
+   "offset": 112,
+   "name": "m_life",
+   "type": "FIELD_FLOAT",
+   "count": 1,
+   "table": "_10CLightning.m_SaveData"
+  },
+  {
+   "offset": 116,
+   "name": "m_boltWidth",
+   "type": "FIELD_INTEGER",
+   "count": 1,
+   "table": "_10CLightning.m_SaveData"
+  },
+  {
+   "offset": 120,
+   "name": "m_noiseAmplitude",
+   "type": "FIELD_INTEGER",
+   "count": 1,
+   "table": "_10CLightning.m_SaveData"
+  },
+  {
+   "offset": 124,
+   "name": "m_brightness",
+   "type": "FIELD_INTEGER",
+   "count": 1,
+   "table": "_10CLightning.m_SaveData"
+  },
+  {
+   "offset": 128,
+   "name": "m_speed",
+   "type": "FIELD_INTEGER",
+   "count": 1,
+   "table": "_10CLightning.m_SaveData"
+  },
+  {
+   "offset": 132,
+   "name": "m_restrike",
+   "type": "FIELD_FLOAT",
+   "count": 1,
+   "table": "_10CLightning.m_SaveData"
+  },
+  {
+   "offset": 136,
+   "name": "m_spriteTexture",
+   "type": "FIELD_INTEGER",
+   "count": 1,
+   "table": "_10CLightning.m_SaveData"
+  },
+  {
+   "offset": 140,
+   "name": "m_iszSpriteName",
+   "type": "FIELD_STRING",
+   "count": 1,
+   "table": "_10CLightning.m_SaveData"
+  },
+  {
+   "offset": 144,
+   "name": "m_frameStart",
+   "type": "FIELD_INTEGER",
+   "count": 1,
+   "table": "_10CLightning.m_SaveData"
+  },
+  {
+   "offset": 148,
+   "name": "m_radius",
+   "type": "FIELD_FLOAT",
+   "count": 1,
+   "table": "_10CLightning.m_SaveData"
+  }
+ ],
+ "CPathTrack": [
+  {
+   "offset": 100,
+   "name": "m_length",
+   "type": "FIELD_FLOAT",
+   "count": 1,
+   "table": "_10CPathTrack.m_SaveData"
+  },
+  {
+   "offset": 108,
+   "name": "m_pnext",
+   "type": "FIELD_CLASSPTR",
+   "count": 1,
+   "table": "_10CPathTrack.m_SaveData"
+  },
+  {
+   "offset": 116,
+   "name": "m_paltpath",
+   "type": "FIELD_CLASSPTR",
+   "count": 1,
+   "table": "_10CPathTrack.m_SaveData"
+  },
+  {
+   "offset": 112,
+   "name": "m_pprevious",
+   "type": "FIELD_CLASSPTR",
+   "count": 1,
+   "table": "_10CPathTrack.m_SaveData"
+  },
+  {
+   "offset": 104,
+   "name": "m_altName",
+   "type": "FIELD_STRING",
+   "count": 1,
+   "table": "_10CPathTrack.m_SaveData"
+  }
+ ],
+ "CBaseButton": [
+  {
+   "offset": 260,
+   "name": "m_fStayPushed",
+   "type": "FIELD_BOOLEAN",
+   "count": 1,
+   "table": "_11CBaseButton.m_SaveData"
+  },
+  {
+   "offset": 264,
+   "name": "m_fRotating",
+   "type": "FIELD_BOOLEAN",
+   "count": 1,
+   "table": "_11CBaseButton.m_SaveData"
+  },
+  {
+   "offset": 312,
+   "name": "m_sounds",
+   "type": "FIELD_INTEGER",
+   "count": 1,
+   "table": "_11CBaseButton.m_SaveData"
+  },
+  {
+   "offset": 308,
+   "name": "m_bLockedSound",
+   "type": "FIELD_CHARACTER",
+   "count": 1,
+   "table": "_11CBaseButton.m_SaveData"
+  },
+  {
+   "offset": 309,
+   "name": "m_bLockedSentence",
+   "type": "FIELD_CHARACTER",
+   "count": 1,
+   "table": "_11CBaseButton.m_SaveData"
+  },
+  {
+   "offset": 310,
+   "name": "m_bUnlockedSound",
+   "type": "FIELD_CHARACTER",
+   "count": 1,
+   "table": "_11CBaseButton.m_SaveData"
+  },
+  {
+   "offset": 311,
+   "name": "m_bUnlockedSentence",
+   "type": "FIELD_CHARACTER",
+   "count": 1,
+   "table": "_11CBaseButton.m_SaveData"
+  },
+  {
+   "offset": 268,
+   "name": "m_strChangeTarget",
+   "type": "FIELD_STRING",
+   "count": 1,
+   "table": "_11CBaseButton.m_SaveData"
+  }
+ ],
+ "CBaseEntity": [
+  {
+   "offset": 4,
+   "name": "m_pGoalEnt",
+   "type": "FIELD_CLASSPTR",
+   "count": 1,
+   "table": "_11CBaseEntity.m_SaveData"
+  },
+  {
+   "offset": 12,
+   "name": "m_pfnThink",
+   "type": "FIELD_FUNCTION",
+   "count": 1,
+   "table": "_11CBaseEntity.m_SaveData"
+  },
+  {
+   "offset": 20,
+   "name": "m_pfnTouch",
+   "type": "FIELD_FUNCTION",
+   "count": 1,
+   "table": "_11CBaseEntity.m_SaveData"
+  },
+  {
+   "offset": 28,
+   "name": "m_pfnUse",
+   "type": "FIELD_FUNCTION",
+   "count": 1,
+   "table": "_11CBaseEntity.m_SaveData"
+  },
+  {
+   "offset": 36,
+   "name": "m_pfnBlocked",
+   "type": "FIELD_FUNCTION",
+   "count": 1,
+   "table": "_11CBaseEntity.m_SaveData"
+  }
+ ],
+ "CBasePlayer": [
+  {
+   "offset": 708,
+   "name": "m_afButtonLast",
+   "type": "FIELD_INTEGER",
+   "count": 1,
+   "table": "_11CBasePlayer.m_playerSaveData"
+  },
+  {
+   "offset": 712,
+   "name": "m_afButtonPressed",
+   "type": "FIELD_INTEGER",
+   "count": 1,
+   "table": "_11CBasePlayer.m_playerSaveData"
+  },
+  {
+   "offset": 716,
+   "name": "m_afButtonReleased",
+   "type": "FIELD_INTEGER",
+   "count": 1,
+   "table": "_11CBasePlayer.m_playerSaveData"
+  },
+  {
+   "offset": 736,
+   "name": "m_rgItems",
+   "type": "FIELD_INTEGER",
+   "count": 10,
+   "table": "_11CBasePlayer.m_playerSaveData"
+  },
+  {
+   "offset": 784,
+   "name": "m_afPhysicsFlags",
+   "type": "FIELD_INTEGER",
+   "count": 1,
+   "table": "_11CBasePlayer.m_playerSaveData"
+  },
+  {
+   "offset": 1964,
+   "name": "m_flTimeStepSound",
+   "type": "FIELD_TIME",
+   "count": 1,
+   "table": "_11CBasePlayer.m_playerSaveData"
+  },
+  {
+   "offset": 1968,
+   "name": "m_flTimeWeaponIdle",
+   "type": "FIELD_TIME",
+   "count": 1,
+   "table": "_11CBasePlayer.m_playerSaveData"
+  },
+  {
+   "offset": 1972,
+   "name": "m_flSwimTime",
+   "type": "FIELD_TIME",
+   "count": 1,
+   "table": "_11CBasePlayer.m_playerSaveData"
+  },
+  {
+   "offset": 1976,
+   "name": "m_flWallJumpTime",
+   "type": "FIELD_TIME",
+   "count": 1,
+   "table": "_11CBasePlayer.m_playerSaveData"
+  },
+  {
+   "offset": 1980,
+   "name": "m_flSuitUpdate",
+   "type": "FIELD_TIME",
+   "count": 1,
+   "table": "_11CBasePlayer.m_playerSaveData"
+  },
+  {
+   "offset": 1984,
+   "name": "m_rgSuitPlayList",
+   "type": "FIELD_INTEGER",
+   "count": 4,
+   "table": "_11CBasePlayer.m_playerSaveData"
+  },
+  {
+   "offset": 2000,
+   "name": "m_iSuitPlayNext",
+   "type": "FIELD_INTEGER",
+   "count": 1,
+   "table": "_11CBasePlayer.m_playerSaveData"
+  },
+  {
+   "offset": 2004,
+   "name": "m_rgiSuitNoRepeat",
+   "type": "FIELD_INTEGER",
+   "count": 32,
+   "table": "_11CBasePlayer.m_playerSaveData"
+  },
+  {
+   "offset": 2132,
+   "name": "m_rgflSuitNoRepeatTime",
+   "type": "FIELD_TIME",
+   "count": 32,
+   "table": "_11CBasePlayer.m_playerSaveData"
+  },
+  {
+   "offset": 2260,
+   "name": "m_lastDamageAmount",
+   "type": "FIELD_INTEGER",
+   "count": 1,
+   "table": "_11CBasePlayer.m_playerSaveData"
+  },
+  {
+   "offset": 2368,
+   "name": "m_rgpPlayerItems",
+   "type": "FIELD_CLASSPTR",
+   "count": 10,
+   "table": "_11CBasePlayer.m_playerSaveData"
+  },
+  {
+   "offset": 2408,
+   "name": "m_pActiveItem",
+   "type": "FIELD_CLASSPTR",
+   "count": 1,
+   "table": "_11CBasePlayer.m_playerSaveData"
+  },
+  {
+   "offset": 2416,
+   "name": "m_pLastItem",
+   "type": "FIELD_CLASSPTR",
+   "count": 1,
+   "table": "_11CBasePlayer.m_playerSaveData"
+  },
+  {
+   "offset": 2288,
+   "name": "m_idrowndmg",
+   "type": "FIELD_INTEGER",
+   "count": 1,
+   "table": "_11CBasePlayer.m_playerSaveData"
+  },
+  {
+   "offset": 2292,
+   "name": "m_idrownrestored",
+   "type": "FIELD_INTEGER",
+   "count": 1,
+   "table": "_11CBasePlayer.m_playerSaveData"
+  },
+  {
+   "offset": 2336,
+   "name": "m_tSneaking",
+   "type": "FIELD_TIME",
+   "count": 1,
+   "table": "_11CBasePlayer.m_playerSaveData"
+  },
+  {
+   "offset": 2308,
+   "name": "m_iTrain",
+   "type": "FIELD_INTEGER",
+   "count": 1,
+   "table": "_11CBasePlayer.m_playerSaveData"
+  },
+  {
+   "offset": 2296,
+   "name": "m_bitsHUDDamage",
+   "type": "FIELD_INTEGER",
+   "count": 1,
+   "table": "_11CBasePlayer.m_playerSaveData"
+  },
+  {
+   "offset": 732,
+   "name": "m_flFallVelocity",
+   "type": "FIELD_FLOAT",
+   "count": 1,
+   "table": "_11CBasePlayer.m_playerSaveData"
+  },
+  {
+   "offset": 688,
+   "name": "m_iTargetVolume",
+   "type": "FIELD_INTEGER",
+   "count": 1,
+   "table": "_11CBasePlayer.m_playerSaveData"
+  },
+  {
+   "offset": 692,
+   "name": "m_iWeaponVolume",
+   "type": "FIELD_INTEGER",
+   "count": 1,
+   "table": "_11CBasePlayer.m_playerSaveData"
+  },
+  {
+   "offset": 696,
+   "name": "m_iExtraSoundTypes",
+   "type": "FIELD_INTEGER",
+   "count": 1,
+   "table": "_11CBasePlayer.m_playerSaveData"
+  },
+  {
+   "offset": 700,
+   "name": "m_iWeaponFlash",
+   "type": "FIELD_INTEGER",
+   "count": 1,
+   "table": "_11CBasePlayer.m_playerSaveData"
+  },
+  {
+   "offset": 2332,
+   "name": "m_fLongJump",
+   "type": "FIELD_BOOLEAN",
+   "count": 1,
+   "table": "_11CBasePlayer.m_playerSaveData"
+  },
+  {
+   "offset": 2300,
+   "name": "m_fInitHUD",
+   "type": "FIELD_BOOLEAN",
+   "count": 1,
+   "table": "_11CBasePlayer.m_playerSaveData"
+  },
+  {
+   "offset": 2264,
+   "name": "m_tbdPrev",
+   "type": "FIELD_TIME",
+   "count": 1,
+   "table": "_11CBasePlayer.m_playerSaveData"
+  },
+  {
+   "offset": 2316,
+   "name": "m_pTank",
+   "type": "FIELD_EHANDLE",
+   "count": 1,
+   "table": "_11CBasePlayer.m_playerSaveData"
+  },
+  {
+   "offset": 2352,
+   "name": "m_iHideHUD",
+   "type": "FIELD_INTEGER",
+   "count": 1,
+   "table": "_11CBasePlayer.m_playerSaveData"
+  },
+  {
+   "offset": 2360,
+   "name": "m_iFOV",
+   "type": "FIELD_INTEGER",
+   "count": 1,
+   "table": "_11CBasePlayer.m_playerSaveData"
+  }
+ ],
+ "CBaseToggle": [
+  {
+   "offset": 128,
+   "name": "m_toggle_state",
+   "type": "FIELD_INTEGER",
+   "count": 1,
+   "table": "_11CBaseToggle.m_SaveData"
+  },
+  {
+   "offset": 132,
+   "name": "m_flActivateFinished",
+   "type": "FIELD_TIME",
+   "count": 1,
+   "table": "_11CBaseToggle.m_SaveData"
+  },
+  {
+   "offset": 136,
+   "name": "m_flMoveDistance",
+   "type": "FIELD_FLOAT",
+   "count": 1,
+   "table": "_11CBaseToggle.m_SaveData"
+  },
+  {
+   "offset": 140,
+   "name": "m_flWait",
+   "type": "FIELD_FLOAT",
+   "count": 1,
+   "table": "_11CBaseToggle.m_SaveData"
+  },
+  {
+   "offset": 144,
+   "name": "m_flLip",
+   "type": "FIELD_FLOAT",
+   "count": 1,
+   "table": "_11CBaseToggle.m_SaveData"
+  },
+  {
+   "offset": 148,
+   "name": "m_flTWidth",
+   "type": "FIELD_FLOAT",
+   "count": 1,
+   "table": "_11CBaseToggle.m_SaveData"
+  },
+  {
+   "offset": 152,
+   "name": "m_flTLength",
+   "type": "FIELD_FLOAT",
+   "count": 1,
+   "table": "_11CBaseToggle.m_SaveData"
+  },
+  {
+   "offset": 156,
+   "name": "m_vecPosition1",
+   "type": "FIELD_POSITION_VECTOR",
+   "count": 1,
+   "table": "_11CBaseToggle.m_SaveData"
+  },
+  {
+   "offset": 168,
+   "name": "m_vecPosition2",
+   "type": "FIELD_POSITION_VECTOR",
+   "count": 1,
+   "table": "_11CBaseToggle.m_SaveData"
+  },
+  {
+   "offset": 180,
+   "name": "m_vecAngle1",
+   "type": "FIELD_VECTOR",
+   "count": 1,
+   "table": "_11CBaseToggle.m_SaveData"
+  },
+  {
+   "offset": 192,
+   "name": "m_vecAngle2",
+   "type": "FIELD_VECTOR",
+   "count": 1,
+   "table": "_11CBaseToggle.m_SaveData"
+  },
+  {
+   "offset": 204,
+   "name": "m_cTriggersLeft",
+   "type": "FIELD_INTEGER",
+   "count": 1,
+   "table": "_11CBaseToggle.m_SaveData"
+  },
+  {
+   "offset": 208,
+   "name": "m_flHeight",
+   "type": "FIELD_FLOAT",
+   "count": 1,
+   "table": "_11CBaseToggle.m_SaveData"
+  },
+  {
+   "offset": 212,
+   "name": "m_hActivator",
+   "type": "FIELD_EHANDLE",
+   "count": 1,
+   "table": "_11CBaseToggle.m_SaveData"
+  },
+  {
+   "offset": 220,
+   "name": "m_pfnCallWhenMoveDone",
+   "type": "FIELD_FUNCTION",
+   "count": 1,
+   "table": "_11CBaseToggle.m_SaveData"
+  },
+  {
+   "offset": 228,
+   "name": "m_vecFinalDest",
+   "type": "FIELD_POSITION_VECTOR",
+   "count": 1,
+   "table": "_11CBaseToggle.m_SaveData"
+  },
+  {
+   "offset": 240,
+   "name": "m_vecFinalAngle",
+   "type": "FIELD_VECTOR",
+   "count": 1,
+   "table": "_11CBaseToggle.m_SaveData"
+  },
+  {
+   "offset": 256,
+   "name": "m_sMaster",
+   "type": "FIELD_STRING",
+   "count": 1,
+   "table": "_11CBaseToggle.m_SaveData"
+  },
+  {
+   "offset": 252,
+   "name": "m_bitsDamageInflict",
+   "type": "FIELD_INTEGER",
+   "count": 1,
+   "table": "_11CBaseToggle.m_SaveData"
+  }
+ ],
+ "CGibShooter": [
+  {
+   "offset": 108,
+   "name": "m_iGibs",
+   "type": "FIELD_INTEGER",
+   "count": 1,
+   "table": "_11CGibShooter.m_SaveData"
+  },
+  {
+   "offset": 112,
+   "name": "m_iGibCapacity",
+   "type": "FIELD_INTEGER",
+   "count": 1,
+   "table": "_11CGibShooter.m_SaveData"
+  },
+  {
+   "offset": 116,
+   "name": "m_iGibMaterial",
+   "type": "FIELD_INTEGER",
+   "count": 1,
+   "table": "_11CGibShooter.m_SaveData"
+  },
+  {
+   "offset": 120,
+   "name": "m_iGibModelIndex",
+   "type": "FIELD_INTEGER",
+   "count": 1,
+   "table": "_11CGibShooter.m_SaveData"
+  },
+  {
+   "offset": 124,
+   "name": "m_flGibVelocity",
+   "type": "FIELD_FLOAT",
+   "count": 1,
+   "table": "_11CGibShooter.m_SaveData"
+  },
+  {
+   "offset": 128,
+   "name": "m_flVariance",
+   "type": "FIELD_FLOAT",
+   "count": 1,
+   "table": "_11CGibShooter.m_SaveData"
+  },
+  {
+   "offset": 132,
+   "name": "m_flGibLife",
+   "type": "FIELD_FLOAT",
+   "count": 1,
+   "table": "_11CGibShooter.m_SaveData"
+  }
+ ],
+ "CPathCorner": [
+  {
+   "offset": 100,
+   "name": "m_flWait",
+   "type": "FIELD_FLOAT",
+   "count": 1,
+   "table": "_11CPathCorner.m_SaveData"
+  }
+ ],
+ "CRuleEntity": [
+  {
+   "offset": 100,
+   "name": "m_iszMaster",
+   "type": "FIELD_STRING",
+   "count": 1,
+   "table": "_11CRuleEntity.m_SaveData"
+  }
+ ],
+ "CAutoTrigger": [
+  {
+   "offset": 108,
+   "name": "m_globalstate",
+   "type": "FIELD_STRING",
+   "count": 1,
+   "table": "_12CAutoTrigger.m_SaveData"
+  },
+  {
+   "offset": 112,
+   "name": "triggerType",
+   "type": "FIELD_INTEGER",
+   "count": 1,
+   "table": "_12CAutoTrigger.m_SaveData"
+  }
+ ],
+ "CBaseMonster": [
+  {
+   "offset": 264,
+   "name": "m_hEnemy",
+   "type": "FIELD_EHANDLE",
+   "count": 1,
+   "table": "_12CBaseMonster.m_SaveData"
+  },
+  {
+   "offset": 272,
+   "name": "m_hTargetEnt",
+   "type": "FIELD_EHANDLE",
+   "count": 1,
+   "table": "_12CBaseMonster.m_SaveData"
+  },
+  {
+   "offset": 280,
+   "name": "m_hOldEnemy",
+   "type": "FIELD_EHANDLE",
+   "count": 4,
+   "table": "_12CBaseMonster.m_SaveData"
+  },
+  {
+   "offset": 312,
+   "name": "m_vecOldEnemy",
+   "type": "FIELD_POSITION_VECTOR",
+   "count": 4,
+   "table": "_12CBaseMonster.m_SaveData"
+  },
+  {
+   "offset": 360,
+   "name": "m_flFieldOfView",
+   "type": "FIELD_FLOAT",
+   "count": 1,
+   "table": "_12CBaseMonster.m_SaveData"
+  },
+  {
+   "offset": 364,
+   "name": "m_flWaitFinished",
+   "type": "FIELD_TIME",
+   "count": 1,
+   "table": "_12CBaseMonster.m_SaveData"
+  },
+  {
+   "offset": 368,
+   "name": "m_flMoveWaitFinished",
+   "type": "FIELD_TIME",
+   "count": 1,
+   "table": "_12CBaseMonster.m_SaveData"
+  },
+  {
+   "offset": 372,
+   "name": "m_Activity",
+   "type": "FIELD_INTEGER",
+   "count": 1,
+   "table": "_12CBaseMonster.m_SaveData"
+  },
+  {
+   "offset": 376,
+   "name": "m_IdealActivity",
+   "type": "FIELD_INTEGER",
+   "count": 1,
+   "table": "_12CBaseMonster.m_SaveData"
+  },
+  {
+   "offset": 380,
+   "name": "m_LastHitGroup",
+   "type": "FIELD_INTEGER",
+   "count": 1,
+   "table": "_12CBaseMonster.m_SaveData"
+  },
+  {
+   "offset": 384,
+   "name": "m_MonsterState",
+   "type": "FIELD_INTEGER",
+   "count": 1,
+   "table": "_12CBaseMonster.m_SaveData"
+  },
+  {
+   "offset": 388,
+   "name": "m_IdealMonsterState",
+   "type": "FIELD_INTEGER",
+   "count": 1,
+   "table": "_12CBaseMonster.m_SaveData"
+  },
+  {
+   "offset": 392,
+   "name": "m_iTaskStatus",
+   "type": "FIELD_INTEGER",
+   "count": 1,
+   "table": "_12CBaseMonster.m_SaveData"
+  },
+  {
+   "offset": 400,
+   "name": "m_iScheduleIndex",
+   "type": "FIELD_INTEGER",
+   "count": 1,
+   "table": "_12CBaseMonster.m_SaveData"
+  },
+  {
+   "offset": 260,
+   "name": "m_afConditions",
+   "type": "FIELD_INTEGER",
+   "count": 1,
+   "table": "_12CBaseMonster.m_SaveData"
+  },
+  {
+   "offset": 544,
+   "name": "m_vecMoveGoal",
+   "type": "FIELD_POSITION_VECTOR",
+   "count": 1,
+   "table": "_12CBaseMonster.m_SaveData"
+  },
+  {
+   "offset": 556,
+   "name": "m_movementActivity",
+   "type": "FIELD_INTEGER",
+   "count": 1,
+   "table": "_12CBaseMonster.m_SaveData"
+  },
+  {
+   "offset": 568,
+   "name": "m_vecLastPosition",
+   "type": "FIELD_POSITION_VECTOR",
+   "count": 1,
+   "table": "_12CBaseMonster.m_SaveData"
+  },
+  {
+   "offset": 580,
+   "name": "m_iHintNode",
+   "type": "FIELD_INTEGER",
+   "count": 1,
+   "table": "_12CBaseMonster.m_SaveData"
+  },
+  {
+   "offset": 584,
+   "name": "m_afMemory",
+   "type": "FIELD_INTEGER",
+   "count": 1,
+   "table": "_12CBaseMonster.m_SaveData"
+  },
+  {
+   "offset": 588,
+   "name": "m_iMaxHealth",
+   "type": "FIELD_INTEGER",
+   "count": 1,
+   "table": "_12CBaseMonster.m_SaveData"
+  },
+  {
+   "offset": 592,
+   "name": "m_vecEnemyLKP",
+   "type": "FIELD_POSITION_VECTOR",
+   "count": 1,
+   "table": "_12CBaseMonster.m_SaveData"
+  },
+  {
+   "offset": 604,
+   "name": "m_cAmmoLoaded",
+   "type": "FIELD_INTEGER",
+   "count": 1,
+   "table": "_12CBaseMonster.m_SaveData"
+  },
+  {
+   "offset": 608,
+   "name": "m_afCapability",
+   "type": "FIELD_INTEGER",
+   "count": 1,
+   "table": "_12CBaseMonster.m_SaveData"
+  },
+  {
+   "offset": 612,
+   "name": "m_flNextAttack",
+   "type": "FIELD_TIME",
+   "count": 1,
+   "table": "_12CBaseMonster.m_SaveData"
+  },
+  {
+   "offset": 616,
+   "name": "m_bitsDamageType",
+   "type": "FIELD_INTEGER",
+   "count": 1,
+   "table": "_12CBaseMonster.m_SaveData"
+  },
+  {
+   "offset": 620,
+   "name": "m_rgbTimeBasedDamage",
+   "type": "FIELD_CHARACTER",
+   "count": 8,
+   "table": "_12CBaseMonster.m_SaveData"
+  },
+  {
+   "offset": 632,
+   "name": "m_bloodColor",
+   "type": "FIELD_INTEGER",
+   "count": 1,
+   "table": "_12CBaseMonster.m_SaveData"
+  },
+  {
+   "offset": 636,
+   "name": "m_failSchedule",
+   "type": "FIELD_INTEGER",
+   "count": 1,
+   "table": "_12CBaseMonster.m_SaveData"
+  },
+  {
+   "offset": 640,
+   "name": "m_flHungryTime",
+   "type": "FIELD_TIME",
+   "count": 1,
+   "table": "_12CBaseMonster.m_SaveData"
+  },
+  {
+   "offset": 644,
+   "name": "m_flDistTooFar",
+   "type": "FIELD_FLOAT",
+   "count": 1,
+   "table": "_12CBaseMonster.m_SaveData"
+  },
+  {
+   "offset": 648,
+   "name": "m_flDistLook",
+   "type": "FIELD_FLOAT",
+   "count": 1,
+   "table": "_12CBaseMonster.m_SaveData"
+  },
+  {
+   "offset": 652,
+   "name": "m_iTriggerCondition",
+   "type": "FIELD_INTEGER",
+   "count": 1,
+   "table": "_12CBaseMonster.m_SaveData"
+  },
+  {
+   "offset": 656,
+   "name": "m_iszTriggerTarget",
+   "type": "FIELD_STRING",
+   "count": 1,
+   "table": "_12CBaseMonster.m_SaveData"
+  },
+  {
+   "offset": 660,
+   "name": "m_HackedGunPos",
+   "type": "FIELD_VECTOR",
+   "count": 1,
+   "table": "_12CBaseMonster.m_SaveData"
+  },
+  {
+   "offset": 672,
+   "name": "m_scriptState",
+   "type": "FIELD_INTEGER",
+   "count": 1,
+   "table": "_12CBaseMonster.m_SaveData"
+  },
+  {
+   "offset": 676,
+   "name": "m_pCine",
+   "type": "FIELD_CLASSPTR",
+   "count": 1,
+   "table": "_12CBaseMonster.m_SaveData"
+  }
+ ],
+ "CChangeLevel": [
+  {
+   "offset": 260,
+   "name": "m_szMapName",
+   "type": "FIELD_CHARACTER",
+   "count": 32,
+   "table": "_12CChangeLevel.m_SaveData"
+  },
+  {
+   "offset": 292,
+   "name": "m_szLandmarkName",
+   "type": "FIELD_CHARACTER",
+   "count": 32,
+   "table": "_12CChangeLevel.m_SaveData"
+  },
+  {
+   "offset": 324,
+   "name": "m_changeTarget",
+   "type": "FIELD_STRING",
+   "count": 1,
+   "table": "_12CChangeLevel.m_SaveData"
+  },
+  {
+   "offset": 328,
+   "name": "m_changeTargetDelay",
+   "type": "FIELD_FLOAT",
+   "count": 1,
+   "table": "_12CChangeLevel.m_SaveData"
+  }
+ ],
+ "CCineMonster": [
+  {
+   "offset": 680,
+   "name": "m_iszIdle",
+   "type": "FIELD_STRING",
+   "count": 1,
+   "table": "_12CCineMonster.m_SaveData"
+  },
+  {
+   "offset": 684,
+   "name": "m_iszPlay",
+   "type": "FIELD_STRING",
+   "count": 1,
+   "table": "_12CCineMonster.m_SaveData"
+  },
+  {
+   "offset": 688,
+   "name": "m_iszEntity",
+   "type": "FIELD_STRING",
+   "count": 1,
+   "table": "_12CCineMonster.m_SaveData"
+  },
+  {
+   "offset": 692,
+   "name": "m_fMoveTo",
+   "type": "FIELD_INTEGER",
+   "count": 1,
+   "table": "_12CCineMonster.m_SaveData"
+  },
+  {
+   "offset": 704,
+   "name": "m_flRepeat",
+   "type": "FIELD_FLOAT",
+   "count": 1,
+   "table": "_12CCineMonster.m_SaveData"
+  },
+  {
+   "offset": 700,
+   "name": "m_flRadius",
+   "type": "FIELD_FLOAT",
+   "count": 1,
+   "table": "_12CCineMonster.m_SaveData"
+  },
+  {
+   "offset": 708,
+   "name": "m_iDelay",
+   "type": "FIELD_INTEGER",
+   "count": 1,
+   "table": "_12CCineMonster.m_SaveData"
+  },
+  {
+   "offset": 712,
+   "name": "m_startTime",
+   "type": "FIELD_TIME",
+   "count": 1,
+   "table": "_12CCineMonster.m_SaveData"
+  },
+  {
+   "offset": 716,
+   "name": "m_saved_movetype",
+   "type": "FIELD_INTEGER",
+   "count": 1,
+   "table": "_12CCineMonster.m_SaveData"
+  },
+  {
+   "offset": 720,
+   "name": "m_saved_solid",
+   "type": "FIELD_INTEGER",
+   "count": 1,
+   "table": "_12CCineMonster.m_SaveData"
+  },
+  {
+   "offset": 724,
+   "name": "m_saved_effects",
+   "type": "FIELD_INTEGER",
+   "count": 1,
+   "table": "_12CCineMonster.m_SaveData"
+  },
+  {
+   "offset": 696,
+   "name": "m_iFinishSchedule",
+   "type": "FIELD_INTEGER",
+   "count": 1,
+   "table": "_12CCineMonster.m_SaveData"
+  },
+  {
+   "offset": 728,
+   "name": "m_interruptable",
+   "type": "FIELD_BOOLEAN",
+   "count": 1,
+   "table": "_12CCineMonster.m_SaveData"
+  }
+ ],
+ "CFuncPlatRot": [
+  {
+   "offset": 268,
+   "name": "m_end",
+   "type": "FIELD_VECTOR",
+   "count": 1,
+   "table": "_12CFuncPlatRot.m_SaveData"
+  },
+  {
+   "offset": 280,
+   "name": "m_start",
+   "type": "FIELD_VECTOR",
+   "count": 1,
+   "table": "_12CFuncPlatRot.m_SaveData"
+  }
+ ],
+ "CGlobalState": [
+  {
+   "offset": 4,
+   "name": "m_listCount",
+   "type": "FIELD_INTEGER",
+   "count": 1,
+   "table": "_12CGlobalState.m_SaveData"
+  }
+ ],
+ "CMultiSource": [
+  {
+   "offset": 100,
+   "name": "m_rgEntities",
+   "type": "FIELD_EHANDLE",
+   "count": 32,
+   "table": "_12CMultiSource.m_SaveData"
+  },
+  {
+   "offset": 356,
+   "name": "m_rgTriggered",
+   "type": "FIELD_INTEGER",
+   "count": 32,
+   "table": "_12CMultiSource.m_SaveData"
+  },
+  {
+   "offset": 484,
+   "name": "m_iTotal",
+   "type": "FIELD_INTEGER",
+   "count": 1,
+   "table": "_12CMultiSource.m_SaveData"
+  },
+  {
+   "offset": 488,
+   "name": "m_globalstate",
+   "type": "FIELD_STRING",
+   "count": 1,
+   "table": "_12CMultiSource.m_SaveData"
+  }
+ ],
+ "CRevertSaved": [
+  {
+   "offset": 100,
+   "name": "m_messageTime",
+   "type": "FIELD_FLOAT",
+   "count": 1,
+   "table": "_12CRevertSaved.m_SaveData"
+  },
+  {
+   "offset": 104,
+   "name": "m_loadTime",
+   "type": "FIELD_FLOAT",
+   "count": 1,
+   "table": "_12CRevertSaved.m_SaveData"
+  }
+ ],
+ "CTalkMonster": [
+  {
+   "offset": 680,
+   "name": "m_bitsSaid",
+   "type": "FIELD_INTEGER",
+   "count": 1,
+   "table": "_12CTalkMonster.m_SaveData"
+  },
+  {
+   "offset": 684,
+   "name": "m_nSpeak",
+   "type": "FIELD_INTEGER",
+   "count": 1,
+   "table": "_12CTalkMonster.m_SaveData"
+  },
+  {
+   "offset": 764,
+   "name": "m_useTime",
+   "type": "FIELD_TIME",
+   "count": 1,
+   "table": "_12CTalkMonster.m_SaveData"
+  },
+  {
+   "offset": 768,
+   "name": "m_iszUse",
+   "type": "FIELD_STRING",
+   "count": 1,
+   "table": "_12CTalkMonster.m_SaveData"
+  },
+  {
+   "offset": 772,
+   "name": "m_iszUnUse",
+   "type": "FIELD_STRING",
+   "count": 1,
+   "table": "_12CTalkMonster.m_SaveData"
+  },
+  {
+   "offset": 776,
+   "name": "m_flLastSaidSmelled",
+   "type": "FIELD_TIME",
+   "count": 1,
+   "table": "_12CTalkMonster.m_SaveData"
+  },
+  {
+   "offset": 780,
+   "name": "m_flStopTalkTime",
+   "type": "FIELD_TIME",
+   "count": 1,
+   "table": "_12CTalkMonster.m_SaveData"
+  },
+  {
+   "offset": 784,
+   "name": "m_hTalkTarget",
+   "type": "FIELD_EHANDLE",
+   "count": 1,
+   "table": "_12CTalkMonster.m_SaveData"
+  }
+ ],
+ "CEnvExplosion": [
+  {
+   "offset": 680,
+   "name": "m_iMagnitude",
+   "type": "FIELD_INTEGER",
+   "count": 1,
+   "table": "_13CEnvExplosion.m_SaveData"
+  },
+  {
+   "offset": 684,
+   "name": "m_spriteScale",
+   "type": "FIELD_INTEGER",
+   "count": 1,
+   "table": "_13CEnvExplosion.m_SaveData"
+  }
+ ],
+ "CFuncRotating": [
+  {
+   "offset": 100,
+   "name": "m_flFanFriction",
+   "type": "FIELD_FLOAT",
+   "count": 1,
+   "table": "_13CFuncRotating.m_SaveData"
+  },
+  {
+   "offset": 104,
+   "name": "m_flAttenuation",
+   "type": "FIELD_FLOAT",
+   "count": 1,
+   "table": "_13CFuncRotating.m_SaveData"
+  },
+  {
+   "offset": 108,
+   "name": "m_flVolume",
+   "type": "FIELD_FLOAT",
+   "count": 1,
+   "table": "_13CFuncRotating.m_SaveData"
+  },
+  {
+   "offset": 112,
+   "name": "m_pitch",
+   "type": "FIELD_FLOAT",
+   "count": 1,
+   "table": "_13CFuncRotating.m_SaveData"
+  },
+  {
+   "offset": 116,
+   "name": "m_sounds",
+   "type": "FIELD_INTEGER",
+   "count": 1,
+   "table": "_13CFuncRotating.m_SaveData"
+  }
+ ],
+ "CMonsterMaker": [
+  {
+   "offset": 680,
+   "name": "m_iszMonsterClassname",
+   "type": "FIELD_STRING",
+   "count": 1,
+   "table": "_13CMonsterMaker.m_SaveData"
+  },
+  {
+   "offset": 684,
+   "name": "m_cNumMonsters",
+   "type": "FIELD_INTEGER",
+   "count": 1,
+   "table": "_13CMonsterMaker.m_SaveData"
+  },
+  {
+   "offset": 688,
+   "name": "m_cLiveChildren",
+   "type": "FIELD_INTEGER",
+   "count": 1,
+   "table": "_13CMonsterMaker.m_SaveData"
+  },
+  {
+   "offset": 696,
+   "name": "m_flGround",
+   "type": "FIELD_FLOAT",
+   "count": 1,
+   "table": "_13CMonsterMaker.m_SaveData"
+  },
+  {
+   "offset": 692,
+   "name": "m_iMaxLiveChildren",
+   "type": "FIELD_INTEGER",
+   "count": 1,
+   "table": "_13CMonsterMaker.m_SaveData"
+  },
+  {
+   "offset": 700,
+   "name": "m_fActive",
+   "type": "FIELD_BOOLEAN",
+   "count": 1,
+   "table": "_13CMonsterMaker.m_SaveData"
+  },
+  {
+   "offset": 704,
+   "name": "m_fFadeChildren",
+   "type": "FIELD_BOOLEAN",
+   "count": 1,
+   "table": "_13CMonsterMaker.m_SaveData"
+  }
+ ],
+ "CMultiManager": [
+  {
+   "offset": 260,
+   "name": "m_cTargets",
+   "type": "FIELD_INTEGER",
+   "count": 1,
+   "table": "_13CMultiManager.m_SaveData"
+  },
+  {
+   "offset": 264,
+   "name": "m_index",
+   "type": "FIELD_INTEGER",
+   "count": 1,
+   "table": "_13CMultiManager.m_SaveData"
+  },
+  {
+   "offset": 268,
+   "name": "m_startTime",
+   "type": "FIELD_TIME",
+   "count": 1,
+   "table": "_13CMultiManager.m_SaveData"
+  },
+  {
+   "offset": 272,
+   "name": "m_iTargetName",
+   "type": "FIELD_STRING",
+   "count": 16,
+   "table": "_13CMultiManager.m_SaveData"
+  },
+  {
+   "offset": 336,
+   "name": "m_flTargetDelay",
+   "type": "FIELD_FLOAT",
+   "count": 16,
+   "table": "_13CMultiManager.m_SaveData"
+  }
+ ],
+ "CTriggerRelay": [
+  {
+   "offset": 108,
+   "name": "triggerType",
+   "type": "FIELD_INTEGER",
+   "count": 1,
+   "table": "_13CTriggerRelay.m_SaveData"
+  }
+ ],
+ "CBaseAnimating": [
+  {
+   "offset": 108,
+   "name": "m_flFrameRate",
+   "type": "FIELD_FLOAT",
+   "count": 1,
+   "table": "_14CBaseAnimating.m_SaveData"
+  },
+  {
+   "offset": 112,
+   "name": "m_flGroundSpeed",
+   "type": "FIELD_FLOAT",
+   "count": 1,
+   "table": "_14CBaseAnimating.m_SaveData"
+  },
+  {
+   "offset": 116,
+   "name": "m_flLastEventCheck",
+   "type": "FIELD_TIME",
+   "count": 1,
+   "table": "_14CBaseAnimating.m_SaveData"
+  },
+  {
+   "offset": 120,
+   "name": "m_fSequenceFinished",
+   "type": "FIELD_BOOLEAN",
+   "count": 1,
+   "table": "_14CBaseAnimating.m_SaveData"
+  },
+  {
+   "offset": 124,
+   "name": "m_fSequenceLoops",
+   "type": "FIELD_BOOLEAN",
+   "count": 1,
+   "table": "_14CBaseAnimating.m_SaveData"
+  }
+ ],
+ "CBasePlatTrain": [
+  {
+   "offset": 260,
+   "name": "m_bMoveSnd",
+   "type": "FIELD_CHARACTER",
+   "count": 1,
+   "table": "_14CBasePlatTrain.m_SaveData"
+  },
+  {
+   "offset": 261,
+   "name": "m_bStopSnd",
+   "type": "FIELD_CHARACTER",
+   "count": 1,
+   "table": "_14CBasePlatTrain.m_SaveData"
+  },
+  {
+   "offset": 264,
+   "name": "m_volume",
+   "type": "FIELD_FLOAT",
+   "count": 1,
+   "table": "_14CBasePlatTrain.m_SaveData"
+  }
+ ],
+ "CMomentaryDoor": [
+  {
+   "offset": 260,
+   "name": "m_bMoveSnd",
+   "type": "FIELD_CHARACTER",
+   "count": 1,
+   "table": "_14CMomentaryDoor.m_SaveData"
+  }
+ ],
+ "CAmbientGeneric": [
+  {
+   "offset": 100,
+   "name": "m_flAttenuation",
+   "type": "FIELD_FLOAT",
+   "count": 1,
+   "table": "_15CAmbientGeneric.m_SaveData"
+  },
+  {
+   "offset": 204,
+   "name": "m_fActive",
+   "type": "FIELD_BOOLEAN",
+   "count": 1,
+   "table": "_15CAmbientGeneric.m_SaveData"
+  },
+  {
+   "offset": 208,
+   "name": "m_fLooping",
+   "type": "FIELD_BOOLEAN",
+   "count": 1,
+   "table": "_15CAmbientGeneric.m_SaveData"
+  },
+  {
+   "offset": 104,
+   "name": "m_dpv",
+   "type": "FIELD_CHARACTER",
+   "count": 100,
+   "table": "_15CAmbientGeneric.m_SaveData"
+  }
+ ],
+ "CBasePlayerItem": [
+  {
+   "offset": 128,
+   "name": "m_pPlayer",
+   "type": "FIELD_CLASSPTR",
+   "count": 1,
+   "table": "_15CBasePlayerItem.m_SaveData"
+  },
+  {
+   "offset": 132,
+   "name": "m_pNext",
+   "type": "FIELD_CLASSPTR",
+   "count": 1,
+   "table": "_15CBasePlayerItem.m_SaveData"
+  },
+  {
+   "offset": 136,
+   "name": "m_iId",
+   "type": "FIELD_INTEGER",
+   "count": 1,
+   "table": "_15CBasePlayerItem.m_SaveData"
+  }
+ ],
+ "CFuncTrackTrain": [
+  {
+   "offset": 100,
+   "name": "m_ppath",
+   "type": "FIELD_CLASSPTR",
+   "count": 1,
+   "table": "_15CFuncTrackTrain.m_SaveData"
+  },
+  {
+   "offset": 104,
+   "name": "m_length",
+   "type": "FIELD_FLOAT",
+   "count": 1,
+   "table": "_15CFuncTrackTrain.m_SaveData"
+  },
+  {
+   "offset": 108,
+   "name": "m_height",
+   "type": "FIELD_FLOAT",
+   "count": 1,
+   "table": "_15CFuncTrackTrain.m_SaveData"
+  },
+  {
+   "offset": 112,
+   "name": "m_speed",
+   "type": "FIELD_FLOAT",
+   "count": 1,
+   "table": "_15CFuncTrackTrain.m_SaveData"
+  },
+  {
+   "offset": 116,
+   "name": "m_dir",
+   "type": "FIELD_FLOAT",
+   "count": 1,
+   "table": "_15CFuncTrackTrain.m_SaveData"
+  },
+  {
+   "offset": 120,
+   "name": "m_startSpeed",
+   "type": "FIELD_FLOAT",
+   "count": 1,
+   "table": "_15CFuncTrackTrain.m_SaveData"
+  },
+  {
+   "offset": 124,
+   "name": "m_controlMins",
+   "type": "FIELD_VECTOR",
+   "count": 1,
+   "table": "_15CFuncTrackTrain.m_SaveData"
+  },
+  {
+   "offset": 136,
+   "name": "m_controlMaxs",
+   "type": "FIELD_VECTOR",
+   "count": 1,
+   "table": "_15CFuncTrackTrain.m_SaveData"
+  },
+  {
+   "offset": 152,
+   "name": "m_sounds",
+   "type": "FIELD_INTEGER",
+   "count": 1,
+   "table": "_15CFuncTrackTrain.m_SaveData"
+  },
+  {
+   "offset": 156,
+   "name": "m_flVolume",
+   "type": "FIELD_FLOAT",
+   "count": 1,
+   "table": "_15CFuncTrackTrain.m_SaveData"
+  },
+  {
+   "offset": 160,
+   "name": "m_flBank",
+   "type": "FIELD_FLOAT",
+   "count": 1,
+   "table": "_15CFuncTrackTrain.m_SaveData"
+  },
+  {
+   "offset": 164,
+   "name": "m_oldSpeed",
+   "type": "FIELD_FLOAT",
+   "count": 1,
+   "table": "_15CFuncTrackTrain.m_SaveData"
+  }
+ ],
+ "CGamePlayerZone": [
+  {
+   "offset": 104,
+   "name": "m_iszInTarget",
+   "type": "FIELD_STRING",
+   "count": 1,
+   "table": "_15CGamePlayerZone.m_SaveData"
+  },
+  {
+   "offset": 108,
+   "name": "m_iszOutTarget",
+   "type": "FIELD_STRING",
+   "count": 1,
+   "table": "_15CGamePlayerZone.m_SaveData"
+  },
+  {
+   "offset": 112,
+   "name": "m_iszInCount",
+   "type": "FIELD_STRING",
+   "count": 1,
+   "table": "_15CGamePlayerZone.m_SaveData"
+  },
+  {
+   "offset": 116,
+   "name": "m_iszOutCount",
+   "type": "FIELD_STRING",
+   "count": 1,
+   "table": "_15CGamePlayerZone.m_SaveData"
+  }
+ ],
+ "CFuncTrackChange": [
+  {
+   "offset": 292,
+   "name": "m_trackTop",
+   "type": "FIELD_CLASSPTR",
+   "count": 1,
+   "table": "_16CFuncTrackChange.m_SaveData"
+  },
+  {
+   "offset": 296,
+   "name": "m_trackBottom",
+   "type": "FIELD_CLASSPTR",
+   "count": 1,
+   "table": "_16CFuncTrackChange.m_SaveData"
+  },
+  {
+   "offset": 300,
+   "name": "m_train",
+   "type": "FIELD_CLASSPTR",
+   "count": 1,
+   "table": "_16CFuncTrackChange.m_SaveData"
+  },
+  {
+   "offset": 304,
+   "name": "m_trackTopName",
+   "type": "FIELD_STRING",
+   "count": 1,
+   "table": "_16CFuncTrackChange.m_SaveData"
+  },
+  {
+   "offset": 308,
+   "name": "m_trackBottomName",
+   "type": "FIELD_STRING",
+   "count": 1,
+   "table": "_16CFuncTrackChange.m_SaveData"
+  },
+  {
+   "offset": 312,
+   "name": "m_trainName",
+   "type": "FIELD_STRING",
+   "count": 1,
+   "table": "_16CFuncTrackChange.m_SaveData"
+  },
+  {
+   "offset": 316,
+   "name": "m_code",
+   "type": "FIELD_INTEGER",
+   "count": 1,
+   "table": "_16CFuncTrackChange.m_SaveData"
+  },
+  {
+   "offset": 320,
+   "name": "m_targetState",
+   "type": "FIELD_INTEGER",
+   "count": 1,
+   "table": "_16CFuncTrackChange.m_SaveData"
+  },
+  {
+   "offset": 324,
+   "name": "m_use",
+   "type": "FIELD_INTEGER",
+   "count": 1,
+   "table": "_16CFuncTrackChange.m_SaveData"
+  }
+ ],
+ "CBasePlayerWeapon": [
+  {
+   "offset": 156,
+   "name": "m_flNextPrimaryAttack",
+   "type": "FIELD_TIME",
+   "count": 1,
+   "table": "_17CBasePlayerWeapon.m_SaveData"
+  },
+  {
+   "offset": 160,
+   "name": "m_flNextSecondaryAttack",
+   "type": "FIELD_TIME",
+   "count": 1,
+   "table": "_17CBasePlayerWeapon.m_SaveData"
+  },
+  {
+   "offset": 164,
+   "name": "m_flTimeWeaponIdle",
+   "type": "FIELD_TIME",
+   "count": 1,
+   "table": "_17CBasePlayerWeapon.m_SaveData"
+  },
+  {
+   "offset": 168,
+   "name": "m_iPrimaryAmmoType",
+   "type": "FIELD_INTEGER",
+   "count": 1,
+   "table": "_17CBasePlayerWeapon.m_SaveData"
+  },
+  {
+   "offset": 172,
+   "name": "m_iSecondaryAmmoType",
+   "type": "FIELD_INTEGER",
+   "count": 1,
+   "table": "_17CBasePlayerWeapon.m_SaveData"
+  },
+  {
+   "offset": 176,
+   "name": "m_iClip",
+   "type": "FIELD_INTEGER",
+   "count": 1,
+   "table": "_17CBasePlayerWeapon.m_SaveData"
+  },
+  {
+   "offset": 192,
+   "name": "m_iDefaultAmmo",
+   "type": "FIELD_INTEGER",
+   "count": 1,
+   "table": "_17CBasePlayerWeapon.m_SaveData"
+  }
+ ],
+ "CFrictionModifier": [
+  {
+   "offset": 100,
+   "name": "m_frictionFraction",
+   "type": "FIELD_FLOAT",
+   "count": 1,
+   "table": "_17CFrictionModifier.m_SaveData"
+  }
+ ],
+ "CScriptedSentence": [
+  {
+   "offset": 260,
+   "name": "m_iszSentence",
+   "type": "FIELD_STRING",
+   "count": 1,
+   "table": "_17CScriptedSentence.m_SaveData"
+  },
+  {
+   "offset": 264,
+   "name": "m_iszEntity",
+   "type": "FIELD_STRING",
+   "count": 1,
+   "table": "_17CScriptedSentence.m_SaveData"
+  },
+  {
+   "offset": 268,
+   "name": "m_flRadius",
+   "type": "FIELD_FLOAT",
+   "count": 1,
+   "table": "_17CScriptedSentence.m_SaveData"
+  },
+  {
+   "offset": 272,
+   "name": "m_flDuration",
+   "type": "FIELD_FLOAT",
+   "count": 1,
+   "table": "_17CScriptedSentence.m_SaveData"
+  },
+  {
+   "offset": 276,
+   "name": "m_flRepeat",
+   "type": "FIELD_FLOAT",
+   "count": 1,
+   "table": "_17CScriptedSentence.m_SaveData"
+  },
+  {
+   "offset": 280,
+   "name": "m_flAttenuation",
+   "type": "FIELD_FLOAT",
+   "count": 1,
+   "table": "_17CScriptedSentence.m_SaveData"
+  },
+  {
+   "offset": 284,
+   "name": "m_flVolume",
+   "type": "FIELD_FLOAT",
+   "count": 1,
+   "table": "_17CScriptedSentence.m_SaveData"
+  },
+  {
+   "offset": 288,
+   "name": "m_active",
+   "type": "FIELD_BOOLEAN",
+   "count": 1,
+   "table": "_17CScriptedSentence.m_SaveData"
+  },
+  {
+   "offset": 292,
+   "name": "m_iszListener",
+   "type": "FIELD_STRING",
+   "count": 1,
+   "table": "_17CScriptedSentence.m_SaveData"
+  }
+ ],
+ "CMomentaryRotButton": [
+  {
+   "offset": 260,
+   "name": "m_lastUsed",
+   "type": "FIELD_INTEGER",
+   "count": 1,
+   "table": "_19CMomentaryRotButton.m_SaveData"
+  },
+  {
+   "offset": 264,
+   "name": "m_direction",
+   "type": "FIELD_INTEGER",
+   "count": 1,
+   "table": "_19CMomentaryRotButton.m_SaveData"
+  },
+  {
+   "offset": 268,
+   "name": "m_returnSpeed",
+   "type": "FIELD_FLOAT",
+   "count": 1,
+   "table": "_19CMomentaryRotButton.m_SaveData"
+  },
+  {
+   "offset": 272,
+   "name": "m_start",
+   "type": "FIELD_VECTOR",
+   "count": 1,
+   "table": "_19CMomentaryRotButton.m_SaveData"
+  },
+  {
+   "offset": 284,
+   "name": "m_end",
+   "type": "FIELD_VECTOR",
+   "count": 1,
+   "table": "_19CMomentaryRotButton.m_SaveData"
+  },
+  {
+   "offset": 296,
+   "name": "m_sounds",
+   "type": "FIELD_INTEGER",
+   "count": 1,
+   "table": "_19CMomentaryRotButton.m_SaveData"
+  }
+ ],
+ "CTriggerChangeTarget": [
+  {
+   "offset": 108,
+   "name": "m_iszNewTarget",
+   "type": "FIELD_STRING",
+   "count": 1,
+   "table": "_20CTriggerChangeTarget.m_SaveData"
+  }
+ ],
+ "CGlow": [
+  {
+   "offset": 100,
+   "name": "m_lastTime",
+   "type": "FIELD_TIME",
+   "count": 1,
+   "table": "_5CGlow.m_SaveData"
+  },
+  {
+   "offset": 104,
+   "name": "m_maxFrame",
+   "type": "FIELD_FLOAT",
+   "count": 1,
+   "table": "_5CGlow.m_SaveData"
+  }
+ ],
+ "CLaser": [
+  {
+   "offset": 100,
+   "name": "m_pSprite",
+   "type": "FIELD_CLASSPTR",
+   "count": 1,
+   "table": "_6CLaser.m_SaveData"
+  },
+  {
+   "offset": 104,
+   "name": "m_iszSpriteName",
+   "type": "FIELD_STRING",
+   "count": 1,
+   "table": "_6CLaser.m_SaveData"
+  },
+  {
+   "offset": 108,
+   "name": "m_firePosition",
+   "type": "FIELD_POSITION_VECTOR",
+   "count": 1,
+   "table": "_6CLaser.m_SaveData"
+  }
+ ],
+ "CLight": [
+  {
+   "offset": 100,
+   "name": "m_iStyle",
+   "type": "FIELD_INTEGER",
+   "count": 1,
+   "table": "_6CLight.m_SaveData"
+  },
+  {
+   "offset": 104,
+   "name": "m_iszPattern",
+   "type": "FIELD_STRING",
+   "count": 1,
+   "table": "_6CLight.m_SaveData"
+  }
+ ],
+ "CSprite": [
+  {
+   "offset": 100,
+   "name": "m_lastTime",
+   "type": "FIELD_TIME",
+   "count": 1,
+   "table": "_7CSprite.m_SaveData"
+  },
+  {
+   "offset": 104,
+   "name": "m_maxFrame",
+   "type": "FIELD_FLOAT",
+   "count": 1,
+   "table": "_7CSprite.m_SaveData"
+  }
+ ],
+ "CSpeaker": [
+  {
+   "offset": 100,
+   "name": "m_preset",
+   "type": "FIELD_INTEGER",
+   "count": 1,
+   "table": "_8CSpeaker.m_SaveData"
+  }
+ ],
+ "CBaseDoor": [
+  {
+   "offset": 260,
+   "name": "m_bHealthValue",
+   "type": "FIELD_CHARACTER",
+   "count": 1,
+   "table": "_9CBaseDoor.m_SaveData"
+  },
+  {
+   "offset": 261,
+   "name": "m_bMoveSnd",
+   "type": "FIELD_CHARACTER",
+   "count": 1,
+   "table": "_9CBaseDoor.m_SaveData"
+  },
+  {
+   "offset": 262,
+   "name": "m_bStopSnd",
+   "type": "FIELD_CHARACTER",
+   "count": 1,
+   "table": "_9CBaseDoor.m_SaveData"
+  },
+  {
+   "offset": 300,
+   "name": "m_bLockedSound",
+   "type": "FIELD_CHARACTER",
+   "count": 1,
+   "table": "_9CBaseDoor.m_SaveData"
+  },
+  {
+   "offset": 301,
+   "name": "m_bLockedSentence",
+   "type": "FIELD_CHARACTER",
+   "count": 1,
+   "table": "_9CBaseDoor.m_SaveData"
+  },
+  {
+   "offset": 302,
+   "name": "m_bUnlockedSound",
+   "type": "FIELD_CHARACTER",
+   "count": 1,
+   "table": "_9CBaseDoor.m_SaveData"
+  },
+  {
+   "offset": 303,
+   "name": "m_bUnlockedSentence",
+   "type": "FIELD_CHARACTER",
+   "count": 1,
+   "table": "_9CBaseDoor.m_SaveData"
+  }
+ ],
+ "CBubbling": [
+  {
+   "offset": 100,
+   "name": "m_density",
+   "type": "FIELD_INTEGER",
+   "count": 1,
+   "table": "_9CBubbling.m_SaveData"
+  },
+  {
+   "offset": 104,
+   "name": "m_frequency",
+   "type": "FIELD_INTEGER",
+   "count": 1,
+   "table": "_9CBubbling.m_SaveData"
+  },
+  {
+   "offset": 112,
+   "name": "m_state",
+   "type": "FIELD_INTEGER",
+   "count": 1,
+   "table": "_9CBubbling.m_SaveData"
+  }
+ ],
+ "CEnvSound": [
+  {
+   "offset": 100,
+   "name": "m_flRadius",
+   "type": "FIELD_FLOAT",
+   "count": 1,
+   "table": "_9CEnvSound.m_SaveData"
+  },
+  {
+   "offset": 104,
+   "name": "m_flRoomtype",
+   "type": "FIELD_FLOAT",
+   "count": 1,
+   "table": "_9CEnvSound.m_SaveData"
+  }
+ ],
+ "CEnvSpark": [
+  {
+   "offset": 100,
+   "name": "m_flDelay",
+   "type": "FIELD_FLOAT",
+   "count": 1,
+   "table": "_9CEnvSpark.m_SaveData"
+  }
+ ],
+ "CGameText": [
+  {
+   "offset": 104,
+   "name": "m_textParms",
+   "type": "FIELD_CHARACTER",
+   "count": 40,
+   "table": "_9CGameText.m_SaveData"
+  }
+ ],
+ "CPendulum": [
+  {
+   "offset": 100,
+   "name": "m_accel",
+   "type": "FIELD_FLOAT",
+   "count": 1,
+   "table": "_9CPendulum.m_SaveData"
+  },
+  {
+   "offset": 104,
+   "name": "m_distance",
+   "type": "FIELD_FLOAT",
+   "count": 1,
+   "table": "_9CPendulum.m_SaveData"
+  },
+  {
+   "offset": 108,
+   "name": "m_time",
+   "type": "FIELD_TIME",
+   "count": 1,
+   "table": "_9CPendulum.m_SaveData"
+  },
+  {
+   "offset": 112,
+   "name": "m_damp",
+   "type": "FIELD_FLOAT",
+   "count": 1,
+   "table": "_9CPendulum.m_SaveData"
+  },
+  {
+   "offset": 116,
+   "name": "m_maxSpeed",
+   "type": "FIELD_FLOAT",
+   "count": 1,
+   "table": "_9CPendulum.m_SaveData"
+  },
+  {
+   "offset": 120,
+   "name": "m_dampSpeed",
+   "type": "FIELD_FLOAT",
+   "count": 1,
+   "table": "_9CPendulum.m_SaveData"
+  },
+  {
+   "offset": 124,
+   "name": "m_center",
+   "type": "FIELD_VECTOR",
+   "count": 1,
+   "table": "_9CPendulum.m_SaveData"
+  },
+  {
+   "offset": 136,
+   "name": "m_start",
+   "type": "FIELD_VECTOR",
+   "count": 1,
+   "table": "_9CPendulum.m_SaveData"
+  }
+ ],
+ "CPushable": [
+  {
+   "offset": 136,
+   "name": "m_maxSpeed",
+   "type": "FIELD_FLOAT",
+   "count": 1,
+   "table": "_9CPushable.m_SaveData"
+  },
+  {
+   "offset": 140,
+   "name": "m_soundTime",
+   "type": "FIELD_TIME",
+   "count": 1,
+   "table": "_9CPushable.m_SaveData"
+  }
+ ]
+}

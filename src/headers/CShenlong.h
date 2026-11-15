@@ -7,7 +7,7 @@ public:
     virtual void Precache();  // vtable[1] Precache__9CShenlong
     virtual void Touch();  // vtable[43] Touch__9CShenlongP11CBaseEntity
     // campos observados (offset em bytes a partir de `this`; inclui os herdados)
-    int f_00c;  // +0xc (12)
+    void* m_pfnThink;  // +0xc (12) FIELD_FUNCTION  [save-table]
     int f_010;  // +0x10 (16)
     int f_060;  // +0x60 (96)
     int f_2a8;  // +0x2a8 (680)

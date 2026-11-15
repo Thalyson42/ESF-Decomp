@@ -19,7 +19,7 @@ public:
     virtual void 0();  // vtable[94] 0
     // campos observados (offset em bytes a partir de `this`; inclui os herdados)
     void* f_060;  // +0x60 (96)
-    void* f_080;  // +0x80 (128)
+    CBaseEntity* m_pPlayer;  // +0x80 (128) FIELD_CLASSPTR  [save-table]
     int f_0c4;  // +0xc4 (196)
     int f_0c8;  // +0xc8 (200)
 };

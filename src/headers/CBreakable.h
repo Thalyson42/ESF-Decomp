@@ -14,16 +14,16 @@ public:
     virtual void DamageDecal();  // vtable[27] DamageDecal__10CBreakablei
     virtual void Use();  // vtable[44] Use__10CBreakableP11CBaseEntityT18USE_TYPEf
     // campos observados (offset em bytes a partir de `this`; inclui os herdados)
-    int f_00c;  // +0xc (12)
+    void* m_pfnThink;  // +0xc (12) FIELD_FUNCTION  [save-table]
     int f_010;  // +0x10 (16)
-    int f_014;  // +0x14 (20)
+    void* m_pfnTouch;  // +0x14 (20) FIELD_FUNCTION  [save-table]
     int f_018;  // +0x18 (24)
     int f_060;  // +0x60 (96)
-    int f_064;  // +0x64 (100)
-    int f_06c;  // +0x6c (108)
-    int f_070;  // +0x70 (112)
+    float m_flDelay;  // +0x64 (100) FIELD_FLOAT  [save-table]
+    int m_Material;  // +0x6c (108) FIELD_INTEGER  [save-table]
+    int m_Explosion;  // +0x70 (112) FIELD_INTEGER  [save-table]
     int f_074;  // +0x74 (116)
-    float f_078;  // +0x78 (120)
-    int f_07c;  // +0x7c (124)
-    int f_080;  // +0x80 (128)
+    float m_angle;  // +0x78 (120) FIELD_FLOAT  [save-table]
+    string_t m_iszGibModel;  // +0x7c (124) FIELD_STRING  [save-table]
+    string_t m_iszSpawnObject;  // +0x80 (128) FIELD_STRING  [save-table]
 };

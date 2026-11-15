@@ -7,21 +7,21 @@
 #include "effects.h"
 #include "kamehameha.h"
 
-// [?] valores de Spawn: os campos +0xdc..+0xfe pertencem à base (CGallitGun::Spawn grava os
-//     mesmos campos com outros valores: id=5, 24, 1200, "gallitgun") -> são "parâmetros de arma".
+// Spawn: +0xdc..+0xf0 são parâmetros de arma da CControlledBeam (nomes em controlledweapon.h);
+// CGallitGun::Spawn grava os mesmos campos com outros valores.
 void CKamehameha::Spawn(void)
 {
     Precache();                         // [OK] vtable slot 1
-    f_0c4 = 0;  f_0d8 = 0;  f_0c8 = 0;  // [?]
+    m_iAttackState = 0;  m_iCharge = 0;  m_pBeam = NULL;  // [?]
     m_iId = 6;                          // [OK] +0x88 (também gravado em GetItemInfo)
-    f_0c0 = 0;
-    f_0b0 = -1;
-    f_0dc = 36;                         // [?]
-    f_0e0 = 1150;                       // [?]
-    f_0e4 = 20;
-    f_0e8 = 4;
+    m_iDefaultAmmo = 0;                 // [OK] +0xc0 (save-table)
+    m_iClip = -1;                       // [OK] +0xb0 (save-table)
+    m_iMaxCharge = 36;                         // [?]
+    m_iBeamSpeed = 1150;                       // [?]
+    m_iKiCost = 20;
+    m_iDmgPerCharge = 4;
     f_0ec = 4;
-    f_0f0 = 0.5f;
+    m_flChargeSpeedMult = 0.5f;
     strcpy(m_szWeaponName, "kamehameha");  // [OK] +0xf4 (char[], gravado como "kame"+"hame"+"ha\0")
     f_1f4 = 0.1f;
     f_1fc = 0;

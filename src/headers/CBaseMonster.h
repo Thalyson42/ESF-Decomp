@@ -87,32 +87,35 @@ public:
     virtual void 0();  // vtable[124] 0
     // campos observados (offset em bytes a partir de `this`; inclui os herdados)
     char f_001;  // +0x1 (1)
-    int f_004;  // +0x4 (4)
+    CBaseEntity* m_pGoalEnt;  // +0x4 (4) FIELD_CLASSPTR  [save-table]
     int f_008;  // +0x8 (8)
-    int f_00c;  // +0xc (12)
+    void* m_pfnThink;  // +0xc (12) FIELD_FUNCTION  [save-table]
     int f_010;  // +0x10 (16)
-    int f_014;  // +0x14 (20)
+    void* m_pfnTouch;  // +0x14 (20) FIELD_FUNCTION  [save-table]
     int f_018;  // +0x18 (24)
-    int f_01c;  // +0x1c (28)
+    void* m_pfnUse;  // +0x1c (28) FIELD_FUNCTION  [save-table]
     int f_060;  // +0x60 (96)
-    float f_070;  // +0x70 (112)
-    int f_07c;  // +0x7c (124)
-    char f_104;  // +0x104 (260)
+    float m_flGroundSpeed;  // +0x70 (112) FIELD_FLOAT  [save-table]
+    BOOL m_fSequenceLoops;  // +0x7c (124) FIELD_BOOLEAN  [save-table]
+    int m_afConditions;  // +0x104 (260) FIELD_INTEGER  [save-table]
     char f_105;  // +0x105 (261)
     char f_106;  // +0x106 (262)
     char f_107;  // +0x107 (263)
-    char f_108;  // +0x108 (264)
-    char f_110;  // +0x110 (272)
-    float f_168;  // +0x168 (360)
-    float f_170;  // +0x170 (368)
-    int f_174;  // +0x174 (372)
-    int f_178;  // +0x178 (376)
-    int f_17c;  // +0x17c (380)
-    int f_180;  // +0x180 (384)
-    int f_184;  // +0x184 (388)
-    int f_188;  // +0x188 (392)
+    EHANDLE m_hEnemy;  // +0x108 (264) FIELD_EHANDLE  [save-table]
+    EHANDLE m_hTargetEnt;  // +0x110 (272) FIELD_EHANDLE  [save-table]
+    EHANDLE m_hOldEnemy[4];  // +0x118 (280) FIELD_EHANDLE  [save-table]
+    Vector m_vecOldEnemy[4];  // +0x138 (312) FIELD_POSITION_VECTOR  [save-table]
+    float m_flFieldOfView;  // +0x168 (360) FIELD_FLOAT  [save-table]
+    float m_flWaitFinished;  // +0x16c (364) FIELD_TIME  [save-table]
+    float m_flMoveWaitFinished;  // +0x170 (368) FIELD_TIME  [save-table]
+    int m_Activity;  // +0x174 (372) FIELD_INTEGER  [save-table]
+    int m_IdealActivity;  // +0x178 (376) FIELD_INTEGER  [save-table]
+    int m_LastHitGroup;  // +0x17c (380) FIELD_INTEGER  [save-table]
+    int m_MonsterState;  // +0x180 (384) FIELD_INTEGER  [save-table]
+    int m_IdealMonsterState;  // +0x184 (388) FIELD_INTEGER  [save-table]
+    int m_iTaskStatus;  // +0x188 (392) FIELD_INTEGER  [save-table]
     int f_18c;  // +0x18c (396)
-    int f_190;  // +0x190 (400)
+    int m_iScheduleIndex;  // +0x190 (400) FIELD_INTEGER  [save-table]
     int f_194;  // +0x194 (404)
     int f_198;  // +0x198 (408)
     int f_19c;  // +0x19c (412)
@@ -124,24 +127,33 @@ public:
     int f_214;  // +0x214 (532)
     int f_218;  // +0x218 (536)
     float f_21c;  // +0x21c (540)
-    int f_220;  // +0x220 (544)
+    Vector m_vecMoveGoal;  // +0x220 (544) FIELD_POSITION_VECTOR  [save-table]
     int f_224;  // +0x224 (548)
     int f_228;  // +0x228 (552)
-    int f_22c;  // +0x22c (556)
+    int m_movementActivity;  // +0x22c (556) FIELD_INTEGER  [save-table]
     int f_230;  // +0x230 (560)
     int f_234;  // +0x234 (564)
-    int f_244;  // +0x244 (580)
-    char f_248;  // +0x248 (584)
-    int f_250;  // +0x250 (592)
+    Vector m_vecLastPosition;  // +0x238 (568) FIELD_POSITION_VECTOR  [save-table]
+    int m_iHintNode;  // +0x244 (580) FIELD_INTEGER  [save-table]
+    int m_afMemory;  // +0x248 (584) FIELD_INTEGER  [save-table]
+    int m_iMaxHealth;  // +0x24c (588) FIELD_INTEGER  [save-table]
+    Vector m_vecEnemyLKP;  // +0x250 (592) FIELD_POSITION_VECTOR  [save-table]
     int f_254;  // +0x254 (596)
     int f_258;  // +0x258 (600)
-    int f_260;  // +0x260 (608)
+    int m_cAmmoLoaded;  // +0x25c (604) FIELD_INTEGER  [save-table]
+    int m_afCapability;  // +0x260 (608) FIELD_INTEGER  [save-table]
     char f_261;  // +0x261 (609)
-    int f_268;  // +0x268 (616)
-    int f_278;  // +0x278 (632)
-    int f_27c;  // +0x27c (636)
-    float f_280;  // +0x280 (640)
-    float f_284;  // +0x284 (644)
-    float f_288;  // +0x288 (648)
-    int f_2a4;  // +0x2a4 (676)
+    float m_flNextAttack;  // +0x264 (612) FIELD_TIME  [save-table]
+    int m_bitsDamageType;  // +0x268 (616) FIELD_INTEGER  [save-table]
+    char m_rgbTimeBasedDamage[8];  // +0x26c (620) FIELD_CHARACTER  [save-table]
+    int m_bloodColor;  // +0x278 (632) FIELD_INTEGER  [save-table]
+    int m_failSchedule;  // +0x27c (636) FIELD_INTEGER  [save-table]
+    float m_flHungryTime;  // +0x280 (640) FIELD_TIME  [save-table]
+    float m_flDistTooFar;  // +0x284 (644) FIELD_FLOAT  [save-table]
+    float m_flDistLook;  // +0x288 (648) FIELD_FLOAT  [save-table]
+    int m_iTriggerCondition;  // +0x28c (652) FIELD_INTEGER  [save-table]
+    string_t m_iszTriggerTarget;  // +0x290 (656) FIELD_STRING  [save-table]
+    Vector m_HackedGunPos;  // +0x294 (660) FIELD_VECTOR  [save-table]
+    int m_scriptState;  // +0x2a0 (672) FIELD_INTEGER  [save-table]
+    CBaseEntity* m_pCine;  // +0x2a4 (676) FIELD_CLASSPTR  [save-table]
 };

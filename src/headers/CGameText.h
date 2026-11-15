@@ -8,7 +8,7 @@ public:
     virtual void Restore();  // vtable[4] Restore__9CGameTextR8CRestore
     virtual void Use();  // vtable[44] Use__9CGameTextP11CBaseEntityT18USE_TYPEf
     // campos observados (offset em bytes a partir de `this`; inclui os herdados)
-    float f_068;  // +0x68 (104)
+    char m_textParms[40];  // +0x68 (104) FIELD_CHARACTER  [save-table]
     float f_06c;  // +0x6c (108)
     int f_070;  // +0x70 (112)
     char f_074;  // +0x74 (116)

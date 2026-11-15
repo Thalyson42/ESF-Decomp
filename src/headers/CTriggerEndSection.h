@@ -6,8 +6,8 @@ public:
     virtual void Spawn();  // vtable[0] Spawn__18CTriggerEndSection
     virtual void KeyValue();  // vtable[2] KeyValue__18CTriggerEndSectionP14KeyValueData_s
     // campos observados (offset em bytes a partir de `this`; inclui os herdados)
-    int f_014;  // +0x14 (20)
+    void* m_pfnTouch;  // +0x14 (20) FIELD_FUNCTION  [save-table]
     int f_018;  // +0x18 (24)
-    int f_01c;  // +0x1c (28)
+    void* m_pfnUse;  // +0x1c (28) FIELD_FUNCTION  [save-table]
     int f_020;  // +0x20 (32)
 };

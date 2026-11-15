@@ -26,17 +26,19 @@ public:
     virtual void 0();  // vtable[85] 0
     // campos observados (offset em bytes a partir de `this`; inclui os herdados)
     int f_060;  // +0x60 (96)
-    int f_080;  // +0x80 (128)
-    void* f_084;  // +0x84 (132)
-    int f_088;  // +0x88 (136)
+    CBaseEntity* m_pPlayer;  // +0x80 (128) FIELD_CLASSPTR  [save-table]
+    CBaseEntity* m_pNext;  // +0x84 (132) FIELD_CLASSPTR  [save-table]
+    int m_iId;  // +0x88 (136) FIELD_INTEGER  [save-table]
     int f_08c;  // +0x8c (140)
     int f_090;  // +0x90 (144)
-    float f_09c;  // +0x9c (156)
-    float f_0a0;  // +0xa0 (160)
-    float f_0a4;  // +0xa4 (164)
-    int f_0a8;  // +0xa8 (168)
-    int f_0b0;  // +0xb0 (176)
+    float m_flNextPrimaryAttack;  // +0x9c (156) FIELD_TIME  [save-table]
+    float m_flNextSecondaryAttack;  // +0xa0 (160) FIELD_TIME  [save-table]
+    float m_flTimeWeaponIdle;  // +0xa4 (164) FIELD_TIME  [save-table]
+    int m_iPrimaryAmmoType;  // +0xa8 (168) FIELD_INTEGER  [save-table]
+    int m_iSecondaryAmmoType;  // +0xac (172) FIELD_INTEGER  [save-table]
+    int m_iClip;  // +0xb0 (176) FIELD_INTEGER  [save-table]
     int f_0b4;  // +0xb4 (180)
     int f_0b8;  // +0xb8 (184)
     int f_0bc;  // +0xbc (188)
+    int m_iDefaultAmmo;  // +0xc0 (192) FIELD_INTEGER  [save-table]
 };

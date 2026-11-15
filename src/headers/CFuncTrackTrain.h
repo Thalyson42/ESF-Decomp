@@ -14,25 +14,25 @@ public:
     virtual void Use();  // vtable[44] Use__15CFuncTrackTrainP11CBaseEntityT18USE_TYPEf
     virtual void Blocked();  // vtable[45] Blocked__15CFuncTrackTrainP11CBaseEntity
     // campos observados (offset em bytes a partir de `this`; inclui os herdados)
-    int f_00c;  // +0xc (12)
+    void* m_pfnThink;  // +0xc (12) FIELD_FUNCTION  [save-table]
     int f_010;  // +0x10 (16)
     int f_060;  // +0x60 (96)
-    int f_064;  // +0x64 (100)
-    float f_068;  // +0x68 (104)
-    float f_06c;  // +0x6c (108)
-    float f_070;  // +0x70 (112)
-    float f_074;  // +0x74 (116)
-    float f_078;  // +0x78 (120)
-    float f_07c;  // +0x7c (124)
+    CBaseEntity* m_ppath;  // +0x64 (100) FIELD_CLASSPTR  [save-table]
+    float m_length;  // +0x68 (104) FIELD_FLOAT  [save-table]
+    float m_height;  // +0x6c (108) FIELD_FLOAT  [save-table]
+    float m_speed;  // +0x70 (112) FIELD_FLOAT  [save-table]
+    float m_dir;  // +0x74 (116) FIELD_FLOAT  [save-table]
+    float m_startSpeed;  // +0x78 (120) FIELD_FLOAT  [save-table]
+    Vector m_controlMins;  // +0x7c (124) FIELD_VECTOR  [save-table]
     float f_080;  // +0x80 (128)
     float f_084;  // +0x84 (132)
-    float f_088;  // +0x88 (136)
+    Vector m_controlMaxs;  // +0x88 (136) FIELD_VECTOR  [save-table]
     float f_08c;  // +0x8c (140)
     float f_090;  // +0x90 (144)
     int f_094;  // +0x94 (148)
-    int f_098;  // +0x98 (152)
-    float f_09c;  // +0x9c (156)
-    float f_0a0;  // +0xa0 (160)
-    float f_0a4;  // +0xa4 (164)
+    int m_sounds;  // +0x98 (152) FIELD_INTEGER  [save-table]
+    float m_flVolume;  // +0x9c (156) FIELD_FLOAT  [save-table]
+    float m_flBank;  // +0xa0 (160) FIELD_FLOAT  [save-table]
+    float m_oldSpeed;  // +0xa4 (164) FIELD_FLOAT  [save-table]
     short f_0a8;  // +0xa8 (168)
 };

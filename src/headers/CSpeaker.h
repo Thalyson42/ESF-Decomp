@@ -10,8 +10,8 @@ public:
     virtual void Restore();  // vtable[4] Restore__8CSpeakerR8CRestore
     virtual void ObjectCaps();  // vtable[5] ObjectCaps__8CSpeaker
     // campos observados (offset em bytes a partir de `this`; inclui os herdados)
-    int f_00c;  // +0xc (12)
-    int f_01c;  // +0x1c (28)
+    void* m_pfnThink;  // +0xc (12) FIELD_FUNCTION  [save-table]
+    void* m_pfnUse;  // +0x1c (28) FIELD_FUNCTION  [save-table]
     int f_060;  // +0x60 (96)
-    int f_064;  // +0x64 (100)
+    int m_preset;  // +0x64 (100) FIELD_INTEGER  [save-table]
 };

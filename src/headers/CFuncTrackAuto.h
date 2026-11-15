@@ -7,11 +7,11 @@ public:
     virtual void UpdateAutoTargets();  // vtable[62] UpdateAutoTargets__14CFuncTrackAutoi
     // campos observados (offset em bytes a partir de `this`; inclui os herdados)
     void* f_060;  // +0x60 (96)
-    void* f_080;  // +0x80 (128)
-    int f_124;  // +0x124 (292)
-    int f_128;  // +0x128 (296)
-    int f_12c;  // +0x12c (300)
-    int f_13c;  // +0x13c (316)
-    int f_140;  // +0x140 (320)
-    int f_144;  // +0x144 (324)
+    int m_toggle_state;  // +0x80 (128) FIELD_INTEGER  [save-table]
+    CBaseEntity* m_trackTop;  // +0x124 (292) FIELD_CLASSPTR  [save-table]
+    CBaseEntity* m_trackBottom;  // +0x128 (296) FIELD_CLASSPTR  [save-table]
+    CBaseEntity* m_train;  // +0x12c (300) FIELD_CLASSPTR  [save-table]
+    int m_code;  // +0x13c (316) FIELD_INTEGER  [save-table]
+    int m_targetState;  // +0x140 (320) FIELD_INTEGER  [save-table]
+    int m_use;  // +0x144 (324) FIELD_INTEGER  [save-table]
 };

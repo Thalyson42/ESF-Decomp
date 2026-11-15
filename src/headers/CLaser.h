@@ -10,9 +10,9 @@ public:
     virtual void Restore();  // vtable[4] Restore__6CLaserR8CRestore
     virtual void Use();  // vtable[44] Use__6CLaserP11CBaseEntityT18USE_TYPEf
     // campos observados (offset em bytes a partir de `this`; inclui os herdados)
-    int f_064;  // +0x64 (100)
-    int f_068;  // +0x68 (104)
-    int f_06c;  // +0x6c (108)
+    CBaseEntity* m_pSprite;  // +0x64 (100) FIELD_CLASSPTR  [save-table]
+    string_t m_iszSpriteName;  // +0x68 (104) FIELD_STRING  [save-table]
+    Vector m_firePosition;  // +0x6c (108) FIELD_POSITION_VECTOR  [save-table]
     int f_070;  // +0x70 (112)
     int f_074;  // +0x74 (116)
 };

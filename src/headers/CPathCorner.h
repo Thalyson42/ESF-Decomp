@@ -9,5 +9,5 @@ public:
     virtual void Restore();  // vtable[4] Restore__11CPathCornerR8CRestore
     virtual void GetDelay();  // vtable[24] GetDelay__11CPathCorner
     // campos observados (offset em bytes a partir de `this`; inclui os herdados)
-    float f_064;  // +0x64 (100)
+    float m_flWait;  // +0x64 (100) FIELD_FLOAT  [save-table]
 };

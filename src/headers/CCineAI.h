@@ -9,10 +9,10 @@ public:
     virtual void FixScriptMonsterSchedule();  // vtable[127] FixScriptMonsterSchedule__7CCineAIP12CBaseMonster
     // campos observados (offset em bytes a partir de `this`; inclui os herdados)
     void* f_060;  // +0x60 (96)
-    char f_110;  // +0x110 (272)
-    int f_2b4;  // +0x2b4 (692)
-    int f_2b8;  // +0x2b8 (696)
-    int f_2cc;  // +0x2cc (716)
-    int f_2d0;  // +0x2d0 (720)
-    int f_2d4;  // +0x2d4 (724)
+    EHANDLE m_hTargetEnt;  // +0x110 (272) FIELD_EHANDLE  [save-table]
+    int m_fMoveTo;  // +0x2b4 (692) FIELD_INTEGER  [save-table]
+    int m_iFinishSchedule;  // +0x2b8 (696) FIELD_INTEGER  [save-table]
+    int m_saved_movetype;  // +0x2cc (716) FIELD_INTEGER  [save-table]
+    int m_saved_solid;  // +0x2d0 (720) FIELD_INTEGER  [save-table]
+    int m_saved_effects;  // +0x2d4 (724) FIELD_INTEGER  [save-table]
 };

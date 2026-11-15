@@ -5201,7 +5201,7 @@
   ]
  },
  "CBuu2": {
-  "base": "CBuu",
+  "base": "CBaseClass",
   "base_origem": "heuristica",
   "virtuals": [
    "GetSoundDir__5CBuu2",
@@ -9853,7 +9853,7 @@
   ]
  },
  "CFog": {
-  "base": "CPointEntity",
+  "base": "CBaseEntity",
   "base_origem": "heuristica",
   "virtuals": [
    "Spawn__4CFog",
@@ -19838,7 +19838,7 @@
   ]
  },
  "CSSJGohan": {
-  "base": "CBaseClass",
+  "base": "CGohan",
   "base_origem": "heuristica",
   "virtuals": [
    "GetSoundDir__6CGohan",
@@ -19879,7 +19879,7 @@
   ]
  },
  "CSSJGoku": {
-  "base": "CGoku",
+  "base": "CBaseClass",
   "base_origem": "heuristica",
   "virtuals": [
    "GetSoundDir__5CGoku",
@@ -19921,7 +19921,7 @@
   ]
  },
  "CSSJTrunks": {
-  "base": "CTrunks",
+  "base": "CBaseClass",
   "base_origem": "heuristica",
   "virtuals": [
    "GetSoundDir__7CTrunks",
@@ -19962,7 +19962,7 @@
   ]
  },
  "CSSJVegeta": {
-  "base": "CBaseClass",
+  "base": "CVegeta",
   "base_origem": "heuristica",
   "virtuals": [
    "GetSoundDir__7CVegeta",

@@ -7,7 +7,7 @@ public:
     virtual void Precache();  // vtable[1] Precache__7CShield
     virtual void Classify();  // vtable[8] Classify__7CShield
     // campos observados (offset em bytes a partir de `this`; inclui os herdados)
-    int f_00c;  // +0xc (12)
+    void* m_pfnThink;  // +0xc (12) FIELD_FUNCTION  [save-table]
     void* f_060;  // +0x60 (96)
     int f_064;  // +0x64 (100)
     float f_068;  // +0x68 (104)

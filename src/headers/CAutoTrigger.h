@@ -12,6 +12,6 @@ public:
     virtual void Think();  // vtable[42] Think__12CAutoTrigger
     // campos observados (offset em bytes a partir de `this`; inclui os herdados)
     void* f_060;  // +0x60 (96)
-    int f_06c;  // +0x6c (108)
-    int f_070;  // +0x70 (112)
+    string_t m_globalstate;  // +0x6c (108) FIELD_STRING  [save-table]
+    int triggerType;  // +0x70 (112) FIELD_INTEGER  [save-table]
 };

@@ -1,10 +1,11 @@
 // CFog.h -- reconstruído automaticamente (vtable + offsets). REVISAR.
 #pragma once
 
-class CFog : public CPointEntity {  // base: heuristica
+class CFog : public CBaseEntity {  // base: heuristica
 public:
     virtual void Spawn();  // vtable[0] Spawn__4CFog
     virtual void KeyValue();  // vtable[2] KeyValue__4CFogP14KeyValueData_s
+    virtual void ObjectCaps();  // vtable[5] ObjectCaps__12CPointEntity
     // campos observados (offset em bytes a partir de `this`; inclui os herdados)
     int f_064;  // +0x64 (100)
     int f_068;  // +0x68 (104)

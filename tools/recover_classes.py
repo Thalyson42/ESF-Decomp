@@ -106,6 +106,15 @@ def fields(cdir):
                     off = int(fm.group(1), 16)
                     if off > 0: f[off].add(FT.get(ty.group(1), 'int') if ty else 'void*')
     return {o: sorted(t)[0] for o, t in f.items()}
+SAVE = {}
+try:
+    SAVE = json.load(open(os.environ.get('SAVEFIELDS', 'symbols/save_fields.json')))
+except Exception: pass
+CT = {'FIELD_FLOAT':'float','FIELD_TIME':'float','FIELD_INTEGER':'int','FIELD_BOOLEAN':'BOOL','FIELD_SHORT':'short','FIELD_CHARACTER':'char','FIELD_STRING':'string_t','FIELD_MODELNAME':'string_t','FIELD_SOUNDNAME':'string_t','FIELD_VECTOR':'Vector','FIELD_POSITION_VECTOR':'Vector','FIELD_EHANDLE':'EHANDLE','FIELD_CLASSPTR':'CBaseEntity*','FIELD_ENTITY':'EOFFSET','FIELD_EVARS':'entvars_t*','FIELD_EDICT':'edict_t*','FIELD_POINTER':'void*','FIELD_FUNCTION':'void*'}
+def chain(c):
+    o = []
+    while c and c not in o: o.append(c); c = base.get(c)
+    return o
 info = {}
 for c in sorted(set(os.listdir(raw)) | set(VT)):
     if c.startswith('_') and c != '_funcoes_livres': continue
@@ -123,7 +132,15 @@ for c, d in info.items():
         L.append(f'    virtual void {meth(v)}();  // vtable[{i}] {v}')
     inh = set()
     L.append('    // campos observados (offset em bytes a partir de `this`; inclui os herdados)')
-    for o in sorted(d['fields']): L.append(f'    {d["fields"][o]} f_{o:03x};  // +0x{o:x} ({o})')
+    named = {}
+    for k in chain(c):
+        for e in SAVE.get(k, []): named.setdefault(e['offset'], e)
+    seen = set()
+    for o in sorted(set(d['fields']) | {e['offset'] for e in SAVE.get(c, [])}):
+        if o in named:
+            e = named[o]; cnt = f'[{e["count"]}]' if e['count'] > 1 else ''
+            L.append(f'    {CT.get(e["type"], "int")} {e["name"]}{cnt};  // +0x{o:x} ({o}) {e["type"]}  [save-table]')
+        else: L.append(f'    {d["fields"][o]} f_{o:03x};  // +0x{o:x} ({o})')
     L.append('};')
     open(os.path.join(out, c + '.h'), 'w').write('\n'.join(L) + '\n')
 print(len(info), 'classes;', sum(1 for d in info.values() if d['base']), 'com base inferida;', sum(1 for d in info.values() if d['virtuals']), 'com vtable')

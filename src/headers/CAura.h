@@ -7,7 +7,7 @@ public:
     virtual void Precache();  // vtable[1] Precache__5CAura
     virtual void TakeDamage();  // vtable[11] TakeDamage__5CAuraP9entvars_sT1fi
     // campos observados (offset em bytes a partir de `this`; inclui os herdados)
-    int f_014;  // +0x14 (20)
+    void* m_pfnTouch;  // +0x14 (20) FIELD_FUNCTION  [save-table]
     int f_018;  // +0x18 (24)
     int f_060;  // +0x60 (96)
     int f_2a8;  // +0x2a8 (680)

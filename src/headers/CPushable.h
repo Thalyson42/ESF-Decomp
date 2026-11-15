@@ -15,6 +15,6 @@ public:
     // campos observados (offset em bytes a partir de `this`; inclui os herdados)
     int f_060;  // +0x60 (96)
     int f_084;  // +0x84 (132)
-    double f_088;  // +0x88 (136)
-    int f_08c;  // +0x8c (140)
+    float m_maxSpeed;  // +0x88 (136) FIELD_FLOAT  [save-table]
+    float m_soundTime;  // +0x8c (140) FIELD_TIME  [save-table]
 };

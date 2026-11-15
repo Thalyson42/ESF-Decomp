@@ -27,22 +27,22 @@ public:
     virtual void FriendNumber();  // vtable[126] FriendNumber__12CTalkMonsteri
     virtual void 0();  // vtable[127] 0
     // campos observados (offset em bytes a partir de `this`; inclui os herdados)
-    int f_01c;  // +0x1c (28)
+    void* m_pfnUse;  // +0x1c (28) FIELD_FUNCTION  [save-table]
     int f_020;  // +0x20 (32)
     int f_060;  // +0x60 (96)
     char f_106;  // +0x106 (262)
     char f_107;  // +0x107 (263)
-    char f_108;  // +0x108 (264)
-    char f_110;  // +0x110 (272)
+    EHANDLE m_hEnemy;  // +0x108 (264) FIELD_EHANDLE  [save-table]
+    EHANDLE m_hTargetEnt;  // +0x110 (272) FIELD_EHANDLE  [save-table]
     int f_114;  // +0x114 (276)
-    int f_180;  // +0x180 (384)
-    int f_184;  // +0x184 (388)
+    int m_MonsterState;  // +0x180 (384) FIELD_INTEGER  [save-table]
+    int m_IdealMonsterState;  // +0x184 (388) FIELD_INTEGER  [save-table]
     int f_214;  // +0x214 (532)
-    char f_248;  // +0x248 (584)
+    int m_afMemory;  // +0x248 (584) FIELD_INTEGER  [save-table]
     char f_261;  // +0x261 (609)
-    int f_2a4;  // +0x2a4 (676)
-    char f_2a8;  // +0x2a8 (680)
-    int f_2ac;  // +0x2ac (684)
+    CBaseEntity* m_pCine;  // +0x2a4 (676) FIELD_CLASSPTR  [save-table]
+    int m_bitsSaid;  // +0x2a8 (680) FIELD_INTEGER  [save-table]
+    int m_nSpeak;  // +0x2ac (684) FIELD_INTEGER  [save-table]
     int f_2b0;  // +0x2b0 (688)
     int f_2b8;  // +0x2b8 (696)
     int f_2bc;  // +0x2bc (700)
@@ -54,9 +54,11 @@ public:
     int f_2e8;  // +0x2e8 (744)
     int f_2ec;  // +0x2ec (748)
     int f_2f0;  // +0x2f0 (752)
-    float f_2fc;  // +0x2fc (764)
-    float f_308;  // +0x308 (776)
-    float f_30c;  // +0x30c (780)
-    int f_310;  // +0x310 (784)
+    float m_useTime;  // +0x2fc (764) FIELD_TIME  [save-table]
+    string_t m_iszUse;  // +0x300 (768) FIELD_STRING  [save-table]
+    string_t m_iszUnUse;  // +0x304 (772) FIELD_STRING  [save-table]
+    float m_flLastSaidSmelled;  // +0x308 (776) FIELD_TIME  [save-table]
+    float m_flStopTalkTime;  // +0x30c (780) FIELD_TIME  [save-table]
+    EHANDLE m_hTalkTarget;  // +0x310 (784) FIELD_EHANDLE  [save-table]
     int f_314;  // +0x314 (788)
 };

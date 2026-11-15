@@ -19,25 +19,25 @@ public:
     virtual void UpdateAutoTargets();  // vtable[62] UpdateAutoTargets__16CFuncTrackChangei
     virtual void 0();  // vtable[63] 0
     // campos observados (offset em bytes a partir de `this`; inclui os herdados)
-    int f_00c;  // +0xc (12)
+    void* m_pfnThink;  // +0xc (12) FIELD_FUNCTION  [save-table]
     int f_010;  // +0x10 (16)
     int f_060;  // +0x60 (96)
-    int f_080;  // +0x80 (128)
+    int m_toggle_state;  // +0x80 (128) FIELD_INTEGER  [save-table]
     float f_0b0;  // +0xb0 (176)
-    int f_0dc;  // +0xdc (220)
-    float f_10c;  // +0x10c (268)
+    void* m_pfnCallWhenMoveDone;  // +0xdc (220) FIELD_FUNCTION  [save-table]
+    Vector m_end;  // +0x10c (268) FIELD_VECTOR  [save-table]
     float f_110;  // +0x110 (272)
     float f_114;  // +0x114 (276)
-    float f_118;  // +0x118 (280)
+    Vector m_start;  // +0x118 (280) FIELD_VECTOR  [save-table]
     float f_11c;  // +0x11c (284)
     float f_120;  // +0x120 (288)
-    int f_124;  // +0x124 (292)
-    int f_128;  // +0x128 (296)
-    int f_12c;  // +0x12c (300)
-    int f_130;  // +0x130 (304)
-    int f_134;  // +0x134 (308)
-    int f_138;  // +0x138 (312)
-    int f_13c;  // +0x13c (316)
-    int f_140;  // +0x140 (320)
-    int f_144;  // +0x144 (324)
+    CBaseEntity* m_trackTop;  // +0x124 (292) FIELD_CLASSPTR  [save-table]
+    CBaseEntity* m_trackBottom;  // +0x128 (296) FIELD_CLASSPTR  [save-table]
+    CBaseEntity* m_train;  // +0x12c (300) FIELD_CLASSPTR  [save-table]
+    string_t m_trackTopName;  // +0x130 (304) FIELD_STRING  [save-table]
+    string_t m_trackBottomName;  // +0x134 (308) FIELD_STRING  [save-table]
+    string_t m_trainName;  // +0x138 (312) FIELD_STRING  [save-table]
+    int m_code;  // +0x13c (316) FIELD_INTEGER  [save-table]
+    int m_targetState;  // +0x140 (320) FIELD_INTEGER  [save-table]
+    int m_use;  // +0x144 (324) FIELD_INTEGER  [save-table]
 };

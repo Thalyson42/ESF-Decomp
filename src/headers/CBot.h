@@ -36,7 +36,7 @@ public:
     int f_760;  // +0x760 (1888)
     int f_764;  // +0x764 (1892)
     int f_770;  // +0x770 (1904)
-    void* f_968;  // +0x968 (2408)
+    CBaseEntity* m_pActiveItem;  // +0x968 (2408) FIELD_CLASSPTR  [save-table]
     char f_9e0;  // +0x9e0 (2528)
     float f_9e4;  // +0x9e4 (2532)
     char f_9e8;  // +0x9e8 (2536)

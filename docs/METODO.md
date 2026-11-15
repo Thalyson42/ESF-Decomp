@@ -30,3 +30,9 @@
 ## Achados registrados
 - CKamehameha e CGallitGun::Spawn gravam os mesmos campos da base (+0xdc..+0x1fc).
 - 1.020 funções têm equivalente no SDK; 864 prováveis iguais; 29 modificadas (CBasePlayer::PreThink/Killed/TakeDamage...).
+
+## Nomes de campos: save-tables (`tools/extract_savefields.py`)
+As tabelas `TYPEDESCRIPTION` (macro `DEFINE_FIELD`) ficam no .so como `_<len>Classe.m_SaveData` / `m_playerSaveData`.
+Cada entrada (16 bytes: tipo, ponteiro p/ nome, offset, tamanho) dá **nome, tipo e offset exatos** de um campo salvo.
+Saída em `symbols/save_fields.txt|json` (53 classes, 299 campos) e usada por `recover_classes.py` nos headers.
+Só cobre campos salvos; o resto continua `f_XXX`. Os offsets de herança (ex.: m_pPlayer=+0x80) são absolutos.

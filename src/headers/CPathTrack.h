@@ -10,8 +10,9 @@ public:
     virtual void Activate();  // vtable[6] Activate__10CPathTrack
     virtual void Use();  // vtable[44] Use__10CPathTrackP11CBaseEntityT18USE_TYPEf
     // campos observados (offset em bytes a partir de `this`; inclui os herdados)
-    int f_068;  // +0x68 (104)
-    int f_06c;  // +0x6c (108)
-    int f_070;  // +0x70 (112)
-    int f_074;  // +0x74 (116)
+    float m_length;  // +0x64 (100) FIELD_FLOAT  [save-table]
+    string_t m_altName;  // +0x68 (104) FIELD_STRING  [save-table]
+    CBaseEntity* m_pnext;  // +0x6c (108) FIELD_CLASSPTR  [save-table]
+    CBaseEntity* m_pprevious;  // +0x70 (112) FIELD_CLASSPTR  [save-table]
+    CBaseEntity* m_paltpath;  // +0x74 (116) FIELD_CLASSPTR  [save-table]
 };

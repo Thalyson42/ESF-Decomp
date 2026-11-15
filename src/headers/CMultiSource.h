@@ -11,11 +11,11 @@ public:
     virtual void IsTriggered();  // vtable[16] IsTriggered__12CMultiSourceP11CBaseEntity
     virtual void Use();  // vtable[44] Use__12CMultiSourceP11CBaseEntityT18USE_TYPEf
     // campos observados (offset em bytes a partir de `this`; inclui os herdados)
-    int f_00c;  // +0xc (12)
+    void* m_pfnThink;  // +0xc (12) FIELD_FUNCTION  [save-table]
     int f_010;  // +0x10 (16)
     void* f_060;  // +0x60 (96)
-    char f_064;  // +0x64 (100)
-    int f_164;  // +0x164 (356)
-    int f_1e4;  // +0x1e4 (484)
-    int f_1e8;  // +0x1e8 (488)
+    EHANDLE m_rgEntities[32];  // +0x64 (100) FIELD_EHANDLE  [save-table]
+    int m_rgTriggered[32];  // +0x164 (356) FIELD_INTEGER  [save-table]
+    int m_iTotal;  // +0x1e4 (484) FIELD_INTEGER  [save-table]
+    string_t m_globalstate;  // +0x1e8 (488) FIELD_STRING  [save-table]
 };

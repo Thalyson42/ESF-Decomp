@@ -9,7 +9,7 @@ public:
     virtual void Restore();  // vtable[4] Restore__17CFrictionModifierR8CRestore
     virtual void ObjectCaps();  // vtable[5] ObjectCaps__17CFrictionModifier
     // campos observados (offset em bytes a partir de `this`; inclui os herdados)
-    int f_014;  // +0x14 (20)
+    void* m_pfnTouch;  // +0x14 (20) FIELD_FUNCTION  [save-table]
     int f_018;  // +0x18 (24)
-    float f_064;  // +0x64 (100)
+    float m_frictionFraction;  // +0x64 (100) FIELD_FLOAT  [save-table]
 };

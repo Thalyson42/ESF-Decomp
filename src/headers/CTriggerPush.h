@@ -7,5 +7,5 @@ public:
     virtual void KeyValue();  // vtable[2] KeyValue__12CTriggerPushP14KeyValueData_s
     virtual void Touch();  // vtable[43] Touch__12CTriggerPushP11CBaseEntity
     // campos observados (offset em bytes a partir de `this`; inclui os herdados)
-    int f_01c;  // +0x1c (28)
+    void* m_pfnUse;  // +0x1c (28) FIELD_FUNCTION  [save-table]
 };

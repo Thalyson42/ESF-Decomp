@@ -9,5 +9,6 @@ public:
     virtual void Restore();  // vtable[4] Restore__9CEnvSoundR8CRestore
     virtual void Think();  // vtable[42] Think__9CEnvSound
     // campos observados (offset em bytes a partir de `this`; inclui os herdados)
-    float f_068;  // +0x68 (104)
+    float m_flRadius;  // +0x64 (100) FIELD_FLOAT  [save-table]
+    float m_flRoomtype;  // +0x68 (104) FIELD_FLOAT  [save-table]
 };

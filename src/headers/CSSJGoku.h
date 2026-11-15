@@ -1,10 +1,12 @@
 // CSSJGoku.h -- reconstruído automaticamente (vtable + offsets). REVISAR.
 #pragma once
 
-class CSSJGoku : public CGoku {  // base: heuristica
+class CSSJGoku : public CBaseClass {  // base: heuristica
 public:
+    virtual void GetSoundDir();  // vtable[0] GetSoundDir__5CGoku
     virtual void GetStartSpeed();  // vtable[1] GetStartSpeed__8CSSJGoku
     virtual void GetStartHealth();  // vtable[2] GetStartHealth__8CSSJGoku
+    virtual void GetStartPowerLevel();  // vtable[3] GetStartPowerLevel__5CGoku
     virtual void KiCost();  // vtable[4] KiCost__8CSSJGoku
     virtual void GetAscendedClass();  // vtable[5] GetAscendedClass__8CSSJGoku
     virtual void CanDescend();  // vtable[6] CanDescend__8CSSJGoku
@@ -12,6 +14,7 @@ public:
     virtual void GetTransFormPowerLevel();  // vtable[8] GetTransFormPowerLevel__8CSSJGoku
     virtual void GetTransFromPLMultiplier();  // vtable[9] GetTransFromPLMultiplier__8CSSJGoku
     virtual void AddAllAttacks();  // vtable[10] AddAllAttacks__8CSSJGoku
+    virtual void Classify();  // vtable[11] Classify__5CGoku
     virtual void GetAuraSkin();  // vtable[12] GetAuraSkin__8CSSJGoku
     virtual void GetModelName();  // vtable[13] GetModelName__8CSSJGoku
     virtual void GetKiEfficiency();  // vtable[14] GetKiEfficiency__8CSSJGoku

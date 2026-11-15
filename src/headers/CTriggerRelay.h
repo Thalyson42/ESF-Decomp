@@ -10,5 +10,5 @@ public:
     virtual void ObjectCaps();  // vtable[5] ObjectCaps__13CTriggerRelay
     virtual void Use();  // vtable[44] Use__13CTriggerRelayP11CBaseEntityT18USE_TYPEf
     // campos observados (offset em bytes a partir de `this`; inclui os herdados)
-    int f_06c;  // +0x6c (108)
+    int triggerType;  // +0x6c (108) FIELD_INTEGER  [save-table]
 };

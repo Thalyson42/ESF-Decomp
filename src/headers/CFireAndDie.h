@@ -8,5 +8,5 @@ public:
     virtual void ObjectCaps();  // vtable[5] ObjectCaps__11CFireAndDie
     virtual void Think();  // vtable[42] Think__11CFireAndDie
     // campos observados (offset em bytes a partir de `this`; inclui os herdados)
-    float f_064;  // +0x64 (100)
+    float m_flDelay;  // +0x64 (100) FIELD_FLOAT  [save-table]
 };

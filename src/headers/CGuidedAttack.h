@@ -7,7 +7,7 @@ public:
     virtual void PowerStruggleThink();  // vtable[130] PowerStruggleThink__13CGuidedAttack
     virtual void 0();  // vtable[131] 0
     // campos observados (offset em bytes a partir de `this`; inclui os herdados)
-    int f_00c;  // +0xc (12)
+    void* m_pfnThink;  // +0xc (12) FIELD_FUNCTION  [save-table]
     int f_010;  // +0x10 (16)
     int f_060;  // +0x60 (96)
     void* f_208;  // +0x208 (520)

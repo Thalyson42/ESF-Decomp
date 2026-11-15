@@ -8,5 +8,5 @@ public:
     virtual void Save();  // vtable[3] Save__11CRuleEntityR5CSave
     virtual void Restore();  // vtable[4] Restore__11CRuleEntityR8CRestore
     // campos observados (offset em bytes a partir de `this`; inclui os herdados)
-    int f_064;  // +0x64 (100)
+    string_t m_iszMaster;  // +0x64 (100) FIELD_STRING  [save-table]
 };

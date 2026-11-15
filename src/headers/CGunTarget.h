@@ -15,11 +15,11 @@ public:
     virtual void BodyTarget();  // vtable[52] BodyTarget__10CGunTargetRC6Vector
     virtual void Stop();  // vtable[75] Stop__10CGunTarget
     // campos observados (offset em bytes a partir de `this`; inclui os herdados)
-    int f_00c;  // +0xc (12)
+    void* m_pfnThink;  // +0xc (12) FIELD_FUNCTION  [save-table]
     int f_010;  // +0x10 (16)
     int f_060;  // +0x60 (96)
-    float f_08c;  // +0x8c (140)
-    int f_0dc;  // +0xdc (220)
-    char f_110;  // +0x110 (272)
-    int f_2a8;  // +0x2a8 (680)
+    float m_flWait;  // +0x8c (140) FIELD_FLOAT  [save-table]
+    void* m_pfnCallWhenMoveDone;  // +0xdc (220) FIELD_FUNCTION  [save-table]
+    EHANDLE m_hTargetEnt;  // +0x110 (272) FIELD_EHANDLE  [save-table]
+    BOOL m_on;  // +0x2a8 (680) FIELD_BOOLEAN  [save-table]
 };

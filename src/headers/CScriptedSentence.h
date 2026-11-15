@@ -10,15 +10,15 @@ public:
     virtual void ObjectCaps();  // vtable[5] ObjectCaps__17CScriptedSentence
     virtual void Use();  // vtable[44] Use__17CScriptedSentenceP11CBaseEntityT18USE_TYPEf
     // campos observados (offset em bytes a partir de `this`; inclui os herdados)
-    int f_00c;  // +0xc (12)
+    void* m_pfnThink;  // +0xc (12) FIELD_FUNCTION  [save-table]
     int f_010;  // +0x10 (16)
-    int f_104;  // +0x104 (260)
-    int f_108;  // +0x108 (264)
-    float f_10c;  // +0x10c (268)
-    float f_110;  // +0x110 (272)
-    float f_114;  // +0x114 (276)
-    float f_118;  // +0x118 (280)
-    float f_11c;  // +0x11c (284)
-    int f_120;  // +0x120 (288)
-    int f_124;  // +0x124 (292)
+    string_t m_iszSentence;  // +0x104 (260) FIELD_STRING  [save-table]
+    string_t m_iszEntity;  // +0x108 (264) FIELD_STRING  [save-table]
+    float m_flRadius;  // +0x10c (268) FIELD_FLOAT  [save-table]
+    float m_flDuration;  // +0x110 (272) FIELD_FLOAT  [save-table]
+    float m_flRepeat;  // +0x114 (276) FIELD_FLOAT  [save-table]
+    float m_flAttenuation;  // +0x118 (280) FIELD_FLOAT  [save-table]
+    float m_flVolume;  // +0x11c (284) FIELD_FLOAT  [save-table]
+    BOOL m_active;  // +0x120 (288) FIELD_BOOLEAN  [save-table]
+    string_t m_iszListener;  // +0x124 (292) FIELD_STRING  [save-table]
 };

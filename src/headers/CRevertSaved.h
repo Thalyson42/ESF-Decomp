@@ -8,8 +8,8 @@ public:
     virtual void Restore();  // vtable[4] Restore__12CRevertSavedR8CRestore
     virtual void Use();  // vtable[44] Use__12CRevertSavedP11CBaseEntityT18USE_TYPEf
     // campos observados (offset em bytes a partir de `this`; inclui os herdados)
-    int f_00c;  // +0xc (12)
+    void* m_pfnThink;  // +0xc (12) FIELD_FUNCTION  [save-table]
     int f_010;  // +0x10 (16)
-    float f_064;  // +0x64 (100)
-    float f_068;  // +0x68 (104)
+    float m_messageTime;  // +0x64 (100) FIELD_FLOAT  [save-table]
+    float m_loadTime;  // +0x68 (104) FIELD_FLOAT  [save-table]
 };

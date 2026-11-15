@@ -11,11 +11,11 @@ public:
     virtual void ObjectCaps();  // vtable[5] ObjectCaps__9CBubbling
     virtual void Use();  // vtable[44] Use__9CBubblingP11CBaseEntityT18USE_TYPEf
     // campos observados (offset em bytes a partir de `this`; inclui os herdados)
-    int f_00c;  // +0xc (12)
+    void* m_pfnThink;  // +0xc (12) FIELD_FUNCTION  [save-table]
     int f_010;  // +0x10 (16)
     int f_060;  // +0x60 (96)
-    int f_064;  // +0x64 (100)
-    int f_068;  // +0x68 (104)
+    int m_density;  // +0x64 (100) FIELD_INTEGER  [save-table]
+    int m_frequency;  // +0x68 (104) FIELD_INTEGER  [save-table]
     int f_06c;  // +0x6c (108)
-    int f_070;  // +0x70 (112)
+    int m_state;  // +0x70 (112) FIELD_INTEGER  [save-table]
 };

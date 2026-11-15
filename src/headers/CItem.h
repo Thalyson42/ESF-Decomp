@@ -8,7 +8,7 @@ public:
     virtual void MyTouch();  // vtable[56] MyTouch__5CItemP11CBasePlayer
     virtual void 0();  // vtable[57] 0
     // campos observados (offset em bytes a partir de `this`; inclui os herdados)
-    int f_014;  // +0x14 (20)
+    void* m_pfnTouch;  // +0x14 (20) FIELD_FUNCTION  [save-table]
     int f_018;  // +0x18 (24)
     void* f_060;  // +0x60 (96)
 };

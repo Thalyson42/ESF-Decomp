@@ -1,0 +1,352 @@
+== CAmbientGeneric
+  +0x064 ( 100)  m_flAttenuation              FIELD_FLOAT x1
+  +0x068 ( 104)  m_dpv                        FIELD_CHARACTER x100
+  +0x0cc ( 204)  m_fActive                    FIELD_BOOLEAN x1
+  +0x0d0 ( 208)  m_fLooping                   FIELD_BOOLEAN x1
+== CAutoTrigger
+  +0x06c ( 108)  m_globalstate                FIELD_STRING x1
+  +0x070 ( 112)  triggerType                  FIELD_INTEGER x1
+== CBaseAnimating
+  +0x06c ( 108)  m_flFrameRate                FIELD_FLOAT x1
+  +0x070 ( 112)  m_flGroundSpeed              FIELD_FLOAT x1
+  +0x074 ( 116)  m_flLastEventCheck           FIELD_TIME x1
+  +0x078 ( 120)  m_fSequenceFinished          FIELD_BOOLEAN x1
+  +0x07c ( 124)  m_fSequenceLoops             FIELD_BOOLEAN x1
+== CBaseButton
+  +0x104 ( 260)  m_fStayPushed                FIELD_BOOLEAN x1
+  +0x108 ( 264)  m_fRotating                  FIELD_BOOLEAN x1
+  +0x10c ( 268)  m_strChangeTarget            FIELD_STRING x1
+  +0x134 ( 308)  m_bLockedSound               FIELD_CHARACTER x1
+  +0x135 ( 309)  m_bLockedSentence            FIELD_CHARACTER x1
+  +0x136 ( 310)  m_bUnlockedSound             FIELD_CHARACTER x1
+  +0x137 ( 311)  m_bUnlockedSentence          FIELD_CHARACTER x1
+  +0x138 ( 312)  m_sounds                     FIELD_INTEGER x1
+== CBaseDelay
+  +0x064 ( 100)  m_flDelay                    FIELD_FLOAT x1
+  +0x068 ( 104)  m_iszKillTarget              FIELD_STRING x1
+== CBaseDoor
+  +0x104 ( 260)  m_bHealthValue               FIELD_CHARACTER x1
+  +0x105 ( 261)  m_bMoveSnd                   FIELD_CHARACTER x1
+  +0x106 ( 262)  m_bStopSnd                   FIELD_CHARACTER x1
+  +0x12c ( 300)  m_bLockedSound               FIELD_CHARACTER x1
+  +0x12d ( 301)  m_bLockedSentence            FIELD_CHARACTER x1
+  +0x12e ( 302)  m_bUnlockedSound             FIELD_CHARACTER x1
+  +0x12f ( 303)  m_bUnlockedSentence          FIELD_CHARACTER x1
+== CBaseEntity
+  +0x004 (   4)  m_pGoalEnt                   FIELD_CLASSPTR x1
+  +0x00c (  12)  m_pfnThink                   FIELD_FUNCTION x1
+  +0x014 (  20)  m_pfnTouch                   FIELD_FUNCTION x1
+  +0x01c (  28)  m_pfnUse                     FIELD_FUNCTION x1
+  +0x024 (  36)  m_pfnBlocked                 FIELD_FUNCTION x1
+== CBaseMonster
+  +0x104 ( 260)  m_afConditions               FIELD_INTEGER x1
+  +0x108 ( 264)  m_hEnemy                     FIELD_EHANDLE x1
+  +0x110 ( 272)  m_hTargetEnt                 FIELD_EHANDLE x1
+  +0x118 ( 280)  m_hOldEnemy                  FIELD_EHANDLE x4
+  +0x138 ( 312)  m_vecOldEnemy                FIELD_POSITION_VECTOR x4
+  +0x168 ( 360)  m_flFieldOfView              FIELD_FLOAT x1
+  +0x16c ( 364)  m_flWaitFinished             FIELD_TIME x1
+  +0x170 ( 368)  m_flMoveWaitFinished         FIELD_TIME x1
+  +0x174 ( 372)  m_Activity                   FIELD_INTEGER x1
+  +0x178 ( 376)  m_IdealActivity              FIELD_INTEGER x1
+  +0x17c ( 380)  m_LastHitGroup               FIELD_INTEGER x1
+  +0x180 ( 384)  m_MonsterState               FIELD_INTEGER x1
+  +0x184 ( 388)  m_IdealMonsterState          FIELD_INTEGER x1
+  +0x188 ( 392)  m_iTaskStatus                FIELD_INTEGER x1
+  +0x190 ( 400)  m_iScheduleIndex             FIELD_INTEGER x1
+  +0x220 ( 544)  m_vecMoveGoal                FIELD_POSITION_VECTOR x1
+  +0x22c ( 556)  m_movementActivity           FIELD_INTEGER x1
+  +0x238 ( 568)  m_vecLastPosition            FIELD_POSITION_VECTOR x1
+  +0x244 ( 580)  m_iHintNode                  FIELD_INTEGER x1
+  +0x248 ( 584)  m_afMemory                   FIELD_INTEGER x1
+  +0x24c ( 588)  m_iMaxHealth                 FIELD_INTEGER x1
+  +0x250 ( 592)  m_vecEnemyLKP                FIELD_POSITION_VECTOR x1
+  +0x25c ( 604)  m_cAmmoLoaded                FIELD_INTEGER x1
+  +0x260 ( 608)  m_afCapability               FIELD_INTEGER x1
+  +0x264 ( 612)  m_flNextAttack               FIELD_TIME x1
+  +0x268 ( 616)  m_bitsDamageType             FIELD_INTEGER x1
+  +0x26c ( 620)  m_rgbTimeBasedDamage         FIELD_CHARACTER x8
+  +0x278 ( 632)  m_bloodColor                 FIELD_INTEGER x1
+  +0x27c ( 636)  m_failSchedule               FIELD_INTEGER x1
+  +0x280 ( 640)  m_flHungryTime               FIELD_TIME x1
+  +0x284 ( 644)  m_flDistTooFar               FIELD_FLOAT x1
+  +0x288 ( 648)  m_flDistLook                 FIELD_FLOAT x1
+  +0x28c ( 652)  m_iTriggerCondition          FIELD_INTEGER x1
+  +0x290 ( 656)  m_iszTriggerTarget           FIELD_STRING x1
+  +0x294 ( 660)  m_HackedGunPos               FIELD_VECTOR x1
+  +0x2a0 ( 672)  m_scriptState                FIELD_INTEGER x1
+  +0x2a4 ( 676)  m_pCine                      FIELD_CLASSPTR x1
+== CBasePlatTrain
+  +0x104 ( 260)  m_bMoveSnd                   FIELD_CHARACTER x1
+  +0x105 ( 261)  m_bStopSnd                   FIELD_CHARACTER x1
+  +0x108 ( 264)  m_volume                     FIELD_FLOAT x1
+== CBasePlayer
+  +0x2b0 ( 688)  m_iTargetVolume              FIELD_INTEGER x1
+  +0x2b4 ( 692)  m_iWeaponVolume              FIELD_INTEGER x1
+  +0x2b8 ( 696)  m_iExtraSoundTypes           FIELD_INTEGER x1
+  +0x2bc ( 700)  m_iWeaponFlash               FIELD_INTEGER x1
+  +0x2c4 ( 708)  m_afButtonLast               FIELD_INTEGER x1
+  +0x2c8 ( 712)  m_afButtonPressed            FIELD_INTEGER x1
+  +0x2cc ( 716)  m_afButtonReleased           FIELD_INTEGER x1
+  +0x2dc ( 732)  m_flFallVelocity             FIELD_FLOAT x1
+  +0x2e0 ( 736)  m_rgItems                    FIELD_INTEGER x10
+  +0x310 ( 784)  m_afPhysicsFlags             FIELD_INTEGER x1
+  +0x7ac (1964)  m_flTimeStepSound            FIELD_TIME x1
+  +0x7b0 (1968)  m_flTimeWeaponIdle           FIELD_TIME x1
+  +0x7b4 (1972)  m_flSwimTime                 FIELD_TIME x1
+  +0x7b8 (1976)  m_flWallJumpTime             FIELD_TIME x1
+  +0x7bc (1980)  m_flSuitUpdate               FIELD_TIME x1
+  +0x7c0 (1984)  m_rgSuitPlayList             FIELD_INTEGER x4
+  +0x7d0 (2000)  m_iSuitPlayNext              FIELD_INTEGER x1
+  +0x7d4 (2004)  m_rgiSuitNoRepeat            FIELD_INTEGER x32
+  +0x854 (2132)  m_rgflSuitNoRepeatTime       FIELD_TIME x32
+  +0x8d4 (2260)  m_lastDamageAmount           FIELD_INTEGER x1
+  +0x8d8 (2264)  m_tbdPrev                    FIELD_TIME x1
+  +0x8f0 (2288)  m_idrowndmg                  FIELD_INTEGER x1
+  +0x8f4 (2292)  m_idrownrestored             FIELD_INTEGER x1
+  +0x8f8 (2296)  m_bitsHUDDamage              FIELD_INTEGER x1
+  +0x8fc (2300)  m_fInitHUD                   FIELD_BOOLEAN x1
+  +0x904 (2308)  m_iTrain                     FIELD_INTEGER x1
+  +0x90c (2316)  m_pTank                      FIELD_EHANDLE x1
+  +0x91c (2332)  m_fLongJump                  FIELD_BOOLEAN x1
+  +0x920 (2336)  m_tSneaking                  FIELD_TIME x1
+  +0x930 (2352)  m_iHideHUD                   FIELD_INTEGER x1
+  +0x938 (2360)  m_iFOV                       FIELD_INTEGER x1
+  +0x940 (2368)  m_rgpPlayerItems             FIELD_CLASSPTR x10
+  +0x968 (2408)  m_pActiveItem                FIELD_CLASSPTR x1
+  +0x970 (2416)  m_pLastItem                  FIELD_CLASSPTR x1
+== CBasePlayerItem
+  +0x080 ( 128)  m_pPlayer                    FIELD_CLASSPTR x1
+  +0x084 ( 132)  m_pNext                      FIELD_CLASSPTR x1
+  +0x088 ( 136)  m_iId                        FIELD_INTEGER x1
+== CBasePlayerWeapon
+  +0x09c ( 156)  m_flNextPrimaryAttack        FIELD_TIME x1
+  +0x0a0 ( 160)  m_flNextSecondaryAttack      FIELD_TIME x1
+  +0x0a4 ( 164)  m_flTimeWeaponIdle           FIELD_TIME x1
+  +0x0a8 ( 168)  m_iPrimaryAmmoType           FIELD_INTEGER x1
+  +0x0ac ( 172)  m_iSecondaryAmmoType         FIELD_INTEGER x1
+  +0x0b0 ( 176)  m_iClip                      FIELD_INTEGER x1
+  +0x0c0 ( 192)  m_iDefaultAmmo               FIELD_INTEGER x1
+== CBaseToggle
+  +0x080 ( 128)  m_toggle_state               FIELD_INTEGER x1
+  +0x084 ( 132)  m_flActivateFinished         FIELD_TIME x1
+  +0x088 ( 136)  m_flMoveDistance             FIELD_FLOAT x1
+  +0x08c ( 140)  m_flWait                     FIELD_FLOAT x1
+  +0x090 ( 144)  m_flLip                      FIELD_FLOAT x1
+  +0x094 ( 148)  m_flTWidth                   FIELD_FLOAT x1
+  +0x098 ( 152)  m_flTLength                  FIELD_FLOAT x1
+  +0x09c ( 156)  m_vecPosition1               FIELD_POSITION_VECTOR x1
+  +0x0a8 ( 168)  m_vecPosition2               FIELD_POSITION_VECTOR x1
+  +0x0b4 ( 180)  m_vecAngle1                  FIELD_VECTOR x1
+  +0x0c0 ( 192)  m_vecAngle2                  FIELD_VECTOR x1
+  +0x0cc ( 204)  m_cTriggersLeft              FIELD_INTEGER x1
+  +0x0d0 ( 208)  m_flHeight                   FIELD_FLOAT x1
+  +0x0d4 ( 212)  m_hActivator                 FIELD_EHANDLE x1
+  +0x0dc ( 220)  m_pfnCallWhenMoveDone        FIELD_FUNCTION x1
+  +0x0e4 ( 228)  m_vecFinalDest               FIELD_POSITION_VECTOR x1
+  +0x0f0 ( 240)  m_vecFinalAngle              FIELD_VECTOR x1
+  +0x0fc ( 252)  m_bitsDamageInflict          FIELD_INTEGER x1
+  +0x100 ( 256)  m_sMaster                    FIELD_STRING x1
+== CBreakable
+  +0x06c ( 108)  m_Material                   FIELD_INTEGER x1
+  +0x070 ( 112)  m_Explosion                  FIELD_INTEGER x1
+  +0x078 ( 120)  m_angle                      FIELD_FLOAT x1
+  +0x07c ( 124)  m_iszGibModel                FIELD_STRING x1
+  +0x080 ( 128)  m_iszSpawnObject             FIELD_STRING x1
+== CBubbling
+  +0x064 ( 100)  m_density                    FIELD_INTEGER x1
+  +0x068 ( 104)  m_frequency                  FIELD_INTEGER x1
+  +0x070 ( 112)  m_state                      FIELD_INTEGER x1
+== CChangeLevel
+  +0x104 ( 260)  m_szMapName                  FIELD_CHARACTER x32
+  +0x124 ( 292)  m_szLandmarkName             FIELD_CHARACTER x32
+  +0x144 ( 324)  m_changeTarget               FIELD_STRING x1
+  +0x148 ( 328)  m_changeTargetDelay          FIELD_FLOAT x1
+== CCineMonster
+  +0x2a8 ( 680)  m_iszIdle                    FIELD_STRING x1
+  +0x2ac ( 684)  m_iszPlay                    FIELD_STRING x1
+  +0x2b0 ( 688)  m_iszEntity                  FIELD_STRING x1
+  +0x2b4 ( 692)  m_fMoveTo                    FIELD_INTEGER x1
+  +0x2b8 ( 696)  m_iFinishSchedule            FIELD_INTEGER x1
+  +0x2bc ( 700)  m_flRadius                   FIELD_FLOAT x1
+  +0x2c0 ( 704)  m_flRepeat                   FIELD_FLOAT x1
+  +0x2c4 ( 708)  m_iDelay                     FIELD_INTEGER x1
+  +0x2c8 ( 712)  m_startTime                  FIELD_TIME x1
+  +0x2cc ( 716)  m_saved_movetype             FIELD_INTEGER x1
+  +0x2d0 ( 720)  m_saved_solid                FIELD_INTEGER x1
+  +0x2d4 ( 724)  m_saved_effects              FIELD_INTEGER x1
+  +0x2d8 ( 728)  m_interruptable              FIELD_BOOLEAN x1
+== CEnvExplosion
+  +0x2a8 ( 680)  m_iMagnitude                 FIELD_INTEGER x1
+  +0x2ac ( 684)  m_spriteScale                FIELD_INTEGER x1
+== CEnvGlobal
+  +0x064 ( 100)  m_globalstate                FIELD_STRING x1
+  +0x068 ( 104)  m_triggermode                FIELD_INTEGER x1
+  +0x06c ( 108)  m_initialstate               FIELD_INTEGER x1
+== CEnvSound
+  +0x064 ( 100)  m_flRadius                   FIELD_FLOAT x1
+  +0x068 ( 104)  m_flRoomtype                 FIELD_FLOAT x1
+== CEnvSpark
+  +0x064 ( 100)  m_flDelay                    FIELD_FLOAT x1
+== CFrictionModifier
+  +0x064 ( 100)  m_frictionFraction           FIELD_FLOAT x1
+== CFuncPlatRot
+  +0x10c ( 268)  m_end                        FIELD_VECTOR x1
+  +0x118 ( 280)  m_start                      FIELD_VECTOR x1
+== CFuncRotating
+  +0x064 ( 100)  m_flFanFriction              FIELD_FLOAT x1
+  +0x068 ( 104)  m_flAttenuation              FIELD_FLOAT x1
+  +0x06c ( 108)  m_flVolume                   FIELD_FLOAT x1
+  +0x070 ( 112)  m_pitch                      FIELD_FLOAT x1
+  +0x074 ( 116)  m_sounds                     FIELD_INTEGER x1
+== CFuncTrackChange
+  +0x124 ( 292)  m_trackTop                   FIELD_CLASSPTR x1
+  +0x128 ( 296)  m_trackBottom                FIELD_CLASSPTR x1
+  +0x12c ( 300)  m_train                      FIELD_CLASSPTR x1
+  +0x130 ( 304)  m_trackTopName               FIELD_STRING x1
+  +0x134 ( 308)  m_trackBottomName            FIELD_STRING x1
+  +0x138 ( 312)  m_trainName                  FIELD_STRING x1
+  +0x13c ( 316)  m_code                       FIELD_INTEGER x1
+  +0x140 ( 320)  m_targetState                FIELD_INTEGER x1
+  +0x144 ( 324)  m_use                        FIELD_INTEGER x1
+== CFuncTrackTrain
+  +0x064 ( 100)  m_ppath                      FIELD_CLASSPTR x1
+  +0x068 ( 104)  m_length                     FIELD_FLOAT x1
+  +0x06c ( 108)  m_height                     FIELD_FLOAT x1
+  +0x070 ( 112)  m_speed                      FIELD_FLOAT x1
+  +0x074 ( 116)  m_dir                        FIELD_FLOAT x1
+  +0x078 ( 120)  m_startSpeed                 FIELD_FLOAT x1
+  +0x07c ( 124)  m_controlMins                FIELD_VECTOR x1
+  +0x088 ( 136)  m_controlMaxs                FIELD_VECTOR x1
+  +0x098 ( 152)  m_sounds                     FIELD_INTEGER x1
+  +0x09c ( 156)  m_flVolume                   FIELD_FLOAT x1
+  +0x0a0 ( 160)  m_flBank                     FIELD_FLOAT x1
+  +0x0a4 ( 164)  m_oldSpeed                   FIELD_FLOAT x1
+== CFuncTrain
+  +0x10c ( 268)  m_pevCurrentTarget           FIELD_EVARS x1
+  +0x110 ( 272)  m_sounds                     FIELD_INTEGER x1
+  +0x114 ( 276)  m_activated                  FIELD_BOOLEAN x1
+== CGamePlayerZone
+  +0x068 ( 104)  m_iszInTarget                FIELD_STRING x1
+  +0x06c ( 108)  m_iszOutTarget               FIELD_STRING x1
+  +0x070 ( 112)  m_iszInCount                 FIELD_STRING x1
+  +0x074 ( 116)  m_iszOutCount                FIELD_STRING x1
+== CGameText
+  +0x068 ( 104)  m_textParms                  FIELD_CHARACTER x40
+== CGibShooter
+  +0x06c ( 108)  m_iGibs                      FIELD_INTEGER x1
+  +0x070 ( 112)  m_iGibCapacity               FIELD_INTEGER x1
+  +0x074 ( 116)  m_iGibMaterial               FIELD_INTEGER x1
+  +0x078 ( 120)  m_iGibModelIndex             FIELD_INTEGER x1
+  +0x07c ( 124)  m_flGibVelocity              FIELD_FLOAT x1
+  +0x080 ( 128)  m_flVariance                 FIELD_FLOAT x1
+  +0x084 ( 132)  m_flGibLife                  FIELD_FLOAT x1
+== CGlobalState
+  +0x004 (   4)  m_listCount                  FIELD_INTEGER x1
+== CGlow
+  +0x064 ( 100)  m_lastTime                   FIELD_TIME x1
+  +0x068 ( 104)  m_maxFrame                   FIELD_FLOAT x1
+== CGunTarget
+  +0x2a8 ( 680)  m_on                         FIELD_BOOLEAN x1
+== CLaser
+  +0x064 ( 100)  m_pSprite                    FIELD_CLASSPTR x1
+  +0x068 ( 104)  m_iszSpriteName              FIELD_STRING x1
+  +0x06c ( 108)  m_firePosition               FIELD_POSITION_VECTOR x1
+== CLight
+  +0x064 ( 100)  m_iStyle                     FIELD_INTEGER x1
+  +0x068 ( 104)  m_iszPattern                 FIELD_STRING x1
+== CLightning
+  +0x064 ( 100)  m_active                     FIELD_INTEGER x1
+  +0x068 ( 104)  m_iszStartEntity             FIELD_STRING x1
+  +0x06c ( 108)  m_iszEndEntity               FIELD_STRING x1
+  +0x070 ( 112)  m_life                       FIELD_FLOAT x1
+  +0x074 ( 116)  m_boltWidth                  FIELD_INTEGER x1
+  +0x078 ( 120)  m_noiseAmplitude             FIELD_INTEGER x1
+  +0x07c ( 124)  m_brightness                 FIELD_INTEGER x1
+  +0x080 ( 128)  m_speed                      FIELD_INTEGER x1
+  +0x084 ( 132)  m_restrike                   FIELD_FLOAT x1
+  +0x088 ( 136)  m_spriteTexture              FIELD_INTEGER x1
+  +0x08c ( 140)  m_iszSpriteName              FIELD_STRING x1
+  +0x090 ( 144)  m_frameStart                 FIELD_INTEGER x1
+  +0x094 ( 148)  m_radius                     FIELD_FLOAT x1
+== CMomentaryDoor
+  +0x104 ( 260)  m_bMoveSnd                   FIELD_CHARACTER x1
+== CMomentaryRotButton
+  +0x104 ( 260)  m_lastUsed                   FIELD_INTEGER x1
+  +0x108 ( 264)  m_direction                  FIELD_INTEGER x1
+  +0x10c ( 268)  m_returnSpeed                FIELD_FLOAT x1
+  +0x110 ( 272)  m_start                      FIELD_VECTOR x1
+  +0x11c ( 284)  m_end                        FIELD_VECTOR x1
+  +0x128 ( 296)  m_sounds                     FIELD_INTEGER x1
+== CMonsterMaker
+  +0x2a8 ( 680)  m_iszMonsterClassname        FIELD_STRING x1
+  +0x2ac ( 684)  m_cNumMonsters               FIELD_INTEGER x1
+  +0x2b0 ( 688)  m_cLiveChildren              FIELD_INTEGER x1
+  +0x2b4 ( 692)  m_iMaxLiveChildren           FIELD_INTEGER x1
+  +0x2b8 ( 696)  m_flGround                   FIELD_FLOAT x1
+  +0x2bc ( 700)  m_fActive                    FIELD_BOOLEAN x1
+  +0x2c0 ( 704)  m_fFadeChildren              FIELD_BOOLEAN x1
+== CMultiManager
+  +0x104 ( 260)  m_cTargets                   FIELD_INTEGER x1
+  +0x108 ( 264)  m_index                      FIELD_INTEGER x1
+  +0x10c ( 268)  m_startTime                  FIELD_TIME x1
+  +0x110 ( 272)  m_iTargetName                FIELD_STRING x16
+  +0x150 ( 336)  m_flTargetDelay              FIELD_FLOAT x16
+== CMultiSource
+  +0x064 ( 100)  m_rgEntities                 FIELD_EHANDLE x32
+  +0x164 ( 356)  m_rgTriggered                FIELD_INTEGER x32
+  +0x1e4 ( 484)  m_iTotal                     FIELD_INTEGER x1
+  +0x1e8 ( 488)  m_globalstate                FIELD_STRING x1
+== CPathCorner
+  +0x064 ( 100)  m_flWait                     FIELD_FLOAT x1
+== CPathTrack
+  +0x064 ( 100)  m_length                     FIELD_FLOAT x1
+  +0x068 ( 104)  m_altName                    FIELD_STRING x1
+  +0x06c ( 108)  m_pnext                      FIELD_CLASSPTR x1
+  +0x070 ( 112)  m_pprevious                  FIELD_CLASSPTR x1
+  +0x074 ( 116)  m_paltpath                   FIELD_CLASSPTR x1
+== CPendulum
+  +0x064 ( 100)  m_accel                      FIELD_FLOAT x1
+  +0x068 ( 104)  m_distance                   FIELD_FLOAT x1
+  +0x06c ( 108)  m_time                       FIELD_TIME x1
+  +0x070 ( 112)  m_damp                       FIELD_FLOAT x1
+  +0x074 ( 116)  m_maxSpeed                   FIELD_FLOAT x1
+  +0x078 ( 120)  m_dampSpeed                  FIELD_FLOAT x1
+  +0x07c ( 124)  m_center                     FIELD_VECTOR x1
+  +0x088 ( 136)  m_start                      FIELD_VECTOR x1
+== CPushable
+  +0x088 ( 136)  m_maxSpeed                   FIELD_FLOAT x1
+  +0x08c ( 140)  m_soundTime                  FIELD_TIME x1
+== CRevertSaved
+  +0x064 ( 100)  m_messageTime                FIELD_FLOAT x1
+  +0x068 ( 104)  m_loadTime                   FIELD_FLOAT x1
+== CRuleEntity
+  +0x064 ( 100)  m_iszMaster                  FIELD_STRING x1
+== CScriptedSentence
+  +0x104 ( 260)  m_iszSentence                FIELD_STRING x1
+  +0x108 ( 264)  m_iszEntity                  FIELD_STRING x1
+  +0x10c ( 268)  m_flRadius                   FIELD_FLOAT x1
+  +0x110 ( 272)  m_flDuration                 FIELD_FLOAT x1
+  +0x114 ( 276)  m_flRepeat                   FIELD_FLOAT x1
+  +0x118 ( 280)  m_flAttenuation              FIELD_FLOAT x1
+  +0x11c ( 284)  m_flVolume                   FIELD_FLOAT x1
+  +0x120 ( 288)  m_active                     FIELD_BOOLEAN x1
+  +0x124 ( 292)  m_iszListener                FIELD_STRING x1
+== CSpeaker
+  +0x064 ( 100)  m_preset                     FIELD_INTEGER x1
+== CSprite
+  +0x064 ( 100)  m_lastTime                   FIELD_TIME x1
+  +0x068 ( 104)  m_maxFrame                   FIELD_FLOAT x1
+== CTalkMonster
+  +0x2a8 ( 680)  m_bitsSaid                   FIELD_INTEGER x1
+  +0x2ac ( 684)  m_nSpeak                     FIELD_INTEGER x1
+  +0x2fc ( 764)  m_useTime                    FIELD_TIME x1
+  +0x300 ( 768)  m_iszUse                     FIELD_STRING x1
+  +0x304 ( 772)  m_iszUnUse                   FIELD_STRING x1
+  +0x308 ( 776)  m_flLastSaidSmelled          FIELD_TIME x1
+  +0x30c ( 780)  m_flStopTalkTime             FIELD_TIME x1
+  +0x310 ( 784)  m_hTalkTarget                FIELD_EHANDLE x1
+== CTriggerChangeTarget
+  +0x06c ( 108)  m_iszNewTarget               FIELD_STRING x1
+== CTriggerRelay
+  +0x06c ( 108)  triggerType                  FIELD_INTEGER x1

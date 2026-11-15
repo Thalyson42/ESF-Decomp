@@ -9,6 +9,6 @@ public:
     virtual void Restore();  // vtable[4] Restore__13CEnvExplosionR8CRestore
     virtual void Use();  // vtable[44] Use__13CEnvExplosionP11CBaseEntityT18USE_TYPEf
     // campos observados (offset em bytes a partir de `this`; inclui os herdados)
-    int f_2a8;  // +0x2a8 (680)
-    char f_2ac;  // +0x2ac (684)
+    int m_iMagnitude;  // +0x2a8 (680) FIELD_INTEGER  [save-table]
+    int m_spriteScale;  // +0x2ac (684) FIELD_INTEGER  [save-table]
 };

@@ -39,39 +39,40 @@ public:
     virtual void ImpulseCommands();  // vtable[128] ImpulseCommands__11CBasePlayer
     virtual void 0();  // vtable[129] 0
     // campos observados (offset em bytes a partir de `this`; inclui os herdados)
-    int f_00c;  // +0xc (12)
+    void* m_pfnThink;  // +0xc (12) FIELD_FUNCTION  [save-table]
     int f_010;  // +0x10 (16)
     int f_060;  // +0x60 (96)
-    int f_078;  // +0x78 (120)
-    void* f_084;  // +0x84 (132)
-    float f_168;  // +0x168 (360)
-    int f_174;  // +0x174 (372)
-    int f_178;  // +0x178 (376)
-    int f_17c;  // +0x17c (380)
+    BOOL m_fSequenceFinished;  // +0x78 (120) FIELD_BOOLEAN  [save-table]
+    float m_flActivateFinished;  // +0x84 (132) FIELD_TIME  [save-table]
+    float m_flFieldOfView;  // +0x168 (360) FIELD_FLOAT  [save-table]
+    int m_Activity;  // +0x174 (372) FIELD_INTEGER  [save-table]
+    int m_IdealActivity;  // +0x178 (376) FIELD_INTEGER  [save-table]
+    int m_LastHitGroup;  // +0x17c (380) FIELD_INTEGER  [save-table]
     char f_1a5;  // +0x1a5 (421)
-    int f_24c;  // +0x24c (588)
-    float f_264;  // +0x264 (612)
-    int f_268;  // +0x268 (616)
+    int m_iMaxHealth;  // +0x24c (588) FIELD_INTEGER  [save-table]
+    float m_flNextAttack;  // +0x264 (612) FIELD_TIME  [save-table]
+    int m_bitsDamageType;  // +0x268 (616) FIELD_INTEGER  [save-table]
     char f_269;  // +0x269 (617)
     char f_26a;  // +0x26a (618)
     char f_270;  // +0x270 (624)
-    int f_278;  // +0x278 (632)
-    int f_294;  // +0x294 (660)
+    int m_bloodColor;  // +0x278 (632) FIELD_INTEGER  [save-table]
+    Vector m_HackedGunPos;  // +0x294 (660) FIELD_VECTOR  [save-table]
     float f_298;  // +0x298 (664)
     int f_29c;  // +0x29c (668)
     int f_2ac;  // +0x2ac (684)
-    int f_2b0;  // +0x2b0 (688)
-    int f_2b4;  // +0x2b4 (692)
-    int f_2b8;  // +0x2b8 (696)
-    int f_2bc;  // +0x2bc (700)
+    int m_iTargetVolume;  // +0x2b0 (688) FIELD_INTEGER  [save-table]
+    int m_iWeaponVolume;  // +0x2b4 (692) FIELD_INTEGER  [save-table]
+    int m_iExtraSoundTypes;  // +0x2b8 (696) FIELD_INTEGER  [save-table]
+    int m_iWeaponFlash;  // +0x2bc (700) FIELD_INTEGER  [save-table]
     float f_2c0;  // +0x2c0 (704)
-    int f_2c4;  // +0x2c4 (708)
-    char f_2c8;  // +0x2c8 (712)
+    int m_afButtonLast;  // +0x2c4 (708) FIELD_INTEGER  [save-table]
+    int m_afButtonPressed;  // +0x2c8 (712) FIELD_INTEGER  [save-table]
     char f_2c9;  // +0x2c9 (713)
-    char f_2cc;  // +0x2cc (716)
-    float f_2dc;  // +0x2dc (732)
+    int m_afButtonReleased;  // +0x2cc (716) FIELD_INTEGER  [save-table]
+    float m_flFallVelocity;  // +0x2dc (732) FIELD_FLOAT  [save-table]
+    int m_rgItems[10];  // +0x2e0 (736) FIELD_INTEGER  [save-table]
     int f_308;  // +0x308 (776)
-    char f_310;  // +0x310 (784)
+    int m_afPhysicsFlags;  // +0x310 (784) FIELD_INTEGER  [save-table]
     float f_318;  // +0x318 (792)
     float f_31c;  // +0x31c (796)
     int f_320;  // +0x320 (800)
@@ -164,36 +165,40 @@ public:
     int f_7a0;  // +0x7a0 (1952)
     int f_7a4;  // +0x7a4 (1956)
     int f_7a8;  // +0x7a8 (1960)
-    int f_7ac;  // +0x7ac (1964)
-    float f_7bc;  // +0x7bc (1980)
-    int f_7c0;  // +0x7c0 (1984)
-    int f_7d0;  // +0x7d0 (2000)
-    int f_7d4;  // +0x7d4 (2004)
-    int f_8d4;  // +0x8d4 (2260)
-    float f_8d8;  // +0x8d8 (2264)
+    float m_flTimeStepSound;  // +0x7ac (1964) FIELD_TIME  [save-table]
+    float m_flTimeWeaponIdle;  // +0x7b0 (1968) FIELD_TIME  [save-table]
+    float m_flSwimTime;  // +0x7b4 (1972) FIELD_TIME  [save-table]
+    float m_flWallJumpTime;  // +0x7b8 (1976) FIELD_TIME  [save-table]
+    float m_flSuitUpdate;  // +0x7bc (1980) FIELD_TIME  [save-table]
+    int m_rgSuitPlayList[4];  // +0x7c0 (1984) FIELD_INTEGER  [save-table]
+    int m_iSuitPlayNext;  // +0x7d0 (2000) FIELD_INTEGER  [save-table]
+    int m_rgiSuitNoRepeat[32];  // +0x7d4 (2004) FIELD_INTEGER  [save-table]
+    float m_rgflSuitNoRepeatTime[32];  // +0x854 (2132) FIELD_TIME  [save-table]
+    int m_lastDamageAmount;  // +0x8d4 (2260) FIELD_INTEGER  [save-table]
+    float m_tbdPrev;  // +0x8d8 (2264) FIELD_TIME  [save-table]
     int f_8dc;  // +0x8dc (2268)
-    int f_8f0;  // +0x8f0 (2288)
-    int f_8f4;  // +0x8f4 (2292)
-    int f_8f8;  // +0x8f8 (2296)
-    int f_8fc;  // +0x8fc (2300)
+    int m_idrowndmg;  // +0x8f0 (2288) FIELD_INTEGER  [save-table]
+    int m_idrownrestored;  // +0x8f4 (2292) FIELD_INTEGER  [save-table]
+    int m_bitsHUDDamage;  // +0x8f8 (2296) FIELD_INTEGER  [save-table]
+    BOOL m_fInitHUD;  // +0x8fc (2300) FIELD_BOOLEAN  [save-table]
     int f_900;  // +0x900 (2304)
-    char f_904;  // +0x904 (2308)
+    int m_iTrain;  // +0x904 (2308) FIELD_INTEGER  [save-table]
     int f_908;  // +0x908 (2312)
-    char f_90c;  // +0x90c (2316)
+    EHANDLE m_pTank;  // +0x90c (2316) FIELD_EHANDLE  [save-table]
     float f_914;  // +0x914 (2324)
     int f_918;  // +0x918 (2328)
-    int f_91c;  // +0x91c (2332)
-    float f_920;  // +0x920 (2336)
+    BOOL m_fLongJump;  // +0x91c (2332) FIELD_BOOLEAN  [save-table]
+    float m_tSneaking;  // +0x920 (2336) FIELD_TIME  [save-table]
     int f_928;  // +0x928 (2344)
     int f_92c;  // +0x92c (2348)
-    char f_930;  // +0x930 (2352)
+    int m_iHideHUD;  // +0x930 (2352) FIELD_INTEGER  [save-table]
     int f_934;  // +0x934 (2356)
-    int f_938;  // +0x938 (2360)
+    int m_iFOV;  // +0x938 (2360) FIELD_INTEGER  [save-table]
     int f_93c;  // +0x93c (2364)
-    char f_940;  // +0x940 (2368)
-    int f_968;  // +0x968 (2408)
+    CBaseEntity* m_rgpPlayerItems[10];  // +0x940 (2368) FIELD_CLASSPTR  [save-table]
+    CBaseEntity* m_pActiveItem;  // +0x968 (2408) FIELD_CLASSPTR  [save-table]
     int f_96c;  // +0x96c (2412)
-    int f_970;  // +0x970 (2416)
+    CBaseEntity* m_pLastItem;  // +0x970 (2416) FIELD_CLASSPTR  [save-table]
     int f_984;  // +0x984 (2436)
     int f_988;  // +0x988 (2440)
     int f_98c;  // +0x98c (2444)

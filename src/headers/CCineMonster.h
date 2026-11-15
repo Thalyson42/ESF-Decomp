@@ -19,20 +19,21 @@ public:
     virtual void FixScriptMonsterSchedule();  // vtable[127] FixScriptMonsterSchedule__12CCineMonsterP12CBaseMonster
     virtual void 0();  // vtable[128] 0
     // campos observados (offset em bytes a partir de `this`; inclui os herdados)
-    int f_00c;  // +0xc (12)
+    void* m_pfnThink;  // +0xc (12) FIELD_FUNCTION  [save-table]
     int f_010;  // +0x10 (16)
     int f_060;  // +0x60 (96)
-    char f_110;  // +0x110 (272)
-    int f_2a8;  // +0x2a8 (680)
-    int f_2ac;  // +0x2ac (684)
-    int f_2b0;  // +0x2b0 (688)
-    int f_2b4;  // +0x2b4 (692)
-    int f_2b8;  // +0x2b8 (696)
-    float f_2bc;  // +0x2bc (700)
-    float f_2c0;  // +0x2c0 (704)
-    float f_2c8;  // +0x2c8 (712)
-    int f_2cc;  // +0x2cc (716)
-    int f_2d0;  // +0x2d0 (720)
-    int f_2d4;  // +0x2d4 (724)
-    int f_2d8;  // +0x2d8 (728)
+    EHANDLE m_hTargetEnt;  // +0x110 (272) FIELD_EHANDLE  [save-table]
+    string_t m_iszIdle;  // +0x2a8 (680) FIELD_STRING  [save-table]
+    string_t m_iszPlay;  // +0x2ac (684) FIELD_STRING  [save-table]
+    string_t m_iszEntity;  // +0x2b0 (688) FIELD_STRING  [save-table]
+    int m_fMoveTo;  // +0x2b4 (692) FIELD_INTEGER  [save-table]
+    int m_iFinishSchedule;  // +0x2b8 (696) FIELD_INTEGER  [save-table]
+    float m_flRadius;  // +0x2bc (700) FIELD_FLOAT  [save-table]
+    float m_flRepeat;  // +0x2c0 (704) FIELD_FLOAT  [save-table]
+    int m_iDelay;  // +0x2c4 (708) FIELD_INTEGER  [save-table]
+    float m_startTime;  // +0x2c8 (712) FIELD_TIME  [save-table]
+    int m_saved_movetype;  // +0x2cc (716) FIELD_INTEGER  [save-table]
+    int m_saved_solid;  // +0x2d0 (720) FIELD_INTEGER  [save-table]
+    int m_saved_effects;  // +0x2d4 (724) FIELD_INTEGER  [save-table]
+    BOOL m_interruptable;  // +0x2d8 (728) FIELD_BOOLEAN  [save-table]
 };

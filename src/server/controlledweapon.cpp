@@ -246,7 +246,7 @@ void CControlledBeam::UpdateBeamJumpStatus(void)
             EnableBeamJump();
         if (m_fBeamJumpFlying)
         {
-            if (UTIL_WeaponTimeBase() > m_flNextBeamJumpCost &&           // +0xa4 [?]
+            if (UTIL_WeaponTimeBase() > m_flTimeWeaponIdle &&           // [OK] +0xa4 = m_flTimeWeaponIdle (save-table)
                 !m_pPlayer->UseKi((int)(m_iKiCost * 0.33)))               // [OK] 33% do ki por tick
                 DisableBeamJump();                                        // sem ki: para
         }
@@ -259,5 +259,5 @@ void CControlledBeam::UpdateBeamJumpStatus(void)
 
 // ---------- AINDA PENDENTES (parciais; dependem de campos do jogador/feixe sem nome) ----------
 // PrimaryAttack(735 B)  SecondaryAttack(117)  WeaponIdle(573)  Holster(312)
-// Holster/Idle/Primary usam: m_flNextPrimaryAttack(+0x9c), +0xa0, +0xa4, +0x1e8 PowerStruggle,
+// Holster/Idle/Primary usam: m_flNextPrimaryAttack(+0x9c), m_flNextSecondaryAttack(+0xa0), m_flTimeWeaponIdle(+0xa4), +0x1e8 PowerStruggle,
 // gmsgPowerStruggle, CBasePlayer::DrawChargeBar etc. -> decompilado em decomp_raw/CControlledBeam/.

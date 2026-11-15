@@ -10,5 +10,5 @@ public:
     virtual void ObjectCaps();  // vtable[5] ObjectCaps__20CTriggerChangeTarget
     virtual void Use();  // vtable[44] Use__20CTriggerChangeTargetP11CBaseEntityT18USE_TYPEf
     // campos observados (offset em bytes a partir de `this`; inclui os herdados)
-    int f_06c;  // +0x6c (108)
+    string_t m_iszNewTarget;  // +0x6c (108) FIELD_STRING  [save-table]
 };

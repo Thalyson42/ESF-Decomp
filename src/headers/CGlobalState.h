@@ -4,5 +4,5 @@
 class CGlobalState {
 public:
     // campos observados (offset em bytes a partir de `this`; inclui os herdados)
-    int f_004;  // +0x4 (4)
+    int m_listCount;  // +0x4 (4) FIELD_INTEGER  [save-table]
 };

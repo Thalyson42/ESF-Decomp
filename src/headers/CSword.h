@@ -10,5 +10,5 @@ public:
     virtual void Holster();  // vtable[63] Holster__6CSwordi
     virtual void iItemSlot();  // vtable[74] iItemSlot__6CSword
     // campos observados (offset em bytes a partir de `this`; inclui os herdados)
-    int f_088;  // +0x88 (136)
+    int m_iId;  // +0x88 (136) FIELD_INTEGER  [save-table]
 };

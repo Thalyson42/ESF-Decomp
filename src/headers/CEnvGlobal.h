@@ -9,7 +9,7 @@ public:
     virtual void Restore();  // vtable[4] Restore__10CEnvGlobalR8CRestore
     virtual void Use();  // vtable[44] Use__10CEnvGlobalP11CBaseEntityT18USE_TYPEf
     // campos observados (offset em bytes a partir de `this`; inclui os herdados)
-    int f_064;  // +0x64 (100)
-    int f_068;  // +0x68 (104)
-    int f_06c;  // +0x6c (108)
+    string_t m_globalstate;  // +0x64 (100) FIELD_STRING  [save-table]
+    int m_triggermode;  // +0x68 (104) FIELD_INTEGER  [save-table]
+    int m_initialstate;  // +0x6c (108) FIELD_INTEGER  [save-table]
 };

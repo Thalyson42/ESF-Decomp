@@ -11,7 +11,7 @@ public:
     virtual void ISoundMask();  // vtable[106] ISoundMask__14CPlayerMonster
     // campos observados (offset em bytes a partir de `this`; inclui os herdados)
     int f_060;  // +0x60 (96)
-    float f_168;  // +0x168 (360)
-    int f_180;  // +0x180 (384)
-    int f_278;  // +0x278 (632)
+    float m_flFieldOfView;  // +0x168 (360) FIELD_FLOAT  [save-table]
+    int m_MonsterState;  // +0x180 (384) FIELD_INTEGER  [save-table]
+    int m_bloodColor;  // +0x278 (632) FIELD_INTEGER  [save-table]
 };

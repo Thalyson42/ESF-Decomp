@@ -10,16 +10,16 @@
 void CGallitGun::Spawn(void)
 {
     Precache();
-    f_0c4 = 0;  f_0d8 = 0;  f_0c8 = 0;
+    m_iAttackState = 0;  m_iCharge = 0;  m_pBeam = NULL;
     m_iId = 5;
-    f_0c0 = 0;
-    f_0b0 = -1;
-    f_0dc = 24;
-    f_0e0 = 1200;
-    f_0e4 = 20;
-    f_0e8 = 4;
+    m_iDefaultAmmo = 0;                 // [OK] +0xc0 (save-table)
+    m_iClip = -1;                       // [OK] +0xb0 (save-table)
+    m_iMaxCharge = 24;
+    m_iBeamSpeed = 1200;
+    m_iKiCost = 20;
+    m_iDmgPerCharge = 4;
     f_0ec = 4;
-    f_0f0 = 0.5f;
+    m_flChargeSpeedMult = 0.5f;
     strcpy(m_szWeaponName, "gallitgun");   // [OK] "gall"+"itgu"+"n\0"
     f_1f4 = 0.1f;
     f_1fc = 3;                              // (Kamehameha usa 0)

@@ -24,10 +24,10 @@ public:
     virtual void 0();  // vtable[96] 0
     // campos observados (offset em bytes a partir de `this`; inclui os herdados)
     int f_060;  // +0x60 (96)
-    int f_080;  // +0x80 (128)
-    float f_09c;  // +0x9c (156)
-    float f_0a0;  // +0xa0 (160)
-    float f_0a4;  // +0xa4 (164)
+    CBaseEntity* m_pPlayer;  // +0x80 (128) FIELD_CLASSPTR  [save-table]
+    float m_flNextPrimaryAttack;  // +0x9c (156) FIELD_TIME  [save-table]
+    float m_flNextSecondaryAttack;  // +0xa0 (160) FIELD_TIME  [save-table]
+    float m_flTimeWeaponIdle;  // +0xa4 (164) FIELD_TIME  [save-table]
     int f_0c4;  // +0xc4 (196)
     int f_0c8;  // +0xc8 (200)
     int f_0d8;  // +0xd8 (216)
