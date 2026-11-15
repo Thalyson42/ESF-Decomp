@@ -1,4 +1,4 @@
-// controlledweapon.cpp -- CControlledBeam, RECUPERAÇÃO COMPLETA (30/30; ver [?] nas partes incertas).
+// controlledweapon.cpp -- CControlledBeam, RECUPERAÇÃO PARCIAL (26 de 30 funções; ver [?] nas partes incertas).
 // Fonte: decomp_raw/CControlledBeam/*.c. [OK] = conferido; [?] = nome/sentido incerto.
 #include "extdll.h"
 #include "util.h"
