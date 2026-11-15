@@ -22,4 +22,6 @@ Versão que as strings dos binários dizem ser: **"ESF Beta 1.2.1, Public Versio
 - `tools/` – scripts (demangler do GCC 2.95, `decompile_fn.py` e `batch_decompile.py` com angr)
 - `docs/` – achados e roadmap
 
-Veja `docs/ROADMAP.md`.
+Leia nesta ordem: `docs/METODO.md` (como retomar), `docs/ROADMAP.md`, `docs/FINDINGS.md`, `docs/RECOVERED.md`.
+
+> Os binários originais e os assets **não** estão aqui; quem tem os arquivos é o dono do projeto (ver METODO.md).
