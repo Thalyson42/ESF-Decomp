@@ -1605,3 +1605,12 @@ void CPlayerMelee::HandleToss(void)
     // a barra do HUD mostra o quanto da velocidade já foi perdida (negativo = lado do defensor)
     UpdateStruggleBar((int)-(((m_flTossSpeed - m_flTossMinSpeed) / (m_flTossStartSpeed - m_flTossMinSpeed)) * 100.0f));   // [OK]
 }
+
+int CPlayerMelee::DeaccelerateToss(void)                      // [OK] a velocidade cai com o tempo; 1 = chegou no piso
+{
+    float dt = gpGlobals->time - m_flGrabLastTick;            // +0xb0: último tick (a0[44])
+    m_flGrabLastTick = gpGlobals->time;
+    m_flTossSpeed -= dt * m_flTossDecel;
+    if (m_flTossSpeed < 0) m_flTossSpeed = 0;
+    return m_flTossSpeed < m_flTossMinSpeed;
+}
