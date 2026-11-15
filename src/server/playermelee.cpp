@@ -227,11 +227,29 @@ void CPlayerMelee::AddComboMoves(void)                        // [OK] monta os 9
     }
 }
 
-struct melee_execution_s {                       // [OK] combo "exe" (0x360 bytes)
-    char pad0[0x24]; int m_iId;                  // +0x24
-    char pad1[0x0c]; float f_34;                 // +0x34 [?]
-    char pad2[0x18]; int f_4c; int f_50; int f_54;   // +0x4c estado (3 = pronto), +0x54 tipo [?]
-    char pad3[0x358 - 0x58];
+struct melee_exe_hit_s {                         // [OK] 24 bytes x 32 em +0x58 (AddExeCombo/ResetComboArray)
+    int   m_iIndex;                              // +0x00
+    float m_flTime;                              // +0x04 prazo (agora + a3)
+    float m_flValue;                             // +0x08
+    int   f_0c;                                  // +0x0c
+    int   m_fActive;                             // +0x10
+    void (*m_pfnCallback)(CBasePlayer *, CBasePlayer *);   // +0x14 [OK] PFN(CBasePlayer*, CBasePlayer*)
+};
+struct melee_execution_s {                       // [OK] combo "exe" (0x360 bytes), criado por CreateExeMove
+    char  m_szName[0x20];                        // +0x00
+    int   f_20;                                  // +0x20
+    int   m_iId;                                 // +0x24 (SetupCombo / AddCombo)
+    int   m_iNumHits;                            // +0x28 até 32 [OK] AddExeCombo
+    int   f_2c;
+    int   f_30;                                  // +0x30
+    float f_34;                                  // +0x34 [?]
+    float f_38;                                  // +0x38
+    int   f_3c, f_40, f_44;                      // +0x44 [?] "pular" em CanEXECombo
+    int   f_48;                                  // +0x48 = 1 na criação
+    int   m_iStatus;                             // +0x4c MELEE_COMBO_STATUS (1 = início de combo, 3 = pronto) [?]
+    int   m_iStrength;                           // +0x50 MELEE_STRENGTH
+    int   f_54;                                  // +0x54 1 = golpe bloqueado
+    melee_exe_hit_s m_Hit[32];                   // +0x58
     melee_execution_s *m_pNext;                  // +0x358
     melee_execution_s *m_pPrev;                  // +0x35c
 };
@@ -543,4 +561,112 @@ plrmelee_anim_s *CPlayerMelee::AddAnimationExe(float flEnd, char *szName)
     strcat(sz, m_pExeCur->f_54 == 1 ? "_block" : "_hit");              // [OK] o defensor toca "<anim>_block" ou "<anim>_hit"
     m_pDefenderMelee->AddAnimation(true, gpGlobals->time, 1, sz);
     return p;
+}
+
+// ======================================================================
+// Lote 3: combos ("exe") e listas de golpes
+// ======================================================================
+melee_execution_s *CPlayerMelee::CreateExeMove(int a, int b, float f, int c, MELEE_COMBO_STATUS status, MELEE_STRENGTH strength, char *szName)
+{
+    melee_execution_s *p = new melee_execution_s;             // [OK] 864 bytes
+    p->f_40 = 0; p->f_44 = 0; p->f_3c = 0;
+    p->f_48 = 1;
+    p->f_20 = a;
+    p->m_iId = b;
+    p->f_38 = f;
+    p->f_34 = 0;
+    p->m_iNumHits = 0;
+    p->f_30 = c;
+    p->f_54 = 0;
+    p->m_iStatus = status;
+    p->m_iStrength = strength;
+    strcpy(p->m_szName, szName);
+    p->m_pNext = NULL;
+    p->m_pPrev = NULL;
+    ResetComboArray(p);
+    return p;
+}
+
+void CPlayerMelee::ResetComboArray(melee_execution_s *p)
+{
+    for (int i = 0; i < 32; i++)                              // [OK]
+    {
+        p->m_Hit[i].m_iIndex = i;
+        p->m_Hit[i].m_flTime = 0;
+        p->m_Hit[i].m_flValue = 0;
+        p->m_Hit[i].f_0c = 0;
+        p->m_Hit[i].m_fActive = 0;
+        p->m_Hit[i].m_pfnCallback = NULL;
+    }
+}
+
+void CPlayerMelee::AddExeCombo(melee_execution_s *p, float flValue, float flDuration, void (*pfn)(CBasePlayer *, CBasePlayer *))
+{
+    if (p && p->m_iNumHits <= 31)                             // [OK] máx. 32
+    {
+        melee_exe_hit_s &h = p->m_Hit[p->m_iNumHits++];
+        h.m_fActive = 1;
+        h.m_flValue = flValue;
+        h.m_flTime = flDuration + gpGlobals->time;
+        h.m_pfnCallback = pfn;
+    }
+}
+
+melee_execution_s *CPlayerMelee::AddCombo(melee_execution_s *pAfter, int iId)    // insere um combo novo logo depois de pAfter
+{
+    melee_execution_s *p = SetupCombo(iId);
+    if (p && pAfter)
+    {
+        p->m_pNext = pAfter->m_pNext;                         // [OK] (o decompilado não religa o prev do seguinte)
+        pAfter->m_pNext = p;
+        p->m_pPrev = pAfter;
+    }
+    return p;
+}
+
+int CPlayerMelee::GetNextExe(void)
+{
+    if (m_pExeCur->m_iStatus == 3 && CanEXECombo(m_pExeCur))                     // [OK]
+        AddCombo(m_pExeCur, m_pExeCur->m_iId);
+    return (int)m_pExeCur->m_pNext;
+}
+
+int CPlayerMelee::CanEXECombo(melee_execution_s *p)           // percorre o histórico para trás; limita pela % de golpes bloqueados
+{
+    int iTotal = 0, iBlocked = 0;
+    for (; p; p = p->m_pPrev)
+    {
+        if (p->f_44) p = p->m_pPrev;                          // [?] ignora o golpe marcado
+        iTotal++;
+        if (p->f_54 == 1) iBlocked++;
+        if (p->m_iStatus == 1) break;                         // [OK] chegou no início do combo
+    }
+    float r = (float)iBlocked / (float)iTotal;                // [?] divisão inteira ou float
+    return r <= melee_percentblocked->value;                  // [?] cvar em +0x0c
+}
+
+// AddMove(idx, tipo, n, valor1, dir1, valor2, dir2...) -- acrescenta um nó (80 bytes) à lista de golpes da direção idx
+void CPlayerMelee::AddMove(int iIdx, int iType, int iCount, ...)
+{
+    if (iCount <= 0) return;
+    struct melee_move_node { int m_iCount; int m_iType; int pad[2]; struct { int flags; int value; } e[8]; melee_move_node *next; melee_move_node *prev; };   // [OK] +0x08+8i flags, +0x0c+8i valor; +0x48 next; +0x4c prev
+    melee_move_node *p = (melee_move_node *)new char[80];
+    p->m_iCount = iCount;
+    p->m_iType = iType;
+    p->prev = NULL;
+    p->next = NULL;
+    va_list ap; va_start(ap, iCount);
+    for (int i = 0; i < iCount; i++)
+    {
+        p->e[i].value = va_arg(ap, int);
+        p->e[i].flags = DirectionsToFlags(va_arg(ap, int));   // [OK]
+    }
+    va_end(ap);
+    melee_move_node *pHead = (melee_move_node *)m_pMoveList[iIdx];
+    if (pHead)
+    {
+        pHead->next = p;                                      // [OK] (como no original: liga a cabeça existente ao novo)
+        p->prev = pHead;
+    }
+    m_pMoveList[iIdx] = (melee_move_s *)p;
 }
