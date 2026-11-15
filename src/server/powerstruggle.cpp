@@ -79,7 +79,7 @@ void CPowerStruggle::Remove(void)
     while (m_pAttacks)
     {
         CExplodingAttack *a = m_pAttacks->pAttack;
-        if (!a->f_2c4)                                    // [?] flag do ataque (+0x2c4)
+        if (!a->m_fVaporized)                                    // [?] flag do ataque (+0x2c4)
         {
             a->m_fInStruggle = 0;
             if (a->m_flStruggleRatio < 0)                 // [OK] perdeu a disputa

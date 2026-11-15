@@ -17,6 +17,8 @@ enum { ESF_KI_OFFSET_IN_PEV = 0x260 };
     /* +0x354 */ int   m_fInPowerStruggle; /* PrimaryAttack/WeaponIdle/StopAiming                   [?] nome */ \
     /* +0x35c */ int   m_fInBlockStruggle; /* idem                                                  [?] nome */ \
     /* +0x36c */ class CPowerStruggle *m_pPowerStruggle; /* aponta p/ a disputa atual               [?] nome */ \
+    /* +0x358 */ int   m_fBlockStruggling; /* ExplodeTouch: preso num block struggle                  [OK] */ \
+    /* +0x780 */ class CExplodingAttack *m_pBlockAttack; /* ataque que o jogador está segurando    [OK] */ \
     /* +0x508 */ int   m_fTurbo;         /* GetMaxSpeed x5                                           [?] nome */
 // pev (entvars_t) usado pelo ESF: fuser4=ki(+0x260), iuser1=spectator(+0x244)
 // Mensagens: gmsgCharge, gmsgMaxHealth, gmsgPowerStruggle

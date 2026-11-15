@@ -168,12 +168,12 @@ void CControlledBeam::ReleaseAttack(void)
 {
     StopAiming();
     if (!m_pBeam) return;
-    if (!m_pBeam->f_2c4)
+    if (!m_pBeam->m_fVaporized)
     {
         if (!m_pBeam->m_fReleased)
             m_pBeam->Explode();                                // [OK] slot 126
     }
-    if (m_pBeam->f_2c4)
+    if (m_pBeam->m_fVaporized)
         m_pBeam->Remove();                                 // [OK] slot 125 (+0x1fc)
     m_pBeam = NULL;                                             // [OK]
 }
@@ -259,7 +259,7 @@ void CControlledBeam::UpdateBeamJumpStatus(void)
 
 // =====================================================================
 // Os 4 "ticks" da arma. Campos do feixe (CExplodingAttack): +0x2ac m_fInStruggle, +0x2b0 m_fInBlockStruggle [?],
-// +0x2b8 m_flStruggleRatio, +0x2c0 m_pStruggle, +0x2c4/+0x2dc = flags de "acabou" [?]; pev->dmg = força.
+// +0x2b8 m_flStruggleRatio, +0x2c0 m_pStruggle, +0x2c4 m_fVaporized, +0x2dc m_fReleased (os dois = "feixe acabou"); pev->dmg = força.
 // Jogador: m_fInPowerStruggle(+0x354), m_fInBlockStruggle(+0x35c), m_pPowerStruggle(+0x36c) [nomes deduzidos].
 // =====================================================================
 static void SendStruggleRatio(CBasePlayer *pPlayer, CExplodingAttack *pBeam)
@@ -276,7 +276,7 @@ void CControlledBeam::PrimaryAttack(void)
 
     if (m_iAttackState == 2 && m_pBeam)
     {
-        if (!m_pBeam->f_2c4 && !m_pBeam->m_fReleased)                            // feixe ainda vivo
+        if (!m_pBeam->m_fVaporized && !m_pBeam->m_fReleased)                            // feixe ainda vivo
         {
             if (m_pBeam->m_fInBlockStruggle || m_pBeam->m_fInStruggle)
             {
@@ -306,7 +306,7 @@ void CControlledBeam::PrimaryAttack(void)
         }
         // feixe acabou: encerra a mira e solta a referência
         StopAiming();
-        if (m_pBeam->f_2c4) m_pBeam->Remove();                          // [OK] slot 125
+        if (m_pBeam->m_fVaporized) m_pBeam->Remove();                          // [OK] slot 125
         m_pBeam = NULL;
         return;
     }
@@ -348,10 +348,10 @@ void CControlledBeam::WeaponIdle(void)
     {
         if (!m_pBeam)
             StopAiming();                                                  // [OK] sem feixe
-        else if (m_pBeam->f_2c4 || m_pBeam->m_fReleased)
+        else if (m_pBeam->m_fVaporized || m_pBeam->m_fReleased)
         {
             StopAiming();                                                  // [OK] feixe acabou
-            if (m_pBeam->f_2c4) m_pBeam->Remove();                      // [OK]
+            if (m_pBeam->m_fVaporized) m_pBeam->Remove();                      // [OK]
             m_pBeam = NULL;
         }
         else if (m_pBeam->m_fInStruggle || m_pBeam->m_fInBlockStruggle)
