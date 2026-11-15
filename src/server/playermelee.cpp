@@ -1874,3 +1874,86 @@ void CPlayerMelee::HandleWallStick(void)
     RemoveAllAnims();
     f_024 = gpGlobals->time;
 }
+
+// ======================================================================
+// Lote 14: efeitos e dano da colisão, pouso com recuperação
+// ======================================================================
+void CPlayerMelee::EmitExplosionRocks(Vector vecPos, Vector vecVel, float flSize, int iRandom, int iCount)
+{
+    MESSAGE_BEGIN(MSG_PVS, SVC_TEMPENTITY, vecPos);           // [?] origem do PVS (o decompilado perde o ponteiro)
+        WRITE_BYTE(TE_BREAKMODEL);                            // [OK] 108
+        WRITE_COORD(vecPos.x); WRITE_COORD(vecPos.y); WRITE_COORD(vecPos.z);
+        WRITE_COORD(flSize);  WRITE_COORD(flSize);  WRITE_COORD(flSize);
+        WRITE_COORD(vecVel.x); WRITE_COORD(vecVel.y); WRITE_COORD(vecVel.z);
+        WRITE_BYTE(iRandom);
+        WRITE_SHORT(g_sRockGibs);                             // [OK] modelo das pedras
+        WRITE_BYTE(iCount);
+        WRITE_BYTE(50);                                       // vida: 5 s
+        WRITE_BYTE(0);
+    MESSAGE_END();
+}
+
+int CPlayerMelee::InflictWallhitDmg(int bHalf)                // dano da batida: cresce com a velocidade; devolve 1 se a vítima sobreviveu
+{
+    CBasePlayer *p = m_pAttacker;
+    float flDmg = (float)(int)((m_flTossSpeed / 1000.0f + 1.0f) * 7.0f);   // [OK]
+    if (bHalf) flDmg *= 0.5f;
+    p->TakeDamage(m_pThrower->pev, m_pThrower->pev, flDmg, 0);             // [?] tipo de dano perdido no decompilado
+    return p->IsAlive() ? 1 : 0;
+}
+
+void CPlayerMelee::StartLandRecover(void)                     // pousou amortecendo: fica agachado até o jogador fazer o dash
+{
+    m_pAttacker->pev->movetype = MOVETYPE_NONE;
+    m_pAttacker->m_flSpeedMult = 0;
+    m_pAttacker->pev->friction = 1.0f;
+    m_pAttacker->pev->gravity = 1.0f;
+    m_pAttacker->pev->velocity = Vector(0, 0, 0);
+    m_flLandRecoverTime = gpGlobals->time;                    // [OK] HandleLandRecover usa +1 s
+    m_iThrowState = THROW_LANDRECOVER;
+    m_vecTossAux[0] = 0;                                      // [OK] guarda os ângulos do jogador com pitch zerado
+    m_vecTossAux[1] = m_pAttacker->pev->angles.y;
+    m_vecTossAux[2] = m_pAttacker->pev->angles.z;
+    UTIL_Model_FixAngles(ENTINDEX(ENT(m_pAttacker->pev)), Vector(m_vecTossAux[0], m_vecTossAux[1], m_vecTossAux[2]));   // [?]
+}
+
+void CPlayerMelee::LandRecoverDash(void)                      // o jogador escolhe a direção do dash de saída com os botões
+{
+    UTIL_MakeVectors(Vector(m_vecTossAux[0], m_vecTossAux[1], m_vecTossAux[2]));
+    int btn = m_pAttacker->pev->button;
+    Vector vecDir(0, 0, 0);
+    int iDir = 0, bUp = 0;
+    if (btn & (IN_LEFT | IN_MOVELEFT))        { vecDir = -gpGlobals->v_right; iDir = 2; }   // 640
+    else if (btn & (IN_RIGHT | IN_MOVERIGHT)) { vecDir = gpGlobals->v_right;  iDir = 3; }
+    else if (btn & IN_FORWARD)                { vecDir = gpGlobals->v_forward; iDir = 4; }
+    else if (btn & IN_BACK)                   { vecDir = -gpGlobals->v_forward; iDir = 5; }
+    else if (btn & IN_JUMP)                   { vecDir = Vector(0, 0, 1); bUp = 1; iDir = 0; }
+    else return;                                              // [OK] sem botão: continua agachado
+
+    if (!bUp)
+    {
+        vecDir.z = 0;
+        vecDir = vecDir.Normalize();
+    }
+    vecDir = vecDir * 900.0f;                                 // [OK]
+    if (!bUp) vecDir.z += 500.0f;                             // [OK] dash horizontal ganha um pulinho
+    m_pAttacker->pev->velocity = vecDir;
+    m_pAttacker->StopFly();
+
+    char szAnim[64];
+    if (!bUp)
+    {
+        char szDir[32];
+        GetThrowAnimDirection(0, iDir, szDir);
+        sprintf(szAnim, "throw_recover_%s", szDir);
+        if (!strcmp(szAnim, "throw_recover_front"))      strcpy(szAnim, "throw_recover_forward");    // [OK] ajustes de nome
+        else if (!strcmp(szAnim, "throw_recover_back"))  strcpy(szAnim, "throw_recover_backward");
+    }
+    else
+        strcpy(szAnim, "throw_recover_jump");
+
+    UTIL_MakeVectors(Vector(m_vecTossAux[0], m_vecTossAux[1], m_vecTossAux[2]));
+    AddAnimationAFix(gpGlobals->v_forward, false, gpGlobals->time, szAnim);
+    m_vecTossAux[0] = m_vecTossAux[1] = m_vecTossAux[2] = 0;
+    EMIT_SOUND_DYN(ENT(m_pAttacker->pev), CHAN_BODY, "weapons/recoverjump.wav", 1.0, 0.8, 0, 100);
+}
