@@ -278,7 +278,9 @@ public:
     float m_vecTossAux[3];                      // +0x58 [?] zerado em StartToss
     int   m_iThrowState;                        // +0x64 [OK] InThrow = !=0; 3/4/5 = lasers (SpecialLaserReduction)
     CBasePlayer *m_pThrower;                    // +0x68 [OK] quem arremessou
-    char  pad_06c[0x78-0x6c];
+    int   m_iStruggleArrows;                    // +0x6c [OK] setas já mostradas no struggle
+    float m_flNextArrow;                        // +0x70 [OK]
+    int   m_fStruggleEnding;                    // +0x74 [OK] última seta mostrada: esperando o fim
     int   f_078, f_07c;                         // +0x78/+0x7c [?] usados em UseAttackerMoves
     char  pad_080[4];
     plrmelee_anim_s *m_pAnimList;               // +0x84 [OK] lista de animações enfileiradas
@@ -288,14 +290,15 @@ public:
     float m_flLastPunch;                        // +0x94 [OK] hora do último soco do prepunch
     float m_flGrabFullTime;                     // +0x98 [OK] hora em que a barra do agarrão encheu
     float f_09c;                                // +0x9c [?] 0..100 (fração mostrada na barra de struggle)
-    char  pad_0a0[0xa8-0xa0];
+    char  pad_0a0[4];
+    float m_flBarUpdate;                        // +0xa4 [OK] limita a barra do HUD a 20 atualizações/s
     float f_0a8;
     float m_flDelayTime;                        // +0xac [OK] HandleDelayedBlock (1 s)
     float m_flGrabLastTick;                     // +0xb0 [OK] último tick do agarrão
     float f_0b4;                                // +0xb4 [?] agora+1 após um arremesso
     int   m_iPunchCount;                        // +0xb8 [OK] socos do prepunch
     char  pad_0bc[0xc4-0xbc];
-    int   f_0c4;                                // +0xc4 [?] CanSwitch compara com melee_maxextanges
+    int   m_iStruggleTies;                      // +0xc4 [OK] empates no struggle (CanSwitch/CheckStruggleArrows)
     int   m_iAttackerMoveCount;                 // +0xc8 [OK] contador de AddDirection (atacante)
     int   m_iDefenderMoveCount;                 // +0xcc [OK]
     int   f_0d0;                                // +0xd0 [?] dano x2 (GetDmgPerPunch)

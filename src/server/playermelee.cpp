@@ -154,7 +154,7 @@ int CPlayerMelee::CanInflictDamage(CBasePlayer *pPlayer, int bitsDamage)
     return 1;
 }
 
-int CPlayerMelee::CanSwitch(void) { return (double)f_0c4 < melee_maxextanges + 12; }    // [?] constante global desconhecida
+int CPlayerMelee::CanSwitch(void) { return (double)m_iStruggleTies < melee_maxextanges + 12; }    // [?] constante global desconhecida
 
 int CPlayerMelee::SpecialLaserReduction(void)
 {
@@ -1956,4 +1956,130 @@ void CPlayerMelee::LandRecoverDash(void)                      // o jogador escol
     AddAnimationAFix(gpGlobals->v_forward, false, gpGlobals->time, szAnim);
     m_vecTossAux[0] = m_vecTossAux[1] = m_vecTossAux[2] = 0;
     EMIT_SOUND_DYN(ENT(m_pAttacker->pev), CHAN_BODY, "weapons/recoverjump.wav", 1.0, 0.8, 0, 100);
+}
+
+// ======================================================================
+// Lote 15: struggle (disputa de setas entre dois jogadores)
+// ======================================================================
+void CPlayerMelee::UpdateStruggleBar(int iValue)
+{
+    if (m_flBarUpdate + 0.05f <= gpGlobals->time)             // [OK] no máx. 20 vezes por segundo
+    {
+        m_flBarUpdate = gpGlobals->time;
+        m_fStruggleBar = 1;
+        MESSAGE_BEGIN(MSG_ONE, gmsgPowerStruggle, NULL, ENT(m_pAttacker->pev));
+            WRITE_CHAR(iValue);
+        MESSAGE_END();
+    }
+}
+
+void CPlayerMelee::RemoveStruggleBar(void)
+{
+    if (m_fStruggleBar)
+    {
+        MESSAGE_BEGIN(MSG_ONE, gmsgPowerStruggle, NULL, ENT(m_pAttacker->pev));
+            WRITE_CHAR(127);                                  // [OK] limpa o HUD
+        MESSAGE_END();
+    }
+    m_flBarUpdate = 0;
+    m_fStruggleBar = 0;
+}
+
+void CPlayerMelee::StartStruggleAttack(void)
+{
+    UTIL_Model_MeleeStruggle(ENTINDEX(ENT(m_pAttacker->pev)), ENTINDEX(ENT(m_pDefender->pev)));   // [?] 2º argumento
+    AddAnimation(true, gpGlobals->time, 1, "ref_grapple");
+    m_pDefenderMelee->AddAnimation(true, gpGlobals->time, 1, "ref_grapple");
+    UTIL_MakeVectors(m_pAttacker->pev->v_angle);
+    m_vecDir[0] = gpGlobals->v_forward.x; m_vecDir[1] = gpGlobals->v_forward.y; m_vecDir[2] = gpGlobals->v_forward.z;
+    for (int i = 0; i < 3; i++) m_pDefenderMelee->m_vecDir[i] = m_vecDir[i];          // [OK]
+    m_flNextArrow = gpGlobals->time + melee_struggle_startdelay->value;               // [OK]
+    Vector vecDir(m_vecDir[0], m_vecDir[1], m_vecDir[2]);
+    Vector vecAng = UTIL_VecToAngles(-vecDir);
+    UTIL_Model_MeleeStruggle_Anglefix(ENTINDEX(ENT(m_pAttacker->pev)), vecAng);       // [?]
+    // afasta o atacante 11 u para trás se houver espaço
+    Vector vecBack = m_pAttacker->pev->origin - vecDir * 11.0f;
+    TraceResult tr;
+    UTIL_TraceHull(m_pAttacker->pev->origin, vecBack, dont_ignore_monsters, head_hull, ENT(m_pAttacker->pev), &tr);
+    if (tr.flFraction == 1.0f)
+        UTIL_SetOrigin(m_pAttacker->pev, tr.vecEndPos);
+    EMIT_SOUND_DYN(GetSoundEdict(), CHAN_BODY, "weapons/meleestruggleinit.wav", 1.0, 0.8, 0, 100);
+    MeleeText(15, 0);
+    m_pDefenderMelee->MeleeText(15, 0);
+    m_iStruggleTies = 0;
+    m_iStruggleArrows = 0;
+    m_fStruggleEnding = 0; f_078 = 0; f_07c = 0;              // memset(+0x74, 0, 12)
+    m_pDefenderMelee->m_iStruggleArrows = 0;
+    m_pDefenderMelee->m_flNextArrow = 0;
+    m_pDefenderMelee->f_078 = 0;
+    m_pDefenderMelee->f_07c = 0;
+}
+
+int CPlayerMelee::ManageStruggleArrows(void)
+{
+    if (m_fIsAttacker && gpGlobals->time > m_flNextArrow)
+    {
+        if (m_fStruggleEnding)
+            return CheckStruggleArrows();                     // [OK] acabaram as setas: decide quem ganhou
+        m_iStruggleArrows++;
+        if ((float)m_iStruggleArrows >= melee_struggle_maxarrows->value)
+        {
+            m_flNextArrow = gpGlobals->time + melee_struggle_enddelay->value;
+            m_fStruggleEnding = 1;
+        }
+        else
+            m_flNextArrow = gpGlobals->time + melee_struggle_arrowtime->value;
+        f_078 = 1;                                            // suprime o HUD enquanto sorteia
+        m_pDefenderMelee->f_078 = 1;
+        AddDirection(DirectionsToFlags(RANDOM_LONG(0, 7)));                    // [OK] seta aleatória para cada um
+        LetGoDirection(m_pAttackerMoves);
+        m_pDefenderMelee->AddDirection(DirectionsToFlags(RANDOM_LONG(0, 7)));
+        m_pDefenderMelee->LetGoDirection(m_pDefenderMelee->m_pAttackerMoves);
+        f_078 = 0;
+        m_pDefenderMelee->f_078 = 0;
+    }
+    f_078 = 0;
+    f_07c = 1;
+    SetBlockingDirections();
+    f_07c = 0;
+    return 0;
+}
+
+int CPlayerMelee::CheckStruggleArrows(void)                   // compara quanto cada um acertou das setas
+{
+    float f1 = PredictBlockRatio(m_pAttackerMoves, m_pDefenderMoves, 1.0f);              // [?] sobrecarga/argumentos extras
+    float f2 = PredictBlockRatio(m_pDefenderMelee->m_pAttackerMoves, m_pDefenderMelee->m_pDefenderMoves, 1.0f);
+    if (f1 == f2)                                             // empate
+    {
+        MeleeText(14, 0);
+        m_pDefenderMelee->MeleeText(14, 0);
+        m_iStruggleTies++;
+        if ((float)m_iStruggleTies < melee_struggle_maxextanges->value)       // [OK] ainda pode haver rodada extra
+        {
+            MeleeHudDisable();
+            m_pDefenderMelee->MeleeHudDisable();
+            DelAllDirections();
+            m_pDefenderMelee->DelAllDirections();
+            RetryStruggleAttack();
+            EMIT_SOUND_DYN(GetSoundEdict(), CHAN_BODY, "weapons/meleestruggletie.wav", 1.0, 0.8, 0, 100);
+            return 0;
+        }
+        StopMelee(0);                                         // [?] argumento
+        return 0;
+    }
+    if (f1 > f2)                                              // [?] sentido da comparação pelo decompilado
+    {
+        MeleeText(12, 0);                                     // atacante vence
+        m_pDefenderMelee->MeleeText(13, 0);
+        StopStruggleAttack();
+        WinStruggle();
+    }
+    else
+    {
+        MeleeText(13, 0);                                     // defensor vence: papéis se invertem
+        m_pDefenderMelee->MeleeText(12, 0);
+        SimpleSwitch(m_pDefenderMelee, 0, 0);
+        m_pDefenderMelee->WinStruggle();
+    }
+    return 0;
 }
