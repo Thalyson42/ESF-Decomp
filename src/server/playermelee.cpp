@@ -2966,3 +2966,170 @@ int CPlayerMelee::EmitDamage()
     pVictimMelee->StartToss(m_pAttacker, 1, vecToss, 1200.0f, 600.0f, 275.0f, 1.5f);   // [OK]
     return 0;
 }
+
+// ---------------------------------------------------------------------------
+// lote 24: bloqueio, sons, combos digitados, Switch, MeleeFrameAdvance
+// ---------------------------------------------------------------------------
+
+int CPlayerMelee::DelAllDirections()
+{
+    DelAllDirectionsAttacker();
+    DelAllDirectionsDefender();
+    return 0;
+}
+
+int CPlayerMelee::Block(int iAttackDir, int iDefendDir)   // 1 = a defesa cobre o golpe
+{
+    int a = iAttackDir;
+    if (a & 1)     a &= ~1;                                   // tira "ataque"
+    if (a & 0x800) a &= ~0x800;                               // tira "alt"
+    for (int i = 2; i <= 5; i++)                              // [?] o decompilado usa CSwoop::DirectionsToFlags (código idêntico)
+    {
+        if (!(DirectionsToFlags(i) & a) && (DirectionsToFlags(i) & iDefendDir))
+            return 0;                                         // defesa em direção que o golpe não tem
+    }
+    return (a == iDefendDir || ((a & 0x198) && (a & iDefendDir))) ? 1 : 0;   // [OK] 0x198 = trás|esq|dir|frente
+}
+
+int CPlayerMelee::CanUseTrunksSword(CBasePlayer *pVictim)
+{
+    if (!m_pAttacker->m_pClass->vfunc_4c()) return 0;        // [?] "personagem tem espada" (vtable do CBaseClass +0x4c)
+    melee_execution_s *e = m_pExeCur;
+    if (e->m_pNext) return 0;                                 // só no último golpe
+    if (e->f_54 != 2 && !e->f_3c) return 0;
+    if (e->m_iStrength != 2) return 0;
+    if (!(e->f_20 & 1)) return 0;                             // só soco forte
+    float flMax = (float)pVictim->m_pClass->vfunc_10();       // [?] vida máxima
+    return (pVictim->pev->health / flMax < 0.2f) ? 1 : 0;     // [OK] vítima abaixo de 20%
+}
+
+int CPlayerMelee::ContinueBlockStun(int &iAmt, MELEE_STRENGTH cur, MELEE_STRENGTH next)
+{
+    switch (next)
+    {
+    case 0: return 1;                                         // [OK]
+    case 1:
+        if (cur == 2) { if (iAmt == GetBlockStunAmt(MELEE_STRONG)) { iAmt = 0; return 1; } }
+        else if (cur != 1) return 1;
+        break;
+    }
+    iAmt = 0;                                                 // [?] cauda comum
+    return 0;
+}
+
+int CPlayerMelee::EmitClientSound(edict_t *pent, int a, int b)
+{
+    PLAYBACK_EVENT_FULL(FEV_GLOBAL, pent, m_usMeleeSounds, 0, g_vecZero, g_vecZero, (float)a, (float)b, 0, 0, 0, 0);   // [OK]
+    return 0;
+}
+
+int CPlayerMelee::EmitExeSound(edict_t *pent)
+{
+    melee_execution_s *e = m_pExeCur;
+    if (e->f_54 == 1 && !e->f_3c)                             // golpe bloqueado
+    {
+        PLAYBACK_EVENT_FULL(FEV_GLOBAL, pent, m_usMeleeSounds, 0, g_vecZero, g_vecZero, 0, 0, 0, 0, 1, 0);   // [?] bparams
+        return 0;
+    }
+    if (e->f_54 != 2 && !e->f_3c) return 0;
+    if (m_pAttacker->m_pClass->vfunc_4c() && e->f_44)         // combo da espada
+        PLAYBACK_EVENT_FULL(FEV_GLOBAL, pent, m_usMeleeSounds, 0, g_vecZero, g_vecZero, 0, 0, 0, 0, 0, 1);  // [?]
+    else
+        PLAYBACK_EVENT_FULL(FEV_GLOBAL, pent, m_usMeleeSounds, 0, g_vecZero, g_vecZero, 0, 0, e->f_20, e->m_iStrength, 0, 0);   // [OK] tipo+força
+    return 0;
+}
+
+int CPlayerMelee::SetComboMoves()                             // marca nos golpes digitados os combos definidos em m_pMoveList
+{
+    melee_move_s *pFirst = (melee_move_s *)GetCurrentDirection();
+    if (!pFirst) return 0;
+    while (pFirst->m_pNext) pFirst = pFirst->m_pNext;         // o mais antigo
+    struct melee_move_node { int m_iCount; int m_iType; struct { int flags; int value; } e[8]; melee_move_node *next; melee_move_node *prev; };   // [OK] ver AddMove
+    int iList = m_pAttacker->m_pClass->vfunc_34();            // [?] índice da lista de combos do personagem
+    for (melee_move_node *pNode = (melee_move_node *)m_pMoveList[iList]; pNode; pNode = pNode->next)
+    {
+        for (melee_move_s *m = pFirst; m; m = m->m_pPrev)
+        {
+            if (m->f_18) continue;                            // já faz parte de um combo
+            int bMatch = 1;
+            melee_move_s *n = m;
+            for (int i = 0; i < pNode->m_iCount; i++)
+            {
+                if (n && !n->f_18 && pNode->e[i].flags == n->m_iDirection && pNode->e[i].value == GetMoveStrength(n))
+                    n = n->m_pPrev;
+                else { bMatch = 0; break; }
+            }
+            if (bMatch)
+            {
+                melee_move_s *w = m;
+                for (int i = 0; i < pNode->m_iCount; i++)
+                {
+                    w->f_14 = pNode->m_iType;
+                    w->f_18 = (i == 0) ? 1 : (i == pNode->m_iCount - 1 ? 3 : 2);   // início / meio / fim
+                    w = w->m_pPrev;
+                }
+            }
+        }
+    }
+    return 1;
+}
+
+int CPlayerMelee::Switch()                                    // fim dos golpes exe: o defensor passa a atacar
+{
+    CPlayerMelee *pD = m_pDefenderMelee;
+    float flStun = -1.0f;
+    int bFlag = pD->f_0f0;
+    if (!pD->f_0f0 && !pD->f_0ec) return StopMelee();         // [OK]
+    if (pD->f_0f0 && !pD->f_0ec)
+        flStun = pD->GetStunTime() * GetBlockRatio(f_0c0, f_0bc);   // [?] o decompilado perde o produto
+    SimpleSwitch(pD, flStun, (ADV_MELEE_STATUS)3);
+    f_0ec = 0;
+    pD->f_0ec = 0;
+    if (!bFlag) return 0;
+    if (pD->SetDelayEndBlock(pD->m_pAttackerMoves, m_pDefenderMoves)) return 1;
+    return pD->ExecuteCombo();
+}
+
+CBasePlayer *CPlayerMelee::GetEnemyPrepunch(CBasePlayer *pPrefer)   // melhor alvo (mais à frente) num raio de 95
+{
+    CBaseEntity *pEnt = NULL;
+    CBaseEntity *pBest = NULL;
+    float flBest = 96.0f;
+    while ((pEnt = UTIL_FindEntityInSphere(pEnt, m_pAttacker->pev->origin, 95.0f)) != NULL)
+    {
+        float flDist = (pEnt->pev->origin - m_pAttacker->pev->origin).Length();
+        if (flDist < flBest && pEnt != (CBaseEntity *)m_pAttacker && pEnt->IsPlayer() && pEnt->IsAlive() && !((CBasePlayer *)pEnt)->f_4c4)
+        {
+            Vector vecDir = (pEnt->pev->origin - m_pAttacker->pev->origin).Normalize();
+            UTIL_MakeVectors(m_pAttacker->pev->v_angle);      // [?] o decompilado chama CSwoop::GetCurrentDirection(&v, player+0x6bc)
+            if (DotProduct(vecDir, gpGlobals->v_forward) > 0.7f)    // [OK] 0x3f333333
+            {
+                pBest = pEnt;
+                flBest = flDist;
+                if (pPrefer && pEnt == (CBaseEntity *)pPrefer) return (CBasePlayer *)pEnt;
+            }
+        }
+    }
+    return (CBasePlayer *)pBest;
+}
+
+int CPlayerMelee::MeleeFrameAdvance()                         // avança a animação do modelo "player" durante o melee
+{
+    int iOldSeq = m_pAttacker->pev->sequence;
+    char szModel[64];
+    strcpy(szModel, m_pAttacker->f_5a0);                      // [?] nome do modelo (+0x5a0)
+    UTIL_SetPlayerModel(m_pAttacker, "player");
+    plrmelee_anim_s *pAnim = (plrmelee_anim_s *)GetCurrentAnim();
+    if (pAnim)
+        m_pAttacker->pev->sequence = m_pAttacker->LookupSequence(pAnim->m_szName[pAnim->f_288]);
+    void *pmodel = GET_MODEL_PTR(ENT(m_pAttacker->pev));
+    GetSequenceInfo(pmodel, m_pAttacker->pev, &m_pAttacker->m_flFrameRate, &m_pAttacker->m_flGroundSpeed);
+    m_pAttacker->StudioFrameAdvance(0);
+    UTIL_SetPlayerModel(m_pAttacker, szModel);
+    pmodel = GET_MODEL_PTR(ENT(m_pAttacker->pev));
+    m_pAttacker->pev->sequence = iOldSeq;
+    GetSequenceInfo(pmodel, m_pAttacker->pev, &m_pAttacker->m_flFrameRate, &m_pAttacker->m_flGroundSpeed);
+    if (m_Mode == 7 && m_pAttacker->f_78)
+        m_pAttacker->PlayAnimation();
+    return 0;
+}
