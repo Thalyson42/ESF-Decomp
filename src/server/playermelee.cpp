@@ -2629,3 +2629,170 @@ int CPlayerMelee::SetMode(ADV_MELEE_STATUS m)
     if (m == 12) { m_pDefenderMelee->m_Mode = (ADV_MELEE_STATUS)13; r = StartKnockPreStruggle(); }
     return r;
 }
+
+// ---------------------------------------------------------------------------
+// lote 22: execução de combos (exe)
+// ---------------------------------------------------------------------------
+
+melee_execution_s *CPlayerMelee::SetupCombo(int iId)
+{
+    char szAnim[0x20];
+    GetAnimForCombo(iId, szAnim);
+    melee_execution_s *p = CreateExeMove(1, iId, 0, 0, (MELEE_COMBO_STATUS)0, (MELEE_STRENGTH)2, szAnim);   // [?] ordem dos args
+    p->f_44 = 1;
+    p->f_54 = 2;
+    if (p->m_iId == 1)                                        // combo 1: 6 golpes + final
+    {
+        AddExeCombo(p, 2.0f, 0.075f, NULL);
+        AddExeCombo(p, 2.0f, 0.275f, NULL);
+        AddExeCombo(p, 2.0f, 0.475f, NULL);
+        AddExeCombo(p, 2.0f, 0.65f, NULL);                    // [OK] 0x3f266666
+        AddExeCombo(p, 2.0f, 0.85f, NULL);
+        AddExeCombo(p, 1.0f, 1.05f, NULL);
+        AddExeCombo(p, 1.0f, 1.35f, NULL);
+    }
+    else if (p->m_iId == 2)                                   // combo 2: 3 golpes + final
+    {
+        AddExeCombo(p, 2.0f, 0.45f, NULL);
+        AddExeCombo(p, 3.0f, 0.65f, NULL);
+        AddExeCombo(p, 4.0f, 1.2f, NULL);
+        AddExeCombo(p, 4.0f, 1.4f, NULL);
+    }
+    else
+    {
+        ALERT(at_console, "Removing invalid combo move!\n");  // [OK]
+        delete p;
+        return NULL;
+    }
+    MeleeText(2, 0);
+    return p;
+}
+
+int CPlayerMelee::StartExeAttack()
+{
+    if (f_104) { f_104 = 0; return 0; }                       // [OK] pula a cópia dos golpes
+    CopyMoveToExe();
+    NewExeMovePost();
+    return 0;
+}
+
+int CPlayerMelee::CopyMoveToExe()       // converte a lista de golpes digitados em execuções "exe"
+{
+    f_0c0 = 0;
+    f_0bc = 0;                                                // [OK] contador de golpes copiados
+    m_pExeHead = NULL;
+    m_pExeCur = NULL;
+    if (!SetComboMoves()) return 0;
+    melee_move_s *it = (melee_move_s *)GetCurrentDirection();
+    if (!it) { StopMelee(); return 0; }
+    while (it->m_pNext) it = it->m_pNext;                     // vai ao primeiro (lista ligada para trás)
+    int iCount = 0;
+    for (; it; it = it->m_pPrev)
+    {
+        if (IsDirectionless(it->m_iDirection)) continue;
+        iCount++;                                             // [OK] a0[47]
+        char szAnim[0x20];
+        GetAnimForMove(it, szAnim);
+        MELEE_STRENGTH s = (MELEE_STRENGTH)GetMeleeStrength(it);
+        float flDelay = GetDamageDelay(it);
+        AddExeMove(CreateExeMove(it->m_iDirection, it->f_14, flDelay, it->f_18, (MELEE_COMBO_STATUS)iCount, s, szAnim));   // [?] ordem dos args
+    }
+    return 0;
+}
+
+int CPlayerMelee::NewExeMovePost()
+{
+    if (!m_pExeCur)
+        return CanSwitch() ? Switch() : StopMelee();          // [OK] acabaram os golpes
+    m_pExeCur->f_54 = SetBlock(m_pExeCur);                    // [OK] +0x54
+    SetBlockStun(m_pExeCur);
+    AddAnimationExe(gpGlobals->time, m_pExeCur->m_szName);
+    if (m_pExeCur->m_iStrength == 2)                          // golpe forte: borrão de movimento
+    {
+        int seq = m_pAttacker->LookupSequence(m_pExeCur->m_szName);   // [?]
+        UTIL_Model_MotionBlur(ENTINDEX(ENT(m_pAttacker->pev)), seq);   // [?] args
+    }
+    return 0;
+}
+
+int CPlayerMelee::NextExeMove()
+{
+    if (!m_pExeCur) return NewExeMovePost();
+    if (!m_pExeCur->f_40)                                     // golpe simples
+    {
+        EmitDamage();
+        if (!m_fInAdvMelee) return 0;                         // [OK] luta acabou durante o dano
+    }
+    else
+    {
+        if (m_pExeCur->f_44)                                  // combo: dispara os hits restantes
+        {
+            for (int i = 0; i < m_pExeCur->m_iNumHits; i++)
+            {
+                EmitComboDamage((melee_combo_hit_s *)&m_pExeCur->m_Hit[i]);
+                if (!m_fInAdvMelee) return 0;
+            }
+        }
+    }
+    if (m_pExeCur) m_pExeCur = (melee_execution_s *)GetNextExe();
+    return NewExeMovePost();
+}
+
+int CPlayerMelee::HandleExeAttack()
+{
+    plrmelee_anim_s *pAnim = (plrmelee_anim_s *)GetCurrentAnim();
+    if (!pAnim) { ALERT(at_console, "No pAnim!\n"); return StopMelee(); }
+    if (!pAnim->m_fExeAnim) { ALERT(at_console, "Non execute anim!\n"); return StopMelee(); }
+
+    melee_execution_s *e = m_pExeCur;
+    if (!e->f_40 && !e->f_44)                                 // golpe simples: dano no atraso
+    {
+        if (e->f_34 + e->f_38 < gpGlobals->time)              // [OK] início + atraso
+        {
+            EmitDamage();
+            if (!m_fInAdvMelee) return 0;
+        }
+    }
+    if (m_pExeCur->f_44)                                      // combo: cada hit vence no seu prazo
+    {
+        for (int i = 0; i < m_pExeCur->m_iNumHits; i++)
+        {
+            melee_exe_hit_s *h = &m_pExeCur->m_Hit[i];
+            if (!h->f_0c && h->m_fActive && h->m_flTime < gpGlobals->time)
+                EmitComboDamage((melee_combo_hit_s *)h);
+        }
+    }
+    return SetBlockingDirections();
+}
+
+int CPlayerMelee::StopExeAttack()
+{
+    if (m_Mode == 7)                                          // atacante
+    {
+        m_Mode = (ADV_MELEE_STATUS)0;
+        if (f_0fc)
+        {
+            plrmelee_anim_s *a = (plrmelee_anim_s *)GetCurrentAnim();
+            if (a) a->m_fExeAnim = 0;
+        }
+        else
+            RemoveAllAnims();
+        if (!m_pDefenderMelee->f_0ec) DelAllDirections();
+        for (melee_execution_s *p = m_pExeHead; p; )
+        {
+            melee_execution_s *n = p->m_pNext;
+            delete p;
+            p = n;
+        }
+        m_pExeHead = NULL;
+        m_pExeCur = NULL;
+        return m_pDefenderMelee->StopExeAttack();
+    }
+    if (m_Mode == 8)                                          // defensor
+    {
+        m_Mode = (ADV_MELEE_STATUS)0;
+        RemoveAllAnims();
+        if (!f_0ec) DelAllDirections();
+    }
+    return 0;
+}

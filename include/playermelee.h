@@ -297,7 +297,7 @@ public:
     float m_flGrabLastTick;                     // +0xb0 [OK] último tick do agarrão
     float f_0b4;                                // +0xb4 [?] agora+1 após um arremesso
     int   m_iPunchCount;                        // +0xb8 [OK] socos do prepunch
-    char  pad_0bc[0xc4-0xbc];
+    int   f_0bc, f_0c0;                         // +0xbc contador de golpes copiados (CopyMoveToExe); +0xc0 [?]
     int   m_iStruggleTies;                      // +0xc4 [OK] empates no struggle (CanSwitch/CheckStruggleArrows)
     int   m_iAttackerMoveCount;                 // +0xc8 [OK] contador de AddDirection (atacante)
     int   m_iDefenderMoveCount;                 // +0xcc [OK]
