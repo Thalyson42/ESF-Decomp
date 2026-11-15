@@ -16,3 +16,9 @@ Dados do trabalho decompilado são verificados comparando cada função com a me
   (ex.: `CBasePlayer::PreThink/Killed/TakeDamage/PostThink/Jump`). 2.910 não têm equivalente (código do ESF, ou funções livres que o script ainda não cobre).
 - Heurística (strings, nomes chamados, constantes): serve para triagem, não prova. Funções triviais/inline podem aparecer como falso positivo.
 - Próximo: usar o código do SDK como base das 864 "prováveis iguais" e reescrever à mão as 156 parciais/modificadas, depois as classes do ESF.
+
+## Fase 2 – headers reconstruídos (14/11/2026)
+- `tools/recover_classes.py` gera `src/headers/<Classe>.h` (+ `classes.json`) de 306 classes:
+  métodos virtuais **na ordem da vtable** (via relocações do .so), campos por offset (observados nas funções decompiladas)
+  e classe-base. Base = declaração real do SDK quando existe (132 classes); senão heurística pela vtable (marcada "base: heuristica", REVISAR).
+- Os campos ainda se chamam `f_XXX` (offset). Renomear usando o SDK (`entvars_t`, `CBaseEntity`...) é o próximo passo.
