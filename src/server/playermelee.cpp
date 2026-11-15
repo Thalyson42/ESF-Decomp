@@ -2083,3 +2083,69 @@ int CPlayerMelee::CheckStruggleArrows(void)                   // compara quanto 
     }
     return 0;
 }
+
+// ======================================================================
+// Lote 16: struggle -- fim, repetição, burst e vitória
+// ======================================================================
+void CPlayerMelee::RetryStruggleAttack(void)                  // rodada extra depois de um empate
+{
+    m_flNextArrow = gpGlobals->time + melee_struggle_startdelay->value;
+    m_iStruggleArrows = 0;
+    m_fStruggleEnding = 0; f_078 = 0; f_07c = 0;              // memset(+0x74, 0, 12)
+    m_pDefenderMelee->m_iStruggleArrows = 0;
+    m_pDefenderMelee->m_flNextArrow = 0;
+    m_pDefenderMelee->f_078 = 0;
+    m_pDefenderMelee->f_07c = 0;
+}
+
+void CPlayerMelee::StartBurstStruggleAttack(void)             // struggle "burst" (o atacante prende o defensor por trás)
+{
+    UTIL_Model_Connect(ENTINDEX(ENT(m_pAttacker->pev)), ENTINDEX(ENT(m_pDefender->pev)), 9);   // [?] argumentos
+    AddAnimation(true, gpGlobals->time, 1, "struggle_attack");                  // [OK]
+    m_pDefenderMelee->AddAnimation(true, gpGlobals->time, 1, "struggle_defend");
+    UTIL_MakeVectors(m_pAttacker->pev->v_angle);
+    m_vecDir[0] = gpGlobals->v_forward.x; m_vecDir[1] = gpGlobals->v_forward.y; m_vecDir[2] = gpGlobals->v_forward.z;
+    for (int i = 0; i < 3; i++) m_pDefenderMelee->m_vecDir[i] = m_vecDir[i];
+    Vector vecBack(-m_vecDir[0], -m_vecDir[1], -m_vecDir[2]);
+    Vector vecPos = m_pDefender->pev->origin + vecBack * 9.0f;                  // [OK] atacante nasce 9 u atrás do defensor
+    UTIL_SetOrigin(m_pAttacker->pev, vecPos);
+    Vector vecAng = UTIL_VecToAngles(vecBack);
+    UTIL_Model_MeleeStruggle_Anglefix(ENTINDEX(ENT(m_pAttacker->pev)), vecAng); // [?]
+}
+
+void CPlayerMelee::StopStruggleAttack(void)
+{
+    if (m_Mode == MELEE_STRUGGLE_ATTACK || m_Mode == MELEE_STRUGGLE_DEFEND)
+    {
+        m_iStruggleArrows = 0; m_flNextArrow = 0; m_fStruggleEnding = 0; f_078 = 0; f_07c = 0;   // memset(+0x6c, 0, 20)
+        DelAllDirections();
+        RemoveAllAnims();
+        m_pAttacker->pev->vuser4 = Vector(0, 0, 0);
+        if (m_Mode == MELEE_STRUGGLE_ATTACK)
+            m_pDefenderMelee->StopStruggleAttack();           // [OK] só o atacante encerra o par
+    }
+}
+
+void CPlayerMelee::WinStruggle(void)                          // o vencedor ganha um combo-relâmpago de um golpe
+{
+    f_104 = 1;
+    SetMode(MELEE_EXE_ATTACK);                                // [OK] 7
+    UTIL_Model_RemoveAll(ENTINDEX(ENT(m_pAttacker->pev)));
+    UTIL_Model_RemoveAll(ENTINDEX(ENT(m_pDefender->pev)));
+    UTIL_Model_Connect(ENTINDEX(ENT(m_pAttacker->pev)), ENTINDEX(ENT(m_pDefender->pev)), 11);   // [?]
+    Vector vecDir(m_vecDir[0], m_vecDir[1], m_vecDir[2]);
+    Vector vecAng = UTIL_VecToAngles(f_140 ? vecDir : -vecDir);                 // [OK]
+    UTIL_Model_MeleeStruggle_Anglefix(ENTINDEX(ENT(m_pAttacker->pev)), vecAng); // [?]
+    m_pExeHead = NULL;                                        // zera a lista de combos
+    m_pExeCur = NULL;
+    melee_execution_s *p = AddExeMove(SetupCombo(1));
+    p->f_54 = 2;                                              // [OK]
+    int iFlags = RANDOM_LONG(0, 1) ? 0x880 : 0x801;           // [OK] golpe final: chute ou soco, sorteado
+    char szAnim[64];
+    GetAnimForMove(iFlags, 2, szAnim);                        // [OK] força 2 = forte
+    melee_execution_s *q = AddExeMove(CreateExeMove(iFlags, 0, 0.35f, 1, (MELEE_COMBO_STATUS)0, MELEE_STRONG, szAnim));
+    q->f_54 = 2;
+    q->f_48 = 0;
+    m_pExeCur = m_pExeHead;
+    NewExeMovePost();
+}
