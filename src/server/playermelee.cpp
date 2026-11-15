@@ -947,7 +947,7 @@ void CPlayerMelee::GetThrowAnimDirection(int iUnused, int iDir, char *szOut)   /
     case 3: strcpy(szOut, "right"); break;
     case 4:
         if ((m_iThrowState == THROW_ROLL && (m_pAttacker->pev->flags & FL_DUCKING)) ||
-            (m_iThrowState == THROW_RECOVER && f_034 == 0))      // [OK] +0x64 e +0x34 [?]
+            (m_iThrowState == THROW_RECOVER && m_fAirRecover == 0))      // [OK] +0x64 e +0x34 [?]
             strcpy(szOut, "forward");
         else
             strcpy(szOut, "front");
@@ -1613,4 +1613,71 @@ int CPlayerMelee::DeaccelerateToss(void)                      // [OK] a velocida
     m_flTossSpeed -= dt * m_flTossDecel;
     if (m_flTossSpeed < 0) m_flTossSpeed = 0;
     return m_flTossSpeed < m_flTossMinSpeed;
+}
+
+// ======================================================================
+// Lote 11: recuperação do arremessado (air/ground recover) e rolagem
+// ======================================================================
+int CPlayerMelee::HandleRecover(void)                         // 1 = o jogador acabou de se recuperar
+{
+    if (m_iThrowState != THROW_RECOVER)
+    {
+        // depois do tempo mínimo, apertar ataque/pulo/alt gasta ki e recupera (mais barato agachado)
+        if (m_flTossEndTime < gpGlobals->time &&
+            ((m_pAttacker->pev->button & IN_ATTACK) || (m_pAttacker->pev->button & (IN_JUMP | 0x800))))   // 2050
+        {
+            int iKi = (m_pAttacker->pev->flags & FL_DUCKING) ? 60 : 150;   // [OK]
+            if (m_pAttacker->UseKi(iKi))
+            {
+                Recover();
+                return 1;
+            }
+        }
+    }
+    else if (m_fAirRecover)                                   // [OK] recuperação no ar continua freando
+    {
+        DeaccelerateToss();
+        ApplyVelocity();
+    }
+    return 0;
+}
+
+void CPlayerMelee::Recover(void)
+{
+    if (m_iThrowState == THROW_TOSS)                          // recuperou ainda voando
+    {
+        m_fAirRecover = 1;
+        m_flTossSpeed *= 0.5f;                                // [OK] perde metade da velocidade
+        m_flTossDecel += m_flTossDecel;                       // [OK] e freia o dobro
+        m_flGrabLastTick = gpGlobals->time;
+        EMIT_SOUND_DYN(ENT(m_pAttacker->pev), CHAN_WEAPON, "weapons/airrecover.wav", 1.0, 0.8, 0, 100);
+    }
+    else
+    {
+        m_fAirRecover = 0;
+        EMIT_SOUND_DYN(ENT(m_pAttacker->pev), CHAN_WEAPON, "weapons/groundrecover.wav", 1.0, 0.8, 0, 100);
+    }
+    m_iThrowState = THROW_RECOVER;                            // [OK] 6
+}
+
+void CPlayerMelee::StartRoll(void)
+{
+    m_pAttacker->pev->movetype = 4;                           // [OK] MOVETYPE_STEP
+    m_pAttacker->pev->friction = 0.3f;                        // [OK] +0x120
+    m_pAttacker->pev->gravity = 0.75f;                        // [OK] +0x11c
+    m_pAttacker->m_flSpeedMult = 0;                           // +0x754: o jogador não anda enquanto rola
+    m_iThrowState = THROW_ROLL;
+    f_030 = 0;
+    f_000 = 1;
+}
+
+void CPlayerMelee::HandleRoll(void)
+{
+    CheckCreater();
+    if (m_pAttacker->pev->velocity.Length() < 10.0f && (m_pAttacker->pev->flags & FL_DUCKING))   // [OK] parou de rolar
+    {
+        StartLay();
+        return;
+    }
+    HandleRecover();
 }

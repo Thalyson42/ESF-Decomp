@@ -269,7 +269,7 @@ public:
     int   m_fTossing;                           // +0x28 [OK] ManageToss
     int   m_iTossType;                          // +0x2c [OK] StartToss(a2)
     char  pad_030[4];
-    int   f_034;                                // +0x34 [?]
+    int   m_fAirRecover;                        // +0x34 [OK] 1 = recuperou no ar (HandleRecover)
     int   m_fStruggleBar;                       // +0x38 [OK] barra de struggle visível
     int   f_03c;                                // +0x3c [?]
     float m_vecTossDir[3];                      // +0x40 [OK] direção normalizada do arremesso
