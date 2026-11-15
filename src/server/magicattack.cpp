@@ -123,3 +123,39 @@ void CGuidedAttack::StopTouch(CBaseEntity *pOther)
     m_fStuck = 1;                                             // [OK] +0x2cc: habilita o beam jump
     SetThink(NULL);                                           // [OK] (+0xc/+0x10 = 0)
 }
+
+// ======================================================================
+// SwatAway: o jogador rebate o ataque com a guarda. iDir != 0 -> desvio aleatório para um dos lados
+// (som "weapons/reflect.wav", animação 7/8); iDir == 0 -> segue reto (animação 9). vtable slot 124 (0x1f8).
+// ======================================================================
+void CMagicAttack::SwatAway(CBasePlayer *pPlayer, int iDir)
+{
+    UTIL_MakeVectors(pPlayer->pev->v_angle);                  // [OK] +0x74
+    Vector vecDir;
+    int iAnim;
+
+    if (iDir)
+    {
+        float r = RANDOM_FLOAT(-1.0f, 1.0f);                  // [OK]
+        vecDir = (gpGlobals->v_forward + gpGlobals->v_right * -r).Normalize();   // [OK] lado aleatório
+        EMIT_SOUND_DYN(ENT(pPlayer->pev), CHAN_WEAPON, "weapons/reflect.wav", 1.0, 0.8, 0, 100);   // [OK]
+        iAnim = (r < 0) ? 7 : 8;                              // [?] a comparação no decompile perdeu o valor de r
+    }
+    else
+    {
+        vecDir = gpGlobals->v_forward;                        // [OK]
+        iAnim = 9;
+    }
+    pPlayer->SetAnimation(iAnim);                             // [OK]
+
+    Vector vecGun = pPlayer->GetGunPosition();                // [?] vtable slot 120 (0x1e0), retorno por ponteiro
+    vecGun = vecGun + gpGlobals->v_forward * (pev->fuser1 + 10.0f);   // [?] pev+0xe8: raio do ataque
+    UTIL_SetOrigin(pev, vecGun);                              // [OK]
+
+    pev->owner = pPlayer->pev->pContainingEntity;             // [OK] agora o dono é quem rebateu
+    SetThink(&CMagicAttack::NormalThink);                     // [OK]
+    pev->nextthink = gpGlobals->time + 0.5f;                  // [OK]
+    pPlayer->m_pBlockAttack_flag = 1;                         // [?] player+0x784 := 1
+    pev->velocity = vecDir * m_flSpeed;                       // [OK] m_flSpeed = float em +0x2a8
+    pev->angles = UTIL_VecToAngles(pev->velocity);            // [OK]
+}

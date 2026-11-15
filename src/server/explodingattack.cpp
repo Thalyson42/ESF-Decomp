@@ -1,6 +1,6 @@
-// explodingattack.cpp -- CExplodingAttack: 9 de 13 funções (as 4 grandes estão pendentes). RECUPERADO À MÃO.
+// explodingattack.cpp -- CExplodingAttack: 13 de 13 funções. RECUPERADO À MÃO.
 // Fonte: decomp_raw/CExplodingAttack/*.c. [OK] conferido; [?] incerto.
-// Pendentes: BlockStruggleThink(1326 B) DrawExplosionFX(1487 B) Explode(1641 B) [+ CMagicAttack::SwatAway 817 B]
+
 #include "extdll.h"
 #include "util.h"
 #include "cbase.h"
@@ -142,4 +142,183 @@ void CExplodingAttack::ExplodeTouch(CBaseEntity *pOther)
         }
     }
     Explode();                                                // [OK] slot 126
+}
+
+// ======================================================================
+// Explode: detona o ataque -- empurra jogadores, causa dano em área, remove/esconde, desenha efeitos.
+// ======================================================================
+void CExplodingAttack::Explode(void)
+{
+    if (!pev->solid) return;                                  // [OK] já explodiu (pev+0x10c é zerado no fim)
+    if (m_fInStruggle && m_pStruggle)                         // [OK] em power struggle: quem manda é a disputa
+    {
+        m_pStruggle->Remove();                                // [OK] slot 125 do CPowerStruggle
+        return;
+    }
+
+    Vector vecCenter = pev->origin;
+    if (m_fInBlockStruggle)                                   // [OK] estava sendo segurado por um jogador em guarda
+    {
+        CBasePlayer *pBlocker = (CBasePlayer *)m_pBlocker;
+        vecCenter = pBlocker->pev->origin;                    // a explosão acontece em cima do jogador
+        m_fInBlockStruggle = 0;
+        pBlocker->pev->movetype = pBlocker->m_fFlying ? 14 : MOVETYPE_WALK;   // [OK] devolve o movetype (14 = voo)
+        MESSAGE_BEGIN(MSG_ONE, gmsgPowerStruggle, NULL, pBlocker->pev->pContainingEntity);
+            WRITE_CHAR(127);                                  // [OK] limpa o HUD
+        MESSAGE_END();
+        pBlocker->m_fBlockStruggling = 0;
+    }
+
+    float flRadius = GetExplosionRadius();                    // [OK] slot 127 (o decompilado perdeu o retorno x87)
+    entvars_t *pevAttacker = pev->owner ? VARS(pev->owner) : NULL;
+
+    // ---- onda de choque nos jogadores (só se o ataque for forte: dmg >= 15) ----
+    CBaseEntity *pEnt = NULL;
+    while ((pEnt = UTIL_FindEntityInSphere(pEnt, vecCenter, flRadius)) != NULL)
+    {
+        if (!pEnt->IsPlayer() || pev->dmg < 15.0f) continue;
+        CBasePlayer *p = (CBasePlayer *)pEnt;
+        CBaseEntity *pAttacker = CBaseEntity::Instance(pevAttacker ? pevAttacker->pContainingEntity : INDEXENT(0));
+        if (g_pGameRules->FPlayerCanTakeDamage(p, pAttacker) &&     // [OK] gamerules slot 14 (o decompilado passa só 1 arg visível)
+            !p->f_4c4 && p->IsAlive() &&                          // [OK] slot 33 = IsAlive
+            p->f_3e4 != 4 && p->f_3e4 != 5 &&                     // player+0x3e4 [?] (estados 4/5 ficam imunes)
+            !p->m_fInPowerStruggle && !p->m_fBlockStruggling && !p->m_fInBlockStruggle && !p->f_368)
+        {
+            float dist = (p->pev->origin - vecCenter).Length();
+            int saved = p->f_33c; p->f_33c = 0;               // +0x33c [?]
+            if (p->f_6c8) p->RemoveWallJump();                // [OK]
+            if (flRadius * 0.5f > dist && p->m_fTurbo) p->StopSwoop();     // perto: para o swoop
+            if (flRadius * 0.25f > dist && p->m_fFlying) p->StopFly();     // muito perto: derruba do voo
+            p->f_33c = saved;
+            float falloff = (flRadius - dist) / flRadius;     // [OK] 1 no centro, 0 na borda
+            float force   = (int)(pev->dmg * 3.0f) + 300;     // [OK]
+            Vector dir = (vecCenter - p->pev->origin);
+            dir = (dir.Length() == 0) ? Vector(0, 0, 1) : dir.Normalize();
+            p->pev->velocity = p->pev->velocity - dir * force * falloff;   // [OK] empurra para longe do centro
+        }
+    }
+
+    RadiusDamage(vecCenter, pev, pevAttacker, pev->dmg, flRadius, 0, DMG_MORTAR);   // [OK] 0x800000
+
+    if (m_fRemoveOnVaporize)
+        Remove();                                             // [OK] slot 125
+    else
+    {
+        m_fVaporized = 1;
+        memset(&m_pfnThink, 0, 16);                           // [OK] think + touch
+        pev->effects |= EF_NODRAW;
+    }
+    DrawExplosionFX((int)flRadius, vecCenter);                // [OK] slot 129
+    pev->solid = SOLID_NOT;                                   // [OK] pev+0x10c = 0
+}
+
+// ======================================================================
+void CExplodingAttack::DrawExplosionFX(int iRadius, Vector vecPos)
+{
+    Vector dir = pev->velocity;
+    dir = (dir.Length() == 0) ? Vector(0, 0, 1) : dir.Normalize();      // [OK] direção do voo
+    Vector vecStart = vecPos + dir * -20.0f;                  // [OK]
+    Vector vecEnd   = vecStart + dir * (float)iRadius + dir * 30.0f;
+    TraceResult tr;
+    UTIL_TraceLine(vecStart, vecEnd, ignore_monsters, edict(), &tr);
+    Vector vecHit = (tr.flFraction >= 1.0f) ? vecPos : tr.vecEndPos;    // [OK] sem superfície: explode no centro
+
+    UTIL_ScreenShake(vecHit, 12.0f, 100.0f, 5.0f, (float)iRadius);       // [OK]
+
+    MESSAGE_BEGIN(MSG_ALL, gmsgExplosion);                    // [OK] efeito principal no cliente
+        WRITE_COORD(vecHit.x); WRITE_COORD(vecHit.y); WRITE_COORD(vecHit.z);
+        WRITE_LONG(iRadius);
+        WRITE_BYTE(m_iExplosionType);                         // +0x2d4
+    MESSAGE_END();
+    MESSAGE_BEGIN(MSG_ALL, gmsgAddEffect);                    // [OK]
+        WRITE_BYTE(2);
+        WRITE_SHORT(ENTINDEX(edict()));
+        WRITE_COORD(vecHit.x); WRITE_COORD(vecHit.y); WRITE_COORD(vecHit.z);
+        WRITE_SHORT(iRadius);
+    MESSAGE_END();
+
+    if (tr.flFraction < 1.0f)                                 // [OK] bateu numa superfície: pedras + marca
+    {
+        MESSAGE_BEGIN(MSG_ALL, SVC_TEMPENTITY);
+            WRITE_BYTE(TE_BREAKMODEL);                        // 108
+            WRITE_COORD(vecHit.x); WRITE_COORD(vecHit.y); WRITE_COORD(vecHit.z);
+            WRITE_COORD(50); WRITE_COORD(50); WRITE_COORD(50);                       // tamanho
+            WRITE_COORD(tr.vecPlaneNormal.x * 200); WRITE_COORD(tr.vecPlaneNormal.y * 200); WRITE_COORD(tr.vecPlaneNormal.z * 200);
+            WRITE_BYTE(30);                                   // velocidade aleatória
+            WRITE_SHORT(g_sRockGibs);
+            WRITE_BYTE(20);                                   // quantidade
+            WRITE_BYTE(50);                                   // vida (x0.1 s)
+            WRITE_BYTE(0);
+        MESSAGE_END();
+    }
+    UTIL_DecalTrace(&tr, RANDOM_FLOAT(0, 1) < 0.5f ? 11 : 12);     // [OK] duas marcas de queimado
+}
+
+// ======================================================================
+// Block struggle: o jogador (m_pBlocker) segura o ataque com a guarda. A cada 0.2 s compara a "força de
+// bloqueio" do jogador (player+0x730) com pev->dmg do ataque.
+// ======================================================================
+void CExplodingAttack::BlockStruggleThink(void)
+{
+    CBasePlayer *p = (CBasePlayer *)m_pBlocker;
+    if (!BlocksAttack(p))                                     // [OK] o jogador desviou o olhar/abaixou a guarda
+    {
+        Explode();                                            // [OK] slot 126
+        return;
+    }
+
+    float flBlock = (float)(int)p->f_730;                     // [OK] força de bloqueio (+0x730) [?] nome
+    if (flBlock > pev->dmg)                                   // [OK] o jogador é mais forte: rebate o ataque
+    {
+        m_fInBlockStruggle = 0;
+        p->m_fBlockStruggling = 0;
+        MESSAGE_BEGIN(MSG_ONE, gmsgPowerStruggle, NULL, p->pev->pContainingEntity);
+            WRITE_CHAR(127);                                  // limpa o HUD
+        MESSAGE_END();
+        p->pev->movetype = p->m_fFlying ? 14 : MOVETYPE_WALK;
+        f_2b4 = 0;
+        f_2d8 = 0;
+        SwatAway(p, 0);                                       // [OK] slot 124: manda o ataque embora
+        SetTouch(&CExplodingAttack::ExplodeTouch);            // [OK] volta a explodir ao tocar
+        return;
+    }
+
+    int iBlock = (int)p->f_730;
+    // razão assinada da disputa: >0 o atacante vence, <0 o jogador vence
+    if (pev->dmg > (float)iBlock)
+    {
+        if (pev->dmg != 0) m_flStruggleRatio = (pev->dmg - iBlock) / pev->dmg;     // [OK]
+    }
+    else if (!iBlock)
+        m_flStruggleRatio = 0;
+    else
+        m_flStruggleRatio = -((float)iBlock - pev->dmg) / (float)iBlock;           // [OK]
+
+    UTIL_MakeAimVectors(pev->angles);
+    float flSpeed = (float)p->GetMaxSpeed();                  // [OK]
+    if (iBlock)
+    {
+        pev->velocity = gpGlobals->v_forward * flSpeed * 0.2f * pev->dmg / (float)iBlock;   // [OK] mais lento quanto mais forte o jogador
+        if (pev->velocity.Length() > flSpeed)
+            pev->velocity = gpGlobals->v_forward * flSpeed;                                 // [OK] limite = velocidade do jogador
+    }
+    else
+        pev->velocity = gpGlobals->v_forward * flSpeed * 0.2f;                              // [OK]
+
+    MESSAGE_BEGIN(MSG_ONE, gmsgPowerStruggle, NULL, p->pev->pContainingEntity);
+        WRITE_CHAR((int)(-m_flStruggleRatio * 100.0f));       // [OK] sinal invertido: visão do jogador
+    MESSAGE_END();
+    p->pev->velocity = pev->velocity;                         // [?] o jogador é empurrado junto (campo exato do pev não confirmado)
+
+    if (f_2b4 && m_flStruggleRatio > 0)                       // [?] f_2b4: o ataque está "machucando" o jogador
+    {
+        f_2d8 += m_flStruggleRatio * pev->dmg * 0.1f;         // [OK] dano acumulado
+        int iDmg = (int)f_2d8;
+        if (iDmg > 3)
+        {
+            p->TakeDamage(pev, pev->owner ? VARS(pev->owner) : NULL, (float)iDmg, DMG_MORTAR);   // [OK] vtable +0x34
+            f_2d8 -= (float)iDmg;
+        }
+    }
+    pev->nextthink = gpGlobals->time + 0.2f;                  // [OK]
 }

@@ -15,7 +15,7 @@ public:
     void AnimateSprite(void);
     void DrawBubbles(void);
     BOOL BlocksAttack(CBasePlayer *pPlayer);
-    void SwatAway(CBasePlayer *pPlayer, int iDir);   // ainda não recuperada (817 B)
+    void SwatAway(CBasePlayer *pPlayer, int iDir);   // slot 124 [OK]
 };
 
 // Campos da CExplodingAttack/CGuidedAttack usados pelo struggle e pela arma:

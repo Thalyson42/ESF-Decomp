@@ -34,5 +34,6 @@ public:
     int   m_fStuck;             // +0x2cc   grudou numa parede (StopTouch)
     int   m_iRadiusMult;        // +0x2d0   raio = m_iRadiusMult * pev->dmg (máx. 4000)
     float f_2d8;                // +0x2d8   (zerado ao iniciar o block struggle)
+    int   m_iExplosionType;     // +0x2d4   (byte enviado em gmsgExplosion)
     int   m_fReleased;          // +0x2dc
 };
