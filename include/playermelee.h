@@ -290,7 +290,7 @@ public:
     float m_flLastPunch;                        // +0x94 [OK] hora do último soco do prepunch
     float m_flGrabFullTime;                     // +0x98 [OK] hora em que a barra do agarrão encheu
     float f_09c;                                // +0x9c [?] 0..100 (fração mostrada na barra de struggle)
-    char  pad_0a0[4];
+    int   f_0a0;                                // +0xa0 [?]
     float m_flBarUpdate;                        // +0xa4 [OK] limita a barra do HUD a 20 atualizações/s
     float f_0a8;
     float m_flDelayTime;                        // +0xac [OK] HandleDelayedBlock (1 s)
@@ -311,7 +311,7 @@ public:
     int   f_0ec;                                // +0xec [?]
     int   f_0f0;                                // +0xf0 [?] retaliate flags (HandleExeDefend)
     int   f_0f4;                                // +0xf4 [?] (StartChargedAttack: pula a animação de conexão)
-    char  pad_0f8[0x100-0xf8];
+    int   f_0f8, f_0fc;                         // +0xf8/+0xfc [?] zerados em Reset
     int   f_100;                                // +0x100 [?] 1 = prepunch em struggle (delays diferentes)
     int   f_104;                                // +0x104 [?] pula CopyMoveToExe
     int   m_fDelayEndBlock;                     // +0x108 [OK] SetDelayEndBlock
