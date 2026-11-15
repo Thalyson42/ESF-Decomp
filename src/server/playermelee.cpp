@@ -1183,3 +1183,139 @@ void CPlayerMelee::HandlePrepunchDefend(void)                 // this = melee do
         pevDef->vuser4 = Vector(0, 0, 0);
     CheckStunTime();
 }
+
+// ======================================================================
+// Lote 7: ataque carregado (charge) e combos do atacante
+// ======================================================================
+int CPlayerMelee::SetDirections(void)                         // lê os botões do atacante e atualiza o golpe atual; 1 = terminou
+{
+    int iFlags = 0;
+    SetMovementFlags(iFlags);
+    melee_move_s *cur = m_pAttackerMoves;
+    if (cur)
+    {
+        if (!iFlags)
+        {
+            if (SetAttackFlags(iFlags))
+                ResetDirection(iFlags, cur);
+            else
+            {
+                LetGoDirection(cur);
+                return 1;
+            }
+        }
+        else
+        {
+            if (SetAttackFlags(iFlags))
+            {
+                if (cur->m_fReleased || cur->m_iDirection != iFlags)
+                {
+                    if (IsDirectionless(cur->m_iDirection) && !IsDirectionless(iFlags))
+                        SetDirection(cur, iFlags);                      // [OK] o golpe ganha direção
+                    else if (!ResetDirection(iFlags, cur) && CanLetGo(cur))
+                    {
+                        int r = LetGoDirection(cur);
+                        if (r) return r;
+                        AddDirection(iFlags);                           // [OK] encadeia o próximo
+                        return r;
+                    }
+                }
+            }
+            else
+            {
+                LetGoDirection(cur);
+                return 1;
+            }
+        }
+        return HoldDirection(cur);
+    }
+    else if (SetAttackFlags(iFlags))
+    {
+        AddDirection(iFlags);
+        return 0;
+    }
+    return 1;
+}
+
+int CPlayerMelee::CanRetaliate(void)
+{
+    int iFlags = 0;
+    melee_move_s *cur = GetCurrentDirection();
+    SetAttackFlags(iFlags);
+    if (!f_0ec)
+    {
+        if (!cur) return 0;
+        if (!cur->m_fReleased) return 0;                        // [OK] +0x10
+        if (!(iFlags & 1) && !(iFlags & 0x800)) return 0;       // [OK] precisa estar apertando ataque
+        if (GetMoveCount() != m_pAttackerOtherMelee->GetMoveCount()) return 0;   // [OK] mesmo nº de golpes
+    }
+    return 1;
+}
+
+void CPlayerMelee::HandleChargeAttack(void)
+{
+    if (m_fDelayEndBlock)                                       // [OK] +0x108
+    {
+        if (HandleDelayedBlock(m_pAttackerMoves, m_pDefenderMelee->m_pDefenderMoves))
+            ExecuteCombo();
+        return;
+    }
+    if (!SetDirections()) return;
+    if (SetDelayEndBlock(m_pAttackerMoves, m_pDefenderMelee->m_pDefenderMoves)) return;
+    ExecuteCombo();
+}
+
+void CPlayerMelee::StartChargedAttack(void)
+{
+    if (!f_0f4)
+    {
+        UTIL_Model_Connect(ENTINDEX(ENT(m_pAttacker->pev)), ENTINDEX(ENT(m_pDefender->pev)), 11);   // [?]
+        Vector vecBack(-m_vecDir[0], -m_vecDir[1], -m_vecDir[2]);
+        Vector vecAng = UTIL_VecToAngles(vecBack);
+        UTIL_Model_MeleeStruggle_Anglefix(ENTINDEX(ENT(m_pAttacker->pev)), vecAng);   // [?]
+    }
+    if (!f_0ec)
+    {
+        DelAllDirections();
+        m_pDefenderMelee->DelAllDirections();
+        SendPredictVars(m_pDefenderMelee->GetStunTime());       // [?]
+    }
+    CPlayerMelee *d = m_pDefenderMelee;
+    if (!d->m_fStunActive)
+        d->AddAnimation(true, gpGlobals->time, 1, "ref_stance");              // [OK]
+    else if (d->f_0d8)
+        d->AddAnimation(true, gpGlobals->time, 2, "ref_autopunch_spin", "ref_stun");   // [OK] gira e fica atordoado
+    else
+        d->AddAnimation(true, gpGlobals->time, 1, "ref_stun");
+    AddAnimation(true, gpGlobals->time, 1, "ref_stance");
+}
+
+void CPlayerMelee::StartChargedAttackRetaliate(void)          // defensor revida: os papéis se invertem
+{
+    DelAllDirectionsAttacker();
+    SetDefender(m_pAttackerOther);                              // [OK]
+    float flStun = GetStunTime();
+    float flRatio = PredictBlockRatio(m_pDefenderMelee->m_pExeHead, m_pDefenderMoves, flStun);   // [?] sobrecarga (exe, move, float)
+    m_pDefenderMelee->SetActiveStunTime(flRatio);
+    SetActiveStunTime(0);
+    MeleeHudDisable();
+    SendPredictVars(flRatio);
+}
+
+void CPlayerMelee::StopChargedAttack(void)
+{
+    if (m_Mode == MELEE_CHARGE_ATTACK)
+    {
+        m_Mode = MELEE_NONE;
+        RemoveAllAnims();
+        MeleeHudDisable();
+        f_0f0 = 0;
+        m_pDefenderMelee->StopChargedAttack();
+    }
+    else if (m_Mode == MELEE_CHARGE_DEFEND)
+    {
+        m_Mode = MELEE_NONE;
+        RemoveAllAnims();
+        m_flTotalStun = m_pAttackerOtherMelee->TotalCmbTime();    // [OK] stun total = tempo do combo do atacante
+    }
+}

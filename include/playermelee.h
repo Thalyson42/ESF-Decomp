@@ -300,7 +300,8 @@ public:
     char  pad_0e4[0xec-0xe4];
     int   f_0ec;                                // +0xec [?]
     int   f_0f0;                                // +0xf0 [?] retaliate flags (HandleExeDefend)
-    char  pad_0f4[0x100-0xf4];
+    int   f_0f4;                                // +0xf4 [?] (StartChargedAttack: pula a animação de conexão)
+    char  pad_0f8[0x100-0xf8];
     int   f_100;                                // +0x100 [?] 1 = prepunch em struggle (delays diferentes)
     int   f_104;                                // +0x104 [?] pula CopyMoveToExe
     int   m_fDelayEndBlock;                     // +0x108 [OK] SetDelayEndBlock
