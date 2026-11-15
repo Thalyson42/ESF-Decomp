@@ -43,7 +43,7 @@ struct plrmelee_anim_s {                        // animação enfileirada (0x2a8
     int   m_fExeAnim;                           // +0x294 [OK] animação de combo exe (GetCurrentExeAnim)
     int   m_fModelAnim;                         // +0x298 [OK] usou UTIL_Model_* (limpar ao remover)
     int   m_fExpire;                            // +0x29c [OK] remover quando não for a atual
-    int   m_iDuckFlag;                          // +0x2a0 [OK] comparado com pev->flags & FL_DUCKING
+    int   m_iGroundFlag;                        // +0x2a0 [OK] comparado com pev->flags & FL_ONGROUND (0x200)
     plrmelee_anim_s *m_pNext;                   // +0x2a4 [OK]
 };
 
@@ -265,15 +265,16 @@ public:
     float m_flTossEndTime;                      // +0x14 [OK] StartToss(agora + a7)
     float m_flLayTime;                          // +0x18 [OK] HandleLay (1.25 s)
     float m_flLandRecoverTime;                  // +0x1c [OK] HandleLandRecover (1 s)
-    char  pad_020[8];
+    int   f_020;                                // +0x20 [?]
+    float f_024;                                // +0x24 [?] hora do fim do arremesso
     int   m_fTossing;                           // +0x28 [OK] ManageToss
     int   m_iTossType;                          // +0x2c [OK] StartToss(a2)
-    char  pad_030[4];
+    int   f_030;                                // +0x30 [OK] cratera já feita neste contato (CheckCreater)
     int   m_fAirRecover;                        // +0x34 [OK] 1 = recuperou no ar (HandleRecover)
     int   m_fStruggleBar;                       // +0x38 [OK] barra de struggle visível
     int   f_03c;                                // +0x3c [?]
     float m_vecTossDir[3];                      // +0x40 [OK] direção normalizada do arremesso
-    char  pad_04c[0x58-0x4c];
+    float m_vecTossLast[3];                     // +0x4c [?] zerado em StopThrow
     float m_vecTossAux[3];                      // +0x58 [?] zerado em StartToss
     int   m_iThrowState;                        // +0x64 [OK] InThrow = !=0; 3/4/5 = lasers (SpecialLaserReduction)
     CBasePlayer *m_pThrower;                    // +0x68 [OK] quem arremessou

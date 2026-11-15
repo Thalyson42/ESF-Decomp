@@ -385,7 +385,7 @@ int CPlayerMelee::PlayLowPriorityAnim(void)
 {
     plrmelee_anim_s *pAnim = GetCurrentAnim();
     if (PlayMedPriorityAnim() && !m_pAttacker->f_330 && !m_pAttacker->m_fFlying &&
-        pAnim->m_iDuckFlag == (m_pAttacker->pev->flags & FL_DUCKING))    // [OK] 0x200
+        pAnim->m_iGroundFlag == (m_pAttacker->pev->flags & FL_ONGROUND))    // [OK] 0x200 = no chão
         return 1;
     return 0;
 }
@@ -946,7 +946,7 @@ void CPlayerMelee::GetThrowAnimDirection(int iUnused, int iDir, char *szOut)   /
     case 2: strcpy(szOut, "left");  break;
     case 3: strcpy(szOut, "right"); break;
     case 4:
-        if ((m_iThrowState == THROW_ROLL && (m_pAttacker->pev->flags & FL_DUCKING)) ||
+        if ((m_iThrowState == THROW_ROLL && (m_pAttacker->pev->flags & FL_ONGROUND)) ||
             (m_iThrowState == THROW_RECOVER && m_fAirRecover == 0))      // [OK] +0x64 e +0x34 [?]
             strcpy(szOut, "forward");
         else
@@ -1477,14 +1477,14 @@ int CPlayerMelee::GetThrowDirection(int bAllowVertical)       // [OK] escolhe a 
 int CPlayerMelee::GetThrowActivity(void)                      // [OK] números lidos das jump-tables em 0x100d80 e 0x100e20
 {
     static const int s_Tbl1[6] = { 110, 111, 114, 115, 112, 113 };   // cima, baixo, esq, dir, frente, trás
-    static const int s_Tbl2[4] = { 118, 119, 116, 117 };             // (agachado/rolando) esq, dir, frente, trás
+    static const int s_Tbl2[4] = { 118, 119, 116, 117 };             // (rolando, no chão) esq, dir, frente, trás
     if (m_iThrowState == THROW_TOSS || m_iThrowState == THROW_WALLSTICK ||
-        (m_iThrowState == THROW_ROLL && !(m_pAttacker->pev->flags & FL_DUCKING)))
+        (m_iThrowState == THROW_ROLL && !(m_pAttacker->pev->flags & FL_ONGROUND)))
     {
         int d = GetThrowDirection(1);
         return d <= 5 ? s_Tbl1[d] : 0;
     }
-    if (m_iThrowState == THROW_ROLL)                          // rolando agachado
+    if (m_iThrowState == THROW_ROLL)                          // rolando no chão
     {
         int d = GetThrowDirection(0) - 2;
         return (d >= 0 && d <= 3) ? s_Tbl2[d] : 0;
@@ -1622,11 +1622,11 @@ int CPlayerMelee::HandleRecover(void)                         // 1 = o jogador a
 {
     if (m_iThrowState != THROW_RECOVER)
     {
-        // depois do tempo mínimo, apertar ataque/pulo/alt gasta ki e recupera (mais barato agachado)
+        // depois do tempo mínimo, apertar ataque/pulo/alt gasta ki e recupera (mais barato no chão)
         if (m_flTossEndTime < gpGlobals->time &&
             ((m_pAttacker->pev->button & IN_ATTACK) || (m_pAttacker->pev->button & (IN_JUMP | 0x800))))   // 2050
         {
-            int iKi = (m_pAttacker->pev->flags & FL_DUCKING) ? 60 : 150;   // [OK]
+            int iKi = (m_pAttacker->pev->flags & FL_ONGROUND) ? 60 : 150;   // [OK]
             if (m_pAttacker->UseKi(iKi))
             {
                 Recover();
@@ -1674,10 +1674,93 @@ void CPlayerMelee::StartRoll(void)
 void CPlayerMelee::HandleRoll(void)
 {
     CheckCreater();
-    if (m_pAttacker->pev->velocity.Length() < 10.0f && (m_pAttacker->pev->flags & FL_DUCKING))   // [OK] parou de rolar
+    if (m_pAttacker->pev->velocity.Length() < 10.0f && (m_pAttacker->pev->flags & FL_ONGROUND))   // [OK] parou de rolar
     {
         StartLay();
         return;
     }
     HandleRecover();
+}
+
+// ======================================================================
+// Lote 12: fim do arremesso, deitar, cratera
+// ======================================================================
+void CPlayerMelee::StopThrow(int bQuiet)
+{
+    if (m_iThrowState == THROW_LAY || m_iThrowState == THROW_LANDRECOVER)
+        UTIL_Model_RemoveAll(ENTINDEX(ENT(m_pAttacker->pev)));            // [OK]
+    int bMayFly = 1;
+    if (m_iThrowState == THROW_WALLSTICK)
+        bMayFly = 0;
+    else if (!bQuiet)
+    {
+        m_pAttacker->m_Swoop.AddAllToNullKeyset();                         // [OK] CSwoop em +0x504
+        m_pAttacker->m_Swoop.ResetAllDT();
+    }
+    if (f_03c && !bQuiet)                                                  // [?] f_03c: o arremessado ainda tem dono do dano
+    {
+        f_10c = 1;
+        m_pIgnoreDamageFrom = m_pThrower;                                  // [OK] +0x120 := +0x68
+        f_0b4 = gpGlobals->time + 1.0f;
+    }
+    RemoveStruggleBar();
+    RemoveAllAnims();
+    m_pThrower = NULL;
+    m_iTossType = 0;
+    m_fTossing = 0;
+    m_fAirRecover = 0;
+    f_03c = 0;
+    m_pAttacker->f_37c = 0;
+    m_iThrowState = THROW_NONE;
+    m_flTossStartSpeed = 0; m_flTossSpeed = 0; m_flTossMinSpeed = 0; m_flTossDecel = 0; m_flTossEndTime = 0;
+    f_020 = 0;
+    f_000 = 0;
+    f_024 = gpGlobals->time;                                               // +0x24 [?] hora do fim
+    m_vecTossLast[0] = m_vecTossLast[1] = m_vecTossLast[2] = 0;
+    m_pAttacker->m_flSpeedMult = 1.0f;                                     // [OK] devolve a velocidade
+    m_pAttacker->pev->friction = 1.0f;
+    m_pAttacker->pev->gravity = 1.0f;
+    if (!bMayFly || (m_pAttacker->pev->flags & FL_ONGROUND))
+        m_pAttacker->pev->movetype = MOVETYPE_WALK;                        // [OK] 3
+    else
+        m_pAttacker->StartFly();                                           // [OK] voltou ao ar: volta a voar
+    m_pAttacker->pev->vuser4 = Vector(0, 0, 0);
+}
+
+void CPlayerMelee::StartLay(void)                             // caiu e parou: fica deitado 1,25 s
+{
+    m_pAttacker->pev->movetype = MOVETYPE_NONE;
+    m_pAttacker->m_flSpeedMult = 0;
+    m_pAttacker->pev->friction = 1.0f;
+    m_pAttacker->pev->gravity = 1.0f;
+    m_pAttacker->pev->velocity = Vector(0, 0, 0);
+    m_flLayTime = gpGlobals->time;                            // [OK] HandleLay usa +1,25 s
+    m_iThrowState = THROW_LAY;
+    Vector vecAng(0, m_pAttacker->pev->angles.y, m_pAttacker->pev->angles.z);   // [OK] zera o pitch
+    UTIL_Model_FixAngles(ENTINDEX(ENT(m_pAttacker->pev)), vecAng);             // [?]
+}
+
+void CPlayerMelee::CheckCreater(void)                         // faz a cratera uma vez por contato com o chão
+{
+    if (m_pAttacker->pev->flags & FL_ONGROUND)
+    {
+        if (!f_030) { f_030 = 1; MakeCreater(); return; }
+    }
+    else if (!f_030) return;
+    if (!(m_pAttacker->pev->flags & FL_ONGROUND)) f_030 = 0;               // [OK] rearma ao sair do chão
+}
+
+void CPlayerMelee::MakeCreater(void)
+{
+    Vector vecDir;
+    if (m_iThrowState == THROW_TOSS)
+        vecDir = Vector(m_vecTossDir[0], m_vecTossDir[1], m_vecTossDir[2]);
+    else
+        vecDir = (m_pAttacker->pev->velocity.Normalize() + Vector(0, 0, -1)).Normalize();   // [OK] velocidade + para baixo
+    TraceResult tr;
+    UTIL_TraceLine(m_pAttacker->pev->origin, m_pAttacker->pev->origin + vecDir * 128.0f, ignore_monsters, ENT(m_pAttacker->pev), &tr);
+    if (tr.flFraction == 1.0f) return;
+    CBaseEntity *pHit = CBaseEntity::Instance(tr.pHit);
+    if (!pHit || pHit->pev->solid != SOLID_BSP) return;       // [OK] só em parede/chão do mapa
+    UTIL_DecalTrace(&tr, 36);                                 // [OK] decal 36 (cratera) [?] índice
 }
