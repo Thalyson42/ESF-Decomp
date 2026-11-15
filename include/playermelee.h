@@ -281,12 +281,13 @@ public:
     float m_flTotalStun;                        // +0x8c [OK]
     float m_flPrepunchStart;                    // +0x90 [OK] hora em que o prepunch começou
     float m_flLastPunch;                        // +0x94 [OK] hora do último soco do prepunch
-    char  pad_098[0x9c-0x98];
+    float m_flGrabFullTime;                     // +0x98 [OK] hora em que a barra do agarrão encheu
     float f_09c;                                // +0x9c [?] 0..100 (fração mostrada na barra de struggle)
     char  pad_0a0[0xa8-0xa0];
     float f_0a8;
     float m_flDelayTime;                        // +0xac [OK] HandleDelayedBlock (1 s)
-    char  pad_0b0[0xb8-0xb0];
+    float m_flGrabLastTick;                     // +0xb0 [OK] último tick do agarrão
+    char  pad_0b4[4];
     int   m_iPunchCount;                        // +0xb8 [OK] socos do prepunch
     char  pad_0bc[0xc4-0xbc];
     int   f_0c4;                                // +0xc4 [?] CanSwitch compara com melee_maxextanges
@@ -297,7 +298,8 @@ public:
     int   f_0d8;                                // +0xd8 [?] dano x1.2, stun x1.2
     int   m_fStunned;                           // +0xdc [OK]
     int   m_fStunActive;                        // +0xe0 [OK]
-    char  pad_0e4[0xec-0xe4];
+    int   m_fGrabFull;                          // +0xe4 [OK] barra do agarrão cheia
+    int   m_fGrabSpinSound;                     // +0xe8 [OK] som de giro já tocado
     int   f_0ec;                                // +0xec [?]
     int   f_0f0;                                // +0xf0 [?] retaliate flags (HandleExeDefend)
     int   f_0f4;                                // +0xf4 [?] (StartChargedAttack: pula a animação de conexão)

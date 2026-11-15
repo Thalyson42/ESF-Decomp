@@ -1319,3 +1319,133 @@ void CPlayerMelee::StopChargedAttack(void)
         m_flTotalStun = m_pAttackerOtherMelee->TotalCmbTime();    // [OK] stun total = tempo do combo do atacante
     }
 }
+
+// ======================================================================
+// Lote 8: agarrar e arremessar (grab / swing / throw)
+// ======================================================================
+void CPlayerMelee::SetGrabbedOrigin(void)                     // o defensor fica preso na mão do atacante
+{
+    Vector vecPos(0, 0, 0);
+    CanThrow(80, vecPos);                                     // [OK] preenche o ponto a 80 u à frente
+    m_pDefender->pev->origin = vecPos;
+    UTIL_SetOrigin(m_pDefender->pev, vecPos);
+}
+
+void CPlayerMelee::StartGrabbedAttack(void)
+{
+    UTIL_Model_RemoveAll(ENTINDEX(ENT(m_pAttacker->pev)));
+    UTIL_Model_Grab(ENTINDEX(ENT(m_pAttacker->pev)), ENTINDEX(ENT(m_pDefender->pev)));   // [?] 2º argumento
+    m_pDefenderMelee->RemoveAllAnims();
+    RemoveAllAnims();
+    m_pAttacker->pev->origin = m_pDefender->pev->origin;      // [OK]
+    UTIL_SetOrigin(m_pAttacker->pev, m_pAttacker->pev->origin);
+    m_pAttacker->pev->solid = SOLID_SLIDEBOX;                 // [OK] 3
+    m_pDefender->pev->solid = SOLID_NOT;                      // [OK] o agarrado não colide
+    AddAnimation(true, gpGlobals->time, 2, "ref_start_throw", "ref_swinger_slow");     // [OK]
+    m_pDefenderMelee->AddAnimation(true, gpGlobals->time, 2, "ref_start_swung", "ref_swung");
+    f_09c = 0;                                                // carga do agarrão 0..100
+    m_flGrabFullTime = 0;
+    m_flGrabLastTick = gpGlobals->time;
+    m_pDefenderMelee->m_flGrabLastTick = gpGlobals->time;
+    m_fGrabFull = 0;
+    m_fGrabSpinSound = 0;
+}
+
+void CPlayerMelee::StopGrabbedAttack(void)
+{
+    if (m_Mode == MELEE_GRAB_ATTACK)
+    {
+        m_pAttacker->DrawChargeBar(0);
+        m_Mode = MELEE_NONE;
+        f_09c = 0;
+        m_flGrabFullTime = 0;
+        m_fGrabFull = 0;
+        RemoveAllAnims();
+        if (m_fGrabSpinSound)
+        {
+            m_fGrabSpinSound = 0;
+            EMIT_SOUND_DYN(ENT(m_pAttacker->pev), CHAN_WEAPON, "weapons/spin.wav", 0, 0, SND_STOP, 100);   // [OK] 32
+        }
+        m_pDefenderMelee->StopGrabbedAttack();
+    }
+    else if (m_Mode == MELEE_GRAB_DEFEND)
+    {
+        m_Mode = MELEE_NONE;
+        m_flTotalStun = 0;
+        RemoveAllAnims();
+        if (m_fStruggleBar) RemoveStruggleBar();
+    }
+}
+
+void CPlayerMelee::HandleGrabAttack(void)
+{
+    int iFail = 0;
+    float flRatio = f_09c / 100.0f;
+    int bWeak = flRatio < 0.333333f;                          // [OK] primeiro terço da barra = agarrão "fraco"
+    SetGrabbedOrigin();
+
+    if (m_pAttacker->pev->button & 0x800)                     // [OK] segurando o ataque alternativo
+    {
+        float dt = gpGlobals->time - m_flGrabLastTick;
+        m_flGrabLastTick = gpGlobals->time;
+        if (!m_fGrabFull)
+        {
+            float flCostMult = m_pAttacker->m_pClass->GetKiCostMult();       // [?] vtable da classe +0x40
+            int iKi = (int)((1.0f / flCostMult) * dt * (bWeak ? 150.0f : 100.0f));   // [OK] custo de ki por segundo
+            if (!m_pAttacker->UseKi(iKi))
+                iFail = 1;
+            else
+            {
+                float flAdd;
+                if (bWeak)
+                {
+                    flAdd = 15.0f;
+                    CBasePlayer *pDef = m_pDefender;
+                    if ((pDef->pev->button & 1) || (pDef->pev->button & 0x800))   // [OK] o defensor resiste apertando ataque
+                    {
+                        float flDefMult = pDef->m_pClass->GetKiCostMult();
+                        if (pDef->UseKi((int)((1.0f / flDefMult) * 75.0f * dt)))   // [OK] gastando ki ele atrapalha o agarrão
+                        {
+                            float f = m_pDefenderMelee->f_0d8 ? 0.8f : 0.6f;
+                            float flPR = GetPowerRatio(m_pAttacker);
+                            f -= ((flPR - 1.25f) / 1.25f) * 0.1f;
+                            flAdd *= f;
+                        }
+                    }
+                    flAdd *= dt;
+                }
+                else
+                    flAdd = dt * 40.0f;                       // [OK] depois do primeiro terço enche rápido
+                f_09c += flAdd;
+                if (f_09c > 100.0f) f_09c = 100.0f;
+            }
+        }
+        if (f_09c == 100.0f && !m_fGrabFull)
+        {
+            m_fGrabFull = 1;
+            m_flGrabFullTime = gpGlobals->time;
+        }
+        if (!bWeak && !m_fGrabSpinSound)
+        {
+            m_fGrabSpinSound = 1;
+            EMIT_SOUND_DYN(ENT(m_pAttacker->pev), CHAN_WEAPON, "weapons/spin.wav", 1.0, 0.8, 0, 100);   // [OK]
+        }
+        if (m_fGrabFull && m_flGrabFullTime + 2.5f < gpGlobals->time)    // [OK] não pode segurar cheio por mais de 2,5 s
+            iFail = 1;
+        if (!iFail)
+        {
+            m_pAttacker->DrawChargeBar((int)(flRatio * 100.0f));
+            return;
+        }
+    }
+
+    // soltou o botão (ou falhou): arremessa se der, senão só solta
+    Vector vecDir;
+    if (!CanThrow(80, vecDir) || bWeak)
+    {
+        StopMelee(1);
+        return;
+    }
+    StopMelee(0);
+    Throw(m_pDefender, (int)(flRatio * 500.0f + 1000.0f), 1.5f * flRatio, vecDir);   // [OK] velocidade 1000..1500
+}
