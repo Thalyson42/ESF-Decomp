@@ -8,7 +8,7 @@
 - `dlls/hl.dll` — 1 MB, MSVC, 339 exports com nomes C++ (`?Nome@Classe@@...`). Timestamp 2004-11-15.
 - `cl_dlls/client.dll` — 880 KB, HUD/VGUI, 505 exports. Timestamp 2004-11-15.
 - `esf_bot/esf_bot.dll` — 573 KB, 179 exports. Timestamp 2004-05.
-- `esfdll.dll` (de `$PLUGINSDIR`) — **helper do instalador** (exports `createlog, createpatchlog, deletepath, ishlrunning, replace, strip`). Não é código do mod.
+- `esfdll.dll` (do instalador) — **helper do instalador** (exports `createlog, createpatchlog, deletepath, ishlrunning, replace, strip`). Não é código do mod.
 - `fmod.dll` — biblioteca de áudio FMOD de terceiros. A cópia solta e a de `cl_dlls/` têm hashes diferentes (uma é UPX). Não precisa ser recuperada, só usada como dependência.
 
 ## Pontos de atenção

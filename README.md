@@ -3,7 +3,6 @@
 Recuperação (engenharia reversa / decomp) do código-fonte C++ do mod ESF, cujo código original foi perdido.
 Os desenvolvedores originais confirmaram que não possuem mais o fonte.
 
-> Este repositório **não contém os binários nem os assets do mod** (direitos dos autores originais). Só código recuperado, símbolos e ferramentas.
 
 ## Estado atual
 | Módulo | Binário de origem | Símbolos? | Estado |
@@ -16,12 +15,12 @@ Os desenvolvedores originais confirmaram que não possuem mais o fonte.
 Versão que as strings dos binários dizem ser: **"ESF Beta 1.2.1, Public Version"** (ver FINDINGS).
 
 ## Estrutura
+- `original/` – binários do mod usados na recuperação
 - `symbols/` – nomes de classes/métodos/endereços extraídos dos binários
 - `src/server/` – um `.cpp` por arquivo original (nomes vêm do próprio .so), com métodos listados e `TODO: decompile`
 - `decomp_raw/` – saída automática do angr (não compila; offsets `*(this+N)`), uma pasta por classe
 - `tools/` – scripts (demangler do GCC 2.95, `decompile_fn.py` e `batch_decompile.py` com angr)
 - `docs/` – achados e roadmap
 
-Leia nesta ordem: `docs/METODO.md` (como retomar), `docs/ROADMAP.md`, `docs/FINDINGS.md`, `docs/RECOVERED.md`.
-
-> Os binários originais e os assets **não** estão aqui; quem tem os arquivos é o dono do projeto (ver METODO.md).
+Documentação: `docs/METODO.md` (pipeline), `docs/ROADMAP.md`, `docs/FINDINGS.md`, `docs/RECOVERED.md`.
+Binários originais em `original/`.

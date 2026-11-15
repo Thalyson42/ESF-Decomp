@@ -1,11 +1,12 @@
-# Método e armadilhas (para retomar o trabalho em qualquer sessão)
+# Método e armadilhas técnicas
 
-## Insumos (NÃO estão neste repositório; o dono os tem)
-- `esf.zip` (pasta do mod, 130 arquivos): `linuxdlls/hl_i386.so` (2,5 MB, **com símbolos**, GCC 2.95), `dlls/hl.dll`, `cl_dlls/client.dll`, `esf_bot/esf_bot.dll`.
-- Assets (overviews, media, models, sound, gfx, maps, textures): sem código; maps `.bsp` servem para testar entidades.
-- `esfdll.dll` = helper do instalador; `fmod.dll` = áudio de terceiros. Ambos fora do escopo.
-- Pasta `mp3` não foi enviada.
-- Versão alegada pelo dono: 1.2.3. Strings dos binários dizem "ESF Beta 1.2.1".
+## Binários de origem (`original/`)
+- `original/linuxdlls/hl_i386.so` – servidor Linux, **com símbolos**, GCC 2.95 (fonte principal da recuperação).
+- `original/dlls/hl.dll` – servidor Windows (MSVC), 339 exports com nomes C++. Usado para conferir o comportamento.
+- `original/cl_dlls/client.dll` – cliente (HUD/VGUI). `original/cl_dlls/fmod.dll` – áudio FMOD (terceiros).
+- `original/esf_bot/esf_bot.dll` – bot (ESF Bot 4.0, aparentemente de outro autor).
+- `original/fmod_installer.dll` – outra cópia do FMOD (UPX), vinda do instalador.
+- Strings internas dizem "ESF Beta 1.2.1, Public Version" (o mod distribuído é a 1.2.3).
 
 ## Pipeline (reproduzível)
 1. `tools/demangle_gcc2.py` – c++filt moderno NÃO demangla GCC 2.95 (`Nome__<len>Classe...`).
@@ -13,7 +14,7 @@
    - endereços do .so no angr têm base **0x400000** (somar `mapped_base`);
    - `signal.alarm` precisa lançar `BaseException` (angr engole `Exception`); limite 30 s/função;
    - 3.942 funções ≈ 25 min com 2 núcleos; é retomável (pula arquivos já gerados);
-   - processos em background morrem quando a sessão acaba: rodar em primeiro plano em partes.
+   - processos em background não sobrevivem ao fim da execução: rodar em primeiro plano, em partes.
 3. `tools/sdk_match.py` – compara com o HL SDK (`github.com/ValveSoftware/halflife`) -> `docs/sdk_match.csv`.
 4. `tools/recover_classes.py` (usar `HLSDK=<pasta do sdk>`) – headers `src/headers/*.h`:
    - vtable via **relocações** (`readelf -r`), não via bytes do arquivo (vêm zerados);
@@ -29,11 +30,3 @@
 ## Achados registrados
 - CKamehameha e CGallitGun::Spawn gravam os mesmos campos da base (+0xdc..+0x1fc).
 - 1.020 funções têm equivalente no SDK; 864 prováveis iguais; 29 modificadas (CBasePlayer::PreThink/Killed/TakeDamage...).
-
-## Próximos passos (fila)
-1. CControlledBeam + CGallitGun (destravam CKamehameha e armas de feixe).
-2. CPlayerMelee (201 métodos), CBasePlayer.
-3. Montar .cpp das 864 funções "iguais ao SDK".
-4. Personagens (CGoku, CSSJGoku, CFrieza, ...), ataques.
-5. client.dll e esf_bot.dll.
-6. Compilar (GitHub Actions) e comparar com hl.dll.
