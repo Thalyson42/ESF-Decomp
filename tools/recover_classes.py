@@ -116,7 +116,7 @@ for c in sorted(set(os.listdir(raw)) | set(VT)):
     info[c] = dict(base=base.get(c), base_origem=ORIGEM.get(c), virtuals=VT.get(c, []), fields=fl, methods=sorted(os.listdir(cd)) if os.path.isdir(cd) else [])
 json.dump(info, open(os.path.join(out, 'classes.json'), 'w'), indent=1)
 for c, d in info.items():
-    if c == '_funcoes_livres': continue
+    if c == '_funcoes_livres' or re.match(r'bad_|type_info|exception$|__|_funcoes', c): continue
     b = d['base']; nb = len(VT.get(b, [])) if b else 0
     L = [f'// {c}.h -- reconstruído automaticamente (vtable + offsets). REVISAR.', f'#pragma once', '']
     L.append(f'class {c}' + (f' : public {b}' if b else '') + ' {' + (f'  // base: {ORIGEM.get(c)}' if b else '') + '\npublic:')
