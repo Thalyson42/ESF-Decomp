@@ -112,6 +112,78 @@ void CBaseEntity :: SUB_UseTargets( CBaseEntity *pActivator, USE_TYPE useType, f
 	}
 }
 
+// [SDK NÃO CONFERIDA] CBaseDelay::SUB_UseTargets
+void CBaseDelay :: SUB_UseTargets( CBaseEntity *pActivator, USE_TYPE useType, float value )
+{
+	//
+	// exit immediatly if we don't have a target or kill target
+	//
+	if (FStringNull(pev->target) && !m_iszKillTarget)
+		return;
+
+	//
+	// check for a delay
+	//
+	if (m_flDelay != 0)
+	{
+		// create a temp object to fire at a later time
+		CBaseDelay *pTemp = GetClassPtr( (CBaseDelay *)NULL);
+		pTemp->pev->classname = MAKE_STRING("DelayedUse");
+
+		pTemp->pev->nextthink = gpGlobals->time + m_flDelay;
+
+		pTemp->SetThink( &CBaseDelay::DelayThink );
+		
+		// Save the useType
+		pTemp->pev->button = (int)useType;
+		pTemp->m_iszKillTarget = m_iszKillTarget;
+		pTemp->m_flDelay = 0; // prevent "recursion"
+		pTemp->pev->target = pev->target;
+
+		// HACKHACK
+		// This wasn't in the release build of Half-Life.  We should have moved m_hActivator into this class
+		// but changing member variable hierarchy would break save/restore without some ugly code.
+		// This code is not as ugly as that code
+		if ( pActivator && pActivator->IsPlayer() )		// If a player activates, then save it
+		{
+			pTemp->pev->owner = pActivator->edict();
+		}
+		else
+		{
+			pTemp->pev->owner = NULL;
+		}
+
+		return;
+	}
+
+	//
+	// kill the killtargets
+	//
+
+	if ( m_iszKillTarget )
+	{
+		edict_t *pentKillTarget = NULL;
+
+		ALERT( at_aiconsole, "KillTarget: %s\n", STRING(m_iszKillTarget) );
+		pentKillTarget = FIND_ENTITY_BY_TARGETNAME( NULL, STRING(m_iszKillTarget) );
+		while ( !FNullEnt(pentKillTarget) )
+		{
+			UTIL_Remove( CBaseEntity::Instance(pentKillTarget) );
+
+			ALERT( at_aiconsole, "killing %s\n", STRING( pentKillTarget->v.classname ) );
+			pentKillTarget = FIND_ENTITY_BY_TARGETNAME( pentKillTarget, STRING(m_iszKillTarget) );
+		}
+	}
+	
+	//
+	// fire targets
+	//
+	if (!FStringNull(pev->target))
+	{
+		FireTargets( STRING(pev->target), pActivator, this, useType, value );
+	}
+}
+
 // [SDK score 1.0] CBaseDelay::DelayThink
 void CBaseDelay::DelayThink( void )
 {

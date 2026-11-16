@@ -54,6 +54,35 @@ void CCineMonster :: KeyValue( KeyValueData *pkvd )
 	}
 }
 
+// [SDK score 0.5] CCineMonster::Spawn
+void CCineMonster :: Spawn( void )
+{
+	// pev->solid = SOLID_TRIGGER;
+	// UTIL_SetSize(pev, Vector(-8, -8, -8), Vector(8, 8, 8));
+	pev->solid = SOLID_NOT;
+
+
+	// REMOVE: The old side-effect
+#if 0
+	if ( m_iszIdle )
+		m_fMoveTo = 4;
+#endif
+
+	// if no targetname, start now
+	if ( FStringNull(pev->targetname) || !FStringNull( m_iszIdle ) )
+	{
+		SetThink( &CCineMonster::CineThink );
+		pev->nextthink = gpGlobals->time + 1.0;
+		// Wait to be used?
+		if ( pev->targetname )
+			m_startTime = gpGlobals->time + 1E6;
+	}
+	if ( pev->spawnflags & SF_SCRIPT_NOINTERRUPT )
+		m_interruptable = FALSE;
+	else
+		m_interruptable = TRUE;
+}
+
 // [SDK score 1.0] CCineMonster::FCanOverrideState
 BOOL CCineMonster :: FCanOverrideState( void )
 {
@@ -123,6 +152,55 @@ void CCineMonster :: Die( void )
 void CCineMonster :: Pain( void )
 {
 
+}
+
+// [SDK heurística] CCineMonster::FindEntity
+int CCineMonster :: FindEntity( void )
+{
+	edict_t *pentTarget;
+
+	pentTarget = FIND_ENTITY_BY_TARGETNAME(NULL, STRING(m_iszEntity));
+	m_hTargetEnt = NULL;
+	CBaseMonster	*pTarget = NULL;
+
+	while (!FNullEnt(pentTarget))
+	{
+		if ( FBitSet( VARS(pentTarget)->flags, FL_MONSTER ))
+		{
+			pTarget = GetMonsterPointer( pentTarget );
+			if ( pTarget && pTarget->CanPlaySequence( FCanOverrideState(), SS_INTERRUPT_BY_NAME ) )
+			{
+				m_hTargetEnt = pTarget;
+				return TRUE;
+			}
+			ALERT( at_console, "Found %s, but can't play!\n", STRING(m_iszEntity) );
+		}
+		pentTarget = FIND_ENTITY_BY_TARGETNAME(pentTarget, STRING(m_iszEntity));
+		pTarget = NULL;
+	}
+	
+	if ( !pTarget )
+	{
+		CBaseEntity *pEntity = NULL;
+		while ((pEntity = UTIL_FindEntityInSphere( pEntity, pev->origin, m_flRadius )) != NULL)
+		{
+			if (FClassnameIs( pEntity->pev, STRING(m_iszEntity)))
+			{
+				if ( FBitSet( pEntity->pev->flags, FL_MONSTER ))
+				{
+					pTarget = pEntity->MyMonsterPointer( );
+					if ( pTarget && pTarget->CanPlaySequence( FCanOverrideState(), SS_INTERRUPT_IDLE ) )
+					{
+						m_hTargetEnt = pTarget;
+						return TRUE;
+					}
+				}
+			}
+		}
+	}
+	pTarget = NULL;
+	m_hTargetEnt = NULL;
+	return FALSE;
 }
 
 // [SDK score 1.0] CCineMonster::PossessEntity
@@ -277,6 +355,22 @@ void CCineAI :: PossessEntity( void )
 			pNewSchedule = pTarget->GetScheduleOfType( SCHED_AISCRIPT );
 			pTarget->ChangeSchedule( pNewSchedule );
 		}
+	}
+}
+
+// [SDK score 0.8] CCineMonster::CineThink
+void CCineMonster :: CineThink( void )
+{
+	if (FindEntity())
+	{
+		PossessEntity( );
+		ALERT( at_aiconsole, "script \"%s\" using monster \"%s\"\n", STRING( pev->targetname ), STRING( m_iszEntity ) );
+	}
+	else
+	{
+		CancelScript( );
+		ALERT( at_aiconsole, "script \"%s\" can't find monster \"%s\"\n", STRING( pev->targetname ), STRING( m_iszEntity ) );
+		pev->nextthink = gpGlobals->time + 1.0;
 	}
 }
 
@@ -435,6 +529,219 @@ int	CCineMonster::IgnoreConditions( void )
 	if ( CanInterrupt() )
 		return 0;
 	return SCRIPT_BREAK_CONDITIONS;
+}
+
+// [SDK score 0.67] CCineMonster::CancelScript
+void CCineMonster :: CancelScript( void )
+{
+	ALERT( at_aiconsole, "Cancelling script: %s\n", STRING(m_iszPlay) );
+	
+	if ( !pev->targetname )
+	{
+		ScriptEntityCancel( edict() );
+		return;
+	}
+
+	edict_t *pentCineTarget = FIND_ENTITY_BY_TARGETNAME(NULL, STRING(pev->targetname));
+
+	while (!FNullEnt(pentCineTarget))
+	{
+		ScriptEntityCancel( pentCineTarget );
+		pentCineTarget = FIND_ENTITY_BY_TARGETNAME(pentCineTarget, STRING(pev->targetname));
+	}
+}
+
+// [SDK score 0.75] CCineMonster::DelayStart
+void CCineMonster :: DelayStart( int state )
+{
+	edict_t *pentCine = FIND_ENTITY_BY_TARGETNAME(NULL, STRING(pev->targetname));
+
+	while (!FNullEnt(pentCine))
+	{
+		if (FClassnameIs( pentCine, "scripted_sequence" ))
+		{
+			CCineMonster *pTarget = GetClassPtr((CCineMonster *)VARS(pentCine));
+			if (state)
+			{
+				pTarget->m_iDelay++;
+			}
+			else
+			{
+				pTarget->m_iDelay--;
+				if (pTarget->m_iDelay <= 0)
+					pTarget->m_startTime = gpGlobals->time + 0.05;
+			}
+		}
+		pentCine = FIND_ENTITY_BY_TARGETNAME(pentCine, STRING(pev->targetname));
+	}
+}
+
+// [SDK NÃO CONFERIDA] CCineMonster::Activate
+void CCineMonster :: Activate( void )
+{
+	edict_t			*pentTarget;
+	CBaseMonster	*pTarget;
+
+	// The entity name could be a target name or a classname
+	// Check the targetname
+	pentTarget = FIND_ENTITY_BY_TARGETNAME(NULL, STRING(m_iszEntity));
+	pTarget = NULL;
+
+	while (!pTarget && !FNullEnt(pentTarget))
+	{
+		if ( FBitSet( VARS(pentTarget)->flags, FL_MONSTER ))
+		{
+			pTarget = GetMonsterPointer( pentTarget );
+		}
+		pentTarget = FIND_ENTITY_BY_TARGETNAME(pentTarget, STRING(m_iszEntity));
+	}
+	
+	// If no entity with that targetname, check the classname
+	if ( !pTarget )
+	{
+		pentTarget = FIND_ENTITY_BY_CLASSNAME(NULL, STRING(m_iszEntity));
+		while (!pTarget && !FNullEnt(pentTarget))
+		{
+			pTarget = GetMonsterPointer( pentTarget );
+			pentTarget = FIND_ENTITY_BY_TARGETNAME(pentTarget, STRING(m_iszEntity));
+		}
+	}
+	// Found a compatible entity
+	if ( pTarget )
+	{
+		void *pmodel;
+		pmodel = GET_MODEL_PTR( pTarget->edict() );
+		if ( pmodel )
+		{
+			// Look through the event list for stuff to precache
+			SequencePrecache( pmodel, STRING( m_iszIdle ) );
+			SequencePrecache( pmodel, STRING( m_iszPlay ) );
+		}
+	}
+}
+
+// [SDK NÃO CONFERIDA] CBaseMonster::CineCleanup
+BOOL CBaseMonster :: CineCleanup( )
+{
+	CCineMonster *pOldCine = m_pCine;
+
+	// am I linked to a cinematic?
+	if (m_pCine)
+	{
+		// okay, reset me to what it thought I was before
+		m_pCine->m_hTargetEnt = NULL;
+		pev->movetype = m_pCine->m_saved_movetype;
+		pev->solid = m_pCine->m_saved_solid;
+		pev->effects = m_pCine->m_saved_effects;
+	}
+	else
+	{
+		// arg, punt
+		pev->movetype = MOVETYPE_STEP;// this is evil
+		pev->solid = SOLID_SLIDEBOX;
+	}
+	m_pCine = NULL;
+	m_hTargetEnt = NULL;
+	m_pGoalEnt = NULL;
+	if (pev->deadflag == DEAD_DYING)
+	{
+		// last frame of death animation?
+		pev->health			= 0;
+		pev->framerate		= 0.0;
+		pev->solid			= SOLID_NOT;
+		SetState( MONSTERSTATE_DEAD );
+		pev->deadflag = DEAD_DEAD;
+		UTIL_SetSize( pev, pev->mins, Vector(pev->maxs.x, pev->maxs.y, pev->mins.z + 2) );
+
+		if ( pOldCine && FBitSet( pOldCine->pev->spawnflags, SF_SCRIPT_LEAVECORPSE ) )
+		{
+			SetUse( NULL );		// BUGBUG -- This doesn't call Killed()
+			SetThink( NULL );	// This will probably break some stuff
+			SetTouch( NULL );
+		}
+		else
+			SUB_StartFadeOut(); // SetThink( SUB_DoNothing );
+		// This turns off animation & physics in case their origin ends up stuck in the world or something
+		StopAnimation();
+		pev->movetype = MOVETYPE_NONE;
+		pev->effects |= EF_NOINTERP;	// Don't interpolate either, assume the corpse is positioned in its final resting place
+		return FALSE;
+	}
+
+	// If we actually played a sequence
+	if ( pOldCine && pOldCine->m_iszPlay )
+	{
+		if ( !(pOldCine->pev->spawnflags & SF_SCRIPT_NOSCRIPTMOVEMENT) )
+		{
+			// reset position
+			Vector new_origin, new_angle;
+			GetBonePosition( 0, new_origin, new_angle );
+
+			// Figure out how far they have moved
+			// We can't really solve this problem because we can't query the movement of the origin relative
+			// to the sequence.  We can get the root bone's position as we do here, but there are
+			// cases where the root bone is in a different relative position to the entity's origin
+			// before/after the sequence plays.  So we are stuck doing this:
+
+			// !!!HACKHACK: Float the origin up and drop to floor because some sequences have
+			// irregular motion that can't be properly accounted for.
+
+			// UNDONE: THIS SHOULD ONLY HAPPEN IF WE ACTUALLY PLAYED THE SEQUENCE.
+			Vector oldOrigin = pev->origin;
+
+			// UNDONE: ugly hack.  Don't move monster if they don't "seem" to move
+			// this really needs to be done with the AX,AY,etc. flags, but that aren't consistantly
+			// being set, so animations that really do move won't be caught.
+			if ((oldOrigin - new_origin).Length2D() < 8.0)
+				new_origin = oldOrigin;
+
+			pev->origin.x = new_origin.x;
+			pev->origin.y = new_origin.y;
+			pev->origin.z += 1;
+
+			pev->flags |= FL_ONGROUND;
+			int drop = DROP_TO_FLOOR( ENT(pev) );
+			
+			// Origin in solid?  Set to org at the end of the sequence
+			if ( drop < 0 )
+				pev->origin = oldOrigin;
+			else if ( drop == 0 ) // Hanging in air?
+			{
+				pev->origin.z = new_origin.z;
+				pev->flags &= ~FL_ONGROUND;
+			}
+			// else entity hit floor, leave there
+
+			// pEntity->pev->origin.z = new_origin.z + 5.0; // damn, got to fix this
+
+			UTIL_SetOrigin( pev, pev->origin );
+			pev->effects |= EF_NOINTERP;
+		}
+
+		// We should have some animation to put these guys in, but for now it's idle.
+		// Due to NOINTERP above, there won't be any blending between this anim & the sequence
+		m_Activity = ACT_RESET;
+	}
+	// set them back into a normal state
+	pev->enemy = NULL;
+	if ( pev->health > 0 )
+		m_IdealMonsterState = MONSTERSTATE_IDLE; // m_previousState;
+	else
+	{
+		// Dropping out because he got killed
+		// Can't call killed() no attacker and weirdness (late gibbing) may result
+		m_IdealMonsterState = MONSTERSTATE_DEAD;
+		SetConditions( bits_COND_LIGHT_DAMAGE );
+		pev->deadflag = DEAD_DYING;
+		FCheckAITrigger();
+		pev->deadflag = DEAD_NO;
+	}
+
+
+	//	SetAnimation( m_MonsterState );
+	ClearBits(pev->spawnflags, SF_MONSTER_WAIT_FOR_SCRIPT );
+
+	return TRUE;
 }
 
 // [SDK score 1.0] CScriptedSentence::KeyValue
@@ -598,6 +905,50 @@ BOOL CScriptedSentence :: AcceptableSpeaker( CBaseToggle *pTarget )
 
 
 	return FALSE;
+}
+
+// [SDK NÃO CONFERIDA] CScriptedSentence::FindEntity
+CBaseToggle *CScriptedSentence :: FindEntity( void )
+{
+	edict_t *pentTarget;
+	CBaseToggle *pSpeakingEnt;
+
+
+	pentTarget = FIND_ENTITY_BY_TARGETNAME(NULL, STRING(m_iszEntity));
+	pSpeakingEnt = NULL;
+
+	while (!FNullEnt(pentTarget))
+	{
+		CBaseEntity *pEnt = Instance(pentTarget);
+		pSpeakingEnt = pEnt ? pEnt->MyTogglePointer() : NULL;
+
+		if (pSpeakingEnt != NULL )
+		{
+			if (AcceptableSpeaker(pSpeakingEnt))
+			{
+				//ALERT(at_console, "acceptable speaker\n");
+				return pSpeakingEnt;
+			}
+			//ALERT(at_console, "found unacceptable speaker\n");
+		}
+		pentTarget = FIND_ENTITY_BY_TARGETNAME(pentTarget, STRING(m_iszEntity));
+	}
+	
+	CBaseEntity *pEntity = NULL;
+	while ((pEntity = UTIL_FindEntityInSphere( pEntity, pev->origin, m_flRadius )) != NULL)
+	{
+		if (FClassnameIs( pEntity->pev, STRING(m_iszEntity)))
+		{
+			if ( FBitSet( pEntity->pev->flags, FL_MONSTER ))
+			{
+				pSpeakingEnt = pEntity->MyTogglePointer( );
+				if ( AcceptableSpeaker( pSpeakingEnt ) )
+					return pSpeakingEnt;
+			}
+		}
+	}
+	
+	return NULL;
 }
 
 // [SDK score 1.0] CScriptedSentence::StartSentence

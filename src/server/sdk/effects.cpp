@@ -293,6 +293,56 @@ void CBeam::DoSparks( const Vector &start, const Vector &end )
 	}
 }
 
+// [SDK NÃO CONFERIDA] CLightning::Spawn
+void CLightning::Spawn( void )
+{
+	if ( FStringNull( m_iszSpriteName ) )
+	{
+		SetThink( &CLightning::SUB_Remove );
+		return;
+	}
+	pev->solid = SOLID_NOT;							// Remove model & collisions
+	Precache( );
+
+	pev->dmgtime = gpGlobals->time;
+
+	if ( ServerSide() )
+	{
+		SetThink( NULL );
+		if ( pev->dmg > 0 )
+		{
+			SetThink( &CLightning::DamageThink );
+			pev->nextthink = gpGlobals->time + 0.1;
+		}
+		if ( pev->targetname )
+		{
+			if ( !(pev->spawnflags & SF_BEAM_STARTON) )
+			{
+				pev->effects = EF_NODRAW;
+				m_active = 0;
+				pev->nextthink = 0;
+			}
+			else
+				m_active = 1;
+		
+			SetUse( &CLightning::ToggleUse );
+		}
+	}
+	else
+	{
+		m_active = 0;
+		if ( !FStringNull(pev->targetname) )
+		{
+			SetUse( &CLightning::StrikeUse );
+		}
+		if ( FStringNull(pev->targetname) || FBitSet(pev->spawnflags, SF_BEAM_STARTON) )
+		{
+			SetThink( &CLightning::StrikeThink );
+			pev->nextthink = gpGlobals->time + 1.0;
+		}
+	}
+}
+
 // [SDK score 1.0] CLightning::Precache
 void CLightning::Precache( void )
 {
@@ -656,6 +706,71 @@ void CLightning::RandomPoint( Vector &vecSrc )
 		Zap( vecSrc, tr1.vecEndPos );
 		break;
 	}
+}
+
+// [SDK heurística] CLightning::BeamUpdateVars
+void CLightning::BeamUpdateVars( void )
+{
+	int beamType;
+	int pointStart, pointEnd;
+
+	edict_t *pStart = FIND_ENTITY_BY_TARGETNAME ( NULL, STRING(m_iszStartEntity) );
+	edict_t *pEnd = FIND_ENTITY_BY_TARGETNAME ( NULL, STRING(m_iszEndEntity) );
+	pointStart = IsPointEntity( CBaseEntity::Instance(pStart) );
+	pointEnd = IsPointEntity( CBaseEntity::Instance(pEnd) );
+
+	pev->skin = 0;
+	pev->sequence = 0;
+	pev->rendermode = 0;
+	pev->flags |= FL_CUSTOMENTITY;
+	pev->model = m_iszSpriteName;
+	SetTexture( m_spriteTexture );
+
+	beamType = BEAM_ENTS;
+	if ( pointStart || pointEnd )
+	{
+		if ( !pointStart )	// One point entity must be in pStart
+		{
+			edict_t *pTemp;
+			// Swap start & end
+			pTemp = pStart;
+			pStart = pEnd;
+			pEnd = pTemp;
+			int swap = pointStart;
+			pointStart = pointEnd;
+			pointEnd = swap;
+		}
+		if ( !pointEnd )
+			beamType = BEAM_ENTPOINT;
+		else
+			beamType = BEAM_POINTS;
+	}
+
+	SetType( beamType );
+	if ( beamType == BEAM_POINTS || beamType == BEAM_ENTPOINT || beamType == BEAM_HOSE )
+	{
+		SetStartPos( pStart->v.origin );
+		if ( beamType == BEAM_POINTS || beamType == BEAM_HOSE )
+			SetEndPos( pEnd->v.origin );
+		else
+			SetEndEntity( ENTINDEX(pEnd) );
+	}
+	else
+	{
+		SetStartEntity( ENTINDEX(pStart) );
+		SetEndEntity( ENTINDEX(pEnd) );
+	}
+
+	RelinkBeam();
+
+	SetWidth( m_boltWidth );
+	SetNoise( m_noiseAmplitude );
+	SetFrame( m_frameStart );
+	SetScrollRate( m_speed );
+	if ( pev->spawnflags & SF_BEAM_SHADEIN )
+		SetFlags( BEAM_FSHADEIN );
+	else if ( pev->spawnflags & SF_BEAM_SHADEOUT )
+		SetFlags( BEAM_FSHADEOUT );
 }
 
 // [SDK score 1.0] CLaser::Spawn
@@ -1106,6 +1221,57 @@ CGib *CGibShooter :: CreateGib ( void )
 	return pGib;
 }
 
+// [SDK NÃO CONFERIDA] CGibShooter::ShootThink
+void CGibShooter :: ShootThink ( void )
+{
+	pev->nextthink = gpGlobals->time + m_flDelay;
+
+	Vector vecShootDir;
+
+	vecShootDir = pev->movedir;
+
+	vecShootDir = vecShootDir + gpGlobals->v_right * RANDOM_FLOAT( -1, 1) * m_flVariance;;
+	vecShootDir = vecShootDir + gpGlobals->v_forward * RANDOM_FLOAT( -1, 1) * m_flVariance;;
+	vecShootDir = vecShootDir + gpGlobals->v_up * RANDOM_FLOAT( -1, 1) * m_flVariance;;
+
+	vecShootDir = vecShootDir.Normalize();
+	CGib *pGib = CreateGib();
+	
+	if ( pGib )
+	{
+		pGib->pev->origin = pev->origin;
+		pGib->pev->velocity = vecShootDir * m_flGibVelocity;
+	
+		pGib->pev->avelocity.x = RANDOM_FLOAT ( 100, 200 );
+		pGib->pev->avelocity.y = RANDOM_FLOAT ( 100, 300 );
+
+		float thinkTime = pGib->pev->nextthink - gpGlobals->time;
+
+		pGib->m_lifeTime = (m_flGibLife * RANDOM_FLOAT( 0.95, 1.05 ));	// +/- 5%
+		if ( pGib->m_lifeTime < thinkTime )
+		{
+			pGib->pev->nextthink = gpGlobals->time + pGib->m_lifeTime;
+			pGib->m_lifeTime = 0;
+		}
+		
+	}
+
+	if ( --m_iGibs <= 0 )
+	{
+		if ( pev->spawnflags & SF_GIBSHOOTER_REPEATABLE )
+		{
+			m_iGibs = m_iGibCapacity;
+			SetThink ( NULL );
+			pev->nextthink = gpGlobals->time;
+		}
+		else
+		{
+			SetThink ( &CGibShooter::SUB_Remove );
+			pev->nextthink = gpGlobals->time;
+		}
+	}
+}
+
 // [SDK score 1.0] CEnvShooter::KeyValue
 void CEnvShooter :: KeyValue( KeyValueData *pkvd )
 {
@@ -1191,6 +1357,73 @@ void CTestEffect::Spawn( void )
 void CTestEffect::Precache( void )
 {
 	PRECACHE_MODEL( "sprites/lgtning.spr" );
+}
+
+// [SDK NÃO CONFERIDA] CTestEffect::TestThink
+void CTestEffect::TestThink( void )
+{
+	int i;
+	float t = (gpGlobals->time - m_flStartTime);
+
+	if (m_iBeam < 24)
+	{
+		CBeam *pbeam = CBeam::BeamCreate( "sprites/lgtning.spr", 100 );
+
+		TraceResult		tr;
+
+		Vector vecSrc = pev->origin;
+		Vector vecDir = Vector( RANDOM_FLOAT( -1.0, 1.0 ), RANDOM_FLOAT( -1.0, 1.0 ),RANDOM_FLOAT( -1.0, 1.0 ) );
+		vecDir = vecDir.Normalize();
+		UTIL_TraceLine( vecSrc, vecSrc + vecDir * 128, ignore_monsters, ENT(pev), &tr);
+
+		pbeam->PointsInit( vecSrc, tr.vecEndPos );
+		// pbeam->SetColor( 80, 100, 255 );
+		pbeam->SetColor( 255, 180, 100 );
+		pbeam->SetWidth( 100 );
+		pbeam->SetScrollRate( 12 );
+		
+		m_flBeamTime[m_iBeam] = gpGlobals->time;
+		m_pBeam[m_iBeam] = pbeam;
+		m_iBeam++;
+
+#if 0
+		Vector vecMid = (vecSrc + tr.vecEndPos) * 0.5;
+		MESSAGE_BEGIN( MSG_BROADCAST, SVC_TEMPENTITY );
+			WRITE_BYTE(TE_DLIGHT);
+			WRITE_COORD(vecMid.x);	// X
+			WRITE_COORD(vecMid.y);	// Y
+			WRITE_COORD(vecMid.z);	// Z
+			WRITE_BYTE( 20 );		// radius * 0.1
+			WRITE_BYTE( 255 );		// r
+			WRITE_BYTE( 180 );		// g
+			WRITE_BYTE( 100 );		// b
+			WRITE_BYTE( 20 );		// time * 10
+			WRITE_BYTE( 0 );		// decay * 0.1
+		MESSAGE_END( );
+#endif
+	}
+
+	if (t < 3.0)
+	{
+		for (i = 0; i < m_iBeam; i++)
+		{
+			t = (gpGlobals->time - m_flBeamTime[i]) / ( 3 + m_flStartTime - m_flBeamTime[i]);
+			m_pBeam[i]->SetBrightness( 255 * t );
+			// m_pBeam[i]->SetScrollRate( 20 * t );
+		}
+		pev->nextthink = gpGlobals->time + 0.1;
+	}
+	else
+	{
+		for (i = 0; i < m_iBeam; i++)
+		{
+			UTIL_Remove( m_pBeam[i] );
+		}
+		m_flStartTime = gpGlobals->time;
+		m_iBeam = 0;
+		// pev->nextthink = gpGlobals->time;
+		SetThink( NULL );
+	}
 }
 
 // [SDK score 1.0] CTestEffect::Use

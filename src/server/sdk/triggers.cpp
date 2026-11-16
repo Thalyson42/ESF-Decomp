@@ -266,6 +266,31 @@ void CRenderFxManager :: Spawn ( void )
 	pev->solid = SOLID_NOT;
 }
 
+// [SDK score 0.5] CRenderFxManager::Use
+void CRenderFxManager :: Use ( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value )
+{
+	if (!FStringNull(pev->target))
+	{
+		edict_t* pentTarget	= NULL;
+		while ( 1 )
+		{
+			pentTarget = FIND_ENTITY_BY_TARGETNAME(pentTarget, STRING(pev->target));
+			if (FNullEnt(pentTarget))
+				break;
+
+			entvars_t *pevTarget = VARS( pentTarget );
+			if ( !FBitSet( pev->spawnflags, SF_RENDER_MASKFX ) )
+				pevTarget->renderfx = pev->renderfx;
+			if ( !FBitSet( pev->spawnflags, SF_RENDER_MASKAMT ) )
+				pevTarget->renderamt = pev->renderamt;
+			if ( !FBitSet( pev->spawnflags, SF_RENDER_MASKMODE ) )
+				pevTarget->rendermode = pev->rendermode;
+			if ( !FBitSet( pev->spawnflags, SF_RENDER_MASKCOLOR ) )
+				pevTarget->rendercolor = pev->rendercolor;
+		}
+	}
+}
+
 // [SDK score 1.0] CBaseTrigger::InitTrigger
 void CBaseTrigger::InitTrigger( )
 {
@@ -1048,6 +1073,42 @@ int CChangeLevel::AddTransitionToList( LEVELLIST *pLevelList, int listCount, con
 	return 1;
 }
 
+// [SDK heurística] CChangeLevel::InTransitionVolume
+int CChangeLevel::InTransitionVolume( CBaseEntity *pEntity, char *pVolumeName )
+{
+	edict_t	*pentVolume;
+
+
+	if ( pEntity->ObjectCaps() & FCAP_FORCE_TRANSITION )
+		return 1;
+
+	// If you're following another entity, follow it through the transition (weapons follow the player)
+	if ( pEntity->pev->movetype == MOVETYPE_FOLLOW )
+	{
+		if ( pEntity->pev->aiment != NULL )
+			pEntity = CBaseEntity::Instance( pEntity->pev->aiment );
+	}
+
+	int inVolume = 1;	// Unless we find a trigger_transition, everything is in the volume
+
+	pentVolume = FIND_ENTITY_BY_TARGETNAME( NULL, pVolumeName );
+	while ( !FNullEnt( pentVolume ) )
+	{
+		CBaseEntity *pVolume = CBaseEntity::Instance( pentVolume );
+		
+		if ( pVolume && FClassnameIs( pVolume->pev, "trigger_transition" ) )
+		{
+			if ( pVolume->Intersects( pEntity ) )	// It touches one, it's in the volume
+				return 1;
+			else
+				inVolume = 0;	// Found a trigger_transition, but I don't intersect it -- if I don't find another, don't go!
+		}
+		pentVolume = FIND_ENTITY_BY_TARGETNAME( pentVolume, pVolumeName );
+	}
+
+	return inVolume;
+}
+
 // [SDK score 1.0] CChangeLevel::ChangeList
 int CChangeLevel::ChangeList( LEVELLIST *pLevelList, int maxList )
 {
@@ -1240,6 +1301,63 @@ void CTriggerPush :: Touch( CBaseEntity *pOther )
 //			ALERT( at_console, "Vel %f, base %f\n", pevToucher->velocity.z, pevToucher->basevelocity.z );
 		}
 	}
+}
+
+// [SDK NÃO CONFERIDA] CBaseTrigger::TeleportTouch
+void CBaseTrigger :: TeleportTouch( CBaseEntity *pOther )
+{
+	entvars_t* pevToucher = pOther->pev;
+	edict_t	*pentTarget = NULL;
+
+	// Only teleport monsters or clients
+	if ( !FBitSet( pevToucher->flags, FL_CLIENT|FL_MONSTER ) )
+		return;
+    
+	if (!UTIL_IsMasterTriggered(m_sMaster, pOther))
+		return;
+ 	
+	if ( !( pev->spawnflags & SF_TRIGGER_ALLOWMONSTERS ) )
+	{// no monsters allowed!
+		if ( FBitSet( pevToucher->flags, FL_MONSTER ) )
+		{
+			return;
+		}
+	}
+
+	if ( ( pev->spawnflags & SF_TRIGGER_NOCLIENTS ) )
+	{// no clients allowed
+		if ( pOther->IsPlayer() )
+		{
+			return;
+		}
+	}
+	
+	pentTarget = FIND_ENTITY_BY_TARGETNAME( pentTarget, STRING(pev->target) );
+	if (FNullEnt(pentTarget))
+	   return;	
+	
+	Vector tmp = VARS( pentTarget )->origin;
+
+	if ( pOther->IsPlayer() )
+	{
+		tmp.z -= pOther->pev->mins.z;// make origin adjustments in case the teleportee is a player. (origin in center, not at feet)
+	}
+
+	tmp.z++;
+
+	pevToucher->flags &= ~FL_ONGROUND;
+	
+	UTIL_SetOrigin( pevToucher, tmp );
+
+	pevToucher->angles = pentTarget->v.angles;
+
+	if ( pOther->IsPlayer() )
+	{
+		pevToucher->v_angle = pentTarget->v.angles;
+	}
+
+	pevToucher->fixangle = TRUE;
+	pevToucher->velocity = pevToucher->basevelocity = g_vecZero;
 }
 
 // [SDK score 1.0] CTriggerTeleport::Spawn

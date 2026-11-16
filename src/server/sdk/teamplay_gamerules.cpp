@@ -10,6 +10,95 @@
 #include	"game.h"
 #include "voice_gamemgr.h"
 
+// [SDK NÃO CONFERIDA] CHalfLifeTeamplay::Think
+void CHalfLifeTeamplay :: Think ( void )
+{
+	///// Check game rules /////
+	static int last_frags;
+	static int last_time;
+
+	int frags_remaining = 0;
+	int time_remaining = 0;
+
+	g_VoiceGameMgr.Update(gpGlobals->frametime);
+
+	if ( g_fGameOver )   // someone else quit the game already
+	{
+		CHalfLifeMultiplay::Think();
+		return;
+	}
+
+	float flTimeLimit = CVAR_GET_FLOAT("mp_timelimit") * 60;
+	
+	time_remaining = (int)(flTimeLimit ? ( flTimeLimit - gpGlobals->time ) : 0);
+
+	if ( flTimeLimit != 0 && gpGlobals->time >= flTimeLimit )
+	{
+		GoToIntermission();
+		return;
+	}
+
+	float flFragLimit = fraglimit.value;
+	if ( flFragLimit )
+	{
+		int bestfrags = 9999;
+		int remain;
+
+		// check if any team is over the frag limit
+		for ( int i = 0; i < num_teams; i++ )
+		{
+			if ( team_scores[i] >= flFragLimit )
+			{
+				GoToIntermission();
+				return;
+			}
+
+			remain = flFragLimit - team_scores[i];
+			if ( remain < bestfrags )
+			{
+				bestfrags = remain;
+			}
+		}
+		frags_remaining = bestfrags;
+	}
+
+	// Updates when frags change
+	if ( frags_remaining != last_frags )
+	{
+		g_engfuncs.pfnCvar_DirectSet( &fragsleft, UTIL_VarArgs( "%i", frags_remaining ) );
+	}
+
+	// Updates once per second
+	if ( timeleft.value != last_time )
+	{
+		g_engfuncs.pfnCvar_DirectSet( &timeleft, UTIL_VarArgs( "%i", time_remaining ) );
+	}
+
+	last_frags = frags_remaining;
+	last_time  = time_remaining;
+}
+
+// [SDK NÃO CONFERIDA] CHalfLifeTeamplay::ClientCommand
+BOOL CHalfLifeTeamplay :: ClientCommand( CBasePlayer *pPlayer, const char *pcmd )
+{
+	if(g_VoiceGameMgr.ClientCommand(pPlayer, pcmd))
+		return TRUE;
+
+	if ( FStrEq( pcmd, "menuselect" ) )
+	{
+		if ( CMD_ARGC() < 2 )
+			return TRUE;
+
+		int slot = atoi( CMD_ARGV(1) );
+
+		// select the item from the current menu
+
+		return TRUE;
+	}
+
+	return FALSE;
+}
+
 // [SDK score 1.0] CHalfLifeTeamplay::UpdateGameMode
 void CHalfLifeTeamplay :: UpdateGameMode( CBasePlayer *pPlayer )
 {
@@ -44,6 +133,105 @@ const char *CHalfLifeTeamplay::SetDefaultPlayerTeam( CBasePlayer *pPlayer )
 	}
 
 	return pPlayer->m_szTeamName;
+}
+
+// [SDK NÃO CONFERIDA] CHalfLifeTeamplay::InitHUD
+void CHalfLifeTeamplay::InitHUD( CBasePlayer *pPlayer )
+{
+	int i;
+
+	SetDefaultPlayerTeam( pPlayer );
+	CHalfLifeMultiplay::InitHUD( pPlayer );
+
+	// Send down the team names
+	MESSAGE_BEGIN( MSG_ONE, gmsgTeamNames, NULL, pPlayer->edict() );  
+		WRITE_BYTE( num_teams );
+		for ( i = 0; i < num_teams; i++ )
+		{
+			WRITE_STRING( team_names[ i ] );
+		}
+	MESSAGE_END();
+
+	RecountTeams();
+
+	char *mdls = g_engfuncs.pfnInfoKeyValue( g_engfuncs.pfnGetInfoKeyBuffer( pPlayer->edict() ), "model" );
+	// update the current player of the team he is joining
+	char text[1024];
+	if ( !strcmp( mdls, pPlayer->m_szTeamName ) )
+	{
+		sprintf( text, "* you are on team \'%s\'\n", pPlayer->m_szTeamName );
+	}
+	else
+	{
+		sprintf( text, "* assigned to team %s\n", pPlayer->m_szTeamName );
+	}
+
+	ChangePlayerTeam( pPlayer, pPlayer->m_szTeamName, FALSE, FALSE );
+	UTIL_SayText( text, pPlayer );
+	int clientIndex = pPlayer->entindex();
+	RecountTeams();
+	// update this player with all the other players team info
+	// loop through all active players and send their team info to the new client
+	for ( i = 1; i <= gpGlobals->maxClients; i++ )
+	{
+		CBaseEntity *plr = UTIL_PlayerByIndex( i );
+		if ( plr && IsValidTeam( plr->TeamID() ) )
+		{
+			MESSAGE_BEGIN( MSG_ONE, gmsgTeamInfo, NULL, pPlayer->edict() );
+				WRITE_BYTE( plr->entindex() );
+				WRITE_STRING( plr->TeamID() );
+			MESSAGE_END();
+		}
+	}
+}
+
+// [SDK NÃO CONFERIDA] CHalfLifeTeamplay::ChangePlayerTeam
+void CHalfLifeTeamplay::ChangePlayerTeam( CBasePlayer *pPlayer, const char *pTeamName, BOOL bKill, BOOL bGib )
+{
+	int damageFlags = DMG_GENERIC;
+	int clientIndex = pPlayer->entindex();
+
+	if ( !bGib )
+	{
+		damageFlags |= DMG_NEVERGIB;
+	}
+	else
+	{
+		damageFlags |= DMG_ALWAYSGIB;
+	}
+
+	if ( bKill )
+	{
+		// kill the player,  remove a death,  and let them start on the new team
+		m_DisableDeathMessages = TRUE;
+		m_DisableDeathPenalty = TRUE;
+
+		entvars_t *pevWorld = VARS( INDEXENT(0) );
+		pPlayer->TakeDamage( pevWorld, pevWorld, 900, damageFlags );
+
+		m_DisableDeathMessages = FALSE;
+		m_DisableDeathPenalty = FALSE;
+	}
+
+	// copy out the team name from the model
+	strncpy( pPlayer->m_szTeamName, pTeamName, TEAM_NAME_LENGTH );
+
+	g_engfuncs.pfnSetClientKeyValue( clientIndex, g_engfuncs.pfnGetInfoKeyBuffer( pPlayer->edict() ), "model", pPlayer->m_szTeamName );
+	g_engfuncs.pfnSetClientKeyValue( clientIndex, g_engfuncs.pfnGetInfoKeyBuffer( pPlayer->edict() ), "team", pPlayer->m_szTeamName );
+
+	// notify everyone's HUD of the team change
+	MESSAGE_BEGIN( MSG_ALL, gmsgTeamInfo );
+		WRITE_BYTE( clientIndex );
+		WRITE_STRING( pPlayer->m_szTeamName );
+	MESSAGE_END();
+
+	MESSAGE_BEGIN( MSG_ALL, gmsgScoreInfo );
+		WRITE_BYTE( clientIndex );
+		WRITE_SHORT( pPlayer->pev->frags );
+		WRITE_SHORT( pPlayer->m_iDeaths );
+		WRITE_SHORT( 0 );
+		WRITE_SHORT( g_pGameRules->GetTeamIndex( pPlayer->m_szTeamName ) + 1 );
+	MESSAGE_END();
 }
 
 // [SDK score 1.0] CHalfLifeTeamplay::DeathNotice

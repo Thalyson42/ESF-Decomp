@@ -67,6 +67,43 @@ void CPathTrack :: Use( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE 
 	}
 }
 
+// [SDK score 0.67] CPathTrack::Link
+void CPathTrack :: Link( void  )
+{
+	edict_t *pentTarget;
+
+	if ( !FStringNull(pev->target) )
+	{
+		pentTarget = FIND_ENTITY_BY_TARGETNAME( NULL, STRING(pev->target) );
+		if ( !FNullEnt(pentTarget) )
+		{
+			m_pnext = CPathTrack::Instance( pentTarget );
+
+			if ( m_pnext )		// If no next pointer, this is the end of a path
+			{
+				m_pnext->SetPrevious( this );
+			}
+		}
+		else
+			ALERT( at_console, "Dead end link %s\n", STRING(pev->target) );
+	}
+
+	// Find "alternate" path
+	if ( m_altName )
+	{
+		pentTarget = FIND_ENTITY_BY_TARGETNAME( NULL, STRING(m_altName) );
+		if ( !FNullEnt(pentTarget) )
+		{
+			m_paltpath = CPathTrack::Instance( pentTarget );
+
+			if ( m_paltpath )		// If no next pointer, this is the end of a path
+			{
+				m_paltpath->SetPrevious( this );
+			}
+		}
+	}
+}
+
 // [SDK score 1.0] CPathTrack::Spawn
 void CPathTrack :: Spawn( void )
 {

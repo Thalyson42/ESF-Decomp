@@ -72,8 +72,14 @@ def sdk_path(name):
 reviewed = set()
 if os.path.exists('docs/sdk_reviewed.txt'):          # funções 'parcial' conferidas à mão: iguais ao SDK
     reviewed = {l.split('#')[0].strip() for l in open('docs/sdk_reviewed.txt') if l.strip() and not l.startswith('#')}
+def _lst(fn):
+    return {l.split('#')[0].strip() for l in open(fn) if l.strip() and not l.startswith('#')} if os.path.exists(fn) else set()
+heur = _lst('docs/sdk_heuristic.txt')       # constantes/strings batem com o SDK (não lidas linha a linha)
+pend = _lst('docs/sdk_pending.txt')         # ainda a conferir: corpo do SDK usado como base provisória
+done = set()                                  # funções escritas à mão em outro arquivo (não gerar aqui)
 rows = [r for r in csv.DictReader(open('docs/sdk_match.csv'))
-        if r['veredito'] == 'provavel-igual' or f"{r['classe']}::{r['metodo']}" in reviewed]
+        if r['veredito'] == 'provavel-igual' or f"{r['classe']}::{r['metodo']}" in reviewed | heur | pend]
+tag = lambda k, sc: (f'[SDK score {sc}]' if k not in heur and k not in pend else ('[SDK heurística]' if k in heur else '[SDK NÃO CONFERIDA]'))
 byfile = collections.defaultdict(list)
 for r in rows: byfile[r['arquivo_sdk']].append(r)
 
@@ -97,7 +103,7 @@ for fn, lst in sorted(byfile.items()):
             chunks[(r['classe'], r['metodo'], f)] = (text.find(f), r['score'])
     body = []
     for (c, m, f), (ps, sc) in sorted(chunks.items(), key=lambda kv: kv[1][0]):
-        body.append(f'// [SDK score {sc}] {c}::{m}\n{f}\n')
+        body.append(f'// {tag(c + "::" + m, sc)} {c}::{m}\n{f}\n')
         tot += 1
     if not body: continue
     out = (f'// sdk/{fn} -- funções do HL SDK que o hl_i386.so do ESF reproduz (score de similaridade >= 0.86 em docs/sdk_match.csv).\n'

@@ -756,6 +756,56 @@ int	CGraph :: FindNearestNode ( const Vector &vecOrigin,  int afNodeTypes )
 	return m_iNearest;
 }
 
+// [SDK NÃO CONFERIDA] CGraph::ShowNodeConnections
+void CGraph :: ShowNodeConnections ( int iNode )
+{
+	Vector	vecSpot;
+	CNode	*pNode;
+	CNode	*pLinkNode;
+	int	i;
+
+	if ( !m_fGraphPresent || !m_fGraphPointersSet )
+	{// protect us in the case that the node graph isn't available or built
+		ALERT ( at_aiconsole, "Graph not ready!\n" );
+		return;
+	}
+
+	if ( iNode < 0 )
+	{
+		ALERT( at_aiconsole, "Can't show connections for node %d\n", iNode );
+		return;
+	}
+
+	pNode = &m_pNodes[ iNode ];
+
+	UTIL_ParticleEffect( pNode->m_vecOrigin, g_vecZero, 255, 20 );// show node position
+	
+	if ( pNode->m_cNumLinks <= 0 )
+	{// no connections!
+		ALERT ( at_aiconsole, "**No Connections!\n" );
+	}
+
+	for ( i = 0 ; i < pNode->m_cNumLinks ; i++ )
+	{
+		
+		pLinkNode = &Node( NodeLink( iNode, i).m_iDestNode );
+		vecSpot = pLinkNode->m_vecOrigin;
+
+		MESSAGE_BEGIN( MSG_BROADCAST, SVC_TEMPENTITY );
+			WRITE_BYTE( TE_SHOWLINE);
+			
+			WRITE_COORD( m_pNodes[ iNode ].m_vecOrigin.x );
+			WRITE_COORD( m_pNodes[ iNode ].m_vecOrigin.y );
+			WRITE_COORD( m_pNodes[ iNode ].m_vecOrigin.z + NODE_HEIGHT );
+
+			WRITE_COORD( vecSpot.x );
+			WRITE_COORD( vecSpot.y );
+			WRITE_COORD( vecSpot.z + NODE_HEIGHT );
+		MESSAGE_END();
+
+	}
+}
+
 // [SDK score 1.0] CGraph::LinkVisibleNodes
 int CGraph :: LinkVisibleNodes ( CLink *pLinkPool, FILE *file, int *piBadNode )
 {
@@ -1138,6 +1188,23 @@ void CNodeEnt :: Spawn( void )
 	WorldGraph.m_cNodes++;
 
 	REMOVE_ENTITY( edict() );
+}
+
+// [SDK heurística] CTestHull::ShowBadNode
+void CTestHull :: ShowBadNode( void )
+{
+	pev->movetype = MOVETYPE_FLY;
+	pev->angles.y = pev->angles.y + 4;
+
+	UTIL_MakeVectors ( pev->angles );
+
+	UTIL_ParticleEffect ( pev->origin, g_vecZero, 255, 25 );
+	UTIL_ParticleEffect ( pev->origin + gpGlobals->v_forward * 64, g_vecZero, 255, 25 );
+	UTIL_ParticleEffect ( pev->origin - gpGlobals->v_forward * 64, g_vecZero, 255, 25 );
+	UTIL_ParticleEffect ( pev->origin + gpGlobals->v_right * 64, g_vecZero, 255, 25 );
+	UTIL_ParticleEffect ( pev->origin - gpGlobals->v_right * 64, g_vecZero, 255, 25 );
+
+	pev->nextthink = gpGlobals->time + 0.1;
 }
 
 // [SDK score 1.0] CTestHull::CallBuildNodeGraph
@@ -1613,6 +1680,54 @@ void CTestHull :: BuildNodeGraph( void )
 	ALERT( at_console, "Done.\n");
 }
 
+// [SDK score 0.8] CTestHull::PathFind
+void CTestHull :: PathFind ( void )
+{
+	int	iPath[ 50 ];
+	int	iPathSize;
+	int	i;
+	CNode	*pNode, *pNextNode;
+
+	if ( !WorldGraph.m_fGraphPresent || !WorldGraph.m_fGraphPointersSet )
+	{// protect us in the case that the node graph isn't available
+		ALERT ( at_aiconsole, "Graph not ready!\n" );
+		return;
+	}
+
+	iPathSize = WorldGraph.FindShortestPath ( iPath, 0, 19, 0, 0 ); // UNDONE use hull constant
+
+	if ( !iPathSize )
+	{
+		ALERT ( at_aiconsole, "No Path!\n" );
+		return;
+	}
+	
+	ALERT ( at_aiconsole, "%d\n", iPathSize );
+
+	pNode = &WorldGraph.m_pNodes[ iPath [ 0 ] ];
+
+	for ( i = 0 ; i < iPathSize - 1 ; i++ )
+	{
+
+		pNextNode = &WorldGraph.m_pNodes[ iPath [ i + 1 ] ];
+
+		MESSAGE_BEGIN( MSG_BROADCAST, SVC_TEMPENTITY );
+			WRITE_BYTE( TE_SHOWLINE);
+			
+			WRITE_COORD( pNode->m_vecOrigin.x );
+			WRITE_COORD( pNode->m_vecOrigin.y );
+			WRITE_COORD( pNode->m_vecOrigin.z + NODE_HEIGHT );
+
+			WRITE_COORD( pNextNode->m_vecOrigin.x);
+			WRITE_COORD( pNextNode->m_vecOrigin.y);
+			WRITE_COORD( pNextNode->m_vecOrigin.z + NODE_HEIGHT);
+		MESSAGE_END();
+
+		pNode = pNextNode;
+	}
+
+}
+
 // [SDK score 1.0] CStack::Push
 void CStack :: Push( int value )
 {
@@ -1715,6 +1830,34 @@ int CQueuePriority :: Remove( float &fPriority )
 
     Heap_SiftDown(0);
     return iReturn;
+}
+
+// [SDK score 0.5] CQueuePriority::Heap_SiftDown
+void CQueuePriority::Heap_SiftDown(int iSubRoot)
+{
+	int parent = iSubRoot;
+	int child = HEAP_LEFT_CHILD(parent);
+
+	struct tag_HEAP_NODE Ref = m_heap[ parent ];
+
+    while (child < m_cSize)
+	{
+		int rightchild = HEAP_RIGHT_CHILD(parent);
+		if (rightchild < m_cSize)
+		{
+			if ( m_heap[ rightchild ].Priority < m_heap[ child ].Priority )
+			{
+				child = rightchild;
+			}
+		}
+		if ( Ref.Priority <= m_heap[ child ].Priority )
+			break;
+
+		m_heap[ parent ] = m_heap[ child ];
+		parent = child;
+		child = HEAP_LEFT_CHILD(parent);
+	}
+	m_heap[ parent ] = Ref;
 }
 
 // [SDK score 1.0] CQueuePriority::Heap_SiftUp
@@ -2166,6 +2309,71 @@ void CGraph::HashChoosePrimes(int TableSize)
         m_HashPrimes[Pick] = m_HashPrimes[15-iPrime];
         m_HashPrimes[15-iPrime] = Temp;
     }
+}
+
+// [SDK heurística] CGraph::SortNodes
+void CGraph::SortNodes(void)
+{
+	// We are using m_iPreviousNode to be the new node number.
+	// After assigning new node numbers to everything, we move
+	// things and patchup the links.
+	//
+	int iNodeCnt = 0;
+	int i;
+	m_pNodes[0].m_iPreviousNode = iNodeCnt++;
+
+	for (i = 1; i < m_cNodes; i++)
+	{
+		m_pNodes[i].m_iPreviousNode = UNNUMBERED_NODE;
+	}
+
+	for (i = 0; i < m_cNodes; i++)
+	{
+		// Run through all of this node's neighbors
+		//
+		for (int j = 0 ; j < m_pNodes[i].m_cNumLinks; j++ )
+		{
+			int iDestNode = INodeLink(i, j);
+			if (m_pNodes[iDestNode].m_iPreviousNode == UNNUMBERED_NODE)
+			{
+				m_pNodes[iDestNode].m_iPreviousNode = iNodeCnt++;
+			}
+		}
+	}
+
+	// Assign remaining node numbers to unlinked nodes.
+	//
+	for (i = 0; i < m_cNodes; i++)
+	{
+		if (m_pNodes[i].m_iPreviousNode == UNNUMBERED_NODE)
+		{
+			m_pNodes[i].m_iPreviousNode = iNodeCnt++;
+		}
+	}
+
+	// Alter links to reflect new node numbers.
+	//
+	for (i = 0; i < m_cLinks; i++)
+	{
+		m_pLinkPool[i].m_iSrcNode  = m_pNodes[m_pLinkPool[i].m_iSrcNode].m_iPreviousNode;
+		m_pLinkPool[i].m_iDestNode = m_pNodes[m_pLinkPool[i].m_iDestNode].m_iPreviousNode;
+	}
+
+	// Rearrange nodes to reflect new node numbering.
+	//
+	for (i = 0; i < m_cNodes; i++)
+	{
+		while (m_pNodes[i].m_iPreviousNode != i)
+		{
+			// Move current node off to where it should be, and bring
+			// that other node back into the current slot.
+			//
+			int iDestNode = m_pNodes[i].m_iPreviousNode;
+			CNode TempNode = m_pNodes[iDestNode];
+			m_pNodes[iDestNode] = m_pNodes[i];
+			m_pNodes[i] = TempNode;
+		}
+	}
 }
 
 // [SDK score 1.0] CGraph::BuildLinkLookups
@@ -2972,6 +3180,81 @@ void CNodeViewer :: DrawThink( void )
 
 
 
+// [SDK NÃO CONFERIDA] CNodeViewer::Spawn
+void CNodeViewer::Spawn( )
+{
+	if ( !WorldGraph.m_fGraphPresent || !WorldGraph.m_fGraphPointersSet )
+	{// protect us in the case that the node graph isn't available or built
+		ALERT ( at_console, "Graph not ready!\n" );
+		UTIL_Remove( this );
+		return;
+	}
+
+
+	if (FClassnameIs( pev, "node_viewer_fly"))
+	{
+		m_iHull = NODE_FLY_HULL;
+		m_afNodeType = bits_NODE_AIR;
+		m_vecColor = Vector( 160, 100, 255 );
+	}
+	else if (FClassnameIs( pev, "node_viewer_large"))
+	{
+		m_iHull = NODE_LARGE_HULL;
+		m_afNodeType = bits_NODE_LAND | bits_NODE_WATER;
+		m_vecColor = Vector( 100, 255, 160 );
+	}
+	else
+	{
+		m_iHull = NODE_HUMAN_HULL;
+		m_afNodeType = bits_NODE_LAND | bits_NODE_WATER;
+		m_vecColor = Vector( 255, 160, 100 );
+	}
+
+
+	m_iBaseNode = WorldGraph.FindNearestNode ( pev->origin, m_afNodeType );
+
+	if ( m_iBaseNode < 0 )
+	{
+		ALERT( at_console, "No nearby node\n" );
+		return;
+	}
+
+	m_nVisited = 0;
+
+	ALERT( at_aiconsole, "basenode %d\n", m_iBaseNode );
+
+	if (WorldGraph.m_cNodes < 128)
+	{
+		for (int i = 0; i < WorldGraph.m_cNodes; i++)
+		{
+			AddNode( i, WorldGraph.NextNodeInRoute( i, m_iBaseNode, m_iHull, 0 ));
+		}
+	}
+	else
+	{
+		// do a depth traversal
+		FindNodeConnections( m_iBaseNode );
+
+		int start = 0;
+		int end;
+		do {
+			end = m_nVisited;
+			// ALERT( at_console, "%d :", m_nVisited );
+			for (end = m_nVisited; start < end; start++)
+			{
+				FindNodeConnections( m_aFrom[start] );
+				FindNodeConnections( m_aTo[start] );
+			}
+		} while (end != m_nVisited);
+	}
+
+	ALERT( at_aiconsole, "%d nodes\n", m_nVisited );
+
+	m_iDraw = 0;
+	SetThink( &CNodeViewer::DrawThink );
+	pev->nextthink = gpGlobals->time;
+}
+
 // [SDK score 1.0] CNodeViewer::FindNodeConnections
 void CNodeViewer :: FindNodeConnections ( int iNode )
 {
@@ -3005,5 +3288,45 @@ void CNodeViewer::AddNode( int iFrom, int iTo )
 		m_aFrom[m_nVisited] = iFrom;
 		m_aTo[m_nVisited] = iTo;
 		m_nVisited++;
+	}
+}
+
+// [SDK score 0.5] CNodeViewer::DrawThink
+void CNodeViewer :: DrawThink( void )
+{
+	pev->nextthink = gpGlobals->time;
+
+	for (int i = 0; i < 10; i++)
+	{
+		if (m_iDraw == m_nVisited)
+		{
+			UTIL_Remove( this );
+			return;
+		}
+
+		extern short g_sModelIndexLaser;
+		MESSAGE_BEGIN( MSG_BROADCAST, SVC_TEMPENTITY );
+			WRITE_BYTE( TE_BEAMPOINTS );
+			WRITE_COORD( WorldGraph.m_pNodes[ m_aFrom[m_iDraw] ].m_vecOrigin.x );
+			WRITE_COORD( WorldGraph.m_pNodes[ m_aFrom[m_iDraw] ].m_vecOrigin.y );
+			WRITE_COORD( WorldGraph.m_pNodes[ m_aFrom[m_iDraw] ].m_vecOrigin.z + NODE_HEIGHT );
+
+			WRITE_COORD( WorldGraph.m_pNodes[ m_aTo[m_iDraw] ].m_vecOrigin.x );
+			WRITE_COORD( WorldGraph.m_pNodes[ m_aTo[m_iDraw] ].m_vecOrigin.y );
+			WRITE_COORD( WorldGraph.m_pNodes[ m_aTo[m_iDraw] ].m_vecOrigin.z + NODE_HEIGHT );
+			WRITE_SHORT( g_sModelIndexLaser );
+			WRITE_BYTE( 0 ); // framerate
+			WRITE_BYTE( 0 ); // framerate
+			WRITE_BYTE( 250 ); // life
+			WRITE_BYTE( 40 );  // width
+			WRITE_BYTE( 0 );   // noise
+			WRITE_BYTE( m_vecColor.x );   // r, g, b
+			WRITE_BYTE( m_vecColor.y );   // r, g, b
+			WRITE_BYTE( m_vecColor.z );   // r, g, b
+			WRITE_BYTE( 128 );	// brightness
+			WRITE_BYTE( 0 );		// speed
+		MESSAGE_END();
+
+		m_iDraw++;
 	}
 }

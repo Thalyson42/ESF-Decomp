@@ -327,6 +327,72 @@ int CBaseButton::TakeDamage( entvars_t* pevInflictor, entvars_t* pevAttacker, fl
 	return 0;
 }
 
+// [SDK NÃO CONFERIDA] CBaseButton::Spawn
+void CBaseButton::Spawn( )
+{ 
+	char  *pszSound;
+
+	//----------------------------------------------------
+	//determine sounds for buttons
+	//a sound of 0 should not make a sound
+	//----------------------------------------------------
+	pszSound = ButtonSound( m_sounds );
+	PRECACHE_SOUND(pszSound);
+	pev->noise = ALLOC_STRING(pszSound);
+
+	Precache();
+
+	if ( FBitSet ( pev->spawnflags, SF_BUTTON_SPARK_IF_OFF ) )// this button should spark in OFF state
+	{
+		SetThink ( &CBaseButton::ButtonSpark );
+		pev->nextthink = gpGlobals->time + 0.5;// no hurry, make sure everything else spawns
+	}
+
+	SetMovedir(pev);
+
+	pev->movetype	= MOVETYPE_PUSH;
+	pev->solid		= SOLID_BSP;
+	SET_MODEL(ENT(pev), STRING(pev->model));
+	
+	if (pev->speed == 0)
+		pev->speed = 40;
+
+	if (pev->health > 0)
+	{
+		pev->takedamage = DAMAGE_YES;
+	}
+
+	if (m_flWait == 0)
+		m_flWait = 1;
+	if (m_flLip == 0)
+		m_flLip = 4;
+
+	m_toggle_state = TS_AT_BOTTOM;
+	m_vecPosition1 = pev->origin;
+	// Subtract 2 from size because the engine expands bboxes by 1 in all directions making the size too big
+	m_vecPosition2	= m_vecPosition1 + (pev->movedir * (fabs( pev->movedir.x * (pev->size.x-2) ) + fabs( pev->movedir.y * (pev->size.y-2) ) + fabs( pev->movedir.z * (pev->size.z-2) ) - m_flLip));
+
+
+	// Is this a non-moving button?
+	if ( ((m_vecPosition2 - m_vecPosition1).Length() < 1) || (pev->spawnflags & SF_BUTTON_DONTMOVE) )
+		m_vecPosition2 = m_vecPosition1;
+
+	m_fStayPushed = (m_flWait == -1 ? TRUE : FALSE);
+	m_fRotating = FALSE;
+
+	// if the button is flagged for USE button activation only, take away it's touch function and add a use function
+
+	if ( FBitSet ( pev->spawnflags, SF_BUTTON_TOUCH_ONLY ) ) // touchable button
+	{
+		SetTouch( &CBaseButton::ButtonTouch );
+	}
+	else 
+	{
+		SetTouch ( NULL );
+		SetUse	 ( &CBaseButton::ButtonUse );
+	}
+}
+
 // [SDK score 1.0] CBaseButton::ButtonSpark
 void CBaseButton::ButtonSpark ( void )
 {
@@ -489,6 +555,56 @@ void CBaseButton::ButtonReturn( void )
 		AngularMove( m_vecAngle1, pev->speed);
 
 	pev->frame = 0;			// use normal textures
+}
+
+// [SDK NÃO CONFERIDA] CBaseButton::ButtonBackHome
+void CBaseButton::ButtonBackHome( void )
+{
+	ASSERT(m_toggle_state == TS_GOING_DOWN);
+	m_toggle_state = TS_AT_BOTTOM;
+
+	if ( FBitSet(pev->spawnflags, SF_BUTTON_TOGGLE) )
+	{
+		//EMIT_SOUND(ENT(pev), CHAN_VOICE, (char*)STRING(pev->noise), 1, ATTN_NORM);
+		
+		SUB_UseTargets( m_hActivator, USE_TOGGLE, 0 );
+	}
+
+
+	if (!FStringNull(pev->target))
+	{
+		edict_t* pentTarget	= NULL;
+		for (;;)
+		{
+			pentTarget = FIND_ENTITY_BY_TARGETNAME(pentTarget, STRING(pev->target));
+
+			if (FNullEnt(pentTarget))
+				break;
+
+			if (!FClassnameIs(pentTarget, "multisource"))
+				continue;
+			CBaseEntity *pTarget = CBaseEntity::Instance( pentTarget );
+
+			if ( pTarget )
+				pTarget->Use( m_hActivator, this, USE_TOGGLE, 0 );
+		}
+	}
+
+// Re-instate touch method, movement cycle is complete.
+	if ( !FBitSet ( pev->spawnflags, SF_BUTTON_TOUCH_ONLY ) ) // this button only works if USED, not touched!
+	{
+	// All buttons are now use only	
+		SetTouch ( NULL );
+	}
+	else
+		SetTouch( &CBaseButton::ButtonTouch );
+
+// reset think for a sparking button
+	if ( FBitSet ( pev->spawnflags, SF_BUTTON_SPARK_IF_OFF ) )
+	{
+		SetThink ( &CBaseButton::ButtonSpark );
+		pev->nextthink = gpGlobals->time + 0.5;// no hurry.
+	}
 }
 
 // [SDK score 1.0] CRotButton::Spawn
@@ -687,6 +803,26 @@ void CMomentaryRotButton::UpdateSelf( float value )
 	
 	pev->avelocity = (m_direction * pev->speed) * pev->movedir;
 	SetThink( &CMomentaryRotButton::Off );
+}
+
+// [SDK score 0.5] CMomentaryRotButton::UpdateTarget
+void CMomentaryRotButton::UpdateTarget( float value )
+{
+	if (!FStringNull(pev->target))
+	{
+		edict_t* pentTarget	= NULL;
+		for (;;)
+		{
+			pentTarget = FIND_ENTITY_BY_TARGETNAME(pentTarget, STRING(pev->target));
+			if (FNullEnt(pentTarget))
+				break;
+			CBaseEntity *pEntity = CBaseEntity::Instance(pentTarget);
+			if ( pEntity )
+			{
+				pEntity->Use( this, this, USE_SET, value );
+			}
+		}
+	}
 }
 
 // [SDK score 1.0] CMomentaryRotButton::Off

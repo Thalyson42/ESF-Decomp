@@ -275,11 +275,41 @@ int CBasePlayerItem::AddToPlayer( CBasePlayer *pPlayer )
 	return TRUE;
 }
 
+// [SDK score 0.5] CBasePlayerItem::Drop
+void CBasePlayerItem::Drop( void )
+{
+	SetTouch( NULL );
+	SetThink(&CBasePlayerItem::SUB_Remove);
+	pev->nextthink = gpGlobals->time + .1;
+}
+
+// [SDK score 0.5] CBasePlayerItem::Kill
+void CBasePlayerItem::Kill( void )
+{
+	SetTouch( NULL );
+	SetThink(&CBasePlayerItem::SUB_Remove);
+	pev->nextthink = gpGlobals->time + .1;
+}
+
 // [SDK score 1.0] CBasePlayerItem::Holster
 void CBasePlayerItem::Holster( int skiplocal /* = 0 */ )
 { 
 	m_pPlayer->pev->viewmodel = 0; 
 	m_pPlayer->pev->weaponmodel = 0;
+}
+
+// [SDK score 0.5] CBasePlayerItem::AttachToPlayer
+void CBasePlayerItem::AttachToPlayer ( CBasePlayer *pPlayer )
+{
+	pev->movetype = MOVETYPE_FOLLOW;
+	pev->solid = SOLID_NOT;
+	pev->aiment = pPlayer->edict();
+	pev->effects = EF_NODRAW; // ??
+	pev->modelindex = 0;// server won't send down to clients if modelindex == 0
+	pev->model = iStringNull;
+	pev->owner = pPlayer->edict();
+	pev->nextthink = gpGlobals->time + .1;
+	SetTouch( NULL );
 }
 
 // [SDK score 1.0] CBasePlayerWeapon::AddToPlayer
@@ -472,6 +502,39 @@ void CBasePlayerAmmo::Materialize( void )
 	}
 
 	SetTouch( &CBasePlayerAmmo::DefaultTouch );
+}
+
+// [SDK NÃO CONFERIDA] CBasePlayerAmmo::DefaultTouch
+void CBasePlayerAmmo :: DefaultTouch( CBaseEntity *pOther )
+{
+	if ( !pOther->IsPlayer() )
+	{
+		return;
+	}
+
+	if ( IsPlayerBusting( pOther ) )
+		return;
+
+	if (AddAmmo( pOther ))
+	{
+		if ( g_pGameRules->AmmoShouldRespawn( this ) == GR_AMMO_RESPAWN_YES )
+		{
+			Respawn();
+		}
+		else
+		{
+			SetTouch( NULL );
+			SetThink(&CBasePlayerAmmo::SUB_Remove);
+			pev->nextthink = gpGlobals->time + .1;
+		}
+	}
+	else if (gEvilImpulse101)
+	{
+		// evil impulse 101 hack, kill always
+		SetTouch( NULL );
+		SetThink(&CBasePlayerAmmo::SUB_Remove);
+		pev->nextthink = gpGlobals->time + .1;
+	}
 }
 
 // [SDK score 1.0] CBasePlayerWeapon::RetireWeapon

@@ -23,6 +23,97 @@ BOOL CHalfLifeMultiplay::ClientCommand( CBasePlayer *pPlayer, const char *pcmd )
 	return CGameRules::ClientCommand(pPlayer, pcmd);
 }
 
+// [SDK NÃO CONFERIDA] CHalfLifeMultiplay::Think
+void CHalfLifeMultiplay :: Think ( void )
+{
+	g_VoiceGameMgr.Update(gpGlobals->frametime);
+	
+	///// Check game rules /////
+	static int last_frags;
+	static int last_time;
+
+	int frags_remaining = 0;
+	int time_remaining = 0;
+
+	if ( g_fGameOver )   // someone else quit the game already
+	{
+		// bounds check
+		int time = (int)CVAR_GET_FLOAT( "mp_chattime" );
+		if ( time < 1 )
+			CVAR_SET_STRING( "mp_chattime", "1" );
+		else if ( time > MAX_INTERMISSION_TIME )
+			CVAR_SET_STRING( "mp_chattime", UTIL_dtos1( MAX_INTERMISSION_TIME ) );
+
+		m_flIntermissionEndTime = g_flIntermissionStartTime + mp_chattime.value;
+
+		// check to see if we should change levels now
+		if ( m_flIntermissionEndTime < gpGlobals->time )
+		{
+			if ( m_iEndIntermissionButtonHit  // check that someone has pressed a key, or the max intermission time is over
+				|| ( ( g_flIntermissionStartTime + MAX_INTERMISSION_TIME ) < gpGlobals->time) ) 
+				ChangeLevel(); // intermission is over
+		}
+
+		return;
+	}
+
+	float flTimeLimit = timelimit.value * 60;
+	float flFragLimit = fraglimit.value;
+
+	time_remaining = (int)(flTimeLimit ? ( flTimeLimit - gpGlobals->time ) : 0);
+	
+	if ( flTimeLimit != 0 && gpGlobals->time >= flTimeLimit )
+	{
+		GoToIntermission();
+		return;
+	}
+
+	if ( flFragLimit )
+	{
+		int bestfrags = 9999;
+		int remain;
+
+		// check if any player is over the frag limit
+		for ( int i = 1; i <= gpGlobals->maxClients; i++ )
+		{
+			CBaseEntity *pPlayer = UTIL_PlayerByIndex( i );
+
+			if ( pPlayer && pPlayer->pev->frags >= flFragLimit )
+			{
+				GoToIntermission();
+				return;
+			}
+
+
+			if ( pPlayer )
+			{
+				remain = flFragLimit - pPlayer->pev->frags;
+				if ( remain < bestfrags )
+				{
+					bestfrags = remain;
+				}
+			}
+
+		}
+		frags_remaining = bestfrags;
+	}
+
+	// Updates when frags change
+	if ( frags_remaining != last_frags )
+	{
+		g_engfuncs.pfnCvar_DirectSet( &fragsleft, UTIL_VarArgs( "%i", frags_remaining ) );
+	}
+
+	// Updates once per second
+	if ( timeleft.value != last_time )
+	{
+		g_engfuncs.pfnCvar_DirectSet( &timeleft, UTIL_VarArgs( "%i", time_remaining ) );
+	}
+
+	last_frags = frags_remaining;
+	last_time  = time_remaining;
+}
+
 // [SDK score 1.0] CHalfLifeMultiplay::IsMultiplayer
 BOOL CHalfLifeMultiplay::IsMultiplayer( void )
 {
@@ -103,6 +194,104 @@ void CHalfLifeMultiplay :: UpdateGameMode( CBasePlayer *pPlayer )
 	MESSAGE_END();
 }
 
+// [SDK NÃO CONFERIDA] CHalfLifeMultiplay::InitHUD
+void CHalfLifeMultiplay :: InitHUD( CBasePlayer *pl )
+{
+	// notify other clients of player joining the game
+	UTIL_ClientPrintAll( HUD_PRINTNOTIFY, UTIL_VarArgs( "%s has joined the game\n", 
+		( pl->pev->netname && STRING(pl->pev->netname)[0] != 0 ) ? STRING(pl->pev->netname) : "unconnected" ) );
+
+	// team match?
+	if ( g_teamplay )
+	{
+		UTIL_LogPrintf( "\"%s<%i><%s><%s>\" entered the game\n",  
+			STRING( pl->pev->netname ), 
+			GETPLAYERUSERID( pl->edict() ),
+			GETPLAYERAUTHID( pl->edict() ),
+			g_engfuncs.pfnInfoKeyValue( g_engfuncs.pfnGetInfoKeyBuffer( pl->edict() ), "model" ) );
+	}
+	else
+	{
+		UTIL_LogPrintf( "\"%s<%i><%s><%i>\" entered the game\n",  
+			STRING( pl->pev->netname ), 
+			GETPLAYERUSERID( pl->edict() ),
+			GETPLAYERAUTHID( pl->edict() ),
+			GETPLAYERUSERID( pl->edict() ) );
+	}
+
+	UpdateGameMode( pl );
+
+	// sending just one score makes the hud scoreboard active;  otherwise
+	// it is just disabled for single play
+	MESSAGE_BEGIN( MSG_ONE, gmsgScoreInfo, NULL, pl->edict() );
+		WRITE_BYTE( ENTINDEX(pl->edict()) );
+		WRITE_SHORT( 0 );
+		WRITE_SHORT( 0 );
+		WRITE_SHORT( 0 );
+		WRITE_SHORT( 0 );
+	MESSAGE_END();
+
+	SendMOTDToClient( pl->edict() );
+
+	// loop through all active players and send their score info to the new client
+	for ( int i = 1; i <= gpGlobals->maxClients; i++ )
+	{
+		// FIXME:  Probably don't need to cast this just to read m_iDeaths
+		CBasePlayer *plr = (CBasePlayer *)UTIL_PlayerByIndex( i );
+
+		if ( plr )
+		{
+			MESSAGE_BEGIN( MSG_ONE, gmsgScoreInfo, NULL, pl->edict() );
+				WRITE_BYTE( i );	// client number
+				WRITE_SHORT( plr->pev->frags );
+				WRITE_SHORT( plr->m_iDeaths );
+				WRITE_SHORT( 0 );
+				WRITE_SHORT( GetTeamIndex( plr->m_szTeamName ) + 1 );
+			MESSAGE_END();
+		}
+	}
+
+	if ( g_fGameOver )
+	{
+		MESSAGE_BEGIN( MSG_ONE, SVC_INTERMISSION, NULL, pl->edict() );
+		MESSAGE_END();
+	}
+}
+
+// [SDK NÃO CONFERIDA] CHalfLifeMultiplay::ClientDisconnected
+void CHalfLifeMultiplay :: ClientDisconnected( edict_t *pClient )
+{
+	if ( pClient )
+	{
+		CBasePlayer *pPlayer = (CBasePlayer *)CBaseEntity::Instance( pClient );
+
+		if ( pPlayer )
+		{
+			FireTargets( "game_playerleave", pPlayer, pPlayer, USE_TOGGLE, 0 );
+
+			// team match?
+			if ( g_teamplay )
+			{
+				UTIL_LogPrintf( "\"%s<%i><%s><%s>\" disconnected\n",  
+					STRING( pPlayer->pev->netname ), 
+					GETPLAYERUSERID( pPlayer->edict() ),
+					GETPLAYERAUTHID( pPlayer->edict() ),
+					g_engfuncs.pfnInfoKeyValue( g_engfuncs.pfnGetInfoKeyBuffer( pPlayer->edict() ), "model" ) );
+			}
+			else
+			{
+				UTIL_LogPrintf( "\"%s<%i><%s><%i>\" disconnected\n",  
+					STRING( pPlayer->pev->netname ), 
+					GETPLAYERUSERID( pPlayer->edict() ),
+					GETPLAYERAUTHID( pPlayer->edict() ),
+					GETPLAYERUSERID( pPlayer->edict() ) );
+			}
+
+			pPlayer->RemoveAllItems( TRUE );// destroy all of the players weapons and items
+		}
+	}
+}
+
 // [SDK score 1.0] CHalfLifeMultiplay::FPlayerCanTakeDamage
 BOOL CHalfLifeMultiplay::FPlayerCanTakeDamage( CBasePlayer *pPlayer, CBaseEntity *pAttacker )
 {
@@ -123,6 +312,35 @@ void CHalfLifeMultiplay :: PlayerThink( CBasePlayer *pPlayer )
 		pPlayer->pev->button = 0;
 		pPlayer->m_afButtonReleased = 0;
 	}
+}
+
+// [SDK NÃO CONFERIDA] CHalfLifeMultiplay::PlayerSpawn
+void CHalfLifeMultiplay :: PlayerSpawn( CBasePlayer *pPlayer )
+{
+	BOOL		addDefault;
+	CBaseEntity	*pWeaponEntity = NULL;
+
+	int iAutoWepSwitch = pPlayer->m_iAutoWepSwitch;
+	pPlayer->m_iAutoWepSwitch = 1;
+
+	pPlayer->pev->weapons |= (1<<WEAPON_SUIT);
+	
+	addDefault = TRUE;
+
+	while ( pWeaponEntity = UTIL_FindEntityByClassname( pWeaponEntity, "game_player_equip" ))
+	{
+		pWeaponEntity->Touch( pPlayer );
+		addDefault = FALSE;
+	}
+
+	if ( addDefault )
+	{
+		pPlayer->GiveNamedItem( "weapon_crowbar" );
+		pPlayer->GiveNamedItem( "weapon_9mmhandgun" );
+		pPlayer->GiveAmmo( 68, "9mm", _9MM_MAX_CARRY );// 4 full reloads
+	}
+
+	pPlayer->m_iAutoWepSwitch = iAutoWepSwitch;
 }
 
 // [SDK score 1.0] CHalfLifeMultiplay::FPlayerCanRespawn
@@ -431,6 +649,21 @@ void CHalfLifeMultiplay :: PlayerGotWeapon( CBasePlayer *pPlayer, CBasePlayerIte
 {
 }
 
+// [SDK score 0.5] CHalfLifeMultiplay::FlWeaponRespawnTime
+float CHalfLifeMultiplay :: FlWeaponRespawnTime( CBasePlayerItem *pWeapon )
+{
+	if ( weaponstay.value > 0 )
+	{
+		// make sure it's only certain weapons
+		if ( !(pWeapon->iFlags() & ITEM_FLAG_LIMITINWORLD) )
+		{
+			return gpGlobals->time + 0;		// weapon respawns almost instantly
+		}
+	}
+
+	return gpGlobals->time + WEAPON_RESPAWN_TIME;
+}
+
 // [SDK score 1.0] CHalfLifeMultiplay::FlWeaponTryRespawn
 float CHalfLifeMultiplay :: FlWeaponTryRespawn( CBasePlayerItem *pWeapon )
 {
@@ -544,10 +777,28 @@ int CHalfLifeMultiplay::AmmoShouldRespawn( CBasePlayerAmmo *pAmmo )
 	return GR_AMMO_RESPAWN_YES;
 }
 
+// [SDK score 0.5] CHalfLifeMultiplay::FlAmmoRespawnTime
+float CHalfLifeMultiplay::FlAmmoRespawnTime( CBasePlayerAmmo *pAmmo )
+{
+	return gpGlobals->time + AMMO_RESPAWN_TIME;
+}
+
 // [SDK score 1.0] CHalfLifeMultiplay::VecAmmoRespawnSpot
 Vector CHalfLifeMultiplay::VecAmmoRespawnSpot( CBasePlayerAmmo *pAmmo )
 {
 	return pAmmo->pev->origin;
+}
+
+// [SDK score 0.5] CHalfLifeMultiplay::FlHealthChargerRechargeTime
+float CHalfLifeMultiplay::FlHealthChargerRechargeTime( void )
+{
+	return 60;
+}
+
+// [SDK score 0.5] CHalfLifeMultiplay::FlHEVChargerRechargeTime
+float CHalfLifeMultiplay::FlHEVChargerRechargeTime( void )
+{
+	return 30;
 }
 
 // [SDK score 1.0] CHalfLifeMultiplay::DeadPlayerWeapons

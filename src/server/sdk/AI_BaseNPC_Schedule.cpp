@@ -496,6 +496,22 @@ void CBaseMonster :: RunTask ( Task_t *pTask )
 	}
 }
 
+// [SDK score 0.5] CBaseMonster::SetTurnActivity
+void CBaseMonster :: SetTurnActivity ( void )
+{
+	float flYD;
+	flYD = FlYawDiff();
+
+	if ( flYD <= -45 && LookupActivity ( ACT_TURN_RIGHT ) != ACTIVITY_NOT_AVAILABLE )
+	{// big right turn
+		m_IdealActivity = ACT_TURN_RIGHT;
+	}
+	else if ( flYD > 45 && LookupActivity ( ACT_TURN_LEFT ) != ACTIVITY_NOT_AVAILABLE )
+	{// big left turn
+		m_IdealActivity = ACT_TURN_LEFT;
+	}
+}
+
 // [SDK score 1.0] CBaseMonster::StartTask
 void CBaseMonster :: StartTask ( Task_t *pTask )
 {

@@ -58,6 +58,54 @@ void CBaseDoor::KeyValue( KeyValueData *pkvd )
 		CBaseToggle::KeyValue( pkvd );
 }
 
+// [SDK NÃO CONFERIDA] CBaseDoor::Spawn
+void CBaseDoor::Spawn( )
+{
+	Precache();
+	SetMovedir (pev);
+
+	if ( pev->skin == 0 )
+	{//normal door
+		if ( FBitSet (pev->spawnflags, SF_DOOR_PASSABLE) )
+			pev->solid		= SOLID_NOT;
+		else
+			pev->solid		= SOLID_BSP;
+	}
+	else
+	{// special contents
+		pev->solid		= SOLID_NOT;
+		SetBits( pev->spawnflags, SF_DOOR_SILENT );	// water is silent for now
+	}
+
+	pev->movetype	= MOVETYPE_PUSH;
+	UTIL_SetOrigin(pev, pev->origin);
+	SET_MODEL( ENT(pev), STRING(pev->model) );
+	
+	if (pev->speed == 0)
+		pev->speed = 100;
+	
+	m_vecPosition1	= pev->origin;
+	// Subtract 2 from size because the engine expands bboxes by 1 in all directions making the size too big
+	m_vecPosition2	= m_vecPosition1 + (pev->movedir * (fabs( pev->movedir.x * (pev->size.x-2) ) + fabs( pev->movedir.y * (pev->size.y-2) ) + fabs( pev->movedir.z * (pev->size.z-2) ) - m_flLip));
+	ASSERTSZ(m_vecPosition1 != m_vecPosition2, "door start/end positions are equal");
+	if ( FBitSet (pev->spawnflags, SF_DOOR_START_OPEN) )
+	{	// swap pos1 and pos2, put door at pos2
+		UTIL_SetOrigin(pev, m_vecPosition2);
+		m_vecPosition2 = m_vecPosition1;
+		m_vecPosition1 = pev->origin;
+	}
+
+	m_toggle_state = TS_AT_BOTTOM;
+	
+	// if the door is flagged for USE button activation only, use NULL touch function
+	if ( FBitSet ( pev->spawnflags, SF_DOOR_USE_ONLY ) )
+	{
+		SetTouch ( NULL );
+	}
+	else // touchable button
+		SetTouch( &CBaseDoor::DoorTouch );
+}
+
 // [SDK score 1.0] CBaseDoor::SetToggleState
 void CBaseDoor :: SetToggleState( int state )
 {
@@ -284,6 +332,53 @@ int CBaseDoor::DoorActivate( )
 	return 1;
 }
 
+// [SDK heurística] CBaseDoor::DoorGoUp
+void CBaseDoor::DoorGoUp( void )
+{
+	entvars_t	*pevActivator;
+
+	// It could be going-down, if blocked.
+	ASSERT(m_toggle_state == TS_AT_BOTTOM || m_toggle_state == TS_GOING_DOWN);
+
+	// emit door moving and stop sounds on CHAN_STATIC so that the multicast doesn't
+	// filter them out and leave a client stuck with looping door sounds!
+	if ( !FBitSet( pev->spawnflags, SF_DOOR_SILENT ) )
+	{
+		if ( m_toggle_state != TS_GOING_UP && m_toggle_state != TS_GOING_DOWN )
+			EMIT_SOUND(ENT(pev), CHAN_STATIC, (char*)STRING(pev->noiseMoving), 1, ATTN_NORM);
+	}
+
+	m_toggle_state = TS_GOING_UP;
+	
+	SetMoveDone( &CBaseDoor::DoorHitTop );
+	if ( FClassnameIs(pev, "func_door_rotating"))		// !!! BUGBUG Triggered doors don't work with this yet
+	{
+		float	sign = 1.0;
+
+		if ( m_hActivator != NULL )
+		{
+			pevActivator = m_hActivator->pev;
+			
+			if ( !FBitSet( pev->spawnflags, SF_DOOR_ONEWAY ) && pev->movedir.y ) 		// Y axis rotation, move away from the player
+			{
+				Vector vec = pevActivator->origin - pev->origin;
+				Vector angles = pevActivator->angles;
+				angles.x = 0;
+				angles.z = 0;
+				UTIL_MakeVectors (angles);
+	//			Vector vnext = (pevToucher->origin + (pevToucher->velocity * 10)) - pev->origin;
+				UTIL_MakeVectors ( pevActivator->angles );
+				Vector vnext = (pevActivator->origin + (gpGlobals->v_forward * 10)) - pev->origin;
+				if ( (vec.x*vnext.y - vec.y*vnext.x) < 0 )
+					sign = -1.0;
+			}
+		}
+		AngularMove(m_vecAngle2*sign, pev->speed);
+	}
+	else
+		LinearMove(m_vecPosition2, pev->speed);
+}
+
 // [SDK score 1.0] CBaseDoor::DoorHitTop
 void CBaseDoor::DoorHitTop( void )
 {
@@ -370,6 +465,80 @@ void CBaseDoor::DoorHitBottom( void )
 		FireTargets( STRING(pev->netname), m_hActivator, this, USE_TOGGLE, 0 );
 }
 
+// [SDK NÃO CONFERIDA] CBaseDoor::Blocked
+void CBaseDoor::Blocked( CBaseEntity *pOther )
+{
+	edict_t	*pentTarget = NULL;
+	CBaseDoor	*pDoor		= NULL;
+
+
+	// Hurt the blocker a little.
+	if ( pev->dmg )
+		pOther->TakeDamage( pev, pev, pev->dmg, DMG_CRUSH );
+
+	// if a door has a negative wait, it would never come back if blocked,
+	// so let it just squash the object to death real fast
+
+	if (m_flWait >= 0)
+	{
+		if (m_toggle_state == TS_GOING_DOWN)
+		{
+			DoorGoUp();
+		}
+		else
+		{
+			DoorGoDown();
+		}
+	}
+
+	// Block all door pieces with the same targetname here.
+	if ( !FStringNull ( pev->targetname ) )
+	{
+		for (;;)
+		{
+			pentTarget = FIND_ENTITY_BY_TARGETNAME(pentTarget, STRING(pev->targetname));
+
+			if ( VARS( pentTarget ) != pev )
+			{
+				if (FNullEnt(pentTarget))
+					break;
+
+				if ( FClassnameIs ( pentTarget, "func_door" ) || FClassnameIs ( pentTarget, "func_door_rotating" ) )
+				{
+				
+					pDoor = GetClassPtr( (CBaseDoor *) VARS(pentTarget) );
+
+					if ( pDoor->m_flWait >= 0)
+					{
+						if (pDoor->pev->velocity == pev->velocity && pDoor->pev->avelocity == pev->velocity)
+						{
+							// this is the most hacked, evil, bastardized thing I've ever seen. kjb
+							if ( FClassnameIs ( pentTarget, "func_door" ) )
+							{// set origin to realign normal doors
+								pDoor->pev->origin = pev->origin;
+								pDoor->pev->velocity = g_vecZero;// stop!
+							}
+							else
+							{// set angles to realign rotating doors
+								pDoor->pev->angles = pev->angles;
+								pDoor->pev->avelocity = g_vecZero;
+							}
+						}
+
+						if ( !FBitSet( pev->spawnflags, SF_DOOR_SILENT ) )
+							STOP_SOUND(ENT(pev), CHAN_STATIC, (char*)STRING(pev->noiseMoving) );
+
+						if ( pDoor->m_toggle_state == TS_GOING_DOWN)
+							pDoor->DoorGoUp();
+						else
+							pDoor->DoorGoDown();
+					}
+				}
+			}
+		}
+	}
+}
+
 // [SDK score 1.0] CRotDoor::Spawn
 void CRotDoor::Spawn( void )
 {
@@ -429,6 +598,38 @@ void CRotDoor :: SetToggleState( int state )
 		pev->angles = m_vecAngle1;
 
 	UTIL_SetOrigin( pev, pev->origin );
+}
+
+// [SDK score 0.5] CMomentaryDoor::Spawn
+void CMomentaryDoor::Spawn( void )
+{
+	SetMovedir (pev);
+
+	pev->solid		= SOLID_BSP;
+	pev->movetype	= MOVETYPE_PUSH;
+
+	UTIL_SetOrigin(pev, pev->origin);
+	SET_MODEL( ENT(pev), STRING(pev->model) );
+	
+	if (pev->speed == 0)
+		pev->speed = 100;
+	if (pev->dmg == 0)
+		pev->dmg = 2;
+	
+	m_vecPosition1	= pev->origin;
+	// Subtract 2 from size because the engine expands bboxes by 1 in all directions making the size too big
+	m_vecPosition2	= m_vecPosition1 + (pev->movedir * (fabs( pev->movedir.x * (pev->size.x-2) ) + fabs( pev->movedir.y * (pev->size.y-2) ) + fabs( pev->movedir.z * (pev->size.z-2) ) - m_flLip));
+	ASSERTSZ(m_vecPosition1 != m_vecPosition2, "door start/end positions are equal");
+
+	if ( FBitSet (pev->spawnflags, SF_DOOR_START_OPEN) )
+	{	// swap pos1 and pos2, put door at pos2
+		UTIL_SetOrigin(pev, m_vecPosition2);
+		m_vecPosition2 = m_vecPosition1;
+		m_vecPosition1 = pev->origin;
+	}
+	SetTouch( NULL );
+	
+	Precache();
 }
 
 // [SDK score 1.0] CMomentaryDoor::Precache
@@ -500,4 +701,35 @@ void CMomentaryDoor::KeyValue( KeyValueData *pkvd )
 	}
 	else
 		CBaseToggle::KeyValue( pkvd );
+}
+
+// [SDK NÃO CONFERIDA] CMomentaryDoor::Use
+void CMomentaryDoor::Use( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value )
+{
+	if ( useType != USE_SET )		// Momentary buttons will pass down a float in here
+		return;
+
+	if ( value > 1.0 )
+		value = 1.0;
+	if ( value < 0.0 )
+		value = 0.0;
+
+	Vector move = m_vecPosition1 + (value * (m_vecPosition2 - m_vecPosition1));
+	
+	Vector delta = move - pev->origin;
+	//float speed = delta.Length() * 10;
+	float speed = delta.Length() / 0.1; // move there in 0.1 sec
+	if ( speed == 0 )
+		return;
+
+	// This entity only thinks when it moves, so if it's thinking, it's in the process of moving
+	// play the sound when it starts moving (not yet thinking)
+	if ( pev->nextthink < pev->ltime || pev->nextthink == 0 )
+		EMIT_SOUND(ENT(pev), CHAN_STATIC, (char*)STRING(pev->noiseMoving), 1, ATTN_NORM);
+	// If we already moving to designated point, return
+	else if (move == m_vecFinalDest)
+		return;
+	
+	SetMoveDone( &CMomentaryDoor::DoorMoveDone );
+	LinearMove( move, speed );
 }

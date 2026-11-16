@@ -316,6 +316,52 @@ void CBreakable::DamageSound( void )
 		EMIT_SOUND_DYN(ENT(pev), CHAN_VOICE, rgpsz[RANDOM_LONG(0,i-1)], fvol, ATTN_NORM, 0, pitch);
 }
 
+// [SDK NÃO CONFERIDA] CBreakable::BreakTouch
+void CBreakable::BreakTouch( CBaseEntity *pOther )
+{
+	float flDamage;
+	entvars_t*	pevToucher = pOther->pev;
+	
+	// only players can break these right now
+	if ( !pOther->IsPlayer() || !IsBreakable() )
+	{
+        return;
+	}
+
+	if ( FBitSet ( pev->spawnflags, SF_BREAK_TOUCH ) )
+	{// can be broken when run into 
+		flDamage = pevToucher->velocity.Length() * 0.01;
+
+		if (flDamage >= pev->health)
+		{
+			SetTouch( NULL );
+			TakeDamage(pevToucher, pevToucher, flDamage, DMG_CRUSH);
+
+			// do a little damage to player if we broke glass or computer
+			pOther->TakeDamage( pev, pev, flDamage/4, DMG_SLASH );
+		}
+	}
+
+	if ( FBitSet ( pev->spawnflags, SF_BREAK_PRESSURE ) && pevToucher->absmin.z >= pev->maxs.z - 2 )
+	{// can be broken when stood upon
+		
+		// play creaking sound here.
+		DamageSound();
+
+		SetThink ( &CBreakable::Die );
+		SetTouch( NULL );
+		
+		if ( m_flDelay == 0 )
+		{// !!!BUGBUG - why doesn't zero delay work?
+			m_flDelay = 0.1;
+		}
+
+		pev->nextthink = pev->ltime + m_flDelay;
+
+	}
+
+}
+
 // [SDK score 1.0] CBreakable::Use
 void CBreakable::Use( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value )
 {
@@ -327,6 +373,36 @@ void CBreakable::Use( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE us
 
 		Die();
 	}
+}
+
+// [SDK score 0.75] CBreakable::TraceAttack
+void CBreakable::TraceAttack( entvars_t *pevAttacker, float flDamage, Vector vecDir, TraceResult *ptr, int bitsDamageType )
+{
+	// random spark if this is a 'computer' object
+	if (RANDOM_LONG(0,1) )
+	{
+		switch( m_Material )
+		{
+			case matComputer:
+			{
+				UTIL_Sparks( ptr->vecEndPos );
+
+				float flVolume = RANDOM_FLOAT ( 0.7 , 1.0 );//random volume range
+				switch ( RANDOM_LONG(0,1) )
+				{
+					case 0: EMIT_SOUND(ENT(pev), CHAN_VOICE, "buttons/spark5.wav", flVolume, ATTN_NORM);	break;
+					case 1: EMIT_SOUND(ENT(pev), CHAN_VOICE, "buttons/spark6.wav", flVolume, ATTN_NORM);	break;
+				}
+			}
+			break;
+			
+			case matUnbreakableGlass:
+				UTIL_Ricochet( ptr->vecEndPos, RANDOM_FLOAT(0.5,1.5) );
+			break;
+		}
+	}
+
+	CBaseDelay::TraceAttack( pevAttacker, flDamage, vecDir, ptr, bitsDamageType );
 }
 
 // [SDK score 1.0] CBreakable::TakeDamage
@@ -382,6 +458,183 @@ int CBreakable :: TakeDamage( entvars_t* pevInflictor, entvars_t* pevAttacker, f
 	return 1;
 }
 
+// [SDK NÃO CONFERIDA] CBreakable::Die
+void CBreakable::Die( void )
+{
+	Vector vecSpot;// shard origin
+	Vector vecVelocity;// shard velocity
+	CBaseEntity *pEntity = NULL;
+	char cFlag = 0;
+	int pitch;
+	float fvol;
+	
+	pitch = 95 + RANDOM_LONG(0,29);
+
+	if (pitch > 97 && pitch < 103)
+		pitch = 100;
+
+	// The more negative pev->health, the louder
+	// the sound should be.
+
+	fvol = RANDOM_FLOAT(0.85, 1.0) + (abs(pev->health) / 100.0);
+
+	if (fvol > 1.0)
+		fvol = 1.0;
+
+
+	switch (m_Material)
+	{
+	case matGlass:
+		switch ( RANDOM_LONG(0,1) )
+		{
+		case 0:	EMIT_SOUND_DYN(ENT(pev), CHAN_VOICE, "debris/bustglass1.wav", fvol, ATTN_NORM, 0, pitch);	
+			break;
+		case 1:	EMIT_SOUND_DYN(ENT(pev), CHAN_VOICE, "debris/bustglass2.wav", fvol, ATTN_NORM, 0, pitch);	
+			break;
+		}
+		cFlag = BREAK_GLASS;
+		break;
+
+	case matWood:
+		switch ( RANDOM_LONG(0,1) )
+		{
+		case 0:	EMIT_SOUND_DYN(ENT(pev), CHAN_VOICE, "debris/bustcrate1.wav", fvol, ATTN_NORM, 0, pitch);	
+			break;
+		case 1:	EMIT_SOUND_DYN(ENT(pev), CHAN_VOICE, "debris/bustcrate2.wav", fvol, ATTN_NORM, 0, pitch);	
+			break;
+		}
+		cFlag = BREAK_WOOD;
+		break;
+
+	case matComputer:
+	case matMetal:
+		switch ( RANDOM_LONG(0,1) )
+		{
+		case 0:	EMIT_SOUND_DYN(ENT(pev), CHAN_VOICE, "debris/bustmetal1.wav", fvol, ATTN_NORM, 0, pitch);	
+			break;
+		case 1:	EMIT_SOUND_DYN(ENT(pev), CHAN_VOICE, "debris/bustmetal2.wav", fvol, ATTN_NORM, 0, pitch);	
+			break;
+		}
+		cFlag = BREAK_METAL;
+		break;
+
+	case matFlesh:
+		switch ( RANDOM_LONG(0,1) )
+		{
+		case 0:	EMIT_SOUND_DYN(ENT(pev), CHAN_VOICE, "debris/bustflesh1.wav", fvol, ATTN_NORM, 0, pitch);	
+			break;
+		case 1:	EMIT_SOUND_DYN(ENT(pev), CHAN_VOICE, "debris/bustflesh2.wav", fvol, ATTN_NORM, 0, pitch);	
+			break;
+		}
+		cFlag = BREAK_FLESH;
+		break;
+
+	case matRocks:
+	case matCinderBlock:
+		switch ( RANDOM_LONG(0,1) )
+		{
+		case 0:	EMIT_SOUND_DYN(ENT(pev), CHAN_VOICE, "debris/bustconcrete1.wav", fvol, ATTN_NORM, 0, pitch);	
+			break;
+		case 1:	EMIT_SOUND_DYN(ENT(pev), CHAN_VOICE, "debris/bustconcrete2.wav", fvol, ATTN_NORM, 0, pitch);	
+			break;
+		}
+		cFlag = BREAK_CONCRETE;
+		break;
+
+	case matCeilingTile:
+		EMIT_SOUND_DYN(ENT(pev), CHAN_VOICE, "debris/bustceiling.wav", fvol, ATTN_NORM, 0, pitch);
+		break;
+	}
+    
+		
+	if (m_Explosion == expDirected)
+		vecVelocity = g_vecAttackDir * 200;
+	else
+	{
+		vecVelocity.x = 0;
+		vecVelocity.y = 0;
+		vecVelocity.z = 0;
+	}
+
+	vecSpot = pev->origin + (pev->mins + pev->maxs) * 0.5;
+	MESSAGE_BEGIN( MSG_PVS, SVC_TEMPENTITY, vecSpot );
+		WRITE_BYTE( TE_BREAKMODEL);
+
+		// position
+		WRITE_COORD( vecSpot.x );
+		WRITE_COORD( vecSpot.y );
+		WRITE_COORD( vecSpot.z );
+
+		// size
+		WRITE_COORD( pev->size.x);
+		WRITE_COORD( pev->size.y);
+		WRITE_COORD( pev->size.z);
+
+		// velocity
+		WRITE_COORD( vecVelocity.x ); 
+		WRITE_COORD( vecVelocity.y );
+		WRITE_COORD( vecVelocity.z );
+
+		// randomization
+		WRITE_BYTE( 10 ); 
+
+		// Model
+		WRITE_SHORT( m_idShard );	//model id#
+
+		// # of shards
+		WRITE_BYTE( 0 );	// let client decide
+
+		// duration
+		WRITE_BYTE( 25 );// 2.5 seconds
+
+		// flags
+		WRITE_BYTE( cFlag );
+	MESSAGE_END();
+
+	float size = pev->size.x;
+	if ( size < pev->size.y )
+		size = pev->size.y;
+	if ( size < pev->size.z )
+		size = pev->size.z;
+
+	// !!! HACK  This should work!
+	// Build a box above the entity that looks like an 8 pixel high sheet
+	Vector mins = pev->absmin;
+	Vector maxs = pev->absmax;
+	mins.z = pev->absmax.z;
+	maxs.z += 8;
+
+	// BUGBUG -- can only find 256 entities on a breakable -- should be enough
+	CBaseEntity *pList[256];
+	int count = UTIL_EntitiesInBox( pList, 256, mins, maxs, FL_ONGROUND );
+	if ( count )
+	{
+		for ( int i = 0; i < count; i++ )
+		{
+			ClearBits( pList[i]->pev->flags, FL_ONGROUND );
+			pList[i]->pev->groundentity = NULL;
+		}
+	}
+
+	// Don't fire something that could fire myself
+	pev->targetname = 0;
+
+	pev->solid = SOLID_NOT;
+	// Fire targets on break
+	SUB_UseTargets( NULL, USE_TOGGLE, 0 );
+
+	SetThink( &CBreakable::SUB_Remove );
+	pev->nextthink = pev->ltime + 0.1;
+	if ( m_iszSpawnObject )
+		CBaseEntity::Create( (char *)STRING(m_iszSpawnObject), VecBModelOrigin(pev), pev->angles, edict() );
+
+
+	if ( Explodable() )
+	{
+		ExplosionCreate( Center(), pev->angles, edict(), ExplosionMagnitude(), TRUE );
+	}
+}
+
 // [SDK score 1.0] CBreakable::IsBreakable
 BOOL CBreakable :: IsBreakable( void ) 
 { 
@@ -398,6 +651,33 @@ int	CBreakable :: DamageDecal( int bitsDamageType )
 		return DECAL_BPROOF1;
 
 	return CBaseEntity::DamageDecal( bitsDamageType );
+}
+
+// [SDK score 0.5] CPushable::Spawn
+void CPushable :: Spawn( void )
+{
+	if ( pev->spawnflags & SF_PUSH_BREAKABLE )
+		CBreakable::Spawn();
+	else
+		Precache( );
+
+	pev->movetype	= MOVETYPE_PUSHSTEP;
+	pev->solid		= SOLID_BBOX;
+	SET_MODEL( ENT(pev), STRING(pev->model) );
+
+	if ( pev->friction > 399 )
+		pev->friction = 399;
+
+	m_maxSpeed = 400 - pev->friction;
+	SetBits( pev->flags, FL_FLOAT );
+	pev->friction = 0;
+	
+	pev->origin.z += 1;	// Pick up off of the floor
+	UTIL_SetOrigin( pev, pev->origin );
+
+	// Multiply by area of the box's cross-section (assume 1000 units^3 standard volume)
+	pev->skin = ( pev->skin * (pev->maxs.x - pev->mins.x) * (pev->maxs.y - pev->mins.y) ) * 0.0005;
+	m_soundTime = 0;
 }
 
 // [SDK score 1.0] CPushable::Precache
@@ -469,6 +749,100 @@ void CPushable :: Touch( CBaseEntity *pOther )
 		return;
 
 	Move( pOther, 1 );
+}
+
+// [SDK NÃO CONFERIDA] CPushable::Move
+void CPushable :: Move( CBaseEntity *pOther, int push )
+{
+	entvars_t*	pevToucher = pOther->pev;
+	int playerTouch = 0;
+
+	// Is entity standing on this pushable ?
+	if ( FBitSet(pevToucher->flags,FL_ONGROUND) && pevToucher->groundentity && VARS(pevToucher->groundentity) == pev )
+	{
+		// Only push if floating
+		if ( pev->waterlevel > 0 )
+			pev->velocity.z += pevToucher->velocity.z * 0.1;
+
+		return;
+	}
+
+
+	if ( pOther->IsPlayer() )
+	{
+		// JoshA: Used to check for FORWARD too and logic was inverted
+		// from comment which seems wrong.
+		// Fixed to just check for USE being not set for PUSH.
+		// Should have the right effect.
+		if ( push && !!(pevToucher->button & IN_USE) )	// Don't push unless the player is not useing (pull)
+			return;
+		playerTouch = 1;
+	}
+
+	float factor;
+
+	if ( playerTouch )
+	{
+		if ( !(pevToucher->flags & FL_ONGROUND) )	// Don't push away from jumping/falling players unless in water
+		{
+			if ( pev->waterlevel < 1 )
+				return;
+			else 
+				factor = 0.1;
+		}
+		else
+			factor = 1;
+	}
+	else 
+		factor = 0.25;
+
+	// This used to be added every 'frame', but to be consistent at high fps,
+	// now act as if it's added at a constant rate with a fudge factor.
+	extern cvar_t sv_pushable_fixed_tick_fudge;
+
+	if ( !push && sv_pushable_fixed_tick_fudge.value >= 0.0f )
+	{
+		factor *= gpGlobals->frametime * sv_pushable_fixed_tick_fudge.value;
+	}
+
+	// JoshA: Always apply this if pushing, or if under the player's velocity.
+	if ( push || ( abs(pev->velocity.x) < abs(pevToucher->velocity.x - pevToucher->velocity.x * factor) ) )
+		pev->velocity.x += pevToucher->velocity.x * factor;
+	if ( push || ( abs(pev->velocity.y) < abs(pevToucher->velocity.y - pevToucher->velocity.y * factor) ) )
+		pev->velocity.y += pevToucher->velocity.y * factor;
+
+	float length = sqrt( pev->velocity.x * pev->velocity.x + pev->velocity.y * pev->velocity.y );
+	if ( length > MaxSpeed() )
+	{
+		pev->velocity.x = (pev->velocity.x * MaxSpeed() / length );
+		pev->velocity.y = (pev->velocity.y * MaxSpeed() / length );
+	}
+	if ( playerTouch )
+	{
+		// JoshA: Match the player to our pushable's velocity.
+		// Previously this always happened, but it should only
+		// happen if the player is pushing (or rather, being pushed.)
+		// This either stops the player in their tracks or nudges them along.
+		if ( push )
+		{
+			pevToucher->velocity.x = pev->velocity.x;
+			pevToucher->velocity.y = pev->velocity.y;
+		}
+
+		if ( (gpGlobals->time - m_soundTime) > 0.7 )
+		{
+			m_soundTime = gpGlobals->time;
+			if ( length > 0 && FBitSet(pev->flags,FL_ONGROUND) )
+			{
+				m_lastSound = RANDOM_LONG(0,2);
+				EMIT_SOUND(ENT(pev), CHAN_WEAPON, m_soundNames[m_lastSound], 0.5, ATTN_NORM);
+	//			SetThink( StopSound );
+	//			pev->nextthink = pev->ltime + 0.1;
+			}
+			else
+				STOP_SOUND( ENT(pev), CHAN_WEAPON, m_soundNames[m_lastSound] );
+		}
+	}
 }
 
 // [SDK score 1.0] CPushable::TakeDamage

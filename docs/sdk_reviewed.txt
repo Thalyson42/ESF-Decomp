@@ -45,3 +45,9 @@ CBreakable::TraceAttack
 CCineMonster::DelayStart
 CSpeaker::SpeakerThink
 CPathTrack::Link
+CCineMonster::Spawn
+CFuncTrackTrain::Spawn
+CMomentaryDoor::Spawn
+CFuncTrackChange::EvaluateTrain
+CGib::Spawn
+CRenderFxManager::Use

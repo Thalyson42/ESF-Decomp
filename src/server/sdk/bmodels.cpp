@@ -183,6 +183,91 @@ void CFuncRotating :: KeyValue( KeyValueData* pkvd)
 		CBaseEntity::KeyValue( pkvd );
 }
 
+// [SDK NÃO CONFERIDA] CFuncRotating::Spawn
+void CFuncRotating :: Spawn( )
+{
+	// set final pitch.  Must not be PITCH_NORM, since we
+	// plan on pitch shifting later.
+
+	m_pitch = PITCH_NORM - 1;
+
+	// maintain compatibility with previous maps
+	if (m_flVolume == 0.0)
+		m_flVolume = 1.0;
+
+	// if the designer didn't set a sound attenuation, default to one.
+	m_flAttenuation = ATTN_NORM;
+	
+	if ( FBitSet ( pev->spawnflags, SF_BRUSH_ROTATE_SMALLRADIUS) )
+	{
+		m_flAttenuation = ATTN_IDLE;
+	}
+	else if ( FBitSet ( pev->spawnflags, SF_BRUSH_ROTATE_MEDIUMRADIUS) )
+	{
+		m_flAttenuation = ATTN_STATIC;
+	}
+	else if ( FBitSet ( pev->spawnflags, SF_BRUSH_ROTATE_LARGERADIUS) )
+	{
+		m_flAttenuation = ATTN_NORM;
+	}
+
+	// prevent divide by zero if level designer forgets friction!
+	if ( m_flFanFriction == 0 )
+	{
+		m_flFanFriction = 1;
+	}
+	
+	if ( FBitSet(pev->spawnflags, SF_BRUSH_ROTATE_Z_AXIS) )
+		pev->movedir = Vector(0,0,1);
+	else if ( FBitSet(pev->spawnflags, SF_BRUSH_ROTATE_X_AXIS) )
+		pev->movedir = Vector(1,0,0);
+	else 
+		pev->movedir = Vector(0,1,0);	// y-axis
+
+	// check for reverse rotation
+	if ( FBitSet(pev->spawnflags, SF_BRUSH_ROTATE_BACKWARDS) )
+		pev->movedir = pev->movedir * -1;
+
+	// some rotating objects like fake volumetric lights will not be solid.
+	if ( FBitSet(pev->spawnflags, SF_ROTATING_NOT_SOLID) )
+	{
+		pev->solid = SOLID_NOT;
+		pev->skin = CONTENTS_EMPTY;
+		pev->movetype	= MOVETYPE_PUSH;
+	}
+	else
+	{
+		pev->solid		= SOLID_BSP;
+		pev->movetype	= MOVETYPE_PUSH;
+	}
+
+	UTIL_SetOrigin(pev, pev->origin);
+	SET_MODEL( ENT(pev), STRING(pev->model) );
+
+	SetUse( &CFuncRotating::RotatingUse );
+	// did level designer forget to assign speed?
+	if (pev->speed <= 0)
+		pev->speed = 0;
+
+	// Removed this per level designers request.  -- JAY
+	//	if (pev->dmg == 0)
+	//		pev->dmg = 2;
+
+	// instant-use brush?
+	if ( FBitSet( pev->spawnflags, SF_BRUSH_ROTATE_INSTANT) )
+	{		
+		SetThink( &CFuncRotating::SUB_CallUseToggle );
+		pev->nextthink = pev->ltime + 1.5;	// leave a magic delay for client to start up
+	}	
+	// can this brush inflict pain?
+	if ( FBitSet (pev->spawnflags, SF_BRUSH_HURT) )
+	{
+		SetTouch( &CFuncRotating::HurtTouch );
+	}
+	
+	Precache( );
+}
+
 // [SDK score 1.0] CFuncRotating::Precache
 void CFuncRotating :: Precache( void )
 {
@@ -247,6 +332,66 @@ void CFuncRotating :: Precache( void )
 		SetThink ( &CFuncRotating::SpinUp );
 		pev->nextthink = pev->ltime + 1.5;
 	}
+}
+
+// [SDK heurística] CFuncRotating::HurtTouch
+void CFuncRotating :: HurtTouch ( CBaseEntity *pOther )
+{
+	entvars_t	*pevOther = pOther->pev;
+
+	// we can't hurt this thing, so we're not concerned with it
+	if ( !pevOther->takedamage )
+		return;
+
+	// calculate damage based on rotation speed
+	pev->dmg = pev->avelocity.Length() / 10;
+
+	pOther->TakeDamage( pev, pev, pev->dmg, DMG_CRUSH);
+	
+	pevOther->velocity = (pevOther->origin - VecBModelOrigin(pev) ).Normalize() * pev->dmg;
+}
+
+// [SDK NÃO CONFERIDA] CFuncRotating::RampPitchVol
+void CFuncRotating :: RampPitchVol (int fUp)
+{
+
+	Vector vecAVel = pev->avelocity;
+	vec_t vecCur;
+	vec_t vecFinal;
+	float fpct;
+	float fvol;
+	float fpitch;
+	int pitch;
+	
+	// get current angular velocity
+
+	vecCur = abs(vecAVel.x != 0 ? vecAVel.x : (vecAVel.y != 0 ? vecAVel.y : vecAVel.z));
+	
+	// get target angular velocity
+
+	vecFinal = (pev->movedir.x != 0 ? pev->movedir.x : (pev->movedir.y != 0 ? pev->movedir.y : pev->movedir.z));
+	vecFinal *= pev->speed;
+	vecFinal = abs(vecFinal);
+
+	// calc volume and pitch as % of final vol and pitch
+
+	fpct = vecCur / vecFinal;
+//	if (fUp)
+//		fvol = m_flVolume * (0.5 + fpct/2.0); // spinup volume ramps up from 50% max vol
+//	else
+		fvol = m_flVolume * fpct;			  // slowdown volume ramps down to 0
+
+	fpitch = FANPITCHMIN + (FANPITCHMAX - FANPITCHMIN) * fpct;	
+	
+	pitch = (int) fpitch;
+	if (pitch == PITCH_NORM)
+		pitch = PITCH_NORM-1;
+
+	// change the fan's vol and pitch
+
+	EMIT_SOUND_DYN(ENT(pev), CHAN_STATIC, (char *)STRING(pev->noiseRunning), 
+		fvol, m_flAttenuation, SND_CHANGE_PITCH | SND_CHANGE_VOL, pitch);
+
 }
 
 // [SDK score 1.0] CFuncRotating::SpinUp
@@ -314,6 +459,12 @@ void CFuncRotating :: SpinDown( void )
 	{
 		RampPitchVol(FALSE);
 	}
+}
+
+// [SDK score 0.5] CFuncRotating::Rotate
+void CFuncRotating :: Rotate( void )
+{
+	pev->nextthink = pev->ltime + 10;
 }
 
 // [SDK score 1.0] CFuncRotating::RotatingUse
