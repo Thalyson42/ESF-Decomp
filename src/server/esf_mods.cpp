@@ -45,3 +45,18 @@ void CGib::WaitTillLand(void)
     else
         pev->nextthink = gpGlobals->time + 0.5f;
 }
+
+void CBaseEntity::TraceAttack(entvars_t *pevAttacker, float flDamage, Vector vecDir, TraceResult *ptr, int bitsDamageType)
+{
+    Vector vecOrigin = ptr->vecEndPos - vecDir * 4;
+    if (pev->takedamage)
+    {
+        AddMultiDamage(pevAttacker, this, flDamage, bitsDamageType);
+        int blood = BloodColor();
+        if (blood != DONT_BLEED || (bitsDamageType & DMG_BULLET))   // [OK] ESF: sangra também sem cor de sangue se for bala (bits & 2)
+        {
+            SpawnBlood(vecOrigin, blood, flDamage);
+            TraceBleed(flDamage, vecDir, ptr, bitsDamageType);      // [OK] virtual (slot +0x44) no ESF
+        }
+    }
+}

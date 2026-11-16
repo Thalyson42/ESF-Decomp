@@ -25,3 +25,16 @@ CBaseAnimating::DispatchAnimEvents
 CInfoIntermission::Spawn
 CBaseEntity::SUB_FadeOut
 CFuncTrainControls::Find
+CTalkMonster::HandleAnimEvent
+CBasePlayerItem::AttachToPlayer
+CQueuePriority::Heap_SiftDown
+CPushable::Spawn
+CBaseEntity::GetNextTarget
+CVoiceGameMgr::PlayerHasBlockedPlayer
+CCineMonster::CancelScript
+CTalkMonster::StartFollowing
+CBaseMonster::GibMonster
+CShower::Touch
+CMomentaryRotButton::UpdateTarget
+CTestHull::PathFind
+CBaseAnimating::StudioFrameAdvance
