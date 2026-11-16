@@ -3133,3 +3133,123 @@ int CPlayerMelee::MeleeFrameAdvance()                         // avança a anima
         m_pAttacker->PlayAnimation();
     return 0;
 }
+
+// ---------------------------------------------------------------------------
+// lote 25: atraso de bloqueio, flash de bloqueio, HUD do bloqueio, powerhit simples
+// ---------------------------------------------------------------------------
+
+int CPlayerMelee::HandleDelayedBlock(melee_move_s *pA, melee_move_s *pB)
+{
+    if (GetMoveCount(pA) != GetMoveCount(pB) && m_flDelayTime + 1.0f >= gpGlobals->time)   // [OK]
+        return 0;
+    return 1;
+}
+
+int CPlayerMelee::SetDelayEndBlock(melee_move_s *pA, melee_move_s *pB)
+{
+    if (GetMoveCount(pA) <= 3)
+    {
+        if (GetMoveCount(pA) > GetMoveCount(pB) && m_flDelayTime + 1.0f > gpGlobals->time)
+            m_fDelayEndBlock = 1;                             // [OK] +0x108
+    }
+    return m_fDelayEndBlock;
+}
+
+int CPlayerMelee::SetAtkBehindAndBlocking()
+{
+    f_0d4 = 0;
+    f_0d8 = 0;
+    Vector vecOther, vecMine;
+    g_engfuncs.pfnAngleVectors(m_pAttackerOther->pev->v_angle, vecOther, NULL, NULL);   // [?] +0x74
+    g_engfuncs.pfnAngleVectors(m_pAttacker->pev->v_angle, vecMine, NULL, NULL);
+    Vector vecNeg = -vecMine;
+    if (DotProduct(vecNeg, vecOther) < -1.0f)                 // [?] limiar literal do binário (-1.0)
+        f_0d8 = 1;                                            // atacante pelas costas
+    else
+    {
+        m_pAttackerOtherMelee->m_fInAdvMelee = 0;
+        m_fInAdvMelee = 0;
+        f_0d4 = m_pAttackerOtherMelee->BlocksAttack(m_pAttacker);
+        m_pAttackerOtherMelee->m_fInAdvMelee = 1;
+        m_fInAdvMelee = 1;
+    }
+    m_pAttacker->m_fBlocking = 0;                             // [OK] player+0x32c
+    return 0;
+}
+
+int CPlayerMelee::SendBlockFlash(CBasePlayer *pBlocker, melee_move_s *pMove)
+{
+    int iBase;
+    if (!GetMeleeStrength(pMove)) iBase = 15;
+    else iBase = (GetMeleeStrength(pMove) == 1) ? 25 : 35;    // [OK]
+    int iChance = iBase + (m_pAttacker->GetPowerLevel() / pBlocker->GetPowerLevel()) * 10;
+    int iDiff = iChance - iBase;
+    if (iDiff < 0) iDiff = -iDiff;
+    if (iDiff > 10) iChance = (iChance <= iBase) ? iBase - 10 : iBase + 10;   // limita a ±10
+
+    int iValue;
+    if (RANDOM_LONG(0, 100) < iChance)                        // bloqueio perfeito
+    {
+        pBlocker->m_Melee.MeleeHud(2, 16);
+        iValue = 0;
+    }
+    else
+    {
+        pBlocker->m_Melee.MeleeHud(2, FlagsToDirections(pMove->m_iDirection));
+        iValue = pMove->m_iDirection;
+    }
+    if (!pBlocker->IsNetClient() && (pBlocker->pev->flags & FL_FAKECLIENT))   // [OK] só bots guardam o evento
+    {
+        struct node_s { int value; node_s *next; node_s *prev; };             // lista de 12 bytes em player+0xb84
+        node_s **ppList = (node_s **)&pBlocker->f_b84;                        // [?] ppList[0]=cabeça, ppList[1]=cauda
+        node_s *n = new node_s; n->value = iValue; n->next = NULL; n->prev = NULL;
+        if (!ppList[0]) { ppList[0] = n; ppList[1] = n; }
+        else { ppList[1]->next = n; n->prev = ppList[1]; ppList[1] = n; }
+    }
+    return 0;
+}
+
+int CPlayerMelee::UpdateBlockClient(melee_move_s *pMove)  // mostra no HUD se o golpe nº N foi bloqueado
+{
+    melee_move_s *pDef = m_pDefenderMoves;
+    melee_move_s *pAtk = NULL;
+    if (f_07c) pAtk = m_pAttackerMoves;
+    else if (m_pDefenderMelee && m_pDefenderMelee->f_0ec) pAtk = m_pDefenderMelee->m_pAttackerMoves;
+    else if (m_pAttackerOtherMelee) pAtk = m_pAttackerOtherMelee->m_pAttackerMoves;
+    else ALERT(at_console, "ERROR: NON-VALID UPDATE BLOCK\n");     // [OK]
+    if (!pDef || !pAtk) return 0;
+
+    while (pDef->m_pNext) pDef = pDef->m_pNext;
+    while (pAtk->m_pNext) pAtk = pAtk->m_pNext;
+    int iIdx = 1;
+    while (pDef != pMove)                                     // posição de pMove na lista do defensor
+    {
+        pDef = pDef->m_pPrev;
+        if (!pDef) return 0;
+        iIdx++;
+    }
+    int n = 0;
+    while (pAtk)                                              // o iIdx-ésimo golpe (com direção) do atacante
+    {
+        if (!IsDirectionless(pAtk->m_iDirection) && ++n == iIdx) break;
+        pAtk = pAtk->m_pPrev;
+    }
+    if (!pAtk) return 0;
+    int iResult = Block(pAtk->m_iDirection, pDef->m_iDirection) ? 1 : 2;
+    MESSAGE_BEGIN(MSG_ONE, gmsgMeleeAtkHud, NULL, ENT(m_pAttacker->pev));
+        WRITE_BYTE(3);
+        WRITE_BYTE(iResult);
+        WRITE_BYTE(pMove->m_iIndex);
+    MESSAGE_END();
+    return 0;
+}
+
+int CPlayerMelee::SimpleMeleePowerhit(CBasePlayer *pVictim, Vector vecDir, int iType)
+{
+    if (m_pAttacker->pev->flags & FL_ONGROUND)                // [OK] no chão: sempre para cima
+    {
+        vecDir = Vector(0, 0, 1);
+        iType = 0;
+    }
+    return Powerhit(pVictim, vecDir, iType, pVictim->f_3a8 ? 22.5f : 15.0f, 1600.0f, 500.0f, 400.0f, 1.75f);   // [OK]
+}
