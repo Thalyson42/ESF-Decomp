@@ -475,3 +475,108 @@ void CBasePlayer::PreThink()
     if (m_afPhysicsFlags & PFLAG_ONBARNACLE)                  // [OK]
         pev->velocity = g_vecZero;
 }
+
+// ---------------------------------------------------------------------------
+// Killed -- SDK + animação de morte do melee, corpo cortado por ki, taunt de bots
+// ---------------------------------------------------------------------------
+void CBasePlayer::Killed(entvars_t *pevAttacker, int iGib)
+{
+    f_34c = 0;
+    f_350 = 0;
+    f_930 = 9;                                                // [?] +0x930
+    if (pevAttacker == VARS(INDEXENT(0)) || pevAttacker == pev)
+        f_794 = 1;                                            // [?] suicídio / mundo
+
+    g_pGameRules->PlayerKilled(this, pevAttacker, g_pevLastInflictor);   // [OK] slot 0x6c
+
+    if (m_pTank != NULL)                                      // [OK] SDK: solta o func_tank
+    {
+        m_pTank->Use(this, this, USE_OFF, 0);
+        m_pTank = NULL;
+    }
+
+    CSound *pSound = CSoundEnt::SoundPointerForIndex(CSoundEnt::ClientSoundIndex(edict()));   // [OK] SDK
+    if (pSound) pSound->Reset();
+
+    RemoveSpecialModes();                                     // [OK] ESF: desliga voo, turbo etc.
+    m_Melee.SetAttacker(this);
+
+    UTIL_MakeVectors(pev->v_angle);
+    Vector vecVel = pev->velocity.Normalize();
+    const char *pszAnim = (DotProduct(gpGlobals->v_forward, vecVel) > 0.0f) ? "die_fall_down" : "die_fall_up";   // [OK]
+    m_Melee.AddAnimation(true, gpGlobals->time, 1, pszAnim);
+
+    f_988 = 0;                                                // [?]
+    pev->deadflag = DEAD_DYING;                               // [OK] +0x170
+    pev->movetype = MOVETYPE_TOSS;                            // [OK] 6
+    pev->gravity = 1.0f;                                      // [OK] +0x11c
+    pev->friction = 1.0f;                                     // [OK] +0x120
+    m_flSpeedMult = 0;
+    pev->flags &= ~FL_ONGROUND;                               // [OK]
+    if (pev->velocity.z < 10)
+        pev->velocity.z += RANDOM_FLOAT(0, 300);              // [OK] SDK
+
+    SetSuitUpdate(NULL, FALSE, 0);                            // [OK]
+    m_iClientHealth = 0;
+    MESSAGE_BEGIN(MSG_ONE, gmsgHealth, NULL, pev);
+        WRITE_BYTE(m_iClientHealth);
+    MESSAGE_END();
+    MESSAGE_BEGIN(MSG_ONE, gmsgCurWeapon, NULL, pev);
+        WRITE_BYTE(0);
+        WRITE_BYTE(0XFF);
+        WRITE_BYTE(0XFF);
+    MESSAGE_END();
+    m_iFOV = m_iClientFOV = 0;
+    pev->viewmodel = 0;
+    MESSAGE_BEGIN(MSG_ONE, gmsgSetFOV, NULL, pev);
+        WRITE_BYTE(0);
+    MESSAGE_END();
+
+    if (g_pevLastInflictor)
+    {
+        CBaseEntity *pInflictor = CBaseEntity::Instance(g_pevLastInflictor);
+        if (pInflictor->Classify() == 14)                     // [?] morto por ataque que corta (Destructo Disc)
+        {
+            pev->solid = SOLID_NOT;
+            CBodySlice::SpawnBodySlices(pev, 0);
+            pev->effects |= EF_NODRAW;
+            return;                                           // [OK] sem PlayerDeathThink
+        }
+
+        CBaseEntity *pKiller = NULL;
+        if (pInflictor->IsPlayer())
+            pKiller = pInflictor;
+        else if (!FNullEnt(g_pevLastInflictor->owner))
+        {
+            if (g_pevLastInflictor->owner->v.flags & FL_CLIENT)
+                pKiller = CBaseEntity::Instance(g_pevLastInflictor->owner);
+        }
+        if (pKiller && pKiller != this)
+        {
+            if (!pKiller->IsNetClient() && (pKiller->pev->flags & FL_FAKECLIENT))     // [OK] bot matou
+            {
+                if (RANDOM_LONG(1, 100) <= ((CBasePlayer *)pKiller)->m_pBotInfo->m_iTauntChance)   // [?] +0xa04->+0x1a
+                    ChatClass.LetBotTaunt((CBasePlayer *)pKiller, this);
+            }
+            if (!IsNetClient() && (pev->flags & FL_FAKECLIENT))
+                m_pLastKiller = (CBasePlayer *)pKiller;       // [?] +0xd50: bot lembra quem o matou
+        }
+    }
+
+    if ((pev->health >= -40 || iGib == GIB_NEVER) && iGib != GIB_ALWAYS)
+    {
+        OnDeathAnim();                                        // [?] virtual +0x1e4 (slot 119)
+        pev->angles.x = 0;
+        pev->angles.z = 0;
+        ESF_PEV_RAW_INT(pev, 0x14c) = 0x437f0000;             // [?] 255.0f (renderamt)
+        ESF_PEV_RAW_INT(pev, 0x148) = 2;                      // [?]
+        ESF_PEV_RAW_INT(pev, 0x15c) = 0;
+        SetThink(&CBasePlayer::PlayerDeathThink);
+        pev->nextthink = gpGlobals->time + 0.1f;
+        return;
+    }
+
+    pev->solid = SOLID_NOT;
+    GibMonster();                                             // [OK] virtual +0x1d0
+    pev->effects |= EF_NODRAW;
+}
