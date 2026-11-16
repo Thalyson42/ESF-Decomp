@@ -3339,3 +3339,74 @@ int CPlayerMelee::SetPowerhitAnim(Vector vecDir, int iType)   // escolhe "blow_*
     if (!bFix) return AddAnimation(false, gpGlobals->time, 1, szAnim);
     return AddAnimationAFix(vecDir, true, gpGlobals->time, szAnim);   // [OK] anim com ajuste de ângulo
 }
+
+int CPlayerMelee::SetThrowAnim(char *szAnim, Activity &act)   // nome da sequência + activity conforme o estado do arremesso
+{
+    int bStop = 0;
+    char szDir[0x100];
+    switch (m_iThrowState)                                    // [OK] jump-table em 0x112bfc
+    {
+    case THROW_TOSS:
+    case THROW_WALLSTICK:
+        act = (Activity)GetThrowActivity();
+        GetThrowAnimDirection(1, szDir);
+        sprintf(szAnim, "hit_blow_%s", szDir);
+        break;
+    case THROW_ROLL:
+        if (m_pAttacker->pev->flags & FL_ONGROUND)            // rolando no chão
+        {
+            act = (Activity)GetThrowActivity();
+            GetThrowAnimDirection(0, szDir);
+            sprintf(szAnim, "tumble_%s", szDir);
+        }
+        else
+        {
+            act = (Activity)GetThrowActivity();
+            GetThrowAnimDirection(1, szDir);
+            sprintf(szAnim, "hit_blow_%s", szDir);
+        }
+        break;
+    case THROW_LAY:
+        if (m_flLayTime != 0.0f)                              // deitado
+        {
+            if (m_pAttacker->f_174 == 0x75 || m_pAttacker->LookupSequence("lay_ground") == m_pAttacker->pev->sequence)
+                strcpy(szAnim, "lay_ground");
+            else
+                strcpy(szAnim, "lay_ground2");
+        }
+        else                                                  // levantando
+        {
+            if (m_pAttacker->f_174 == GetThrowActivity() && m_pAttacker->f_78)
+                bStop = 1;                                    // [?] animação já terminou
+            if (m_pAttacker->LookupSequence("lay_ground") == m_pAttacker->pev->sequence ||
+                m_pAttacker->LookupSequence("lay_ground_recover") == m_pAttacker->pev->sequence)
+                strcpy(szAnim, "lay_ground_recover");
+            else
+                strcpy(szAnim, "lay_ground_recover2");
+        }
+        act = (Activity)GetThrowActivity();
+        break;
+    case THROW_LANDRECOVER:
+        strcpy(szAnim, "throw_land");
+        act = (Activity)GetThrowActivity();
+        break;
+    case THROW_RECOVER:
+        if (m_pAttacker->f_174 == GetThrowActivity() && m_pAttacker->f_78)
+            bStop = 1;
+        if (!m_fAirRecover)
+        {
+            act = (Activity)GetThrowActivity();
+            GetThrowAnimDirection(0, szDir);
+            sprintf(szAnim, "tumble_%s_recover", szDir);
+        }
+        else
+        {
+            act = (Activity)GetThrowActivity();
+            GetThrowAnimDirection(1, szDir);
+            sprintf(szAnim, "hit_blow_%s_recover", szDir);
+        }
+        break;
+    }
+    if (bStop) StopThrow();
+    return 0;
+}
