@@ -283,3 +283,195 @@ int CBasePlayer::TakeDamage(entvars_t *pevInflictor, entvars_t *pevAttacker, flo
     }
     return 0;
 }
+
+// ---------------------------------------------------------------------------
+// PreThink -- SDK + ki (regeneração/consumo), melee, voo, block, powerups
+// ---------------------------------------------------------------------------
+#define ESF_PEV_RAW_INT(p, off)   (*(int *)((char *)(p) + (off)))     // campos de entvars ainda sem nome
+
+void CBasePlayer::PreThink()
+{
+    int buttonsChanged = (m_afButtonLast ^ pev->button);      // [OK] SDK
+    m_afButtonPressed  = buttonsChanged & pev->button;
+    m_afButtonReleased = buttonsChanged & (~pev->button);
+
+    g_pGameRules->PlayerThink(this);                          // [OK] slot 0x4c
+    if (g_fGameOver) return;
+
+    UTIL_MakeVectors(pev->v_angle);
+    ItemPreFrame();
+    WaterMove();
+    UpdateClientData_Hook();                                  // [?] virtual +0x204 (slot 127), sem nome
+    CheckTimeBasedDamage();
+
+    if (pev->iuser1)                                          // [OK] espectador
+    {
+        Spectator_HandleButtons();
+        pev->impulse = 0;
+        return;
+    }
+
+    // melee avançado ligado/desligado pelo cvar simplemelee
+    if ((simplemelee.value == 1.0f && !m_Melee.f_080) || (simplemelee.value == 0.0f && m_Melee.f_080))   // [?] +0x400 = flag "melee ativo"
+    {
+        if (!f_37c)
+        {
+            m_Melee.f_080 = !m_Melee.f_080;
+            m_Melee.Reset();
+            m_Melee.SetAttacker(this);
+        }
+    }
+    if (f_37c)                                                // [OK] em melee
+    {
+        m_Melee.ManageToss();
+        m_Melee.ManageMelee();
+    }
+
+    CheckWallJump();
+    if (!(pev->flags & 0x4000000))                            // [?] flag ESF (byte +0x1a7 & 4)
+        m_Swoop.ManageSwoop();
+    CheckSubModelStatus();
+
+    if (f_34c && gpGlobals->time > f_73c)                     // [OK] fim da invulnerabilidade
+    {
+        if (f_350)
+        {
+            f_350 = 0;
+            ESF_PEV_RAW_INT(pev, 0x15c) = 0;                  // [?]
+            if (!m_fPoweredUp && !m_fTurbo)
+                ESF_PEV_RAW_INT(pev, 0x148) = 0;              // [?]
+            m_pClass->vfunc_30();                             // [?] callback do personagem (vtable +4, slot 0x30)
+        }
+        f_34c = 0;
+    }
+
+    if (f_728 && gpGlobals->time - f_72c > 10.0f)             // [OK] doce (Buu) por no máximo 10 s
+    {
+        ((CBasePlayer *)f_728)->ReleaseCandy();
+        f_728 = 0;
+    }
+
+    if (f_378 && !f_33c)                                      // [?]
+    {
+        RemoveAllWeapons(0);
+        m_pClass->vfunc_30();
+        f_378 = 0;
+    }
+
+    if (gpGlobals->time - f_318 > 0.2f)                       // [OK] tick de ki a cada 0.2 s
+    {
+        float flDrain = m_pClass->vfunc_18();                 // [?] custo base por tick do personagem
+        if (flDrain < pev->fuser4)
+            pev->fuser4 -= m_pClass->vfunc_18();
+        else if (!f_33c)
+            Descend(1);
+
+        if (!m_fFlying && !m_fPoweredUp)                      // regeneração parado
+        {
+            if (!f_330 && !f_364 && !f_4c4)
+            {
+                if (pev->fuser4 < 1000.0f)                    // [OK] +3.5 por tick, máx. 1000
+                {
+                    pev->fuser4 += 3.5f;
+                    if (pev->fuser4 > 1000.0f) pev->fuser4 = 1000.0f;
+                }
+            }
+        }
+        if (f_330)                                            // [OK] carregando: +70 por tick
+        {
+            if (pev->fuser4 < 1000.0f)
+            {
+                pev->fuser4 += 70.0f;
+                if (pev->fuser4 > 1000.0f) pev->fuser4 = 1000.0f;
+            }
+        }
+        if (m_fPoweredUp && !UseKi(2))  StopTurbo();          // [OK] turbo custa 2/tick
+        if (m_fFlying && !UseKi(1))     StopFly();            // [OK] voo custa 1/tick
+        if (f_37c && m_fTurbo && !UseKi(16)) StopSwoop();     // [OK] swoop em melee custa 16
+        f_318 = gpGlobals->time;
+    }
+
+    if (f_724 < gpGlobals->time) UpdateOldPositions();        // [OK] histórico de posições
+
+    if (pev->fuser4 <= 20.0f)                                 // ki acabando
+        pev->iuser4 = 1;                                      // [?] +0x250: "sem ki"
+    else if (m_flSpeedMult != 0.0f)
+        pev->iuser4 = 0;
+
+    if (f_344 && gpGlobals->time > f_31c) f_344 = 0;          // [OK] fim da cegueira
+
+    if (pev->health < 5.0f)                                   // [OK] vida baixa: consome PL
+    {
+        int iPL = (int)((double)m_iPowerLevel - (double)m_iMaxPowerLevel * 0.0001);
+        if (iPL > 0)
+            SetPowerLevel(iPL);
+        else if (IsAlive())
+            TakeDamage(VARS(INDEXENT(0)), VARS(INDEXENT(0)), 900.0f, 0x1000);   // [OK] morre sem PL
+    }
+
+    if (f_770 && gpGlobals->time - f_774 > 0.0f)              // [?]
+        Ascend();
+
+    if (f_358 && m_pBlockAttack)                              // [?] segurando um ataque de block
+    {
+        entvars_t *pevAtk = m_pBlockAttack->pev;
+        UTIL_MakeVectors(pevAtk->angles);
+        Vector vecFwd = gpGlobals->v_forward;
+        if (pev->flags & FL_ONGROUND)
+        {
+            vecFwd.z = 0;
+            pevAtk->angles.x = 0;
+        }
+        TraceResult tr;
+        Vector vecEnd = pev->origin + vecFwd * 32.0f;
+        UTIL_TraceHull(pev->origin, vecEnd, dont_ignore_monsters, head_hull, ENT(pevAtk), &tr);
+        if (tr.flFraction < 1.0f)                             // [OK] bateu na parede: para
+        {
+            pevAtk->velocity = Vector(0, 0, 0);
+            pev->vuser4 = Vector(0, 0, 0);
+            m_pBlockAttack->m_fHitWall = 1;                   // [?] +0x2b4
+        }
+        if (gpGlobals->time > f_734)                          // [OK] custo do block: 5 de ki a cada 0.2 s
+        {
+            if (!UseKi(5))
+                StopBlock();
+            else
+            {
+                if (g_flBlockPLDiv)                           // [?] o decompilado lê *g_pGameRules; provável variável global
+                    f_730 = (int)((double)f_730 + (double)GetPowerLevel() / (double)g_flBlockPLDiv * 4.0);
+                f_734 = gpGlobals->time + 0.2f;
+            }
+        }
+    }
+
+    if (!f_6bc)                                               // [?] ativa objetos próximos (Classify 1)
+    {
+        CBaseEntity *pEnt = NULL;
+        while ((pEnt = UTIL_FindEntityInSphere(pEnt, pev->origin, 30.0f)) != NULL)
+        {
+            if (pEnt->Classify() == 1 && pEnt->pev->solid)
+                pEnt->TouchedByPlayer(this);                  // [?] virtual +0xb4 (slot 43)
+        }
+    }
+
+    CheckSuitUpdate();
+
+    if (pev->deadflag >= DEAD_DYING)                          // [OK] SDK
+    {
+        PlayerDeathThink();
+        return;
+    }
+
+    if (m_afPhysicsFlags & PFLAG_ONTRAIN) pev->flags |= FL_ONTRAIN;   // [OK] SDK
+    else                                  pev->flags &= ~FL_ONTRAIN;
+
+    if (pev->button & IN_JUMP) Jump();                        // [OK] virtual no ESF
+
+    if (!(pev->flags & FL_ONGROUND))
+        m_flFallVelocity = -pev->velocity.z;                  // [OK]
+
+    m_hTrain = NULL;                                          // [?] EHANDLE +0x108
+
+    if (m_afPhysicsFlags & PFLAG_ONBARNACLE)                  // [OK]
+        pev->velocity = g_vecZero;
+}
