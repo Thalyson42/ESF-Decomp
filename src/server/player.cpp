@@ -177,3 +177,109 @@ void CBasePlayer::PostThink()
     else
         m_vecSavedAngles = pev->angles;
 }
+
+// ---------------------------------------------------------------------------
+// TakeDamage -- imunidades do ESF, defesa (block), PL ganho pelo atacante, flash
+// ---------------------------------------------------------------------------
+int CBasePlayer::TakeDamage(entvars_t *pevInflictor, entvars_t *pevAttacker, float flDamage, int bitsDamageType)
+{
+    float flOldHealth = pev->health;
+    if (!IsAlive()) return 0;                                 // [OK]
+
+    CBaseEntity *pInflictor = CBaseEntity::Instance(ENT(pevInflictor));   // [OK] edict->pvPrivateData
+    CBaseEntity *pAttacker  = CBaseEntity::Instance(ENT(pevAttacker));
+
+    if (!g_pGameRules->FPlayerCanTakeDamage(this, pAttacker)) return 0;   // [OK] slot 0x40
+    if (f_34c) return 0;                                      // [?] +0x34c: invulnerável
+    if (f_4c4)                                                // [?] +0x4c4: em melee avançado
+    {
+        if (!(bitsDamageType & 0x2400000)) return 0;          // só dano de melee/powerhit passa
+        if (m_Melee.m_fIsAttacker && pevAttacker != m_Melee.m_pDefender->pev) return 0;
+        if (m_Melee.m_fIsDefender && pevAttacker != m_Melee.m_pAttackerOther->pev) return 0;
+    }
+    if (!m_Melee.CanInflictDamage((CBasePlayer *)pInflictor, bitsDamageType)) return 0;   // [OK]
+
+    int bInflictorIs14 = pInflictor->Classify() == 14;        // [?] classe 14 (ataque de ki especial)
+    if (m_fInBlockStruggle) return 0;                         // [?] +0x35c
+    if (m_fBlockStruggling && m_pBlockAttack != pInflictor) return 0;   // +0x358/+0x780 [OK] ExplodeTouch
+    if (m_fInPowerStruggle && m_pPowerStruggle && !m_pPowerStruggle->InStruggle(pevInflictor)) return 0;   // [OK] +0x354/+0x36c
+
+    f_8d4 = (int)flDamage;                                    // [?] último dano sofrido
+    if (m_fPoweredUp) flDamage *= 0.75f;                      // [OK] +0x324
+    if (f_770)        flDamage *= 0.5f;                       // [?] +0x770
+
+    int iYaw = ((int)pev->v_angle.y + 360) % 360;
+    int iFromYaw = ((int)pevInflictor->angles.y + 540) % 360; // [OK] direção de onde veio o golpe
+    int bBlocked = 0;
+    if (m_fBlocking && iFromYaw < iYaw + 75 && iFromYaw > iYaw - 75)   // [OK] defendendo de frente (±75°)
+    {
+        flDamage *= 0.25f;
+        bBlocked = 1;
+    }
+
+    if ((bitsDamageType & 0x100000) && pAttacker->IsPlayer() && flDamage >= pev->health && pAttacker != this)
+    {
+        WaitToBecomeCandy((CBasePlayer *)pAttacker);          // [OK] vítima vira doce (Buu) em vez de morrer
+        return 0;
+    }
+
+    if (pAttacker->IsPlayer())                                // atacante ganha PL
+    {
+        int iGain;
+        if (bInflictorIs14) iGain = 10;
+        else if (bitsDamageType & 0x2400000) iGain = (int)(flDamage < pev->health ? flDamage * 2 : pev->health * 2);   // [OK] melee: dobro
+        else iGain = (int)(flDamage < pev->health ? flDamage : pev->health);
+        ((CBasePlayer *)pAttacker)->IncreaseStrength(this, iGain);
+    }
+
+    if (!f_344 && (bitsDamageType & 0x1000000))               // [?] dano de flash: cegueira
+    {
+        UTIL_ScreenFade(this, Vector(255, 255, 255), 1.1666666f, 2.3333333f, 255, 0);
+        f_344 = 1;
+        f_31c = gpGlobals->time + 3.5f;
+    }
+
+    if (pAttacker != this || !(bitsDamageType & DMG_BULLET))  // [OK] (char)a4 & 2
+    {
+        int iAtkYaw = ((int)pevAttacker->v_angle.y + 540) % 360;
+        if (!f_344 && (bitsDamageType & 2) && iAtkYaw < iYaw + 75 && iAtkYaw > iYaw - 75)   // [?] olhando de frente p/ o clarão
+        {
+            UTIL_ScreenFade(this, Vector(255, 255, 255), 4.0f, 8.0f, 255, 0);
+            f_344 = 1;
+            f_31c = gpGlobals->time + 12.0f;
+        }
+
+        if (bitsDamageType & 0x600000)                        // [OK] empurrão
+        {
+            UTIL_MakeVectors(pevInflictor->angles);
+            if (bBlocked)                                     // defendendo: recua o atacante
+            {
+                float flPush = (bitsDamageType & 0x200000) ? 75.0f : 250.0f;
+                pevInflictor->velocity = pevInflictor->velocity - gpGlobals->v_forward * flPush;
+            }
+            else
+                pev->origin = pev->origin + gpGlobals->v_forward * 50.0f;   // [?] desloca a vítima
+        }
+
+        int ret = CBaseMonster::TakeDamage(pevInflictor, pevAttacker, (float)(int)flDamage, bitsDamageType);
+        if (ret && flDamage >= 1.0f) Pain();
+
+        MESSAGE_BEGIN(MSG_SPEC, SVC_DIRECTOR);                // [OK] evento do HLTV
+            WRITE_BYTE(9);
+            WRITE_BYTE(DRC_CMD_EVENT);
+            WRITE_SHORT(ENTINDEX(this->edict()));
+            WRITE_SHORT(ENTINDEX(ENT(pevInflictor)));
+            WRITE_LONG(5);
+        MESSAGE_END();
+
+        pev->punchangle.x = -2;                               // [OK]
+        if (!ret || !(bitsDamageType & ~(DMG_FALL - 1)) || flOldHealth >= 75.0f)   // [?] máscara 0xffffc000
+            return ret;
+        if (flOldHealth >= 50.0f)
+            SetSuitUpdate("!HEV_HLTH1", FALSE, 600);          // [OK]
+        else if (!RANDOM_LONG(0, 3))
+            SetSuitUpdate("!HEV_DMG7", FALSE, 300);
+        return ret;
+    }
+    return 0;
+}
