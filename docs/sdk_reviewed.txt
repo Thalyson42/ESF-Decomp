@@ -38,3 +38,10 @@ CShower::Touch
 CMomentaryRotButton::UpdateTarget
 CTestHull::PathFind
 CBaseAnimating::StudioFrameAdvance
+CTalkMonster::TargetDistance
+CNodeViewer::DrawThink
+CBloodSplat::Spray
+CBreakable::TraceAttack
+CCineMonster::DelayStart
+CSpeaker::SpeakerThink
+CPathTrack::Link
