@@ -17,10 +17,7 @@ CBaseMonster::FindLateralCover
 CBaseMonster::OpenDoorAndWait
 CBaseMonster::StartMonster
 CBaseMonster::TakeDamage
-CBasePlayer::CheckSuitUpdate
-CBasePlayer::ImpulseCommands
 CBasePlayer::PlayerUse
-CBasePlayer::StartDeathCam
 CBasePlayer::UpdateClientData
 CBasePlayer::UpdatePlayerSound
 CBasePlayer::WaterMove

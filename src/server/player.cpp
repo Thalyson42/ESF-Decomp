@@ -695,3 +695,102 @@ Vector CBasePlayer::GetGunPosition()
     origin.z -= 3.0f;                                         // [OK] ESF: 3 unidades abaixo da visão
     return origin;
 }
+
+// ---------------------------------------------------------------------------
+// CheckSuitUpdate -- SDK sem o Geiger; StartDeathCam -- usa StartObserver; ImpulseCommands -- sem lanterna
+// ---------------------------------------------------------------------------
+void CBasePlayer::CheckSuitUpdate()
+{
+    int i;
+    int isentence = 0;
+    int isearch = m_iSuitPlayNext;
+
+    if (!(pev->weapons & (1 << WEAPON_SUIT))) return;         // [OK]
+    // [OK] ESF: sem UpdateGeigerCounter()
+    if (g_pGameRules->IsMultiplayer()) return;                // [OK]
+
+    if (gpGlobals->time >= m_flSuitUpdate && m_flSuitUpdate > 0)
+    {
+        for (i = 0; i < CSUITPLAYLIST; i++)
+        {
+            if ((isentence = m_rgSuitPlayList[isearch]) != 0) break;
+            if (++isearch == CSUITPLAYLIST) isearch = 0;
+        }
+        if (isentence)
+        {
+            m_rgSuitPlayList[isearch] = 0;
+            if (isentence > 0)
+            {
+                char sentence[CBSENTENCENAME_MAX + 1];
+                strcpy(sentence, "!");
+                strcat(sentence, gszallsentencenames[isentence]);
+                EMIT_SOUND_SUIT(ENT(pev), sentence);
+            }
+            else
+                EMIT_GROUPID_SUIT(ENT(pev), -isentence);
+            m_flSuitUpdate = gpGlobals->time + SUITUPDATETIME;   // [OK] 3.5
+        }
+        else
+            m_flSuitUpdate = 0;
+    }
+}
+
+void CBasePlayer::StartDeathCam()
+{
+    if (pev->view_ofs == g_vecZero) return;                   // [OK] já está em deathcam
+
+    edict_t *pSpot = FIND_ENTITY_BY_CLASSNAME(NULL, "info_intermission");
+    if (FNullEnt(pSpot))                                      // sem spot: sobe 128 olhando o corpo
+    {
+        TraceResult tr;
+        UTIL_TraceLine(pev->origin, pev->origin + Vector(0, 0, 128), ignore_monsters, edict(), &tr);
+        Vector vecAngles = UTIL_VecToAngles(tr.vecEndPos - pev->origin);
+        StartObserver(tr.vecEndPos, vecAngles);               // [OK] ESF: sem CopyToBodyQue
+        return;
+    }
+    int iRand = RANDOM_LONG(0, 3);
+    while (iRand > 0)
+    {
+        edict_t *pNewSpot = FIND_ENTITY_BY_CLASSNAME(pSpot, "info_intermission");
+        if (pNewSpot) pSpot = pNewSpot;
+        iRand--;
+    }
+    StartObserver(pSpot->v.origin, pSpot->v.v_angle);         // [OK]
+}
+
+void CBasePlayer::ImpulseCommands()
+{
+    TraceResult tr;
+    PlayerUse();
+    int iImpulse = (int)pev->impulse;
+    switch (iImpulse)
+    {
+    case 99:                                                  // [OK] logo (igual ao SDK)
+    {
+        int iOn;
+        if (!gmsgLogo) { iOn = 1; gmsgLogo = REG_USER_MSG("Logo", 1); }
+        else iOn = 0;
+        MESSAGE_BEGIN(MSG_ONE, gmsgLogo, NULL, pev);
+            WRITE_BYTE(iOn);
+        MESSAGE_END();
+        if (!iOn) gmsgLogo = 0;
+        break;
+    }
+    case 100:                                                 // [OK] ESF: lanterna removida; 100 = decal, como 201
+    case 201:
+        if (gpGlobals->time < m_flNextDecalTime) break;
+        UTIL_MakeVectors(pev->v_angle);
+        UTIL_TraceLine(pev->origin + pev->view_ofs, pev->origin + pev->view_ofs + gpGlobals->v_forward * 128, ignore_monsters, ENT(pev), &tr);
+        if (tr.flFraction != 1.0)
+        {
+            m_flNextDecalTime = gpGlobals->time + decalfrequency.value;
+            CSprayCan *pCan = GetClassPtr((CSprayCan *)NULL);
+            pCan->Spawn(pev);
+        }
+        break;
+    default:
+        CheatImpulseCommands(iImpulse);
+        break;
+    }
+    pev->impulse = 0;
+}
