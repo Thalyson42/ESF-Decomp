@@ -69,7 +69,11 @@ def sdk_path(name):
         if name in files: return os.path.join(root, name)
     return None
 
-rows = [r for r in csv.DictReader(open('docs/sdk_match.csv')) if r['veredito'] == 'provavel-igual']
+reviewed = set()
+if os.path.exists('docs/sdk_reviewed.txt'):          # funções 'parcial' conferidas à mão: iguais ao SDK
+    reviewed = {l.split('#')[0].strip() for l in open('docs/sdk_reviewed.txt') if l.strip() and not l.startswith('#')}
+rows = [r for r in csv.DictReader(open('docs/sdk_match.csv'))
+        if r['veredito'] == 'provavel-igual' or f"{r['classe']}::{r['metodo']}" in reviewed]
 byfile = collections.defaultdict(list)
 for r in rows: byfile[r['arquivo_sdk']].append(r)
 

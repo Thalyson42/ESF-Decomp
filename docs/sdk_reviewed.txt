@@ -1,0 +1,27 @@
+# Funções marcadas 'parcial'/'modificada-ESF' em sdk_match.csv que, lidas à mão contra o decompilado, são iguais ao SDK.
+CBaseEntity::SetObjectCollisionBox
+CBaseMonster::ShouldAdvanceRoute
+CHalfLifeMultiplay::FlHEVChargerRechargeTime
+CHalfLifeMultiplay::FlHealthChargerRechargeTime
+CBaseEntity::IsInWorld
+CBaseMonster::CheckMeleeAttack2
+CHalfLifeMultiplay::FlAmmoRespawnTime
+CHalfLifeMultiplay::FlWeaponRespawnTime
+CFuncRotating::Rotate
+CBaseMonster::SetTurnActivity
+CBaseMonster::DamageForce
+CBaseMonster::BecomeDead
+CBaseMonster::CheckMeleeAttack1
+CTalkMonster::IdleRespond
+CCineMonster::CineThink
+CFuncPlat::Precache
+CTalkMonster::Talk
+CBasePlayerItem::Drop
+CBasePlayerItem::Kill
+CFuncPlat::HitTop
+CEnvExplosion::Spawn
+CGlobalState::Save
+CBaseAnimating::DispatchAnimEvents
+CInfoIntermission::Spawn
+CBaseEntity::SUB_FadeOut
+CFuncTrainControls::Find

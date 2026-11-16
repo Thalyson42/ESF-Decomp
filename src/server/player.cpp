@@ -672,3 +672,26 @@ void CBasePlayer::PlayerDeathThink()
     respawn(pev, FALSE);                                      // [OK] ESF: sempre FALSE (SDK: !PFLAG_OBSERVER)
     pev->nextthink = -1;
 }
+
+// ---------------------------------------------------------------------------
+// DeathSound / Pain -- sons por personagem (EmitClassSound)
+// ---------------------------------------------------------------------------
+void CBasePlayer::DeathSound()
+{
+    EmitClassSound("death.wav");                              // [OK] pasta do personagem (m_pClass->GetSoundDir)
+}
+
+void CBasePlayer::Pain()
+{
+    if (f_4c4) return;                                        // [?] +0x4c4 (em melee avançado: sem som)
+    char szSound[32];
+    sprintf(szSound, "pain%d.wav", RANDOM_LONG(1, 4));        // [OK] pain1..pain4.wav
+    EmitClassSound(szSound);
+}
+
+Vector CBasePlayer::GetGunPosition()
+{
+    Vector origin = pev->origin + pev->view_ofs;
+    origin.z -= 3.0f;                                         // [OK] ESF: 3 unidades abaixo da visão
+    return origin;
+}
