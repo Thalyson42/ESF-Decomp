@@ -580,3 +580,95 @@ void CBasePlayer::Killed(entvars_t *pevAttacker, int iGib)
     GibMonster();                                             // [OK] virtual +0x1d0
     pev->effects |= EF_NODRAW;
 }
+
+// ---------------------------------------------------------------------------
+// PlayerDeathThink -- SDK + animação "hit" ao cair morto; deathcam em 12 s
+// ---------------------------------------------------------------------------
+void CBasePlayer::PlayerDeathThink()
+{
+    float flForward;
+
+    if (pev->flags & FL_ONGROUND)                             // [OK] SDK: atrito no chão
+    {
+        flForward = pev->velocity.Length() - 20;
+        if (flForward <= 0)
+            pev->velocity = g_vecZero;
+        else
+            pev->velocity = flForward * pev->velocity.Normalize();
+    }
+
+    if (HasWeapons() || m_iPowerLevelDrop > 0)                // [?] +0x75c: também larga item se tiver PL/drop pendente
+        PackDeadPlayerItems();
+
+    if (m_flSpeedMult != 0.0f)                                // [OK] ESF: zera efeitos do estado anterior
+    {
+        pev->gravity = 1.0f;
+        pev->friction = 1.0f;
+        m_flSpeedMult = 0.0f;
+    }
+
+    if (pev->modelindex)
+    {
+        if (m_Melee.CanPlayAnimation())
+        {
+            if ((pev->flags & FL_ONGROUND) && (int)pev->effects >= 0)    // [?]
+            {
+                plrmelee_anim_s *pAnim = (plrmelee_anim_s *)m_Melee.GetCurrentAnim();
+                if (pAnim)
+                {
+                    if (!m_Melee.m_pAttacker) m_Melee.SetAttacker(this);
+                    const char *pszCur = pAnim->m_szName[pAnim->f_288];
+                    const char *pszHit = NULL;
+                    if (!strcmp(pszCur, "die_fall_up"))        pszHit = "die_fall_up_hit";     // [OK]
+                    else if (!strcmp(pszCur, "die_fall_down")) pszHit = "die_fall_down_hit";
+                    if (pszHit)                                // [OK] bateu no chão: toca a versão "hit"
+                    {
+                        m_Melee.AddAnimation(true, gpGlobals->time, 1, pszHit);
+                        EMIT_SOUND(ENT(pev), CHAN_WEAPON, "weapons/deathfall.wav", 1.0, ATTN_NORM);
+                    }
+                }
+            }
+        }
+        PlayAnimation();                                      // [OK] no lugar de StudioFrameAdvance puro do SDK
+        StudioFrameAdvance(0);
+        m_iRespawnFrames += 1.0f;                             // [OK] +0x988 (float)
+        if (m_iRespawnFrames < 120.0f)                        // [OK] SDK: 60 quadros; ESF: 120
+            return;
+    }
+
+    if (pev->movetype != MOVETYPE_NONE && (pev->flags & FL_ONGROUND))   // [OK] SDK
+        pev->movetype = MOVETYPE_NONE;
+
+    if (pev->deadflag == DEAD_DYING)
+        pev->deadflag = DEAD_DEAD;
+
+    if (ESF_PEV_RAW_INT(pev, 0x14c) > 0)                      // [?] renderamt: some aos poucos (corpo)
+        *(float *)((char *)pev + 0x14c) -= 1.0f;
+
+    BOOL fAnyButtonDown = (pev->button & ~IN_SCORE);          // [OK] SDK
+
+    if (pev->deadflag == DEAD_DEAD)
+    {
+        if (fAnyButtonDown) return;
+        if (!g_pGameRules->FPlayerCanRespawn(this)) return;   // [OK] slot 0x50
+        m_fDeadTime = gpGlobals->time;
+        pev->deadflag = DEAD_RESPAWNABLE;
+        return;
+    }
+
+    // DEAD_RESPAWNABLE
+    if (g_pGameRules->IsMultiplayer() && gpGlobals->time > m_fDeadTime + 12.0f && !(m_afPhysicsFlags & PFLAG_OBSERVER))   // [OK] ESF: 12 s (SDK 6 s)
+        StartDeathCam();
+
+    if (!fAnyButtonDown)
+    {
+        if (!(g_pGameRules->IsMultiplayer() && forcerespawn.value > 0 && gpGlobals->time > m_fDeadTime + 5.0f))   // [OK]
+            return;
+    }
+
+    pev->button = 0;
+    m_iRespawnFrames = 0;
+    ESF_PEV_RAW_INT(pev, 0x148) = 0;                          // [?]
+    respawn(pev, FALSE);                                      // [OK] ESF: sempre FALSE (SDK: !PFLAG_OBSERVER)
+    pev->nextthink = -1;
+}
