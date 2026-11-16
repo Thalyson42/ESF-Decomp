@@ -3253,3 +3253,89 @@ int CPlayerMelee::SimpleMeleePowerhit(CBasePlayer *pVictim, Vector vecDir, int i
     }
     return Powerhit(pVictim, vecDir, iType, pVictim->f_3a8 ? 22.5f : 15.0f, 1600.0f, 500.0f, 400.0f, 1.75f);   // [OK]
 }
+
+// ---------------------------------------------------------------------------
+// lote 26: previsão de bloqueio (HUD) e animação do powerhit
+// ---------------------------------------------------------------------------
+
+int CPlayerMelee::PredictBlockRatio(melee_move_s *pAtk, melee_move_s *pDef, float flMult)
+{
+    if (!pAtk || !pDef) return 0;
+    while (pDef->m_pNext) pDef = pDef->m_pNext;
+    while (pAtk->m_pNext) pAtk = pAtk->m_pNext;
+    int iBlocked = 0, iTotal = 0;
+    for (; pAtk; pAtk = pAtk->m_pPrev)
+    {
+        iTotal++;
+        if (pDef)
+        {
+            if (Block(pAtk->m_iDirection, pDef->m_iDirection)) iBlocked++;
+            pDef = pDef->m_pPrev;
+        }
+    }
+    return (int)(GetBlockRatio(iBlocked, iTotal) * flMult);   // [OK] (retorno float no binário)
+}
+
+int CPlayerMelee::PredictBlockRatio(melee_execution_s *pExe, melee_move_s *pDef, float flMult)
+{
+    if (!pExe || !pDef) return 0;
+    while (pDef->m_pNext) pDef = pDef->m_pNext;
+    int iBlocked = 0, iTotal = 0, iStun = 0;
+    int iPrev = 0;
+    for (; pExe; pExe = pExe->m_pNext)
+    {
+        if (pExe->f_44) continue;
+        iTotal++;
+        if (!pDef) continue;
+        if (iStun && ContinueBlockStun(iStun, (MELEE_STRENGTH)iPrev, (MELEE_STRENGTH)pExe->m_iStrength))
+            iStun--;                                          // ainda em block-stun: bloqueado
+        else if (Block(pExe->f_20, pDef->m_iDirection) || pExe->f_3c)
+        {
+            iBlocked++;
+            iStun = 0;
+        }
+        else
+        {
+            iStun = m_pDefender->m_Melee.GetBlockStunAmt((MELEE_STRENGTH)pExe->m_iStrength);
+            iPrev = pExe->m_iStrength;
+        }
+        pDef = pDef->m_pPrev;
+    }
+    return (int)(GetBlockRatio(iBlocked, iTotal) * flMult);
+}
+
+int CPlayerMelee::SendPredictVars(float flRatio)
+{
+    float *pTbl = (float *)((void *(*)(void *))(*(void ***)m_pSkill)[3])(this);   // [?] vfunc +0xc (tempos de força)
+    MESSAGE_BEGIN(MSG_ONE, gmsgMeleeAtkHud, NULL, ENT(m_pAttacker->pev));
+        WRITE_BYTE(4);
+        WRITE_SHORT((int)(100.0f * pTbl[1]));
+        WRITE_SHORT((int)(100.0f * pTbl[2]));
+        WRITE_SHORT((int)(100.0f * pTbl[3]));
+        WRITE_SHORT((int)(flRatio * 100.0f));
+    MESSAGE_END();
+    return 0;
+}
+
+int CPlayerMelee::SetPowerhitAnim(Vector vecDir, int iType)   // escolhe "blow_*" conforme o tipo/direção do golpe
+{
+    if (iType == -1) iType = 4;
+    char szAnim[0x40];
+    strcpy(szAnim, "blow_");
+    int bFix = 0;
+    const char *pszSuffix;
+    switch (iType)                                            // [OK] tabela de saltos em 0x10c170
+    {
+    case 0: pszSuffix = "up"; break;
+    case 1: pszSuffix = "down"; break;
+    case 2: pszSuffix = "left"; break;
+    case 3: pszSuffix = "right"; break;
+    case 5: bFix = 1; pszSuffix = "kick_front"; break;
+    default:                                                  // 4 e >5: pela inclinação do vetor
+        pszSuffix = vecDir.z >= 0.45f ? "up" : (vecDir.z <= -0.45f ? "down" : "kick_front");
+        break;
+    }
+    strcat(szAnim, pszSuffix);
+    if (!bFix) return AddAnimation(false, gpGlobals->time, 1, szAnim);
+    return AddAnimationAFix(vecDir, true, gpGlobals->time, szAnim);   // [OK] anim com ajuste de ângulo
+}
