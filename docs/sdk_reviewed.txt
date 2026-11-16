@@ -51,3 +51,6 @@ CMomentaryDoor::Spawn
 CFuncTrackChange::EvaluateTrain
 CGib::Spawn
 CRenderFxManager::Use
+CBasePlayer::UpdatePlayerSound
+CBasePlayer::WaterMove      # ESF define AIRTIME 90 (SDK: 12) em player.h
+CBasePlayer::PlayerUse

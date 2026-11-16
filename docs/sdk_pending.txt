@@ -17,10 +17,7 @@ CBaseMonster::FindLateralCover
 CBaseMonster::OpenDoorAndWait
 CBaseMonster::StartMonster
 CBaseMonster::TakeDamage
-CBasePlayer::PlayerUse
 CBasePlayer::UpdateClientData
-CBasePlayer::UpdatePlayerSound
-CBasePlayer::WaterMove
 CBasePlayerAmmo::DefaultTouch
 CBaseTrigger::TeleportTouch
 CBreakable::BreakTouch
@@ -38,9 +35,6 @@ CGib::SpawnStickyGibs
 CGib::StickyGibTouch
 CGibShooter::ShootThink
 CGraph::ShowNodeConnections
-CHalfLifeMultiplay::ClientDisconnected
-CHalfLifeMultiplay::InitHUD
-CHalfLifeMultiplay::PlayerSpawn
 CHalfLifeMultiplay::Think
 CHalfLifeTeamplay::ChangePlayerTeam
 CHalfLifeTeamplay::ClientCommand
