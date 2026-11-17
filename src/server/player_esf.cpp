@@ -3,6 +3,8 @@
 #include "extdll.h"
 #include "util.h"
 #include "cbase.h"
+#include "gamerules.h"
+#include "weapons.h"
 #include "player.h"
 #include "gamerules.h"
 

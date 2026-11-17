@@ -3,6 +3,10 @@
 #include "extdll.h"
 #include "util.h"
 #include "cbase.h"
+#include "gamerules.h"
+#include "weapons.h"
+#include "player.h"
+#include "explodingattack.h"
 #include "weapons.h"
 #include "effects.h"
 #include "kamehameha.h"
@@ -87,7 +91,7 @@ void CKamehameha::InitChargeSprite(void)
 
 void CKamehameha::GrowChargeSprite(void)
 {
-    m_pChargeSprite->pev->scale = m_flCharge * 0.015f;          // [OK] +0xd8 * 0.015
+    m_pChargeSprite->pev->scale = m_iCharge * 0.015f;          // [OK] +0xd8 * 0.015
 }
 
 void CKamehameha::EnableChargeSprite(void)  { m_pChargeSprite->TurnOn(); }   // [OK]

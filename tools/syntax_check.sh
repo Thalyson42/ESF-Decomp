@@ -27,7 +27,7 @@ import sys
 w=sys.argv[1]; t=open(w).read()
 k=t.index('class CBasePlayerItem : public CBaseAnimating')
 k=t.index('public:',k)+7
-t=t[:k]+'\n\tvirtual int vf_158(void) { return 0; }  virtual int vf_104(int) { return 0; }  virtual int vf_fc(void) { return 0; }   // [?] ESF\n'+t[k:]
+t=t[:k]+'\n\tfloat f_1f4; int f_1f8; int f_1fc;  /* [?] campos ESF da arma */ virtual int vf_158(void) { return 0; }  virtual int vf_104(int) { return 0; }  virtual int vf_fc(void) { return 0; }   // [?] ESF\n'+t[k:]
 open(w,'w').write(t)
 c=sys.argv[2]; t=open(c).read()
 k=t.index('virtual void Touch(')

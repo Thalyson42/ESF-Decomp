@@ -4,9 +4,17 @@ extern int g_fGameOver;
 extern float g_flBlockPLDiv;
 extern float g_flIntermissionStartTime;
 extern int g_sRockGibs;
+extern int gmsgAddEffect;
+extern int gmsgBlockStruggle;
+extern int gmsgCharge;
 extern int gmsgCurWeapon;
+extern int gmsgDetachTrail;
+extern int gmsgEntEntTrail;
+extern int gmsgExplosion;
 extern int gmsgHealth;
+extern int gmsgKillTrail;
 extern int gmsgLogo;
+extern int gmsgMaxHealth;
 extern int gmsgMeleeAtkHud;
 extern int gmsgMeleeFX;
 extern int gmsgMeleeTxtHud;
@@ -29,7 +37,12 @@ extern cvar_t * melee_wallstick_maxtime;
 extern cvar_t * melee_wallstick_mintime;
 extern cvar_t * nomeleehittime;
 #define ESF_PLAYER_UNNAMED \
+    int f_784; \
+    int f_10; \
     int f_174; \
+    int f_1f4; \
+    int f_1f8; \
+    int f_1fc; \
     int f_24c; \
     int f_318; \
     int f_31c; \
@@ -46,6 +59,7 @@ extern cvar_t * nomeleehittime;
     int f_358; \
     int f_35c; \
     int f_364; \
+    int f_368; \
     int f_374; \
     int f_378; \
     int f_37c; \
@@ -68,6 +82,7 @@ extern cvar_t * nomeleehittime;
     int f_750; \
     int f_770; \
     int f_774; \
+    int f_778; \
     int f_78; \
     int f_794; \
     int f_8d4; \
@@ -75,4 +90,5 @@ extern cvar_t * nomeleehittime;
     int f_968; \
     int f_988; \
     int f_b84; \
+    int f_c; \
 

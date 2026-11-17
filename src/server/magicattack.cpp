@@ -3,6 +3,9 @@
 #include "extdll.h"
 #include "util.h"
 #include "cbase.h"
+#include "gamerules.h"
+#include "weapons.h"
+#include "explodingattack.h"
 #include "player.h"
 #include "magicattack.h"
 
@@ -155,7 +158,7 @@ void CMagicAttack::SwatAway(CBasePlayer *pPlayer, int iDir)
     pev->owner = pPlayer->pev->pContainingEntity;             // [OK] agora o dono é quem rebateu
     SetThink(&CMagicAttack::NormalThink);                     // [OK]
     pev->nextthink = gpGlobals->time + 0.5f;                  // [OK]
-    pPlayer->m_pBlockAttack_flag = 1;                         // [?] player+0x784 := 1
+    pPlayer->f_784 = 1;                         // [?] player+0x784 := 1
     pev->velocity = vecDir * m_flSpeed;                       // [OK] m_flSpeed = float em +0x2a8
     pev->angles = UTIL_VecToAngles(pev->velocity);            // [OK]
 }
