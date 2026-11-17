@@ -60,3 +60,42 @@ void CBaseEntity::TraceAttack(entvars_t *pevAttacker, float flDamage, Vector vec
         }
     }
 }
+
+// CGib::BounceGibTouch [OK] vs decomp 0xa5200: ESF ignora toque do dono, e SEMPRE freia a velocidade (x0.8) no fim.
+void CGib::BounceGibTouch(CBaseEntity *pOther)
+{
+    Vector vecSpot;
+    TraceResult tr;
+
+    if (pev->owner)                                           // [?] decomp ambíguo: dono ou "irmãos" do mesmo dono não colidem
+    {
+        if (pev->owner == pOther->edict())
+            return;
+        if (pOther->pev->owner == pev->owner)
+            return;
+    }
+    if (pev->flags & FL_ONGROUND)
+    {
+        pev->angles.x = 0;                                    // (sem o x0.9 do SDK)
+        pev->angles.z = 0;
+        pev->avelocity.x = 0;
+        pev->avelocity.z = 0;
+    }
+    else
+    {
+        if (g_Language != LANGUAGE_GERMAN && m_cBloodDecals > 0 && m_bloodColor != DONT_BLEED)
+        {
+            vecSpot = pev->origin + Vector(0, 0, 8);
+            UTIL_TraceLine(vecSpot, vecSpot + Vector(0, 0, -24), ignore_monsters, ENT(pev), &tr);
+            UTIL_BloodDecalTrace(&tr, m_bloodColor);
+            m_cBloodDecals--;
+        }
+        if (m_material != matNone && RANDOM_LONG(0, 2) == 0)
+        {
+            float zvel = fabs(pev->velocity.z);
+            float volume = 0.8 * min(1.0, ((float)zvel) / 450.0);
+            CBreakable::MaterialSoundRandom(edict(), (Materials)m_material, volume);
+        }
+    }
+    pev->velocity = pev->velocity * 0.8;                      // [OK] ESF
+}

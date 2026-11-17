@@ -54,3 +54,4 @@ CRenderFxManager::Use
 CBasePlayer::UpdatePlayerSound
 CBasePlayer::WaterMove      # ESF define AIRTIME 90 (SDK: 12) em player.h
 CBasePlayer::PlayerUse
+CBreakable::BreakTouch  # [SDK score ok] só diferença: /4 vs *0.25 (equivalente)

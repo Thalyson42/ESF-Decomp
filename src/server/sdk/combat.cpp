@@ -626,47 +626,6 @@ void CBaseEntity :: SUB_FadeOut ( void  )
 	}
 }
 
-// [SDK NÃO CONFERIDA] CGib::BounceGibTouch
-void CGib :: BounceGibTouch ( CBaseEntity *pOther )
-{
-	Vector	vecSpot;
-	TraceResult	tr;
-	
-	//if ( RANDOM_LONG(0,1) )
-	//	return;// don't bleed everytime
-
-	if (pev->flags & FL_ONGROUND)
-	{
-		pev->velocity = pev->velocity * 0.9;
-		pev->angles.x = 0;
-		pev->angles.z = 0;
-		pev->avelocity.x = 0;
-		pev->avelocity.z = 0;
-	}
-	else
-	{
-		if ( g_Language != LANGUAGE_GERMAN && m_cBloodDecals > 0 && m_bloodColor != DONT_BLEED )
-		{
-			vecSpot = pev->origin + Vector ( 0 , 0 , 8 );//move up a bit, and trace down.
-			UTIL_TraceLine ( vecSpot, vecSpot + Vector ( 0, 0, -24 ),  ignore_monsters, ENT(pev), & tr);
-
-			UTIL_BloodDecalTrace( &tr, m_bloodColor );
-
-			m_cBloodDecals--; 
-		}
-
-		if ( m_material != matNone && RANDOM_LONG(0,2) == 0 )
-		{
-			float volume;
-			float zvel = fabs(pev->velocity.z);
-		
-			volume = 0.8 * min(1.0, ((float)zvel) / 450.0);
-
-			CBreakable::MaterialSoundRandom( edict(), (Materials)m_material, volume );
-		}
-	}
-}
-
 // [SDK NÃO CONFERIDA] CGib::StickyGibTouch
 void CGib :: StickyGibTouch ( CBaseEntity *pOther )
 {

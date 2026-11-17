@@ -316,7 +316,7 @@ void CBreakable::DamageSound( void )
 		EMIT_SOUND_DYN(ENT(pev), CHAN_VOICE, rgpsz[RANDOM_LONG(0,i-1)], fvol, ATTN_NORM, 0, pitch);
 }
 
-// [SDK NÃO CONFERIDA] CBreakable::BreakTouch
+// [SDK score 0.4] CBreakable::BreakTouch
 void CBreakable::BreakTouch( CBaseEntity *pOther )
 {
 	float flDamage;

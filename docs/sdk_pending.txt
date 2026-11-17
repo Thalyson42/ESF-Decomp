@@ -20,7 +20,6 @@ CBaseMonster::TakeDamage
 CBasePlayer::UpdateClientData
 CBasePlayerAmmo::DefaultTouch
 CBaseTrigger::TeleportTouch
-CBreakable::BreakTouch
 CBreakable::Die
 CCineMonster::Activate
 CFuncPlat::Setup
@@ -28,7 +27,6 @@ CFuncRotating::RampPitchVol
 CFuncRotating::Spawn
 CFuncTrackTrain::Next
 CFuncTrain::Activate
-CGib::BounceGibTouch
 CGib::SpawnHeadGib
 CGib::SpawnRandomGibs
 CGib::SpawnStickyGibs
