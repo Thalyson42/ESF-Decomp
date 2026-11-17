@@ -16,7 +16,5 @@ public:
     void EmitChargeSound(void);
     void EmitShootSound(void);
     // GrowChargeSprite: não existe -> usa CControlledBeam::GrowChargeSprite
-    unsigned short m_usTrailSprite;      // +0xcc
     unsigned short m_usSpriteA, m_usSpriteB, m_usSpriteAStart, m_usSpriteBStart; // +0xce..+0xd4
-    CSprite *m_pChargeSprite;            // +0x20c
 };

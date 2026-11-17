@@ -36,10 +36,10 @@ void CKamehameha::Spawn(void)
 void CKamehameha::Precache(void)
 {
     // [OK] índices dos sprites (cada PRECACHE_MODEL guarda em campo unsigned short)
-    m_usKameSpriteA      = PRECACHE_MODEL("sprites/kamehamehaa.spr");
-    m_usKameSpriteB      = PRECACHE_MODEL("sprites/kamehamehab.spr");
-    m_usKameSpriteAStart = PRECACHE_MODEL("sprites/kamehamehaastart.spr");
-    m_usKameSpriteBStart = PRECACHE_MODEL("sprites/kamehamehabstart.spr");
+    m_usSpriteA      = PRECACHE_MODEL("sprites/kamehamehaa.spr");
+    m_usSpriteB      = PRECACHE_MODEL("sprites/kamehamehab.spr");
+    m_usSpriteAStart = PRECACHE_MODEL("sprites/kamehamehaastart.spr");
+    m_usSpriteBStart = PRECACHE_MODEL("sprites/kamehamehabstart.spr");
     PRECACHE_MODEL("sprites/kamecharge.spr");
 
     // sons de voz de cada personagem

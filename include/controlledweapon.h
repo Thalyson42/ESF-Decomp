@@ -7,6 +7,12 @@
 class CControlledBeam : public CBasePlayerWeapon
 {
 public:
+    unsigned short m_usTrailSprite;      // +0xcc  índice do sprite do rastro (PRECACHE_MODEL)
+    unsigned short m_usSpriteA;          // +0xce
+    unsigned short m_usSpriteB;          // +0xd0
+    unsigned short m_usSpriteAStart;     // +0xd2
+    unsigned short m_usSpriteBStart;     // +0xd4
+    class CSprite *m_pChargeSprite;      // +0x20c sprite de carga seguindo o jogador
     float GetPowerRatio(void);                     // [?] relação carga/máximo; valor descartado em 1 uso
     // --- virtuais (ordem da vtable: ver src/headers/CControlledBeam.h) ---
     virtual void Precache(void);

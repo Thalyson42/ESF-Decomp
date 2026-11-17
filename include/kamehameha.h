@@ -4,7 +4,6 @@
 #pragma once
 #include "controlledweapon.h"   // CControlledBeam (ainda a recuperar)
 
-class CSprite;
 
 class CKamehameha : public CControlledBeam
 {
@@ -23,12 +22,6 @@ public:
     void EmitShootSound(void);
 
     // campos próprios (offsets verificados nas funções acima)
-    unsigned short m_usTrailSprite;      // +0xcc  (204)
-    unsigned short m_usKameSpriteA;      // +0xce  (206)
-    unsigned short m_usKameSpriteB;      // +0xd0  (208)
-    unsigned short m_usKameSpriteAStart; // +0xd2  (210)
-    unsigned short m_usKameSpriteBStart; // +0xd4  (212)
-    CSprite *m_pChargeSprite;            // +0x20c (524)
     // +0xd8 (216): carga atual (float usado como scale*0.015 em GrowChargeSprite;
     //              zerado em Spawn). Provavelmente herdado de CControlledBeam -> ver classe-base.
 };

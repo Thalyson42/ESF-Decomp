@@ -57,4 +57,3 @@ extern cvar_t allowspectator, characterlimit, plcatchup;
 extern int gmsgSpectator, gmsgAllowSpec, gmsgVGUIMenu, gmsgScoreInfo, gmsgFog, gmsgTeamInfo, gmsgTeamNames, gmsgPowerLevel;
 class CFog : public CBaseEntity { public: int m_iR, m_iG, m_iB; float m_flStart, m_flEnd; };   // [?] env_fog do ESF
 #endif
-extern unsigned short m_usTrailSprite, m_usSpriteAStart, m_usSpriteBStart, m_usSpriteA, m_usSpriteB;   // [?] índices de sprites precacheados
