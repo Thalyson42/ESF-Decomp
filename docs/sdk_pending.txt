@@ -21,7 +21,6 @@ CFuncRotating::RampPitchVol
 CFuncRotating::Spawn
 CFuncTrackTrain::Next
 CFuncTrain::Activate
-CGibShooter::ShootThink
 CGraph::ShowNodeConnections
 CLightning::Spawn
 CMomentaryDoor::Use
@@ -36,6 +35,3 @@ CTalkMonster::IdleHeadTurn
 CTalkMonster::StopFollowing
 CTalkMonster::TrySmellTalk
 CTestEffect::TestThink
-CVoiceGameMgr::ClientCommand
-CVoiceGameMgr::ClientConnected
-CVoiceGameMgr::UpdateMasks

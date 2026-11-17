@@ -48,7 +48,7 @@ void CVoiceGameMgr::Update(double frametime)
 	UpdateMasks();
 }
 
-// [SDK NÃO CONFERIDA] CVoiceGameMgr::ClientConnected
+// [SDK score 0.2] CVoiceGameMgr::ClientConnected
 void CVoiceGameMgr::ClientConnected(edict_t *pEdict)
 {
 	int index = ENTINDEX(pEdict) - 1;
@@ -76,7 +76,7 @@ bool CVoiceGameMgr::PlayerHasBlockedPlayer(CBasePlayer *pReceiver, CBasePlayer *
 	return ( g_BanMasks[iReceiverIndex][iSenderIndex] ? true : false );
 }
 
-// [SDK NÃO CONFERIDA] CVoiceGameMgr::ClientCommand
+// [SDK score 0.56] CVoiceGameMgr::ClientCommand
 bool CVoiceGameMgr::ClientCommand(CBasePlayer *pPlayer, const char *cmd)
 {
 	int playerClientIndex = pPlayer->entindex() - 1;
@@ -123,7 +123,7 @@ bool CVoiceGameMgr::ClientCommand(CBasePlayer *pPlayer, const char *cmd)
 	}
 }
 
-// [SDK NÃO CONFERIDA] CVoiceGameMgr::UpdateMasks
+// [SDK score 0.22] CVoiceGameMgr::UpdateMasks
 void CVoiceGameMgr::UpdateMasks()
 {
 	m_UpdateInterval = 0;

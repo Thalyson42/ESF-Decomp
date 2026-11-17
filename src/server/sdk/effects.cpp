@@ -1221,7 +1221,7 @@ CGib *CGibShooter :: CreateGib ( void )
 	return pGib;
 }
 
-// [SDK NÃO CONFERIDA] CGibShooter::ShootThink
+// [SDK score 0.33] CGibShooter::ShootThink
 void CGibShooter :: ShootThink ( void )
 {
 	pev->nextthink = gpGlobals->time + m_flDelay;
