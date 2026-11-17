@@ -65,3 +65,5 @@ CGibShooter::ShootThink  # [SDK score ok] conferida (0.95/1.05 = strncpy artefat
 CVoiceGameMgr::ClientCommand  # [SDK score ok] vban/VModEnable iguais; asserts do bitvec são do compilador
 CVoiceGameMgr::ClientConnected  # [SDK score ok] idem
 CVoiceGameMgr::UpdateMasks  # [SDK score ok] idem
+CBaseDelay::SUB_UseTargets  # [SDK score ok] conferida linha a linha
+CFuncRotating::Spawn  # [SDK score ok] conferida: 99/0.8/1.25/2.0 iguais

@@ -1438,7 +1438,7 @@ void CSprayCan::Spawn ( entvars_t *pevOwner )
 	EMIT_SOUND(ENT(pev), CHAN_VOICE, "player/sprayer.wav", 1, ATTN_NORM);
 }
 
-// [SDK NÃO CONFERIDA] CSprayCan::Think
+// [SDK heurística] CSprayCan::Think
 void CSprayCan::Think( void )
 {
 	TraceResult	tr;	

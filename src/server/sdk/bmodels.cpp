@@ -183,7 +183,7 @@ void CFuncRotating :: KeyValue( KeyValueData* pkvd)
 		CBaseEntity::KeyValue( pkvd );
 }
 
-// [SDK NÃO CONFERIDA] CFuncRotating::Spawn
+// [SDK score 0.4] CFuncRotating::Spawn
 void CFuncRotating :: Spawn( )
 {
 	// set final pitch.  Must not be PITCH_NORM, since we
@@ -351,7 +351,7 @@ void CFuncRotating :: HurtTouch ( CBaseEntity *pOther )
 	pevOther->velocity = (pevOther->origin - VecBModelOrigin(pev) ).Normalize() * pev->dmg;
 }
 
-// [SDK NÃO CONFERIDA] CFuncRotating::RampPitchVol
+// [SDK heurística] CFuncRotating::RampPitchVol
 void CFuncRotating :: RampPitchVol (int fUp)
 {
 

@@ -6,7 +6,7 @@
 #include "decals.h"
 #include "explode.h"
 
-// [SDK NÃO CONFERIDA] CShower::Spawn
+// [SDK heurística] CShower::Spawn
 void CShower::Spawn( void )
 {
 	pev->velocity = RANDOM_FLOAT( 200, 300 ) * pev->angles;

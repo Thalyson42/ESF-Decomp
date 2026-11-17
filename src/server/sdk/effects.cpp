@@ -293,7 +293,7 @@ void CBeam::DoSparks( const Vector &start, const Vector &end )
 	}
 }
 
-// [SDK NÃO CONFERIDA] CLightning::Spawn
+// [SDK heurística] CLightning::Spawn
 void CLightning::Spawn( void )
 {
 	if ( FStringNull( m_iszSpriteName ) )
@@ -1359,7 +1359,7 @@ void CTestEffect::Precache( void )
 	PRECACHE_MODEL( "sprites/lgtning.spr" );
 }
 
-// [SDK NÃO CONFERIDA] CTestEffect::TestThink
+// [SDK heurística] CTestEffect::TestThink
 void CTestEffect::TestThink( void )
 {
 	int i;

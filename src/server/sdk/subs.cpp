@@ -112,7 +112,7 @@ void CBaseEntity :: SUB_UseTargets( CBaseEntity *pActivator, USE_TYPE useType, f
 	}
 }
 
-// [SDK NÃO CONFERIDA] CBaseDelay::SUB_UseTargets
+// [SDK score 0.75] CBaseDelay::SUB_UseTargets
 void CBaseDelay :: SUB_UseTargets( CBaseEntity *pActivator, USE_TYPE useType, float value )
 {
 	//

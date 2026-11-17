@@ -751,7 +751,7 @@ void CPushable :: Touch( CBaseEntity *pOther )
 	Move( pOther, 1 );
 }
 
-// [SDK NÃO CONFERIDA] CPushable::Move
+// [SDK heurística] CPushable::Move
 void CPushable :: Move( CBaseEntity *pOther, int push )
 {
 	entvars_t*	pevToucher = pOther->pev;

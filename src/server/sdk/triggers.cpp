@@ -1303,7 +1303,7 @@ void CTriggerPush :: Touch( CBaseEntity *pOther )
 	}
 }
 
-// [SDK NÃO CONFERIDA] CBaseTrigger::TeleportTouch
+// [SDK heurística] CBaseTrigger::TeleportTouch
 void CBaseTrigger :: TeleportTouch( CBaseEntity *pOther )
 {
 	entvars_t* pevToucher = pOther->pev;

@@ -58,7 +58,7 @@ void CBaseDoor::KeyValue( KeyValueData *pkvd )
 		CBaseToggle::KeyValue( pkvd );
 }
 
-// [SDK NÃO CONFERIDA] CBaseDoor::Spawn
+// [SDK heurística] CBaseDoor::Spawn
 void CBaseDoor::Spawn( )
 {
 	Precache();
@@ -465,7 +465,7 @@ void CBaseDoor::DoorHitBottom( void )
 		FireTargets( STRING(pev->netname), m_hActivator, this, USE_TOGGLE, 0 );
 }
 
-// [SDK NÃO CONFERIDA] CBaseDoor::Blocked
+// [SDK heurística] CBaseDoor::Blocked
 void CBaseDoor::Blocked( CBaseEntity *pOther )
 {
 	edict_t	*pentTarget = NULL;
@@ -703,7 +703,7 @@ void CMomentaryDoor::KeyValue( KeyValueData *pkvd )
 		CBaseToggle::KeyValue( pkvd );
 }
 
-// [SDK NÃO CONFERIDA] CMomentaryDoor::Use
+// [SDK heurística] CMomentaryDoor::Use
 void CMomentaryDoor::Use( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value )
 {
 	if ( useType != USE_SET )		// Momentary buttons will pass down a float in here

@@ -327,7 +327,7 @@ int CBaseButton::TakeDamage( entvars_t* pevInflictor, entvars_t* pevAttacker, fl
 	return 0;
 }
 
-// [SDK NÃO CONFERIDA] CBaseButton::Spawn
+// [SDK heurística] CBaseButton::Spawn
 void CBaseButton::Spawn( )
 { 
 	char  *pszSound;
@@ -557,7 +557,7 @@ void CBaseButton::ButtonReturn( void )
 	pev->frame = 0;			// use normal textures
 }
 
-// [SDK NÃO CONFERIDA] CBaseButton::ButtonBackHome
+// [SDK heurística] CBaseButton::ButtonBackHome
 void CBaseButton::ButtonBackHome( void )
 {
 	ASSERT(m_toggle_state == TS_GOING_DOWN);

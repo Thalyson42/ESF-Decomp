@@ -9,7 +9,7 @@
 #include "gamerules.h"
 #include <ctype.h>
 
-// [SDK NÃO CONFERIDA] CAmbientGeneric::Spawn
+// [SDK heurística] CAmbientGeneric::Spawn
 void CAmbientGeneric :: Spawn( void )
 {
 /*
@@ -371,7 +371,7 @@ void CAmbientGeneric :: InitModulationParms(void)
 									  // if we intend to pitch shift later!
 }
 
-// [SDK NÃO CONFERIDA] CAmbientGeneric::ToggleUse
+// [SDK heurística] CAmbientGeneric::ToggleUse
 void CAmbientGeneric :: ToggleUse ( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value )
 {
 	char* szSoundFile = (char*) STRING(pev->message);

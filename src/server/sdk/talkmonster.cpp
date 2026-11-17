@@ -633,7 +633,7 @@ int CTalkMonster :: FIdleHello( void )
 	return FALSE;
 }
 
-// [SDK NÃO CONFERIDA] CTalkMonster::IdleHeadTurn
+// [SDK heurística] CTalkMonster::IdleHeadTurn
 void CTalkMonster :: IdleHeadTurn( Vector &vecFriend )
 {
 	 // turn head in desired direction only if ent has a turnable head
@@ -649,7 +649,7 @@ void CTalkMonster :: IdleHeadTurn( Vector &vecFriend )
 	}
 }
 
-// [SDK NÃO CONFERIDA] CTalkMonster::FIdleSpeak
+// [SDK heurística] CTalkMonster::FIdleSpeak
 int CTalkMonster :: FIdleSpeak ( void )
 { 
 	// try to start a conversation, or make statement
@@ -952,7 +952,7 @@ void CTalkMonster :: PrescheduleThink ( void )
 	}
 }
 
-// [SDK NÃO CONFERIDA] CTalkMonster::TrySmellTalk
+// [SDK heurística] CTalkMonster::TrySmellTalk
 void CTalkMonster :: TrySmellTalk( void )
 {
 	if ( !FOkToSpeak() )
@@ -982,7 +982,7 @@ int CTalkMonster::IRelationship( CBaseEntity *pTarget )
 	return CBaseMonster::IRelationship( pTarget );
 }
 
-// [SDK NÃO CONFERIDA] CTalkMonster::StopFollowing
+// [SDK heurística] CTalkMonster::StopFollowing
 void CTalkMonster::StopFollowing( BOOL clearSchedule )
 {
 	if ( IsFollowing() )

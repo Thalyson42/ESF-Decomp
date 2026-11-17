@@ -159,7 +159,7 @@ void CBasePlatTrain::Precache( void )
 	}
 }
 
-// [SDK NÃO CONFERIDA] CFuncPlat::Setup
+// [SDK heurística] CFuncPlat::Setup
 void CFuncPlat :: Setup( void )
 {
 	//pev->noiseMovement = MAKE_STRING("plats/platmove1.wav");
@@ -225,7 +225,7 @@ void CFuncPlat :: Spawn( )
 	}
 }
 
-// [SDK NÃO CONFERIDA] CPlatTrigger::SpawnInsideTrigger
+// [SDK heurística] CPlatTrigger::SpawnInsideTrigger
 void CPlatTrigger :: SpawnInsideTrigger( CFuncPlat *pPlatform )
 {
 	m_pPlatform = pPlatform;
@@ -588,7 +588,7 @@ void CFuncTrain :: Next( void )
 	}
 }
 
-// [SDK NÃO CONFERIDA] CFuncTrain::Activate
+// [SDK heurística] CFuncTrain::Activate
 void CFuncTrain :: Activate( void )
 {
 	// Not yet active, so teleport to first target
@@ -877,7 +877,7 @@ void CFuncTrackTrain :: UpdateSound( void )
 	}
 }
 
-// [SDK NÃO CONFERIDA] CFuncTrackTrain::Next
+// [SDK heurística] CFuncTrackTrain::Next
 void CFuncTrackTrain :: Next( void )
 {
 	float time = 0.5;

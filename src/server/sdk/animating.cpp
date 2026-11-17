@@ -196,7 +196,7 @@ int CBaseAnimating :: ExtractBbox( int sequence, float *mins, float *maxs )
 	return ::ExtractBbox( GET_MODEL_PTR( ENT(pev) ), sequence, mins, maxs );
 }
 
-// [SDK NÃO CONFERIDA] CBaseAnimating::SetSequenceBox
+// [SDK heurística] CBaseAnimating::SetSequenceBox
 void CBaseAnimating :: SetSequenceBox( void )
 {
 	Vector mins, maxs;

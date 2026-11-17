@@ -14,7 +14,7 @@ void CGraph :: InitGraph( void ) { }
 // [SDK score 1.0] CGraph::FindNearestNode
 int	CGraph :: FindNearestNode ( const Vector &vecOrigin,  int afNodeTypes ) { return 0; }
 
-// [SDK NÃO CONFERIDA] CBaseMonster::ChangeYaw
+// [SDK heurística] CBaseMonster::ChangeYaw
 float 	CBaseMonster :: ChangeYaw ( int speed ) { return 0; }
 
 // [SDK score 1.0] CBaseMonster::MakeIdealYaw

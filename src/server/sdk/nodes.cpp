@@ -756,7 +756,7 @@ int	CGraph :: FindNearestNode ( const Vector &vecOrigin,  int afNodeTypes )
 	return m_iNearest;
 }
 
-// [SDK NÃO CONFERIDA] CGraph::ShowNodeConnections
+// [SDK heurística] CGraph::ShowNodeConnections
 void CGraph :: ShowNodeConnections ( int iNode )
 {
 	Vector	vecSpot;
@@ -3180,7 +3180,7 @@ void CNodeViewer :: DrawThink( void )
 
 
 
-// [SDK NÃO CONFERIDA] CNodeViewer::Spawn
+// [SDK heurística] CNodeViewer::Spawn
 void CNodeViewer::Spawn( )
 {
 	if ( !WorldGraph.m_fGraphPresent || !WorldGraph.m_fGraphPointersSet )

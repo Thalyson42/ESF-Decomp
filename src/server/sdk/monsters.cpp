@@ -908,7 +908,7 @@ void CBaseMonster :: SetSequenceByName ( char *szSequence )
 	}
 }
 
-// [SDK NÃO CONFERIDA] CBaseMonster::CheckLocalMove
+// [SDK heurística] CBaseMonster::CheckLocalMove
 int CBaseMonster :: CheckLocalMove ( const Vector &vecStart, const Vector &vecEnd, CBaseEntity *pTarget, float *pflDist )
 {
 	Vector	vecStartPos;// record monster's position before trying the move
@@ -1011,7 +1011,7 @@ int CBaseMonster :: CheckLocalMove ( const Vector &vecStart, const Vector &vecEn
 	return iReturn;
 }
 
-// [SDK NÃO CONFERIDA] CBaseMonster::OpenDoorAndWait
+// [SDK heurística] CBaseMonster::OpenDoorAndWait
 float CBaseMonster :: OpenDoorAndWait( entvars_t *pevDoor )
 {
 	float flTravelTime = 0;
@@ -1215,7 +1215,7 @@ void CBaseMonster :: InsertWaypoint ( Vector vecLocation, int afMoveFlags )
 	m_Route[ m_iRouteIndex ].iType = type;
 }
 
-// [SDK NÃO CONFERIDA] CBaseMonster::FTriangulate
+// [SDK heurística] CBaseMonster::FTriangulate
 BOOL CBaseMonster :: FTriangulate ( const Vector &vecStart , const Vector &vecEnd, float flDist, CBaseEntity *pTargetEnt, Vector *pApex )
 {
 	Vector		vecDir;
@@ -1636,7 +1636,7 @@ void CBaseMonster :: MonsterInitThink ( void )
 	StartMonster();
 }
 
-// [SDK NÃO CONFERIDA] CBaseMonster::StartMonster
+// [SDK heurística] CBaseMonster::StartMonster
 void CBaseMonster :: StartMonster ( void )
 {
 	// update capabilities
@@ -2451,7 +2451,7 @@ int CBaseMonster :: CanPlaySequence( BOOL fDisregardMonsterState, int interruptL
 	return FALSE;
 }
 
-// [SDK NÃO CONFERIDA] CBaseMonster::FindLateralCover
+// [SDK heurística] CBaseMonster::FindLateralCover
 BOOL CBaseMonster :: FindLateralCover ( const Vector &vecThreat, const Vector &vecViewOffset )
 {
 	TraceResult	tr;
@@ -2541,7 +2541,7 @@ BOOL CBaseMonster :: FCanActiveIdle ( void )
 	return FALSE;
 }
 
-// [SDK NÃO CONFERIDA] CBaseMonster::BBoxFlat
+// [SDK heurística] CBaseMonster::BBoxFlat
 BOOL CBaseMonster :: BBoxFlat ( void )
 {
 	TraceResult	tr;

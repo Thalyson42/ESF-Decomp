@@ -576,7 +576,7 @@ void CCineMonster :: DelayStart( int state )
 	}
 }
 
-// [SDK NÃO CONFERIDA] CCineMonster::Activate
+// [SDK heurística] CCineMonster::Activate
 void CCineMonster :: Activate( void )
 {
 	edict_t			*pentTarget;
@@ -620,7 +620,7 @@ void CCineMonster :: Activate( void )
 	}
 }
 
-// [SDK NÃO CONFERIDA] CBaseMonster::CineCleanup
+// [SDK heurística] CBaseMonster::CineCleanup
 BOOL CBaseMonster :: CineCleanup( )
 {
 	CCineMonster *pOldCine = m_pCine;
@@ -907,7 +907,7 @@ BOOL CScriptedSentence :: AcceptableSpeaker( CBaseToggle *pTarget )
 	return FALSE;
 }
 
-// [SDK NÃO CONFERIDA] CScriptedSentence::FindEntity
+// [SDK heurística] CScriptedSentence::FindEntity
 CBaseToggle *CScriptedSentence :: FindEntity( void )
 {
 	edict_t *pentTarget;
