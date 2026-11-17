@@ -9,7 +9,6 @@ CBaseDoor::Spawn
 CBaseEntity::TraceBleed
 CBaseMonster::BBoxFlat
 CBaseMonster::ChangeYaw
-CBaseMonster::CheckEnemy
 CBaseMonster::CheckLocalMove
 CBaseMonster::CineCleanup
 CBaseMonster::FTriangulate

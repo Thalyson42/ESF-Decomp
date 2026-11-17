@@ -60,3 +60,4 @@ CGib::SpawnHeadGib  # [SDK score ok] conferida linha a linha
 CGib::SpawnRandomGibs  # [SDK score ok] floats hex no decomp eram falso positivo
 CGib::SpawnStickyGibs  # [SDK score ok] idem
 CBreakable::Die  # [SDK score ok] decomp sem tabela de sons (jump table) mas resto igual
+CBaseMonster::CheckEnemy  # [SDK score ok] conferida: 0.05/256/0x82/80 iguais
