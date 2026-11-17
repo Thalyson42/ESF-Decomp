@@ -5,6 +5,7 @@
     CSwoop m_Swoop;                             /* [OK] +0x504 */ \
     void  RemoveSpecialModes(void); void OnDeathAnim(void); \
     void  StopPowerUp(void); void RemoveWallJump(void); BOOL CanMelee(CBasePlayer *pOther); \
+    void  Spectator_SetMode(int iMode); void StartObserving(void); int GetPotentialPL(void); \
     void  Swoop(void); void CheckWallJump(void); void CheckSubModelStatus(void); void ReleaseCandy(void); \
     void  RemoveAllWeapons(int iFlag); void Descend(int iFlag); void Ascend(void); \
     void  StopTurbo(void); void StopBlock(void); void UpdateOldPositions(void); void Spectator_HandleButtons(void); \
@@ -46,4 +47,12 @@ extern unsigned short m_usMeleeSounds;
 #endif
 #ifndef DMG_PREVENT_PHYSICS_FORCE
 #define DMG_PREVENT_PHYSICS_FORCE (1<<31)   // [?]
+#endif
+// usados por gamerules_esf.cpp
+#ifndef ESF_GAMERULES_GLOBALS_H
+#define ESF_GAMERULES_GLOBALS_H
+extern int g_teamplay;                         // [?] ESF mantém "teamplay" em variável própria
+extern cvar_t allowspectator, characterlimit, plcatchup;
+extern int gmsgSpectator, gmsgAllowSpec, gmsgVGUIMenu, gmsgScoreInfo, gmsgFog, gmsgTeamInfo, gmsgTeamNames, gmsgPowerLevel;
+class CFog : public CBaseEntity { public: int m_iR, m_iG, m_iB; float m_flStart, m_flEnd; };   // [?] env_fog do ESF
 #endif

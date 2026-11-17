@@ -34,8 +34,23 @@ k=t.index('virtual void Touch(')
 t=t[:k]+'virtual class CBaseEntity *vfunc_12c(void) { return 0; } virtual int vfunc_item_28(void) { return 0; } virtual int vfunc_104(int) { return 0; } virtual int vfunc_fc(void) { return 0; } virtual int vfunc_item_18(void) { return 0; }   // [?]\n\t'+t[k:]
 open(c,'w').write(t)
 PY
+  python3 - "$B/dlls/gamerules.h" <<'PY'
+import sys
+g=sys.argv[1]; t=open(g).read()
+k=t.index('class CHalfLifeMultiplay')
+k=t.index('public:',k)+7
+t=t[:k]+'\n\tint m_iAveragePL;                                   // [?] ESF\n\tvirtual void GiveBaseItems(CBasePlayer *pPlayer) {}  // [?] vtable +0xf0\n'+t[k:]
+open(g,'w').write(t)
+PY
+  python3 - "$B/dlls/teamplay_gamerules.h" <<'PY'
+import sys
+g=sys.argv[1]; t=open(g).read()
+k=t.index('public:',t.index('class CHalfLifeTeamplay'))+7
+t=t[:k]+'\n\tconst char *WeakestTeam(CBasePlayer *pPlayer);   // [?] ESF\n'+t[k:]
+open(g,'w').write(t)
+PY
 fi
-INC="-I include -I $B/dlls -I $B/engine -I $B/common -I $B/pm_shared -I $B/public"
+INC="-I include -I $B/dlls -I $B/engine -I $B/common -I $B/pm_shared -I $B/public -I $H/game_shared"
 for f in "$@"; do
   echo "== $f"
   LC_ALL=C g++ -fsyntax-only -fpermissive -w -std=gnu++98 $INC -DLINUX -D_LINUX "$f" 2>&1 | grep -E "error" | cut -c1-170

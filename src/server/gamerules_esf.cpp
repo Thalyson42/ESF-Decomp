@@ -11,6 +11,10 @@
 #include "client.h"
 #include "game.h"
 #include "decals.h"
+#include "esf_classes.h"
+#include "voice_gamemgr.h"
+#define MAX_INTERMISSION_TIME 120
+extern CVoiceGameMgr g_VoiceGameMgr;
 #include "func_break.h"
 #include "explode.h"
 #include "teamplay_gamerules.h"
@@ -59,7 +63,7 @@ void CHalfLifeMultiplay::PlayerSpawn(CBasePlayer *pPlayer)    // ESF: sem armas/
     int iPL;
     if (plcatchup.value == 1.0f)                              // [OK] "catch-up": novos jogadores nascem mais perto do PL médio
     {
-        iPL = pPlayer->m_pClass->GetBasePL();                 // [?] vtable do personagem +0x14
+        iPL = pPlayer->m_pClass->GetStartPowerLevel();                 // [?] vtable do personagem +0x14
         if (m_iAveragePL)                                     // [?] CHalfLifeMultiplay+4
         {
             int iDiff = m_iAveragePL - pPlayer->GetPotentialPL();
@@ -77,8 +81,8 @@ void CHalfLifeMultiplay::PlayerSpawn(CBasePlayer *pPlayer)    // ESF: sem armas/
     pPlayer->f_750 = -1;                                      // [?]
     pPlayer->SetPowerLevel(iPL);
 
-    int v = pPlayer->m_pClass->vfunc_c();                     // [?] +0x74c
-    int iHealth = pPlayer->m_pClass->vfunc_10();              // [OK] vida inicial do personagem
+    int v = pPlayer->m_pClass->GetStartSpeed();                     // [?] +0x74c
+    int iHealth = pPlayer->m_pClass->GetStartHealth();              // [OK] vida inicial do personagem
     pPlayer->pev->fuser4 = 1000.0f;                           // [OK] ki cheio (+0x260)
     pPlayer->f_74c = v;
     pPlayer->f_24c = iHealth;
