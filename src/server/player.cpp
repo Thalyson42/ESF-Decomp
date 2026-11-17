@@ -794,3 +794,139 @@ void CBasePlayer::ImpulseCommands()
     }
     pev->impulse = 0;
 }
+
+// CBasePlayer::UpdateClientData [OK] vs decomp 0xfd3d0 (2085 bytes).
+// ESF: blobs de ki ao entrar, envia PowerLevel/maxspeed, WeaponList reduzida e SEM mensagens de Damage/Geiger/Train/Battery/Flashlight/Ammo.
+extern int gmsgResetHUD, gmsgInitHUD, gmsgBlobStart, gmsgInitHUDMap, gmsgHideWeapon, gmsgSetFOV, gmsgHealth, gmsgPowerLevel, gmsgWeaponList;
+extern int gInitHUD;
+#define ESF_PL_I(off)  (*(int *)((char *)this + (off)))
+#define ESF_PL_F(off)  (*(float *)((char *)this + (off)))
+
+void CBasePlayer::UpdateClientData(void)
+{
+    if (m_fInitHUD)
+    {
+        m_fInitHUD = FALSE;
+        gInitHUD = FALSE;
+
+        MESSAGE_BEGIN(MSG_ONE, gmsgResetHUD, NULL, pev->pContainingEntity);
+            WRITE_BYTE(0);
+        MESSAGE_END();
+
+        if (!m_fGameHUDInitialized)
+        {
+            MESSAGE_BEGIN(MSG_ONE, gmsgInitHUD, NULL, pev->pContainingEntity);
+            MESSAGE_END();
+            g_pGameRules->InitHUD(this);
+            m_fGameHUDInitialized = TRUE;
+            if (g_pGameRules->IsMultiplayer())
+                FireTargets("game_playerjoin", this, this, USE_TOGGLE, 0);
+
+            // [OK] ESF: reenvia ao cliente novo os escudos e blobs de ki já existentes (tipo 0 = kishield, 1 = kiblob)
+            CBaseEntity *pEnt = NULL;
+            while ((pEnt = UTIL_FindEntityByClassname(pEnt, "kishield")) != NULL)
+            {
+                MESSAGE_BEGIN(MSG_ONE, gmsgBlobStart, NULL, pev->pContainingEntity);
+                    WRITE_BYTE(0);
+                    WRITE_COORD(pEnt->pev->origin.x); WRITE_COORD(pEnt->pev->origin.y); WRITE_COORD(pEnt->pev->origin.z);
+                    WRITE_SHORT(ENTINDEX(pEnt->edict()));
+                    WRITE_SHORT(pEnt->pev->skin);                  // [?] +0x64 do pev: nome (skin?) a conferir
+                MESSAGE_END();
+            }
+            pEnt = NULL;
+            while ((pEnt = UTIL_FindEntityByClassname(pEnt, "kiblob")) != NULL)
+            {
+                MESSAGE_BEGIN(MSG_ONE, gmsgBlobStart, NULL, pev->pContainingEntity);
+                    WRITE_BYTE(1);
+                    WRITE_COORD(pEnt->pev->origin.x); WRITE_COORD(pEnt->pev->origin.y); WRITE_COORD(pEnt->pev->origin.z);
+                    WRITE_SHORT(ENTINDEX(pEnt->edict()));
+                    WRITE_SHORT(pEnt->pev->skin);                  // [?]
+                MESSAGE_END();
+            }
+        }
+        FireTargets("game_playerspawn", this, this, USE_TOGGLE, 0);
+    }
+
+    if (ESF_PL_I(0x374))                                      // [?] m_fInitHUDMap (ESF)
+    {
+        ESF_PL_I(0x374) = 0;
+        MESSAGE_BEGIN(MSG_ONE, gmsgInitHUDMap, NULL, pev->pContainingEntity);
+        MESSAGE_END();
+    }
+
+    if (m_iHideHUD != m_iClientHideHUD)
+    {
+        MESSAGE_BEGIN(MSG_ONE, gmsgHideWeapon, NULL, pev->pContainingEntity);
+            WRITE_BYTE(m_iHideHUD);
+        MESSAGE_END();
+        m_iClientHideHUD = m_iHideHUD;
+    }
+    if (m_iFOV != m_iClientFOV)
+    {
+        MESSAGE_BEGIN(MSG_ONE, gmsgSetFOV, NULL, pev->pContainingEntity);
+            WRITE_BYTE(m_iFOV);
+        MESSAGE_END();
+    }
+    if (pev->health != m_iClientHealth)
+    {
+        int iHealth = max(pev->health, 0);
+        MESSAGE_BEGIN(MSG_ONE, gmsgHealth, NULL, pev->pContainingEntity);
+            WRITE_BYTE(iHealth);
+        MESSAGE_END();
+        m_iClientHealth = pev->health;
+    }
+
+    // [OK] ESF: velocidade máxima (GetMaxSpeed) sincronizada com o cliente
+    float spd = GetMaxSpeed();
+    if (spd != ESF_PL_F(0x740))
+    {
+        ESF_PEV_RAW_INT(pev, 0x250) = (spd != 0) ? 0 : 1;     // [?] pev+0x250: flag "parado" (1 quando maxspeed 0)
+        g_engfuncs.pfnSetClientMaxspeed(pev->pContainingEntity, GetMaxSpeed());
+        pev->maxspeed = spd;
+        ESF_PL_F(0x740) = spd;
+    }
+    // [OK] ESF: Power Level mudou -> avisa todos
+    int pl = GetPowerLevel();
+    if (pl != ESF_PL_I(0x750))
+    {
+        MESSAGE_BEGIN(MSG_ALL, gmsgPowerLevel);
+            WRITE_BYTE(ENTINDEX(pev->pContainingEntity));
+            WRITE_LONG(pl);
+        MESSAGE_END();
+        ESF_PL_I(0x750) = pl;
+    }
+
+    // [OK] ESF: a mensagem "Damage" foi removida; só zera os acumuladores
+    if (pev->dmg_take || pev->dmg_save || m_bitsHUDDamage != m_bitsDamageType)
+    {
+        pev->dmg_take = 0;
+        pev->dmg_save = 0;
+        m_bitsHUDDamage = m_bitsDamageType;
+        m_bitsDamageType &= DMG_TIMEBASED;                    // 0xffffc000 -> DMG_TIMEBASED
+    }
+
+    if (!m_fWeapon)                                           // [?] +0x308: WeaponList já enviada (m_fWeapon do SDK)
+    {
+        m_fWeapon = TRUE;
+        for (int i = 0; i < MAX_WEAPONS; i++)
+        {
+            ItemInfo &II = CBasePlayerItem::ItemInfoArray[i];
+            if (!II.iId) continue;
+            const char *pszName = II.pszName ? II.pszName : "Empty";
+            MESSAGE_BEGIN(MSG_ONE, gmsgWeaponList, NULL, pev->pContainingEntity);
+                WRITE_STRING(pszName);
+                WRITE_BYTE(II.iSlot);
+                WRITE_BYTE(II.iPosition);
+                WRITE_BYTE(II.iId);
+                WRITE_BYTE(II.iFlags);                        // (sem ammo1/ammo2: ESF não usa munição)
+            MESSAGE_END();
+        }
+    }
+
+    for (int i = 0; i < MAX_ITEM_TYPES; i++)
+        if (m_rgpPlayerItems[i])
+            m_rgpPlayerItems[i]->UpdateClientData(this);
+
+    m_pClientActiveItem = m_pActiveItem;
+    m_iClientFOV = m_iFOV;
+}

@@ -16,7 +16,6 @@ CBaseMonster::FTriangulate
 CBaseMonster::FindLateralCover
 CBaseMonster::OpenDoorAndWait
 CBaseMonster::StartMonster
-CBasePlayer::UpdateClientData
 CBasePlayerAmmo::DefaultTouch
 CBaseTrigger::TeleportTouch
 CCineMonster::Activate
