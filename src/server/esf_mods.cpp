@@ -18,7 +18,6 @@
 
 // declarações que no SDK ficam dentro de world.cpp / combat.cpp (dados e globais do jogo)
 extern float g_flWeaponCheat;
-extern entvars_t *g_pevLastInflictor;                         // [?] ESF: último causador de dano
 extern CBaseEntity *g_pLastSpawn;
 extern CSoundEnt *pSoundEnt;
 extern CGraph WorldGraph;

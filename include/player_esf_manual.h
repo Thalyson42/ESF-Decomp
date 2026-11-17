@@ -52,6 +52,7 @@ extern unsigned short m_usMeleeSounds;
 #ifndef ESF_GAMERULES_GLOBALS_H
 #define ESF_GAMERULES_GLOBALS_H
 extern int g_teamplay;                         // [?] ESF mantém "teamplay" em variável própria
+extern entvars_t *g_pevLastInflictor;          // [?] último causador de dano
 extern cvar_t allowspectator, characterlimit, plcatchup;
 extern int gmsgSpectator, gmsgAllowSpec, gmsgVGUIMenu, gmsgScoreInfo, gmsgFog, gmsgTeamInfo, gmsgTeamNames, gmsgPowerLevel;
 class CFog : public CBaseEntity { public: int m_iR, m_iG, m_iB; float m_flStart, m_flEnd; };   // [?] env_fog do ESF
