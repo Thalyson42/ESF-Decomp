@@ -5,6 +5,15 @@
 #include "cbase.h"
 #include "player.h"
 #include "gamerules.h"
+#include "monsters.h"
+#include "weapons.h"
+#include "soundent.h"
+#include "client.h"
+#include "game.h"
+#include "decals.h"
+#include "func_break.h"
+#include "explode.h"
+#include "teamplay_gamerules.h"
 
 
 void CHalfLifeMultiplay::ClientDisconnected(edict_t *pClient)

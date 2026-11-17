@@ -2,7 +2,6 @@
 #pragma once
 extern int g_fGameOver;
 extern float g_flBlockPLDiv;
-extern int g_pGameRules;
 extern int g_sRockGibs;
 extern int gmsgCurWeapon;
 extern int gmsgHealth;

@@ -5,6 +5,31 @@
 #include "cbase.h"
 #include "player.h"
 #include "gamerules.h"
+#include "monsters.h"
+#include "weapons.h"
+#include "soundent.h"
+#include "client.h"
+#include "game.h"
+#include "decals.h"
+#include "func_break.h"
+#include "explode.h"
+#include "teamplay_gamerules.h"
+#include "nodes.h"
+
+// declarações que no SDK ficam dentro de world.cpp / combat.cpp (dados e globais do jogo)
+extern float g_flWeaponCheat;
+extern entvars_t *g_pevLastInflictor;                         // [?] ESF: último causador de dano
+extern CBaseEntity *g_pLastSpawn;
+extern CSoundEnt *pSoundEnt;
+extern CGraph WorldGraph;
+extern DLL_GLOBAL int gDisplayTitle;
+extern DLL_DECALLIST gDecals[];                               // 42 decals ([OK] o loop do decomp vai até 41)
+extern void InitBodyQue(void);
+extern void W_Precache(void);
+extern BOOL gEvilImpulse101;
+#define SF_WORLD_DARK       0x0001
+#define SF_WORLD_TITLE      0x0002
+#define SF_WORLD_FORCETEAM  0x0004
 
 
 #define ESF_ITEM_RESPAWN_TIME 120      // [OK] SDK: 30
@@ -368,7 +393,7 @@ void CWorld :: Precache( void )
 	// 63 testing
 	LIGHT_STYLE(63, "a");
 
-	for ( int i = 0; i < ARRAYSIZE(gDecals); i++ )
+	for ( int i = 0; i < 42; i++ )
 		gDecals[i].index = DECAL_INDEX( gDecals[i].name );
 
 // init the WorldGraph.
@@ -467,7 +492,7 @@ void CBaseEntity :: TraceBleed( float flDamage, Vector vecDir, TraceResult *ptr,
 	if (flDamage == 0)
 		return;
 
-	if (! (bitsDamageType & (DMG_CRUSH | DMG_SLASH | DMG_BLAST | DMG_MORTAR)   // [OK] ESF: máscara 0x800045 (sem BULLET/CLUB)))
+	if (! (bitsDamageType & (DMG_CRUSH | DMG_SLASH | DMG_BLAST | DMG_MORTAR)))   // [OK] ESF: máscara 0x800045 (sem BULLET/CLUB)
 		return;
 	
 	// make blood decal on the wall! 
