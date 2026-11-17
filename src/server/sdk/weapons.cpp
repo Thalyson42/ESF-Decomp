@@ -504,39 +504,6 @@ void CBasePlayerAmmo::Materialize( void )
 	SetTouch( &CBasePlayerAmmo::DefaultTouch );
 }
 
-// [SDK NÃO CONFERIDA] CBasePlayerAmmo::DefaultTouch
-void CBasePlayerAmmo :: DefaultTouch( CBaseEntity *pOther )
-{
-	if ( !pOther->IsPlayer() )
-	{
-		return;
-	}
-
-	if ( IsPlayerBusting( pOther ) )
-		return;
-
-	if (AddAmmo( pOther ))
-	{
-		if ( g_pGameRules->AmmoShouldRespawn( this ) == GR_AMMO_RESPAWN_YES )
-		{
-			Respawn();
-		}
-		else
-		{
-			SetTouch( NULL );
-			SetThink(&CBasePlayerAmmo::SUB_Remove);
-			pev->nextthink = gpGlobals->time + .1;
-		}
-	}
-	else if (gEvilImpulse101)
-	{
-		// evil impulse 101 hack, kill always
-		SetTouch( NULL );
-		SetThink(&CBasePlayerAmmo::SUB_Remove);
-		pev->nextthink = gpGlobals->time + .1;
-	}
-}
-
 // [SDK score 1.0] CBasePlayerWeapon::RetireWeapon
 void CBasePlayerWeapon::RetireWeapon( void )
 {

@@ -6,7 +6,6 @@ CBaseButton::Spawn
 CBaseDelay::SUB_UseTargets
 CBaseDoor::Blocked
 CBaseDoor::Spawn
-CBaseEntity::TraceBleed
 CBaseMonster::BBoxFlat
 CBaseMonster::ChangeYaw
 CBaseMonster::CheckLocalMove
@@ -15,7 +14,6 @@ CBaseMonster::FTriangulate
 CBaseMonster::FindLateralCover
 CBaseMonster::OpenDoorAndWait
 CBaseMonster::StartMonster
-CBasePlayerAmmo::DefaultTouch
 CBaseTrigger::TeleportTouch
 CCineMonster::Activate
 CFuncPlat::Setup

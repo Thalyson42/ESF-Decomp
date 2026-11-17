@@ -430,3 +430,98 @@ void CWorld :: Precache( void )
 		CVAR_SET_FLOAT( "mp_defaultteam", 0 );
 	}
 }
+
+// CBasePlayerAmmo::DefaultTouch = SDK sem o teste IsPlayerBusting (modo Busters removido). [OK] vs decomp 0x138f20
+void CBasePlayerAmmo::DefaultTouch(CBaseEntity *pOther)
+{
+    if (!pOther->IsPlayer())
+        return;
+
+    if (AddAmmo(pOther))
+    {
+        if (g_pGameRules->AmmoShouldRespawn(this) == GR_AMMO_RESPAWN_YES)
+        {
+            Respawn();
+        }
+        else
+        {
+            SetTouch(NULL);
+            SetThink(&CBasePlayerAmmo::SUB_Remove);
+            pev->nextthink = gpGlobals->time + .1;
+        }
+    }
+    else if (gEvilImpulse101)
+    {
+        SetTouch(NULL);
+        SetThink(&CBasePlayerAmmo::SUB_Remove);
+        pev->nextthink = gpGlobals->time + .1;
+    }
+}
+
+// CBaseEntity::TraceBleed = SDK com máscara de dano 0x800045. [OK] vs decomp 0xa6dd0
+void CBaseEntity :: TraceBleed( float flDamage, Vector vecDir, TraceResult *ptr, int bitsDamageType )
+{
+	if (BloodColor() == DONT_BLEED)
+		return;
+	
+	if (flDamage == 0)
+		return;
+
+	if (! (bitsDamageType & (DMG_CRUSH | DMG_SLASH | DMG_BLAST | DMG_MORTAR)   // [OK] ESF: máscara 0x800045 (sem BULLET/CLUB)))
+		return;
+	
+	// make blood decal on the wall! 
+	TraceResult Bloodtr;
+	Vector vecTraceDir; 
+	float flNoise;
+	int cCount;
+	int i;
+
+/*
+	if ( !IsAlive() )
+	{
+		// dealing with a dead monster. 
+		if ( pev->max_health <= 0 )
+		{
+			// no blood decal for a monster that has already decalled its limit.
+			return; 
+		}
+		else
+		{
+			pev->max_health--;
+		}
+	}
+*/
+
+	if (flDamage < 10)
+	{
+		flNoise = 0.1;
+		cCount = 1;
+	}
+	else if (flDamage < 25)
+	{
+		flNoise = 0.2;
+		cCount = 2;
+	}
+	else
+	{
+		flNoise = 0.3;
+		cCount = 4;
+	}
+
+	for ( i = 0 ; i < cCount ; i++ )
+	{
+		vecTraceDir = vecDir * -1;// trace in the opposite direction the shot came from (the direction the shot is going)
+
+		vecTraceDir.x += RANDOM_FLOAT( -flNoise, flNoise );
+		vecTraceDir.y += RANDOM_FLOAT( -flNoise, flNoise );
+		vecTraceDir.z += RANDOM_FLOAT( -flNoise, flNoise );
+
+		UTIL_TraceLine( ptr->vecEndPos, ptr->vecEndPos + vecTraceDir * -172, ignore_monsters, ENT(pev), &Bloodtr);
+
+		if ( Bloodtr.flFraction != 1.0 )
+		{
+			UTIL_BloodDecalTrace( &Bloodtr, BloodColor() );
+		}
+	}
+}
