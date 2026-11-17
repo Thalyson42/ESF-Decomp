@@ -5,7 +5,7 @@
 #include "cbase.h"
 #include "player.h"
 #include "gamerules.h"
-#include "multiplay_gamerules.h"
+
 
 #define ESF_ITEM_RESPAWN_TIME 120      // [OK] SDK: 30
 

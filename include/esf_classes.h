@@ -2,6 +2,7 @@
 // [OK] valores lidos do decomp; [?] hierarquia (ascendida herda da forma base) deduzida pelos métodos ausentes.
 #pragma once
 class CBasePlayer;
+void UTIL_SetPlayerModel(CBasePlayer *pPlayer, const char *pszModel);   // [OK] mangled FP11CBasePlayerPCc
 
 class CBaseClass {   // [?] layout: +0 CBasePlayer*, +4 vptr (GCC 2.95); vtable: slots 0..18
 public:

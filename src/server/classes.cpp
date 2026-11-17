@@ -14,7 +14,7 @@ void CBaseClass::SetModel()   // [OK] decomp 0x9f190
     strcpy(model, GetModelName());
     char *infobuffer = g_engfuncs.pfnGetInfoKeyBuffer(m_pPlayer->edict());
     g_engfuncs.pfnSetClientKeyValue(ENTINDEX(m_pPlayer->edict()), infobuffer, "model", model);
-    UTIL_SetPlayerModel(m_pPlayer, model);   // [?] assinatura
+    UTIL_SetPlayerModel(m_pPlayer, model);
 }
 
 const char *CGoku::GetSoundDir() { return "goku"; }

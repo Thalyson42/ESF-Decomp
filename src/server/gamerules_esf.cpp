@@ -5,7 +5,7 @@
 #include "cbase.h"
 #include "player.h"
 #include "gamerules.h"
-#include "multiplay_gamerules.h"
+
 
 void CHalfLifeMultiplay::ClientDisconnected(edict_t *pClient)
 {
@@ -235,7 +235,7 @@ void CHalfLifeMultiplay::Think(void)
 }
 
 // ---- CHalfLifeTeamplay::Think (ESF) [OK] vs decomp 0x1278c0 ----
-#include "teamplay_gamerules.h"
+
 extern int team_scores[]; extern int num_teams;
 extern char BotManager[];                                         // [?] objeto global; +44 = flag "bots ativos"
 extern bool UTIL_IsValidPlayer(CBaseEntity *, int, int);          // [?] assinatura
