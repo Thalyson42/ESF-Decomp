@@ -345,7 +345,21 @@ Schedule_t	slTlkIdleEyecontact[] =
 };
 
 
-// [fora desta etapa: diferente do SDK ou definida em outro arquivo] DEFINE_CUSTOM_SCHEDULES( CTalkMonster );
+// [SDK NÃO CONFERIDA: função livre] 
+DEFINE_CUSTOM_SCHEDULES( CTalkMonster )
+{
+	slIdleResponse,
+	slIdleSpeak,
+	slIdleHello,
+	slIdleSpeakWait,
+	slIdleStopShooting,
+	slMoveAway,
+	slMoveAwayFollow,
+	slMoveAwayFail,
+	slTlkIdleWatchClient,
+	&slTlkIdleWatchClient[ 1 ],
+	slTlkIdleEyecontact,
+};
 
 IMPLEMENT_CUSTOM_SCHEDULES( CTalkMonster, CBaseMonster );
 

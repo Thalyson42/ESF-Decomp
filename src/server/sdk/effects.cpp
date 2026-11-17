@@ -638,7 +638,16 @@ void CLightning::StrikeUse( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_T
 }
 
 
-// [fora desta etapa: diferente do SDK ou definida em outro arquivo] int IsPointEntity( CBaseEntity *pEnt )
+// [SDK NÃO CONFERIDA: função livre] 
+int IsPointEntity( CBaseEntity *pEnt )
+{
+	if ( !pEnt->pev->modelindex )
+		return 1;
+	if ( FClassnameIs( pEnt->pev, "info_target" ) || FClassnameIs( pEnt->pev, "info_landmark" ) || FClassnameIs( pEnt->pev, "path_corner" ) )
+		return 1;
+
+	return 0;
+}
 
 
 // [SDK score 1.0] CLightning::StrikeThink

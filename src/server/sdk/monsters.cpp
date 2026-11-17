@@ -661,11 +661,83 @@ BOOL CBaseMonster::MoveToNode( Activity movementAct, float waitTime, const Vecto
 
 
 #ifdef _DEBUG
-// [fora desta etapa: diferente do SDK ou definida em outro arquivo] void DrawRoute( entvars_t *pev, WayPoint_t *m_Route, int m_iRouteIndex, int r, int g, int 
+// [SDK NÃO CONFERIDA: função livre] 
+void DrawRoute( entvars_t *pev, WayPoint_t *m_Route, int m_iRouteIndex, int r, int g, int b )
+{
+	int			i;
+
+	if ( m_Route[m_iRouteIndex].iType == 0 )
+	{
+		ALERT( at_aiconsole, "Can't draw route!\n" );
+		return;
+	}
+
+//	UTIL_ParticleEffect ( m_Route[ m_iRouteIndex ].vecLocation, g_vecZero, 255, 25 );
+
+	MESSAGE_BEGIN( MSG_BROADCAST, SVC_TEMPENTITY );
+		WRITE_BYTE( TE_BEAMPOINTS);
+		WRITE_COORD( pev->origin.x );
+		WRITE_COORD( pev->origin.y );
+		WRITE_COORD( pev->origin.z );
+		WRITE_COORD( m_Route[ m_iRouteIndex ].vecLocation.x );
+		WRITE_COORD( m_Route[ m_iRouteIndex ].vecLocation.y );
+		WRITE_COORD( m_Route[ m_iRouteIndex ].vecLocation.z );
+
+		WRITE_SHORT( g_sModelIndexLaser );
+		WRITE_BYTE( 0 ); // frame start
+		WRITE_BYTE( 10 ); // framerate
+		WRITE_BYTE( 1 ); // life
+		WRITE_BYTE( 16 );  // width
+		WRITE_BYTE( 0 );   // noise
+		WRITE_BYTE( r );   // r, g, b
+		WRITE_BYTE( g );   // r, g, b
+		WRITE_BYTE( b );   // r, g, b
+		WRITE_BYTE( 255 );	// brightness
+		WRITE_BYTE( 10 );		// speed
+	MESSAGE_END();
+
+	for ( i = m_iRouteIndex ; i < ROUTE_SIZE - 1; i++ )
+	{
+		if ( (m_Route[ i ].iType & bits_MF_IS_GOAL) || (m_Route[ i+1 ].iType == 0) )
+			break;
+
+		
+		MESSAGE_BEGIN( MSG_BROADCAST, SVC_TEMPENTITY );
+			WRITE_BYTE( TE_BEAMPOINTS );
+			WRITE_COORD( m_Route[ i ].vecLocation.x );
+			WRITE_COORD( m_Route[ i ].vecLocation.y );
+			WRITE_COORD( m_Route[ i ].vecLocation.z );
+			WRITE_COORD( m_Route[ i + 1 ].vecLocation.x );
+			WRITE_COORD( m_Route[ i + 1 ].vecLocation.y );
+			WRITE_COORD( m_Route[ i + 1 ].vecLocation.z );
+			WRITE_SHORT( g_sModelIndexLaser );
+			WRITE_BYTE( 0 ); // frame start
+			WRITE_BYTE( 10 ); // framerate
+			WRITE_BYTE( 1 ); // life
+			WRITE_BYTE( 8 );  // width
+			WRITE_BYTE( 0 );   // noise
+			WRITE_BYTE( r );   // r, g, b
+			WRITE_BYTE( g );   // r, g, b
+			WRITE_BYTE( b );   // r, g, b
+			WRITE_BYTE( 255 );	// brightness
+			WRITE_BYTE( 10 );		// speed
+		MESSAGE_END();
+
+//		UTIL_ParticleEffect ( m_Route[ i ].vecLocation, g_vecZero, 255, 25 );
+	}
+}
 #endif
 
 
-// [fora desta etapa: diferente do SDK ou definida em outro arquivo] int ShouldSimplify( int routeType )
+// [SDK NÃO CONFERIDA: função livre] 
+int ShouldSimplify( int routeType )
+{
+	routeType &= ~bits_MF_IS_GOAL;
+
+	if ( (routeType == bits_MF_TO_PATHCORNER) || (routeType & bits_MF_DONT_SIMPLIFY) )
+		return FALSE;
+	return TRUE;
+}
 
 // [SDK score 1.0] CBaseMonster::RouteSimplify
 //=========================================================

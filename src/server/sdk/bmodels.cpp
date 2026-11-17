@@ -39,7 +39,14 @@ extern DLL_GLOBAL Vector		g_vecAttackDir;
 #define		noiseRunning	noise3
 
 #define		SF_PENDULUM_SWING		2	// spawnflag that makes a pendulum a rope swing.
-// [fora desta etapa: diferente do SDK ou definida em outro arquivo] // // BModelOrigin - calculates origin of a bmodel from absmin/size because all bmodel ori
+// [SDK NÃO CONFERIDA: função livre] 
+//
+// BModelOrigin - calculates origin of a bmodel from absmin/size because all bmodel origins are 0 0 0
+//
+Vector VecBModelOrigin( entvars_t* pevBModel )
+{
+	return pevBModel->absmin + ( pevBModel->size * 0.5 );
+}
 
 // =================== FUNC_WALL ==============================================
 

@@ -40,9 +40,49 @@ cvar_t voice_serverdebug = {"voice_serverdebug", "0"};
 // Muted players still can't talk to each other.
 cvar_t sv_alltalk = {"sv_alltalk", "0", FCVAR_SERVER};
 
-// [fora desta etapa: diferente do SDK ou definida em outro arquivo] // ------------------------------------------------------------------------ // // Static h
+// [SDK NÃO CONFERIDA: função livre] 
+// ------------------------------------------------------------------------ //
+// Static helpers.
+// ------------------------------------------------------------------------ //
 
-// [fora desta etapa: diferente do SDK ou definida em outro arquivo] static void VoiceServerDebug( char const *pFmt, ... )
+// Find a player with a case-insensitive name search.
+static CBasePlayer* FindPlayerByName(const char *pTestName)
+{
+	for(int i=1; i <= gpGlobals->maxClients; i++)
+	{
+		edict_t *pEdict = g_engfuncs.pfnPEntityOfEntIndex(i);
+		if(pEdict)
+		{
+			CBaseEntity *pEnt = CBaseEntity::Instance(pEdict);
+			if(pEnt && pEnt->IsPlayer())
+			{			
+				const char *pNetName = STRING(pEnt->pev->netname);
+				if(stricmp(pNetName, pTestName) == 0)
+				{
+					return (CBasePlayer*)pEnt;
+				}
+			}
+		}
+	}
+
+	return NULL;
+}
+
+// [SDK NÃO CONFERIDA: função livre] 
+static void VoiceServerDebug( char const *pFmt, ... )
+{
+	char msg[4096];
+	va_list marker;
+
+	if( !voice_serverdebug.value )
+		return;
+
+	va_start( marker, pFmt );
+	_vsnprintf( msg, sizeof(msg), pFmt, marker );
+	va_end( marker );
+
+	ALERT( at_console, "%s", msg );
+}
 
 
 

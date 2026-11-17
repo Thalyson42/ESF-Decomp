@@ -53,5 +53,5 @@ fi
 INC="-I include -I $B/dlls -I $B/engine -I $B/common -I $B/pm_shared -I $B/public -I $H/game_shared"
 for f in "$@"; do
   echo "== $f"
-  LC_ALL=C g++ -fsyntax-only -fpermissive -w -std=gnu++98 $INC -DLINUX -D_LINUX "$f" 2>&1 | grep -E "error" | cut -c1-170
+  LC_ALL=C g++ -fsyntax-only -fpermissive -w -std=gnu++11 -Dstricmp=strcasecmp -Dstrnicmp=strncasecmp $INC -DLINUX -D_LINUX "$f" 2>&1 | grep -E "error" | cut -c1-170
 done

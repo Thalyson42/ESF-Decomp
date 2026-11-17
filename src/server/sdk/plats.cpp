@@ -346,7 +346,11 @@ void CFuncPlat :: Spawn( )
 
 
 
-// [fora desta etapa: diferente do SDK ou definida em outro arquivo] static void PlatSpawnInsideTrigger(entvars_t* pevPlatform)
+// [SDK NÃO CONFERIDA: função livre] 
+static void PlatSpawnInsideTrigger(entvars_t* pevPlatform)
+{
+	GetClassPtr( (CPlatTrigger *)NULL)->SpawnInsideTrigger( GetClassPtr( (CFuncPlat *)pevPlatform ) );
+}
 		
 
 // [SDK heurística] CPlatTrigger::SpawnInsideTrigger
@@ -1103,10 +1107,25 @@ void CFuncTrackTrain :: Use( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_
 }
 
 
-// [fora desta etapa: diferente do SDK ou definida em outro arquivo] static float Fix( float angle )
+// [SDK NÃO CONFERIDA: função livre] 
+static float Fix( float angle )
+{
+	while ( angle < 0 )
+		angle += 360;
+	while ( angle > 360 )
+		angle -= 360;
+
+	return angle;
+}
 
 
-// [fora desta etapa: diferente do SDK ou definida em outro arquivo] static void FixupAngles( Vector &v )
+// [SDK NÃO CONFERIDA: função livre] 
+static void FixupAngles( Vector &v )
+{
+	v.x = Fix( v.x );
+	v.y = Fix( v.y );
+	v.z = Fix( v.z );
+}
 
 #define TRAIN_STARTPITCH	60
 #define TRAIN_MAXPITCH		200

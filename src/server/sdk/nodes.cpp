@@ -584,14 +584,48 @@ int CGraph :: FindShortestPath ( int *piPath, int iStart, int iDest, int iHull, 
 	return iNumPathNodes;
 }
 
-// [fora desta etapa: diferente do SDK ou definida em outro arquivo] inline ULONG Hash(void *p, int len)
+// [SDK NÃO CONFERIDA: função livre] 
+inline ULONG Hash(void *p, int len)
+{
+	CRC32_t ulCrc;
+	CRC32_INIT(&ulCrc);
+	CRC32_PROCESS_BUFFER(&ulCrc, p, len);
+	return CRC32_FINAL(ulCrc);
+}
 
-// [fora desta etapa: diferente do SDK ou definida em outro arquivo] void inline CalcBounds(int &Lower, int &Upper, int Goal, int Best)
+// [SDK NÃO CONFERIDA: função livre] 
+void inline CalcBounds(int &Lower, int &Upper, int Goal, int Best)
+{
+    int Temp = 2*Goal - Best;
+    if (Best > Goal)
+    {
+        Lower = max(0, Temp);
+        Upper = Best;
+    }
+    else
+    {
+        Upper = min(255, Temp);
+        Lower = Best;
+    }
+}
 
-// [fora desta etapa: diferente do SDK ou definida em outro arquivo] // Convert from [-8192,8192] to [0, 255] // inline int CALC_RANGE(int x, int lower, int up
+// [SDK NÃO CONFERIDA: função livre] 
+// Convert from [-8192,8192] to [0, 255]
+//
+inline int CALC_RANGE(int x, int lower, int upper)
+{
+	return NUM_RANGES*(x-lower)/((upper-lower+1));
+}
 
 
-// [fora desta etapa: diferente do SDK ou definida em outro arquivo] void inline UpdateRange(int &minValue, int &maxValue, int Goal, int Best)
+// [SDK NÃO CONFERIDA: função livre] 
+void inline UpdateRange(int &minValue, int &maxValue, int Goal, int Best)
+{
+    int Lower, Upper;
+    CalcBounds(Lower, Upper, Goal, Best);
+    if (Upper < maxValue) maxValue = Upper;
+    if (minValue < Lower) minValue = Lower;
+}
 
 // [SDK score 1.0] CGraph::CheckNode
 void CGraph :: CheckNode(Vector vecOrigin, int iNode)

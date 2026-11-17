@@ -197,7 +197,29 @@ void CBaseEntity :: SUB_UseTargets( CBaseEntity *pActivator, USE_TYPE useType, f
 }
 
 
-// [fora desta etapa: diferente do SDK ou definida em outro arquivo] void FireTargets( const char *targetName, CBaseEntity *pActivator, CBaseEntity *pCaller, U
+// [SDK NÃO CONFERIDA: função livre] 
+void FireTargets( const char *targetName, CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value )
+{
+	edict_t *pentTarget = NULL;
+	if ( !targetName )
+		return;
+
+	ALERT( at_aiconsole, "Firing: (%s)\n", targetName );
+
+	for (;;)
+	{
+		pentTarget = FIND_ENTITY_BY_TARGETNAME(pentTarget, targetName);
+		if (FNullEnt(pentTarget))
+			break;
+
+		CBaseEntity *pTarget = CBaseEntity::Instance( pentTarget );
+		if ( pTarget && !(pTarget->pev->flags & FL_KILLME) )	// Don't use dying ents
+		{
+			ALERT( at_aiconsole, "Found: %s, firing (%s)\n", STRING(pTarget->pev->classname), targetName );
+			pTarget->Use( pActivator, pCaller, useType, value );
+		}
+	}
+}
 
 LINK_ENTITY_TO_CLASS( DelayedUse, CBaseDelay );
 
@@ -520,6 +542,32 @@ float CBaseToggle :: AxisDelta( int flags, const Vector &angle1, const Vector &a
 }
 
 
-// [fora desta etapa: diferente do SDK ou definida em outro arquivo] /* ============= FEntIsVisible returns TRUE if the passed entity is visible to caller, eve
+// [SDK NÃO CONFERIDA: função livre] 
+/*
+=============
+FEntIsVisible
+
+returns TRUE if the passed entity is visible to caller, even if not infront ()
+=============
+*/
+	BOOL
+FEntIsVisible(
+	entvars_t*		pev,
+	entvars_t*		pevTarget)
+	{
+	Vector vecSpot1 = pev->origin + pev->view_ofs;
+	Vector vecSpot2 = pevTarget->origin + pevTarget->view_ofs;
+	TraceResult tr;
+
+	UTIL_TraceLine(vecSpot1, vecSpot2, ignore_monsters, ENT(pev), &tr);
+	
+	if (tr.fInOpen && tr.fInWater)
+		return FALSE;                   // sight line crossed contents
+
+	if (tr.flFraction == 1)
+		return TRUE;
+
+	return FALSE;
+	}
 
 

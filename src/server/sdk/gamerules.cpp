@@ -115,7 +115,51 @@ BOOL CGameRules::CanHavePlayerItem( CBasePlayer *pPlayer, CBasePlayerItem *pWeap
 
 // [fora desta etapa: diferente do SDK ou definida em outro arquivo] //========================================================= // load the SkillData struct w
 
-// [fora desta etapa: diferente do SDK ou definida em outro arquivo] //========================================================= // instantiate the proper game
+// [SDK NÃO CONFERIDA: função livre] 
+//=========================================================
+// instantiate the proper game rules object
+//=========================================================
+
+CGameRules *InstallGameRules( void )
+{
+	SERVER_COMMAND( "exec game.cfg\n" );
+	SERVER_EXECUTE( );
+
+	if ( !gpGlobals->deathmatch )
+	{
+		// generic half-life
+		g_teamplay = 0;
+		return new CHalfLifeRules;
+	}
+	else
+	{
+		if ( teamplay.value > 0 )
+		{
+			// teamplay
+
+			g_teamplay = 1;
+			return new CHalfLifeTeamplay;
+		}
+
+		if ( sv_busters.value == 1 )
+		{
+			g_teamplay = 0;
+			return new CMultiplayBusters;
+		}
+		else if ((int)gpGlobals->deathmatch == 1)
+		{
+			// vanilla deathmatch
+			g_teamplay = 0;
+			return new CHalfLifeMultiplay;
+		}
+		else
+		{
+			// vanilla deathmatch??
+			g_teamplay = 0;
+			return new CHalfLifeMultiplay;
+		}
+	}
+}
 
 
 

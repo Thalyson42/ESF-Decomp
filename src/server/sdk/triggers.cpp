@@ -713,7 +713,36 @@ void CTriggerCDAudio::Use( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TY
 	PlayTrack();
 }
 
-// [fora desta etapa: diferente do SDK ou definida em outro arquivo] void PlayCDTrack( int iTrack )
+// [SDK NÃO CONFERIDA: função livre] 
+void PlayCDTrack( int iTrack )
+{
+	edict_t *pClient;
+	
+	// manually find the single player. 
+	pClient = g_engfuncs.pfnPEntityOfEntIndex( 1 );
+	
+	// Can't play if the client is not connected!
+	if ( !pClient )
+		return;
+
+	if ( iTrack < -1 || iTrack > 30 )
+	{
+		ALERT ( at_console, "TriggerCDAudio - Track %d out of range\n" );
+		return;
+	}
+
+	if ( iTrack == -1 )
+	{
+		CLIENT_COMMAND ( pClient, "cd stop\n");
+	}
+	else
+	{
+		char string [ 64 ];
+
+		sprintf( string, "cd play %3d\n", iTrack );
+		CLIENT_COMMAND ( pClient, string);
+	}
+}
 
 
 // [SDK score 1.0] CTriggerCDAudio::PlayTrack
@@ -1588,7 +1617,11 @@ int CChangeLevel::AddTransitionToList( LEVELLIST *pLevelList, int listCount, con
 	return 1;
 }
 
-// [fora desta etapa: diferente do SDK ou definida em outro arquivo] int BuildChangeList( LEVELLIST *pLevelList, int maxList )
+// [SDK NÃO CONFERIDA: função livre] 
+int BuildChangeList( LEVELLIST *pLevelList, int maxList )
+{
+	return CChangeLevel::ChangeList( pLevelList, maxList );
+}
 
 
 // [SDK heurística] CChangeLevel::InTransitionVolume
@@ -1737,7 +1770,38 @@ int CChangeLevel::ChangeList( LEVELLIST *pLevelList, int maxList )
 	return count;
 }
 
-// [fora desta etapa: diferente do SDK ou definida em outro arquivo] /* go to the next level for deathmatch only called if a time or frag limit has expired */ 
+// [SDK NÃO CONFERIDA: função livre] 
+/*
+go to the next level for deathmatch
+only called if a time or frag limit has expired
+*/
+void NextLevel( void )
+{
+	edict_t* pent;
+	CChangeLevel *pChange;
+	
+	// find a trigger_changelevel
+	pent = FIND_ENTITY_BY_CLASSNAME(NULL, "trigger_changelevel");
+	
+	// go back to start if no trigger_changelevel
+	if (FNullEnt(pent))
+	{
+		gpGlobals->mapname = ALLOC_STRING("start");
+		pChange = GetClassPtr( (CChangeLevel *)NULL );
+		strcpy(pChange->m_szMapName, "start");
+	}
+	else
+		pChange = GetClassPtr( (CChangeLevel *)VARS(pent));
+	
+	strcpy(st_szNextMap, pChange->m_szMapName);
+	g_fGameOver = TRUE;
+	
+	if (pChange->pev->nextthink < gpGlobals->time)
+	{
+		pChange->SetThink( &CChangeLevel::ExecuteChangeLevel );
+		pChange->pev->nextthink = gpGlobals->time + 0.1;
+	}
+}
 
 
 // ============================== LADDER =======================================

@@ -263,4 +263,21 @@ void CEnvExplosion::Smoke( void )
 }
 
 
-// [fora desta etapa: diferente do SDK ou definida em outro arquivo] // HACKHACK -- create one of these and fake a keyvalue to get the right explosion setup vo
+// [SDK NÃO CONFERIDA: função livre] 
+// HACKHACK -- create one of these and fake a keyvalue to get the right explosion setup
+void ExplosionCreate( const Vector &center, const Vector &angles, edict_t *pOwner, int magnitude, BOOL doDamage )
+{
+	KeyValueData	kvd;
+	char			buf[128];
+
+	CBaseEntity *pExplosion = CBaseEntity::Create( "env_explosion", center, angles, pOwner );
+	sprintf( buf, "%3d", magnitude );
+	kvd.szKeyName = "iMagnitude";
+	kvd.szValue = buf;
+	pExplosion->KeyValue( &kvd );
+	if ( !doDamage )
+		pExplosion->pev->spawnflags |= SF_ENVEXPLOSION_NODAMAGE;
+
+	pExplosion->Spawn();
+	pExplosion->Use( NULL, NULL, USE_TOGGLE, 0 );
+}

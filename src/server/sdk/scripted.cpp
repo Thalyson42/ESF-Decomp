@@ -697,7 +697,32 @@ int	CCineMonster::IgnoreConditions( void )
 }
 
 
-// [fora desta etapa: diferente do SDK ou definida em outro arquivo] void ScriptEntityCancel( edict_t *pentCine )
+// [SDK NÃO CONFERIDA: função livre] 
+void ScriptEntityCancel( edict_t *pentCine )
+{
+	// make sure they are a scripted_sequence
+	if (FClassnameIs( pentCine, CLASSNAME ))
+	{
+		CCineMonster *pCineTarget = GetClassPtr((CCineMonster *)VARS(pentCine));
+		// make sure they have a monster in mind for the script
+		CBaseEntity		*pEntity = pCineTarget->m_hTargetEnt;
+		CBaseMonster	*pTarget = NULL;
+		if ( pEntity )
+			pTarget = pEntity->MyMonsterPointer();
+		
+		if (pTarget)
+		{
+			// make sure their monster is actually playing a script
+			if ( pTarget->m_MonsterState == MONSTERSTATE_SCRIPT )
+			{
+				// tell them do die
+				pTarget->m_scriptState = CCineMonster::SCRIPT_CLEANUP;
+				// do it now
+				pTarget->CineCleanup( );
+			}
+		}
+	}
+}
 
 
 // [SDK score 0.67] CCineMonster::CancelScript

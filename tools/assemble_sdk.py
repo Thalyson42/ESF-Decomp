@@ -165,6 +165,8 @@ for fn, lst in sorted(byfile.items()):
         hit = [k for k in keep if a0 <= k < b0 or k == a0]
         if hit:
             out_parts.append(keep[hit[0]][1] + text[a0:b0])
+        elif '::' not in text[a0:b0].split('{')[0]:     # função livre (fora das classes): mantida, não faz parte do sdk_match.csv
+            out_parts.append('// [SDK NÃO CONFERIDA: função livre] \n' + text[a0:b0])
         else:
             sig = ' '.join(text[a0:b0].split('{')[0].split())[:90]
             out_parts.append('// [fora desta etapa: diferente do SDK ou definida em outro arquivo] ' + sig)

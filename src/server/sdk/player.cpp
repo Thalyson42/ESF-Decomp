@@ -194,7 +194,54 @@ int gmsgStatusValue = 0;
 
 
 
-// [fora desta etapa: diferente do SDK ou definida em outro arquivo] void LinkUserMessages( void )
+// [SDK NÃO CONFERIDA: função livre] 
+void LinkUserMessages( void )
+{
+	// Already taken care of?
+	if ( gmsgSelAmmo )
+	{
+		return;
+	}
+
+	gmsgSelAmmo = REG_USER_MSG("SelAmmo", sizeof(SelAmmo));
+	gmsgCurWeapon = REG_USER_MSG("CurWeapon", 3);
+	gmsgGeigerRange = REG_USER_MSG("Geiger", 1);
+	gmsgFlashlight = REG_USER_MSG("Flashlight", 2);
+	gmsgFlashBattery = REG_USER_MSG("FlashBat", 1);
+	gmsgHealth = REG_USER_MSG( "Health", 1 );
+	gmsgDamage = REG_USER_MSG( "Damage", 12 );
+	gmsgBattery = REG_USER_MSG( "Battery", 2);
+	gmsgTrain = REG_USER_MSG( "Train", 1);
+	//gmsgHudText = REG_USER_MSG( "HudTextPro", -1 );
+	gmsgHudText = REG_USER_MSG( "HudText", -1 ); // we don't use the message but 3rd party addons may!
+	gmsgSayText = REG_USER_MSG( "SayText", -1 );
+	gmsgTextMsg = REG_USER_MSG( "TextMsg", -1 );
+	gmsgWeaponList = REG_USER_MSG("WeaponList", -1);
+	gmsgResetHUD = REG_USER_MSG("ResetHUD", 1);		// called every respawn
+	gmsgInitHUD = REG_USER_MSG("InitHUD", 0 );		// called every time a new player joins the server
+	gmsgShowGameTitle = REG_USER_MSG("GameTitle", 1);
+	gmsgDeathMsg = REG_USER_MSG( "DeathMsg", -1 );
+	gmsgScoreInfo = REG_USER_MSG( "ScoreInfo", 9 );
+	gmsgTeamInfo = REG_USER_MSG( "TeamInfo", -1 );  // sets the name of a player's team
+	gmsgTeamScore = REG_USER_MSG( "TeamScore", -1 );  // sets the score of a team on the scoreboard
+	gmsgGameMode = REG_USER_MSG( "GameMode", 1 );
+	gmsgMOTD = REG_USER_MSG( "MOTD", -1 );
+	gmsgServerName = REG_USER_MSG( "ServerName", -1 );
+	gmsgAmmoPickup = REG_USER_MSG( "AmmoPickup", 2 );
+	gmsgWeapPickup = REG_USER_MSG( "WeapPickup", 1 );
+	gmsgItemPickup = REG_USER_MSG( "ItemPickup", -1 );
+	gmsgHideWeapon = REG_USER_MSG( "HideWeapon", 1 );
+	gmsgSetFOV = REG_USER_MSG( "SetFOV", 1 );
+	gmsgShowMenu = REG_USER_MSG( "ShowMenu", -1 );
+	gmsgShake = REG_USER_MSG("ScreenShake", sizeof(ScreenShake));
+	gmsgFade = REG_USER_MSG("ScreenFade", sizeof(ScreenFade));
+	gmsgAmmoX = REG_USER_MSG("AmmoX", 2);
+	gmsgTeamNames = REG_USER_MSG( "TeamNames", -1 );
+
+	gmsgStatusText = REG_USER_MSG("StatusText", -1);
+	gmsgStatusValue = REG_USER_MSG("StatusValue", 3); 
+
+}
 
 LINK_ENTITY_TO_CLASS( player, CBasePlayer );
 
@@ -202,19 +249,94 @@ LINK_ENTITY_TO_CLASS( player, CBasePlayer );
 
 // [fora desta etapa: diferente do SDK ou definida em outro arquivo] void CBasePlayer :: Pain( void )
 
-// [fora desta etapa: diferente do SDK ou definida em outro arquivo] /* * */ Vector VecVelocityForDamage(float flDamage)
+// [SDK NÃO CONFERIDA: função livre] 
+/* 
+ *
+ */
+Vector VecVelocityForDamage(float flDamage)
+{
+	Vector vec(RANDOM_FLOAT(-100,100), RANDOM_FLOAT(-100,100), RANDOM_FLOAT(200,300));
+
+	if (flDamage > -50)
+		vec = vec * 0.7;
+	else if (flDamage > -200)
+		vec = vec * 2;
+	else
+		vec = vec * 10;
+	
+	return vec;
+}
 
 #if 0 /*
-// [fora desta etapa: diferente do SDK ou definida em outro arquivo] static void ThrowGib(entvars_t *pev, char *szGibModel, float flDamage)
+// [SDK NÃO CONFERIDA: função livre] 
+static void ThrowGib(entvars_t *pev, char *szGibModel, float flDamage)
+{
+	edict_t *pentNew = CREATE_ENTITY();
+	entvars_t *pevNew = VARS(pentNew);
+
+	pevNew->origin = pev->origin;
+	SET_MODEL(ENT(pevNew), szGibModel);
+	UTIL_SetSize(pevNew, g_vecZero, g_vecZero);
+
+	pevNew->velocity		= VecVelocityForDamage(flDamage);
+	pevNew->movetype		= MOVETYPE_BOUNCE;
+	pevNew->solid			= SOLID_NOT;
+	pevNew->avelocity.x		= RANDOM_FLOAT(0,600);
+	pevNew->avelocity.y		= RANDOM_FLOAT(0,600);
+	pevNew->avelocity.z		= RANDOM_FLOAT(0,600);
+	CHANGE_METHOD(ENT(pevNew), em_think, SUB_Remove);
+	pevNew->ltime		= gpGlobals->time;
+	pevNew->nextthink	= gpGlobals->time + RANDOM_FLOAT(10,20);
+	pevNew->frame		= 0;
+	pevNew->flags		= 0;
+}
 	
 	
-// [fora desta etapa: diferente do SDK ou definida em outro arquivo] static void ThrowHead(entvars_t *pev, char *szGibModel, floatflDamage)
+// [SDK NÃO CONFERIDA: função livre] 
+static void ThrowHead(entvars_t *pev, char *szGibModel, floatflDamage)
+{
+	SET_MODEL(ENT(pev), szGibModel);
+	pev->frame			= 0;
+	pev->nextthink		= -1;
+	pev->movetype		= MOVETYPE_BOUNCE;
+	pev->takedamage		= DAMAGE_NO;
+	pev->solid			= SOLID_NOT;
+	pev->view_ofs		= Vector(0,0,8);
+	UTIL_SetSize(pev, Vector(-16,-16,0), Vector(16,16,56));
+	pev->velocity		= VecVelocityForDamage(flDamage);
+	pev->avelocity		= RANDOM_FLOAT(-1,1) * Vector(0,600,0);
+	pev->origin.z -= 24;
+	ClearBits(pev->flags, FL_ONGROUND);
+}
 
 
 */ 
 #endif
 
-// [fora desta etapa: diferente do SDK ou definida em outro arquivo] int TrainSpeed(int iSpeed, int iMax)
+// [SDK NÃO CONFERIDA: função livre] 
+int TrainSpeed(int iSpeed, int iMax)
+{
+	float fSpeed, fMax;
+	int iRet = 0;
+
+	fMax = (float)iMax;
+	fSpeed = iSpeed;
+
+	fSpeed = fSpeed/fMax;
+
+	if (iSpeed < 0)
+		iRet = TRAIN_BACK;
+	else if (iSpeed == 0)
+		iRet = TRAIN_NEUTRAL;
+	else if (fSpeed < 0.33)
+		iRet = TRAIN_SLOW;
+	else if (fSpeed < 0.66)
+		iRet = TRAIN_MEDIUM;
+	else
+		iRet = TRAIN_FAST;
+
+	return iRet;
+}
 
 // [fora desta etapa: diferente do SDK ou definida em outro arquivo] void CBasePlayer :: DeathSound( void )
 
@@ -1048,7 +1170,24 @@ void CBasePlayer::PlayerUse ( void )
 
 
 
-// [fora desta etapa: diferente do SDK ou definida em outro arquivo] // This is a glorious hack to find free space when you've crouched into some solid space /
+// [SDK NÃO CONFERIDA: função livre] 
+// This is a glorious hack to find free space when you've crouched into some solid space
+// Our crouching collisions do not work correctly for some reason and this is easier
+// than fixing the problem :(
+void FixPlayerCrouchStuck( edict_t *pPlayer )
+{
+	TraceResult trace;
+
+	// Move up as many as 18 pixels if the player is stuck.
+	for ( int i = 0; i < 18; i++ )
+	{
+		UTIL_TraceHull( pPlayer->v.origin, pPlayer->v.origin, dont_ignore_monsters, head_hull, pPlayer, &trace );
+		if ( trace.fStartSolid )
+			pPlayer->v.origin.z ++;
+		else
+			break;
+	}
+}
 
 // [fora desta etapa: diferente do SDK ou definida em outro arquivo] void CBasePlayer::Duck( )
 
@@ -1394,7 +1533,24 @@ Play suit update if it's time
  
 // [fora desta etapa: diferente do SDK ou definida em outro arquivo] // add sentence to suit playlist queue. if fgroup is true, then // name is a sentence grou
 
-// [fora desta etapa: diferente do SDK ou definida em outro arquivo] /* ================ CheckPowerups Check for turning off powerups GLOBALS ASSUMED SET: g_ul
+// [SDK NÃO CONFERIDA: função livre] 
+/*
+================
+CheckPowerups
+
+Check for turning off powerups
+
+GLOBALS ASSUMED SET:  g_ulModelIndexPlayer
+================
+*/
+	static void
+CheckPowerups(entvars_t *pev)
+{
+	if (pev->health <= 0)
+		return;
+
+	pev->modelindex = g_ulModelIndexPlayer;    // don't use eyes
+}
 
 
 // [SDK score 0.5] CBasePlayer::UpdatePlayerSound
@@ -1521,13 +1677,143 @@ void CBasePlayer :: UpdatePlayerSound ( void )
 // [fora desta etapa: diferente do SDK ou definida em outro arquivo] void CBasePlayer::PostThink()
 
 
-// [fora desta etapa: diferente do SDK ou definida em outro arquivo] // checks if the spot is clear of players BOOL IsSpawnPointValid( CBaseEntity *pPlayer, CB
+// [SDK NÃO CONFERIDA: função livre] 
+// checks if the spot is clear of players
+BOOL IsSpawnPointValid( CBaseEntity *pPlayer, CBaseEntity *pSpot )
+{
+	CBaseEntity *ent = NULL;
+
+	if ( !pSpot->IsTriggered( pPlayer ) )
+	{
+		return FALSE;
+	}
+
+	while ( (ent = UTIL_FindEntityInSphere( ent, pSpot->pev->origin, 128 )) != NULL )
+	{
+		// if ent is a client, don't spawn on 'em
+		if ( ent->IsPlayer() && ent != pPlayer )
+			return FALSE;
+	}
+
+	return TRUE;
+}
 
 
 DLL_GLOBAL CBaseEntity	*g_pLastSpawn;
-// [fora desta etapa: diferente do SDK ou definida em outro arquivo] inline int FNullEnt( CBaseEntity *ent )
+// [SDK NÃO CONFERIDA: função livre] 
+inline int FNullEnt( CBaseEntity *ent ) { return (ent == NULL) || FNullEnt( ent->edict() ); }
 
-// [fora desta etapa: diferente do SDK ou definida em outro arquivo] /* ============ EntSelectSpawnPoint Returns the entity to spawn at USES AND SETS GLOBAL g_
+// [SDK NÃO CONFERIDA: função livre] 
+/*
+============
+EntSelectSpawnPoint
+
+Returns the entity to spawn at
+
+USES AND SETS GLOBAL g_pLastSpawn
+============
+*/
+edict_t *EntSelectSpawnPoint( CBaseEntity *pPlayer )
+{
+	CBaseEntity *pSpot;
+	edict_t		*player;
+
+	int nNumRandomSpawnsToTry = 10;
+
+	player = pPlayer->edict();
+
+// choose a info_player_deathmatch point
+	if (g_pGameRules->IsCoOp())
+	{
+		pSpot = UTIL_FindEntityByClassname( g_pLastSpawn, "info_player_coop");
+		if ( !FNullEnt(pSpot) )
+			goto ReturnSpot;
+		pSpot = UTIL_FindEntityByClassname( g_pLastSpawn, "info_player_start");
+		if ( !FNullEnt(pSpot) ) 
+			goto ReturnSpot;
+	}
+	else if ( g_pGameRules->IsDeathmatch() )
+	{
+		if (NULL == g_pLastSpawn)
+		{
+			int nNumSpawnPoints = 0;
+			CBaseEntity* pEnt = UTIL_FindEntityByClassname(NULL, "info_player_deathmatch");
+			while (NULL != pEnt)
+			{
+				nNumSpawnPoints++;
+				pEnt = UTIL_FindEntityByClassname(pEnt, "info_player_deathmatch");
+			}
+			nNumRandomSpawnsToTry = nNumSpawnPoints;
+		}
+		
+		pSpot = g_pLastSpawn;
+		// Randomize the start spot
+		for ( int i = RANDOM_LONG(1, nNumRandomSpawnsToTry - 1); i > 0; i-- )
+			pSpot = UTIL_FindEntityByClassname( pSpot, "info_player_deathmatch" );
+		if ( FNullEnt( pSpot ) )  // skip over the null point
+			pSpot = UTIL_FindEntityByClassname( pSpot, "info_player_deathmatch" );
+
+		CBaseEntity *pFirstSpot = pSpot;
+
+		do 
+		{
+			if ( pSpot )
+			{
+				// check if pSpot is valid
+				if ( IsSpawnPointValid( pPlayer, pSpot ) )
+				{
+					if ( pSpot->pev->origin == Vector( 0, 0, 0 ) )
+					{
+						pSpot = UTIL_FindEntityByClassname( pSpot, "info_player_deathmatch" );
+						continue;
+					}
+
+					// if so, go to pSpot
+					goto ReturnSpot;
+				}
+			}
+			// increment pSpot
+			pSpot = UTIL_FindEntityByClassname( pSpot, "info_player_deathmatch" );
+		} while ( pSpot != pFirstSpot ); // loop if we're not back to the start
+
+		// we haven't found a place to spawn yet,  so kill any guy at the first spawn point and spawn there
+		if ( !FNullEnt( pSpot ) )
+		{
+			CBaseEntity *ent = NULL;
+			while ( (ent = UTIL_FindEntityInSphere( ent, pSpot->pev->origin, 128 )) != NULL )
+			{
+				// if ent is a client, kill em (unless they are ourselves)
+				if ( ent->IsPlayer() && !(ent->edict() == player) )
+					ent->TakeDamage( VARS(INDEXENT(0)), VARS(INDEXENT(0)), 300, DMG_GENERIC );
+			}
+			goto ReturnSpot;
+		}
+	}
+
+	// If startspot is set, (re)spawn there.
+	if ( FStringNull( gpGlobals->startspot ) || !strlen(STRING(gpGlobals->startspot)))
+	{
+		pSpot = UTIL_FindEntityByClassname(NULL, "info_player_start");
+		if ( !FNullEnt(pSpot) )
+			goto ReturnSpot;
+	}
+	else
+	{
+		pSpot = UTIL_FindEntityByTargetname( NULL, STRING(gpGlobals->startspot) );
+		if ( !FNullEnt(pSpot) )
+			goto ReturnSpot;
+	}
+
+ReturnSpot:
+	if ( FNullEnt( pSpot ) )
+	{
+		ALERT(at_error, "PutClientInServer: no info_player_start on level");
+		return INDEXENT(0);
+	}
+
+	g_pLastSpawn = pSpot;
+	return pSpot->edict();
+}
 
 // [SDK score 0.86] CBasePlayer::Spawn
 void CBasePlayer::Spawn( void )
@@ -2043,7 +2329,20 @@ void CBasePlayer::GiveNamedItem( const char *pszName )
 
 
 
-// [fora desta etapa: diferente do SDK ou definida em outro arquivo] CBaseEntity *FindEntityForward( CBaseEntity *pMe )
+// [SDK NÃO CONFERIDA: função livre] 
+CBaseEntity *FindEntityForward( CBaseEntity *pMe )
+{
+	TraceResult tr;
+
+	UTIL_MakeVectors(pMe->pev->v_angle);
+	UTIL_TraceLine(pMe->pev->origin + pMe->pev->view_ofs,pMe->pev->origin + pMe->pev->view_ofs + gpGlobals->v_forward * 8192,dont_ignore_monsters, pMe->edict(), &tr );
+	if ( tr.flFraction != 1.0 && !FNullEnt( tr.pHit) )
+	{
+		CBaseEntity *pHit = CBaseEntity::Instance( tr.pHit );
+		return pHit;
+	}
+	return NULL;
+}
 
 
 // [fora desta etapa: diferente do SDK ou definida em outro arquivo] BOOL CBasePlayer :: FlashlightIsOn( void )

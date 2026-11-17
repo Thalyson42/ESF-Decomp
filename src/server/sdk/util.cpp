@@ -33,7 +33,15 @@
 #include "weapons.h"
 #include "gamerules.h"
 
-// [fora desta etapa: diferente do SDK ou definida em outro arquivo] float UTIL_WeaponTimeBase( void )
+// [SDK NÃO CONFERIDA: função livre] 
+float UTIL_WeaponTimeBase( void )
+{
+#if defined( CLIENT_WEAPONS )
+	return 0.0;
+#else
+	return gpGlobals->time;
+#endif
+}
 
 static unsigned int glSeed = 0; 
 
@@ -57,22 +65,127 @@ unsigned int seed_table[ 256 ] =
 	25678, 18555, 13256, 23316, 22407, 16727, 991, 9236, 5373, 29402, 6117, 15241, 27715, 19291, 19888, 19847
 };
 
-// [fora desta etapa: diferente do SDK ou definida em outro arquivo] unsigned int U_Random( void ) 
+// [SDK NÃO CONFERIDA: função livre] 
+unsigned int U_Random( void ) 
+{ 
+	glSeed *= 69069; 
+	glSeed += seed_table[ glSeed & 0xff ];
+ 
+	return ( ++glSeed & 0x0fffffff ); 
+} 
 
-// [fora desta etapa: diferente do SDK ou definida em outro arquivo] void U_Srand( unsigned int seed )
+// [SDK NÃO CONFERIDA: função livre] 
+void U_Srand( unsigned int seed )
+{
+	glSeed = seed_table[ seed & 0xff ];
+}
 
-// [fora desta etapa: diferente do SDK ou definida em outro arquivo] /* ===================== UTIL_SharedRandomLong ===================== */ int UTIL_SharedRan
+// [SDK NÃO CONFERIDA: função livre] 
+/*
+=====================
+UTIL_SharedRandomLong
+=====================
+*/
+int UTIL_SharedRandomLong( unsigned int seed, int low, int high )
+{
+	unsigned int range;
 
-// [fora desta etapa: diferente do SDK ou definida em outro arquivo] /* ===================== UTIL_SharedRandomFloat ===================== */ float UTIL_Shared
+	U_Srand( (int)seed + low + high );
 
-// [fora desta etapa: diferente do SDK ou definida em outro arquivo] void UTIL_ParametricRocket( entvars_t *pev, Vector vecOrigin, Vector vecAngles, edict_t *o
+	range = high - low + 1;
+	if ( !(range - 1) )
+	{
+		return low;
+	}
+	else
+	{
+		int offset;
+		int rnum;
+
+		rnum = U_Random();
+
+		offset = rnum % range;
+
+		return (low + offset);
+	}
+}
+
+// [SDK NÃO CONFERIDA: função livre] 
+/*
+=====================
+UTIL_SharedRandomFloat
+=====================
+*/
+float UTIL_SharedRandomFloat( unsigned int seed, float low, float high )
+{
+	//
+	unsigned int range;
+
+	U_Srand( (int)seed + *(int *)&low + *(int *)&high );
+
+	U_Random();
+	U_Random();
+
+	range = high - low;
+	if ( !range )
+	{
+		return low;
+	}
+	else
+	{
+		int tensixrand;
+		float offset;
+
+		tensixrand = U_Random() & 65535;
+
+		offset = (float)tensixrand / 65536.0;
+
+		return (low + offset * range );
+	}
+}
+
+// [SDK NÃO CONFERIDA: função livre] 
+void UTIL_ParametricRocket( entvars_t *pev, Vector vecOrigin, Vector vecAngles, edict_t *owner )
+{	
+	pev->startpos = vecOrigin;
+	// Trace out line to end pos
+	TraceResult tr;
+	UTIL_MakeVectors( vecAngles );
+	UTIL_TraceLine( pev->startpos, pev->startpos + gpGlobals->v_forward * 8192, ignore_monsters, owner, &tr);
+	pev->endpos = tr.vecEndPos;
+
+	// Now compute how long it will take based on current velocity
+	Vector vecTravel = pev->endpos - pev->startpos;
+	float travelTime = 0.0;
+	if ( pev->velocity.Length() > 0 )
+	{
+		travelTime = vecTravel.Length() / pev->velocity.Length();
+	}
+	pev->starttime = gpGlobals->time;
+	pev->impacttime = gpGlobals->time + travelTime;
+}
 
 int g_groupmask = 0;
 int g_groupop = 0;
 
-// [fora desta etapa: diferente do SDK ou definida em outro arquivo] // Normal overrides void UTIL_SetGroupTrace( int groupmask, int op )
+// [SDK NÃO CONFERIDA: função livre] 
+// Normal overrides
+void UTIL_SetGroupTrace( int groupmask, int op )
+{
+	g_groupmask		= groupmask;
+	g_groupop		= op;
 
-// [fora desta etapa: diferente do SDK ou definida em outro arquivo] void UTIL_UnsetGroupTrace( void )
+	ENGINE_SETGROUPMASK( g_groupmask, g_groupop );
+}
+
+// [SDK NÃO CONFERIDA: função livre] 
+void UTIL_UnsetGroupTrace( void )
+{
+	g_groupmask		= 0;
+	g_groupop		= 0;
+
+	ENGINE_SETGROUPMASK( 0, 0 );
+}
 
 // [fora desta etapa: diferente do SDK ou definida em outro arquivo] // Smart version, it'll clean itself up when it pops off stack UTIL_GroupTrace::UTIL_Group
 
@@ -193,214 +306,1412 @@ TYPEDESCRIPTION	gEntvarsDescription[] =
 
 
 #ifdef	DEBUG
-// [fora desta etapa: diferente do SDK ou definida em outro arquivo] edict_t *DBG_EntOfVars( const entvars_t *pev )
+// [SDK NÃO CONFERIDA: função livre] 
+edict_t *DBG_EntOfVars( const entvars_t *pev )
+{
+	if (pev->pContainingEntity != NULL)
+		return pev->pContainingEntity;
+	ALERT(at_console, "entvars_t pContainingEntity is NULL, calling into engine");
+	edict_t* pent = (*g_engfuncs.pfnFindEntityByVars)((entvars_t*)pev);
+	if (pent == NULL)
+		ALERT(at_console, "DAMN!  Even the engine couldn't FindEntityByVars!");
+	((entvars_t *)pev)->pContainingEntity = pent;
+	return pent;
+}
 #endif //DEBUG
 
 
 #ifdef	DEBUG
-	// [fora desta etapa: diferente do SDK ou definida em outro arquivo] void DBG_AssertFunction( BOOL fExpr, const char* szExpr, const char* szFile, int szLine, c
+	// [SDK NÃO CONFERIDA: função livre] 
+void
+DBG_AssertFunction(
+	BOOL		fExpr,
+	const char*	szExpr,
+	const char*	szFile,
+	int			szLine,
+	const char*	szMessage)
+	{
+	if (fExpr)
+		return;
+	char szOut[512];
+	if (szMessage != NULL)
+		sprintf(szOut, "ASSERT FAILED:\n %s \n(%s@%d)\n%s", szExpr, szFile, szLine, szMessage);
+	else
+		sprintf(szOut, "ASSERT FAILED:\n %s \n(%s@%d)", szExpr, szFile, szLine);
+	ALERT(at_console, szOut);
+	}
 #endif	// DEBUG
 
-// [fora desta etapa: diferente do SDK ou definida em outro arquivo] BOOL UTIL_GetNextBestWeapon( CBasePlayer *pPlayer, CBasePlayerItem *pCurrentWeapon )
+// [SDK NÃO CONFERIDA: função livre] 
+BOOL UTIL_GetNextBestWeapon( CBasePlayer *pPlayer, CBasePlayerItem *pCurrentWeapon )
+{
+	return g_pGameRules->GetNextBestWeapon( pPlayer, pCurrentWeapon );
+}
 
-// [fora desta etapa: diferente do SDK ou definida em outro arquivo] // ripped this out of the engine float UTIL_AngleMod(float a)
+// [SDK NÃO CONFERIDA: função livre] 
+// ripped this out of the engine
+float	UTIL_AngleMod(float a)
+{
+	if (a < 0)
+	{
+		a = a + 360 * ((int)(a / 360) + 1);
+	}
+	else if (a >= 360)
+	{
+		a = a - 360 * ((int)(a / 360));
+	}
+	// a = (360.0/65536) * ((int)(a*(65536/360.0)) & 65535);
+	return a;
+}
 
-// [fora desta etapa: diferente do SDK ou definida em outro arquivo] float UTIL_AngleDiff( float destAngle, float srcAngle )
+// [SDK NÃO CONFERIDA: função livre] 
+float UTIL_AngleDiff( float destAngle, float srcAngle )
+{
+	float delta;
 
-// [fora desta etapa: diferente do SDK ou definida em outro arquivo] Vector UTIL_VecToAngles( const Vector &vec )
+	delta = destAngle - srcAngle;
+	if ( destAngle > srcAngle )
+	{
+		if ( delta >= 180 )
+			delta -= 360;
+	}
+	else
+	{
+		if ( delta <= -180 )
+			delta += 360;
+	}
+	return delta;
+}
+
+// [SDK NÃO CONFERIDA: função livre] 
+Vector UTIL_VecToAngles( const Vector &vec )
+{
+	float rgflVecOut[3];
+	VEC_TO_ANGLES(vec, rgflVecOut);
+	return Vector(rgflVecOut);
+}
 	
-// [fora desta etapa: diferente do SDK ou definida em outro arquivo] // float UTIL_MoveToOrigin( edict_t *pent, const Vector vecGoal, float flDist, int iMoveTy
+// [SDK NÃO CONFERIDA: função livre] 
+//	float UTIL_MoveToOrigin( edict_t *pent, const Vector vecGoal, float flDist, int iMoveType )
+void UTIL_MoveToOrigin( edict_t *pent, const Vector &vecGoal, float flDist, int iMoveType )
+{
+	float rgfl[3];
+	vecGoal.CopyToArray(rgfl);
+//		return MOVE_TO_ORIGIN ( pent, rgfl, flDist, iMoveType ); 
+	MOVE_TO_ORIGIN ( pent, rgfl, flDist, iMoveType ); 
+}
 
 
-// [fora desta etapa: diferente do SDK ou definida em outro arquivo] int UTIL_EntitiesInBox( CBaseEntity **pList, int listMax, const Vector &mins, const Vector
+// [SDK NÃO CONFERIDA: função livre] 
+int UTIL_EntitiesInBox( CBaseEntity **pList, int listMax, const Vector &mins, const Vector &maxs, int flagMask )
+{
+	edict_t		*pEdict = g_engfuncs.pfnPEntityOfEntIndex( 1 );
+	CBaseEntity *pEntity;
+	int			count;
+
+	count = 0;
+
+	if ( !pEdict )
+		return count;
+
+	for ( int i = 1; i < gpGlobals->maxEntities; i++, pEdict++ )
+	{
+		if ( pEdict->free )	// Not in use
+			continue;
+		
+		if ( flagMask && !(pEdict->v.flags & flagMask) )	// Does it meet the criteria?
+			continue;
+
+		if ( mins.x > pEdict->v.absmax.x ||
+			 mins.y > pEdict->v.absmax.y ||
+			 mins.z > pEdict->v.absmax.z ||
+			 maxs.x < pEdict->v.absmin.x ||
+			 maxs.y < pEdict->v.absmin.y ||
+			 maxs.z < pEdict->v.absmin.z )
+			 continue;
+
+		pEntity = CBaseEntity::Instance(pEdict);
+		if ( !pEntity )
+			continue;
+
+		pList[ count ] = pEntity;
+		count++;
+
+		if ( count >= listMax )
+			return count;
+	}
+
+	return count;
+}
 
 
-// [fora desta etapa: diferente do SDK ou definida em outro arquivo] int UTIL_MonstersInSphere( CBaseEntity **pList, int listMax, const Vector &center, float r
+// [SDK NÃO CONFERIDA: função livre] 
+int UTIL_MonstersInSphere( CBaseEntity **pList, int listMax, const Vector &center, float radius )
+{
+	edict_t		*pEdict = g_engfuncs.pfnPEntityOfEntIndex( 1 );
+	CBaseEntity *pEntity;
+	int			count;
+	float		distance, delta;
+
+	count = 0;
+	float radiusSquared = radius * radius;
+
+	if ( !pEdict )
+		return count;
+
+	for ( int i = 1; i < gpGlobals->maxEntities; i++, pEdict++ )
+	{
+		if ( pEdict->free )	// Not in use
+			continue;
+		
+		if ( !(pEdict->v.flags & (FL_CLIENT|FL_MONSTER)) )	// Not a client/monster ?
+			continue;
+
+		// Use origin for X & Y since they are centered for all monsters
+		// Now X
+		delta = center.x - pEdict->v.origin.x;//(pEdict->v.absmin.x + pEdict->v.absmax.x)*0.5;
+		delta *= delta;
+
+		if ( delta > radiusSquared )
+			continue;
+		distance = delta;
+		
+		// Now Y
+		delta = center.y - pEdict->v.origin.y;//(pEdict->v.absmin.y + pEdict->v.absmax.y)*0.5;
+		delta *= delta;
+
+		distance += delta;
+		if ( distance > radiusSquared )
+			continue;
+
+		// Now Z
+		delta = center.z - (pEdict->v.absmin.z + pEdict->v.absmax.z)*0.5;
+		delta *= delta;
+
+		distance += delta;
+		if ( distance > radiusSquared )
+			continue;
+
+		pEntity = CBaseEntity::Instance(pEdict);
+		if ( !pEntity )
+			continue;
+
+		pList[ count ] = pEntity;
+		count++;
+
+		if ( count >= listMax )
+			return count;
+	}
 
 
-// [fora desta etapa: diferente do SDK ou definida em outro arquivo] CBaseEntity *UTIL_FindEntityInSphere( CBaseEntity *pStartEntity, const Vector &vecCenter, 
+	return count;
+}
 
 
-// [fora desta etapa: diferente do SDK ou definida em outro arquivo] CBaseEntity *UTIL_FindEntityByString( CBaseEntity *pStartEntity, const char *szKeyword, co
+// [SDK NÃO CONFERIDA: função livre] 
+CBaseEntity *UTIL_FindEntityInSphere( CBaseEntity *pStartEntity, const Vector &vecCenter, float flRadius )
+{
+	edict_t	*pentEntity;
 
-// [fora desta etapa: diferente do SDK ou definida em outro arquivo] CBaseEntity *UTIL_FindEntityByClassname( CBaseEntity *pStartEntity, const char *szName )
+	if (pStartEntity)
+		pentEntity = pStartEntity->edict();
+	else
+		pentEntity = NULL;
 
-// [fora desta etapa: diferente do SDK ou definida em outro arquivo] CBaseEntity *UTIL_FindEntityByTargetname( CBaseEntity *pStartEntity, const char *szName )
+	pentEntity = FIND_ENTITY_IN_SPHERE( pentEntity, vecCenter, flRadius);
+
+	if (!FNullEnt(pentEntity))
+		return CBaseEntity::Instance(pentEntity);
+	return NULL;
+}
 
 
-// [fora desta etapa: diferente do SDK ou definida em outro arquivo] CBaseEntity *UTIL_FindEntityGeneric( const char *szWhatever, Vector &vecSrc, float flRadiu
+// [SDK NÃO CONFERIDA: função livre] 
+CBaseEntity *UTIL_FindEntityByString( CBaseEntity *pStartEntity, const char *szKeyword, const char *szValue )
+{
+	edict_t	*pentEntity;
+
+	if (pStartEntity)
+		pentEntity = pStartEntity->edict();
+	else
+		pentEntity = NULL;
+
+	pentEntity = FIND_ENTITY_BY_STRING( pentEntity, szKeyword, szValue );
+
+	if (!FNullEnt(pentEntity))
+		return CBaseEntity::Instance(pentEntity);
+	return NULL;
+}
+
+// [SDK NÃO CONFERIDA: função livre] 
+CBaseEntity *UTIL_FindEntityByClassname( CBaseEntity *pStartEntity, const char *szName )
+{
+	return UTIL_FindEntityByString( pStartEntity, "classname", szName );
+}
+
+// [SDK NÃO CONFERIDA: função livre] 
+CBaseEntity *UTIL_FindEntityByTargetname( CBaseEntity *pStartEntity, const char *szName )
+{
+	return UTIL_FindEntityByString( pStartEntity, "targetname", szName );
+}
 
 
-// [fora desta etapa: diferente do SDK ou definida em outro arquivo] // returns a CBaseEntity pointer to a player by index. Only returns if the player is spawn
+// [SDK NÃO CONFERIDA: função livre] 
+CBaseEntity *UTIL_FindEntityGeneric( const char *szWhatever, Vector &vecSrc, float flRadius )
+{
+	CBaseEntity *pEntity = NULL;
+
+	pEntity = UTIL_FindEntityByTargetname( NULL, szWhatever );
+	if (pEntity)
+		return pEntity;
+
+	CBaseEntity *pSearch = NULL;
+	float flMaxDist2 = flRadius * flRadius;
+	while ((pSearch = UTIL_FindEntityByClassname( pSearch, szWhatever )) != NULL)
+	{
+		float flDist2 = (pSearch->pev->origin - vecSrc).Length();
+		flDist2 = flDist2 * flDist2;
+		if (flMaxDist2 > flDist2)
+		{
+			pEntity = pSearch;
+			flMaxDist2 = flDist2;
+		}
+	}
+	return pEntity;
+}
 
 
-// [fora desta etapa: diferente do SDK ou definida em outro arquivo] void UTIL_MakeVectors( const Vector &vecAngles )
+// [SDK NÃO CONFERIDA: função livre] 
+// returns a CBaseEntity pointer to a player by index.  Only returns if the player is spawned and connected
+// otherwise returns NULL
+// Index is 1 based
+CBaseEntity	*UTIL_PlayerByIndex( int playerIndex )
+{
+	CBaseEntity *pPlayer = NULL;
+
+	if ( playerIndex > 0 && playerIndex <= gpGlobals->maxClients )
+	{
+		edict_t *pPlayerEdict = INDEXENT( playerIndex );
+		if ( pPlayerEdict && !pPlayerEdict->free )
+		{
+			pPlayer = CBaseEntity::Instance( pPlayerEdict );
+		}
+	}
+	
+	return pPlayer;
+}
 
 
-// [fora desta etapa: diferente do SDK ou definida em outro arquivo] void UTIL_MakeAimVectors( const Vector &vecAngles )
+// [SDK NÃO CONFERIDA: função livre] 
+void UTIL_MakeVectors( const Vector &vecAngles )
+{
+	MAKE_VECTORS( vecAngles );
+}
+
+
+// [SDK NÃO CONFERIDA: função livre] 
+void UTIL_MakeAimVectors( const Vector &vecAngles )
+{
+	float rgflVec[3];
+	vecAngles.CopyToArray(rgflVec);
+	rgflVec[0] = -rgflVec[0];
+	MAKE_VECTORS(rgflVec);
+}
 
 
 #define SWAP(a,b,temp)	((temp)=(a),(a)=(b),(b)=(temp))
 
-// [fora desta etapa: diferente do SDK ou definida em outro arquivo] void UTIL_MakeInvVectors( const Vector &vec, globalvars_t *pgv )
+// [SDK NÃO CONFERIDA: função livre] 
+void UTIL_MakeInvVectors( const Vector &vec, globalvars_t *pgv )
+{
+	MAKE_VECTORS(vec);
+
+	float tmp;
+	pgv->v_right = pgv->v_right * -1;
+
+	SWAP(pgv->v_forward.y, pgv->v_right.x, tmp);
+	SWAP(pgv->v_forward.z, pgv->v_up.x, tmp);
+	SWAP(pgv->v_right.z, pgv->v_up.y, tmp);
+}
 
 
-// [fora desta etapa: diferente do SDK ou definida em outro arquivo] void UTIL_EmitAmbientSound( edict_t *entity, const Vector &vecOrigin, const char *samp, fl
+// [SDK NÃO CONFERIDA: função livre] 
+void UTIL_EmitAmbientSound( edict_t *entity, const Vector &vecOrigin, const char *samp, float vol, float attenuation, int fFlags, int pitch )
+{
+	float rgfl[3];
+	vecOrigin.CopyToArray(rgfl);
 
-// [fora desta etapa: diferente do SDK ou definida em outro arquivo] static unsigned short FixedUnsigned16( float value, float scale )
+	if (samp && *samp == '!')
+	{
+		char name[32];
+		if (SENTENCEG_Lookup(samp, name) >= 0)
+			EMIT_AMBIENT_SOUND(entity, rgfl, name, vol, attenuation, fFlags, pitch);
+	}
+	else
+		EMIT_AMBIENT_SOUND(entity, rgfl, samp, vol, attenuation, fFlags, pitch);
+}
 
-// [fora desta etapa: diferente do SDK ou definida em outro arquivo] static short FixedSigned16( float value, float scale )
+// [SDK NÃO CONFERIDA: função livre] 
+static unsigned short FixedUnsigned16( float value, float scale )
+{
+	int output;
 
-// [fora desta etapa: diferente do SDK ou definida em outro arquivo] // Shake the screen of all clients within radius // radius == 0, shake all clients // UNDO
+	output = value * scale;
+	if ( output < 0 )
+		output = 0;
+	if ( output > 0xFFFF )
+		output = 0xFFFF;
+
+	return (unsigned short)output;
+}
+
+// [SDK NÃO CONFERIDA: função livre] 
+static short FixedSigned16( float value, float scale )
+{
+	int output;
+
+	output = value * scale;
+
+	if ( output > 32767 )
+		output = 32767;
+
+	if ( output < -32768 )
+		output = -32768;
+
+	return (short)output;
+}
+
+// [SDK NÃO CONFERIDA: função livre] 
+// Shake the screen of all clients within radius
+// radius == 0, shake all clients
+// UNDONE: Allow caller to shake clients not ONGROUND?
+// UNDONE: Fix falloff model (disabled)?
+// UNDONE: Affect user controls?
+void UTIL_ScreenShake( const Vector &center, float amplitude, float frequency, float duration, float radius )
+{
+	int			i;
+	float		localAmplitude;
+	ScreenShake	shake;
+
+	shake.duration = FixedUnsigned16( duration, 1<<12 );		// 4.12 fixed
+	shake.frequency = FixedUnsigned16( frequency, 1<<8 );	// 8.8 fixed
+
+	for ( i = 1; i <= gpGlobals->maxClients; i++ )
+	{
+		CBaseEntity *pPlayer = UTIL_PlayerByIndex( i );
+
+		if ( !pPlayer || !(pPlayer->pev->flags & FL_ONGROUND) )	// Don't shake if not onground
+			continue;
+
+		localAmplitude = 0;
+
+		if ( radius <= 0 )
+			localAmplitude = amplitude;
+		else
+		{
+			Vector delta = center - pPlayer->pev->origin;
+			float distance = delta.Length();
+	
+			// Had to get rid of this falloff - it didn't work well
+			if ( distance < radius )
+				localAmplitude = amplitude;//radius - distance;
+		}
+		if ( localAmplitude )
+		{
+			shake.amplitude = FixedUnsigned16( localAmplitude, 1<<12 );		// 4.12 fixed
+			
+			MESSAGE_BEGIN( MSG_ONE, gmsgShake, NULL, pPlayer->edict() );		// use the magic #1 for "one client"
+				
+				WRITE_SHORT( shake.amplitude );				// shake amount
+				WRITE_SHORT( shake.duration );				// shake lasts this long
+				WRITE_SHORT( shake.frequency );				// shake noise frequency
+
+			MESSAGE_END();
+		}
+	}
+}
 
 
 
-// [fora desta etapa: diferente do SDK ou definida em outro arquivo] void UTIL_ScreenShakeAll( const Vector &center, float amplitude, float frequency, float du
+// [SDK NÃO CONFERIDA: função livre] 
+void UTIL_ScreenShakeAll( const Vector &center, float amplitude, float frequency, float duration )
+{
+	UTIL_ScreenShake( center, amplitude, frequency, duration, 0 );
+}
 
 
-// [fora desta etapa: diferente do SDK ou definida em outro arquivo] void UTIL_ScreenFadeBuild( ScreenFade &fade, const Vector &color, float fadeTime, float fa
+// [SDK NÃO CONFERIDA: função livre] 
+void UTIL_ScreenFadeBuild( ScreenFade &fade, const Vector &color, float fadeTime, float fadeHold, int alpha, int flags )
+{
+	fade.duration = FixedUnsigned16( fadeTime, 1<<12 );		// 4.12 fixed
+	fade.holdTime = FixedUnsigned16( fadeHold, 1<<12 );		// 4.12 fixed
+	fade.r = (int)color.x;
+	fade.g = (int)color.y;
+	fade.b = (int)color.z;
+	fade.a = alpha;
+	fade.fadeFlags = flags;
+}
 
 
-// [fora desta etapa: diferente do SDK ou definida em outro arquivo] void UTIL_ScreenFadeWrite( const ScreenFade &fade, CBaseEntity *pEntity )
+// [SDK NÃO CONFERIDA: função livre] 
+void UTIL_ScreenFadeWrite( const ScreenFade &fade, CBaseEntity *pEntity )
+{
+	if ( !pEntity || !pEntity->IsNetClient() )
+		return;
+
+	MESSAGE_BEGIN( MSG_ONE, gmsgFade, NULL, pEntity->edict() );		// use the magic #1 for "one client"
+		
+		WRITE_SHORT( fade.duration );		// fade lasts this long
+		WRITE_SHORT( fade.holdTime );		// fade lasts this long
+		WRITE_SHORT( fade.fadeFlags );		// fade type (in / out)
+		WRITE_BYTE( fade.r );				// fade red
+		WRITE_BYTE( fade.g );				// fade green
+		WRITE_BYTE( fade.b );				// fade blue
+		WRITE_BYTE( fade.a );				// fade blue
+
+	MESSAGE_END();
+}
 
 
-// [fora desta etapa: diferente do SDK ou definida em outro arquivo] void UTIL_ScreenFadeAll( const Vector &color, float fadeTime, float fadeHold, int alpha, i
+// [SDK NÃO CONFERIDA: função livre] 
+void UTIL_ScreenFadeAll( const Vector &color, float fadeTime, float fadeHold, int alpha, int flags )
+{
+	int			i;
+	ScreenFade	fade;
 
 
-// [fora desta etapa: diferente do SDK ou definida em outro arquivo] void UTIL_ScreenFade( CBaseEntity *pEntity, const Vector &color, float fadeTime, float fad
+	UTIL_ScreenFadeBuild( fade, color, fadeTime, fadeHold, alpha, flags );
+
+	for ( i = 1; i <= gpGlobals->maxClients; i++ )
+	{
+		CBaseEntity *pPlayer = UTIL_PlayerByIndex( i );
+	
+		UTIL_ScreenFadeWrite( fade, pPlayer );
+	}
+}
 
 
-// [fora desta etapa: diferente do SDK ou definida em outro arquivo] void UTIL_HudMessage( CBaseEntity *pEntity, const hudtextparms_t &textparms, const char *p
+// [SDK NÃO CONFERIDA: função livre] 
+void UTIL_ScreenFade( CBaseEntity *pEntity, const Vector &color, float fadeTime, float fadeHold, int alpha, int flags )
+{
+	ScreenFade	fade;
 
-// [fora desta etapa: diferente do SDK ou definida em outro arquivo] void UTIL_HudMessageAll( const hudtextparms_t &textparms, const char *pMessage )
+	UTIL_ScreenFadeBuild( fade, color, fadeTime, fadeHold, alpha, flags );
+	UTIL_ScreenFadeWrite( fade, pEntity );
+}
+
+
+// [SDK NÃO CONFERIDA: função livre] 
+void UTIL_HudMessage( CBaseEntity *pEntity, const hudtextparms_t &textparms, const char *pMessage )
+{
+	if ( !pEntity || !pEntity->IsNetClient() )
+		return;
+
+	MESSAGE_BEGIN( MSG_ONE, SVC_TEMPENTITY, NULL, pEntity->edict() );
+		WRITE_BYTE( TE_TEXTMESSAGE );
+		WRITE_BYTE( textparms.channel & 0xFF );
+
+		WRITE_SHORT( FixedSigned16( textparms.x, 1<<13 ) );
+		WRITE_SHORT( FixedSigned16( textparms.y, 1<<13 ) );
+		WRITE_BYTE( textparms.effect );
+
+		WRITE_BYTE( textparms.r1 );
+		WRITE_BYTE( textparms.g1 );
+		WRITE_BYTE( textparms.b1 );
+		WRITE_BYTE( textparms.a1 );
+
+		WRITE_BYTE( textparms.r2 );
+		WRITE_BYTE( textparms.g2 );
+		WRITE_BYTE( textparms.b2 );
+		WRITE_BYTE( textparms.a2 );
+
+		WRITE_SHORT( FixedUnsigned16( textparms.fadeinTime, 1<<8 ) );
+		WRITE_SHORT( FixedUnsigned16( textparms.fadeoutTime, 1<<8 ) );
+		WRITE_SHORT( FixedUnsigned16( textparms.holdTime, 1<<8 ) );
+
+		if ( textparms.effect == 2 )
+			WRITE_SHORT( FixedUnsigned16( textparms.fxTime, 1<<8 ) );
+		
+		if ( strlen( pMessage ) < 512 )
+		{
+			WRITE_STRING( pMessage );
+		}
+		else
+		{
+			char tmp[512];
+			strncpy( tmp, pMessage, 511 );
+			tmp[511] = 0;
+			WRITE_STRING( tmp );
+		}
+	MESSAGE_END();
+}
+
+// [SDK NÃO CONFERIDA: função livre] 
+void UTIL_HudMessageAll( const hudtextparms_t &textparms, const char *pMessage )
+{
+	int			i;
+
+	for ( i = 1; i <= gpGlobals->maxClients; i++ )
+	{
+		CBaseEntity *pPlayer = UTIL_PlayerByIndex( i );
+		if ( pPlayer )
+			UTIL_HudMessage( pPlayer, textparms, pMessage );
+	}
+}
 
 					 
 extern int gmsgTextMsg, gmsgSayText;
-// [fora desta etapa: diferente do SDK ou definida em outro arquivo] void UTIL_ClientPrintAll( int msg_dest, const char *msg_name, const char *param1, const ch
+// [SDK NÃO CONFERIDA: função livre] 
+void UTIL_ClientPrintAll( int msg_dest, const char *msg_name, const char *param1, const char *param2, const char *param3, const char *param4 )
+{
+	MESSAGE_BEGIN( MSG_ALL, gmsgTextMsg );
+		WRITE_BYTE( msg_dest );
+		WRITE_STRING( msg_name );
 
-// [fora desta etapa: diferente do SDK ou definida em outro arquivo] void ClientPrint( entvars_t *client, int msg_dest, const char *msg_name, const char *param
+		if ( param1 )
+			WRITE_STRING( param1 );
+		if ( param2 )
+			WRITE_STRING( param2 );
+		if ( param3 )
+			WRITE_STRING( param3 );
+		if ( param4 )
+			WRITE_STRING( param4 );
 
-// [fora desta etapa: diferente do SDK ou definida em outro arquivo] void UTIL_SayText( const char *pText, CBaseEntity *pEntity )
+	MESSAGE_END();
+}
 
-// [fora desta etapa: diferente do SDK ou definida em outro arquivo] void UTIL_SayTextAll( const char *pText, CBaseEntity *pEntity )
+// [SDK NÃO CONFERIDA: função livre] 
+void ClientPrint( entvars_t *client, int msg_dest, const char *msg_name, const char *param1, const char *param2, const char *param3, const char *param4 )
+{
+	MESSAGE_BEGIN( MSG_ONE, gmsgTextMsg, NULL, client );
+		WRITE_BYTE( msg_dest );
+		WRITE_STRING( msg_name );
+
+		if ( param1 )
+			WRITE_STRING( param1 );
+		if ( param2 )
+			WRITE_STRING( param2 );
+		if ( param3 )
+			WRITE_STRING( param3 );
+		if ( param4 )
+			WRITE_STRING( param4 );
+
+	MESSAGE_END();
+}
+
+// [SDK NÃO CONFERIDA: função livre] 
+void UTIL_SayText( const char *pText, CBaseEntity *pEntity )
+{
+	if ( !pEntity->IsNetClient() )
+		return;
+
+	MESSAGE_BEGIN( MSG_ONE, gmsgSayText, NULL, pEntity->edict() );
+		WRITE_BYTE( pEntity->entindex() );
+		WRITE_STRING( pText );
+	MESSAGE_END();
+}
+
+// [SDK NÃO CONFERIDA: função livre] 
+void UTIL_SayTextAll( const char *pText, CBaseEntity *pEntity )
+{
+	MESSAGE_BEGIN( MSG_ALL, gmsgSayText, NULL );
+		WRITE_BYTE( pEntity->entindex() );
+		WRITE_STRING( pText );
+	MESSAGE_END();
+}
 
 
-// [fora desta etapa: diferente do SDK ou definida em outro arquivo] char *UTIL_dtos1( int d )
+// [SDK NÃO CONFERIDA: função livre] 
+char *UTIL_dtos1( int d )
+{
+	static char buf[8];
+	sprintf( buf, "%d", d );
+	return buf;
+}
 
-// [fora desta etapa: diferente do SDK ou definida em outro arquivo] char *UTIL_dtos2( int d )
+// [SDK NÃO CONFERIDA: função livre] 
+char *UTIL_dtos2( int d )
+{
+	static char buf[8];
+	sprintf( buf, "%d", d );
+	return buf;
+}
 
-// [fora desta etapa: diferente do SDK ou definida em outro arquivo] char *UTIL_dtos3( int d )
+// [SDK NÃO CONFERIDA: função livre] 
+char *UTIL_dtos3( int d )
+{
+	static char buf[8];
+	sprintf( buf, "%d", d );
+	return buf;
+}
 
-// [fora desta etapa: diferente do SDK ou definida em outro arquivo] char *UTIL_dtos4( int d )
+// [SDK NÃO CONFERIDA: função livre] 
+char *UTIL_dtos4( int d )
+{
+	static char buf[8];
+	sprintf( buf, "%d", d );
+	return buf;
+}
 
-// [fora desta etapa: diferente do SDK ou definida em outro arquivo] void UTIL_ShowMessage( const char *pString, CBaseEntity *pEntity )
+// [SDK NÃO CONFERIDA: função livre] 
+void UTIL_ShowMessage( const char *pString, CBaseEntity *pEntity )
+{
+	if ( !pEntity || !pEntity->IsNetClient() )
+		return;
+
+	MESSAGE_BEGIN( MSG_ONE, gmsgHudText, NULL, pEntity->edict() );
+	WRITE_STRING( pString );
+	MESSAGE_END();
+}
 
 
-// [fora desta etapa: diferente do SDK ou definida em outro arquivo] void UTIL_ShowMessageAll( const char *pString )
+// [SDK NÃO CONFERIDA: função livre] 
+void UTIL_ShowMessageAll( const char *pString )
+{
+	int		i;
 
-// [fora desta etapa: diferente do SDK ou definida em outro arquivo] // Overloaded to add IGNORE_GLASS void UTIL_TraceLine( const Vector &vecStart, const Vecto
+	// loop through all players
+
+	for ( i = 1; i <= gpGlobals->maxClients; i++ )
+	{
+		CBaseEntity *pPlayer = UTIL_PlayerByIndex( i );
+		if ( pPlayer )
+			UTIL_ShowMessage( pString, pPlayer );
+	}
+}
+
+// [SDK NÃO CONFERIDA: função livre] 
+// Overloaded to add IGNORE_GLASS
+void UTIL_TraceLine( const Vector &vecStart, const Vector &vecEnd, IGNORE_MONSTERS igmon, IGNORE_GLASS ignoreGlass, edict_t *pentIgnore, TraceResult *ptr )
+{
+	TRACE_LINE( vecStart, vecEnd, (igmon == ignore_monsters ? TRUE : FALSE) | (ignoreGlass?0x100:0), pentIgnore, ptr );
+}
 
 
-// [fora desta etapa: diferente do SDK ou definida em outro arquivo] void UTIL_TraceLine( const Vector &vecStart, const Vector &vecEnd, IGNORE_MONSTERS igmon, 
+// [SDK NÃO CONFERIDA: função livre] 
+void UTIL_TraceLine( const Vector &vecStart, const Vector &vecEnd, IGNORE_MONSTERS igmon, edict_t *pentIgnore, TraceResult *ptr )
+{
+	TRACE_LINE( vecStart, vecEnd, (igmon == ignore_monsters ? TRUE : FALSE), pentIgnore, ptr );
+}
 
 
-// [fora desta etapa: diferente do SDK ou definida em outro arquivo] void UTIL_TraceHull( const Vector &vecStart, const Vector &vecEnd, IGNORE_MONSTERS igmon, 
+// [SDK NÃO CONFERIDA: função livre] 
+void UTIL_TraceHull( const Vector &vecStart, const Vector &vecEnd, IGNORE_MONSTERS igmon, int hullNumber, edict_t *pentIgnore, TraceResult *ptr )
+{
+	TRACE_HULL( vecStart, vecEnd, (igmon == ignore_monsters ? TRUE : FALSE), hullNumber, pentIgnore, ptr );
+}
 
-// [fora desta etapa: diferente do SDK ou definida em outro arquivo] void UTIL_TraceModel( const Vector &vecStart, const Vector &vecEnd, int hullNumber, edict_
+// [SDK NÃO CONFERIDA: função livre] 
+void UTIL_TraceModel( const Vector &vecStart, const Vector &vecEnd, int hullNumber, edict_t *pentModel, TraceResult *ptr )
+{
+	g_engfuncs.pfnTraceModel( vecStart, vecEnd, hullNumber, pentModel, ptr );
+}
 
 
-// [fora desta etapa: diferente do SDK ou definida em outro arquivo] TraceResult UTIL_GetGlobalTrace( )
+// [SDK NÃO CONFERIDA: função livre] 
+TraceResult UTIL_GetGlobalTrace( )
+{
+	TraceResult tr;
+
+	tr.fAllSolid		= gpGlobals->trace_allsolid;
+	tr.fStartSolid		= gpGlobals->trace_startsolid;
+	tr.fInOpen			= gpGlobals->trace_inopen;
+	tr.fInWater			= gpGlobals->trace_inwater;
+	tr.flFraction		= gpGlobals->trace_fraction;
+	tr.flPlaneDist		= gpGlobals->trace_plane_dist;
+	tr.pHit			= gpGlobals->trace_ent;
+	tr.vecEndPos		= gpGlobals->trace_endpos;
+	tr.vecPlaneNormal	= gpGlobals->trace_plane_normal;
+	tr.iHitgroup		= gpGlobals->trace_hitgroup;
+	return tr;
+}
 
 	
-// [fora desta etapa: diferente do SDK ou definida em outro arquivo] void UTIL_SetSize( entvars_t *pev, const Vector &vecMin, const Vector &vecMax )
+// [SDK NÃO CONFERIDA: função livre] 
+void UTIL_SetSize( entvars_t *pev, const Vector &vecMin, const Vector &vecMax )
+{
+	SET_SIZE( ENT(pev), vecMin, vecMax );
+}
 	
 	
-// [fora desta etapa: diferente do SDK ou definida em outro arquivo] float UTIL_VecToYaw( const Vector &vec )
+// [SDK NÃO CONFERIDA: função livre] 
+float UTIL_VecToYaw( const Vector &vec )
+{
+	return VEC_TO_YAW(vec);
+}
 
 
-// [fora desta etapa: diferente do SDK ou definida em outro arquivo] void UTIL_SetOrigin( entvars_t *pev, const Vector &vecOrigin )
+// [SDK NÃO CONFERIDA: função livre] 
+void UTIL_SetOrigin( entvars_t *pev, const Vector &vecOrigin )
+{
+	edict_t *ent = ENT(pev);
+	if ( ent )
+		SET_ORIGIN( ent, vecOrigin );
+}
 
-// [fora desta etapa: diferente do SDK ou definida em outro arquivo] void UTIL_ParticleEffect( const Vector &vecOrigin, const Vector &vecDirection, ULONG ulCol
-
-
-// [fora desta etapa: diferente do SDK ou definida em outro arquivo] float UTIL_Approach( float target, float value, float speed )
-
-
-// [fora desta etapa: diferente do SDK ou definida em outro arquivo] float UTIL_ApproachAngle( float target, float value, float speed )
-
-
-// [fora desta etapa: diferente do SDK ou definida em outro arquivo] float UTIL_AngleDistance( float next, float cur )
-
-
-// [fora desta etapa: diferente do SDK ou definida em outro arquivo] float UTIL_SplineFraction( float value, float scale )
+// [SDK NÃO CONFERIDA: função livre] 
+void UTIL_ParticleEffect( const Vector &vecOrigin, const Vector &vecDirection, ULONG ulColor, ULONG ulCount )
+{
+	PARTICLE_EFFECT( vecOrigin, vecDirection, (float)ulColor, (float)ulCount );
+}
 
 
-// [fora desta etapa: diferente do SDK ou definida em outro arquivo] char* UTIL_VarArgs( char *format, ... )
+// [SDK NÃO CONFERIDA: função livre] 
+float UTIL_Approach( float target, float value, float speed )
+{
+	float delta = target - value;
+
+	if ( delta > speed )
+		value += speed;
+	else if ( delta < -speed )
+		value -= speed;
+	else 
+		value = target;
+
+	return value;
+}
+
+
+// [SDK NÃO CONFERIDA: função livre] 
+float UTIL_ApproachAngle( float target, float value, float speed )
+{
+	target = UTIL_AngleMod( target );
+	value = UTIL_AngleMod( target );
 	
-// [fora desta etapa: diferente do SDK ou definida em outro arquivo] Vector UTIL_GetAimVector( edict_t *pent, float flSpeed )
+	float delta = target - value;
 
-// [fora desta etapa: diferente do SDK ou definida em outro arquivo] int UTIL_IsMasterTriggered(string_t sMaster, CBaseEntity *pActivator)
+	// Speed is assumed to be positive
+	if ( speed < 0 )
+		speed = -speed;
 
-// [fora desta etapa: diferente do SDK ou definida em outro arquivo] BOOL UTIL_ShouldShowBlood( int color )
+	if ( delta < -180 )
+		delta += 360;
+	else if ( delta > 180 )
+		delta -= 360;
 
-// [fora desta etapa: diferente do SDK ou definida em outro arquivo] int UTIL_PointContents( const Vector &vec )
+	if ( delta > speed )
+		value += speed;
+	else if ( delta < -speed )
+		value -= speed;
+	else 
+		value = target;
 
-// [fora desta etapa: diferente do SDK ou definida em outro arquivo] void UTIL_BloodStream( const Vector &origin, const Vector &direction, int color, int amoun				
-
-// [fora desta etapa: diferente do SDK ou definida em outro arquivo] void UTIL_BloodDrips( const Vector &origin, const Vector &direction, int color, int amount				
-
-// [fora desta etapa: diferente do SDK ou definida em outro arquivo] Vector UTIL_RandomBloodVector( void )
-
-
-// [fora desta etapa: diferente do SDK ou definida em outro arquivo] void UTIL_BloodDecalTrace( TraceResult *pTrace, int bloodColor )
-
-
-// [fora desta etapa: diferente do SDK ou definida em outro arquivo] void UTIL_DecalTrace( TraceResult *pTrace, int decalNumber )
-
-// [fora desta etapa: diferente do SDK ou definida em outro arquivo] /* ============== UTIL_PlayerDecalTrace A player is trying to apply his custom decal for t
-
-// [fora desta etapa: diferente do SDK ou definida em outro arquivo] void UTIL_GunshotDecalTrace( TraceResult *pTrace, int decalNumber )
+	return value;
+}
 
 
-// [fora desta etapa: diferente do SDK ou definida em outro arquivo] void UTIL_Sparks( const Vector &position )
+// [SDK NÃO CONFERIDA: função livre] 
+float UTIL_AngleDistance( float next, float cur )
+{
+	float delta = next - cur;
+
+	if ( delta < -180 )
+		delta += 360;
+	else if ( delta > 180 )
+		delta -= 360;
+
+	return delta;
+}
 
 
-// [fora desta etapa: diferente do SDK ou definida em outro arquivo] void UTIL_Ricochet( const Vector &position, float scale )
+// [SDK NÃO CONFERIDA: função livre] 
+float UTIL_SplineFraction( float value, float scale )
+{
+	value = scale * value;
+	float valueSquared = value * value;
+
+	// Nice little ease-in, ease-out spline-like curve
+	return 3 * valueSquared - 2 * valueSquared * value;
+}
 
 
-// [fora desta etapa: diferente do SDK ou definida em outro arquivo] BOOL UTIL_TeamsMatch( const char *pTeamName1, const char *pTeamName2 )
+// [SDK NÃO CONFERIDA: função livre] 
+char* UTIL_VarArgs( char *format, ... )
+{
+	va_list		argptr;
+	static char		string[1024];
+	
+	va_start (argptr, format);
+	vsprintf (string, format,argptr);
+	va_end (argptr);
+
+	return string;	
+}
+	
+// [SDK NÃO CONFERIDA: função livre] 
+Vector UTIL_GetAimVector( edict_t *pent, float flSpeed )
+{
+	Vector tmp;
+	GET_AIM_VECTOR(pent, flSpeed, tmp);
+	return tmp;
+}
+
+// [SDK NÃO CONFERIDA: função livre] 
+int UTIL_IsMasterTriggered(string_t sMaster, CBaseEntity *pActivator)
+{
+	if (sMaster)
+	{
+		edict_t *pentTarget = FIND_ENTITY_BY_TARGETNAME(NULL, STRING(sMaster));
+	
+		if ( !FNullEnt(pentTarget) )
+		{
+			CBaseEntity *pMaster = CBaseEntity::Instance(pentTarget);
+			if ( pMaster && (pMaster->ObjectCaps() & FCAP_MASTER) )
+				return pMaster->IsTriggered( pActivator );
+		}
+
+		ALERT(at_console, "Master was null or not a master!\n");
+	}
+
+	// if this isn't a master entity, just say yes.
+	return 1;
+}
+
+// [SDK NÃO CONFERIDA: função livre] 
+BOOL UTIL_ShouldShowBlood( int color )
+{
+	if ( color != DONT_BLEED )
+	{
+		if ( color == BLOOD_COLOR_RED )
+		{
+			if ( CVAR_GET_FLOAT("violence_hblood") != 0 )
+				return TRUE;
+		}
+		else
+		{
+			if ( CVAR_GET_FLOAT("violence_ablood") != 0 )
+				return TRUE;
+		}
+	}
+	return FALSE;
+}
+
+// [SDK NÃO CONFERIDA: função livre] 
+int UTIL_PointContents(	const Vector &vec )
+{
+	return POINT_CONTENTS(vec);
+}
+
+// [SDK NÃO CONFERIDA: função livre] 
+void UTIL_BloodStream( const Vector &origin, const Vector &direction, int color, int amount )
+{
+	if ( !UTIL_ShouldShowBlood( color ) )
+		return;
+
+	if ( g_Language == LANGUAGE_GERMAN && color == BLOOD_COLOR_RED )
+		color = 0;
+
+	
+	MESSAGE_BEGIN( MSG_PVS, SVC_TEMPENTITY, origin );
+		WRITE_BYTE( TE_BLOODSTREAM );
+		WRITE_COORD( origin.x );
+		WRITE_COORD( origin.y );
+		WRITE_COORD( origin.z );
+		WRITE_COORD( direction.x );
+		WRITE_COORD( direction.y );
+		WRITE_COORD( direction.z );
+		WRITE_BYTE( color );
+		WRITE_BYTE( min( amount, 255 ) );
+	MESSAGE_END();
+}				
+
+// [SDK NÃO CONFERIDA: função livre] 
+void UTIL_BloodDrips( const Vector &origin, const Vector &direction, int color, int amount )
+{
+	if ( !UTIL_ShouldShowBlood( color ) )
+		return;
+
+	if ( color == DONT_BLEED || amount == 0 )
+		return;
+
+	if ( g_Language == LANGUAGE_GERMAN && color == BLOOD_COLOR_RED )
+		color = 0;
+
+	if ( g_pGameRules->IsMultiplayer() )
+	{
+		// scale up blood effect in multiplayer for better visibility
+		amount *= 2;
+	}
+
+	if ( amount > 255 )
+		amount = 255;
+
+	MESSAGE_BEGIN( MSG_PVS, SVC_TEMPENTITY, origin );
+		WRITE_BYTE( TE_BLOODSPRITE );
+		WRITE_COORD( origin.x);								// pos
+		WRITE_COORD( origin.y);
+		WRITE_COORD( origin.z);
+		WRITE_SHORT( g_sModelIndexBloodSpray );				// initial sprite model
+		WRITE_SHORT( g_sModelIndexBloodDrop );				// droplet sprite models
+		WRITE_BYTE( color );								// color index into host_basepal
+		WRITE_BYTE( min( max( 3, amount / 10 ), 16 ) );		// size
+	MESSAGE_END();
+}				
+
+// [SDK NÃO CONFERIDA: função livre] 
+Vector UTIL_RandomBloodVector( void )
+{
+	Vector direction;
+
+	direction.x = RANDOM_FLOAT ( -1, 1 );
+	direction.y = RANDOM_FLOAT ( -1, 1 );
+	direction.z = RANDOM_FLOAT ( 0, 1 );
+
+	return direction;
+}
 
 
-// [fora desta etapa: diferente do SDK ou definida em outro arquivo] void UTIL_StringToVector( float *pVector, const char *pString )
+// [SDK NÃO CONFERIDA: função livre] 
+void UTIL_BloodDecalTrace( TraceResult *pTrace, int bloodColor )
+{
+	if ( UTIL_ShouldShowBlood( bloodColor ) )
+	{
+		if ( bloodColor == BLOOD_COLOR_RED )
+			UTIL_DecalTrace( pTrace, DECAL_BLOOD1 + RANDOM_LONG(0,5) );
+		else
+			UTIL_DecalTrace( pTrace, DECAL_YBLOOD1 + RANDOM_LONG(0,5) );
+	}
+}
 
 
-// [fora desta etapa: diferente do SDK ou definida em outro arquivo] void UTIL_StringToIntArray( int *pVector, int count, const char *pString )
+// [SDK NÃO CONFERIDA: função livre] 
+void UTIL_DecalTrace( TraceResult *pTrace, int decalNumber )
+{
+	short entityIndex;
+	int index;
+	int message;
 
-// [fora desta etapa: diferente do SDK ou definida em outro arquivo] Vector UTIL_ClampVectorToBox( const Vector &input, const Vector &clampSize )
+	if ( decalNumber < 0 )
+		return;
+
+	index = gDecals[ decalNumber ].index;
+
+	if ( index < 0 )
+		return;
+
+	if (pTrace->flFraction == 1.0)
+		return;
+
+	// Only decal BSP models
+	if ( pTrace->pHit )
+	{
+		CBaseEntity *pEntity = CBaseEntity::Instance( pTrace->pHit );
+		if ( pEntity && !pEntity->IsBSPModel() )
+			return;
+		entityIndex = ENTINDEX( pTrace->pHit );
+	}
+	else 
+		entityIndex = 0;
+
+	message = TE_DECAL;
+	if ( entityIndex != 0 )
+	{
+		if ( index > 255 )
+		{
+			message = TE_DECALHIGH;
+			index -= 256;
+		}
+	}
+	else
+	{
+		message = TE_WORLDDECAL;
+		if ( index > 255 )
+		{
+			message = TE_WORLDDECALHIGH;
+			index -= 256;
+		}
+	}
+	
+	MESSAGE_BEGIN( MSG_BROADCAST, SVC_TEMPENTITY );
+		WRITE_BYTE( message );
+		WRITE_COORD( pTrace->vecEndPos.x );
+		WRITE_COORD( pTrace->vecEndPos.y );
+		WRITE_COORD( pTrace->vecEndPos.z );
+		WRITE_BYTE( index );
+		if ( entityIndex )
+			WRITE_SHORT( entityIndex );
+	MESSAGE_END();
+}
+
+// [SDK NÃO CONFERIDA: função livre] 
+/*
+==============
+UTIL_PlayerDecalTrace
+
+A player is trying to apply his custom decal for the spray can.
+Tell connected clients to display it, or use the default spray can decal
+if the custom can't be loaded.
+==============
+*/
+void UTIL_PlayerDecalTrace( TraceResult *pTrace, int playernum, int decalNumber, BOOL bIsCustom )
+{
+	int index;
+	
+	if (!bIsCustom)
+	{
+		if ( decalNumber < 0 )
+			return;
+
+		index = gDecals[ decalNumber ].index;
+		if ( index < 0 )
+			return;
+	}
+	else
+		index = decalNumber;
+
+	if (pTrace->flFraction == 1.0)
+		return;
+
+	MESSAGE_BEGIN( MSG_BROADCAST, SVC_TEMPENTITY );
+		WRITE_BYTE( TE_PLAYERDECAL );
+		WRITE_BYTE ( playernum );
+		WRITE_COORD( pTrace->vecEndPos.x );
+		WRITE_COORD( pTrace->vecEndPos.y );
+		WRITE_COORD( pTrace->vecEndPos.z );
+		WRITE_SHORT( (short)ENTINDEX(pTrace->pHit) );
+		WRITE_BYTE( index );
+	MESSAGE_END();
+}
+
+// [SDK NÃO CONFERIDA: função livre] 
+void UTIL_GunshotDecalTrace( TraceResult *pTrace, int decalNumber )
+{
+	if ( decalNumber < 0 )
+		return;
+
+	int index = gDecals[ decalNumber ].index;
+	if ( index < 0 )
+		return;
+
+	if (pTrace->flFraction == 1.0)
+		return;
+
+	MESSAGE_BEGIN( MSG_PAS, SVC_TEMPENTITY, pTrace->vecEndPos );
+		WRITE_BYTE( TE_GUNSHOTDECAL );
+		WRITE_COORD( pTrace->vecEndPos.x );
+		WRITE_COORD( pTrace->vecEndPos.y );
+		WRITE_COORD( pTrace->vecEndPos.z );
+		WRITE_SHORT( (short)ENTINDEX(pTrace->pHit) );
+		WRITE_BYTE( index );
+	MESSAGE_END();
+}
 
 
-// [fora desta etapa: diferente do SDK ou definida em outro arquivo] float UTIL_WaterLevel( const Vector &position, float minz, float maxz )
+// [SDK NÃO CONFERIDA: função livre] 
+void UTIL_Sparks( const Vector &position )
+{
+	MESSAGE_BEGIN( MSG_PVS, SVC_TEMPENTITY, position );
+		WRITE_BYTE( TE_SPARKS );
+		WRITE_COORD( position.x );
+		WRITE_COORD( position.y );
+		WRITE_COORD( position.z );
+	MESSAGE_END();
+}
 
 
-extern DLL_GLOBAL	short	g_sModelIndexBubbles;// [fora desta etapa: diferente do SDK ou definida em outro arquivo] // holds the index for the bubbles model void UTIL_Bubbles( Vector mins, Vector maxs, int 
-
-// [fora desta etapa: diferente do SDK ou definida em outro arquivo] void UTIL_BubbleTrail( Vector from, Vector to, int count )
-
-
-// [fora desta etapa: diferente do SDK ou definida em outro arquivo] void UTIL_Remove( CBaseEntity *pEntity )
-
-
-// [fora desta etapa: diferente do SDK ou definida em outro arquivo] BOOL UTIL_IsValidEntity( edict_t *pent )
-
-
-// [fora desta etapa: diferente do SDK ou definida em outro arquivo] void UTIL_PrecacheOther( const char *szClassname )
-
-// [fora desta etapa: diferente do SDK ou definida em outro arquivo] //========================================================= // UTIL_LogPrintf - Prints a l
-
-// [fora desta etapa: diferente do SDK ou definida em outro arquivo] //========================================================= // UTIL_DotPoints - returns th
+// [SDK NÃO CONFERIDA: função livre] 
+void UTIL_Ricochet( const Vector &position, float scale )
+{
+	MESSAGE_BEGIN( MSG_PVS, SVC_TEMPENTITY, position );
+		WRITE_BYTE( TE_ARMOR_RICOCHET );
+		WRITE_COORD( position.x );
+		WRITE_COORD( position.y );
+		WRITE_COORD( position.z );
+		WRITE_BYTE( (int)(scale*10) );
+	MESSAGE_END();
+}
 
 
-// [fora desta etapa: diferente do SDK ou definida em outro arquivo] //========================================================= // UTIL_StripToken - for redun
+// [SDK NÃO CONFERIDA: função livre] 
+BOOL UTIL_TeamsMatch( const char *pTeamName1, const char *pTeamName2 )
+{
+	// Everyone matches unless it's teamplay
+	if ( !g_pGameRules->IsTeamplay() )
+		return TRUE;
+
+	// Both on a team?
+	if ( *pTeamName1 != 0 && *pTeamName2 != 0 )
+	{
+		if ( !stricmp( pTeamName1, pTeamName2 ) )	// Same Team?
+			return TRUE;
+	}
+
+	return FALSE;
+}
+
+
+// [SDK NÃO CONFERIDA: função livre] 
+void UTIL_StringToVector( float *pVector, const char *pString )
+{
+	char *pstr, *pfront, tempString[128];
+	int	j;
+
+	strncpy( tempString, pString, sizeof( tempString ) );
+	tempString[ sizeof( tempString ) - 1 ] = '\0';
+	pstr = pfront = tempString;
+
+	for ( j = 0; j < 3; j++ )			// lifted from pr_edict.c
+	{
+		pVector[j] = atof( pfront );
+
+		while ( *pstr && *pstr != ' ' )
+			pstr++;
+		if (!*pstr)
+			break;
+		pstr++;
+		pfront = pstr;
+	}
+	if (j < 2)
+	{
+		/*
+		ALERT( at_error, "Bad field in entity!! %s:%s == \"%s\"\n",
+			pkvd->szClassName, pkvd->szKeyName, pkvd->szValue );
+		*/
+		for (j = j+1;j < 3; j++)
+			pVector[j] = 0;
+	}
+}
+
+
+// [SDK NÃO CONFERIDA: função livre] 
+void UTIL_StringToIntArray( int *pVector, int count, const char *pString )
+{
+	char *pstr, *pfront, tempString[128];
+	int	j;
+
+	strncpy( tempString, pString, sizeof( tempString ) );
+	tempString[ sizeof( tempString ) - 1 ] = '\0';
+	pstr = pfront = tempString;
+
+	for ( j = 0; j < count; j++ )			// lifted from pr_edict.c
+	{
+		pVector[j] = atoi( pfront );
+
+		while ( *pstr && *pstr != ' ' )
+			pstr++;
+		if (!*pstr)
+			break;
+		pstr++;
+		pfront = pstr;
+	}
+
+	for ( j++; j < count; j++ )
+	{
+		pVector[j] = 0;
+	}
+}
+
+// [SDK NÃO CONFERIDA: função livre] 
+Vector UTIL_ClampVectorToBox( const Vector &input, const Vector &clampSize )
+{
+	Vector sourceVector = input;
+
+	if ( sourceVector.x > clampSize.x )
+		sourceVector.x -= clampSize.x;
+	else if ( sourceVector.x < -clampSize.x )
+		sourceVector.x += clampSize.x;
+	else
+		sourceVector.x = 0;
+
+	if ( sourceVector.y > clampSize.y )
+		sourceVector.y -= clampSize.y;
+	else if ( sourceVector.y < -clampSize.y )
+		sourceVector.y += clampSize.y;
+	else
+		sourceVector.y = 0;
+	
+	if ( sourceVector.z > clampSize.z )
+		sourceVector.z -= clampSize.z;
+	else if ( sourceVector.z < -clampSize.z )
+		sourceVector.z += clampSize.z;
+	else
+		sourceVector.z = 0;
+
+	return sourceVector.Normalize();
+}
+
+
+// [SDK NÃO CONFERIDA: função livre] 
+float UTIL_WaterLevel( const Vector &position, float minz, float maxz )
+{
+	Vector midUp = position;
+	midUp.z = minz;
+
+	if (UTIL_PointContents(midUp) != CONTENTS_WATER)
+		return minz;
+
+	midUp.z = maxz;
+	if (UTIL_PointContents(midUp) == CONTENTS_WATER)
+		return maxz;
+
+	float diff = maxz - minz;
+	while (diff > 1.0)
+	{
+		midUp.z = minz + diff/2.0;
+		if (UTIL_PointContents(midUp) == CONTENTS_WATER)
+		{
+			minz = midUp.z;
+		}
+		else
+		{
+			maxz = midUp.z;
+		}
+		diff = maxz - minz;
+	}
+
+	return midUp.z;
+}
+
+
+extern DLL_GLOBAL	short	g_sModelIndexBubbles;// [SDK NÃO CONFERIDA: função livre] 
+// holds the index for the bubbles model
+
+void UTIL_Bubbles( Vector mins, Vector maxs, int count )
+{
+	Vector mid =  (mins + maxs) * 0.5;
+
+	float flHeight = UTIL_WaterLevel( mid,  mid.z, mid.z + 1024 );
+	flHeight = flHeight - mins.z;
+
+	MESSAGE_BEGIN( MSG_PAS, SVC_TEMPENTITY, mid );
+		WRITE_BYTE( TE_BUBBLES );
+		WRITE_COORD( mins.x );	// mins
+		WRITE_COORD( mins.y );
+		WRITE_COORD( mins.z );
+		WRITE_COORD( maxs.x );	// maxz
+		WRITE_COORD( maxs.y );
+		WRITE_COORD( maxs.z );
+		WRITE_COORD( flHeight );			// height
+		WRITE_SHORT( g_sModelIndexBubbles );
+		WRITE_BYTE( count ); // count
+		WRITE_COORD( 8 ); // speed
+	MESSAGE_END();
+}
+
+// [SDK NÃO CONFERIDA: função livre] 
+void UTIL_BubbleTrail( Vector from, Vector to, int count )
+{
+	float flHeight = UTIL_WaterLevel( from,  from.z, from.z + 256 );
+	flHeight = flHeight - from.z;
+
+	if (flHeight < 8)
+	{
+		flHeight = UTIL_WaterLevel( to,  to.z, to.z + 256 );
+		flHeight = flHeight - to.z;
+		if (flHeight < 8)
+			return;
+
+		// UNDONE: do a ploink sound
+		flHeight = flHeight + to.z - from.z;
+	}
+
+	if (count > 255) 
+		count = 255;
+
+	MESSAGE_BEGIN( MSG_BROADCAST, SVC_TEMPENTITY );
+		WRITE_BYTE( TE_BUBBLETRAIL );
+		WRITE_COORD( from.x );	// mins
+		WRITE_COORD( from.y );
+		WRITE_COORD( from.z );
+		WRITE_COORD( to.x );	// maxz
+		WRITE_COORD( to.y );
+		WRITE_COORD( to.z );
+		WRITE_COORD( flHeight );			// height
+		WRITE_SHORT( g_sModelIndexBubbles );
+		WRITE_BYTE( count ); // count
+		WRITE_COORD( 8 ); // speed
+	MESSAGE_END();
+}
+
+
+// [SDK NÃO CONFERIDA: função livre] 
+void UTIL_Remove( CBaseEntity *pEntity )
+{
+	if ( !pEntity )
+		return;
+
+	pEntity->UpdateOnRemove();
+	pEntity->pev->flags |= FL_KILLME;
+	pEntity->pev->targetname = 0;
+}
+
+
+// [SDK NÃO CONFERIDA: função livre] 
+BOOL UTIL_IsValidEntity( edict_t *pent )
+{
+	if ( !pent || pent->free || (pent->v.flags & FL_KILLME) )
+		return FALSE;
+	return TRUE;
+}
+
+
+// [SDK NÃO CONFERIDA: função livre] 
+void UTIL_PrecacheOther( const char *szClassname )
+{
+	edict_t	*pent;
+
+	pent = CREATE_NAMED_ENTITY( MAKE_STRING( szClassname ) );
+	if ( FNullEnt( pent ) )
+	{
+		ALERT ( at_console, "NULL Ent in UTIL_PrecacheOther\n" );
+		return;
+	}
+	
+	CBaseEntity *pEntity = CBaseEntity::Instance (VARS( pent ));
+	if (pEntity)
+		pEntity->Precache( );
+	REMOVE_ENTITY(pent);
+}
+
+// [SDK NÃO CONFERIDA: função livre] 
+//=========================================================
+// UTIL_LogPrintf - Prints a logged message to console.
+// Preceded by LOG: ( timestamp ) < message >
+//=========================================================
+void UTIL_LogPrintf( char *fmt, ... )
+{
+	va_list			argptr;
+	static char		string[1024];
+	
+	va_start ( argptr, fmt );
+	vsprintf ( string, fmt, argptr );
+	va_end   ( argptr );
+
+	// Print to server console
+	ALERT( at_logged, "%s", string );
+}
+
+// [SDK NÃO CONFERIDA: função livre] 
+//=========================================================
+// UTIL_DotPoints - returns the dot product of a line from
+// src to check and vecdir.
+//=========================================================
+float UTIL_DotPoints ( const Vector &vecSrc, const Vector &vecCheck, const Vector &vecDir )
+{
+	Vector2D	vec2LOS;
+
+	vec2LOS = ( vecCheck - vecSrc ).Make2D();
+	vec2LOS = vec2LOS.Normalize();
+
+	return DotProduct (vec2LOS , ( vecDir.Make2D() ) );
+}
+
+
+// [SDK NÃO CONFERIDA: função livre] 
+//=========================================================
+// UTIL_StripToken - for redundant keynames
+//=========================================================
+void UTIL_StripToken( const char *pKey, char *pDest, int nLen )
+{
+	int i = 0;
+
+	while ( i < nLen - 1 && pKey[i] && pKey[i] != '#' )
+	{
+		pDest[i] = pKey[i];
+		i++;
+	}
+	pDest[i] = 0;
+}
 
 
 // --------------------------------------------------------------
@@ -759,7 +2070,54 @@ void CSave :: WriteFunction( const char *pname, void **data, int count )
 }
 
 
-// [fora desta etapa: diferente do SDK ou definida em outro arquivo] void EntvarsKeyvalue( entvars_t *pev, KeyValueData *pkvd )
+// [SDK NÃO CONFERIDA: função livre] 
+void EntvarsKeyvalue( entvars_t *pev, KeyValueData *pkvd )
+{
+	int i;
+	TYPEDESCRIPTION		*pField;
+
+	for ( i = 0; i < ENTVARS_COUNT; i++ )
+	{
+		pField = &gEntvarsDescription[i];
+
+		if ( !stricmp( pField->fieldName, pkvd->szKeyName ) )
+		{
+			switch( pField->fieldType )
+			{
+			case FIELD_MODELNAME:
+			case FIELD_SOUNDNAME:
+			case FIELD_STRING:
+				(*(int *)((char *)pev + pField->fieldOffset)) = ALLOC_STRING( pkvd->szValue );
+				break;
+
+			case FIELD_TIME:
+			case FIELD_FLOAT:
+				(*(float *)((char *)pev + pField->fieldOffset)) = atof( pkvd->szValue );
+				break;
+
+			case FIELD_INTEGER:
+				(*(int *)((char *)pev + pField->fieldOffset)) = atoi( pkvd->szValue );
+				break;
+
+			case FIELD_POSITION_VECTOR:
+			case FIELD_VECTOR:
+				UTIL_StringToVector( (float *)((char *)pev + pField->fieldOffset), pkvd->szValue );
+				break;
+
+			default:
+			case FIELD_EVARS:
+			case FIELD_CLASSPTR:
+			case FIELD_EDICT:
+			case FIELD_ENTITY:
+			case FIELD_POINTER:
+				ALERT( at_error, "Bad field in entity!!\n" );
+				break;
+			}
+			pkvd->fHandled = TRUE;
+			return;
+		}
+	}
+}
 
 
 
