@@ -4,6 +4,7 @@
 #define ESF_PLAYER_EXTRA \
     CSwoop m_Swoop;                             /* [OK] +0x504 */ \
     void  RemoveSpecialModes(void); void OnDeathAnim(void); \
+    void  StopPowerUp(void); void RemoveWallJump(void); BOOL CanMelee(CBasePlayer *pOther); \
     void  Swoop(void); void CheckWallJump(void); void CheckSubModelStatus(void); void ReleaseCandy(void); \
     void  RemoveAllWeapons(int iFlag); void Descend(int iFlag); void Ascend(void); \
     void  StopTurbo(void); void StopBlock(void); void UpdateOldPositions(void); void Spectator_HandleButtons(void); \
@@ -27,4 +28,22 @@ extern cvar_t simplemelee, forcerespawn;
 class CBodySlice { public: static void SpawnBodySlices(entvars_t *pev, int iFlag); };   // [?] assinatura
 class CBotChat { public: void LetBotTaunt(CBasePlayer *pKiller, CBasePlayer *pVictim); };
 extern CBotChat ChatClass;
+#endif
+// usados por playermelee.cpp (assinaturas [?], só para compilar a sintaxe)
+#ifndef ESF_MELEE_GLOBALS_H
+#define ESF_MELEE_GLOBALS_H
+void UTIL_Model_RemoveAll(int iPlayer);
+void UTIL_Model_Grab(...);
+void UTIL_Model_MeleeStruggle(...);
+void UTIL_Model_MotionBlur(...);
+#define ANIM_LOW 3   // [?]
+void GetSequenceInfo(void *pmodel, entvars_t *pev, float *pflFrameRate, float *pflGroundSpeed);
+void UTIL_Model_Connect(...);
+void UTIL_Model_FixAngles(...);
+void UTIL_Model_MeleeStruggle_Anglefix(...);
+extern unsigned short m_usMeleeSounds;
+
+#endif
+#ifndef DMG_PREVENT_PHYSICS_FORCE
+#define DMG_PREVENT_PHYSICS_FORCE (1<<31)   // [?]
 #endif

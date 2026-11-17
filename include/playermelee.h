@@ -63,7 +63,7 @@ public:
     void AddComboMoves(void);
     melee_execution_s * AddCombo(melee_execution_s *pAfter, int iId);
     void AddDirection(int iFlags);
-    int AddExeCombo(melee_execution_s*, float, float, void**);
+    void AddExeCombo(melee_execution_s*, float, float, void (*)(CBasePlayer*, CBasePlayer*));
     melee_execution_s * AddExeMove(melee_execution_s *p);
     void AddMove(int iIdx, int iType, int iCount, ...);
     void AddToCurAnim(bool bFlag, char *szName);
@@ -231,7 +231,7 @@ public:
     void StartBurstStruggleAttack(void);
     void StartChargedAttackRetaliate(void);
     void StartChargedAttack(void);
-    void StartExeAttack(void);
+    int StartExeAttack(void);
     void StartGrabbedAttack(void);
     void StartKnockPreStruggle(void);
     void StartLandRecover(void);

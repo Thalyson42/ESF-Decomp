@@ -4,6 +4,8 @@
 #include "util.h"
 #include "cbase.h"
 #include "player.h"
+#include "weapons.h"
+#include "esf_classes.h"
 #include "playermelee.h"
 
 // ---------------- papéis na luta (atacante / defensor) ----------------
@@ -50,7 +52,7 @@ edict_t *CPlayerMelee::GetSoundEdict(void)
 
 int CPlayerMelee::GetSkillValues(void)
 {
-    return g_pGameRules->m_pSkill->GetSkillValues();          // [?] objeto em gamerules+0x44, vfunc +0x108
+    return ((int (*)(void *))(*(void ***)(*(void **)((char *)g_pGameRules + 0x44)))[0x108 / 4])(*(void **)((char *)g_pGameRules + 0x44));          // [?] objeto em gamerules+0x44, vfunc +0x108
 }
 
 // ---------------- listas de golpes ----------------
@@ -107,7 +109,7 @@ void CPlayerMelee::SetDirection(melee_move_s *pMove, int iDir)
     MeleeHudFlags(6, iDir);                                   // [OK]
 }
 
-int CPlayerMelee::MeleeHudFlags(int a, int iFlags) { return MeleeHud(a, FlagsToDirections(iFlags)); }   // [OK]
+int CPlayerMelee::MeleeHudFlags(int a, int iFlags) { return (MeleeHud(a, FlagsToDirections(iFlags)), 0); }   // [OK]
 int CPlayerMelee::MeleeHudSwitchAtk(melee_move_s *pMove) { return MeleeHudFlags(6, pMove->m_iDirection); }   // [OK]
 
 // ---------------- força / tempo do golpe ----------------
@@ -154,7 +156,7 @@ int CPlayerMelee::CanInflictDamage(CBasePlayer *pPlayer, int bitsDamage)
     return 1;
 }
 
-int CPlayerMelee::CanSwitch(void) { return (double)m_iStruggleTies < melee_maxextanges + 12; }    // [?] constante global desconhecida
+int CPlayerMelee::CanSwitch(void) { return (double)m_iStruggleTies < melee_maxextanges->value + 12; }    // [?] constante global desconhecida
 
 int CPlayerMelee::SpecialLaserReduction(void)
 {
@@ -274,13 +276,6 @@ void CPlayerMelee::ExecuteCombo(void)
     m_fDelayEndBlock = 0;                                     // [OK] +0x108
     StopChargedAttack();
     SetMode(MELEE_EXE_ATTACK);                                // [OK] 7
-}
-
-void CPlayerMelee::StartExeAttack(void)
-{
-    if (f_104) { f_104 = 0; return; }                         // [OK]
-    CopyMoveToExe();
-    NewExeMovePost();
 }
 
 // ---------------- bloqueio ----------------
@@ -1390,7 +1385,7 @@ void CPlayerMelee::HandleGrabAttack(void)
         m_flGrabLastTick = gpGlobals->time;
         if (!m_fGrabFull)
         {
-            float flCostMult = m_pAttacker->m_pClass->GetKiCostMult();       // [?] vtable da classe +0x40
+            float flCostMult = m_pAttacker->m_pClass->GetKiEfficiency();       // [?] vtable da classe +0x40
             int iKi = (int)((1.0f / flCostMult) * dt * (bWeak ? 150.0f : 100.0f));   // [OK] custo de ki por segundo
             if (!m_pAttacker->UseKi(iKi))
                 iFail = 1;
@@ -1403,7 +1398,7 @@ void CPlayerMelee::HandleGrabAttack(void)
                     CBasePlayer *pDef = m_pDefender;
                     if ((pDef->pev->button & 1) || (pDef->pev->button & 0x800))   // [OK] o defensor resiste apertando ataque
                     {
-                        float flDefMult = pDef->m_pClass->GetKiCostMult();
+                        float flDefMult = pDef->m_pClass->GetKiEfficiency();
                         if (pDef->UseKi((int)((1.0f / flDefMult) * 75.0f * dt)))   // [OK] gastando ki ele atrapalha o agarrão
                         {
                             float f = m_pDefenderMelee->f_0d8 ? 0.8f : 0.6f;
@@ -2229,7 +2224,7 @@ int CPlayerMelee::Powerhit(int bAnim, CBasePlayer *pVictim, Vector vecDir, int i
     if (!m_pAttacker) return 0;
     int bBlocked = 0;
     CBasePlayerItem *pItem = m_pAttacker->m_pActiveItem;      // [OK] +0x3c8
-    if (pItem && pItem->m_iId == 1 && pItem->m_flNextSecondaryAttack > gpGlobals->time)   // [?] +0x88 e +0xa0: arma ainda em recarga
+    if (pItem && pItem->m_iId == 1 && ((CBasePlayerWeapon *)pItem)->m_flNextSecondaryAttack > gpGlobals->time)   // [?] +0x88 e +0xa0: arma ainda em recarga
         return 0;
 
     float flDmg = (float)(int)(GetPowerRatio(pVictim) * flDmgMult);
@@ -2249,14 +2244,14 @@ int CPlayerMelee::Powerhit(int bAnim, CBasePlayer *pVictim, Vector vecDir, int i
         if (pVictim->m_pActiveItem)
         {
             float f = gpGlobals->time + 0.8f;
-            pVictim->m_pActiveItem->m_flNextPrimaryAttack = f;
-            pVictim->m_pActiveItem->m_flNextSecondaryAttack = f;
+            ((CBasePlayerWeapon *)pVictim->m_pActiveItem)->m_flNextPrimaryAttack = f;
+            ((CBasePlayerWeapon *)pVictim->m_pActiveItem)->m_flNextSecondaryAttack = f;
         }
     }
     if (!pItem) return bBlocked;
     float f = gpGlobals->time + (bBlocked ? 1.0f : 0.65f);    // [OK] recarga do atacante: 1 s se bloqueado, senão 0,65 s
-    pItem->m_flNextPrimaryAttack = f;
-    pItem->m_flNextSecondaryAttack = f;
+    ((CBasePlayerWeapon *)pItem)->m_flNextPrimaryAttack = f;
+    ((CBasePlayerWeapon *)pItem)->m_flNextSecondaryAttack = f;
     return bBlocked;
 }
 
@@ -2620,13 +2615,13 @@ int CPlayerMelee::SetMode(ADV_MELEE_STATUS m)
     m_pDefenderMelee->m_Mode = m;
     int r = 0;
     if (m == 0) return 0;
-    if (m == 1)  { m_pDefenderMelee->m_Mode = (ADV_MELEE_STATUS)2;  r = StartPrePunchAttack(); }
-    if (m == 3)  { m_pDefenderMelee->m_Mode = (ADV_MELEE_STATUS)4;  r = StartChargedAttack(); }
-    if (m == 5)  { m_pDefenderMelee->m_Mode = (ADV_MELEE_STATUS)6;  r = StartGrabbedAttack(); }
+    if (m == 1)  { m_pDefenderMelee->m_Mode = (ADV_MELEE_STATUS)2;  r = (StartPrePunchAttack(), 0); }
+    if (m == 3)  { m_pDefenderMelee->m_Mode = (ADV_MELEE_STATUS)4;  r = (StartChargedAttack(), 0); }
+    if (m == 5)  { m_pDefenderMelee->m_Mode = (ADV_MELEE_STATUS)6;  r = (StartGrabbedAttack(), 0); }
     if (m == 7)  { m_pDefenderMelee->m_Mode = (ADV_MELEE_STATUS)8;  r = StartExeAttack(); }
-    if (m == 9)  { m_pDefenderMelee->m_Mode = (ADV_MELEE_STATUS)11; r = StartStruggleAttack(); }
-    if (m == 10) { m_pDefenderMelee->m_Mode = (ADV_MELEE_STATUS)11; r = StartBurstStruggleAttack(); }
-    if (m == 12) { m_pDefenderMelee->m_Mode = (ADV_MELEE_STATUS)13; r = StartKnockPreStruggle(); }
+    if (m == 9)  { m_pDefenderMelee->m_Mode = (ADV_MELEE_STATUS)11; r = (StartStruggleAttack(), 0); }
+    if (m == 10) { m_pDefenderMelee->m_Mode = (ADV_MELEE_STATUS)11; r = (StartBurstStruggleAttack(), 0); }
+    if (m == 12) { m_pDefenderMelee->m_Mode = (ADV_MELEE_STATUS)13; r = (StartKnockPreStruggle(), 0); }
     return r;
 }
 
@@ -2703,7 +2698,7 @@ int CPlayerMelee::CopyMoveToExe()       // converte a lista de golpes digitados 
 int CPlayerMelee::NewExeMovePost()
 {
     if (!m_pExeCur)
-        return CanSwitch() ? Switch() : StopMelee();          // [OK] acabaram os golpes
+        return CanSwitch() ? Switch() : (StopMelee(), 0);          // [OK] acabaram os golpes
     m_pExeCur->f_54 = SetBlock(m_pExeCur);                    // [OK] +0x54
     SetBlockStun(m_pExeCur);
     AddAnimationExe(gpGlobals->time, m_pExeCur->m_szName);
@@ -2741,8 +2736,8 @@ int CPlayerMelee::NextExeMove()
 int CPlayerMelee::HandleExeAttack()
 {
     plrmelee_anim_s *pAnim = (plrmelee_anim_s *)GetCurrentAnim();
-    if (!pAnim) { ALERT(at_console, "No pAnim!\n"); return StopMelee(); }
-    if (!pAnim->m_fExeAnim) { ALERT(at_console, "Non execute anim!\n"); return StopMelee(); }
+    if (!pAnim) { ALERT(at_console, "No pAnim!\n"); return (StopMelee(), 0); }
+    if (!pAnim->m_fExeAnim) { ALERT(at_console, "Non execute anim!\n"); return (StopMelee(), 0); }
 
     melee_execution_s *e = m_pExeCur;
     if (!e->f_40 && !e->f_44)                                 // golpe simples: dano no atraso
@@ -2762,7 +2757,7 @@ int CPlayerMelee::HandleExeAttack()
                 EmitComboDamage((melee_combo_hit_s *)h);
         }
     }
-    return SetBlockingDirections();
+    return (SetBlockingDirections(), 0);
 }
 
 int CPlayerMelee::StopExeAttack()
@@ -2937,7 +2932,7 @@ int CPlayerMelee::EmitDamage()
     if (m_pAttacker->f_968)                               // atrasa o próximo ataque do item
     {
         CBasePlayerItem *pItem = (CBasePlayerItem *)m_pAttacker->f_968;
-        pItem->m_flNextPrimaryAttack = pItem->m_flNextSecondaryAttack = gpGlobals->time + 1.0f;
+        ((CBasePlayerWeapon *)pItem)->m_flNextPrimaryAttack = ((CBasePlayerWeapon *)pItem)->m_flNextSecondaryAttack = gpGlobals->time + 1.0f;
     }
     CBasePlayer *pVictim = m_pDefender;
     CPlayerMelee *pVictimMelee = m_pDefenderMelee;
@@ -2993,13 +2988,13 @@ int CPlayerMelee::Block(int iAttackDir, int iDefendDir)   // 1 = a defesa cobre 
 
 int CPlayerMelee::CanUseTrunksSword(CBasePlayer *pVictim)
 {
-    if (!m_pAttacker->m_pClass->vfunc_4c()) return 0;        // [?] "personagem tem espada" (vtable do CBaseClass +0x4c)
+    if (!m_pAttacker->m_pClass->HasSword()) return 0;        // [?] "personagem tem espada" (vtable do CBaseClass +0x4c)
     melee_execution_s *e = m_pExeCur;
     if (e->m_pNext) return 0;                                 // só no último golpe
     if (e->f_54 != 2 && !e->f_3c) return 0;
     if (e->m_iStrength != 2) return 0;
     if (!(e->f_20 & 1)) return 0;                             // só soco forte
-    float flMax = (float)pVictim->m_pClass->vfunc_10();       // [?] vida máxima
+    float flMax = (float)pVictim->m_pClass->GetStartHealth();       // [?] vida máxima
     return (pVictim->pev->health / flMax < 0.2f) ? 1 : 0;     // [OK] vítima abaixo de 20%
 }
 
@@ -3032,7 +3027,7 @@ int CPlayerMelee::EmitExeSound(edict_t *pent)
         return 0;
     }
     if (e->f_54 != 2 && !e->f_3c) return 0;
-    if (m_pAttacker->m_pClass->vfunc_4c() && e->f_44)         // combo da espada
+    if (m_pAttacker->m_pClass->HasSword() && e->f_44)         // combo da espada
         PLAYBACK_EVENT_FULL(FEV_GLOBAL, pent, m_usMeleeSounds, 0, g_vecZero, g_vecZero, 0, 0, 0, 0, 0, 1);  // [?]
     else
         PLAYBACK_EVENT_FULL(FEV_GLOBAL, pent, m_usMeleeSounds, 0, g_vecZero, g_vecZero, 0, 0, e->f_20, e->m_iStrength, 0, 0);   // [OK] tipo+força
@@ -3045,7 +3040,7 @@ int CPlayerMelee::SetComboMoves()                             // marca nos golpe
     if (!pFirst) return 0;
     while (pFirst->m_pNext) pFirst = pFirst->m_pNext;         // o mais antigo
     struct melee_move_node { int m_iCount; int m_iType; struct { int flags; int value; } e[8]; melee_move_node *next; melee_move_node *prev; };   // [OK] ver AddMove
-    int iList = m_pAttacker->m_pClass->vfunc_34();            // [?] índice da lista de combos do personagem
+    int iList = m_pAttacker->m_pClass->Classify();            // [?] índice da lista de combos do personagem
     for (melee_move_node *pNode = (melee_move_node *)m_pMoveList[iList]; pNode; pNode = pNode->next)
     {
         for (melee_move_s *m = pFirst; m; m = m->m_pPrev)
@@ -3079,7 +3074,7 @@ int CPlayerMelee::Switch()                                    // fim dos golpes 
     CPlayerMelee *pD = m_pDefenderMelee;
     float flStun = -1.0f;
     int bFlag = pD->f_0f0;
-    if (!pD->f_0f0 && !pD->f_0ec) return StopMelee();         // [OK]
+    if (!pD->f_0f0 && !pD->f_0ec) return (StopMelee(), 0);         // [OK]
     if (pD->f_0f0 && !pD->f_0ec)
         flStun = pD->GetStunTime() * GetBlockRatio(f_0c0, f_0bc);   // [?] o decompilado perde o produto
     SimpleSwitch(pD, flStun, (ADV_MELEE_STATUS)3);
@@ -3087,7 +3082,7 @@ int CPlayerMelee::Switch()                                    // fim dos golpes 
     pD->f_0ec = 0;
     if (!bFlag) return 0;
     if (pD->SetDelayEndBlock(pD->m_pAttackerMoves, m_pDefenderMoves)) return 1;
-    return pD->ExecuteCombo();
+    return (pD->ExecuteCombo(), 0);
 }
 
 CBasePlayer *CPlayerMelee::GetEnemyPrepunch(CBasePlayer *pPrefer)   // melhor alvo (mais à frente) num raio de 95

@@ -12,9 +12,10 @@ if os.path.exists(path):
         if m: globs[m.group(2)] = m.group(1)
 for f in sys.argv[1:]:
     out = subprocess.run(['tools/syntax_check.sh', f], capture_output=True, text=True, env=dict(os.environ, LC_ALL='C')).stdout
-    for n in set(re.findall(r"'(\w+)' was not declared", out)):
+    for n in set(re.findall(r"'(\w+)' was not declared", out)) | set(re.findall(r"no member named '(f_[0-9a-f]+)'", out)):
         if re.fullmatch(r'f_[0-9a-f]+', n): fields.setdefault(n, 'int')
         elif n.startswith('gmsg'): globs.setdefault(n, 'int')
+        elif n.startswith('melee_') or n=='nomeleehittime': globs.setdefault(n, 'cvar_t *')
         elif n.startswith('g_fl'): globs.setdefault(n, 'float')
         elif n.startswith('g_'): globs.setdefault(n, 'int')
 L = ['// Gerado por tools/gen_extras.py: campos ainda sem nome ([?] tipo int por padrão) e globais usados pelo código recuperado.', '#pragma once']

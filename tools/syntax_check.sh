@@ -22,6 +22,18 @@ k=t.index('virtual void Touch(')
 t=t[:k]+'virtual void TouchedByPlayer(class CBasePlayer *) {}   // [?] ESF vtable +0xb4\n\t'+t[k:]
 open(p,'w').write(t)
 PY
+  python3 - "$B/dlls/weapons.h" "$B/dlls/cbase.h" <<'PY'
+import sys
+w=sys.argv[1]; t=open(w).read()
+k=t.index('class CBasePlayerItem : public CBaseAnimating')
+k=t.index('public:',k)+7
+t=t[:k]+'\n\tvirtual int vf_158(void) { return 0; }  virtual int vf_104(int) { return 0; }  virtual int vf_fc(void) { return 0; }   // [?] ESF\n'+t[k:]
+open(w,'w').write(t)
+c=sys.argv[2]; t=open(c).read()
+k=t.index('virtual void Touch(')
+t=t[:k]+'virtual class CBaseEntity *vfunc_12c(void) { return 0; } virtual int vfunc_item_28(void) { return 0; } virtual int vfunc_104(int) { return 0; } virtual int vfunc_fc(void) { return 0; } virtual int vfunc_item_18(void) { return 0; }   // [?]\n\t'+t[k:]
+open(c,'w').write(t)
+PY
 fi
 INC="-I include -I $B/dlls -I $B/engine -I $B/common -I $B/pm_shared -I $B/public"
 for f in "$@"; do
