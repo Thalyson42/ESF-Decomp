@@ -1,10 +1,64 @@
-// sdk/lights.cpp -- funções do HL SDK que o hl_i386.so do ESF reproduz (score de similaridade >= 0.86 em docs/sdk_match.csv).
-// Gerado por tools/assemble_sdk.py a partir de <hlsdk>/dlls/lights.cpp. Conferir contra decomp_raw ao compilar.
+// sdk/lights.cpp -- arquivo do HL SDK com SÓ as funções que o hl_i386.so do ESF reproduz (score >= 0.86 em docs/sdk_match.csv).
+// Gerado por tools/assemble_sdk.py a partir de <hlsdk>/dlls/lights.cpp. As demais funções do arquivo foram removidas.
+/***
+*
+*	Copyright (c) 1996-2001, Valve LLC. All rights reserved.
+*	
+*	This product contains software technology licensed from Id 
+*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc. 
+*	All Rights Reserved.
+*
+*   Use, distribution, and modification of this source code and/or resulting
+*   object code is restricted to non-commercial enhancements to products from
+*   Valve LLC.  All other use, distribution, or modification is prohibited
+*   without written permission from Valve LLC.
+*
+****/
+/*
+
+===== lights.cpp ========================================================
+
+  spawn and think functions for editor-placed lights
+
+*/
+
 #include "extdll.h"
 #include "util.h"
 #include "cbase.h"
 
+
+
+class CLight : public CPointEntity
+{
+public:
+	virtual void	KeyValue( KeyValueData* pkvd ); 
+	virtual void	Spawn( void );
+	void	Use( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value );
+
+	virtual int		Save( CSave &save );
+	virtual int		Restore( CRestore &restore );
+	
+	static	TYPEDESCRIPTION m_SaveData[];
+
+private:
+	int		m_iStyle;
+	int		m_iszPattern;
+};
+LINK_ENTITY_TO_CLASS( light, CLight );
+
+TYPEDESCRIPTION	CLight::m_SaveData[] = 
+{
+	DEFINE_FIELD( CLight, m_iStyle, FIELD_INTEGER ),
+	DEFINE_FIELD( CLight, m_iszPattern, FIELD_STRING ),
+};
+
+IMPLEMENT_SAVERESTORE( CLight, CPointEntity );
+
+
 // [SDK score 1.0] CLight::KeyValue
+//
+// Cache user-entity-field values until spawn is called.
+//
 void CLight :: KeyValue( KeyValueData* pkvd)
 {
 	if (FStrEq(pkvd->szKeyName, "style"))
@@ -29,6 +83,13 @@ void CLight :: KeyValue( KeyValueData* pkvd)
 }
 
 // [SDK score 1.0] CLight::Spawn
+/*QUAKED light (0 1 0) (-8 -8 -8) (8 8 8) LIGHT_START_OFF
+Non-displayed light.
+Default light value is 300
+Default style is 0
+If targeted, it will toggle between on or off.
+*/
+
 void CLight :: Spawn( void )
 {
 	if (FStringNull(pev->targetname))
@@ -48,6 +109,7 @@ void CLight :: Spawn( void )
 			LIGHT_STYLE(m_iStyle, "m");
 	}
 }
+
 
 // [SDK score 1.0] CLight::Use
 void CLight :: Use( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value )
@@ -72,6 +134,21 @@ void CLight :: Use( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useT
 		}
 	}
 }
+
+//
+// shut up spawn functions for new spotlights
+//
+LINK_ENTITY_TO_CLASS( light_spot, CLight );
+
+
+class CEnvLight : public CLight
+{
+public:
+	void	KeyValue( KeyValueData* pkvd ); 
+	void	Spawn( void );
+};
+
+LINK_ENTITY_TO_CLASS( light_environment, CEnvLight );
 
 // [SDK score 0.9] CEnvLight::KeyValue
 void CEnvLight::KeyValue( KeyValueData* pkvd )
@@ -110,6 +187,7 @@ void CEnvLight::KeyValue( KeyValueData* pkvd )
 		CLight::KeyValue( pkvd );
 	}
 }
+
 
 // [SDK score 1.0] CEnvLight::Spawn
 void CEnvLight :: Spawn( void )

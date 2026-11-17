@@ -1,5 +1,27 @@
-// sdk/subs.cpp -- funções do HL SDK que o hl_i386.so do ESF reproduz (score de similaridade >= 0.86 em docs/sdk_match.csv).
-// Gerado por tools/assemble_sdk.py a partir de <hlsdk>/dlls/subs.cpp. Conferir contra decomp_raw ao compilar.
+// sdk/subs.cpp -- arquivo do HL SDK com SÓ as funções que o hl_i386.so do ESF reproduz (score >= 0.86 em docs/sdk_match.csv).
+// Gerado por tools/assemble_sdk.py a partir de <hlsdk>/dlls/subs.cpp. As demais funções do arquivo foram removidas.
+/***
+*
+*	Copyright (c) 1996-2001, Valve LLC. All rights reserved.
+*	
+*	This product contains software technology licensed from Id 
+*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc. 
+*	All Rights Reserved.
+*
+*   Use, distribution, and modification of this source code and/or resulting
+*   object code is restricted to non-commercial enhancements to products from
+*   Valve LLC.  All other use, distribution, or modification is prohibited
+*   without written permission from Valve LLC.
+*
+****/
+/*
+
+===== subs.cpp ========================================================
+
+  frequently used global functions
+
+*/
+
 #include "extdll.h"
 #include "util.h"
 #include "cbase.h"
@@ -7,18 +29,50 @@
 #include "nodes.h"
 #include "doors.h"
 
+extern CGraph WorldGraph;
+
+extern BOOL FEntIsVisible(entvars_t* pev, entvars_t* pevTarget);
+
+extern DLL_GLOBAL int g_iSkillLevel;
+
+
 // [SDK score 1.0] CPointEntity::Spawn
+// Landmark class
 void CPointEntity :: Spawn( void )
 {
 	pev->solid = SOLID_NOT;
 //	UTIL_SetSize(pev, g_vecZero, g_vecZero);
 }
 
+
+class CNullEntity : public CBaseEntity
+{
+public:
+	void Spawn( void );
+};
+
+
 // [SDK score 1.0] CNullEntity::Spawn
+// Null Entity, remove on startup
 void CNullEntity :: Spawn( void )
 {
 	REMOVE_ENTITY(ENT(pev));
 }
+LINK_ENTITY_TO_CLASS(info_null,CNullEntity);
+
+class CBaseDMStart : public CPointEntity
+{
+public:
+	void		KeyValue( KeyValueData *pkvd );
+	BOOL		IsTriggered( CBaseEntity *pEntity );
+
+private:
+};
+
+// These are the new entry points to entities. 
+LINK_ENTITY_TO_CLASS(info_player_deathmatch,CBaseDMStart);
+LINK_ENTITY_TO_CLASS(info_player_start,CPointEntity);
+LINK_ENTITY_TO_CLASS(info_landmark,CPointEntity);
 
 // [SDK score 1.0] CBaseDMStart::KeyValue
 void CBaseDMStart::KeyValue( KeyValueData *pkvd )
@@ -41,6 +95,7 @@ BOOL CBaseDMStart::IsTriggered( CBaseEntity *pEntity )
 }
 
 // [SDK score 1.0] CBaseEntity::UpdateOnRemove
+// This updates global tables that need to know about entities being removed
 void CBaseEntity::UpdateOnRemove( void )
 {
 	int	i;
@@ -63,6 +118,7 @@ void CBaseEntity::UpdateOnRemove( void )
 }
 
 // [SDK score 1.0] CBaseEntity::SUB_Remove
+// Convenient way to delay removing oneself
 void CBaseEntity :: SUB_Remove( void )
 {
 	UpdateOnRemove();
@@ -76,10 +132,22 @@ void CBaseEntity :: SUB_Remove( void )
 	REMOVE_ENTITY(ENT(pev));
 }
 
+
 // [SDK score 1.0] CBaseEntity::SUB_DoNothing
+// Convenient way to explicitly do nothing (passed to functions that require a method)
 void CBaseEntity :: SUB_DoNothing( void )
 {
 }
+
+
+// Global Savedata for Delay
+TYPEDESCRIPTION	CBaseDelay::m_SaveData[] = 
+{
+	DEFINE_FIELD( CBaseDelay, m_flDelay, FIELD_FLOAT ),
+	DEFINE_FIELD( CBaseDelay, m_iszKillTarget, FIELD_STRING ),
+};
+
+IMPLEMENT_SAVERESTORE( CBaseDelay, CBaseEntity );
 
 // [SDK score 1.0] CBaseDelay::KeyValue
 void CBaseDelay :: KeyValue( KeyValueData *pkvd )
@@ -100,7 +168,23 @@ void CBaseDelay :: KeyValue( KeyValueData *pkvd )
 	}
 }
 
+
 // [SDK score 1.0] CBaseEntity::SUB_UseTargets
+/*
+==============================
+SUB_UseTargets
+
+If self.delay is set, a DelayedUse entity will be created that will actually
+do the SUB_UseTargets after that many seconds have passed.
+
+Removes all entities with a targetname that match self.killtarget,
+and removes them, so some events can remove other triggers.
+
+Search for (string)targetname in all entities that
+match (string)self.target and call their .use function (if they have one)
+
+==============================
+*/
 void CBaseEntity :: SUB_UseTargets( CBaseEntity *pActivator, USE_TYPE useType, float value )
 {
 	//
@@ -111,6 +195,12 @@ void CBaseEntity :: SUB_UseTargets( CBaseEntity *pActivator, USE_TYPE useType, f
 		FireTargets( STRING(pev->target), pActivator, this, useType, value );
 	}
 }
+
+
+// [fora desta etapa: diferente do SDK ou definida em outro arquivo] void FireTargets( const char *targetName, CBaseEntity *pActivator, CBaseEntity *pCaller, U
+
+LINK_ENTITY_TO_CLASS( DelayedUse, CBaseDelay );
+
 
 // [SDK score 0.75] CBaseDelay::SUB_UseTargets
 void CBaseDelay :: SUB_UseTargets( CBaseEntity *pActivator, USE_TYPE useType, float value )
@@ -184,6 +274,12 @@ void CBaseDelay :: SUB_UseTargets( CBaseEntity *pActivator, USE_TYPE useType, fl
 	}
 }
 
+
+// [fora desta etapa: diferente do SDK ou definida em outro arquivo] /* void CBaseDelay :: SUB_UseTargetsEntMethod( void )
+
+
+
+
 // [SDK score 1.0] CBaseDelay::DelayThink
 void CBaseDelay::DelayThink( void )
 {
@@ -197,6 +293,33 @@ void CBaseDelay::DelayThink( void )
 	SUB_UseTargets( pActivator, (USE_TYPE)pev->button, 0 );
 	REMOVE_ENTITY(ENT(pev));
 }
+
+
+// Global Savedata for Toggle
+TYPEDESCRIPTION	CBaseToggle::m_SaveData[] = 
+{
+	DEFINE_FIELD( CBaseToggle, m_toggle_state, FIELD_INTEGER ),
+	DEFINE_FIELD( CBaseToggle, m_flActivateFinished, FIELD_TIME ),
+	DEFINE_FIELD( CBaseToggle, m_flMoveDistance, FIELD_FLOAT ),
+	DEFINE_FIELD( CBaseToggle, m_flWait, FIELD_FLOAT ),
+	DEFINE_FIELD( CBaseToggle, m_flLip, FIELD_FLOAT ),
+	DEFINE_FIELD( CBaseToggle, m_flTWidth, FIELD_FLOAT ),
+	DEFINE_FIELD( CBaseToggle, m_flTLength, FIELD_FLOAT ),
+	DEFINE_FIELD( CBaseToggle, m_vecPosition1, FIELD_POSITION_VECTOR ),
+	DEFINE_FIELD( CBaseToggle, m_vecPosition2, FIELD_POSITION_VECTOR ),
+	DEFINE_FIELD( CBaseToggle, m_vecAngle1, FIELD_VECTOR ),		// UNDONE: Position could go through transition, but also angle?
+	DEFINE_FIELD( CBaseToggle, m_vecAngle2, FIELD_VECTOR ),		// UNDONE: Position could go through transition, but also angle?
+	DEFINE_FIELD( CBaseToggle, m_cTriggersLeft, FIELD_INTEGER ),
+	DEFINE_FIELD( CBaseToggle, m_flHeight, FIELD_FLOAT ),
+	DEFINE_FIELD( CBaseToggle, m_hActivator, FIELD_EHANDLE ),
+	DEFINE_FIELD( CBaseToggle, m_pfnCallWhenMoveDone, FIELD_FUNCTION ),
+	DEFINE_FIELD( CBaseToggle, m_vecFinalDest, FIELD_POSITION_VECTOR ),
+	DEFINE_FIELD( CBaseToggle, m_vecFinalAngle, FIELD_VECTOR ),
+	DEFINE_FIELD( CBaseToggle, m_sMaster, FIELD_STRING),
+	DEFINE_FIELD( CBaseToggle, m_bitsDamageInflict, FIELD_INTEGER ),	// damage type inflicted
+};
+IMPLEMENT_SAVERESTORE( CBaseToggle, CBaseAnimating );
+
 
 // [SDK score 1.0] CBaseToggle::KeyValue
 void CBaseToggle::KeyValue( KeyValueData *pkvd )
@@ -226,6 +349,14 @@ void CBaseToggle::KeyValue( KeyValueData *pkvd )
 }
 
 // [SDK score 1.0] CBaseToggle::LinearMove
+/*
+=============
+LinearMove
+
+calculate pev->velocity and pev->nextthink to reach vecDest from
+pev->origin traveling at flSpeed
+===============
+*/
 void CBaseToggle ::  LinearMove( Vector	vecDest, float flSpeed )
 {
 	ASSERTSZ(flSpeed != 0, "LinearMove:  no speed is defined!");
@@ -254,7 +385,13 @@ void CBaseToggle ::  LinearMove( Vector	vecDest, float flSpeed )
 	pev->velocity = vecDestDelta / flTravelTime;
 }
 
+
 // [SDK score 1.0] CBaseToggle::LinearMoveDone
+/*
+============
+After moving, set origin to exact final destination, call "move done" function
+============
+*/
 void CBaseToggle :: LinearMoveDone( void )
 {
 	Vector delta = m_vecFinalDest - pev->origin;
@@ -281,7 +418,26 @@ BOOL CBaseToggle :: IsLockedByMaster( void )
 		return FALSE;
 }
 
+
+// [fora desta etapa: diferente do SDK ou definida em outro arquivo] void CBaseToggle::PlaySentence(const char* pszSentence, float duration, float volume, floa
+
+// [fora desta etapa: diferente do SDK ou definida em outro arquivo] void CBaseToggle::PlayScriptedSentence(const char* pszSentence, float duration, float volu
+
+// [fora desta etapa: diferente do SDK ou definida em outro arquivo] void CBaseToggle::SentenceStop(void)
+
+
+
+
 // [SDK score 1.0] CBaseToggle::AngularMove
+/*
+=============
+AngularMove
+
+calculate pev->velocity and pev->nextthink to reach vecDest from
+pev->origin traveling at flSpeed
+Just like LinearMove, but rotational.
+===============
+*/
 void CBaseToggle :: AngularMove( Vector vecDestAngle, float flSpeed )
 {
 	ASSERTSZ(flSpeed != 0, "AngularMove:  no speed is defined!");
@@ -310,7 +466,13 @@ void CBaseToggle :: AngularMove( Vector vecDestAngle, float flSpeed )
 	pev->avelocity = vecDestDelta / flTravelTime;
 }
 
+
 // [SDK score 1.0] CBaseToggle::AngularMoveDone
+/*
+============
+After rotating, set angle to exact final angle, call "move done" function
+============
+*/
 void CBaseToggle :: AngularMoveDone( void )
 {
 	pev->angles = m_vecFinalAngle;
@@ -319,6 +481,7 @@ void CBaseToggle :: AngularMoveDone( void )
 	if ( m_pfnCallWhenMoveDone )
 		(this->*m_pfnCallWhenMoveDone)();
 }
+
 
 // [SDK score 1.0] CBaseToggle::AxisValue
 float CBaseToggle :: AxisValue( int flags, const Vector &angles )
@@ -331,6 +494,7 @@ float CBaseToggle :: AxisValue( int flags, const Vector &angles )
 	return angles.y;
 }
 
+
 // [SDK score 1.0] CBaseToggle::AxisDir
 void CBaseToggle :: AxisDir( entvars_t *pev )
 {
@@ -341,6 +505,7 @@ void CBaseToggle :: AxisDir( entvars_t *pev )
 	else
 		pev->movedir = Vector ( 0, 1, 0 );		// around y-axis
 }
+
 
 // [SDK score 1.0] CBaseToggle::AxisDelta
 float CBaseToggle :: AxisDelta( int flags, const Vector &angle1, const Vector &angle2 )
@@ -353,3 +518,8 @@ float CBaseToggle :: AxisDelta( int flags, const Vector &angle1, const Vector &a
 
 	return angle1.y - angle2.y;
 }
+
+
+// [fora desta etapa: diferente do SDK ou definida em outro arquivo] /* ============= FEntIsVisible returns TRUE if the passed entity is visible to caller, eve
+
+

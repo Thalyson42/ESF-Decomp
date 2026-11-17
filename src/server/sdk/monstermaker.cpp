@@ -1,10 +1,84 @@
-// sdk/monstermaker.cpp -- funções do HL SDK que o hl_i386.so do ESF reproduz (score de similaridade >= 0.86 em docs/sdk_match.csv).
-// Gerado por tools/assemble_sdk.py a partir de <hlsdk>/dlls/monstermaker.cpp. Conferir contra decomp_raw ao compilar.
+// sdk/monstermaker.cpp -- arquivo do HL SDK com SÓ as funções que o hl_i386.so do ESF reproduz (score >= 0.86 em docs/sdk_match.csv).
+// Gerado por tools/assemble_sdk.py a partir de <hlsdk>/dlls/monstermaker.cpp. As demais funções do arquivo foram removidas.
+/***
+*
+*	Copyright (c) 1996-2001, Valve LLC. All rights reserved.
+*	
+*	This product contains software technology licensed from Id 
+*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc. 
+*	All Rights Reserved.
+*
+*   Use, distribution, and modification of this source code and/or resulting
+*   object code is restricted to non-commercial enhancements to products from
+*   Valve LLC.  All other use, distribution, or modification is prohibited
+*   without written permission from Valve LLC.
+*
+****/
+//=========================================================
+// Monster Maker - this is an entity that creates monsters
+// in the game.
+//=========================================================
+
 #include "extdll.h"
 #include "util.h"
 #include "cbase.h"
 #include "monsters.h"
 #include "saverestore.h"
+
+// Monstermaker spawnflags
+#define	SF_MONSTERMAKER_START_ON	1 // start active ( if has targetname )
+#define	SF_MONSTERMAKER_CYCLIC		4 // drop one monster every time fired.
+#define SF_MONSTERMAKER_MONSTERCLIP	8 // Children are blocked by monsterclip
+
+//=========================================================
+// MonsterMaker - this ent creates monsters during the game.
+//=========================================================
+class CMonsterMaker : public CBaseMonster 
+{
+public:
+	void Spawn( void );
+	void Precache( void );
+	void KeyValue( KeyValueData* pkvd);
+	void EXPORT ToggleUse ( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value );
+	void EXPORT CyclicUse ( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value );
+	void EXPORT MakerThink ( void );
+	void DeathNotice ( entvars_t *pevChild );// monster maker children use this to tell the monster maker that they have died.
+	void MakeMonster( void );
+
+	virtual int		Save( CSave &save );
+	virtual int		Restore( CRestore &restore );
+
+	static	TYPEDESCRIPTION m_SaveData[];
+	
+	string_t m_iszMonsterClassname;// classname of the monster(s) that will be created.
+	
+	int	 m_cNumMonsters;// max number of monsters this ent can create
+
+	
+	int  m_cLiveChildren;// how many monsters made by this monster maker that are currently alive
+	int	 m_iMaxLiveChildren;// max number of monsters that this maker may have out at one time.
+
+	float m_flGround; // z coord of the ground under me, used to make sure no monsters are under the maker when it drops a new child
+
+	BOOL m_fActive;
+	BOOL m_fFadeChildren;// should we make the children fadeout?
+};
+
+LINK_ENTITY_TO_CLASS( monstermaker, CMonsterMaker );
+
+TYPEDESCRIPTION	CMonsterMaker::m_SaveData[] = 
+{
+	DEFINE_FIELD( CMonsterMaker, m_iszMonsterClassname, FIELD_STRING ),
+	DEFINE_FIELD( CMonsterMaker, m_cNumMonsters, FIELD_INTEGER ),
+	DEFINE_FIELD( CMonsterMaker, m_cLiveChildren, FIELD_INTEGER ),
+	DEFINE_FIELD( CMonsterMaker, m_flGround, FIELD_FLOAT ),
+	DEFINE_FIELD( CMonsterMaker, m_iMaxLiveChildren, FIELD_INTEGER ),
+	DEFINE_FIELD( CMonsterMaker, m_fActive, FIELD_BOOLEAN ),
+	DEFINE_FIELD( CMonsterMaker, m_fFadeChildren, FIELD_BOOLEAN ),
+};
+
+
+IMPLEMENT_SAVERESTORE( CMonsterMaker, CBaseMonster );
 
 // [SDK score 1.0] CMonsterMaker::KeyValue
 void CMonsterMaker :: KeyValue( KeyValueData *pkvd )
@@ -28,6 +102,7 @@ void CMonsterMaker :: KeyValue( KeyValueData *pkvd )
 	else
 		CBaseMonster::KeyValue( pkvd );
 }
+
 
 // [SDK score 1.0] CMonsterMaker::Spawn
 void CMonsterMaker :: Spawn( )
@@ -86,6 +161,9 @@ void CMonsterMaker :: Precache( void )
 }
 
 // [SDK score 1.0] CMonsterMaker::MakeMonster
+//=========================================================
+// MakeMonster-  this is the code that drops the monster
+//=========================================================
 void CMonsterMaker::MakeMonster( void )
 {
 	edict_t	*pent;
@@ -163,12 +241,19 @@ void CMonsterMaker::MakeMonster( void )
 }
 
 // [SDK score 1.0] CMonsterMaker::CyclicUse
+//=========================================================
+// CyclicUse - drops one monster from the monstermaker
+// each time we call this.
+//=========================================================
 void CMonsterMaker::CyclicUse ( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value )
 {
 	MakeMonster();
 }
 
 // [SDK score 1.0] CMonsterMaker::ToggleUse
+//=========================================================
+// ToggleUse - activates/deactivates the monster maker
+//=========================================================
 void CMonsterMaker :: ToggleUse ( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value )
 {
 	if ( !ShouldToggle( useType, m_fActive ) )
@@ -189,6 +274,9 @@ void CMonsterMaker :: ToggleUse ( CBaseEntity *pActivator, CBaseEntity *pCaller,
 }
 
 // [SDK score 1.0] CMonsterMaker::MakerThink
+//=========================================================
+// MakerThink - creates a new monster every so often
+//=========================================================
 void CMonsterMaker :: MakerThink ( void )
 {
 	pev->nextthink = gpGlobals->time + m_flDelay;
@@ -196,7 +284,10 @@ void CMonsterMaker :: MakerThink ( void )
 	MakeMonster();
 }
 
+
 // [SDK score 1.0] CMonsterMaker::DeathNotice
+//=========================================================
+//=========================================================
 void CMonsterMaker :: DeathNotice ( entvars_t *pevChild )
 {
 	// ok, we've gotten the deathnotice from our child, now clear out its owner if we don't want it to fade.
@@ -207,3 +298,5 @@ void CMonsterMaker :: DeathNotice ( entvars_t *pevChild )
 		pevChild->owner = NULL;
 	}
 }
+
+

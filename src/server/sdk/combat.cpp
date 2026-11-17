@@ -1,5 +1,27 @@
-// sdk/combat.cpp -- funções do HL SDK que o hl_i386.so do ESF reproduz (score de similaridade >= 0.86 em docs/sdk_match.csv).
-// Gerado por tools/assemble_sdk.py a partir de <hlsdk>/dlls/combat.cpp. Conferir contra decomp_raw ao compilar.
+// sdk/combat.cpp -- arquivo do HL SDK com SÓ as funções que o hl_i386.so do ESF reproduz (score >= 0.86 em docs/sdk_match.csv).
+// Gerado por tools/assemble_sdk.py a partir de <hlsdk>/dlls/combat.cpp. As demais funções do arquivo foram removidas.
+/***
+*
+*	Copyright (c) 1996-2001, Valve LLC. All rights reserved.
+*	
+*	This product contains software technology licensed from Id 
+*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc. 
+*	All Rights Reserved.
+*
+*   Use, distribution, and modification of this source code and/or resulting
+*   object code is restricted to non-commercial enhancements to products from
+*   Valve LLC.  All other use, distribution, or modification is prohibited
+*   without written permission from Valve LLC.
+*
+****/
+/*
+
+===== combat.cpp ========================================================
+
+  functions dealing with damage infliction & death
+
+*/
+
 #include "extdll.h"
 #include "util.h"
 #include "cbase.h"
@@ -10,7 +32,19 @@
 #include "weapons.h"
 #include "func_break.h"
 
+extern DLL_GLOBAL Vector		g_vecAttackDir;
+extern DLL_GLOBAL int			g_iSkillLevel;
+
+extern Vector VecBModelOrigin( entvars_t* pevBModel );
+extern entvars_t *g_pevLastInflictor;
+
+#define GERMAN_GIB_COUNT		4
+#define	HUMAN_GIB_COUNT			6
+#define ALIEN_GIB_COUNT			4
+
+
 // [SDK score 1.0] CGib::LimitVelocity
+// HACKHACK -- The gib velocity equations don't work
 void CGib :: LimitVelocity( void )
 {
 	float length = pev->velocity.Length();
@@ -20,6 +54,7 @@ void CGib :: LimitVelocity( void )
 	if ( length > 1500.0 )
 		pev->velocity = pev->velocity.Normalize() * 1500;		// This should really be sv_maxvelocity * 0.75 or something
 }
+
 
 // [SDK score 0.4] CGib::SpawnStickyGibs
 void CGib :: SpawnStickyGibs( entvars_t *pevVictim, Vector vecOrigin, int cGibs )
@@ -223,6 +258,7 @@ void CGib :: SpawnRandomGibs( entvars_t *pevVictim, int cGibs, int human )
 	}
 }
 
+
 // [SDK score 1.0] CBaseMonster::HasHumanGibs
 BOOL CBaseMonster :: HasHumanGibs( void )
 {
@@ -237,6 +273,7 @@ BOOL CBaseMonster :: HasHumanGibs( void )
 
 	return FALSE;
 }
+
 
 // [SDK score 1.0] CBaseMonster::HasAlienGibs
 BOOL CBaseMonster :: HasAlienGibs( void )
@@ -255,6 +292,7 @@ BOOL CBaseMonster :: HasAlienGibs( void )
 	return FALSE;
 }
 
+
 // [SDK score 1.0] CBaseMonster::FadeMonster
 void CBaseMonster::FadeMonster( void )
 {
@@ -268,6 +306,10 @@ void CBaseMonster::FadeMonster( void )
 }
 
 // [SDK score 0.8] CBaseMonster::GibMonster
+//=========================================================
+// GibMonster - create some gore and get rid of a monster's
+// model.
+//=========================================================
 void CBaseMonster :: GibMonster( void )
 {
 	TraceResult	tr;
@@ -310,6 +352,10 @@ void CBaseMonster :: GibMonster( void )
 }
 
 // [SDK heurística] CBaseMonster::GetDeathActivity
+//=========================================================
+// GetDeathActivity - determines the best type of death
+// anim to play.
+//=========================================================
 Activity CBaseMonster :: GetDeathActivity ( void )
 {
 	Activity	deathActivity;
@@ -428,6 +474,10 @@ Activity CBaseMonster :: GetDeathActivity ( void )
 }
 
 // [SDK score 1.0] CBaseMonster::GetSmallFlinchActivity
+//=========================================================
+// GetSmallFlinchActivity - determines the best type of flinch
+// anim to play.
+//=========================================================
 Activity CBaseMonster :: GetSmallFlinchActivity ( void )
 {
 	Activity	flinchActivity;
@@ -476,6 +526,7 @@ Activity CBaseMonster :: GetSmallFlinchActivity ( void )
 	return flinchActivity;
 }
 
+
 // [SDK score 0.5] CBaseMonster::BecomeDead
 void CBaseMonster::BecomeDead( void )
 {
@@ -493,6 +544,7 @@ void CBaseMonster::BecomeDead( void )
 	//pev->velocity = pev->velocity * RANDOM_FLOAT( 300, 400 );
 }
 
+
 // [SDK score 1.0] CBaseMonster::ShouldGibMonster
 BOOL CBaseMonster::ShouldGibMonster( int iGib )
 {
@@ -501,6 +553,7 @@ BOOL CBaseMonster::ShouldGibMonster( int iGib )
 	
 	return FALSE;
 }
+
 
 // [SDK score 1.0] CBaseMonster::CallGibMonster
 void CBaseMonster::CallGibMonster( void )
@@ -544,7 +597,13 @@ void CBaseMonster::CallGibMonster( void )
 		UTIL_Remove(this);
 }
 
+
 // [SDK score 1.0] CBaseMonster::Killed
+/*
+============
+Killed
+============
+*/
 void CBaseMonster :: Killed( entvars_t *pevAttacker, int iGib )
 {
 	unsigned int	cCount = 0;
@@ -595,6 +654,11 @@ void CBaseMonster :: Killed( entvars_t *pevAttacker, int iGib )
 }
 
 // [SDK score 1.0] CBaseEntity::SUB_StartFadeOut
+//
+// fade out - slowly fades a entity out, then removes it.
+//
+// DON'T USE ME FOR GIBS AND STUFF IN MULTIPLAYER! 
+// SET A FUTURE THINK AND A RENDERMODE!!
 void CBaseEntity :: SUB_StartFadeOut ( void )
 {
 	if (pev->rendermode == kRenderNormal)
@@ -626,7 +690,14 @@ void CBaseEntity :: SUB_FadeOut ( void  )
 	}
 }
 
+// [fora desta etapa: diferente do SDK ou definida em outro arquivo] //========================================================= // WaitTillLand - in order to 
+
+// [fora desta etapa: diferente do SDK ou definida em outro arquivo] // // Gib bounces on the ground or wall, sponges some blood down, too! // void CGib :: Bou
+
 // [SDK score 0.5] CGib::StickyGibTouch
+//
+// Sticky gib puts blood on the wall and stays put. 
+//
 void CGib :: StickyGibTouch ( CBaseEntity *pOther )
 {
 	Vector	vecSpot;
@@ -653,6 +724,9 @@ void CGib :: StickyGibTouch ( CBaseEntity *pOther )
 }
 
 // [SDK score 0.5] CGib::Spawn
+//
+// Throw a chunk
+//
 void CGib :: Spawn( const char *szGibModel )
 {
 	pev->movetype = MOVETYPE_BOUNCE;
@@ -679,6 +753,7 @@ void CGib :: Spawn( const char *szGibModel )
 }
 
 // [SDK score 1.0] CBaseMonster::TakeHealth
+// take health
 int CBaseMonster :: TakeHealth (float flHealth, int bitsDamageType)
 {
 	if (!pev->takedamage)
@@ -693,7 +768,13 @@ int CBaseMonster :: TakeHealth (float flHealth, int bitsDamageType)
 	return CBaseEntity::TakeHealth(flHealth, bitsDamageType);
 }
 
+// [fora desta etapa: diferente do SDK ou definida em outro arquivo] /* ============ TakeDamage The damage is coming from inflictor, but get mad at attacker Th
+
 // [SDK score 1.0] CBaseMonster::DeadTakeDamage
+//=========================================================
+// DeadTakeDamage - takedamage function called when a monster's
+// corpse is damaged.
+//=========================================================
 int CBaseMonster :: DeadTakeDamage( entvars_t *pevInflictor, entvars_t *pevAttacker, float flDamage, int bitsDamageType )
 {
 	Vector			vecDir;
@@ -739,6 +820,7 @@ int CBaseMonster :: DeadTakeDamage( entvars_t *pevInflictor, entvars_t *pevAttac
 	return 1;
 }
 
+
 // [SDK score 0.5] CBaseMonster::DamageForce
 float CBaseMonster :: DamageForce( float damage )
 { 
@@ -752,11 +834,15 @@ float CBaseMonster :: DamageForce( float damage )
 	return force;
 }
 
+// [fora desta etapa: diferente do SDK ou definida em outro arquivo] // // RadiusDamage - this entity is exploding, or otherwise needs to inflict damage upon e
+
+
 // [SDK score 1.0] CBaseMonster::RadiusDamage
 void CBaseMonster :: RadiusDamage(entvars_t* pevInflictor, entvars_t*	pevAttacker, float flDamage, int iClassIgnore, int bitsDamageType )
 {
 	::RadiusDamage( pev->origin, pevInflictor, pevAttacker, flDamage, flDamage * 2.5, iClassIgnore, bitsDamageType );
 }
+
 
 // [SDK score 1.0] CBaseMonster::RadiusDamage
 void CBaseMonster :: RadiusDamage( Vector vecSrc, entvars_t *pevInflictor, entvars_t *pevAttacker, float flDamage, int iClassIgnore, int bitsDamageType )
@@ -764,7 +850,16 @@ void CBaseMonster :: RadiusDamage( Vector vecSrc, entvars_t *pevInflictor, entva
 	::RadiusDamage( vecSrc, pevInflictor, pevAttacker, flDamage, flDamage * 2.5, iClassIgnore, bitsDamageType );
 }
 
+
 // [SDK score 1.0] CBaseMonster::CheckTraceHullAttack
+//=========================================================
+// CheckTraceHullAttack - expects a length to trace, amount 
+// of damage to do, and damage type. Returns a pointer to
+// the damaged entity in case the monster wishes to do
+// other stuff to the victim (punchangle, etc)
+//
+// Used for many contact-range melee attacks. Bites, claws, etc.
+//=========================================================
 CBaseEntity* CBaseMonster :: CheckTraceHullAttack( float flDist, int iDamage, int iDmgType )
 {
 	TraceResult tr;
@@ -795,7 +890,13 @@ CBaseEntity* CBaseMonster :: CheckTraceHullAttack( float flDist, int iDamage, in
 	return NULL;
 }
 
+
 // [SDK score 1.0] CBaseMonster::FInViewCone
+//=========================================================
+// FInViewCone - returns true is the passed ent is in
+// the caller's forward view cone. The dot product is performed
+// in 2d, making the view cone infinitely tall. 
+//=========================================================
 BOOL CBaseMonster :: FInViewCone ( CBaseEntity *pEntity )
 {
 	Vector2D	vec2LOS;
@@ -819,6 +920,11 @@ BOOL CBaseMonster :: FInViewCone ( CBaseEntity *pEntity )
 }
 
 // [SDK score 1.0] CBaseMonster::FInViewCone
+//=========================================================
+// FInViewCone - returns true is the passed vector is in
+// the caller's forward view cone. The dot product is performed
+// in 2d, making the view cone infinitely tall. 
+//=========================================================
 BOOL CBaseMonster :: FInViewCone ( Vector *pOrigin )
 {
 	Vector2D	vec2LOS;
@@ -842,6 +948,10 @@ BOOL CBaseMonster :: FInViewCone ( Vector *pOrigin )
 }
 
 // [SDK score 1.0] CBaseEntity::FVisible
+//=========================================================
+// FVisible - returns true if a line can be traced from
+// the caller's eyes to the target
+//=========================================================
 BOOL CBaseEntity :: FVisible ( CBaseEntity *pEntity )
 {
 	TraceResult tr;
@@ -872,6 +982,10 @@ BOOL CBaseEntity :: FVisible ( CBaseEntity *pEntity )
 }
 
 // [SDK score 1.0] CBaseEntity::FVisible
+//=========================================================
+// FVisible - returns true if a line can be traced from
+// the caller's eyes to the target vector
+//=========================================================
 BOOL CBaseEntity :: FVisible ( const Vector &vecOrigin )
 {
 	TraceResult tr;
@@ -891,7 +1005,38 @@ BOOL CBaseEntity :: FVisible ( const Vector &vecOrigin )
 	}
 }
 
+// [fora desta etapa: diferente do SDK ou definida em outro arquivo] /* ================ TraceAttack ================ */ void CBaseEntity::TraceAttack(entvars_
+
+
 // [SDK score 1.0] CBaseMonster::TraceAttack
+/*
+//=========================================================
+// TraceAttack
+//=========================================================
+void CBaseMonster::TraceAttack(entvars_t *pevAttacker, float flDamage, Vector vecDir, TraceResult *ptr, int bitsDamageType)
+{
+	Vector vecOrigin = ptr->vecEndPos - vecDir * 4;
+
+	ALERT ( at_console, "%d\n", ptr->iHitgroup );
+
+
+	if ( pev->takedamage )
+	{
+		AddMultiDamage( pevAttacker, this, flDamage, bitsDamageType );
+
+		int blood = BloodColor();
+		
+		if ( blood != DONT_BLEED )
+		{
+			SpawnBlood(vecOrigin, blood, flDamage);// a little surface blood.
+		}
+	}
+}
+*/
+
+//=========================================================
+// TraceAttack
+//=========================================================
 void CBaseMonster :: TraceAttack( entvars_t *pevAttacker, float flDamage, Vector vecDir, TraceResult *ptr, int bitsDamageType)
 {
 	if ( pev->takedamage )
@@ -929,7 +1074,16 @@ void CBaseMonster :: TraceAttack( entvars_t *pevAttacker, float flDamage, Vector
 	}
 }
 
+// [fora desta etapa: diferente do SDK ou definida em outro arquivo] /* ================ FireBullets Go to the trouble of combining multiple pellets into a sin
+
+
+// [fora desta etapa: diferente do SDK ou definida em outro arquivo] /* ================ FireBullets Go to the trouble of combining multiple pellets into a sin
+
+// [fora desta etapa: diferente do SDK ou definida em outro arquivo] void CBaseEntity :: TraceBleed( float flDamage, Vector vecDir, TraceResult *ptr, int bitsD
+
 // [SDK heurística] CBaseMonster::MakeDamageBloodDecal
+//=========================================================
+//=========================================================
 void CBaseMonster :: MakeDamageBloodDecal ( int cCount, float flNoise, TraceResult *ptr, const Vector &vecDir )
 {
 	// make blood decal on the wall! 

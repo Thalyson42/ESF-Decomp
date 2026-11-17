@@ -1,12 +1,50 @@
-// sdk/animating.cpp -- funções do HL SDK que o hl_i386.so do ESF reproduz (score de similaridade >= 0.86 em docs/sdk_match.csv).
-// Gerado por tools/assemble_sdk.py a partir de <hlsdk>/dlls/animating.cpp. Conferir contra decomp_raw ao compilar.
+// sdk/animating.cpp -- arquivo do HL SDK com SÓ as funções que o hl_i386.so do ESF reproduz (score >= 0.86 em docs/sdk_match.csv).
+// Gerado por tools/assemble_sdk.py a partir de <hlsdk>/dlls/animating.cpp. As demais funções do arquivo foram removidas.
+/***
+*
+*	Copyright (c) 1996-2001, Valve LLC. All rights reserved.
+*	
+*	This product contains software technology licensed from Id 
+*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc. 
+*	All Rights Reserved.
+*
+*   Use, distribution, and modification of this source code and/or resulting
+*   object code is restricted to non-commercial enhancements to products from
+*   Valve LLC.  All other use, distribution, or modification is prohibited
+*   without written permission from Valve LLC.
+*
+****/
+/*
+
+===== monsters.cpp ========================================================
+
+  Monster-related utility code
+
+*/
+
 #include "extdll.h"
 #include "util.h"
 #include "cbase.h"
 #include "animation.h"
 #include "saverestore.h"
 
+TYPEDESCRIPTION	CBaseAnimating::m_SaveData[] = 
+{
+	DEFINE_FIELD( CBaseMonster, m_flFrameRate, FIELD_FLOAT ),
+	DEFINE_FIELD( CBaseMonster, m_flGroundSpeed, FIELD_FLOAT ),
+	DEFINE_FIELD( CBaseMonster, m_flLastEventCheck, FIELD_TIME ),
+	DEFINE_FIELD( CBaseMonster, m_fSequenceFinished, FIELD_BOOLEAN ),
+	DEFINE_FIELD( CBaseMonster, m_fSequenceLoops, FIELD_BOOLEAN ),
+};
+
+IMPLEMENT_SAVERESTORE( CBaseAnimating, CBaseDelay );
+
+
 // [SDK score 0.6] CBaseAnimating::StudioFrameAdvance
+//=========================================================
+// StudioFrameAdvance - advance the animation frame up to the current time
+// if an flInterval is passed in, only advance animation that number of seconds
+//=========================================================
 float CBaseAnimating :: StudioFrameAdvance ( float flInterval )
 {
 	if (flInterval == 0.0)
@@ -37,6 +75,9 @@ float CBaseAnimating :: StudioFrameAdvance ( float flInterval )
 }
 
 // [SDK score 1.0] CBaseAnimating::LookupActivity
+//=========================================================
+// LookupActivity
+//=========================================================
 int CBaseAnimating :: LookupActivity ( int activity )
 {
 	ASSERT( activity != 0 );
@@ -46,6 +87,12 @@ int CBaseAnimating :: LookupActivity ( int activity )
 }
 
 // [SDK score 1.0] CBaseAnimating::LookupActivityHeaviest
+//=========================================================
+// LookupActivityHeaviest
+//
+// Get activity with highest 'weight'
+//
+//=========================================================
 int CBaseAnimating :: LookupActivityHeaviest ( int activity )
 {
 	void *pmodel = GET_MODEL_PTR( ENT(pev) );
@@ -54,6 +101,8 @@ int CBaseAnimating :: LookupActivityHeaviest ( int activity )
 }
 
 // [SDK score 1.0] CBaseAnimating::LookupSequence
+//=========================================================
+//=========================================================
 int CBaseAnimating :: LookupSequence ( const char *label )
 {
 	void *pmodel = GET_MODEL_PTR( ENT(pev) );
@@ -61,7 +110,10 @@ int CBaseAnimating :: LookupSequence ( const char *label )
 	return ::LookupSequence( pmodel, label );
 }
 
+
 // [SDK score 1.0] CBaseAnimating::ResetSequenceInfo
+//=========================================================
+//=========================================================
 void CBaseAnimating :: ResetSequenceInfo ( )
 {
 	void *pmodel = GET_MODEL_PTR( ENT(pev) );
@@ -74,7 +126,11 @@ void CBaseAnimating :: ResetSequenceInfo ( )
 	m_flLastEventCheck = gpGlobals->time;
 }
 
+
+
 // [SDK score 1.0] CBaseAnimating::GetSequenceFlags
+//=========================================================
+//=========================================================
 BOOL CBaseAnimating :: GetSequenceFlags( )
 {
 	void *pmodel = GET_MODEL_PTR( ENT(pev) );
@@ -83,6 +139,9 @@ BOOL CBaseAnimating :: GetSequenceFlags( )
 }
 
 // [SDK score 0.5] CBaseAnimating::DispatchAnimEvents
+//=========================================================
+// DispatchAnimEvents
+//=========================================================
 void CBaseAnimating :: DispatchAnimEvents ( float flInterval )
 {
 	MonsterEvent_t	event;
@@ -115,7 +174,10 @@ void CBaseAnimating :: DispatchAnimEvents ( float flInterval )
 	}
 }
 
+
 // [SDK score 1.0] CBaseAnimating::SetBoneController
+//=========================================================
+//=========================================================
 float CBaseAnimating :: SetBoneController ( int iController, float flValue )
 {
 	void *pmodel = GET_MODEL_PTR( ENT(pev) );
@@ -124,6 +186,8 @@ float CBaseAnimating :: SetBoneController ( int iController, float flValue )
 }
 
 // [SDK score 1.0] CBaseAnimating::InitBoneControllers
+//=========================================================
+//=========================================================
 void CBaseAnimating :: InitBoneControllers ( void )
 {
 	void *pmodel = GET_MODEL_PTR( ENT(pev) );
@@ -135,6 +199,8 @@ void CBaseAnimating :: InitBoneControllers ( void )
 }
 
 // [SDK score 1.0] CBaseAnimating::SetBlending
+//=========================================================
+//=========================================================
 float CBaseAnimating :: SetBlending ( int iBlender, float flValue )
 {
 	void *pmodel = GET_MODEL_PTR( ENT(pev) );
@@ -143,18 +209,24 @@ float CBaseAnimating :: SetBlending ( int iBlender, float flValue )
 }
 
 // [SDK score 1.0] CBaseAnimating::GetBonePosition
+//=========================================================
+//=========================================================
 void CBaseAnimating :: GetBonePosition ( int iBone, Vector &origin, Vector &angles )
 {
 	GET_BONE_POSITION( ENT(pev), iBone, origin, angles );
 }
 
 // [SDK score 1.0] CBaseAnimating::GetAttachment
+//=========================================================
+//=========================================================
 void CBaseAnimating :: GetAttachment ( int iAttachment, Vector &origin, Vector &angles )
 {
 	GET_ATTACHMENT( ENT(pev), iAttachment, origin, angles );
 }
 
 // [SDK score 1.0] CBaseAnimating::FindTransition
+//=========================================================
+//=========================================================
 int CBaseAnimating :: FindTransition( int iEndingSequence, int iGoalSequence, int *piDir )
 {
 	void *pmodel = GET_MODEL_PTR( ENT(pev) );
@@ -173,6 +245,8 @@ int CBaseAnimating :: FindTransition( int iEndingSequence, int iGoalSequence, in
 }
 
 // [SDK score 1.0] CBaseAnimating::GetAutomovement
+//=========================================================
+//=========================================================
 void CBaseAnimating :: GetAutomovement( Vector &origin, Vector &angles, float flInterval )
 {
 
@@ -190,6 +264,7 @@ int CBaseAnimating :: GetBodygroup( int iGroup )
 	return ::GetBodygroup( GET_MODEL_PTR( ENT(pev) ), pev, iGroup );
 }
 
+
 // [SDK score 1.0] CBaseAnimating::ExtractBbox
 int CBaseAnimating :: ExtractBbox( int sequence, float *mins, float *maxs )
 {
@@ -197,6 +272,9 @@ int CBaseAnimating :: ExtractBbox( int sequence, float *mins, float *maxs )
 }
 
 // [SDK heurística] CBaseAnimating::SetSequenceBox
+//=========================================================
+//=========================================================
+
 void CBaseAnimating :: SetSequenceBox( void )
 {
 	Vector mins, maxs;
@@ -257,3 +335,4 @@ void CBaseAnimating :: SetSequenceBox( void )
 		UTIL_SetSize( pev, rmin, rmax );
 	}
 }
+

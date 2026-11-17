@@ -1,5 +1,22 @@
-// sdk/teamplay_gamerules.cpp -- funções do HL SDK que o hl_i386.so do ESF reproduz (score de similaridade >= 0.86 em docs/sdk_match.csv).
-// Gerado por tools/assemble_sdk.py a partir de <hlsdk>/dlls/teamplay_gamerules.cpp. Conferir contra decomp_raw ao compilar.
+// sdk/teamplay_gamerules.cpp -- arquivo do HL SDK com SÓ as funções que o hl_i386.so do ESF reproduz (score >= 0.86 em docs/sdk_match.csv).
+// Gerado por tools/assemble_sdk.py a partir de <hlsdk>/dlls/teamplay_gamerules.cpp. As demais funções do arquivo foram removidas.
+/***
+*
+*	Copyright (c) 1996-2001, Valve LLC. All rights reserved.
+*	
+*	This product contains software technology licensed from Id 
+*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc. 
+*	All Rights Reserved.
+*
+*   Use, distribution, and modification of this source code and/or resulting
+*   object code is restricted to non-commercial enhancements to products from
+*   Valve LLC.  All other use, distribution, or modification is prohibited
+*   without written permission from Valve LLC.
+*
+****/
+//
+// teamplay_gamerules.cpp
+//
 #include	"extdll.h"
 #include	"util.h"
 #include	"cbase.h"
@@ -8,7 +25,29 @@
 #include	"gamerules.h"
 #include	"teamplay_gamerules.h"
 #include	"game.h"
+
+static char team_names[MAX_TEAMS][MAX_TEAMNAME_LENGTH];
+static int team_scores[MAX_TEAMS];
+static int num_teams = 0;
+
+extern DLL_GLOBAL BOOL		g_fGameOver;
+
+// [fora desta etapa: diferente do SDK ou definida em outro arquivo] CHalfLifeTeamplay :: CHalfLifeTeamplay()
+
+extern cvar_t timeleft, fragsleft;
+
 #include "voice_gamemgr.h"
+extern CVoiceGameMgr	g_VoiceGameMgr;
+
+// [fora desta etapa: diferente do SDK ou definida em outro arquivo] void CHalfLifeTeamplay :: Think ( void )
+
+// [fora desta etapa: diferente do SDK ou definida em outro arquivo] //========================================================= // ClientCommand // the user h
+
+extern int gmsgGameMode;
+extern int gmsgSayText;
+extern int gmsgTeamInfo;
+extern int gmsgTeamNames;
+extern int gmsgScoreInfo;
 
 // [SDK score 1.0] CHalfLifeTeamplay::UpdateGameMode
 void CHalfLifeTeamplay :: UpdateGameMode( CBasePlayer *pPlayer )
@@ -17,6 +56,7 @@ void CHalfLifeTeamplay :: UpdateGameMode( CBasePlayer *pPlayer )
 		WRITE_BYTE( 1 );  // game mode teamplay
 	MESSAGE_END();
 }
+
 
 // [SDK score 1.0] CHalfLifeTeamplay::SetDefaultPlayerTeam
 const char *CHalfLifeTeamplay::SetDefaultPlayerTeam( CBasePlayer *pPlayer )
@@ -46,7 +86,21 @@ const char *CHalfLifeTeamplay::SetDefaultPlayerTeam( CBasePlayer *pPlayer )
 	return pPlayer->m_szTeamName;
 }
 
+
+// [fora desta etapa: diferente do SDK ou definida em outro arquivo] //========================================================= // InitHUD //=================
+
+
+// [fora desta etapa: diferente do SDK ou definida em outro arquivo] void CHalfLifeTeamplay::ChangePlayerTeam( CBasePlayer *pPlayer, const char *pTeamName, BOO
+
+
+// [fora desta etapa: diferente do SDK ou definida em outro arquivo] //========================================================= // ClientUserInfoChanged //===
+
+extern int gmsgDeathMsg;
+
 // [SDK score 1.0] CHalfLifeTeamplay::DeathNotice
+//=========================================================
+// Deathnotice. 
+//=========================================================
 void CHalfLifeTeamplay::DeathNotice( CBasePlayer *pVictim, entvars_t *pKiller, entvars_t *pevInflictor )
 {
 	if ( m_DisableDeathMessages )
@@ -74,6 +128,8 @@ void CHalfLifeTeamplay::DeathNotice( CBasePlayer *pVictim, entvars_t *pKiller, e
 }
 
 // [SDK score 1.0] CHalfLifeTeamplay::PlayerKilled
+//=========================================================
+//=========================================================
 void CHalfLifeTeamplay :: PlayerKilled( CBasePlayer *pVictim, entvars_t *pKiller, entvars_t *pInflictor )
 {
 	if ( !m_DisableDeathPenalty )
@@ -83,7 +139,11 @@ void CHalfLifeTeamplay :: PlayerKilled( CBasePlayer *pVictim, entvars_t *pKiller
 	}
 }
 
+
 // [SDK score 1.0] CHalfLifeTeamplay::IsTeamplay
+//=========================================================
+// IsTeamplay
+//=========================================================
 BOOL CHalfLifeTeamplay::IsTeamplay( void )
 {
 	return TRUE;
@@ -106,6 +166,8 @@ BOOL CHalfLifeTeamplay::FPlayerCanTakeDamage( CBasePlayer *pPlayer, CBaseEntity 
 }
 
 // [SDK score 1.0] CHalfLifeTeamplay::PlayerRelationship
+//=========================================================
+//=========================================================
 int CHalfLifeTeamplay::PlayerRelationship( CBaseEntity *pPlayer, CBaseEntity *pTarget )
 {
 	// half life multiplay has a simple concept of Player Relationships.
@@ -122,6 +184,8 @@ int CHalfLifeTeamplay::PlayerRelationship( CBaseEntity *pPlayer, CBaseEntity *pT
 }
 
 // [SDK score 1.0] CHalfLifeTeamplay::ShouldAutoAim
+//=========================================================
+//=========================================================
 BOOL CHalfLifeTeamplay::ShouldAutoAim( CBasePlayer *pPlayer, edict_t *target )
 {
 	// always autoaim, unless target is a teammate
@@ -136,6 +200,8 @@ BOOL CHalfLifeTeamplay::ShouldAutoAim( CBasePlayer *pPlayer, edict_t *target )
 }
 
 // [SDK score 1.0] CHalfLifeTeamplay::IPointsForKill
+//=========================================================
+//=========================================================
 int CHalfLifeTeamplay::IPointsForKill( CBasePlayer *pAttacker, CBasePlayer *pKilled )
 {
 	if ( !pKilled )
@@ -151,6 +217,8 @@ int CHalfLifeTeamplay::IPointsForKill( CBasePlayer *pAttacker, CBasePlayer *pKil
 }
 
 // [SDK score 1.0] CHalfLifeTeamplay::GetTeamID
+//=========================================================
+//=========================================================
 const char *CHalfLifeTeamplay::GetTeamID( CBaseEntity *pEntity )
 {
 	if ( pEntity == NULL || pEntity->pev == NULL )
@@ -159,6 +227,7 @@ const char *CHalfLifeTeamplay::GetTeamID( CBaseEntity *pEntity )
 	// return their team name
 	return pEntity->TeamID();
 }
+
 
 // [SDK score 1.0] CHalfLifeTeamplay::GetTeamIndex
 int CHalfLifeTeamplay::GetTeamIndex( const char *pTeamName )
@@ -176,6 +245,7 @@ int CHalfLifeTeamplay::GetTeamIndex( const char *pTeamName )
 	return -1;	// No match
 }
 
+
 // [SDK score 1.0] CHalfLifeTeamplay::GetIndexedTeamName
 const char *CHalfLifeTeamplay::GetIndexedTeamName( int teamIndex )
 {
@@ -184,6 +254,7 @@ const char *CHalfLifeTeamplay::GetIndexedTeamName( int teamIndex )
 
 	return team_names[ teamIndex ];
 }
+
 
 // [SDK score 1.0] CHalfLifeTeamplay::IsValidTeam
 BOOL CHalfLifeTeamplay::IsValidTeam( const char *pTeamName ) 
@@ -194,7 +265,12 @@ BOOL CHalfLifeTeamplay::IsValidTeam( const char *pTeamName )
 	return ( GetTeamIndex( pTeamName ) != -1 ) ? TRUE : FALSE;
 }
 
+// [fora desta etapa: diferente do SDK ou definida em outro arquivo] const char *CHalfLifeTeamplay::TeamWithFewestPlayers( void )
+
+
 // [SDK score 1.0] CHalfLifeTeamplay::RecountTeams
+//=========================================================
+//=========================================================
 void CHalfLifeTeamplay::RecountTeams( bool bResendInfo )
 {
 	char	*pName;

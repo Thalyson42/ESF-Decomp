@@ -1,5 +1,27 @@
-// sdk/weapons.cpp -- funções do HL SDK que o hl_i386.so do ESF reproduz (score de similaridade >= 0.86 em docs/sdk_match.csv).
-// Gerado por tools/assemble_sdk.py a partir de <hlsdk>/dlls/weapons.cpp. Conferir contra decomp_raw ao compilar.
+// sdk/weapons.cpp -- arquivo do HL SDK com SÓ as funções que o hl_i386.so do ESF reproduz (score >= 0.86 em docs/sdk_match.csv).
+// Gerado por tools/assemble_sdk.py a partir de <hlsdk>/dlls/weapons.cpp. As demais funções do arquivo foram removidas.
+/*** 
+*
+*	Copyright (c) 1996-2001, Valve LLC. All rights reserved.
+*	
+*	This product contains software technology licensed from Id 
+*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc. 
+*	All Rights Reserved.
+*
+*   Use, distribution, and modification of this source code and/or resulting
+*   object code is restricted to non-commercial enhancements to products from
+*   Valve LLC.  All other use, distribution, or modification is prohibited
+*   without written permission from Valve LLC.
+*
+****/
+/*
+
+===== weapons.cpp ========================================================
+
+  functions governing the selection/use of weapons for players
+
+*/
+
 #include "extdll.h"
 #include "util.h"
 #include "cbase.h"
@@ -11,6 +33,108 @@
 #include "decals.h"
 #include "gamerules.h"
 
+extern CGraph	WorldGraph;
+extern int gEvilImpulse101;
+
+
+#define NOT_USED 255
+
+DLL_GLOBAL	short	g_sModelIndexLaser;// holds the index for the laser beam
+DLL_GLOBAL  const char *g_pModelNameLaser = "sprites/laserbeam.spr";
+DLL_GLOBAL	short	g_sModelIndexLaserDot;// holds the index for the laser beam dot
+DLL_GLOBAL	short	g_sModelIndexFireball;// holds the index for the fireball
+DLL_GLOBAL	short	g_sModelIndexSmoke;// holds the index for the smoke cloud
+DLL_GLOBAL	short	g_sModelIndexWExplosion;// holds the index for the underwater explosion
+DLL_GLOBAL	short	g_sModelIndexBubbles;// holds the index for the bubbles model
+DLL_GLOBAL	short	g_sModelIndexBloodDrop;// holds the sprite index for the initial blood
+DLL_GLOBAL	short	g_sModelIndexBloodSpray;// holds the sprite index for splattered blood
+
+ItemInfo CBasePlayerItem::ItemInfoArray[MAX_WEAPONS];
+AmmoInfo CBasePlayerItem::AmmoInfoArray[MAX_AMMO_SLOTS];
+
+extern int gmsgCurWeapon;
+
+MULTIDAMAGE gMultiDamage;
+
+#define TRACER_FREQ		4			// Tracers fire every fourth bullet
+
+extern bool IsBustingGame();
+extern bool IsPlayerBusting( CBaseEntity *pPlayer );
+
+// [fora desta etapa: diferente do SDK ou definida em outro arquivo] //========================================================= // MaxAmmoCarry - pass in a na
+
+	
+// [fora desta etapa: diferente do SDK ou definida em outro arquivo] /* ============================================================================== MULTI-DA
+
+
+// [fora desta etapa: diferente do SDK ou definida em outro arquivo] // // ApplyMultiDamage - inflicts contents of global multi damage register on gMultiDamage
+
+
+// [fora desta etapa: diferente do SDK ou definida em outro arquivo] // GLOBALS USED: // gMultiDamage void AddMultiDamage( entvars_t *pevInflictor, CBaseEntity
+
+// [fora desta etapa: diferente do SDK ou definida em outro arquivo] /* ================ SpawnBlood ================ */ void SpawnBlood(Vector vecSpot, int blo
+
+
+// [fora desta etapa: diferente do SDK ou definida em outro arquivo] int DamageDecal( CBaseEntity *pEntity, int bitsDamageType )
+
+// [fora desta etapa: diferente do SDK ou definida em outro arquivo] void DecalGunshot( TraceResult *pTrace, int iBulletType )
+
+
+
+// [fora desta etapa: diferente do SDK ou definida em outro arquivo] // // EjectBrass - tosses a brass shell from passed origin at passed velocity // void Ejec
+
+
+#if 0
+// [fora desta etapa: diferente do SDK ou definida em outro arquivo] // UNDONE: This is no longer used? void ExplodeModel( const Vector &vecOrigin, float speed
+#endif
+
+
+int giAmmoIndex = 0;
+
+// [fora desta etapa: diferente do SDK ou definida em outro arquivo] // Precaches the ammo and queues the ammo info for sending to clients void AddAmmoNameToAm
+
+
+// [fora desta etapa: diferente do SDK ou definida em outro arquivo] // Precaches the weapon and queues the weapon info for sending to clients void UTIL_Precac
+
+// [fora desta etapa: diferente do SDK ou definida em outro arquivo] // called by worldspawn void W_Precache(void)
+
+
+ 
+
+TYPEDESCRIPTION	CBasePlayerItem::m_SaveData[] = 
+{
+	DEFINE_FIELD( CBasePlayerItem, m_pPlayer, FIELD_CLASSPTR ),
+	DEFINE_FIELD( CBasePlayerItem, m_pNext, FIELD_CLASSPTR ),
+	//DEFINE_FIELD( CBasePlayerItem, m_fKnown, FIELD_INTEGER ),Reset to zero on load
+	DEFINE_FIELD( CBasePlayerItem, m_iId, FIELD_INTEGER ),
+	// DEFINE_FIELD( CBasePlayerItem, m_iIdPrimary, FIELD_INTEGER ),
+	// DEFINE_FIELD( CBasePlayerItem, m_iIdSecondary, FIELD_INTEGER ),
+};
+IMPLEMENT_SAVERESTORE( CBasePlayerItem, CBaseAnimating );
+
+
+TYPEDESCRIPTION	CBasePlayerWeapon::m_SaveData[] = 
+{
+#if defined( CLIENT_WEAPONS )
+	DEFINE_FIELD( CBasePlayerWeapon, m_flNextPrimaryAttack, FIELD_FLOAT ),
+	DEFINE_FIELD( CBasePlayerWeapon, m_flNextSecondaryAttack, FIELD_FLOAT ),
+	DEFINE_FIELD( CBasePlayerWeapon, m_flTimeWeaponIdle, FIELD_FLOAT ),
+#else	// CLIENT_WEAPONS
+	DEFINE_FIELD( CBasePlayerWeapon, m_flNextPrimaryAttack, FIELD_TIME ),
+	DEFINE_FIELD( CBasePlayerWeapon, m_flNextSecondaryAttack, FIELD_TIME ),
+	DEFINE_FIELD( CBasePlayerWeapon, m_flTimeWeaponIdle, FIELD_TIME ),
+#endif	// CLIENT_WEAPONS
+	DEFINE_FIELD( CBasePlayerWeapon, m_iPrimaryAmmoType, FIELD_INTEGER ),
+	DEFINE_FIELD( CBasePlayerWeapon, m_iSecondaryAmmoType, FIELD_INTEGER ),
+	DEFINE_FIELD( CBasePlayerWeapon, m_iClip, FIELD_INTEGER ),
+	DEFINE_FIELD( CBasePlayerWeapon, m_iDefaultAmmo, FIELD_INTEGER ),
+//	DEFINE_FIELD( CBasePlayerWeapon, m_iClientClip, FIELD_INTEGER )	 , reset to zero on load so hud gets updated correctly
+//  DEFINE_FIELD( CBasePlayerWeapon, m_iClientWeaponState, FIELD_INTEGER ), reset to zero on load so hud gets updated correctly
+};
+
+IMPLEMENT_SAVERESTORE( CBasePlayerWeapon, CBasePlayerItem );
+
+
 // [SDK score 1.0] CBasePlayerItem::SetObjectCollisionBox
 void CBasePlayerItem :: SetObjectCollisionBox( void )
 {
@@ -18,7 +142,11 @@ void CBasePlayerItem :: SetObjectCollisionBox( void )
 	pev->absmax = pev->origin + Vector(24, 24, 16); 
 }
 
+
 // [SDK score 1.0] CBasePlayerItem::FallInit
+//=========================================================
+// Sets up movetype, size, solidtype for a new weapon. 
+//=========================================================
 void CBasePlayerItem :: FallInit( void )
 {
 	pev->movetype = MOVETYPE_TOSS;
@@ -34,6 +162,13 @@ void CBasePlayerItem :: FallInit( void )
 }
 
 // [SDK score 1.0] CBasePlayerItem::FallThink
+//=========================================================
+// FallThink - Items that have just spawned run this think
+// to catch them when they hit the ground. Once we're sure
+// that the object is grounded, we change its solid type
+// to trigger and set it in a large box that helps the
+// player get it.
+//=========================================================
 void CBasePlayerItem::FallThink ( void )
 {
 	pev->nextthink = gpGlobals->time + 0.1;
@@ -70,6 +205,9 @@ void CBasePlayerItem::FallThink ( void )
 }
 
 // [SDK score 1.0] CBasePlayerItem::Materialize
+//=========================================================
+// Materialize - make a CBasePlayerItem visible and tangible
+//=========================================================
 void CBasePlayerItem::Materialize( void )
 {
 	if ( pev->effects & EF_NODRAW )
@@ -89,6 +227,10 @@ void CBasePlayerItem::Materialize( void )
 }
 
 // [SDK score 1.0] CBasePlayerItem::AttemptToMaterialize
+//=========================================================
+// AttemptToMaterialize - the item is trying to rematerialize,
+// should it do so now or wait longer?
+//=========================================================
 void CBasePlayerItem::AttemptToMaterialize( void )
 {
 	float time = g_pGameRules->FlWeaponTryRespawn( this );
@@ -103,6 +245,10 @@ void CBasePlayerItem::AttemptToMaterialize( void )
 }
 
 // [SDK score 1.0] CBasePlayerItem::CheckRespawn
+//=========================================================
+// CheckRespawn - a player is taking this weapon, should 
+// it respawn?
+//=========================================================
 void CBasePlayerItem :: CheckRespawn ( void )
 {
 	switch ( g_pGameRules->WeaponShouldRespawn( this ) )
@@ -117,6 +263,10 @@ void CBasePlayerItem :: CheckRespawn ( void )
 }
 
 // [SDK score 1.0] CBasePlayerItem::Respawn
+//=========================================================
+// Respawn- this item is already in the world, but it is
+// invisible and intangible. Make it visible and tangible.
+//=========================================================
 CBaseEntity* CBasePlayerItem::Respawn( void )
 {
 	// make a copy of this weapon that is invisible and inaccessible to players (no touch function). The weapon spawn/respawn code
@@ -170,6 +320,8 @@ void CBasePlayerItem::DefaultTouch( CBaseEntity *pOther )
 
 	SUB_UseTargets( pOther, USE_TOGGLE, 0 ); // UNDONE: when should this happen?
 }
+
+// [fora desta etapa: diferente do SDK ou definida em outro arquivo] BOOL CanAttack( float attack_time, float curtime, BOOL isPredicted )
 
 // [SDK score 1.0] CBasePlayerWeapon::ItemPostFrame
 void CBasePlayerWeapon::ItemPostFrame( void )
@@ -312,6 +464,9 @@ void CBasePlayerItem::AttachToPlayer ( CBasePlayer *pPlayer )
 	SetTouch( NULL );
 }
 
+// [fora desta etapa: diferente do SDK ou definida em outro arquivo] // CALLED THROUGH the newly-touched weapon's instance. The existing player weapon is pOrig
+
+
 // [SDK score 1.0] CBasePlayerWeapon::AddToPlayer
 int CBasePlayerWeapon::AddToPlayer( CBasePlayer *pPlayer )
 {
@@ -387,6 +542,7 @@ int CBasePlayerWeapon::UpdateClientData( CBasePlayer *pPlayer )
 	return 1;
 }
 
+
 // [SDK score 1.0] CBasePlayerWeapon::SendWeaponAnim
 void CBasePlayerWeapon::SendWeaponAnim( int iAnim, int skiplocal, int body )
 {
@@ -408,6 +564,15 @@ void CBasePlayerWeapon::SendWeaponAnim( int iAnim, int skiplocal, int body )
 	MESSAGE_END();
 }
 
+// [fora desta etapa: diferente do SDK ou definida em outro arquivo] BOOL CBasePlayerWeapon :: AddPrimaryAmmo( int iCount, char *szName, int iMaxClip, int iMax
+
+
+// [fora desta etapa: diferente do SDK ou definida em outro arquivo] BOOL CBasePlayerWeapon :: AddSecondaryAmmo( int iCount, char *szName, int iMax )
+
+// [fora desta etapa: diferente do SDK ou definida em outro arquivo] //========================================================= // IsUseable - this function d
+
+// [fora desta etapa: diferente do SDK ou definida em outro arquivo] BOOL CBasePlayerWeapon :: CanDeploy( void )
+
 // [SDK score 1.0] CBasePlayerWeapon::DefaultDeploy
 BOOL CBasePlayerWeapon :: DefaultDeploy( char *szViewModel, char *szWeaponModel, int iAnim, char *szAnimExt, int skiplocal /* = 0 */, int body )
 {
@@ -426,6 +591,9 @@ BOOL CBasePlayerWeapon :: DefaultDeploy( char *szViewModel, char *szWeaponModel,
 
 	return TRUE;
 }
+
+
+// [fora desta etapa: diferente do SDK ou definida em outro arquivo] BOOL CBasePlayerWeapon :: DefaultReload( int iClipSize, int iAnim, float fDelay, int body 
 
 // [SDK score 1.0] CBasePlayerWeapon::PlayEmptySound
 BOOL CBasePlayerWeapon :: PlayEmptySound( void )
@@ -446,12 +614,16 @@ void CBasePlayerWeapon :: ResetEmptySound( void )
 }
 
 // [SDK score 1.0] CBasePlayerWeapon::PrimaryAmmoIndex
+//=========================================================
+//=========================================================
 int CBasePlayerWeapon::PrimaryAmmoIndex( void )
 {
 	return m_iPrimaryAmmoType;
 }
 
 // [SDK score 1.0] CBasePlayerWeapon::SecondaryAmmoIndex
+//=========================================================
+//=========================================================
 int CBasePlayerWeapon::SecondaryAmmoIndex( void )
 {
 	return -1;
@@ -504,7 +676,16 @@ void CBasePlayerAmmo::Materialize( void )
 	SetTouch( &CBasePlayerAmmo::DefaultTouch );
 }
 
+// [fora desta etapa: diferente do SDK ou definida em outro arquivo] void CBasePlayerAmmo :: DefaultTouch( CBaseEntity *pOther )
+
+// [fora desta etapa: diferente do SDK ou definida em outro arquivo] //========================================================= // called by the new item with
+
+// [fora desta etapa: diferente do SDK ou definida em outro arquivo] //========================================================= // called by the new item's cl
+	
 // [SDK score 1.0] CBasePlayerWeapon::RetireWeapon
+//=========================================================
+// RetireWeapon - no more ammo for this gun, put it away.
+//=========================================================
 void CBasePlayerWeapon::RetireWeapon( void )
 {
 	// first, no viewmodel at all.
@@ -514,6 +695,48 @@ void CBasePlayerWeapon::RetireWeapon( void )
 
 	g_pGameRules->GetNextBestWeapon( m_pPlayer, this );
 }
+
+// [fora desta etapa: diferente do SDK ou definida em outro arquivo] //========================================================================= // GetNextAtta
+
+
+//*********************************************************
+// weaponbox code:
+//*********************************************************
+
+LINK_ENTITY_TO_CLASS( weaponbox, CWeaponBox );
+
+TYPEDESCRIPTION	CWeaponBox::m_SaveData[] = 
+{
+	DEFINE_ARRAY( CWeaponBox, m_rgAmmo, FIELD_INTEGER, MAX_AMMO_SLOTS ),
+	DEFINE_ARRAY( CWeaponBox, m_rgiszAmmo, FIELD_STRING, MAX_AMMO_SLOTS ),
+	DEFINE_ARRAY( CWeaponBox, m_rgpPlayerItems, FIELD_CLASSPTR, MAX_ITEM_TYPES ),
+	DEFINE_FIELD( CWeaponBox, m_cAmmoTypes, FIELD_INTEGER ),
+};
+
+IMPLEMENT_SAVERESTORE( CWeaponBox, CBaseEntity );
+
+// [fora desta etapa: diferente do SDK ou definida em outro arquivo] //========================================================= // //=========================
+
+// [fora desta etapa: diferente do SDK ou definida em outro arquivo] //========================================================= //============================
+
+// [fora desta etapa: diferente do SDK ou definida em outro arquivo] //========================================================= // CWeaponBox - Spawn //======
+
+// [fora desta etapa: diferente do SDK ou definida em outro arquivo] //========================================================= // CWeaponBox - Kill - the thi
+
+// [fora desta etapa: diferente do SDK ou definida em outro arquivo] //========================================================= // CWeaponBox - Touch: try to 
+
+// [fora desta etapa: diferente do SDK ou definida em outro arquivo] //========================================================= // CWeaponBox - PackWeapon: Ad
+
+// [fora desta etapa: diferente do SDK ou definida em outro arquivo] //========================================================= // CWeaponBox - PackAmmo //===
+
+// [fora desta etapa: diferente do SDK ou definida em outro arquivo] //========================================================= // CWeaponBox - GiveAmmo //===
+
+// [fora desta etapa: diferente do SDK ou definida em outro arquivo] //========================================================= // CWeaponBox::HasWeapon - is 
+
+// [fora desta etapa: diferente do SDK ou definida em outro arquivo] //========================================================= // CWeaponBox::IsEmpty - is th
+
+// [fora desta etapa: diferente do SDK ou definida em outro arquivo] //========================================================= //============================
+
 
 // [SDK score 1.0] CBasePlayerWeapon::PrintState
 void CBasePlayerWeapon::PrintState( void )
@@ -530,3 +753,60 @@ void CBasePlayerWeapon::PrintState( void )
 
 	ALERT( at_console, "m_iclip:  %i\n", m_iClip );
 }
+
+
+TYPEDESCRIPTION	CRpg::m_SaveData[] = 
+{
+	DEFINE_FIELD( CRpg, m_fSpotActive, FIELD_INTEGER ),
+	DEFINE_FIELD( CRpg, m_cActiveRockets, FIELD_INTEGER ),
+};
+IMPLEMENT_SAVERESTORE( CRpg, CBasePlayerWeapon );
+
+TYPEDESCRIPTION	CRpgRocket::m_SaveData[] = 
+{
+	DEFINE_FIELD( CRpgRocket, m_flIgniteTime, FIELD_TIME ),
+	DEFINE_FIELD( CRpgRocket, m_hLauncher, FIELD_EHANDLE ),
+};
+
+
+IMPLEMENT_SAVERESTORE( CRpgRocket, CGrenade );
+
+TYPEDESCRIPTION	CShotgun::m_SaveData[] = 
+{
+	DEFINE_FIELD( CShotgun, m_flNextReload, FIELD_TIME ),
+	DEFINE_FIELD( CShotgun, m_fInSpecialReload, FIELD_INTEGER ),
+	DEFINE_FIELD( CShotgun, m_flNextReload, FIELD_TIME ),
+	// DEFINE_FIELD( CShotgun, m_iShell, FIELD_INTEGER ),
+	DEFINE_FIELD( CShotgun, m_flPumpTime, FIELD_TIME ),
+};
+IMPLEMENT_SAVERESTORE( CShotgun, CBasePlayerWeapon );
+
+TYPEDESCRIPTION	CGauss::m_SaveData[] = 
+{
+	DEFINE_FIELD( CGauss, m_fInAttack, FIELD_INTEGER ),
+//	DEFINE_FIELD( CGauss, m_flStartCharge, FIELD_TIME ),
+//	DEFINE_FIELD( CGauss, m_flPlayAftershock, FIELD_TIME ),
+//	DEFINE_FIELD( CGauss, m_flNextAmmoBurn, FIELD_TIME ),
+	DEFINE_FIELD( CGauss, m_fPrimaryFire, FIELD_BOOLEAN ),
+};
+IMPLEMENT_SAVERESTORE( CGauss, CBasePlayerWeapon );
+
+TYPEDESCRIPTION	CEgon::m_SaveData[] = 
+{
+//	DEFINE_FIELD( CEgon, m_pBeam, FIELD_CLASSPTR ),
+//	DEFINE_FIELD( CEgon, m_pNoise, FIELD_CLASSPTR ),
+//	DEFINE_FIELD( CEgon, m_pSprite, FIELD_CLASSPTR ),
+	DEFINE_FIELD( CEgon, m_shootTime, FIELD_TIME ),
+	DEFINE_FIELD( CEgon, m_fireState, FIELD_INTEGER ),
+	DEFINE_FIELD( CEgon, m_fireMode, FIELD_INTEGER ),
+	DEFINE_FIELD( CEgon, m_shakeTime, FIELD_TIME ),
+	DEFINE_FIELD( CEgon, m_flAmmoUseTime, FIELD_TIME ),
+};
+IMPLEMENT_SAVERESTORE( CEgon, CBasePlayerWeapon );
+
+TYPEDESCRIPTION	CSatchel::m_SaveData[] = 
+{
+	DEFINE_FIELD( CSatchel, m_chargeReady, FIELD_INTEGER ),
+};
+IMPLEMENT_SAVERESTORE( CSatchel, CBasePlayerWeapon );
+

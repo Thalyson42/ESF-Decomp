@@ -1,5 +1,27 @@
-// sdk/world.cpp -- funções do HL SDK que o hl_i386.so do ESF reproduz (score de similaridade >= 0.86 em docs/sdk_match.csv).
-// Gerado por tools/assemble_sdk.py a partir de <hlsdk>/dlls/world.cpp. Conferir contra decomp_raw ao compilar.
+// sdk/world.cpp -- arquivo do HL SDK com SÓ as funções que o hl_i386.so do ESF reproduz (score >= 0.86 em docs/sdk_match.csv).
+// Gerado por tools/assemble_sdk.py a partir de <hlsdk>/dlls/world.cpp. As demais funções do arquivo foram removidas.
+/***
+*
+*	Copyright (c) 1996-2001, Valve LLC. All rights reserved.
+*	
+*	This product contains software technology licensed from Id 
+*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc. 
+*	All Rights Reserved.
+*
+*   Use, distribution, and modification of this source code and/or resulting
+*   object code is restricted to non-commercial enhancements to products from
+*   Valve LLC.  All other use, distribution, or modification is prohibited
+*   without written permission from Valve LLC.
+*
+****/
+/*
+
+===== world.cpp ========================================================
+
+  precaches and defs for entities and other data that must always be available.
+
+*/
+
 #include "extdll.h"
 #include "util.h"
 #include "cbase.h"
@@ -14,7 +36,87 @@
 #include "gamerules.h"
 #include "teamplay_gamerules.h"
 
+extern CGraph WorldGraph;
+extern CSoundEnt *pSoundEnt;
+
+extern CBaseEntity				*g_pLastSpawn;
+DLL_GLOBAL edict_t				*g_pBodyQueueHead;
+CGlobalState					gGlobalState;
+extern DLL_GLOBAL	int			gDisplayTitle;
+
+extern void W_Precache(void);
+
+//
+// This must match the list in util.h
+//
+DLL_DECALLIST gDecals[] = {
+	{ "{shot1",	0 },		// DECAL_GUNSHOT1 
+	{ "{shot2",	0 },		// DECAL_GUNSHOT2
+	{ "{shot3",0 },			// DECAL_GUNSHOT3
+	{ "{shot4",	0 },		// DECAL_GUNSHOT4
+	{ "{shot5",	0 },		// DECAL_GUNSHOT5
+	{ "{lambda01", 0 },		// DECAL_LAMBDA1
+	{ "{lambda02", 0 },		// DECAL_LAMBDA2
+	{ "{lambda03", 0 },		// DECAL_LAMBDA3
+	{ "{lambda04", 0 },		// DECAL_LAMBDA4
+	{ "{lambda05", 0 },		// DECAL_LAMBDA5
+	{ "{lambda06", 0 },		// DECAL_LAMBDA6
+	{ "{scorch1", 0 },		// DECAL_SCORCH1
+	{ "{scorch2", 0 },		// DECAL_SCORCH2
+	{ "{blood1", 0 },		// DECAL_BLOOD1
+	{ "{blood2", 0 },		// DECAL_BLOOD2
+	{ "{blood3", 0 },		// DECAL_BLOOD3
+	{ "{blood4", 0 },		// DECAL_BLOOD4
+	{ "{blood5", 0 },		// DECAL_BLOOD5
+	{ "{blood6", 0 },		// DECAL_BLOOD6
+	{ "{yblood1", 0 },		// DECAL_YBLOOD1
+	{ "{yblood2", 0 },		// DECAL_YBLOOD2
+	{ "{yblood3", 0 },		// DECAL_YBLOOD3
+	{ "{yblood4", 0 },		// DECAL_YBLOOD4
+	{ "{yblood5", 0 },		// DECAL_YBLOOD5
+	{ "{yblood6", 0 },		// DECAL_YBLOOD6
+	{ "{break1", 0 },		// DECAL_GLASSBREAK1
+	{ "{break2", 0 },		// DECAL_GLASSBREAK2
+	{ "{break3", 0 },		// DECAL_GLASSBREAK3
+	{ "{bigshot1", 0 },		// DECAL_BIGSHOT1
+	{ "{bigshot2", 0 },		// DECAL_BIGSHOT2
+	{ "{bigshot3", 0 },		// DECAL_BIGSHOT3
+	{ "{bigshot4", 0 },		// DECAL_BIGSHOT4
+	{ "{bigshot5", 0 },		// DECAL_BIGSHOT5
+	{ "{spit1", 0 },		// DECAL_SPIT1
+	{ "{spit2", 0 },		// DECAL_SPIT2
+	{ "{bproof1", 0 },		// DECAL_BPROOF1
+	{ "{gargstomp", 0 },	// DECAL_GARGSTOMP1,	// Gargantua stomp crack
+	{ "{smscorch1", 0 },	// DECAL_SMALLSCORCH1,	// Small scorch mark
+	{ "{smscorch2", 0 },	// DECAL_SMALLSCORCH2,	// Small scorch mark
+	{ "{smscorch3", 0 },	// DECAL_SMALLSCORCH3,	// Small scorch mark
+	{ "{mommablob", 0 },	// DECAL_MOMMABIRTH		// BM Birth spray
+	{ "{mommablob", 0 },	// DECAL_MOMMASPLAT		// BM Mortar spray?? need decal
+};
+
+/*
+==============================================================================
+
+BODY QUE
+
+==============================================================================
+*/
+
+#define SF_DECAL_NOTINDEATHMATCH		2048
+
+class CDecal : public CBaseEntity
+{
+public:
+	void	Spawn( void );
+	void	KeyValue( KeyValueData *pkvd );
+	void	EXPORT StaticDecal( void );
+	void	EXPORT TriggerDecal( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value );
+};
+
+LINK_ENTITY_TO_CLASS( infodecal, CDecal );
+
 // [SDK score 1.0] CDecal::Spawn
+// UNDONE:  These won't get sent to joining players in multi-player
 void CDecal :: Spawn( void )
 {
 	if ( pev->skin < 0 || (gpGlobals->deathmatch && FBitSet( pev->spawnflags, SF_DECAL_NOTINDEATHMATCH )) )
@@ -63,6 +165,7 @@ void CDecal :: TriggerDecal ( CBaseEntity *pActivator, CBaseEntity *pCaller, USE
 	pev->nextthink = gpGlobals->time + 0.1;
 }
 
+
 // [SDK score 1.0] CDecal::StaticDecal
 void CDecal :: StaticDecal( void )
 {
@@ -82,6 +185,7 @@ void CDecal :: StaticDecal( void )
 	SUB_Remove();
 }
 
+
 // [SDK score 1.0] CDecal::KeyValue
 void CDecal :: KeyValue( KeyValueData *pkvd )
 {
@@ -97,6 +201,23 @@ void CDecal :: KeyValue( KeyValueData *pkvd )
 	else
 		CBaseEntity::KeyValue( pkvd );
 }
+
+
+// Body queue class here.... It's really just CBaseEntity
+class CCorpse : public CBaseEntity
+{
+	virtual int ObjectCaps( void ) { return FCAP_DONT_SAVE; }	
+};
+
+LINK_ENTITY_TO_CLASS( bodyque, CCorpse );
+
+// [fora desta etapa: diferente do SDK ou definida em outro arquivo] static void InitBodyQue(void)
+
+
+// [fora desta etapa: diferente do SDK ou definida em outro arquivo] // // make a body que entry for the given ent so the ent can be respawned elsewhere // // 
+
+
+// [fora desta etapa: diferente do SDK ou definida em outro arquivo] CGlobalState::CGlobalState( void )
 
 // [SDK score 1.0] CGlobalState::Reset
 void CGlobalState::Reset( void )
@@ -127,7 +248,10 @@ globalentity_t *CGlobalState :: Find( string_t globalname )
 	return pTest;
 }
 
+
 // [SDK score 1.0] CGlobalState::DumpGlobals
+// This is available all the time now on impulse 104, remove later
+//#ifdef _DEBUG
 void CGlobalState :: DumpGlobals( void )
 {
 	static char *estates[] = { "Off", "On", "Dead" };
@@ -141,8 +265,10 @@ void CGlobalState :: DumpGlobals( void )
 		pTest = pTest->pNext;
 	}
 }
-
 // [SDK score 1.0] CGlobalState::EntityAdd
+//#endif
+
+
 void CGlobalState :: EntityAdd( string_t globalname, string_t mapName, GLOBALESTATE state )
 {
 	ASSERT( !Find(globalname) );
@@ -157,6 +283,7 @@ void CGlobalState :: EntityAdd( string_t globalname, string_t mapName, GLOBALEST
 	m_listCount++;
 }
 
+
 // [SDK score 1.0] CGlobalState::EntitySetState
 void CGlobalState :: EntitySetState( string_t globalname, GLOBALESTATE state )
 {
@@ -166,6 +293,7 @@ void CGlobalState :: EntitySetState( string_t globalname, GLOBALESTATE state )
 		pEnt->state = state;
 }
 
+
 // [SDK score 1.0] CGlobalState::EntityFromTable
 const globalentity_t *CGlobalState :: EntityFromTable( string_t globalname )
 {
@@ -173,6 +301,7 @@ const globalentity_t *CGlobalState :: EntityFromTable( string_t globalname )
 
 	return pEnt;
 }
+
 
 // [SDK score 1.0] CGlobalState::EntityGetState
 GLOBALESTATE CGlobalState :: EntityGetState( string_t globalname )
@@ -183,6 +312,22 @@ GLOBALESTATE CGlobalState :: EntityGetState( string_t globalname )
 
 	return GLOBAL_OFF;
 }
+
+
+// Global Savedata for Delay
+TYPEDESCRIPTION	CGlobalState::m_SaveData[] = 
+{
+	DEFINE_FIELD( CGlobalState, m_listCount, FIELD_INTEGER ),
+};
+
+// Global Savedata for Delay
+TYPEDESCRIPTION	gGlobalEntitySaveData[] = 
+{
+	DEFINE_ARRAY( globalentity_t, name, FIELD_CHARACTER, 64 ),
+	DEFINE_ARRAY( globalentity_t, levelName, FIELD_CHARACTER, 32 ),
+	DEFINE_FIELD( globalentity_t, state, FIELD_INTEGER ),
+};
+
 
 // [SDK score 0.75] CGlobalState::Save
 int CGlobalState::Save( CSave &save )
@@ -237,6 +382,7 @@ void CGlobalState::EntityUpdate( string_t globalname, string_t mapname )
 		strcpy( pEnt->levelName, STRING(mapname) );
 }
 
+
 // [SDK score 1.0] CGlobalState::ClearStates
 void CGlobalState::ClearStates( void )
 {
@@ -250,7 +396,39 @@ void CGlobalState::ClearStates( void )
 	Reset();
 }
 
+
+// [fora desta etapa: diferente do SDK ou definida em outro arquivo] void SaveGlobalState( SAVERESTOREDATA *pSaveData )
+
+
+// [fora desta etapa: diferente do SDK ou definida em outro arquivo] void RestoreGlobalState( SAVERESTOREDATA *pSaveData )
+
+
+// [fora desta etapa: diferente do SDK ou definida em outro arquivo] void ResetGlobalState( void )
+
+// moved CWorld class definition to cbase.h
+//=======================
+// CWorld
+//
+// This spawns first when each level begins.
+//=======================
+
+LINK_ENTITY_TO_CLASS( worldspawn, CWorld );
+
+#define SF_WORLD_DARK		0x0001		// Fade from black at startup
+#define SF_WORLD_TITLE		0x0002		// Display game title at startup
+#define SF_WORLD_FORCETEAM	0x0004		// Force teams
+
+extern DLL_GLOBAL BOOL		g_fGameOver;
+
+// [fora desta etapa: diferente do SDK ou definida em outro arquivo] void CWorld :: Spawn( void )
+
+// [fora desta etapa: diferente do SDK ou definida em outro arquivo] void CWorld :: Precache( void )
+
+
 // [SDK score 0.86] CWorld::KeyValue
+//
+// Just to ignore the "wad" field.
+//
 void CWorld :: KeyValue( KeyValueData *pkvd )
 {
 	if ( FStrEq(pkvd->szKeyName, "skyname") )

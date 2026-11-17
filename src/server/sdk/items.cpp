@@ -1,5 +1,27 @@
-// sdk/items.cpp -- funções do HL SDK que o hl_i386.so do ESF reproduz (score de similaridade >= 0.86 em docs/sdk_match.csv).
-// Gerado por tools/assemble_sdk.py a partir de <hlsdk>/dlls/items.cpp. Conferir contra decomp_raw ao compilar.
+// sdk/items.cpp -- arquivo do HL SDK com SÓ as funções que o hl_i386.so do ESF reproduz (score >= 0.86 em docs/sdk_match.csv).
+// Gerado por tools/assemble_sdk.py a partir de <hlsdk>/dlls/items.cpp. As demais funções do arquivo foram removidas.
+/***
+*
+*	Copyright (c) 1996-2001, Valve LLC. All rights reserved.
+*	
+*	This product contains software technology licensed from Id 
+*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc. 
+*	All Rights Reserved.
+*
+*   Use, distribution, and modification of this source code and/or resulting
+*   object code is restricted to non-commercial enhancements to products from
+*   Valve LLC.  All other use, distribution, or modification is prohibited
+*   without written permission from Valve LLC.
+*
+****/
+/*
+
+===== items.cpp ========================================================
+
+  functions governing the selection/use of weapons for players
+
+*/
+
 #include "extdll.h"
 #include "util.h"
 #include "cbase.h"
@@ -8,6 +30,18 @@
 #include "skill.h"
 #include "items.h"
 #include "gamerules.h"
+
+extern int gmsgItemPickup;
+
+class CWorldItem : public CBaseEntity
+{
+public:
+	void	KeyValue(KeyValueData *pkvd ); 
+	void	Spawn( void );
+	int		m_iType;
+};
+
+LINK_ENTITY_TO_CLASS(world_items, CWorldItem);
 
 // [SDK score 1.0] CWorldItem::KeyValue
 void CWorldItem::KeyValue(KeyValueData *pkvd)
@@ -56,6 +90,7 @@ void CWorldItem::Spawn( void )
 	REMOVE_ENTITY(edict());
 }
 
+
 // [SDK score 1.0] CItem::Spawn
 void CItem::Spawn( void )
 {
@@ -72,6 +107,8 @@ void CItem::Spawn( void )
 		return;
 	}
 }
+
+extern int gEvilImpulse101;
 
 // [SDK score 1.0] CItem::ItemTouch
 void CItem::ItemTouch( CBaseEntity *pOther )
@@ -139,3 +176,175 @@ void CItem::Materialize( void )
 
 	SetTouch( &CItem::ItemTouch );
 }
+
+#define SF_SUIT_SHORTLOGON		0x0001
+
+class CItemSuit : public CItem
+{
+	void Spawn( void )
+	{ 
+		Precache( );
+		SET_MODEL(ENT(pev), "models/w_suit.mdl");
+		CItem::Spawn( );
+	}
+	void Precache( void )
+	{
+		PRECACHE_MODEL ("models/w_suit.mdl");
+	}
+	BOOL MyTouch( CBasePlayer *pPlayer )
+	{
+		if ( pPlayer->pev->weapons & (1<<WEAPON_SUIT) )
+			return FALSE;
+
+		if ( pev->spawnflags & SF_SUIT_SHORTLOGON )
+			EMIT_SOUND_SUIT(pPlayer->edict(), "!HEV_A0");		// short version of suit logon,
+		else
+			EMIT_SOUND_SUIT(pPlayer->edict(), "!HEV_AAx");	// long version of suit logon
+
+		pPlayer->pev->weapons |= (1<<WEAPON_SUIT);
+		return TRUE;
+	}
+};
+
+LINK_ENTITY_TO_CLASS(item_suit, CItemSuit);
+
+
+
+class CItemBattery : public CItem
+{
+	void Spawn( void )
+	{ 
+		Precache( );
+		SET_MODEL(ENT(pev), "models/w_battery.mdl");
+		CItem::Spawn( );
+	}
+	void Precache( void )
+	{
+		PRECACHE_MODEL ("models/w_battery.mdl");
+		PRECACHE_SOUND( "items/gunpickup2.wav" );
+	}
+	BOOL MyTouch( CBasePlayer *pPlayer )
+	{
+		if ( pPlayer->pev->deadflag != DEAD_NO )
+		{
+			return FALSE;
+		}
+
+		if ((pPlayer->pev->armorvalue < MAX_NORMAL_BATTERY) &&
+			(pPlayer->pev->weapons & (1<<WEAPON_SUIT)))
+		{
+			int pct;
+			char szcharge[64];
+
+			pPlayer->pev->armorvalue += gSkillData.batteryCapacity;
+			pPlayer->pev->armorvalue = min<float>(pPlayer->pev->armorvalue, MAX_NORMAL_BATTERY);
+
+			EMIT_SOUND( pPlayer->edict(), CHAN_ITEM, "items/gunpickup2.wav", 1, ATTN_NORM );
+
+			MESSAGE_BEGIN( MSG_ONE, gmsgItemPickup, NULL, pPlayer->pev );
+				WRITE_STRING( STRING(pev->classname) );
+			MESSAGE_END();
+
+			
+			// Suit reports new power level
+			// For some reason this wasn't working in release build -- round it.
+			pct = (int)( (float)(pPlayer->pev->armorvalue * 100.0) * (1.0/MAX_NORMAL_BATTERY) + 0.5);
+			pct = (pct / 5);
+			if (pct > 0)
+				pct--;
+		
+			sprintf( szcharge,"!HEV_%1dP", pct );
+			
+			//EMIT_SOUND_SUIT(ENT(pev), szcharge);
+			pPlayer->SetSuitUpdate(szcharge, FALSE, SUIT_NEXT_IN_30SEC);
+			return TRUE;		
+		}
+		return FALSE;
+	}
+};
+
+LINK_ENTITY_TO_CLASS(item_battery, CItemBattery);
+
+
+class CItemAntidote : public CItem
+{
+	void Spawn( void )
+	{ 
+		Precache( );
+		SET_MODEL(ENT(pev), "models/w_antidote.mdl");
+		CItem::Spawn( );
+	}
+	void Precache( void )
+	{
+		PRECACHE_MODEL ("models/w_antidote.mdl");
+	}
+	BOOL MyTouch( CBasePlayer *pPlayer )
+	{
+		pPlayer->SetSuitUpdate("!HEV_DET4", FALSE, SUIT_NEXT_IN_1MIN);
+		
+		pPlayer->m_rgItems[ITEM_ANTIDOTE] += 1;
+		return TRUE;
+	}
+};
+
+LINK_ENTITY_TO_CLASS(item_antidote, CItemAntidote);
+
+
+class CItemSecurity : public CItem
+{
+	void Spawn( void )
+	{ 
+		Precache( );
+		SET_MODEL(ENT(pev), "models/w_security.mdl");
+		CItem::Spawn( );
+	}
+	void Precache( void )
+	{
+		PRECACHE_MODEL ("models/w_security.mdl");
+	}
+	BOOL MyTouch( CBasePlayer *pPlayer )
+	{
+		pPlayer->m_rgItems[ITEM_SECURITY] += 1;
+		return TRUE;
+	}
+};
+
+LINK_ENTITY_TO_CLASS(item_security, CItemSecurity);
+
+class CItemLongJump : public CItem
+{
+	void Spawn( void )
+	{ 
+		Precache( );
+		SET_MODEL(ENT(pev), "models/w_longjump.mdl");
+		CItem::Spawn( );
+	}
+	void Precache( void )
+	{
+		PRECACHE_MODEL ("models/w_longjump.mdl");
+	}
+	BOOL MyTouch( CBasePlayer *pPlayer )
+	{
+		if ( pPlayer->m_fLongJump )
+		{
+			return FALSE;
+		}
+
+		if ( ( pPlayer->pev->weapons & (1<<WEAPON_SUIT) ) )
+		{
+			pPlayer->m_fLongJump = TRUE;// player now has longjump module
+
+			g_engfuncs.pfnSetPhysicsKeyValue( pPlayer->edict(), "slj", "1" );
+
+			MESSAGE_BEGIN( MSG_ONE, gmsgItemPickup, NULL, pPlayer->pev );
+				WRITE_STRING( STRING(pev->classname) );
+			MESSAGE_END();
+
+			EMIT_SOUND_SUIT( pPlayer->edict(), "!HEV_A1" );	// Play the longjump sound UNDONE: Kelly? correct sound?
+			return TRUE;		
+		}
+		return FALSE;
+	}
+};
+
+LINK_ENTITY_TO_CLASS( item_longjump, CItemLongJump );

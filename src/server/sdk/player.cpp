@@ -1,7 +1,30 @@
-// sdk/player.cpp -- funções do HL SDK que o hl_i386.so do ESF reproduz (score de similaridade >= 0.86 em docs/sdk_match.csv).
-// Gerado por tools/assemble_sdk.py a partir de <hlsdk>/dlls/player.cpp. Conferir contra decomp_raw ao compilar.
+// sdk/player.cpp -- arquivo do HL SDK com SÓ as funções que o hl_i386.so do ESF reproduz (score >= 0.86 em docs/sdk_match.csv).
+// Gerado por tools/assemble_sdk.py a partir de <hlsdk>/dlls/player.cpp. As demais funções do arquivo foram removidas.
+	/***
+*
+*	Copyright (c) 1996-2001, Valve LLC. All rights reserved.
+*	
+*	This product contains software technology licensed from Id 
+*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc. 
+*	All Rights Reserved.
+*
+*   Use, distribution, and modification of this source code and/or resulting
+*   object code is restricted to non-commercial enhancements to products from
+*   Valve LLC.  All other use, distribution, or modification is prohibited
+*   without written permission from Valve LLC.
+*
+****/
+/*
+
+===== player.cpp ========================================================
+
+  functions dealing with the player
+
+*/
+
 #include "extdll.h"
 #include "util.h"
+
 #include "cbase.h"
 #include "player.h"
 #include "trains.h"
@@ -16,14 +39,201 @@
 #include "pm_shared.h"
 #include "hltv.h"
 
+// #define DUCKFIX
+
+extern DLL_GLOBAL ULONG		g_ulModelIndexPlayer;
+extern DLL_GLOBAL BOOL		g_fGameOver;
+extern DLL_GLOBAL	BOOL	g_fDrawLines;
+int gEvilImpulse101;
+extern DLL_GLOBAL int		g_iSkillLevel, gDisplayTitle;
+ 
+
+BOOL gInitHUD = TRUE; 
+
+extern void CopyToBodyQue(entvars_t* pev);
+extern void respawn(entvars_t *pev, BOOL fCopyCorpse);
+extern Vector VecBModelOrigin(entvars_t *pevBModel );
+extern edict_t *EntSelectSpawnPoint( CBaseEntity *pPlayer );
+
+extern bool IsBustingGame();
+
+// the world node graph
+extern CGraph	WorldGraph;
+
+#define TRAIN_ACTIVE	0x80 
+#define TRAIN_NEW		0xc0
+#define TRAIN_OFF		0x00
+#define TRAIN_NEUTRAL	0x01
+#define TRAIN_SLOW		0x02
+#define TRAIN_MEDIUM	0x03
+#define TRAIN_FAST		0x04 
+#define TRAIN_BACK		0x05
+
+#define	FLASH_DRAIN_TIME	 1.2 //100 units/3 minutes
+#define	FLASH_CHARGE_TIME	 0.2 // 100 units/20 seconds  (seconds per unit)
+
+// Global Savedata for player
+TYPEDESCRIPTION	CBasePlayer::m_playerSaveData[] = 
+{
+	DEFINE_FIELD( CBasePlayer, m_flFlashLightTime, FIELD_TIME ),
+	DEFINE_FIELD( CBasePlayer, m_iFlashBattery, FIELD_INTEGER ),
+
+	DEFINE_FIELD( CBasePlayer, m_afButtonLast, FIELD_INTEGER ),
+	DEFINE_FIELD( CBasePlayer, m_afButtonPressed, FIELD_INTEGER ),
+	DEFINE_FIELD( CBasePlayer, m_afButtonReleased, FIELD_INTEGER ),
+
+	DEFINE_ARRAY( CBasePlayer, m_rgItems, FIELD_INTEGER, MAX_ITEMS ),
+	DEFINE_FIELD( CBasePlayer, m_afPhysicsFlags, FIELD_INTEGER ),
+
+	DEFINE_FIELD( CBasePlayer, m_flTimeStepSound, FIELD_TIME ),
+	DEFINE_FIELD( CBasePlayer, m_flTimeWeaponIdle, FIELD_TIME ),
+	DEFINE_FIELD( CBasePlayer, m_flSwimTime, FIELD_TIME ),
+	DEFINE_FIELD( CBasePlayer, m_flDuckTime, FIELD_TIME ),
+	DEFINE_FIELD( CBasePlayer, m_flWallJumpTime, FIELD_TIME ),
+
+	DEFINE_FIELD( CBasePlayer, m_flSuitUpdate, FIELD_TIME ),
+	DEFINE_ARRAY( CBasePlayer, m_rgSuitPlayList, FIELD_INTEGER, CSUITPLAYLIST ),
+	DEFINE_FIELD( CBasePlayer, m_iSuitPlayNext, FIELD_INTEGER ),
+	DEFINE_ARRAY( CBasePlayer, m_rgiSuitNoRepeat, FIELD_INTEGER, CSUITNOREPEAT ),
+	DEFINE_ARRAY( CBasePlayer, m_rgflSuitNoRepeatTime, FIELD_TIME, CSUITNOREPEAT ),
+	DEFINE_FIELD( CBasePlayer, m_lastDamageAmount, FIELD_INTEGER ),
+
+	DEFINE_ARRAY( CBasePlayer, m_rgpPlayerItems, FIELD_CLASSPTR, MAX_ITEM_TYPES ),
+	DEFINE_FIELD( CBasePlayer, m_pActiveItem, FIELD_CLASSPTR ),
+	DEFINE_FIELD( CBasePlayer, m_pLastItem, FIELD_CLASSPTR ),
+	
+	DEFINE_ARRAY( CBasePlayer, m_rgAmmo, FIELD_INTEGER, MAX_AMMO_SLOTS ),
+	DEFINE_FIELD( CBasePlayer, m_idrowndmg, FIELD_INTEGER ),
+	DEFINE_FIELD( CBasePlayer, m_idrownrestored, FIELD_INTEGER ),
+	DEFINE_FIELD( CBasePlayer, m_tSneaking, FIELD_TIME ),
+
+	DEFINE_FIELD( CBasePlayer, m_iTrain, FIELD_INTEGER ),
+	DEFINE_FIELD( CBasePlayer, m_bitsHUDDamage, FIELD_INTEGER ),
+	DEFINE_FIELD( CBasePlayer, m_flFallVelocity, FIELD_FLOAT ),
+	DEFINE_FIELD( CBasePlayer, m_iTargetVolume, FIELD_INTEGER ),
+	DEFINE_FIELD( CBasePlayer, m_iWeaponVolume, FIELD_INTEGER ),
+	DEFINE_FIELD( CBasePlayer, m_iExtraSoundTypes, FIELD_INTEGER ),
+	DEFINE_FIELD( CBasePlayer, m_iWeaponFlash, FIELD_INTEGER ),
+	DEFINE_FIELD( CBasePlayer, m_fLongJump, FIELD_BOOLEAN ),
+	DEFINE_FIELD( CBasePlayer, m_fInitHUD, FIELD_BOOLEAN ),
+	DEFINE_FIELD( CBasePlayer, m_tbdPrev, FIELD_TIME ),
+
+	DEFINE_FIELD( CBasePlayer, m_pTank, FIELD_EHANDLE ),
+	DEFINE_FIELD( CBasePlayer, m_iHideHUD, FIELD_INTEGER ),
+	DEFINE_FIELD( CBasePlayer, m_iFOV, FIELD_INTEGER ),
+	
+	//DEFINE_FIELD( CBasePlayer, m_fDeadTime, FIELD_FLOAT ), // only used in multiplayer games
+	//DEFINE_FIELD( CBasePlayer, m_fGameHUDInitialized, FIELD_INTEGER ), // only used in multiplayer games
+	//DEFINE_FIELD( CBasePlayer, m_flStopExtraSoundTime, FIELD_TIME ),
+	//DEFINE_FIELD( CBasePlayer, m_fKnownItem, FIELD_INTEGER ), // reset to zero on load
+	//DEFINE_FIELD( CBasePlayer, m_iPlayerSound, FIELD_INTEGER ),	// Don't restore, set in Precache()
+	//DEFINE_FIELD( CBasePlayer, m_pentSndLast, FIELD_EDICT ),	// Don't restore, client needs reset
+	//DEFINE_FIELD( CBasePlayer, m_flSndRoomtype, FIELD_FLOAT ),	// Don't restore, client needs reset
+	//DEFINE_FIELD( CBasePlayer, m_flSndRange, FIELD_FLOAT ),	// Don't restore, client needs reset
+	//DEFINE_FIELD( CBasePlayer, m_fNewAmmo, FIELD_INTEGER ), // Don't restore, client needs reset
+	//DEFINE_FIELD( CBasePlayer, m_flgeigerRange, FIELD_FLOAT ),	// Don't restore, reset in Precache()
+	//DEFINE_FIELD( CBasePlayer, m_flgeigerDelay, FIELD_FLOAT ),	// Don't restore, reset in Precache()
+	//DEFINE_FIELD( CBasePlayer, m_igeigerRangePrev, FIELD_FLOAT ),	// Don't restore, reset in Precache()
+	//DEFINE_FIELD( CBasePlayer, m_iStepLeft, FIELD_INTEGER ), // Don't need to restore
+	//DEFINE_ARRAY( CBasePlayer, m_szTextureName, FIELD_CHARACTER, CBTEXTURENAMEMAX ), // Don't need to restore
+	//DEFINE_FIELD( CBasePlayer, m_chTextureType, FIELD_CHARACTER ), // Don't need to restore
+	//DEFINE_FIELD( CBasePlayer, m_fNoPlayerSound, FIELD_BOOLEAN ), // Don't need to restore, debug
+	//DEFINE_FIELD( CBasePlayer, m_iUpdateTime, FIELD_INTEGER ), // Don't need to restore
+	//DEFINE_FIELD( CBasePlayer, m_iClientHealth, FIELD_INTEGER ), // Don't restore, client needs reset
+	//DEFINE_FIELD( CBasePlayer, m_iClientBattery, FIELD_INTEGER ), // Don't restore, client needs reset
+	//DEFINE_FIELD( CBasePlayer, m_iClientHideHUD, FIELD_INTEGER ), // Don't restore, client needs reset
+	//DEFINE_FIELD( CBasePlayer, m_fWeapon, FIELD_BOOLEAN ),  // Don't restore, client needs reset
+	//DEFINE_FIELD( CBasePlayer, m_nCustomSprayFrames, FIELD_INTEGER ), // Don't restore, depends on server message after spawning and only matters in multiplayer
+	//DEFINE_FIELD( CBasePlayer, m_vecAutoAim, FIELD_VECTOR ), // Don't save/restore - this is recomputed
+	//DEFINE_ARRAY( CBasePlayer, m_rgAmmoLast, FIELD_INTEGER, MAX_AMMO_SLOTS ), // Don't need to restore
+	//DEFINE_FIELD( CBasePlayer, m_fOnTarget, FIELD_BOOLEAN ), // Don't need to restore
+	//DEFINE_FIELD( CBasePlayer, m_nCustomSprayFrames, FIELD_INTEGER ), // Don't need to restore
+	
+};	
+
+
+int giPrecacheGrunt = 0;
+int gmsgShake = 0;
+int gmsgFade = 0;
+int gmsgSelAmmo = 0;
+int gmsgFlashlight = 0;
+int gmsgFlashBattery = 0;
+int gmsgResetHUD = 0;
+int gmsgInitHUD = 0;
+int gmsgShowGameTitle = 0;
+int gmsgCurWeapon = 0;
+int gmsgHealth = 0;
+int gmsgDamage = 0;
+int gmsgBattery = 0;
+int gmsgTrain = 0;
+int gmsgLogo = 0;
+int gmsgWeaponList = 0;
+int gmsgAmmoX = 0;
+int gmsgHudText = 0;
+int gmsgDeathMsg = 0;
+int gmsgScoreInfo = 0;
+int gmsgTeamInfo = 0;
+int gmsgTeamScore = 0;
+int gmsgGameMode = 0;
+int gmsgMOTD = 0;
+int gmsgServerName = 0;
+int gmsgAmmoPickup = 0;
+int gmsgWeapPickup = 0;
+int gmsgItemPickup = 0;
+int gmsgHideWeapon = 0;
+int gmsgSetCurWeap = 0;
+int gmsgSayText = 0;
+int gmsgTextMsg = 0;
+int gmsgSetFOV = 0;
+int gmsgShowMenu = 0;
+int gmsgGeigerRange = 0;
+int gmsgTeamNames = 0;
+
+int gmsgStatusText = 0;
+int gmsgStatusValue = 0; 
+
+
+
+// [fora desta etapa: diferente do SDK ou definida em outro arquivo] void LinkUserMessages( void )
+
+LINK_ENTITY_TO_CLASS( player, CBasePlayer );
+
+
+
+// [fora desta etapa: diferente do SDK ou definida em outro arquivo] void CBasePlayer :: Pain( void )
+
+// [fora desta etapa: diferente do SDK ou definida em outro arquivo] /* * */ Vector VecVelocityForDamage(float flDamage)
+
+#if 0 /*
+// [fora desta etapa: diferente do SDK ou definida em outro arquivo] static void ThrowGib(entvars_t *pev, char *szGibModel, float flDamage)
+	
+	
+// [fora desta etapa: diferente do SDK ou definida em outro arquivo] static void ThrowHead(entvars_t *pev, char *szGibModel, floatflDamage)
+
+
+*/ 
+#endif
+
+// [fora desta etapa: diferente do SDK ou definida em outro arquivo] int TrainSpeed(int iSpeed, int iMax)
+
+// [fora desta etapa: diferente do SDK ou definida em outro arquivo] void CBasePlayer :: DeathSound( void )
+
 // [SDK score 1.0] CBasePlayer::TakeHealth
+// override takehealth
+// bitsDamageType indicates type of damage healed. 
+
 int CBasePlayer :: TakeHealth( float flHealth, int bitsDamageType )
 {
 	return CBaseMonster :: TakeHealth (flHealth, bitsDamageType);
 
 }
 
+// [fora desta etapa: diferente do SDK ou definida em outro arquivo] Vector CBasePlayer :: GetGunPosition( )
+
 // [SDK score 1.0] CBasePlayer::TraceAttack
+//=========================================================
+// TraceAttack
+//=========================================================
 void CBasePlayer :: TraceAttack( entvars_t *pevAttacker, float flDamage, Vector vecDir, TraceResult *ptr, int bitsDamageType)
 {
 	if ( pev->takedamage )
@@ -61,7 +271,26 @@ void CBasePlayer :: TraceAttack( entvars_t *pevAttacker, float flDamage, Vector 
 	}
 }
 
+/*
+	Take some damage.  
+	NOTE: each call to TakeDamage with bitsDamageType set to a time-based damage
+	type will cause the damage time countdown to be reset.  Thus the ongoing effects of poison, radiation
+	etc are implemented with subsequent calls to TakeDamage using DMG_GENERIC.
+*/
+
+#define ARMOR_RATIO	 0.2	// Armor Takes 80% of the damage
+#define ARMOR_BONUS  0.5	// Each Point of Armor is work 1/x points of health
+
+// [fora desta etapa: diferente do SDK ou definida em outro arquivo] int CBasePlayer :: TakeDamage( entvars_t *pevInflictor, entvars_t *pevAttacker, float flDa
+
 // [SDK score 1.0] CBasePlayer::PackDeadPlayerItems
+//=========================================================
+// PackDeadPlayerItems - call this when a player dies to
+// pack up the appropriate weapons and ammo items, and to
+// destroy anything that shouldn't be packed.
+//
+// This is pretty brute force :(
+//=========================================================
 void CBasePlayer::PackDeadPlayerItems( void )
 {
 	int iWeaponRules;
@@ -298,7 +527,16 @@ void CBasePlayer::RemoveAllItems( BOOL removeSuit )
 	MESSAGE_END();
 }
 
+/*
+ * GLOBALS ASSUMED SET:  g_ulModelIndexPlayer
+ *
+ * ENTITY_METHOD(PlayerDie)
+ */
+entvars_t *g_pevLastInflictor;  // [fora desta etapa: diferente do SDK ou definida em outro arquivo] // Set in combat.cpp. Used to pass the damage inflictor for death messages. // Better solu
+
+
 // [SDK score 1.0] CBasePlayer::SetAnimation
+// Set the activity based on an event or current state
 void CBasePlayer::SetAnimation( PLAYER_ANIM playerAnim )
 {
 	int animDesired;
@@ -473,6 +711,16 @@ void CBasePlayer::SetAnimation( PLAYER_ANIM playerAnim )
 	ResetSequenceInfo( );
 }
 
+// [fora desta etapa: diferente do SDK ou definida em outro arquivo] /* =========== TabulateAmmo This function is used to find and store all the ammo we have i
+
+
+/*
+===========
+WaterMove
+============
+*/
+#define AIRTIME	12		// lung full of air lasts this many seconds
+
 // [SDK score 0.5] CBasePlayer::WaterMove
 void CBasePlayer::WaterMove()
 {
@@ -588,11 +836,17 @@ void CBasePlayer::WaterMove()
 	}
 }
 
+
 // [SDK score 1.0] CBasePlayer::IsOnLadder
+// TRUE if the player is attached to a ladder
 BOOL CBasePlayer::IsOnLadder( void )
 { 
 	return ( pev->movetype == MOVETYPE_FLY );
 }
+
+// [fora desta etapa: diferente do SDK ou definida em outro arquivo] void CBasePlayer::PlayerDeathThink(void)
+
+// [fora desta etapa: diferente do SDK ou definida em outro arquivo] //========================================================= // StartDeathCam - find an int
 
 // [SDK score 1.0] CBasePlayer::StartObserver
 void CBasePlayer::StartObserver( Vector vecPosition, Vector vecViewAngle )
@@ -664,6 +918,11 @@ void CBasePlayer::StartObserver( Vector vecPosition, Vector vecViewAngle )
 	m_flNextObserverInput = 0;
 	Observer_SetMode( m_iObserverLastMode );
 }
+
+// 
+// PlayerUse - handles USE keypress
+//
+#define	PLAYER_SEARCH_RADIUS	(float)64
 
 // [SDK score 0.8] CBasePlayer::PlayerUse
 void CBasePlayer::PlayerUse ( void )
@@ -783,11 +1042,25 @@ void CBasePlayer::PlayerUse ( void )
 	}
 }
 
+
+
+// [fora desta etapa: diferente do SDK ou definida em outro arquivo] void CBasePlayer::Jump()
+
+
+
+// [fora desta etapa: diferente do SDK ou definida em outro arquivo] // This is a glorious hack to find free space when you've crouched into some solid space /
+
+// [fora desta etapa: diferente do SDK ou definida em outro arquivo] void CBasePlayer::Duck( )
+
 // [SDK score 1.0] CBasePlayer::Classify
+//
+// ID's player as such.
+//
 int  CBasePlayer::Classify ( void )
 {
 	return CLASS_PLAYER;
 }
+
 
 // [SDK score 1.0] CBasePlayer::AddPoints
 void CBasePlayer::AddPoints( int score, BOOL bAllowNegativeScore )
@@ -818,6 +1091,7 @@ void CBasePlayer::AddPoints( int score, BOOL bAllowNegativeScore )
 	MESSAGE_END();
 }
 
+
 // [SDK score 1.0] CBasePlayer::AddPointsToTeam
 void CBasePlayer::AddPointsToTeam( int score, BOOL bAllowNegativeScore )
 {
@@ -837,7 +1111,104 @@ void CBasePlayer::AddPointsToTeam( int score, BOOL bAllowNegativeScore )
 	}
 }
 
+// [fora desta etapa: diferente do SDK ou definida em outro arquivo] //Player ID void CBasePlayer::InitStatusBar()
+
+// [fora desta etapa: diferente do SDK ou definida em outro arquivo] void CBasePlayer::UpdateStatusBar()
+
+
+
+
+
+
+
+
+
+#define CLIMB_SHAKE_FREQUENCY	22	// how many frames in between screen shakes when climbing
+#define	MAX_CLIMB_SPEED			200	// fastest vertical climbing speed possible
+#define	CLIMB_SPEED_DEC			15	// climbing deceleration rate
+#define	CLIMB_PUNCH_X			-7  // how far to 'punch' client X axis when climbing
+#define CLIMB_PUNCH_Z			7	// how far to 'punch' client Z axis when climbing
+
+// [fora desta etapa: diferente do SDK ou definida em outro arquivo] void CBasePlayer::PreThink(void)
 // [SDK score 1.0] CBasePlayer::CheckTimeBasedDamage
+/* Time based Damage works as follows: 
+	1) There are several types of timebased damage:
+
+		#define DMG_PARALYZE		(1 << 14)	// slows affected creature down
+		#define DMG_NERVEGAS		(1 << 15)	// nerve toxins, very bad
+		#define DMG_POISON			(1 << 16)	// blood poisioning
+		#define DMG_RADIATION		(1 << 17)	// radiation exposure
+		#define DMG_DROWNRECOVER	(1 << 18)	// drown recovery
+		#define DMG_ACID			(1 << 19)	// toxic chemicals or acid burns
+		#define DMG_SLOWBURN		(1 << 20)	// in an oven
+		#define DMG_SLOWFREEZE		(1 << 21)	// in a subzero freezer
+
+	2) A new hit inflicting tbd restarts the tbd counter - each monster has an 8bit counter,
+		per damage type. The counter is decremented every second, so the maximum time 
+		an effect will last is 255/60 = 4.25 minutes.  Of course, staying within the radius
+		of a damaging effect like fire, nervegas, radiation will continually reset the counter to max.
+
+	3) Every second that a tbd counter is running, the player takes damage.  The damage
+		is determined by the type of tdb.  
+			Paralyze		- 1/2 movement rate, 30 second duration.
+			Nervegas		- 5 points per second, 16 second duration = 80 points max dose.
+			Poison			- 2 points per second, 25 second duration = 50 points max dose.
+			Radiation		- 1 point per second, 50 second duration = 50 points max dose.
+			Drown			- 5 points per second, 2 second duration.
+			Acid/Chemical	- 5 points per second, 10 second duration = 50 points max.
+			Burn			- 10 points per second, 2 second duration.
+			Freeze			- 3 points per second, 10 second duration = 30 points max.
+
+	4) Certain actions or countermeasures counteract the damaging effects of tbds:
+
+		Armor/Heater/Cooler - Chemical(acid),burn, freeze all do damage to armor power, then to body
+							- recharged by suit recharger
+		Air In Lungs		- drowning damage is done to air in lungs first, then to body
+							- recharged by poking head out of water
+							- 10 seconds if swiming fast
+		Air In SCUBA		- drowning damage is done to air in tanks first, then to body
+							- 2 minutes in tanks. Need new tank once empty.
+		Radiation Syringe	- Each syringe full provides protection vs one radiation dosage
+		Antitoxin Syringe	- Each syringe full provides protection vs one poisoning (nervegas or poison).
+		Health kit			- Immediate stop to acid/chemical, fire or freeze damage.
+		Radiation Shower	- Immediate stop to radiation damage, acid/chemical or fire damage.
+		
+	
+*/
+
+// If player is taking time based damage, continue doing damage to player -
+// this simulates the effect of being poisoned, gassed, dosed with radiation etc -
+// anything that continues to do damage even after the initial contact stops.
+// Update all time based damage counters, and shut off any that are done.
+
+// The m_bitsDamageType bit MUST be set if any damage is to be taken.
+// This routine will detect the initial on value of the m_bitsDamageType
+// and init the appropriate counter.  Only processes damage every second.
+
+//#define PARALYZE_DURATION	30		// number of 2 second intervals to take damage
+//#define PARALYZE_DAMAGE		0.0		// damage to take each 2 second interval
+
+//#define NERVEGAS_DURATION	16
+//#define NERVEGAS_DAMAGE		5.0
+
+//#define POISON_DURATION		25
+//#define POISON_DAMAGE		2.0
+
+//#define RADIATION_DURATION	50
+//#define RADIATION_DAMAGE	1.0
+
+//#define ACID_DURATION		10
+//#define ACID_DAMAGE			5.0
+
+//#define SLOWBURN_DURATION	2
+//#define SLOWBURN_DAMAGE		1.0
+
+//#define SLOWFREEZE_DURATION	1.0
+//#define SLOWFREEZE_DAMAGE	3.0
+
+/* */
+
+
 void CBasePlayer::CheckTimeBasedDamage() 
 {
 	int i;
@@ -935,7 +1306,102 @@ void CBasePlayer::CheckTimeBasedDamage()
 	}
 }
 
+/*
+THE POWER SUIT
+
+The Suit provides 3 main functions: Protection, Notification and Augmentation. 
+Some functions are automatic, some require power. 
+The player gets the suit shortly after getting off the train in C1A0 and it stays
+with him for the entire game.
+
+Protection
+
+	Heat/Cold
+		When the player enters a hot/cold area, the heating/cooling indicator on the suit 
+		will come on and the battery will drain while the player stays in the area. 
+		After the battery is dead, the player starts to take damage. 
+		This feature is built into the suit and is automatically engaged.
+	Radiation Syringe
+		This will cause the player to be immune from the effects of radiation for N seconds. Single use item.
+	Anti-Toxin Syringe
+		This will cure the player from being poisoned. Single use item.
+	Health
+		Small (1st aid kits, food, etc.)
+		Large (boxes on walls)
+	Armor
+		The armor works using energy to create a protective field that deflects a
+		percentage of damage projectile and explosive attacks. After the armor has been deployed,
+		it will attempt to recharge itself to full capacity with the energy reserves from the battery.
+		It takes the armor N seconds to fully charge. 
+
+Notification (via the HUD)
+
+x	Health
+x	Ammo  
+x	Automatic Health Care
+		Notifies the player when automatic healing has been engaged. 
+x	Geiger counter
+		Classic Geiger counter sound and status bar at top of HUD 
+		alerts player to dangerous levels of radiation. This is not visible when radiation levels are normal.
+x	Poison
+	Armor
+		Displays the current level of armor. 
+
+Augmentation 
+
+	Reanimation (w/adrenaline)
+		Causes the player to come back to life after he has been dead for 3 seconds. 
+		Will not work if player was gibbed. Single use.
+	Long Jump
+		Used by hitting the ??? key(s). Caused the player to further than normal.
+	SCUBA	
+		Used automatically after picked up and after player enters the water. 
+		Works for N seconds. Single use.	
+	
+Things powered by the battery
+
+	Armor		
+		Uses N watts for every M units of damage.
+	Heat/Cool	
+		Uses N watts for every second in hot/cold area.
+	Long Jump	
+		Uses N watts for every jump.
+	Alien Cloak	
+		Uses N watts for each use. Each use lasts M seconds.
+	Alien Shield	
+		Augments armor. Reduces Armor drain by one half
+ 
+*/
+
+// if in range of radiation source, ping geiger counter
+
+#define GEIGERDELAY 0.25
+
+// [fora desta etapa: diferente do SDK ou definida em outro arquivo] void CBasePlayer :: UpdateGeigerCounter( void )
+
+/*
+================
+CheckSuitUpdate
+
+Play suit update if it's time
+================
+*/
+
+#define SUITUPDATETIME	3.5
+#define SUITFIRSTUPDATETIME 0.1
+
+// [fora desta etapa: diferente do SDK ou definida em outro arquivo] void CBasePlayer::CheckSuitUpdate()
+ 
+// [fora desta etapa: diferente do SDK ou definida em outro arquivo] // add sentence to suit playlist queue. if fgroup is true, then // name is a sentence grou
+
+// [fora desta etapa: diferente do SDK ou definida em outro arquivo] /* ================ CheckPowerups Check for turning off powerups GLOBALS ASSUMED SET: g_ul
+
+
 // [SDK score 0.5] CBasePlayer::UpdatePlayerSound
+//=========================================================
+// UpdatePlayerSound - updates the position of the player's
+// reserved sound slot in the sound list.
+//=========================================================
 void CBasePlayer :: UpdatePlayerSound ( void )
 {
 	int iBodyVolume;
@@ -1051,6 +1517,18 @@ void CBasePlayer :: UpdatePlayerSound ( void )
 	//ALERT ( at_console, "%d/%d\n", iVolume, m_iTargetVolume );
 }
 
+
+// [fora desta etapa: diferente do SDK ou definida em outro arquivo] void CBasePlayer::PostThink()
+
+
+// [fora desta etapa: diferente do SDK ou definida em outro arquivo] // checks if the spot is clear of players BOOL IsSpawnPointValid( CBaseEntity *pPlayer, CB
+
+
+DLL_GLOBAL CBaseEntity	*g_pLastSpawn;
+// [fora desta etapa: diferente do SDK ou definida em outro arquivo] inline int FNullEnt( CBaseEntity *ent )
+
+// [fora desta etapa: diferente do SDK ou definida em outro arquivo] /* ============ EntSelectSpawnPoint Returns the entity to spawn at USES AND SETS GLOBAL g_
+
 // [SDK score 0.86] CBasePlayer::Spawn
 void CBasePlayer::Spawn( void )
 {
@@ -1147,6 +1625,7 @@ void CBasePlayer::Spawn( void )
 	g_pGameRules->PlayerSpawn( this );
 }
 
+
 // [SDK score 1.0] CBasePlayer::Precache
 void CBasePlayer :: Precache( void )
 {
@@ -1191,6 +1670,7 @@ void CBasePlayer :: Precache( void )
 		m_fInitHUD = TRUE;
 }
 
+
 // [SDK score 1.0] CBasePlayer::Save
 int CBasePlayer::Save( CSave &save )
 {
@@ -1200,11 +1680,16 @@ int CBasePlayer::Save( CSave &save )
 	return save.WriteFields( "PLAYER", this, m_playerSaveData, ARRAYSIZE(m_playerSaveData) );
 }
 
+
 // [SDK score 1.0] CBasePlayer::RenewItems
+//
+// Marks everything as new so the player will resend this to the hud.
+//
 void CBasePlayer::RenewItems(void)
 {
 
 }
+
 
 // [SDK score 1.0] CBasePlayer::Restore
 int CBasePlayer::Restore( CRestore &restore )
@@ -1272,6 +1757,8 @@ int CBasePlayer::Restore( CRestore &restore )
 
 	return status;
 }
+
+
 
 // [SDK score 1.0] CBasePlayer::SelectNextItem
 void CBasePlayer::SelectNextItem( int iItem )
@@ -1369,6 +1856,7 @@ void CBasePlayer::SelectItem(const char *pstr)
 	}
 }
 
+
 // [SDK score 1.0] CBasePlayer::SelectLastItem
 void CBasePlayer::SelectLastItem(void)
 {
@@ -1396,6 +1884,9 @@ void CBasePlayer::SelectLastItem(void)
 }
 
 // [SDK score 1.0] CBasePlayer::HasWeapons
+//==============================================
+// HasWeapons - do I have any weapons at all?
+//==============================================
 BOOL CBasePlayer::HasWeapons( void )
 {
 	int i;
@@ -1416,6 +1907,7 @@ void CBasePlayer::SelectPrevItem( int iItem )
 {
 }
 
+
 // [SDK score 1.0] CBasePlayer::TeamID
 const char *CBasePlayer::TeamID( void )
 {
@@ -1425,6 +1917,20 @@ const char *CBasePlayer::TeamID( void )
 	// return their team name
 	return m_szTeamName;
 }
+
+
+//==============================================
+// !!!UNDONE:ultra temporary SprayCan entity to apply
+// decal frame at a time. For PreAlpha CD
+//==============================================
+class CSprayCan : public CBaseEntity
+{
+public:
+	void	Spawn ( entvars_t *pevOwner );
+	void	Think( void );
+
+	virtual int	ObjectCaps( void ) { return FCAP_DONT_SAVE; }
+};
 
 // [SDK score 1.0] CSprayCan::Spawn
 void CSprayCan::Spawn ( entvars_t *pevOwner )
@@ -1477,6 +1983,13 @@ void CSprayCan::Think( void )
 	pev->nextthink = gpGlobals->time + 0.1;
 }
 
+class	CBloodSplat : public CBaseEntity
+{
+public:
+	void	Spawn ( entvars_t *pevOwner );
+	void	Spray ( void );
+};
+
 // [SDK score 1.0] CBloodSplat::Spawn
 void CBloodSplat::Spawn ( entvars_t *pevOwner )
 {
@@ -1505,6 +2018,10 @@ void CBloodSplat::Spray ( void )
 }
 
 // [SDK score 1.0] CBasePlayer::GiveNamedItem
+//==============================================
+
+
+
 void CBasePlayer::GiveNamedItem( const char *pszName )
 {
 	edict_t	*pent;
@@ -1524,7 +2041,29 @@ void CBasePlayer::GiveNamedItem( const char *pszName )
 	DispatchTouch( pent, ENT( pev ) );
 }
 
+
+
+// [fora desta etapa: diferente do SDK ou definida em outro arquivo] CBaseEntity *FindEntityForward( CBaseEntity *pMe )
+
+
+// [fora desta etapa: diferente do SDK ou definida em outro arquivo] BOOL CBasePlayer :: FlashlightIsOn( void )
+
+
+// [fora desta etapa: diferente do SDK ou definida em outro arquivo] void CBasePlayer :: FlashlightTurnOn( void )
+
+
+// [fora desta etapa: diferente do SDK ou definida em outro arquivo] void CBasePlayer :: FlashlightTurnOff( void )
+
 // [SDK score 1.0] CBasePlayer::ForceClientDllUpdate
+/*
+===============
+ForceClientDllUpdate
+
+When recording a demo, we need to have the server tell us the entire client state
+so that the client side .dll can behave correctly.
+Reset stuff so that the state is transmitted.
+===============
+*/
 void CBasePlayer :: ForceClientDllUpdate( void )
 {
 	m_iClientHealth  = -1;
@@ -1539,7 +2078,11 @@ void CBasePlayer :: ForceClientDllUpdate( void )
 	UpdateClientData();
 }
 
+// [fora desta etapa: diferente do SDK ou definida em outro arquivo] /* ============ ImpulseCommands ============ */ void CBasePlayer::ImpulseCommands( )
+
 // [SDK score 1.0] CBasePlayer::CheatImpulseCommands
+//=========================================================
+//=========================================================
 void CBasePlayer::CheatImpulseCommands( int iImpulse )
 {
 #if !defined( HLDEMO_BUILD )
@@ -1718,6 +2261,9 @@ void CBasePlayer::CheatImpulseCommands( int iImpulse )
 }
 
 // [SDK score 1.0] CBasePlayer::AddPlayerItem
+//
+// Add a weapon to the player (Item == Weapon == Selectable Object)
+//
 int CBasePlayer::AddPlayerItem( CBasePlayerItem *pItem )
 {
 	CBasePlayerItem *pInsert;
@@ -1775,6 +2321,8 @@ int CBasePlayer::AddPlayerItem( CBasePlayerItem *pItem )
 	return FALSE;
 }
 
+
+
 // [SDK score 1.0] CBasePlayer::RemovePlayerItem
 int CBasePlayer::RemovePlayerItem( CBasePlayerItem *pItem )
 {
@@ -1813,7 +2361,18 @@ int CBasePlayer::RemovePlayerItem( CBasePlayerItem *pItem )
 	return FALSE;
 }
 
+
+// [fora desta etapa: diferente do SDK ou definida em outro arquivo] // // Returns the unique ID for the ammo, or -1 if error // int CBasePlayer :: GiveAmmo( i
+
+
 // [SDK score 1.0] CBasePlayer::ItemPreFrame
+/*
+============
+ItemPreFrame
+
+Called every frame by the player PreThink
+============
+*/
 void CBasePlayer::ItemPreFrame()
 {
 #if defined( CLIENT_WEAPONS )
@@ -1831,7 +2390,15 @@ void CBasePlayer::ItemPreFrame()
 	m_pActiveItem->ItemPreFrame( );
 }
 
+
 // [SDK score 1.0] CBasePlayer::ItemPostFrame
+/*
+============
+ItemPostFrame
+
+Called every frame by the player PostThink
+============
+*/
 void CBasePlayer::ItemPostFrame()
 {
 	static int fInSelect = FALSE;
@@ -1857,6 +2424,8 @@ void CBasePlayer::ItemPostFrame()
 	m_pActiveItem->ItemPostFrame( );
 }
 
+// [fora desta etapa: diferente do SDK ou definida em outro arquivo] int CBasePlayer::AmmoInventory( int iAmmoIndex )
+
 // [SDK score 1.0] CBasePlayer::GetAmmoIndex
 int CBasePlayer::GetAmmoIndex(const char *psz)
 {
@@ -1877,7 +2446,18 @@ int CBasePlayer::GetAmmoIndex(const char *psz)
 	return -1;
 }
 
+// [fora desta etapa: diferente do SDK ou definida em outro arquivo] // Called from UpdateClientData // makes sure the client has all the necessary ammo info, 
+
+// [fora desta etapa: diferente do SDK ou definida em outro arquivo] /* ========================================================= UpdateClientData resends any 
+
+// [fora desta etapa: diferente do SDK ou definida em outro arquivo] void CBasePlayer :: SetPrefsFromUserinfo( char * infobuffer )
+
+
 // [SDK score 1.0] CBasePlayer::FBecomeProne
+//=========================================================
+// FBecomeProne - Overridden for the player to set the proper
+// physics flags when a barnacle grabs player.
+//=========================================================
 BOOL CBasePlayer :: FBecomeProne ( void )
 {
 	m_afPhysicsFlags |= PFLAG_ONBARNACLE;
@@ -1885,18 +2465,32 @@ BOOL CBasePlayer :: FBecomeProne ( void )
 }
 
 // [SDK score 1.0] CBasePlayer::BarnacleVictimBitten
+//=========================================================
+// BarnacleVictimBitten - bad name for a function that is called
+// by Barnacle victims when the barnacle pulls their head
+// into its mouth. For the player, just die.
+//=========================================================
 void CBasePlayer :: BarnacleVictimBitten ( entvars_t *pevBarnacle )
 {
 	TakeDamage ( pevBarnacle, pevBarnacle, pev->health + pev->armorvalue, DMG_SLASH | DMG_ALWAYSGIB );
 }
 
 // [SDK score 1.0] CBasePlayer::BarnacleVictimReleased
+//=========================================================
+// BarnacleVictimReleased - overridden for player who has
+// physics flags concerns. 
+//=========================================================
 void CBasePlayer :: BarnacleVictimReleased ( void )
 {
 	m_afPhysicsFlags &= ~PFLAG_ONBARNACLE;
 }
 
+
 // [SDK score 1.0] CBasePlayer::Illumination
+//=========================================================
+// Illumination 
+// return player light level plus virtual muzzle flash
+//=========================================================
 int CBasePlayer :: Illumination( void )
 {
 	int iIllum = CBaseEntity::Illumination( );
@@ -1906,6 +2500,7 @@ int CBasePlayer :: Illumination( void )
 		return 255;
 	return iIllum;
 }
+
 
 // [SDK score 1.0] CBasePlayer::EnableControl
 void CBasePlayer :: EnableControl(BOOL fControl)
@@ -1917,7 +2512,38 @@ void CBasePlayer :: EnableControl(BOOL fControl)
 
 }
 
+
+#define DOT_1DEGREE   0.9998476951564
+#define DOT_2DEGREE   0.9993908270191
+#define DOT_3DEGREE   0.9986295347546
+#define DOT_4DEGREE   0.9975640502598
+#define DOT_5DEGREE   0.9961946980917
+#define DOT_6DEGREE   0.9945218953683
+#define DOT_7DEGREE   0.9925461516413
+#define DOT_8DEGREE   0.9902680687416
+#define DOT_9DEGREE   0.9876883405951
+#define DOT_10DEGREE  0.9848077530122
+#define DOT_15DEGREE  0.9659258262891
+#define DOT_20DEGREE  0.9396926207859
+#define DOT_25DEGREE  0.9063077870367
+
+// [fora desta etapa: diferente do SDK ou definida em outro arquivo] //========================================================= // Autoaim // set crosshair po
+
+
+// [fora desta etapa: diferente do SDK ou definida em outro arquivo] Vector CBasePlayer :: AutoaimDeflection( Vector &vecSrc, float flDist, float flDelta )
+
+
+// [fora desta etapa: diferente do SDK ou definida em outro arquivo] void CBasePlayer :: ResetAutoaim( )
+
 // [SDK score 1.0] CBasePlayer::SetCustomDecalFrames
+/*
+=============
+SetCustomDecalFrames
+
+  UNDONE:  Determine real frame limit, 8 is a placeholder.
+  Note:  -1 means no custom frames present.
+=============
+*/
 void CBasePlayer :: SetCustomDecalFrames( int nFrames )
 {
 	if (nFrames > 0 &&
@@ -1928,12 +2554,24 @@ void CBasePlayer :: SetCustomDecalFrames( int nFrames )
 }
 
 // [SDK score 1.0] CBasePlayer::GetCustomDecalFrames
+/*
+=============
+GetCustomDecalFrames
+
+  Returns the # of custom frames this player's custom clan logo contains.
+=============
+*/
 int CBasePlayer :: GetCustomDecalFrames( void )
 {
 	return m_nCustomSprayFrames;
 }
 
+
 // [SDK score 1.0] CBasePlayer::DropPlayerItem
+//=========================================================
+// DropPlayerItem - drop the named item, or if no name,
+// the active item. 
+//=========================================================
 void CBasePlayer::DropPlayerItem ( char *pszItemName )
 {
 	if ( !g_pGameRules->IsMultiplayer() || (weaponstay.value > 0) )
@@ -2029,6 +2667,9 @@ void CBasePlayer::DropPlayerItem ( char *pszItemName )
 }
 
 // [SDK score 1.0] CBasePlayer::HasPlayerItem
+//=========================================================
+// HasPlayerItem Does the player already have this item?
+//=========================================================
 BOOL CBasePlayer::HasPlayerItem( CBasePlayerItem *pCheckItem )
 {
 	CBasePlayerItem *pItem = m_rgpPlayerItems[pCheckItem->iItemSlot()];
@@ -2046,6 +2687,9 @@ BOOL CBasePlayer::HasPlayerItem( CBasePlayerItem *pCheckItem )
 }
 
 // [SDK score 1.0] CBasePlayer::HasNamedPlayerItem
+//=========================================================
+// HasNamedPlayerItem Does the player already have this item?
+//=========================================================
 BOOL CBasePlayer::HasNamedPlayerItem( const char *pszItemName )
 {
 	CBasePlayerItem *pItem;
@@ -2068,7 +2712,12 @@ BOOL CBasePlayer::HasNamedPlayerItem( const char *pszItemName )
 	return FALSE;
 }
 
+// [fora desta etapa: diferente do SDK ou definida em outro arquivo] //========================================================= // HasPlayerItemFromID // Just
+
 // [SDK score 1.0] CBasePlayer::SwitchWeapon
+//=========================================================
+// 
+//=========================================================
 BOOL CBasePlayer :: SwitchWeapon( CBasePlayerItem *pWeapon ) 
 {
 	if ( !pWeapon->CanDeploy() )
@@ -2089,6 +2738,23 @@ BOOL CBasePlayer :: SwitchWeapon( CBasePlayerItem *pWeapon )
 	return TRUE;
 }
 
+//=========================================================
+// Dead HEV suit prop
+//=========================================================
+class CDeadHEV : public CBaseMonster 
+{
+public:
+	void Spawn( void );
+	int	Classify ( void ) { return	CLASS_HUMAN_MILITARY; }
+
+	void KeyValue( KeyValueData *pkvd );
+
+	int	m_iPose;// which sequence to display	-- temporary, don't need to save
+	static char *m_szPoses[4];
+};
+
+char *CDeadHEV::m_szPoses[] = { "deadback", "deadsitting", "deadstomach", "deadtable" };
+
 // [SDK score 1.0] CDeadHEV::KeyValue
 void CDeadHEV::KeyValue( KeyValueData *pkvd )
 {
@@ -2101,7 +2767,12 @@ void CDeadHEV::KeyValue( KeyValueData *pkvd )
 		CBaseMonster::KeyValue( pkvd );
 }
 
+LINK_ENTITY_TO_CLASS( monster_hevsuit_dead, CDeadHEV );
+
 // [SDK score 1.0] CDeadHEV::Spawn
+//=========================================================
+// ********** DeadHEV SPAWN **********
+//=========================================================
 void CDeadHEV :: Spawn( void )
 {
 	PRECACHE_MODEL("models/player.mdl");
@@ -2128,6 +2799,17 @@ void CDeadHEV :: Spawn( void )
 	MonsterInitDead();
 }
 
+
+class CStripWeapons : public CPointEntity
+{
+public:
+	void	Use( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value );
+
+private:
+};
+
+LINK_ENTITY_TO_CLASS( player_weaponstrip, CStripWeapons );
+
 // [SDK score 1.0] CStripWeapons::Use
 void CStripWeapons :: Use( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value )
 {
@@ -2145,6 +2827,44 @@ void CStripWeapons :: Use( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TY
 	if ( pPlayer )
 		pPlayer->RemoveAllItems( FALSE );
 }
+
+
+class CRevertSaved : public CPointEntity
+{
+public:
+	void	Use( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value );
+	void	EXPORT MessageThink( void );
+	void	EXPORT LoadThink( void );
+	void	KeyValue( KeyValueData *pkvd );
+
+	virtual int		Save( CSave &save );
+	virtual int		Restore( CRestore &restore );
+	static	TYPEDESCRIPTION m_SaveData[];
+
+	inline	float	Duration( void ) { return pev->dmg_take; }
+	inline	float	HoldTime( void ) { return pev->dmg_save; }
+	inline	float	MessageTime( void ) { return m_messageTime; }
+	inline	float	LoadTime( void ) { return m_loadTime; }
+
+	inline	void	SetDuration( float duration ) { pev->dmg_take = duration; }
+	inline	void	SetHoldTime( float hold ) { pev->dmg_save = hold; }
+	inline	void	SetMessageTime( float time ) { m_messageTime = time; }
+	inline	void	SetLoadTime( float time ) { m_loadTime = time; }
+
+private:
+	float	m_messageTime;
+	float	m_loadTime;
+};
+
+LINK_ENTITY_TO_CLASS( player_loadsaved, CRevertSaved );
+
+TYPEDESCRIPTION	CRevertSaved::m_SaveData[] = 
+{
+	DEFINE_FIELD( CRevertSaved, m_messageTime, FIELD_FLOAT ),	// These are not actual times, but durations, so save as floats
+	DEFINE_FIELD( CRevertSaved, m_loadTime, FIELD_FLOAT ),
+};
+
+IMPLEMENT_SAVERESTORE( CRevertSaved, CPointEntity );
 
 // [SDK score 1.0] CRevertSaved::KeyValue
 void CRevertSaved :: KeyValue( KeyValueData *pkvd )
@@ -2181,6 +2901,7 @@ void CRevertSaved :: Use( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYP
 	SetThink( &CRevertSaved::MessageThink );
 }
 
+
 // [SDK score 1.0] CRevertSaved::MessageThink
 void CRevertSaved :: MessageThink( void )
 {
@@ -2195,6 +2916,7 @@ void CRevertSaved :: MessageThink( void )
 		LoadThink();
 }
 
+
 // [SDK score 1.0] CRevertSaved::LoadThink
 void CRevertSaved :: LoadThink( void )
 {
@@ -2203,6 +2925,16 @@ void CRevertSaved :: LoadThink( void )
 		SERVER_COMMAND("reload\n");
 	}
 }
+
+
+//=========================================================
+// Multiplayer intermission spots.
+//=========================================================
+class CInfoIntermission:public CPointEntity
+{
+	void Spawn( void );
+	void Think( void );
+};
 
 // [SDK score 0.5] CInfoIntermission::Spawn
 void CInfoIntermission::Spawn( void )
@@ -2230,3 +2962,6 @@ void CInfoIntermission::Think ( void )
 		pev->v_angle.x = -pev->v_angle.x;
 	}
 }
+
+LINK_ENTITY_TO_CLASS( info_intermission, CInfoIntermission );
+

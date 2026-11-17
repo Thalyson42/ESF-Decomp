@@ -1,10 +1,42 @@
-// sdk/explode.cpp -- funções do HL SDK que o hl_i386.so do ESF reproduz (score de similaridade >= 0.86 em docs/sdk_match.csv).
-// Gerado por tools/assemble_sdk.py a partir de <hlsdk>/dlls/explode.cpp. Conferir contra decomp_raw ao compilar.
+// sdk/explode.cpp -- arquivo do HL SDK com SÓ as funções que o hl_i386.so do ESF reproduz (score >= 0.86 em docs/sdk_match.csv).
+// Gerado por tools/assemble_sdk.py a partir de <hlsdk>/dlls/explode.cpp. As demais funções do arquivo foram removidas.
+/***
+*
+*	Copyright (c) 1996-2002, Valve LLC. All rights reserved.
+*	
+*	This product contains software technology licensed from Id 
+*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc. 
+*	All Rights Reserved.
+*
+*   Use, distribution, and modification of this source code and/or resulting
+*   object code is restricted to non-commercial enhancements to products from
+*   Valve LLC.  All other use, distribution, or modification is prohibited
+*   without written permission from Valve LLC.
+*
+****/
+/*
+
+===== explode.cpp ========================================================
+
+  Explosion-related code
+
+*/
 #include "extdll.h"
 #include "util.h"
 #include "cbase.h"
 #include "decals.h"
 #include "explode.h"
+
+// Spark Shower
+class CShower : public CBaseEntity
+{
+	void Spawn( void );
+	void Think( void );
+	void Touch( CBaseEntity *pOther );
+	int ObjectCaps( void ) { return FCAP_DONT_SAVE; }
+}; 
+
+LINK_ENTITY_TO_CLASS( spark_shower, CShower );
 
 // [SDK heurística] CShower::Spawn
 void CShower::Spawn( void )
@@ -27,6 +59,7 @@ void CShower::Spawn( void )
 
 	pev->angles = g_vecZero;
 }
+
 
 // [SDK score 1.0] CShower::Think
 void CShower::Think( void )
@@ -52,6 +85,31 @@ void CShower::Touch( CBaseEntity *pOther )
 	if ( (pev->velocity.x*pev->velocity.x+pev->velocity.y*pev->velocity.y) < 10.0 )
 		pev->speed = 0;
 }
+
+class CEnvExplosion : public CBaseMonster
+{
+public:
+	void Spawn( );
+	void EXPORT Smoke ( void );
+	void KeyValue( KeyValueData *pkvd );
+	void Use( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value );
+
+	virtual int		Save( CSave &save );
+	virtual int		Restore( CRestore &restore );
+	static	TYPEDESCRIPTION m_SaveData[];
+
+	int m_iMagnitude;// how large is the fireball? how much damage?
+	int m_spriteScale; // what's the exact fireball sprite scale? 
+};
+
+TYPEDESCRIPTION	CEnvExplosion::m_SaveData[] = 
+{
+	DEFINE_FIELD( CEnvExplosion, m_iMagnitude, FIELD_INTEGER ),
+	DEFINE_FIELD( CEnvExplosion, m_spriteScale, FIELD_INTEGER ),
+};
+
+IMPLEMENT_SAVERESTORE( CEnvExplosion, CBaseMonster );
+LINK_ENTITY_TO_CLASS( env_explosion, CEnvExplosion );
 
 // [SDK score 1.0] CEnvExplosion::KeyValue
 void CEnvExplosion::KeyValue( KeyValueData *pkvd )
@@ -203,3 +261,6 @@ void CEnvExplosion::Smoke( void )
 		UTIL_Remove( this );
 	}
 }
+
+
+// [fora desta etapa: diferente do SDK ou definida em outro arquivo] // HACKHACK -- create one of these and fake a keyvalue to get the right explosion setup vo

@@ -1,5 +1,26 @@
-// sdk/func_break.cpp -- funções do HL SDK que o hl_i386.so do ESF reproduz (score de similaridade >= 0.86 em docs/sdk_match.csv).
-// Gerado por tools/assemble_sdk.py a partir de <hlsdk>/dlls/func_break.cpp. Conferir contra decomp_raw ao compilar.
+// sdk/func_break.cpp -- arquivo do HL SDK com SÓ as funções que o hl_i386.so do ESF reproduz (score >= 0.86 em docs/sdk_match.csv).
+// Gerado por tools/assemble_sdk.py a partir de <hlsdk>/dlls/func_break.cpp. As demais funções do arquivo foram removidas.
+/***
+*
+*	Copyright (c) 1996-2001, Valve LLC. All rights reserved.
+*	
+*	This product contains software technology licensed from Id 
+*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc. 
+*	All Rights Reserved.
+*
+*   Use, distribution, and modification of this source code and/or resulting
+*   object code is restricted to non-commercial enhancements to products from
+*   Valve LLC.  All other use, distribution, or modification is prohibited
+*   without written permission from Valve LLC.
+*
+****/
+/*
+
+===== bmodels.cpp ========================================================
+
+  spawn, think, and use functions for entities that use brush models
+
+*/
 #include "extdll.h"
 #include "util.h"
 #include "cbase.h"
@@ -7,6 +28,39 @@
 #include "func_break.h"
 #include "decals.h"
 #include "explode.h"
+
+extern DLL_GLOBAL Vector		g_vecAttackDir;
+
+// =================== FUNC_Breakable ==============================================
+
+// Just add more items to the bottom of this array and they will automagically be supported
+// This is done instead of just a classname in the FGD so we can control which entities can
+// be spawned, and still remain fairly flexible
+const char *CBreakable::pSpawnObjects[] =
+{
+	NULL,				// 0
+	"item_battery",		// 1
+	"item_healthkit",	// 2
+	"weapon_9mmhandgun",// 3
+	"ammo_9mmclip",		// 4
+	"weapon_9mmAR",		// 5
+	"ammo_9mmAR",		// 6
+	"ammo_ARgrenades",	// 7
+	"weapon_shotgun",	// 8
+	"ammo_buckshot",	// 9
+	"weapon_crossbow",	// 10
+	"ammo_crossbow",	// 11
+	"weapon_357",		// 12
+	"ammo_357",			// 13
+	"weapon_rpg",		// 14
+	"ammo_rpgclip",		// 15
+	"ammo_gaussclip",	// 16
+	"weapon_handgrenade",// 17
+	"weapon_tripmine",	// 18
+	"weapon_satchel",	// 19
+	"weapon_snark",		// 20
+	"weapon_hornetgun",	// 21
+};
 
 // [SDK score 1.0] CBreakable::KeyValue
 void CBreakable::KeyValue( KeyValueData* pkvd )
@@ -68,6 +122,28 @@ void CBreakable::KeyValue( KeyValueData* pkvd )
 		CBaseDelay::KeyValue( pkvd );
 }
 
+
+//
+// func_breakable - bmodel that breaks into pieces after taking damage
+//
+LINK_ENTITY_TO_CLASS( func_breakable, CBreakable );
+TYPEDESCRIPTION CBreakable::m_SaveData[] =
+{
+	DEFINE_FIELD( CBreakable, m_Material, FIELD_INTEGER ),
+	DEFINE_FIELD( CBreakable, m_Explosion, FIELD_INTEGER ),
+
+// Don't need to save/restore these because we precache after restore
+//	DEFINE_FIELD( CBreakable, m_idShard, FIELD_INTEGER ),
+
+	DEFINE_FIELD( CBreakable, m_angle, FIELD_FLOAT ),
+	DEFINE_FIELD( CBreakable, m_iszGibModel, FIELD_STRING ),
+	DEFINE_FIELD( CBreakable, m_iszSpawnObject, FIELD_STRING ),
+
+	// Explosion magnitude is stored in pev->impulse
+};
+
+IMPLEMENT_SAVERESTORE( CBreakable, CBaseEntity );
+
 // [SDK score 1.0] CBreakable::Spawn
 void CBreakable::Spawn( void )
 {
@@ -100,6 +176,46 @@ void CBreakable::Spawn( void )
 	if ( !IsBreakable() && pev->rendermode != kRenderNormal )
 		pev->flags |= FL_WORLDBRUSH;
 }
+
+
+const char *CBreakable::pSoundsWood[] = 
+{
+	"debris/wood1.wav",
+	"debris/wood2.wav",
+	"debris/wood3.wav",
+};
+
+const char *CBreakable::pSoundsFlesh[] = 
+{
+	"debris/flesh1.wav",
+	"debris/flesh2.wav",
+	"debris/flesh3.wav",
+	"debris/flesh5.wav",
+	"debris/flesh6.wav",
+	"debris/flesh7.wav",
+};
+
+const char *CBreakable::pSoundsMetal[] = 
+{
+	"debris/metal1.wav",
+	"debris/metal2.wav",
+	"debris/metal3.wav",
+};
+
+const char *CBreakable::pSoundsConcrete[] = 
+{
+	"debris/concrete1.wav",
+	"debris/concrete2.wav",
+	"debris/concrete3.wav",
+};
+
+
+const char *CBreakable::pSoundsGlass[] = 
+{
+	"debris/glass1.wav",
+	"debris/glass2.wav",
+	"debris/glass3.wav",
+};
 
 // [SDK score 1.0] CBreakable::MaterialSoundList
 const char **CBreakable::MaterialSoundList( Materials precacheMaterial, int &soundCount )
@@ -170,6 +286,7 @@ void CBreakable::MaterialSoundRandom( edict_t *pEdict, Materials soundMaterial, 
 	if ( soundCount )
 		EMIT_SOUND( pEdict, CHAN_BODY, pSoundList[ RANDOM_LONG(0,soundCount-1) ], volume, 1.0 );
 }
+
 
 // [SDK score 1.0] CBreakable::Precache
 void CBreakable::Precache( void )
@@ -242,6 +359,10 @@ void CBreakable::Precache( void )
 }
 
 // [SDK score 1.0] CBreakable::DamageSound
+// play shard sound when func_breakable takes damage.
+// the more damage, the louder the shard sound.
+
+
 void CBreakable::DamageSound( void )
 {
 	int pitch;
@@ -362,7 +483,13 @@ void CBreakable::BreakTouch( CBaseEntity *pOther )
 
 }
 
+
 // [SDK score 1.0] CBreakable::Use
+//
+// Smash the our breakable object
+//
+
+// Break when triggered
 void CBreakable::Use( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value )
 {
 	if ( IsBreakable() )
@@ -374,6 +501,7 @@ void CBreakable::Use( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE us
 		Die();
 	}
 }
+
 
 // [SDK score 0.75] CBreakable::TraceAttack
 void CBreakable::TraceAttack( entvars_t *pevAttacker, float flDamage, Vector vecDir, TraceResult *ptr, int bitsDamageType )
@@ -406,6 +534,11 @@ void CBreakable::TraceAttack( entvars_t *pevAttacker, float flDamage, Vector vec
 }
 
 // [SDK score 1.0] CBreakable::TakeDamage
+//=========================================================
+// Special takedamage for func_breakable. Allows us to make
+// exceptions that are breakable-specific
+// bitsDamageType indicates the type of damage sustained ie: DMG_CRUSH
+//=========================================================
 int CBreakable :: TakeDamage( entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType )
 {
 	Vector	vecTemp;
@@ -457,6 +590,7 @@ int CBreakable :: TakeDamage( entvars_t* pevInflictor, entvars_t* pevAttacker, f
 
 	return 1;
 }
+
 
 // [SDK score 0.67] CBreakable::Die
 void CBreakable::Die( void )
@@ -635,11 +769,14 @@ void CBreakable::Die( void )
 	}
 }
 
+
+
 // [SDK score 1.0] CBreakable::IsBreakable
 BOOL CBreakable :: IsBreakable( void ) 
 { 
 	return m_Material != matUnbreakableGlass;
 }
+
 
 // [SDK score 1.0] CBreakable::DamageDecal
 int	CBreakable :: DamageDecal( int bitsDamageType )
@@ -652,6 +789,49 @@ int	CBreakable :: DamageDecal( int bitsDamageType )
 
 	return CBaseEntity::DamageDecal( bitsDamageType );
 }
+
+
+class CPushable : public CBreakable
+{
+public:
+	void	Spawn ( void );
+	void	Precache( void );
+	void	Touch ( CBaseEntity *pOther );
+	void	Move( CBaseEntity *pMover, int push );
+	void	KeyValue( KeyValueData *pkvd );
+	void	Use( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value );
+	void	EXPORT StopSound( void );
+//	virtual void	SetActivator( CBaseEntity *pActivator ) { m_pPusher = pActivator; }
+
+	virtual int	ObjectCaps( void ) { return (CBaseEntity :: ObjectCaps() & ~FCAP_ACROSS_TRANSITION) | FCAP_CONTINUOUS_USE; }
+	virtual int		Save( CSave &save );
+	virtual int		Restore( CRestore &restore );
+
+	inline float MaxSpeed( void ) { return m_maxSpeed; }
+	
+	// breakables use an overridden takedamage
+	virtual int TakeDamage( entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType );
+	
+	static	TYPEDESCRIPTION m_SaveData[];
+
+	static char *m_soundNames[3];
+	int		m_lastSound;	// no need to save/restore, just keeps the same sound from playing twice in a row
+	float	m_maxSpeed;
+	float	m_soundTime;
+};
+
+TYPEDESCRIPTION	CPushable::m_SaveData[] = 
+{
+	DEFINE_FIELD( CPushable, m_maxSpeed, FIELD_FLOAT ),
+	DEFINE_FIELD( CPushable, m_soundTime, FIELD_TIME ),
+};
+
+IMPLEMENT_SAVERESTORE( CPushable, CBreakable );
+
+LINK_ENTITY_TO_CLASS( func_pushable, CPushable );
+
+char *CPushable :: m_soundNames[3] = { "debris/pushbox1.wav", "debris/pushbox2.wav", "debris/pushbox3.wav" };
+
 
 // [SDK score 0.5] CPushable::Spawn
 void CPushable :: Spawn( void )
@@ -680,6 +860,7 @@ void CPushable :: Spawn( void )
 	m_soundTime = 0;
 }
 
+
 // [SDK score 1.0] CPushable::Precache
 void CPushable :: Precache( void )
 {
@@ -689,6 +870,7 @@ void CPushable :: Precache( void )
 	if ( pev->spawnflags & SF_PUSH_BREAKABLE )
 		CBreakable::Precache( );
 }
+
 
 // [SDK score 1.0] CPushable::KeyValue
 void CPushable :: KeyValue( KeyValueData *pkvd )
@@ -728,7 +910,9 @@ void CPushable :: KeyValue( KeyValueData *pkvd )
 		CBreakable::KeyValue( pkvd );
 }
 
+
 // [SDK score 1.0] CPushable::Use
+// Pull the func_pushable
 void CPushable :: Use( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value )
 {
 	if ( !pActivator || !pActivator->IsPlayer() )
@@ -742,6 +926,7 @@ void CPushable :: Use( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE u
 		Move( pActivator, 0 );
 }
 
+
 // [SDK score 1.0] CPushable::Touch
 void CPushable :: Touch( CBaseEntity *pOther )
 {
@@ -750,6 +935,7 @@ void CPushable :: Touch( CBaseEntity *pOther )
 
 	Move( pOther, 1 );
 }
+
 
 // [SDK heurística] CPushable::Move
 void CPushable :: Move( CBaseEntity *pOther, int push )
@@ -845,6 +1031,10 @@ void CPushable :: Move( CBaseEntity *pOther, int push )
 	}
 }
 
+#if 0
+// [fora desta etapa: diferente do SDK ou definida em outro arquivo] void CPushable::StopSound( void )
+#endif
+
 // [SDK score 1.0] CPushable::TakeDamage
 int CPushable::TakeDamage( entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType )
 {
@@ -853,3 +1043,4 @@ int CPushable::TakeDamage( entvars_t* pevInflictor, entvars_t* pevAttacker, floa
 
 	return 1;
 }
+

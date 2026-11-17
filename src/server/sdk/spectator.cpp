@@ -1,5 +1,25 @@
-// sdk/spectator.cpp -- funções do HL SDK que o hl_i386.so do ESF reproduz (score de similaridade >= 0.86 em docs/sdk_match.csv).
-// Gerado por tools/assemble_sdk.py a partir de <hlsdk>/dlls/spectator.cpp. Conferir contra decomp_raw ao compilar.
+// sdk/spectator.cpp -- arquivo do HL SDK com SÓ as funções que o hl_i386.so do ESF reproduz (score >= 0.86 em docs/sdk_match.csv).
+// Gerado por tools/assemble_sdk.py a partir de <hlsdk>/dlls/spectator.cpp. As demais funções do arquivo foram removidas.
+/***
+*
+*	Copyright (c) 1996-2001, Valve LLC. All rights reserved.
+*	
+*	This product contains software technology licensed from Id 
+*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc. 
+*	All Rights Reserved.
+*
+*   Use, distribution, and modification of this source code and/or resulting
+*   object code is restricted to non-commercial enhancements to products from
+*   Valve LLC.  All other use, distribution, or modification is prohibited
+*   without written permission from Valve LLC.
+*
+****/
+// CBaseSpectator
+
+// YWB:  UNDONE
+
+// Spectator functions
+// 
 #include	"extdll.h"
 #include	"util.h"
 #include	"cbase.h"
@@ -7,6 +27,13 @@
 #include	"spectator.h"
 
 // [SDK score 1.0] CBaseSpectator::SpectatorConnect
+/*
+===========
+SpectatorConnect
+
+called when a spectator connects to a server
+============
+*/
 void CBaseSpectator::SpectatorConnect(void)
 {
 	pev->flags = FL_SPECTATOR;
@@ -17,11 +44,25 @@ void CBaseSpectator::SpectatorConnect(void)
 }
 
 // [SDK score 1.0] CBaseSpectator::SpectatorDisconnect
+/*
+===========
+SpectatorDisconnect
+
+called when a spectator disconnects from a server
+============
+*/
 void CBaseSpectator::SpectatorDisconnect(void)
 {
 }
 
 // [SDK heurística] CBaseSpectator::SpectatorImpulseCommand
+/*
+================
+SpectatorImpulseCommand
+
+Called by SpectatorThink if the spectator entered an impulse
+================
+*/
 void CBaseSpectator::SpectatorImpulseCommand(void)
 {
 	static edict_t	*pGoal		= NULL;
@@ -75,6 +116,13 @@ void CBaseSpectator::SpectatorImpulseCommand(void)
 }
 
 // [SDK score 1.0] CBaseSpectator::SpectatorThink
+/*
+================
+SpectatorThink
+
+Called every frame after physics are run
+================
+*/
 void  CBaseSpectator::SpectatorThink(void)
 {
 	if (!(pev->flags & FL_SPECTATOR))
@@ -90,6 +138,14 @@ void  CBaseSpectator::SpectatorThink(void)
 }
 
 // [SDK score 1.0] CBaseSpectator::Spawn
+/*
+===========
+Spawn
+
+  Called when spectator is initialized:
+  UNDONE:  Is this actually being called because spectators are not allocated in normal fashion?
+============
+*/
 void CBaseSpectator::Spawn()
 {
 	pev->flags = FL_SPECTATOR;

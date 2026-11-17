@@ -1,12 +1,59 @@
-// sdk/pathcorner.cpp -- funções do HL SDK que o hl_i386.so do ESF reproduz (score de similaridade >= 0.86 em docs/sdk_match.csv).
-// Gerado por tools/assemble_sdk.py a partir de <hlsdk>/dlls/pathcorner.cpp. Conferir contra decomp_raw ao compilar.
+// sdk/pathcorner.cpp -- arquivo do HL SDK com SÓ as funções que o hl_i386.so do ESF reproduz (score >= 0.86 em docs/sdk_match.csv).
+// Gerado por tools/assemble_sdk.py a partir de <hlsdk>/dlls/pathcorner.cpp. As demais funções do arquivo foram removidas.
+/***
+*
+*	Copyright (c) 1996-2001, Valve LLC. All rights reserved.
+*	
+*	This product contains software technology licensed from Id 
+*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc. 
+*	All Rights Reserved.
+*
+*   Use, distribution, and modification of this source code and/or resulting
+*   object code is restricted to non-commercial enhancements to products from
+*   Valve LLC.  All other use, distribution, or modification is prohibited
+*   without written permission from Valve LLC.
+*
+****/
+//
+// ========================== PATH_CORNER ===========================
+//
+
 #include "extdll.h"
 #include "util.h"
 #include "cbase.h"
 #include "trains.h"
 #include "saverestore.h"
 
+class CPathCorner : public CPointEntity
+{
+public:
+	void Spawn( );
+	void KeyValue( KeyValueData* pkvd );
+	float GetDelay( void ) { return m_flWait; }
+//	void Touch( CBaseEntity *pOther );
+	virtual int		Save( CSave &save );
+	virtual int		Restore( CRestore &restore );
+	
+	static	TYPEDESCRIPTION m_SaveData[];
+
+private:
+	float	m_flWait;
+};
+
+LINK_ENTITY_TO_CLASS( path_corner, CPathCorner );
+
+// Global Savedata for Delay
+TYPEDESCRIPTION	CPathCorner::m_SaveData[] = 
+{
+	DEFINE_FIELD( CPathCorner, m_flWait, FIELD_FLOAT ),
+};
+
+IMPLEMENT_SAVERESTORE( CPathCorner, CPointEntity );
+
 // [SDK score 1.0] CPathCorner::KeyValue
+//
+// Cache user-entity-field values until spawn is called.
+//
 void CPathCorner :: KeyValue( KeyValueData *pkvd )
 {
 	if (FStrEq(pkvd->szKeyName, "wait"))
@@ -18,13 +65,35 @@ void CPathCorner :: KeyValue( KeyValueData *pkvd )
 		CPointEntity::KeyValue( pkvd );
 }
 
+
 // [SDK score 1.0] CPathCorner::Spawn
 void CPathCorner :: Spawn( )
 {
 	ASSERTSZ(!FStringNull(pev->targetname), "path_corner without a targetname");
 }
 
+#if 0
+// [fora desta etapa: diferente do SDK ou definida em outro arquivo] void CPathCorner :: Touch( CBaseEntity *pOther )
+#endif
+
+
+
+TYPEDESCRIPTION	CPathTrack::m_SaveData[] = 
+{
+	DEFINE_FIELD( CPathTrack, m_length, FIELD_FLOAT ),
+	DEFINE_FIELD( CPathTrack, m_pnext, FIELD_CLASSPTR ),
+	DEFINE_FIELD( CPathTrack, m_paltpath, FIELD_CLASSPTR ),
+	DEFINE_FIELD( CPathTrack, m_pprevious, FIELD_CLASSPTR ),
+	DEFINE_FIELD( CPathTrack, m_altName, FIELD_STRING ),
+};
+
+IMPLEMENT_SAVERESTORE( CPathTrack, CBaseEntity );
+LINK_ENTITY_TO_CLASS( path_track, CPathTrack );
+
 // [SDK score 1.0] CPathTrack::KeyValue
+//
+// Cache user-entity-field values until spawn is called.
+//
 void CPathTrack :: KeyValue( KeyValueData *pkvd )
 {
 	if (FStrEq(pkvd->szKeyName, "altpath"))
@@ -67,6 +136,7 @@ void CPathTrack :: Use( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE 
 	}
 }
 
+
 // [SDK score 0.67] CPathTrack::Link
 void CPathTrack :: Link( void  )
 {
@@ -104,6 +174,7 @@ void CPathTrack :: Link( void  )
 	}
 }
 
+
 // [SDK score 1.0] CPathTrack::Spawn
 void CPathTrack :: Spawn( void )
 {
@@ -118,6 +189,7 @@ void CPathTrack :: Spawn( void )
 	pev->nextthink = gpGlobals->time + 0.5;
 #endif
 }
+
 
 // [SDK score 1.0] CPathTrack::Activate
 void CPathTrack::Activate( void )
@@ -137,6 +209,7 @@ CPathTrack	*CPathTrack :: ValidPath( CPathTrack	*ppath, int testFlag )
 
 	return ppath;
 }
+
 
 // [SDK score 1.0] CPathTrack::Project
 void CPathTrack :: Project( CPathTrack *pstart, CPathTrack *pend, Vector *origin, float dist )
@@ -158,6 +231,8 @@ CPathTrack *CPathTrack::GetNext( void )
 	return m_pnext;
 }
 
+
+
 // [SDK score 1.0] CPathTrack::GetPrevious
 CPathTrack *CPathTrack::GetPrevious( void )
 {
@@ -167,6 +242,8 @@ CPathTrack *CPathTrack::GetPrevious( void )
 	return m_pprevious;
 }
 
+
+
 // [SDK score 1.0] CPathTrack::SetPrevious
 void CPathTrack::SetPrevious( CPathTrack *pprev )
 {
@@ -175,7 +252,9 @@ void CPathTrack::SetPrevious( CPathTrack *pprev )
 		m_pprevious = pprev;
 }
 
+
 // [SDK score 1.0] CPathTrack::LookAhead
+// Assumes this is ALWAYS enabled
 CPathTrack *CPathTrack :: LookAhead( Vector *origin, float dist, int move )
 {
 	CPathTrack *pcurrent;
@@ -257,7 +336,9 @@ CPathTrack *CPathTrack :: LookAhead( Vector *origin, float dist, int move )
 	return pcurrent;
 }
 
+	
 // [SDK score 1.0] CPathTrack::Nearest
+// Assumes this is ALWAYS enabled
 CPathTrack *CPathTrack :: Nearest( Vector origin )
 {
 	int			deadCount;
@@ -295,6 +376,7 @@ CPathTrack *CPathTrack :: Nearest( Vector origin )
 	return pnearest;
 }
 
+
 // [SDK score 1.0] CPathTrack::Instance
 CPathTrack *CPathTrack::Instance( edict_t *pent )
 { 
@@ -302,3 +384,10 @@ CPathTrack *CPathTrack::Instance( edict_t *pent )
 		return (CPathTrack *)GET_PRIVATE(pent);
 	return NULL;
 }
+
+
+	// DEBUGGING CODE
+#if PATH_SPARKLE_DEBUG
+// [fora desta etapa: diferente do SDK ou definida em outro arquivo] void CPathTrack :: Sparkle( void )
+#endif
+

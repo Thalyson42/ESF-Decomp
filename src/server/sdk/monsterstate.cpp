@@ -1,5 +1,24 @@
-// sdk/monsterstate.cpp -- funções do HL SDK que o hl_i386.so do ESF reproduz (score de similaridade >= 0.86 em docs/sdk_match.csv).
-// Gerado por tools/assemble_sdk.py a partir de <hlsdk>/dlls/monsterstate.cpp. Conferir contra decomp_raw ao compilar.
+// sdk/monsterstate.cpp -- arquivo do HL SDK com SÓ as funções que o hl_i386.so do ESF reproduz (score >= 0.86 em docs/sdk_match.csv).
+// Gerado por tools/assemble_sdk.py a partir de <hlsdk>/dlls/monsterstate.cpp. As demais funções do arquivo foram removidas.
+/***
+*
+*	Copyright (c) 1996-2001, Valve LLC. All rights reserved.
+*	
+*	This product contains software technology licensed from Id 
+*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc. 
+*	All Rights Reserved.
+*
+*   This source code contains proprietary and confidential information of
+*   Valve LLC and its suppliers.  Access to this code is restricted to
+*   persons who have executed a written SDK license with Valve.  Any access,
+*   use or distribution of this code by or to any unlicensed person is illegal.
+*
+****/
+//=========================================================
+// monsterstate.cpp - base class monster functions for 
+// controlling core AI.
+//=========================================================
+
 #include "extdll.h"
 #include "util.h"
 #include "cbase.h"
@@ -10,6 +29,9 @@
 #include "soundent.h"
 
 // [SDK score 1.0] CBaseMonster::SetState
+//=========================================================
+// SetState
+//=========================================================
 void CBaseMonster :: SetState ( MONSTERSTATE State )
 {
 /*
@@ -38,6 +60,9 @@ void CBaseMonster :: SetState ( MONSTERSTATE State )
 }
 
 // [SDK score 1.0] CBaseMonster::RunAI
+//=========================================================
+// RunAI
+//=========================================================
 void CBaseMonster :: RunAI ( void )
 {
 	// to test model's eye height
@@ -92,6 +117,10 @@ void CBaseMonster :: RunAI ( void )
 }
 
 // [SDK score 1.0] CBaseMonster::GetIdealState
+//=========================================================
+// GetIdealState - surveys the Conditions information available
+// and finds the best new state for a monster.
+//=========================================================
 MONSTERSTATE CBaseMonster :: GetIdealState ( void )
 {
 	int	iConditions;
@@ -207,3 +236,4 @@ MONSTERSTATE CBaseMonster :: GetIdealState ( void )
 
 	return m_IdealMonsterState;
 }
+

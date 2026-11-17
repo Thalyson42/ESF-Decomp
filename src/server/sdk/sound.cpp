@@ -1,5 +1,23 @@
-// sdk/sound.cpp -- funções do HL SDK que o hl_i386.so do ESF reproduz (score de similaridade >= 0.86 em docs/sdk_match.csv).
-// Gerado por tools/assemble_sdk.py a partir de <hlsdk>/dlls/sound.cpp. Conferir contra decomp_raw ao compilar.
+// sdk/sound.cpp -- arquivo do HL SDK com SÓ as funções que o hl_i386.so do ESF reproduz (score >= 0.86 em docs/sdk_match.csv).
+// Gerado por tools/assemble_sdk.py a partir de <hlsdk>/dlls/sound.cpp. As demais funções do arquivo foram removidas.
+/***
+*
+*	Copyright (c) 1996-2001, Valve LLC. All rights reserved.
+*	
+*	This product contains software technology licensed from Id 
+*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc. 
+*	All Rights Reserved.
+*
+*   Use, distribution, and modification of this source code and/or resulting
+*   object code is restricted to non-commercial enhancements to products from
+*   Valve LLC.  All other use, distribution, or modification is prohibited
+*   without written permission from Valve LLC.
+*
+****/
+//=========================================================
+// sound.cpp 
+//=========================================================
+
 #include "extdll.h"
 #include "util.h"
 #include "cbase.h"
@@ -7,9 +25,144 @@
 #include "player.h"
 #include "talkmonster.h"
 #include "gamerules.h"
+
+#if !defined ( _WIN32 )
 #include <ctype.h>
+#endif
+
+
+static char *memfgets( byte *pMemFile, int fileSize, int &filePos, char *pBuffer, int bufferSize );
+
+
+// ==================== GENERIC AMBIENT SOUND ======================================
+
+// runtime pitch shift and volume fadein/out structure
+
+// NOTE: IF YOU CHANGE THIS STRUCT YOU MUST CHANGE THE SAVE/RESTORE VERSION NUMBER
+// SEE BELOW (in the typedescription for the class)
+typedef struct dynpitchvol
+{
+	// NOTE: do not change the order of these parameters 
+	// NOTE: unless you also change order of rgdpvpreset array elements!
+	int preset;
+
+	int pitchrun;		// pitch shift % when sound is running 0 - 255
+	int pitchstart;		// pitch shift % when sound stops or starts 0 - 255
+	int spinup;			// spinup time 0 - 100
+	int spindown;		// spindown time 0 - 100
+
+	int volrun;			// volume change % when sound is running 0 - 10
+	int volstart;		// volume change % when sound stops or starts 0 - 10
+	int fadein;			// volume fade in time 0 - 100
+	int fadeout;		// volume fade out time 0 - 100
+
+						// Low Frequency Oscillator
+	int	lfotype;		// 0) off 1) square 2) triangle 3) random
+	int lforate;		// 0 - 1000, how fast lfo osciallates
+	
+	int lfomodpitch;	// 0-100 mod of current pitch. 0 is off.
+	int lfomodvol;		// 0-100 mod of current volume. 0 is off.
+
+	int cspinup;		// each trigger hit increments counter and spinup pitch
+
+
+	int	cspincount;
+
+	int pitch;			
+	int spinupsav;
+	int spindownsav;
+	int pitchfrac;
+
+	int vol;
+	int fadeinsav;
+	int fadeoutsav;
+	int volfrac;
+
+	int	lfofrac;
+	int	lfomult;
+
+
+} dynpitchvol_t;
+
+#define CDPVPRESETMAX 27
+
+// presets for runtime pitch and vol modulation of ambient sounds
+
+dynpitchvol_t rgdpvpreset[CDPVPRESETMAX] = 
+{
+// pitch	pstart	spinup	spindwn	volrun	volstrt	fadein	fadeout	lfotype	lforate	modptch modvol	cspnup		
+{1,	255,	 75,	95,		95,		10,		1,		50,		95, 	0,		0,		0,		0,		0,		0,0,0,0,0,0,0,0,0,0}, 
+{2,	255,	 85,	70,		88,		10,		1,		20,		88,		0,		0,		0,		0,		0,		0,0,0,0,0,0,0,0,0,0}, 
+{3,	255,	100,	50,		75,		10,		1,		10,		75,		0,		0,		0,		0,		0,		0,0,0,0,0,0,0,0,0,0},
+{4,	100,	100,	0,		0,		10,		1,		90,		90,		0,		0,		0,		0,		0,		0,0,0,0,0,0,0,0,0,0},
+{5,	100,	100,	0,		0,		10,		1,		80,		80,		0,		0,		0,		0,		0,		0,0,0,0,0,0,0,0,0,0},
+{6,	100,	100,	0,		0,		10,		1,		50,		70,		0,		0,		0,		0,		0,		0,0,0,0,0,0,0,0,0,0},
+{7,	100,	100,	0,		0,		 5,		1,		40,		50,		1,		50,		0,		10,		0,		0,0,0,0,0,0,0,0,0,0},
+{8,	100,	100,	0,		0,		 5,		1,		40,		50,		1,		150,	0,		10,		0,		0,0,0,0,0,0,0,0,0,0},
+{9,	100,	100,	0,		0,		 5,		1,		40,		50,		1,		750,	0,		10,		0,		0,0,0,0,0,0,0,0,0,0},
+{10,128,	100,	50,		75,		10,		1,		30,		40,		2,		 8,		20,		0,		0,		0,0,0,0,0,0,0,0,0,0},
+{11,128,	100,	50,		75,		10,		1,		30,		40,		2,		25,		20,		0,		0,		0,0,0,0,0,0,0,0,0,0},
+{12,128,	100,	50,		75,		10,		1,		30,		40,		2,		70,		20,		0,		0,		0,0,0,0,0,0,0,0,0,0},
+{13,50,		 50,	0,		0,		10,		1,		20,		50,		0,		0,		0,		0,		0,		0,0,0,0,0,0,0,0,0,0},
+{14,70,		 70,	0,		0,		10,		1,		20,		50,		0,		0,		0,		0,		0,		0,0,0,0,0,0,0,0,0,0},
+{15,90,		 90,	0,		0,		10,		1,		20,		50,		0,		0,		0,		0,		0,		0,0,0,0,0,0,0,0,0,0},
+{16,120,	120,	0,		0,		10,		1,		20,		50,		0,		0,		0,		0,		0,		0,0,0,0,0,0,0,0,0,0},
+{17,180,	180,	0,		0,		10,		1,		20,		50,		0,		0,		0,		0,		0,		0,0,0,0,0,0,0,0,0,0},
+{18,255,	255,	0,		0,		10,		1,		20,		50,		0,		0,		0,		0,		0,		0,0,0,0,0,0,0,0,0,0},
+{19,200,	 75,	90,		90,		10,		1,		50,		90,		2,		100,	20,		0,		0,		0,0,0,0,0,0,0,0,0,0},
+{20,255,	 75,	97,		90,		10,		1,		50,		90,		1,		40,		50,		0,		0,		0,0,0,0,0,0,0,0,0,0},
+{21,100,	100,	0,		0,		10,		1,		30,		50,		3,		15,		20,		0,		0,		0,0,0,0,0,0,0,0,0,0},
+{22,160,	160,	0,		0,		10,		1,		50,		50,		3,		500,	25,		0,		0,		0,0,0,0,0,0,0,0,0,0},
+{23,255,	 75,	88,		0,		10,		1,		40,		0,		0,		0,		0,		0,		5,		0,0,0,0,0,0,0,0,0,0}, 
+{24,200,	 20,	95,	    70,		10,		1,		70,		70,		3,		20,		50,		0,		0,		0,0,0,0,0,0,0,0,0,0}, 
+{25,180,	100,	50,		60,		10,		1,		40,		60,		2,		90,		100,	100,	0,		0,0,0,0,0,0,0,0,0,0}, 
+{26,60,		 60,	0,		0,		10,		1,		40,		70,		3,		80,		20,		50,		0,		0,0,0,0,0,0,0,0,0,0}, 
+{27,128,	 90,	10,		10,		10,		1,		20,		40,		1,		5,		10,		20,		0,		0,0,0,0,0,0,0,0,0,0}
+};
+
+class CAmbientGeneric : public CBaseEntity
+{
+public:
+	void KeyValue( KeyValueData* pkvd);
+	void Spawn( void );
+	void Precache( void );
+	void EXPORT ToggleUse ( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value );
+	void EXPORT RampThink( void );
+	void InitModulationParms(void);
+
+	virtual int		Save( CSave &save );
+	virtual int		Restore( CRestore &restore );
+	static	TYPEDESCRIPTION m_SaveData[];
+	virtual int	ObjectCaps( void ) { return (CBaseEntity :: ObjectCaps() & ~FCAP_ACROSS_TRANSITION); }
+
+	float m_flAttenuation;		// attenuation value
+	dynpitchvol_t m_dpv;	
+
+	BOOL	m_fActive;	// only TRUE when the entity is playing a looping sound
+	BOOL	m_fLooping;	// TRUE when the sound played will loop
+};
+
+LINK_ENTITY_TO_CLASS( ambient_generic, CAmbientGeneric );
+TYPEDESCRIPTION	CAmbientGeneric::m_SaveData[] = 
+{
+	DEFINE_FIELD( CAmbientGeneric, m_flAttenuation, FIELD_FLOAT ),
+	DEFINE_FIELD( CAmbientGeneric, m_fActive, FIELD_BOOLEAN ),
+	DEFINE_FIELD( CAmbientGeneric, m_fLooping, FIELD_BOOLEAN ),
+
+	// HACKHACK - This is not really in the spirit of the save/restore design, but save this
+	// out as a binary data block.  If the dynpitchvol_t is changed, old saved games will NOT
+	// load these correctly, so bump the save/restore version if you change the size of the struct
+	// The right way to do this is to split the input parms (read in keyvalue) into members and re-init this
+	// struct in Precache(), but it's unlikely that the struct will change, so it's not worth the time right now.
+	DEFINE_ARRAY( CAmbientGeneric, m_dpv, FIELD_CHARACTER, sizeof(dynpitchvol_t) ),
+};
+
+IMPLEMENT_SAVERESTORE( CAmbientGeneric, CBaseEntity );
 
 // [SDK heurística] CAmbientGeneric::Spawn
+//
+// ambient_generic - general-purpose user-defined static sound
+//
 void CAmbientGeneric :: Spawn( void )
 {
 /*
@@ -73,6 +226,7 @@ void CAmbientGeneric :: Spawn( void )
 	Precache( );
 }
 
+
 // [SDK score 1.0] CAmbientGeneric::Precache
 void CAmbientGeneric :: Precache( void )
 {
@@ -102,6 +256,11 @@ void CAmbientGeneric :: Precache( void )
 }
 
 // [SDK score 1.0] CAmbientGeneric::RampThink
+// RampThink - Think at 5hz if we are dynamically modifying 
+// pitch or volume of the playing sound.  This function will
+// ramp pitch and/or volume up or down, modify pitch/volume
+// with lfo if active.
+
 void CAmbientGeneric :: RampThink( void )
 {
 	char* szSoundFile = (char*) STRING(pev->message);
@@ -293,6 +452,9 @@ void CAmbientGeneric :: RampThink( void )
 }
 
 // [SDK heurística] CAmbientGeneric::InitModulationParms
+// Init all ramp params in preparation to 
+// play a new sound
+
 void CAmbientGeneric :: InitModulationParms(void)
 {
 	int pitchinc;
@@ -372,6 +534,12 @@ void CAmbientGeneric :: InitModulationParms(void)
 }
 
 // [SDK heurística] CAmbientGeneric::ToggleUse
+//
+// ToggleUse - turns an ambient sound on or off.  If the 
+// ambient is a looping sound, mark sound as active (m_fActive)
+// if it's playing, innactive if not.  If the sound is not
+// a looping sound, never mark it as active.
+//
 void CAmbientGeneric :: ToggleUse ( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value )
 {
 	char* szSoundFile = (char*) STRING(pev->message);
@@ -481,8 +649,10 @@ void CAmbientGeneric :: ToggleUse ( CBaseEntity *pActivator, CBaseEntity *pCalle
 
 	} 
 }
-
 // [SDK score 1.0] CAmbientGeneric::KeyValue
+// KeyValue - load keyvalue pairs into member data of the
+// ambient generic. NOTE: called BEFORE spawn!
+
 void CAmbientGeneric :: KeyValue( KeyValueData *pkvd )
 {
 	// NOTE: changing any of the modifiers in this code
@@ -638,6 +808,35 @@ void CAmbientGeneric :: KeyValue( KeyValueData *pkvd )
 		CBaseEntity::KeyValue( pkvd );
 }
 
+
+// =================== ROOM SOUND FX ==========================================
+
+class CEnvSound : public CPointEntity
+{
+public:
+	void KeyValue( KeyValueData* pkvd);
+	void Spawn( void );
+
+	void Think( void );
+
+	virtual int		Save( CSave &save );
+	virtual int		Restore( CRestore &restore );
+	static	TYPEDESCRIPTION m_SaveData[];
+
+	float m_flRadius;
+	float m_flRoomtype;
+};
+
+LINK_ENTITY_TO_CLASS( env_sound, CEnvSound );
+TYPEDESCRIPTION	CEnvSound::m_SaveData[] = 
+{
+	DEFINE_FIELD( CEnvSound, m_flRadius, FIELD_FLOAT ),
+	DEFINE_FIELD( CEnvSound, m_flRoomtype, FIELD_FLOAT ),
+};
+
+IMPLEMENT_SAVERESTORE( CEnvSound, CBaseEntity );
+
+
 // [SDK score 1.0] CEnvSound::KeyValue
 void CEnvSound :: KeyValue( KeyValueData *pkvd )
 {
@@ -654,7 +853,20 @@ void CEnvSound :: KeyValue( KeyValueData *pkvd )
 	}
 }
 
+// [fora desta etapa: diferente do SDK ou definida em outro arquivo] // returns TRUE if the given sound entity (pev) is in range // and can see the given playe
+
 // [SDK score 1.0] CEnvSound::Think
+//
+// A client that is visible and in range of a sound entity will
+// have its room_type set by that sound entity.  If two or more
+// sound entities are contending for a client, then the nearest
+// sound entity to the client will set the client's room_type.
+// A client's room_type will remain set to its prior value until
+// a new in-range, visible sound entity resets a new room_type.
+//
+
+// CONSIDER: if player in water state, autoset roomtype to 14,15 or 16. 
+
 void CEnvSound :: Think( void )
 {
 	// get pointer to client if visible; FIND_CLIENT_IN_PVS will
@@ -746,13 +958,127 @@ env_sound_Think_slow:
 }
 
 // [SDK score 1.0] CEnvSound::Spawn
+//
+// env_sound - spawn a sound entity that will set player roomtype
+// when player moves in range and sight.
+//
+//
 void CEnvSound :: Spawn( )
 {
 	// spread think times
 	pev->nextthink = gpGlobals->time + RANDOM_FLOAT(0.0, 0.5); 
 }
 
+// ==================== SENTENCE GROUPS, UTILITY FUNCTIONS  ======================================
+
+#define CSENTENCE_LRU_MAX	32		// max number of elements per sentence group
+
+// group of related sentences
+
+typedef struct sentenceg
+{
+	char szgroupname[CBSENTENCENAME_MAX];
+	int count;
+	unsigned char rgblru[CSENTENCE_LRU_MAX];
+
+} SENTENCEG;
+
+#define CSENTENCEG_MAX 200					// max number of sentence groups
+// globals
+
+SENTENCEG rgsentenceg[CSENTENCEG_MAX];
+int fSentencesInit = FALSE;
+
+char gszallsentencenames[CVOXFILESENTENCEMAX][CBSENTENCENAME_MAX];
+int gcallsentences = 0;
+
+// [fora desta etapa: diferente do SDK ou definida em outro arquivo] // randomize list of sentence name indices void USENTENCEG_InitLRU(unsigned char *plru, in
+
+// [fora desta etapa: diferente do SDK ou definida em outro arquivo] // ignore lru. pick next sentence from sentence group. Go in order until we hit the last s
+
+
+
+// [fora desta etapa: diferente do SDK ou definida em outro arquivo] // pick a random sentence from rootname0 to rootnameX. // picks from the rgsentenceg[isent
+
+// [fora desta etapa: diferente do SDK ou definida em outro arquivo] // ===================== SENTENCE GROUPS, MAIN ROUTINES ======================== // Given 
+
+// [fora desta etapa: diferente do SDK ou definida em outro arquivo] // given sentence group index, play random sentence for given entity. // returns ipick - w
+
+// [fora desta etapa: diferente do SDK ou definida em outro arquivo] // same as above, but takes sentence group name instead of index int SENTENCEG_PlayRndSz(e
+
+// [fora desta etapa: diferente do SDK ou definida em outro arquivo] // play sentences in sequential order from sentence group. Reset after last sentence. int 
+
+
+// [fora desta etapa: diferente do SDK ou definida em outro arquivo] // for this entity, for the given sentence within the sentence group, stop // the sentence
+
+// [fora desta etapa: diferente do SDK ou definida em outro arquivo] // open sentences.txt, scan for groups, build rgsentenceg // Should be called from world s
+
+// [fora desta etapa: diferente do SDK ou definida em outro arquivo] // convert sentence (sample) name to !sentencenum, return !sentencenum int SENTENCEG_Looku
+
+// [fora desta etapa: diferente do SDK ou definida em outro arquivo] void EMIT_SOUND_DYN(edict_t *entity, int channel, const char *sample, float volume, float 
+
+// [fora desta etapa: diferente do SDK ou definida em outro arquivo] // play a specific sentence over the HEV suit speaker - just pass player entity, and !sent
+
+// [fora desta etapa: diferente do SDK ou definida em outro arquivo] // play a sentence, randomly selected from the passed in group id, over the HEV suit speak
+
+// [fora desta etapa: diferente do SDK ou definida em outro arquivo] // play a sentence, randomly selected from the passed in groupname void EMIT_GROUPNAME_SUI
+
+// ===================== MATERIAL TYPE DETECTION, MAIN ROUTINES ========================
+// 
+// Used to detect the texture the player is standing on, map the
+// texture name to a material type.  Play footstep sound based
+// on material type.
+
+int fTextureTypeInit = FALSE;
+
+#define CTEXTURESMAX		512			// max number of textures loaded
+
+int gcTextures = 0;
+char grgszTextureName[CTEXTURESMAX][CBTEXTURENAMEMAX];	// texture names
+char grgchTextureType[CTEXTURESMAX];						// [fora desta etapa: diferente do SDK ou definida em outro arquivo] // parallel array of texture types // open materials.txt, get size, alloc space, // save i
+
+
+// [fora desta etapa: diferente do SDK ou definida em outro arquivo] void TEXTURETYPE_Init()
+
+// [fora desta etapa: diferente do SDK ou definida em outro arquivo] // given texture name, find texture type // if not found, return type 'concrete' // NOTE: 
+
+// [fora desta etapa: diferente do SDK ou definida em outro arquivo] // play a strike sound based on the texture that was hit by the attack traceline. VecSrc/V
+
+// ===================================================================================
+//
+// Speaker class. Used for announcements per level, for door lock/unlock spoken voice. 
+//
+
+class CSpeaker : public CBaseEntity
+{
+public:
+	void KeyValue( KeyValueData* pkvd);
+	void Spawn( void );
+	void Precache( void );
+	void EXPORT ToggleUse ( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value );
+	void EXPORT SpeakerThink( void );
+	
+	virtual int		Save( CSave &save );
+	virtual int		Restore( CRestore &restore );
+	static	TYPEDESCRIPTION m_SaveData[];
+
+	virtual int	ObjectCaps( void ) { return (CBaseEntity :: ObjectCaps() & ~FCAP_ACROSS_TRANSITION); }
+	
+	int	m_preset;			// preset number
+};
+
+LINK_ENTITY_TO_CLASS( speaker, CSpeaker );
+TYPEDESCRIPTION	CSpeaker::m_SaveData[] = 
+{
+	DEFINE_FIELD( CSpeaker, m_preset, FIELD_INTEGER ),
+};
+
+IMPLEMENT_SAVERESTORE( CSpeaker, CBaseEntity );
+
 // [SDK score 1.0] CSpeaker::Spawn
+//
+// ambient_generic - general-purpose user-defined static sound
+//
 void CSpeaker :: Spawn( void )
 {
 	char* szSoundFile = (char*) STRING(pev->message);
@@ -778,6 +1104,9 @@ void CSpeaker :: Spawn( void )
 	Precache( );
 }
 
+#define ANNOUNCE_MINUTES_MIN	0.25	 
+#define ANNOUNCE_MINUTES_MAX	2.25
+
 // [SDK score 1.0] CSpeaker::Precache
 void CSpeaker :: Precache( void )
 {
@@ -785,7 +1114,6 @@ void CSpeaker :: Precache( void )
 		// set first announcement time for random n second
 		pev->nextthink = gpGlobals->time + RANDOM_FLOAT(5.0, 15.0);
 }
-
 // [SDK score 0.6] CSpeaker::SpeakerThink
 void CSpeaker :: SpeakerThink( void )
 {
@@ -850,7 +1178,11 @@ void CSpeaker :: SpeakerThink( void )
 	return;
 }
 
+
 // [SDK score 1.0] CSpeaker::ToggleUse
+//
+// ToggleUse - if an announcement is pending, cancel it.  If no announcement is pending, start one.
+//
 void CSpeaker :: ToggleUse ( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value )
 {
 	int fActive = (pev->nextthink > 0.0);
@@ -896,6 +1228,9 @@ void CSpeaker :: ToggleUse ( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_
 }
 
 // [SDK score 1.0] CSpeaker::KeyValue
+// KeyValue - load keyvalue pairs into member data
+// NOTE: called BEFORE spawn!
+
 void CSpeaker :: KeyValue( KeyValueData *pkvd )
 {
 	

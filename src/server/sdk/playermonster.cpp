@@ -1,18 +1,55 @@
-// sdk/playermonster.cpp -- funções do HL SDK que o hl_i386.so do ESF reproduz (score de similaridade >= 0.86 em docs/sdk_match.csv).
-// Gerado por tools/assemble_sdk.py a partir de <hlsdk>/dlls/playermonster.cpp. Conferir contra decomp_raw ao compilar.
+// sdk/playermonster.cpp -- arquivo do HL SDK com SÓ as funções que o hl_i386.so do ESF reproduz (score >= 0.86 em docs/sdk_match.csv).
+// Gerado por tools/assemble_sdk.py a partir de <hlsdk>/dlls/playermonster.cpp. As demais funções do arquivo foram removidas.
+//========= Copyright © 1996-2001, Valve LLC, All rights reserved. ============
+//
+// Purpose: New version of the slider bar
+//
+// $NoKeywords: $
+//=============================================================================
+
+//=========================================================
+// playermonster - for scripted sequence use.
+//=========================================================
 #include	"extdll.h"
 #include	"util.h"
 #include	"cbase.h"
 #include	"monsters.h"
 #include	"schedule.h"
 
+// For holograms, make them not solid so the player can walk through them
+#define	SF_MONSTERPLAYER_NOTSOLID					4 
+
+//=========================================================
+// Monster's Anim Events Go Here
+//=========================================================
+
+class CPlayerMonster : public CBaseMonster
+{
+public:
+	void Spawn( void );
+	void Precache( void );
+	void SetYawSpeed( void );
+	int  Classify ( void );
+	void HandleAnimEvent( MonsterEvent_t *pEvent );
+	int ISoundMask ( void );
+};
+LINK_ENTITY_TO_CLASS( monster_player, CPlayerMonster );
+
 // [SDK score 1.0] CPlayerMonster::Classify
+//=========================================================
+// Classify - indicates this monster's place in the 
+// relationship table.
+//=========================================================
 int	CPlayerMonster :: Classify ( void )
 {
 	return	CLASS_PLAYER_ALLY;
 }
 
 // [SDK score 1.0] CPlayerMonster::SetYawSpeed
+//=========================================================
+// SetYawSpeed - allows each sequence to have a different
+// turn rate associated with it.
+//=========================================================
 void CPlayerMonster :: SetYawSpeed ( void )
 {
 	int ys;
@@ -28,6 +65,10 @@ void CPlayerMonster :: SetYawSpeed ( void )
 }
 
 // [SDK score 1.0] CPlayerMonster::HandleAnimEvent
+//=========================================================
+// HandleAnimEvent - catches the monster-specific messages
+// that occur when tagged animation frames are played.
+//=========================================================
 void CPlayerMonster :: HandleAnimEvent( MonsterEvent_t *pEvent )
 {
 	switch( pEvent->event )
@@ -40,12 +81,18 @@ void CPlayerMonster :: HandleAnimEvent( MonsterEvent_t *pEvent )
 }
 
 // [SDK score 1.0] CPlayerMonster::ISoundMask
+//=========================================================
+// ISoundMask - player monster can't hear.
+//=========================================================
 int CPlayerMonster :: ISoundMask ( void )
 {
 	return	NULL;
 }
 
 // [SDK score 1.0] CPlayerMonster::Spawn
+//=========================================================
+// Spawn
+//=========================================================
 void CPlayerMonster :: Spawn()
 {
 	Precache( );
@@ -70,7 +117,14 @@ void CPlayerMonster :: Spawn()
 }
 
 // [SDK score 1.0] CPlayerMonster::Precache
+//=========================================================
+// Precache - precaches all resources this monster needs
+//=========================================================
 void CPlayerMonster :: Precache()
 {
 	PRECACHE_MODEL("models/player.mdl");
-}
+}	
+
+//=========================================================
+// AI Schedules Specific to this monster
+//=========================================================

@@ -1,9 +1,62 @@
-// sdk/bmodels.cpp -- funções do HL SDK que o hl_i386.so do ESF reproduz (score de similaridade >= 0.86 em docs/sdk_match.csv).
-// Gerado por tools/assemble_sdk.py a partir de <hlsdk>/dlls/bmodels.cpp. Conferir contra decomp_raw ao compilar.
+// sdk/bmodels.cpp -- arquivo do HL SDK com SÓ as funções que o hl_i386.so do ESF reproduz (score >= 0.86 em docs/sdk_match.csv).
+// Gerado por tools/assemble_sdk.py a partir de <hlsdk>/dlls/bmodels.cpp. As demais funções do arquivo foram removidas.
+/***
+*
+*	Copyright (c) 1996-2001, Valve LLC. All rights reserved.
+*	
+*	This product contains software technology licensed from Id 
+*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc. 
+*	All Rights Reserved.
+*
+*   Use, distribution, and modification of this source code and/or resulting
+*   object code is restricted to non-commercial enhancements to products from
+*   Valve LLC.  All other use, distribution, or modification is prohibited
+*   without written permission from Valve LLC.
+*
+****/
+/*
+
+===== bmodels.cpp ========================================================
+
+  spawn, think, and use functions for entities that use brush models
+
+*/
+
 #include "extdll.h"
 #include "util.h"
 #include "cbase.h"
 #include "doors.h"
+
+extern DLL_GLOBAL Vector		g_vecAttackDir;
+
+#define		SF_BRUSH_ACCDCC	16// brush should accelerate and decelerate when toggled
+#define		SF_BRUSH_HURT		32// rotating brush that inflicts pain based on rotation speed
+#define		SF_ROTATING_NOT_SOLID	64	// some special rotating objects are not solid.
+
+// covering cheesy noise1, noise2, & noise3 fields so they make more sense (for rotating fans)
+#define		noiseStart		noise1
+#define		noiseStop		noise2
+#define		noiseRunning	noise3
+
+#define		SF_PENDULUM_SWING		2	// spawnflag that makes a pendulum a rope swing.
+// [fora desta etapa: diferente do SDK ou definida em outro arquivo] // // BModelOrigin - calculates origin of a bmodel from absmin/size because all bmodel ori
+
+// =================== FUNC_WALL ==============================================
+
+/*QUAKED func_wall (0 .5 .8) ?
+This is just a solid wall if not inhibited
+*/
+class CFuncWall : public CBaseEntity
+{
+public:
+	void	Spawn( void );
+	void	Use( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value );
+
+	// Bmodels don't go across transitions
+	virtual int	ObjectCaps( void ) { return CBaseEntity :: ObjectCaps() & ~FCAP_ACROSS_TRANSITION; }
+};
+
+LINK_ENTITY_TO_CLASS( func_wall, CFuncWall );
 
 // [SDK score 1.0] CFuncWall::Spawn
 void CFuncWall :: Spawn( void )
@@ -17,12 +70,28 @@ void CFuncWall :: Spawn( void )
 	pev->flags |= FL_WORLDBRUSH;
 }
 
+
 // [SDK score 1.0] CFuncWall::Use
 void CFuncWall :: Use( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value )
 {
 	if ( ShouldToggle( useType, (int)(pev->frame)) )
 		pev->frame = 1 - pev->frame;
 }
+
+
+#define SF_WALL_START_OFF		0x0001
+
+class CFuncWallToggle : public CFuncWall
+{
+public:
+	void	Spawn( void );
+	void	Use( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value );
+	void	TurnOff( void );
+	void	TurnOn( void );
+	BOOL	IsOn( void );
+};
+
+LINK_ENTITY_TO_CLASS( func_wall_toggle, CFuncWallToggle );
 
 // [SDK score 1.0] CFuncWallToggle::Spawn
 void CFuncWallToggle :: Spawn( void )
@@ -32,6 +101,7 @@ void CFuncWallToggle :: Spawn( void )
 		TurnOff();
 }
 
+
 // [SDK score 1.0] CFuncWallToggle::TurnOff
 void CFuncWallToggle :: TurnOff( void )
 {
@@ -39,6 +109,7 @@ void CFuncWallToggle :: TurnOff( void )
 	pev->effects |= EF_NODRAW;
 	UTIL_SetOrigin( pev, pev->origin );
 }
+
 
 // [SDK score 1.0] CFuncWallToggle::TurnOn
 void CFuncWallToggle :: TurnOn( void )
@@ -48,6 +119,7 @@ void CFuncWallToggle :: TurnOn( void )
 	UTIL_SetOrigin( pev, pev->origin );
 }
 
+
 // [SDK score 1.0] CFuncWallToggle::IsOn
 BOOL CFuncWallToggle :: IsOn( void )
 {
@@ -55,6 +127,7 @@ BOOL CFuncWallToggle :: IsOn( void )
 		return FALSE;
 	return TRUE;
 }
+
 
 // [SDK score 1.0] CFuncWallToggle::Use
 void CFuncWallToggle :: Use( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value )
@@ -70,6 +143,19 @@ void CFuncWallToggle :: Use( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_
 	}
 }
 
+
+#define SF_CONVEYOR_VISUAL		0x0001
+#define SF_CONVEYOR_NOTSOLID	0x0002
+
+class CFuncConveyor : public CFuncWall
+{
+public:
+	void	Spawn( void );
+	void	Use( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value );
+	void	UpdateSpeed( float speed );
+};
+
+LINK_ENTITY_TO_CLASS( func_conveyor, CFuncConveyor );
 // [SDK score 1.0] CFuncConveyor::Spawn
 void CFuncConveyor :: Spawn( void )
 {
@@ -92,7 +178,9 @@ void CFuncConveyor :: Spawn( void )
 	UpdateSpeed( pev->speed );
 }
 
+
 // [SDK score 1.0] CFuncConveyor::UpdateSpeed
+// HACKHACK -- This is ugly, but encode the speed in the rendercolor to avoid adding more data to the network stream
 void CFuncConveyor :: UpdateSpeed( float speed )
 {
 	// Encode it as an integer with 4 fractional bits
@@ -107,12 +195,32 @@ void CFuncConveyor :: UpdateSpeed( float speed )
 	pev->rendercolor.z = (speedCode & 0xFF);
 }
 
+
 // [SDK score 1.0] CFuncConveyor::Use
 void CFuncConveyor :: Use( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value )
 {
     pev->speed = -pev->speed;
 	UpdateSpeed( pev->speed );
 }
+
+
+
+// =================== FUNC_ILLUSIONARY ==============================================
+
+
+/*QUAKED func_illusionary (0 .5 .8) ?
+A simple entity that looks solid but lets you walk through it.
+*/
+class CFuncIllusionary : public CBaseToggle 
+{
+public:
+	void Spawn( void );
+	void EXPORT SloshTouch( CBaseEntity *pOther );
+	void KeyValue( KeyValueData *pkvd );
+	virtual int	ObjectCaps( void ) { return CBaseEntity :: ObjectCaps() & ~FCAP_ACROSS_TRANSITION; }
+};
+
+LINK_ENTITY_TO_CLASS( func_illusionary, CFuncIllusionary );
 
 // [SDK score 1.0] CFuncIllusionary::KeyValue
 void CFuncIllusionary :: KeyValue( KeyValueData *pkvd )
@@ -140,6 +248,27 @@ void CFuncIllusionary :: Spawn( void )
 	//	MAKE_STATIC(ENT(pev));
 }
 
+
+// -------------------------------------------------------------------------------
+//
+// Monster only clip brush
+// 
+// This brush will be solid for any entity who has the FL_MONSTERCLIP flag set
+// in pev->flags
+//
+// otherwise it will be invisible and not solid.  This can be used to keep 
+// specific monsters out of certain areas
+//
+// -------------------------------------------------------------------------------
+class CFuncMonsterClip : public CFuncWall
+{
+public:
+	void	Spawn( void );
+	void	Use( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value ) {}		// Clear out func_wall's use function
+};
+
+LINK_ENTITY_TO_CLASS( func_monsterclip, CFuncMonsterClip );
+
 // [SDK score 1.0] CFuncMonsterClip::Spawn
 void CFuncMonsterClip::Spawn( void )
 {
@@ -148,6 +277,49 @@ void CFuncMonsterClip::Spawn( void )
 		pev->effects = EF_NODRAW;
 	pev->flags |= FL_MONSTERCLIP;
 }
+
+
+// =================== FUNC_ROTATING ==============================================
+class CFuncRotating : public CBaseEntity
+{
+public:
+	// basic functions
+	void Spawn( void  );
+	void Precache( void  );
+	void EXPORT SpinUp ( void );
+	void EXPORT SpinDown ( void );
+	void KeyValue( KeyValueData* pkvd);
+	void EXPORT HurtTouch ( CBaseEntity *pOther );
+	void EXPORT RotatingUse( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value );
+	void EXPORT Rotate( void );
+	void RampPitchVol (int fUp );
+	void Blocked( CBaseEntity *pOther );
+	virtual int	ObjectCaps( void ) { return CBaseEntity :: ObjectCaps() & ~FCAP_ACROSS_TRANSITION; }
+	virtual int		Save( CSave &save );
+	virtual int		Restore( CRestore &restore );
+	
+	static	TYPEDESCRIPTION m_SaveData[];
+
+	float m_flFanFriction;
+	float m_flAttenuation;
+	float m_flVolume;
+	float m_pitch;
+	int	  m_sounds;
+};
+
+TYPEDESCRIPTION	CFuncRotating::m_SaveData[] = 
+{
+	DEFINE_FIELD( CFuncRotating, m_flFanFriction, FIELD_FLOAT ),
+	DEFINE_FIELD( CFuncRotating, m_flAttenuation, FIELD_FLOAT ),
+	DEFINE_FIELD( CFuncRotating, m_flVolume, FIELD_FLOAT ),
+	DEFINE_FIELD( CFuncRotating, m_pitch, FIELD_FLOAT ),
+	DEFINE_FIELD( CFuncRotating, m_sounds, FIELD_INTEGER )
+};
+
+IMPLEMENT_SAVERESTORE( CFuncRotating, CBaseEntity );
+
+
+LINK_ENTITY_TO_CLASS( func_rotating, CFuncRotating );
 
 // [SDK score 0.86] CFuncRotating::KeyValue
 void CFuncRotating :: KeyValue( KeyValueData* pkvd)
@@ -184,6 +356,20 @@ void CFuncRotating :: KeyValue( KeyValueData* pkvd)
 }
 
 // [SDK score 0.4] CFuncRotating::Spawn
+/*QUAKED func_rotating (0 .5 .8) ? START_ON REVERSE X_AXIS Y_AXIS
+You need to have an origin brush as part of this entity.  The  
+center of that brush will be
+the point around which it is rotated. It will rotate around the Z  
+axis by default.  You can
+check either the X_AXIS or Y_AXIS box to change that.
+
+"speed" determines how fast it moves; default value is 100.
+"dmg"	damage to inflict when blocked (2 default)
+
+REVERSE will cause the it to rotate in the opposite direction.
+*/
+
+
 void CFuncRotating :: Spawn( )
 {
 	// set final pitch.  Must not be PITCH_NORM, since we
@@ -268,6 +454,7 @@ void CFuncRotating :: Spawn( )
 	Precache( );
 }
 
+
 // [SDK score 1.0] CFuncRotating::Precache
 void CFuncRotating :: Precache( void )
 {
@@ -334,7 +521,12 @@ void CFuncRotating :: Precache( void )
 	}
 }
 
+
+
 // [SDK heurística] CFuncRotating::HurtTouch
+//
+// Touch - will hurt others based on how fast the brush is spinning
+//
 void CFuncRotating :: HurtTouch ( CBaseEntity *pOther )
 {
 	entvars_t	*pevOther = pOther->pev;
@@ -350,6 +542,13 @@ void CFuncRotating :: HurtTouch ( CBaseEntity *pOther )
 	
 	pevOther->velocity = (pevOther->origin - VecBModelOrigin(pev) ).Normalize() * pev->dmg;
 }
+
+//
+// RampPitchVol - ramp pitch and volume up to final values, based on difference
+// between how fast we're going vs how fast we plan to go
+//
+#define FANPITCHMIN		30
+#define FANPITCHMAX		100
 
 // [SDK heurística] CFuncRotating::RampPitchVol
 void CFuncRotating :: RampPitchVol (int fUp)
@@ -395,6 +594,9 @@ void CFuncRotating :: RampPitchVol (int fUp)
 }
 
 // [SDK score 1.0] CFuncRotating::SpinUp
+//
+// SpinUp - accelerates a non-moving func_rotating up to it's speed
+//
 void CFuncRotating :: SpinUp( void )
 {
 	Vector	vecAVel;//rotational velocity
@@ -423,6 +625,9 @@ void CFuncRotating :: SpinUp( void )
 }
 
 // [SDK score 1.0] CFuncRotating::SpinDown
+//
+// SpinDown - decelerates a moving func_rotating to a standstill.
+//
 void CFuncRotating :: SpinDown( void )
 {
 	Vector	vecAVel;//rotational velocity
@@ -468,6 +673,9 @@ void CFuncRotating :: Rotate( void )
 }
 
 // [SDK score 1.0] CFuncRotating::RotatingUse
+//=========================================================
+// Rotating Use - when a rotating brush is triggered
+//=========================================================
 void CFuncRotating :: RotatingUse( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value )
 {
 	// is this a brush that should accelerate and decelerate when turned on/off (fan)?
@@ -516,12 +724,69 @@ void CFuncRotating :: RotatingUse( CBaseEntity *pActivator, CBaseEntity *pCaller
 	}
 }
 
+
 // [SDK score 1.0] CFuncRotating::Blocked
+//
+// RotatingBlocked - An entity has blocked the brush
+//
 void CFuncRotating :: Blocked( CBaseEntity *pOther )
 
 {
 	pOther->TakeDamage( pev, pev, pev->dmg, DMG_CRUSH);
 }
+
+
+
+
+
+
+//#endif
+
+
+class CPendulum : public CBaseEntity
+{
+public:
+	void	Spawn ( void );
+	void	KeyValue( KeyValueData *pkvd );
+	void	EXPORT Swing( void );
+	void	EXPORT PendulumUse( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value );
+	void	EXPORT Stop( void );
+	void	Touch( CBaseEntity *pOther );
+	void	EXPORT RopeTouch ( CBaseEntity *pOther );// this touch func makes the pendulum a rope
+	virtual int	ObjectCaps( void ) { return CBaseEntity :: ObjectCaps() & ~FCAP_ACROSS_TRANSITION; }
+	virtual int		Save( CSave &save );
+	virtual int		Restore( CRestore &restore );
+	void	Blocked( CBaseEntity *pOther );
+
+	static	TYPEDESCRIPTION m_SaveData[];
+	
+	float	m_accel;			// Acceleration
+	float	m_distance;			// 
+	float	m_time;
+	float	m_damp;
+	float	m_maxSpeed;
+	float	m_dampSpeed;
+	vec3_t	m_center;
+	vec3_t	m_start;
+};
+
+LINK_ENTITY_TO_CLASS( func_pendulum, CPendulum );
+
+TYPEDESCRIPTION	CPendulum::m_SaveData[] = 
+{
+	DEFINE_FIELD( CPendulum, m_accel, FIELD_FLOAT ),
+	DEFINE_FIELD( CPendulum, m_distance, FIELD_FLOAT ),
+	DEFINE_FIELD( CPendulum, m_time, FIELD_TIME ),
+	DEFINE_FIELD( CPendulum, m_damp, FIELD_FLOAT ),
+	DEFINE_FIELD( CPendulum, m_maxSpeed, FIELD_FLOAT ),
+	DEFINE_FIELD( CPendulum, m_dampSpeed, FIELD_FLOAT ),
+	DEFINE_FIELD( CPendulum, m_center, FIELD_VECTOR ),
+	DEFINE_FIELD( CPendulum, m_start, FIELD_VECTOR ),
+};
+
+IMPLEMENT_SAVERESTORE( CPendulum, CBaseEntity );
+
+
 
 // [SDK score 1.0] CPendulum::KeyValue
 void CPendulum :: KeyValue( KeyValueData *pkvd )
@@ -539,6 +804,7 @@ void CPendulum :: KeyValue( KeyValueData *pkvd )
 	else 
 		CBaseEntity::KeyValue( pkvd );
 }
+
 
 // [SDK score 1.0] CPendulum::Spawn
 void CPendulum :: Spawn( void )
@@ -579,6 +845,7 @@ void CPendulum :: Spawn( void )
 	}
 }
 
+
 // [SDK score 1.0] CPendulum::PendulumUse
 void CPendulum :: PendulumUse( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value )
 {
@@ -610,6 +877,7 @@ void CPendulum :: PendulumUse( CBaseEntity *pActivator, CBaseEntity *pCaller, US
 	}
 }
 
+
 // [SDK score 1.0] CPendulum::Stop
 void CPendulum :: Stop( void )
 {
@@ -619,11 +887,13 @@ void CPendulum :: Stop( void )
 	pev->avelocity = g_vecZero;
 }
 
+
 // [SDK score 1.0] CPendulum::Blocked
 void CPendulum::Blocked( CBaseEntity *pOther )
 {
 	m_time = gpGlobals->time;
 }
+
 
 // [SDK score 1.0] CPendulum::Swing
 void CPendulum :: Swing( void )
@@ -666,6 +936,7 @@ void CPendulum :: Swing( void )
 
 	}
 }
+
 
 // [SDK score 1.0] CPendulum::Touch
 void CPendulum :: Touch ( CBaseEntity *pOther )
@@ -710,3 +981,5 @@ void CPendulum :: RopeTouch ( CBaseEntity *pOther )
 	pevOther->velocity = g_vecZero;
 	pevOther->movetype = MOVETYPE_NONE;
 }
+
+

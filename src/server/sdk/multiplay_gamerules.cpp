@@ -1,18 +1,85 @@
-// sdk/multiplay_gamerules.cpp -- funções do HL SDK que o hl_i386.so do ESF reproduz (score de similaridade >= 0.86 em docs/sdk_match.csv).
-// Gerado por tools/assemble_sdk.py a partir de <hlsdk>/dlls/multiplay_gamerules.cpp. Conferir contra decomp_raw ao compilar.
+// sdk/multiplay_gamerules.cpp -- arquivo do HL SDK com SÓ as funções que o hl_i386.so do ESF reproduz (score >= 0.86 em docs/sdk_match.csv).
+// Gerado por tools/assemble_sdk.py a partir de <hlsdk>/dlls/multiplay_gamerules.cpp. As demais funções do arquivo foram removidas.
+/***
+*
+*	Copyright (c) 1996-2001, Valve LLC. All rights reserved.
+*	
+*	This product contains software technology licensed from Id 
+*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc. 
+*	All Rights Reserved.
+*
+*   Use, distribution, and modification of this source code and/or resulting
+*   object code is restricted to non-commercial enhancements to products from
+*   Valve LLC.  All other use, distribution, or modification is prohibited
+*   without written permission from Valve LLC.
+*
+****/
+//
+// teamplay_gamerules.cpp
+//
 #include	"extdll.h"
 #include	"util.h"
 #include	"cbase.h"
 #include	"player.h"
 #include	"weapons.h"
 #include	"gamerules.h"
+ 
 #include	"skill.h"
 #include	"game.h"
 #include	"items.h"
 #include	"voice_gamemgr.h"
 #include	"hltv.h"
 #include	"trains.h"
+
+#if !defined ( _WIN32 )
 #include <ctype.h>
+#endif
+
+extern DLL_GLOBAL CGameRules	*g_pGameRules;
+extern DLL_GLOBAL BOOL	g_fGameOver;
+extern int gmsgDeathMsg;	// client dll messages
+extern int gmsgScoreInfo;
+extern int gmsgMOTD;
+extern int gmsgServerName;
+
+extern int g_teamplay;
+
+#define ITEM_RESPAWN_TIME	30
+#define WEAPON_RESPAWN_TIME	20
+#define AMMO_RESPAWN_TIME	20
+
+float g_flIntermissionStartTime = 0;
+
+
+// longest the intermission can last, in seconds
+#define MAX_INTERMISSION_TIME		120
+
+extern cvar_t timeleft, fragsleft, sv_busters;
+
+extern cvar_t mp_chattime;
+
+
+CVoiceGameMgr	g_VoiceGameMgr;
+
+class CMultiplayGameMgrHelper : public IVoiceGameMgrHelper
+{
+public:
+	virtual bool		CanPlayerHearPlayer(CBasePlayer *pListener, CBasePlayer *pTalker)
+	{
+		if ( g_teamplay )
+		{
+			if ( g_pGameRules->PlayerRelationship( pListener, pTalker ) != GR_TEAMMATE )
+			{
+				return false;
+			}
+		}
+
+		return true;
+	}
+};
+static CMultiplayGameMgrHelper g_GameMgrHelper;
+
+// [fora desta etapa: diferente do SDK ou definida em outro arquivo] //********************************************************* // Rules for the half-life mul
 
 // [SDK score 1.0] CHalfLifeMultiplay::ClientCommand
 BOOL CHalfLifeMultiplay::ClientCommand( CBasePlayer *pPlayer, const char *pcmd )
@@ -23,25 +90,38 @@ BOOL CHalfLifeMultiplay::ClientCommand( CBasePlayer *pPlayer, const char *pcmd )
 	return CGameRules::ClientCommand(pPlayer, pcmd);
 }
 
+// [fora desta etapa: diferente do SDK ou definida em outro arquivo] //========================================================= //============================
+
+// [fora desta etapa: diferente do SDK ou definida em outro arquivo] //========================================================= //============================
+
+
 // [SDK score 1.0] CHalfLifeMultiplay::IsMultiplayer
+//=========================================================
+//=========================================================
 BOOL CHalfLifeMultiplay::IsMultiplayer( void )
 {
 	return TRUE;
 }
 
 // [SDK score 1.0] CHalfLifeMultiplay::IsDeathmatch
+//=========================================================
+//=========================================================
 BOOL CHalfLifeMultiplay::IsDeathmatch( void )
 {
 	return TRUE;
 }
 
 // [SDK score 1.0] CHalfLifeMultiplay::IsCoOp
+//=========================================================
+//=========================================================
 BOOL CHalfLifeMultiplay::IsCoOp( void )
 {
 	return gpGlobals->coop;
 }
 
 // [SDK score 1.0] CHalfLifeMultiplay::FShouldSwitchWeapon
+//=========================================================
+//=========================================================
 BOOL CHalfLifeMultiplay::FShouldSwitchWeapon( CBasePlayer *pPlayer, CBasePlayerItem *pWeapon )
 {
 	if ( !pWeapon->CanDeploy() )
@@ -82,6 +162,8 @@ BOOL CHalfLifeMultiplay::FShouldSwitchWeapon( CBasePlayer *pPlayer, CBasePlayerI
 	return FALSE;
 }
 
+extern BOOL HLGetNextBestWeapon( CBasePlayer* pPlayer, CBasePlayerItem* pCurrentWeapon );
+
 // [SDK score 1.0] CHalfLifeMultiplay::GetNextBestWeapon
 BOOL CHalfLifeMultiplay :: GetNextBestWeapon( CBasePlayer *pPlayer, CBasePlayerItem *pCurrentWeapon )
 {
@@ -89,11 +171,16 @@ BOOL CHalfLifeMultiplay :: GetNextBestWeapon( CBasePlayer *pPlayer, CBasePlayerI
 }
 
 // [SDK score 1.0] CHalfLifeMultiplay::ClientConnected
+//=========================================================
+//=========================================================
 BOOL CHalfLifeMultiplay :: ClientConnected( edict_t *pEntity, const char *pszName, const char *pszAddress, char szRejectReason[ 128 ] )
 {
 	g_VoiceGameMgr.ClientConnected(pEntity);
 	return TRUE;
 }
+
+extern int gmsgSayText;
+extern int gmsgGameMode;
 
 // [SDK score 1.0] CHalfLifeMultiplay::UpdateGameMode
 void CHalfLifeMultiplay :: UpdateGameMode( CBasePlayer *pPlayer )
@@ -103,13 +190,23 @@ void CHalfLifeMultiplay :: UpdateGameMode( CBasePlayer *pPlayer )
 	MESSAGE_END();
 }
 
+// [fora desta etapa: diferente do SDK ou definida em outro arquivo] void CHalfLifeMultiplay :: InitHUD( CBasePlayer *pl )
+
+// [fora desta etapa: diferente do SDK ou definida em outro arquivo] //========================================================= //============================
+
+// [fora desta etapa: diferente do SDK ou definida em outro arquivo] //========================================================= //============================ 
+
 // [SDK score 1.0] CHalfLifeMultiplay::FPlayerCanTakeDamage
+//=========================================================
+//=========================================================
 BOOL CHalfLifeMultiplay::FPlayerCanTakeDamage( CBasePlayer *pPlayer, CBaseEntity *pAttacker )
 {
 	return TRUE;
 }
 
 // [SDK score 1.0] CHalfLifeMultiplay::PlayerThink
+//=========================================================
+//=========================================================
 void CHalfLifeMultiplay :: PlayerThink( CBasePlayer *pPlayer )
 {
 	if ( g_fGameOver )
@@ -125,13 +222,19 @@ void CHalfLifeMultiplay :: PlayerThink( CBasePlayer *pPlayer )
 	}
 }
 
+// [fora desta etapa: diferente do SDK ou definida em outro arquivo] //========================================================= //============================
+
 // [SDK score 1.0] CHalfLifeMultiplay::FPlayerCanRespawn
+//=========================================================
+//=========================================================
 BOOL CHalfLifeMultiplay :: FPlayerCanRespawn( CBasePlayer *pPlayer )
 {
 	return TRUE;
 }
 
 // [SDK score 1.0] CHalfLifeMultiplay::FlPlayerSpawnTime
+//=========================================================
+//=========================================================
 float CHalfLifeMultiplay :: FlPlayerSpawnTime( CBasePlayer *pPlayer )
 {
 	return gpGlobals->time;//now!
@@ -144,12 +247,20 @@ BOOL CHalfLifeMultiplay :: AllowAutoTargetCrosshair( void )
 }
 
 // [SDK score 1.0] CHalfLifeMultiplay::IPointsForKill
+//=========================================================
+// IPointsForKill - how many points awarded to anyone
+// that kills this player?
+//=========================================================
 int CHalfLifeMultiplay :: IPointsForKill( CBasePlayer *pAttacker, CBasePlayer *pKilled )
 {
 	return 1;
 }
 
+
 // [SDK score 1.0] CHalfLifeMultiplay::PlayerKilled
+//=========================================================
+// PlayerKilled - someone/something killed this player
+//=========================================================
 void CHalfLifeMultiplay :: PlayerKilled( CBasePlayer *pVictim, entvars_t *pKiller, entvars_t *pInflictor )
 {
 	CBasePlayer* peKiller = NULL;
@@ -226,6 +337,9 @@ void CHalfLifeMultiplay :: PlayerKilled( CBasePlayer *pVictim, entvars_t *pKille
 }
 
 // [SDK score 1.0] CHalfLifeMultiplay::DeathNotice
+//=========================================================
+// Deathnotice. 
+//=========================================================
 void CHalfLifeMultiplay::DeathNotice( CBasePlayer *pVictim, entvars_t *pKiller, entvars_t *pevInflictor )
 {
 	// Work out what killed the player, and send a message to all clients about it
@@ -427,11 +541,19 @@ void CHalfLifeMultiplay::DeathNotice( CBasePlayer *pVictim, entvars_t *pKiller, 
 }
 
 // [SDK score 1.0] CHalfLifeMultiplay::PlayerGotWeapon
+//=========================================================
+// PlayerGotWeapon - player has grabbed a weapon that was
+// sitting in the world
+//=========================================================
 void CHalfLifeMultiplay :: PlayerGotWeapon( CBasePlayer *pPlayer, CBasePlayerItem *pWeapon )
 {
 }
 
 // [SDK score 0.5] CHalfLifeMultiplay::FlWeaponRespawnTime
+//=========================================================
+// FlWeaponRespawnTime - what is the time in the future
+// at which this weapon may spawn?
+//=========================================================
 float CHalfLifeMultiplay :: FlWeaponRespawnTime( CBasePlayerItem *pWeapon )
 {
 	if ( weaponstay.value > 0 )
@@ -446,7 +568,16 @@ float CHalfLifeMultiplay :: FlWeaponRespawnTime( CBasePlayerItem *pWeapon )
 	return gpGlobals->time + WEAPON_RESPAWN_TIME;
 }
 
+// when we are within this close to running out of entities,  items 
+// marked with the ITEM_FLAG_LIMITINWORLD will delay their respawn
+#define ENTITY_INTOLERANCE	100
+
 // [SDK score 1.0] CHalfLifeMultiplay::FlWeaponTryRespawn
+//=========================================================
+// FlWeaponRespawnTime - Returns 0 if the weapon can respawn 
+// now,  otherwise it returns the time at which it can try
+// to spawn again.
+//=========================================================
 float CHalfLifeMultiplay :: FlWeaponTryRespawn( CBasePlayerItem *pWeapon )
 {
 	if ( pWeapon && pWeapon->m_iId && (pWeapon->iFlags() & ITEM_FLAG_LIMITINWORLD) )
@@ -462,12 +593,20 @@ float CHalfLifeMultiplay :: FlWeaponTryRespawn( CBasePlayerItem *pWeapon )
 }
 
 // [SDK score 1.0] CHalfLifeMultiplay::VecWeaponRespawnSpot
+//=========================================================
+// VecWeaponRespawnSpot - where should this weapon spawn?
+// Some game variations may choose to randomize spawn locations
+//=========================================================
 Vector CHalfLifeMultiplay :: VecWeaponRespawnSpot( CBasePlayerItem *pWeapon )
 {
 	return pWeapon->pev->origin;
 }
 
 // [SDK score 1.0] CHalfLifeMultiplay::WeaponShouldRespawn
+//=========================================================
+// WeaponShouldRespawn - any conditions inhibiting the
+// respawning of this weapon?
+//=========================================================
 int CHalfLifeMultiplay :: WeaponShouldRespawn( CBasePlayerItem *pWeapon )
 {
 	if ( pWeapon->pev->spawnflags & SF_NORESPAWN )
@@ -479,6 +618,10 @@ int CHalfLifeMultiplay :: WeaponShouldRespawn( CBasePlayerItem *pWeapon )
 }
 
 // [SDK score 1.0] CHalfLifeMultiplay::CanHavePlayerItem
+//=========================================================
+// CanHaveWeapon - returns FALSE if the player is not allowed
+// to pick up this weapon
+//=========================================================
 BOOL CHalfLifeMultiplay::CanHavePlayerItem( CBasePlayer *pPlayer, CBasePlayerItem *pItem )
 {
 	if ( weaponstay.value > 0 )
@@ -507,17 +650,23 @@ BOOL CHalfLifeMultiplay::CanHavePlayerItem( CBasePlayer *pPlayer, CBasePlayerIte
 }
 
 // [SDK score 1.0] CHalfLifeMultiplay::CanHaveItem
+//=========================================================
+//=========================================================
 BOOL CHalfLifeMultiplay::CanHaveItem( CBasePlayer *pPlayer, CItem *pItem )
 {
 	return TRUE;
 }
 
 // [SDK score 1.0] CHalfLifeMultiplay::PlayerGotItem
+//=========================================================
+//=========================================================
 void CHalfLifeMultiplay::PlayerGotItem( CBasePlayer *pPlayer, CItem *pItem )
 {
 }
 
 // [SDK score 1.0] CHalfLifeMultiplay::ItemShouldRespawn
+//=========================================================
+//=========================================================
 int CHalfLifeMultiplay::ItemShouldRespawn( CItem *pItem )
 {
 	if ( pItem->pev->spawnflags & SF_NORESPAWN )
@@ -528,18 +677,29 @@ int CHalfLifeMultiplay::ItemShouldRespawn( CItem *pItem )
 	return GR_ITEM_RESPAWN_YES;
 }
 
+
+// [fora desta etapa: diferente do SDK ou definida em outro arquivo] //========================================================= // At what time in the future 
+
 // [SDK score 1.0] CHalfLifeMultiplay::VecItemRespawnSpot
+//=========================================================
+// Where should this item respawn?
+// Some game variations may choose to randomize spawn locations
+//=========================================================
 Vector CHalfLifeMultiplay::VecItemRespawnSpot( CItem *pItem )
 {
 	return pItem->pev->origin;
 }
 
 // [SDK score 1.0] CHalfLifeMultiplay::PlayerGotAmmo
+//=========================================================
+//=========================================================
 void CHalfLifeMultiplay::PlayerGotAmmo( CBasePlayer *pPlayer, char *szName, int iCount )
 {
 }
 
 // [SDK score 1.0] CHalfLifeMultiplay::IsAllowedToSpawn
+//=========================================================
+//=========================================================
 BOOL CHalfLifeMultiplay::IsAllowedToSpawn( CBaseEntity *pEntity )
 {
 //	if ( pEntity->pev->flags & FL_MONSTER )
@@ -549,6 +709,8 @@ BOOL CHalfLifeMultiplay::IsAllowedToSpawn( CBaseEntity *pEntity )
 }
 
 // [SDK score 1.0] CHalfLifeMultiplay::AmmoShouldRespawn
+//=========================================================
+//=========================================================
 int CHalfLifeMultiplay::AmmoShouldRespawn( CBasePlayerAmmo *pAmmo )
 {
 	if ( pAmmo->pev->spawnflags & SF_NORESPAWN )
@@ -560,22 +722,29 @@ int CHalfLifeMultiplay::AmmoShouldRespawn( CBasePlayerAmmo *pAmmo )
 }
 
 // [SDK score 0.5] CHalfLifeMultiplay::FlAmmoRespawnTime
+//=========================================================
+//=========================================================
 float CHalfLifeMultiplay::FlAmmoRespawnTime( CBasePlayerAmmo *pAmmo )
 {
 	return gpGlobals->time + AMMO_RESPAWN_TIME;
 }
 
 // [SDK score 1.0] CHalfLifeMultiplay::VecAmmoRespawnSpot
+//=========================================================
+//=========================================================
 Vector CHalfLifeMultiplay::VecAmmoRespawnSpot( CBasePlayerAmmo *pAmmo )
 {
 	return pAmmo->pev->origin;
 }
 
 // [SDK score 0.5] CHalfLifeMultiplay::FlHealthChargerRechargeTime
+//=========================================================
+//=========================================================
 float CHalfLifeMultiplay::FlHealthChargerRechargeTime( void )
 {
 	return 60;
 }
+
 
 // [SDK score 0.5] CHalfLifeMultiplay::FlHEVChargerRechargeTime
 float CHalfLifeMultiplay::FlHEVChargerRechargeTime( void )
@@ -584,12 +753,16 @@ float CHalfLifeMultiplay::FlHEVChargerRechargeTime( void )
 }
 
 // [SDK score 1.0] CHalfLifeMultiplay::DeadPlayerWeapons
+//=========================================================
+//=========================================================
 int CHalfLifeMultiplay::DeadPlayerWeapons( CBasePlayer *pPlayer )
 {
 	return GR_PLR_DROP_GUN_ACTIVE;
 }
 
 // [SDK score 1.0] CHalfLifeMultiplay::DeadPlayerAmmo
+//=========================================================
+//=========================================================
 int CHalfLifeMultiplay::DeadPlayerAmmo( CBasePlayer *pPlayer )
 {
 	return GR_PLR_DROP_AMMO_ACTIVE;
@@ -607,7 +780,10 @@ edict_t *CHalfLifeMultiplay::GetPlayerSpawnSpot( CBasePlayer *pPlayer )
 	return pentSpawnSpot;
 }
 
+
 // [SDK score 1.0] CHalfLifeMultiplay::PlayerRelationship
+//=========================================================
+//=========================================================
 int CHalfLifeMultiplay::PlayerRelationship( CBaseEntity *pPlayer, CBaseEntity *pTarget )
 {
 	// half life deathmatch has only enemies
@@ -626,11 +802,19 @@ BOOL CHalfLifeMultiplay :: PlayFootstepSounds( CBasePlayer *pl, float fvol )
 	return FALSE;
 }
 
+// [fora desta etapa: diferente do SDK ou definida em outro arquivo] BOOL CHalfLifeMultiplay :: FAllowFlashlight( void )
+
 // [SDK score 1.0] CHalfLifeMultiplay::FAllowMonsters
+//=========================================================
+//=========================================================
 BOOL CHalfLifeMultiplay :: FAllowMonsters( void )
 {
 	return ( allowmonsters.value != 0 );
 }
+
+//=========================================================
+//======== CHalfLifeMultiplay private functions ===========
+#define INTERMISSION_TIME		6
 
 // [SDK score 1.0] CHalfLifeMultiplay::GoToIntermission
 void CHalfLifeMultiplay :: GoToIntermission( void )
@@ -655,7 +839,47 @@ void CHalfLifeMultiplay :: GoToIntermission( void )
 	m_iEndIntermissionButtonHit = FALSE;
 }
 
+#define MAX_RULE_BUFFER 1024
+
+typedef struct mapcycle_item_s
+{
+	struct mapcycle_item_s *next;
+
+	char mapname[ 32 ];
+	int  minplayers, maxplayers;
+	char rulebuffer[ MAX_RULE_BUFFER ];
+} mapcycle_item_t;
+
+typedef struct mapcycle_s
+{
+	struct mapcycle_item_s *items;
+	struct mapcycle_item_s *next_item;
+} mapcycle_t;
+
+// [fora desta etapa: diferente do SDK ou definida em outro arquivo] /* ============== DestroyMapCycle Clean up memory used by mapcycle when switching it =====
+
+static char com_token[ 1500 ];
+
+// [fora desta etapa: diferente do SDK ou definida em outro arquivo] /* ============== COM_Parse Parse a token out of a string ============== */ char *COM_Pars
+
+// [fora desta etapa: diferente do SDK ou definida em outro arquivo] /* ============== COM_TokenWaiting Returns 1 if additional data is waiting to be processed
+
+
+
+// [fora desta etapa: diferente do SDK ou definida em outro arquivo] /* ============== ReloadMapCycleFile Parses mapcycle.txt file into mapcycle_t structure ==
+
+// [fora desta etapa: diferente do SDK ou definida em outro arquivo] /* ============== CountPlayers Determine the current # of active players on the server for
+
+// [fora desta etapa: diferente do SDK ou definida em outro arquivo] /* ============== ExtractCommandString Parse commands/key value pairs to issue right after
+
 // [SDK score 0.86] CHalfLifeMultiplay::ChangeLevel
+/*
+==============
+ChangeLevel
+
+Server is changing to a new level, check mapcycle.txt for map name and setup info
+==============
+*/
 void CHalfLifeMultiplay :: ChangeLevel( void )
 {
 	static char szPreviousMapCycleFile[ 256 ];
@@ -783,6 +1007,9 @@ void CHalfLifeMultiplay :: ChangeLevel( void )
 	}
 }
 
+#define MAX_MOTD_CHUNK	  60
+#define MAX_MOTD_LENGTH   1536 // (MAX_MOTD_CHUNK * 4)
+
 // [SDK score 1.0] CHalfLifeMultiplay::SendMOTDToClient
 void CHalfLifeMultiplay :: SendMOTDToClient( edict_t *client )
 {
@@ -827,3 +1054,46 @@ void CHalfLifeMultiplay :: SendMOTDToClient( edict_t *client )
 
 	FREE_FILE( aFileList );
 }
+	
+// [fora desta etapa: diferente do SDK ou definida em outro arquivo] void CHalfLifeMultiplay :: ClientUserInfoChanged( CBasePlayer *pPlayer, char *infobuffer )
+
+//=========================================================
+//=========================================================
+// Busters Gamerules
+//=========================================================
+//=========================================================
+
+#define EGON_BUSTING_TIME 10
+
+// [fora desta etapa: diferente do SDK ou definida em outro arquivo] bool IsBustingGame()
+
+// [fora desta etapa: diferente do SDK ou definida em outro arquivo] bool IsPlayerBusting( CBaseEntity* pPlayer )
+
+// [fora desta etapa: diferente do SDK ou definida em outro arquivo] BOOL BustingCanHaveItem( CBasePlayer* pPlayer, CBaseEntity* pItem )
+
+// [fora desta etapa: diferente do SDK ou definida em outro arquivo] //========================================================= CMultiplayBusters::CMultiplayB
+
+// [fora desta etapa: diferente do SDK ou definida em outro arquivo] //========================================================= void CMultiplayBusters::Think(
+
+// [fora desta etapa: diferente do SDK ou definida em outro arquivo] //========================================================= int CMultiplayBusters::IPoints
+
+// [fora desta etapa: diferente do SDK ou definida em outro arquivo] //========================================================= void CMultiplayBusters::Player
+
+// [fora desta etapa: diferente do SDK ou definida em outro arquivo] //========================================================= void CMultiplayBusters::DeathN
+
+// [fora desta etapa: diferente do SDK ou definida em outro arquivo] //========================================================= int CMultiplayBusters::WeaponS
+
+
+// [fora desta etapa: diferente do SDK ou definida em outro arquivo] //========================================================= // CheckForEgons: //Check to s
+
+// [fora desta etapa: diferente do SDK ou definida em outro arquivo] //========================================================= BOOL CMultiplayBusters::CanHav
+
+// [fora desta etapa: diferente do SDK ou definida em outro arquivo] //========================================================= BOOL CMultiplayBusters::CanHav
+
+// [fora desta etapa: diferente do SDK ou definida em outro arquivo] //========================================================= void CMultiplayBusters::Player
+
+// [fora desta etapa: diferente do SDK ou definida em outro arquivo] void CMultiplayBusters::ClientUserInfoChanged( CBasePlayer* pPlayer, char* infobuffer )
+
+// [fora desta etapa: diferente do SDK ou definida em outro arquivo] void CMultiplayBusters::PlayerSpawn( CBasePlayer* pPlayer )
+
+// [fora desta etapa: diferente do SDK ou definida em outro arquivo] void CMultiplayBusters::SetPlayerModel( CBasePlayer* pPlayer )

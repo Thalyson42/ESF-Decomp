@@ -1,5 +1,21 @@
-// sdk/mpstubb.cpp -- funções do HL SDK que o hl_i386.so do ESF reproduz (score de similaridade >= 0.86 em docs/sdk_match.csv).
-// Gerado por tools/assemble_sdk.py a partir de <hlsdk>/dlls/mpstubb.cpp. Conferir contra decomp_raw ao compilar.
+// sdk/mpstubb.cpp -- arquivo do HL SDK com SÓ as funções que o hl_i386.so do ESF reproduz (score >= 0.86 em docs/sdk_match.csv).
+// Gerado por tools/assemble_sdk.py a partir de <hlsdk>/dlls/mpstubb.cpp. As demais funções do arquivo foram removidas.
+/***
+*
+*	Copyright (c) 1996-2001, Valve LLC. All rights reserved.
+*	
+*	This product contains software technology licensed from Id 
+*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc. 
+*	All Rights Reserved.
+*
+*   Use, distribution, and modification of this source code and/or resulting
+*   object code is restricted to non-commercial enhancements to products from
+*   Valve LLC.  All other use, distribution, or modification is prohibited
+*   without written permission from Valve LLC.
+*
+****/
+
+
 #include	"extdll.h"
 #include	"util.h"
 #include	"cbase.h"
@@ -8,17 +24,30 @@
 #include	"nodes.h"
 #include	"talkmonster.h"
 
+
+float	CTalkMonster::g_talkWaitTime = 0;		// time delay until it's ok to speak: used so that two NPCs don't talk at once
+
+/*********************************************************/
+
+
+CGraph	WorldGraph;
 // [SDK score 1.0] CGraph::InitGraph
 void CGraph :: InitGraph( void ) { }
-
+// [fora desta etapa: diferente do SDK ou definida em outro arquivo] int CGraph :: FLoadGraph ( char *szMapName )
+// [fora desta etapa: diferente do SDK ou definida em outro arquivo] int CGraph :: AllocNodes ( void )
+// [fora desta etapa: diferente do SDK ou definida em outro arquivo] int CGraph :: CheckNODFile ( char *szMapName )
+// [fora desta etapa: diferente do SDK ou definida em outro arquivo] int CGraph :: FSetGraphPointers ( void )
+// [fora desta etapa: diferente do SDK ou definida em outro arquivo] void CGraph :: ShowNodeConnections ( int iNode )
 // [SDK score 1.0] CGraph::FindNearestNode
 int	CGraph :: FindNearestNode ( const Vector &vecOrigin,  int afNodeTypes ) { return 0; }
 
+
+// [fora desta etapa: diferente do SDK ou definida em outro arquivo] /*********************************************************/ void CBaseMonster :: ReportAIS
 // [SDK heurística] CBaseMonster::ChangeYaw
 float 	CBaseMonster :: ChangeYaw ( int speed ) { return 0; }
-
 // [SDK score 1.0] CBaseMonster::MakeIdealYaw
 void	CBaseMonster :: MakeIdealYaw( Vector vecTarget ) { }
+
 
 // [SDK score 1.0] CBaseMonster::CorpseFallThink
 void CBaseMonster::CorpseFallThink( void )
@@ -33,8 +62,8 @@ void CBaseMonster::CorpseFallThink( void )
 	else
 		pev->nextthink = gpGlobals->time + 0.1;
 }
-
 // [SDK score 1.0] CBaseMonster::MonsterInitDead
+// Call after animation/pose is set up
 void CBaseMonster :: MonsterInitDead( void )
 {
 	InitBoneControllers();
@@ -59,11 +88,16 @@ void CBaseMonster :: MonsterInitDead( void )
 	pev->nextthink = gpGlobals->time + 0.5;
 }
 
+
 // [SDK score 1.0] CBaseMonster::ShouldFadeOnDeath
 BOOL	CBaseMonster :: ShouldFadeOnDeath( void ) 
 { 
 	return FALSE; 
 }
+
+// [fora desta etapa: diferente do SDK ou definida em outro arquivo] BOOL CBaseMonster :: FCheckAITrigger ( void )
+
+// [fora desta etapa: diferente do SDK ou definida em outro arquivo] void CBaseMonster :: KeyValue( KeyValueData *pkvd )
 
 // [SDK score 1.0] CBaseMonster::IRelationship
 int CBaseMonster::IRelationship ( CBaseEntity *pTarget )
@@ -89,7 +123,20 @@ int CBaseMonster::IRelationship ( CBaseEntity *pTarget )
 	return iEnemy[ Classify() ][ pTarget->Classify() ];
 }
 
+
 // [SDK score 1.0] CBaseMonster::Look
+//=========================================================
+// Look - Base class monster function to find enemies or 
+// food by sight. iDistance is distance ( in units ) that the 
+// monster can see.
+//
+// Sets the sight bits of the m_afConditions mask to indicate
+// which types of entities were sighted.
+// Function also sets the Looker's m_pLink 
+// to the head of a link list that contains all visible ents.
+// (linked via each ent's m_pLink field)
+//
+//=========================================================
 void CBaseMonster :: Look ( int iDistance )
 {
 	int	iSighted = 0;
@@ -160,7 +207,17 @@ void CBaseMonster :: Look ( int iDistance )
 	SetConditions( iSighted );
 }
 
+
 // [SDK score 1.0] CBaseMonster::BestVisibleEnemy
+//=========================================================
+// BestVisibleEnemy - this functions searches the link
+// list whose head is the caller's m_pLink field, and returns
+// a pointer to the enemy entity in that list that is nearest the 
+// caller.
+//
+// !!!UNDONE - currently, this only returns the closest enemy.
+// we'll want to consider distance, relationship, attack types, back turned, etc.
+//=========================================================
 CBaseEntity *CBaseMonster :: BestVisibleEnemy ( void )
 {
 	CBaseEntity	*pReturn;

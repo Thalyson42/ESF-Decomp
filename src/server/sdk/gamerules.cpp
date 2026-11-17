@@ -1,5 +1,23 @@
-// sdk/gamerules.cpp -- funções do HL SDK que o hl_i386.so do ESF reproduz (score de similaridade >= 0.86 em docs/sdk_match.csv).
-// Gerado por tools/assemble_sdk.py a partir de <hlsdk>/dlls/gamerules.cpp. Conferir contra decomp_raw ao compilar.
+// sdk/gamerules.cpp -- arquivo do HL SDK com SÓ as funções que o hl_i386.so do ESF reproduz (score >= 0.86 em docs/sdk_match.csv).
+// Gerado por tools/assemble_sdk.py a partir de <hlsdk>/dlls/gamerules.cpp. As demais funções do arquivo foram removidas.
+/***
+*
+*	Copyright (c) 1996-2001, Valve LLC. All rights reserved.
+*	
+*	This product contains software technology licensed from Id 
+*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc. 
+*	All Rights Reserved.
+*
+*   Use, distribution, and modification of this source code and/or resulting
+*   object code is restricted to non-commercial enhancements to products from
+*   Valve LLC.  All other use, distribution, or modification is prohibited
+*   without written permission from Valve LLC.
+*
+****/
+//=========================================================
+// GameRules.cpp
+//=========================================================
+
 #include	"extdll.h"
 #include	"util.h"
 #include	"cbase.h"
@@ -10,7 +28,19 @@
 #include	"skill.h"
 #include	"game.h"
 
+extern edict_t *EntSelectSpawnPoint( CBaseEntity *pPlayer );
+
+DLL_GLOBAL CGameRules*	g_pGameRules = NULL;
+extern DLL_GLOBAL BOOL	g_fGameOver;
+extern int gmsgDeathMsg;	// client dll messages
+extern int gmsgMOTD;
+
+int g_teamplay = 0;
+extern cvar_t sv_busters;
+
 // [SDK score 1.0] CGameRules::CanHaveAmmo
+//=========================================================
+//=========================================================
 BOOL CGameRules::CanHaveAmmo( CBasePlayer *pPlayer, const char *pszAmmoName, int iMaxCarry )
 {
 	int iAmmoIndex;
@@ -33,6 +63,8 @@ BOOL CGameRules::CanHaveAmmo( CBasePlayer *pPlayer, const char *pszAmmoName, int
 }
 
 // [SDK score 1.0] CGameRules::GetPlayerSpawnSpot
+//=========================================================
+//=========================================================
 edict_t *CGameRules :: GetPlayerSpawnSpot( CBasePlayer *pPlayer )
 {
 	edict_t *pentSpawnSpot = EntSelectSpawnPoint( pPlayer );
@@ -48,6 +80,8 @@ edict_t *CGameRules :: GetPlayerSpawnSpot( CBasePlayer *pPlayer )
 }
 
 // [SDK score 1.0] CGameRules::CanHavePlayerItem
+//=========================================================
+//=========================================================
 BOOL CGameRules::CanHavePlayerItem( CBasePlayer *pPlayer, CBasePlayerItem *pWeapon )
 {
 	// only living players can have items
@@ -78,3 +112,10 @@ BOOL CGameRules::CanHavePlayerItem( CBasePlayer *pPlayer, CBasePlayerItem *pWeap
 	// note: will fall through to here if GetItemInfo doesn't fill the struct!
 	return TRUE;
 }
+
+// [fora desta etapa: diferente do SDK ou definida em outro arquivo] //========================================================= // load the SkillData struct w
+
+// [fora desta etapa: diferente do SDK ou definida em outro arquivo] //========================================================= // instantiate the proper game
+
+
+

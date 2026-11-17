@@ -1,12 +1,34 @@
-// sdk/soundent.cpp -- funções do HL SDK que o hl_i386.so do ESF reproduz (score de similaridade >= 0.86 em docs/sdk_match.csv).
-// Gerado por tools/assemble_sdk.py a partir de <hlsdk>/dlls/soundent.cpp. Conferir contra decomp_raw ao compilar.
+// sdk/soundent.cpp -- arquivo do HL SDK com SÓ as funções que o hl_i386.so do ESF reproduz (score >= 0.86 em docs/sdk_match.csv).
+// Gerado por tools/assemble_sdk.py a partir de <hlsdk>/dlls/soundent.cpp. As demais funções do arquivo foram removidas.
+/***
+*
+*	Copyright (c) 1996-2001, Valve LLC. All rights reserved.
+*	
+*	This product contains software technology licensed from Id 
+*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc. 
+*	All Rights Reserved.
+*
+*   Use, distribution, and modification of this source code and/or resulting
+*   object code is restricted to non-commercial enhancements to products from
+*   Valve LLC.  All other use, distribution, or modification is prohibited
+*   without written permission from Valve LLC.
+*
+****/
 #include	"extdll.h"
 #include	"util.h"
 #include	"cbase.h"
 #include	"monsters.h"
 #include	"soundent.h"
 
+
+LINK_ENTITY_TO_CLASS( soundent, CSoundEnt );
+
+CSoundEnt *pSoundEnt;
+
 // [SDK score 1.0] CSound::Clear
+//=========================================================
+// CSound - Clear - zeros all fields for a sound
+//=========================================================
 void CSound :: Clear ( void )
 {
 	m_vecOrigin		= g_vecZero;
@@ -18,6 +40,10 @@ void CSound :: Clear ( void )
 }
 
 // [SDK score 1.0] CSound::Reset
+//=========================================================
+// Reset - clears the volume, origin, and type for a sound,
+// but doesn't expire or unlink it. 
+//=========================================================
 void CSound :: Reset ( void )
 {
 	m_vecOrigin		= g_vecZero;
@@ -27,6 +53,9 @@ void CSound :: Reset ( void )
 }
 
 // [SDK score 1.0] CSound::FIsSound
+//=========================================================
+// FIsSound - returns TRUE if the sound is an Audible sound
+//=========================================================
 BOOL CSound :: FIsSound ( void )
 {
 	if ( m_iType & ( bits_SOUND_COMBAT | bits_SOUND_WORLD | bits_SOUND_PLAYER | bits_SOUND_DANGER ) )
@@ -38,6 +67,9 @@ BOOL CSound :: FIsSound ( void )
 }
 
 // [SDK score 1.0] CSound::FIsScent
+//=========================================================
+// FIsScent - returns TRUE if the sound is actually a scent
+//=========================================================
 BOOL CSound :: FIsScent ( void )
 {
 	if ( m_iType & ( bits_SOUND_CARCASS | bits_SOUND_MEAT | bits_SOUND_GARBAGE ) )
@@ -49,6 +81,9 @@ BOOL CSound :: FIsScent ( void )
 }
 
 // [SDK score 1.0] CSoundEnt::Spawn
+//=========================================================
+// Spawn 
+//=========================================================
 void CSoundEnt :: Spawn( void )
 {
 	pev->solid = SOLID_NOT;
@@ -58,6 +93,11 @@ void CSoundEnt :: Spawn( void )
 }
 
 // [SDK score 1.0] CSoundEnt::Think
+//=========================================================
+// Think - at interval, the entire active sound list is checked
+// for sounds that have ExpireTimes less than or equal
+// to the current world time, and these sounds are deallocated.
+//=========================================================
 void CSoundEnt :: Think ( void )
 {
 	int iSound;
@@ -95,11 +135,19 @@ void CSoundEnt :: Think ( void )
 }
 
 // [SDK score 1.0] CSoundEnt::Precache
+//=========================================================
+// Precache - dummy function
+//=========================================================
 void CSoundEnt :: Precache ( void )
 {
 }
 
 // [SDK score 1.0] CSoundEnt::FreeSound
+//=========================================================
+// FreeSound - clears the passed active sound and moves it 
+// to the top of the free list. TAKE CARE to only call this
+// function for sounds in the Active list!!
+//=========================================================
 void CSoundEnt :: FreeSound ( int iSound, int iPrevious )
 {
 	if ( !pSoundEnt )
@@ -127,6 +175,10 @@ void CSoundEnt :: FreeSound ( int iSound, int iPrevious )
 }
 
 // [SDK score 1.0] CSoundEnt::IAllocSound
+//=========================================================
+// IAllocSound - moves a sound from the Free list to the 
+// Active list returns the index of the alloc'd sound
+//=========================================================
 int CSoundEnt :: IAllocSound( void )
 {
 	int iNewSound;
@@ -153,6 +205,10 @@ int CSoundEnt :: IAllocSound( void )
 }
 
 // [SDK score 1.0] CSoundEnt::InsertSound
+//=========================================================
+// InsertSound - Allocates a free sound and fills it with 
+// sound info.
+//=========================================================
 void CSoundEnt :: InsertSound ( int iType, const Vector &vecOrigin, int iVolume, float flDuration )
 {
 	int	iThisSound;
@@ -178,6 +234,10 @@ void CSoundEnt :: InsertSound ( int iType, const Vector &vecOrigin, int iVolume,
 }
 
 // [SDK score 1.0] CSoundEnt::Initialize
+//=========================================================
+// Initialize - clears all sounds and moves them into the 
+// free sound list.
+//=========================================================
 void CSoundEnt :: Initialize ( void )
 {
   	int i;
@@ -221,6 +281,10 @@ void CSoundEnt :: Initialize ( void )
 }
 
 // [SDK score 1.0] CSoundEnt::ISoundsInList
+//=========================================================
+// ISoundsInList - returns the number of sounds in the desired
+// sound list.
+//=========================================================
 int CSoundEnt :: ISoundsInList ( int iListType )
 {
 	int i;
@@ -257,6 +321,9 @@ int CSoundEnt :: ISoundsInList ( int iListType )
 }
 
 // [SDK score 1.0] CSoundEnt::ActiveList
+//=========================================================
+// ActiveList - returns the head of the active sound list
+//=========================================================
 int CSoundEnt :: ActiveList ( void )
 {
 	if ( !pSoundEnt )
@@ -268,6 +335,9 @@ int CSoundEnt :: ActiveList ( void )
 }
 
 // [SDK score 1.0] CSoundEnt::FreeList
+//=========================================================
+// FreeList - returns the head of the free sound list
+//=========================================================
 int CSoundEnt :: FreeList ( void )
 {
 	if ( !pSoundEnt )
@@ -279,6 +349,10 @@ int CSoundEnt :: FreeList ( void )
 }
 
 // [SDK score 1.0] CSoundEnt::SoundPointerForIndex
+//=========================================================
+// SoundPointerForIndex - returns a pointer to the instance
+// of CSound at index's position in the sound pool.
+//=========================================================
 CSound*	CSoundEnt :: SoundPointerForIndex( int iIndex )
 {
 	if ( !pSoundEnt )
@@ -302,6 +376,12 @@ CSound*	CSoundEnt :: SoundPointerForIndex( int iIndex )
 }
 
 // [SDK score 1.0] CSoundEnt::ClientSoundIndex
+//=========================================================
+// Clients are numbered from 1 to MAXCLIENTS, but the client
+// reserved sounds in the soundlist are from 0 to MAXCLIENTS - 1,
+// so this function ensures that a client gets the proper index
+// to his reserved sound in the soundlist.
+//=========================================================
 int CSoundEnt :: ClientSoundIndex ( edict_t *pClient )
 {
 	int iReturn = ENTINDEX( pClient ) - 1;

@@ -1,5 +1,12 @@
-// sdk/voice_gamemgr.cpp -- funções do HL SDK que o hl_i386.so do ESF reproduz (score de similaridade >= 0.86 em docs/sdk_match.csv).
-// Gerado por tools/assemble_sdk.py a partir de <hlsdk>/game_shared/voice_gamemgr.cpp. Conferir contra decomp_raw ao compilar.
+// sdk/voice_gamemgr.cpp -- arquivo do HL SDK com SÓ as funções que o hl_i386.so do ESF reproduz (score >= 0.86 em docs/sdk_match.csv).
+// Gerado por tools/assemble_sdk.py a partir de <hlsdk>/game_shared/voice_gamemgr.cpp. As demais funções do arquivo foram removidas.
+//========= Copyright © 1996-2001, Valve LLC, All rights reserved. ============
+//
+// Purpose: 
+//
+// $NoKeywords: $
+//=============================================================================
+
 #include "archtypes.h"     // DAL
 #include "voice_gamemgr.h"
 #include <string.h>
@@ -8,6 +15,42 @@
 #include "util.h"
 #include "cbase.h"
 #include "player.h"
+
+
+
+#define UPDATE_INTERVAL	0.3
+
+
+// These are stored off as CVoiceGameMgr is created and deleted.
+CPlayerBitVec	g_PlayerModEnable;		// Set to 1 for each player if the player wants to use voice in this mod.
+										// (If it's zero, then the server reports that the game rules are saying the
+										// player can't hear anyone).
+
+CPlayerBitVec	g_BanMasks[VOICE_MAX_PLAYERS];	// Tells which players don't want to hear each other.
+												// These are indexed as clients and each bit represents a client
+												// (so player entity is bit+1).
+
+CPlayerBitVec	g_SentGameRulesMasks[VOICE_MAX_PLAYERS];	// These store the masks we last sent to each client so we can determine if
+CPlayerBitVec	g_SentBanMasks[VOICE_MAX_PLAYERS];			// we need to resend them.
+CPlayerBitVec	g_bWantModEnable;
+
+cvar_t voice_serverdebug = {"voice_serverdebug", "0"};
+
+// Set game rules to allow all clients to talk to each other.
+// Muted players still can't talk to each other.
+cvar_t sv_alltalk = {"sv_alltalk", "0", FCVAR_SERVER};
+
+// [fora desta etapa: diferente do SDK ou definida em outro arquivo] // ------------------------------------------------------------------------ // // Static h
+
+// [fora desta etapa: diferente do SDK ou definida em outro arquivo] static void VoiceServerDebug( char const *pFmt, ... )
+
+
+
+// [fora desta etapa: diferente do SDK ou definida em outro arquivo] // ------------------------------------------------------------------------ // // CVoiceGa
+
+
+// [fora desta etapa: diferente do SDK ou definida em outro arquivo] CVoiceGameMgr::~CVoiceGameMgr()
+
 
 // [SDK score 1.0] CVoiceGameMgr::Init
 bool CVoiceGameMgr::Init(
@@ -31,11 +74,13 @@ bool CVoiceGameMgr::Init(
 	return true;
 }
 
+
 // [SDK score 1.0] CVoiceGameMgr::SetHelper
 void CVoiceGameMgr::SetHelper(IVoiceGameMgrHelper *pHelper)
 {
 	m_pHelper = pHelper;
 }
+
 
 // [SDK score 1.0] CVoiceGameMgr::Update
 void CVoiceGameMgr::Update(double frametime)
@@ -47,6 +92,7 @@ void CVoiceGameMgr::Update(double frametime)
 
 	UpdateMasks();
 }
+
 
 // [SDK score 0.2] CVoiceGameMgr::ClientConnected
 void CVoiceGameMgr::ClientConnected(edict_t *pEdict)
@@ -60,6 +106,8 @@ void CVoiceGameMgr::ClientConnected(edict_t *pEdict)
 }
 
 // [SDK score 0.2] CVoiceGameMgr::PlayerHasBlockedPlayer
+// Called to determine if the Receiver has muted (blocked) the Sender
+// Returns true if the receiver has blocked the sender
 bool CVoiceGameMgr::PlayerHasBlockedPlayer(CBasePlayer *pReceiver, CBasePlayer *pSender)
 {
 	int iReceiverIndex, iSenderIndex;
@@ -122,6 +170,7 @@ bool CVoiceGameMgr::ClientCommand(CBasePlayer *pPlayer, const char *cmd)
 		return false;
 	}
 }
+
 
 // [SDK score 0.22] CVoiceGameMgr::UpdateMasks
 void CVoiceGameMgr::UpdateMasks()

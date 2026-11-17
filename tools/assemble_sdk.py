@@ -63,6 +63,58 @@ def find_funcs(text, cls, meth):
         res.append(text[start:k])
     return res
 
+
+def top_level_functions(text):
+    """[(ini, fim)] dos corpos de funções definidas no nível 0 (ini = começo da assinatura). Ignora comentários/strings."""
+    spans, depth, i, n = [], 0, 0, len(text)
+    last = 0            # fim da última declaração de nível 0 (';' ou '}' ou linha #)
+    while i < n:
+        c = text[i]
+        if text.startswith('//', i):
+            i = text.find('\n', i); i = n if i < 0 else i; continue
+        if text.startswith('/*', i):
+            i = text.find('*/', i); i = n if i < 0 else i + 2; continue
+        if c in '"\'':
+            j = i + 1
+            while j < n and text[j] != c:
+                j += 2 if text[j] == '\\' else 1
+            i = j + 1; continue
+        if c == '#' and depth == 0 and (i == 0 or text[i-1] == '\n'):
+            while True:                                   # diretiva (com continuação)
+                j = text.find('\n', i); j = n if j < 0 else j
+                if j > 0 and text[j-1] == '\\' and j < n: i = j + 1; continue
+                i = j; break
+            last = i; continue
+        if c == '{':
+            if depth == 0:
+                head = text[last:i]
+                import re as _re
+                h = _re.sub(r'//[^\n]*|/\*.*?\*/', '', head, flags=_re.S).strip()
+                is_fn = ('(' in h and h.rstrip().endswith((')', 'const')) and
+                         not _re.search(r'\b(class|struct|enum|namespace|union)\b|=|\b(if|while|for|switch)\s*\(', h.split('(')[0]) and
+                         not h.startswith(('TYPEDESCRIPTION', 'static const')))
+                if is_fn:
+                    d = 1; j = i + 1
+                    while j < n and d:
+                        if text.startswith('//', j): j = text.find('\n', j); continue
+                        if text.startswith('/*', j): j = text.find('*/', j) + 2; continue
+                        if text[j] in '"\'':
+                            q = text[j]; j += 1
+                            while j < n and text[j] != q: j += 2 if text[j] == '\\' else 1
+                        elif text[j] == '{': d += 1
+                        elif text[j] == '}': d -= 1
+                        j += 1
+                    start = last + (len(head) - len(head.lstrip()))
+                    spans.append((start, j)); i = j; last = j; continue
+            depth += 1
+        elif c == '}':
+            depth -= 1
+            if depth == 0: last = i + 1
+        elif c == ';' and depth == 0:
+            last = i + 1
+        i += 1
+    return spans
+
 def sdk_path(name):
     for root, _, files in os.walk(SDK):
         if '/dmc' in root or '/ricochet' in root or '/cl_dll' in root: continue
@@ -101,14 +153,26 @@ for fn, lst in sorted(byfile.items()):
             miss += 1; report.append(f'{fn}: {r["classe"]}::{r["metodo"]} não achada'); continue
         for f in fs:
             chunks[(r['classe'], r['metodo'], f)] = (text.find(f), r['score'])
-    body = []
-    for (c, m, f), (ps, sc) in sorted(chunks.items(), key=lambda kv: kv[1][0]):
-        body.append(f'// {tag(c + "::" + m, sc)} {c}::{m}\n{f}\n')
+    keep = {}                      # posição inicial do trecho -> (texto aprovado, tag)
+    for (c, m, f), (ps, sc) in chunks.items():
+        keep[ps] = (f, f'// {tag(c + "::" + m, sc)} {c}::{m}\n')
         tot += 1
-    if not body: continue
-    out = (f'// sdk/{fn} -- funções do HL SDK que o hl_i386.so do ESF reproduz (score de similaridade >= 0.86 em docs/sdk_match.csv).\n'
-           f'// Gerado por tools/assemble_sdk.py a partir de {p.replace(SDK, "<hlsdk>")}. Conferir contra decomp_raw ao compilar.\n'
-           + '\n'.join(incs) + '\n\n' + '\n'.join(body))
+    if not keep: continue
+    spans = top_level_functions(text)
+    out_parts, cur = [], 0
+    for (a0, b0) in spans:
+        out_parts.append(text[cur:a0])
+        hit = [k for k in keep if a0 <= k < b0 or k == a0]
+        if hit:
+            out_parts.append(keep[hit[0]][1] + text[a0:b0])
+        else:
+            sig = ' '.join(text[a0:b0].split('{')[0].split())[:90]
+            out_parts.append('// [fora desta etapa: diferente do SDK ou definida em outro arquivo] ' + sig)
+        cur = b0
+    out_parts.append(text[cur:])
+    out = (f'// sdk/{fn} -- arquivo do HL SDK com SÓ as funções que o hl_i386.so do ESF reproduz (score >= 0.86 em docs/sdk_match.csv).\n'
+           f'// Gerado por tools/assemble_sdk.py a partir de {p.replace(SDK, "<hlsdk>")}. As demais funções do arquivo foram removidas.\n'
+           + ''.join(out_parts))
     open(os.path.join(OUT, fn), 'w', encoding='utf-8').write(out)
 print(f'funções montadas: {tot}; não achadas: {miss}')
 open('docs/sdk_assemble_report.txt', 'w').write('\n'.join(report) + '\n')

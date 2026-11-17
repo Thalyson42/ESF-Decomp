@@ -1,5 +1,23 @@
-// sdk/nodes.cpp -- funções do HL SDK que o hl_i386.so do ESF reproduz (score de similaridade >= 0.86 em docs/sdk_match.csv).
-// Gerado por tools/assemble_sdk.py a partir de <hlsdk>/dlls/nodes.cpp. Conferir contra decomp_raw ao compilar.
+// sdk/nodes.cpp -- arquivo do HL SDK com SÓ as funções que o hl_i386.so do ESF reproduz (score >= 0.86 em docs/sdk_match.csv).
+// Gerado por tools/assemble_sdk.py a partir de <hlsdk>/dlls/nodes.cpp. As demais funções do arquivo foram removidas.
+/***
+*
+*	Copyright (c) 1996-2001, Valve LLC. All rights reserved.
+*	
+*	This product contains software technology licensed from Id 
+*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc. 
+*	All Rights Reserved.
+*
+*   This source code contains proprietary and confidential information of
+*   Valve LLC and its suppliers.  Access to this code is restricted to
+*   persons who have executed a written SDK license with Valve.  Any access,
+*   use or distribution of this code by or to any unlicensed person is illegal.
+*
+****/
+//=========================================================
+// nodes.cpp - AI node tree stuff.
+//=========================================================
+
 #include	"extdll.h"
 #include	"util.h"
 #include	"cbase.h"
@@ -7,13 +25,42 @@
 #include	"nodes.h"
 #include	"animation.h"
 #include	"doors.h"
+
+#if !defined ( _WIN32 )
 #include <sys/stat.h>
 #include <sys/types.h>
 #include <fcntl.h>
 #include <unistd.h> // mkdir
-#include <unistd.h>
+#endif
 
+#define	HULL_STEP_SIZE 16// how far the test hull moves on each step
+#define	NODE_HEIGHT	8	// how high to lift nodes off the ground after we drop them all (make stair/ramp mapping easier)
+
+// to help eliminate node clutter by level designers, this is used to cap how many other nodes
+// any given node is allowed to 'see' in the first stage of graph creation "LinkVisibleNodes()".
+#define	MAX_NODE_INITIAL_LINKS	128
+#define	MAX_NODES               1024
+
+extern DLL_GLOBAL edict_t		*g_pBodyQueueHead;
+
+Vector VecBModelOrigin( entvars_t* pevBModel );
+
+CGraph	WorldGraph;
+
+LINK_ENTITY_TO_CLASS( info_node, CNodeEnt );
+LINK_ENTITY_TO_CLASS( info_node_air, CNodeEnt );
+#ifdef _LINUX
+#include <unistd.h>
+#define CreateDirectory(p, n) mkdir(p, 0777)
+#endif
+// [fora desta etapa: diferente do SDK ou definida em outro arquivo] //========================================================= // CGraph - InitGraph - prepar
+	
 // [SDK score 1.0] CGraph::AllocNodes
+//=========================================================
+// CGraph - AllocNodes - temporary function that mallocs a
+// reasonable number of nodes so we can build the path which
+// will be saved to disk.
+//=========================================================
 int CGraph :: AllocNodes ( void )
 {
 //  malloc all of the nodes
@@ -30,6 +77,19 @@ int CGraph :: AllocNodes ( void )
 }
 
 // [SDK score 0.86] CGraph::LinkEntForLink
+//=========================================================
+// CGraph - LinkEntForLink - sometimes the ent that blocks
+// a path is a usable door, in which case the monster just
+// needs to face the door and fire it. In other cases, the
+// monster needs to operate a button or lever to get the 
+// door to open. This function will return a pointer to the
+// button if the monster needs to hit a button to open the 
+// door, or returns a pointer to the door if the monster 
+// need only use the door.
+//
+// pNode is the node the monster will be standing on when it
+// will need to stop and trigger the ent.
+//=========================================================
 entvars_t* CGraph :: LinkEntForLink ( CLink *pLink, CNode *pNode )
 {
 	edict_t	*pentSearch;
@@ -94,6 +154,12 @@ entvars_t* CGraph :: LinkEntForLink ( CLink *pLink, CNode *pNode )
 }
 
 // [SDK score 1.0] CGraph::HandleLinkEnt
+//=========================================================
+// CGraph - HandleLinkEnt - a brush ent is between two
+// nodes that would otherwise be able to see each other. 
+// Given the monster's capability, determine whether
+// or not the monster can go this way. 
+//=========================================================
 int	CGraph :: HandleLinkEnt ( int iNode, entvars_t *pevLinkEnt, int afCapMask, NODEQUERY queryType )
 {
 	edict_t  *pentWorld;
@@ -168,6 +234,11 @@ int	CGraph :: HandleLinkEnt ( int iNode, entvars_t *pevLinkEnt, int afCapMask, N
 	return FALSE;
 }
 
+#if 0
+// [fora desta etapa: diferente do SDK ou definida em outro arquivo] //========================================================= // FindNearestLink - finds the
+
+#endif
+
 // [SDK score 1.0] CGraph::HullIndex
 int	CGraph::HullIndex( const CBaseEntity *pEntity )
 {
@@ -184,6 +255,7 @@ int	CGraph::HullIndex( const CBaseEntity *pEntity )
 //	ALERT ( at_aiconsole, "Unknown Hull Mins!\n" );
 	return NODE_HUMAN_HULL;
 }
+
 
 // [SDK score 1.0] CGraph::NodeType
 int	CGraph::NodeType( const CBaseEntity *pEntity )
@@ -202,7 +274,9 @@ int	CGraph::NodeType( const CBaseEntity *pEntity )
 	return bits_NODE_LAND;
 }
 
+
 // [SDK score 1.0] CGraph::PathLength
+// Sum up graph weights on the path from iStart to iDest to determine path length
 float CGraph::PathLength( int iStart, int iDest, int iHull, int afCapMask )
 {
 	float	distance = 0;
@@ -244,7 +318,9 @@ float CGraph::PathLength( int iStart, int iDest, int iHull, int afCapMask )
 	return distance;
 }
 
+
 // [SDK score 1.0] CGraph::NextNodeInRoute
+// Parse the routing table at iCurrentNode for the next node on the shortest path to iDest
 int CGraph::NextNodeInRoute( int iCurrentNode, int iDest, int iHull, int iCap )
 {
 	int iNext = iCurrentNode;
@@ -300,7 +376,15 @@ int CGraph::NextNodeInRoute( int iCurrentNode, int iDest, int iHull, int iCap )
 	return iNext;
 }
 
+
 // [SDK score 1.0] CGraph::FindShortestPath
+//=========================================================
+// CGraph - FindShortestPath 
+//
+// accepts a capability mask (afCapMask), and will only 
+// find a path usable by a monster with those capabilities
+// returns the number of nodes copied into supplied array
+//=========================================================
 int CGraph :: FindShortestPath ( int *piPath, int iStart, int iDest, int iHull, int afCapMask)
 {
 	int		iVisitNode;
@@ -500,6 +584,15 @@ int CGraph :: FindShortestPath ( int *piPath, int iStart, int iDest, int iHull, 
 	return iNumPathNodes;
 }
 
+// [fora desta etapa: diferente do SDK ou definida em outro arquivo] inline ULONG Hash(void *p, int len)
+
+// [fora desta etapa: diferente do SDK ou definida em outro arquivo] void inline CalcBounds(int &Lower, int &Upper, int Goal, int Best)
+
+// [fora desta etapa: diferente do SDK ou definida em outro arquivo] // Convert from [-8192,8192] to [0, 255] // inline int CALC_RANGE(int x, int lower, int up
+
+
+// [fora desta etapa: diferente do SDK ou definida em outro arquivo] void inline UpdateRange(int &minValue, int &maxValue, int Goal, int Best)
+
 // [SDK score 1.0] CGraph::CheckNode
 void CGraph :: CheckNode(Vector vecOrigin, int iNode)
 {
@@ -540,6 +633,11 @@ void CGraph :: CheckNode(Vector vecOrigin, int iNode)
 }
 
 // [SDK score 1.0] CGraph::FindNearestNode
+//=========================================================
+// CGraph - FindNearestNode - returns the index of the node nearest
+// the given vector -1 is failure (couldn't find a valid
+// near node )
+//=========================================================
 int	CGraph :: FindNearestNode ( const Vector &vecOrigin,  CBaseEntity *pEntity )
 {
 	return FindNearestNode( vecOrigin, NodeType( pEntity ) );
@@ -757,6 +855,10 @@ int	CGraph :: FindNearestNode ( const Vector &vecOrigin,  int afNodeTypes )
 }
 
 // [SDK heurística] CGraph::ShowNodeConnections
+//=========================================================
+// CGraph - ShowNodeConnections - draws a line from the given node
+// to all connected nodes
+//=========================================================
 void CGraph :: ShowNodeConnections ( int iNode )
 {
 	Vector	vecSpot;
@@ -807,6 +909,17 @@ void CGraph :: ShowNodeConnections ( int iNode )
 }
 
 // [SDK score 1.0] CGraph::LinkVisibleNodes
+//=========================================================
+// CGraph - LinkVisibleNodes - the first, most basic
+// function of node graph creation, this connects every
+// node to every other node that it can see. Expects a 
+// pointer to an empty connection pool and a file pointer 
+// to write progress to. Returns the total number of initial
+// links.
+//
+// If there's a problem with this process, the index
+// of the offending node will be written to piBadNode
+//=========================================================
 int CGraph :: LinkVisibleNodes ( CLink *pLinkPool, FILE *file, int *piBadNode )
 {
 	int			i,j,z;
@@ -1001,6 +1114,12 @@ int CGraph :: LinkVisibleNodes ( CLink *pLinkPool, FILE *file, int *piBadNode )
 }
 
 // [SDK score 1.0] CGraph::RejectInlineLinks
+//=========================================================
+// CGraph - RejectInlineLinks - expects a pointer to a link
+// pool, and a pointer to and already-open file ( if you
+// want status reports written to disk ). RETURNS the number
+// of connections that were rejected
+//=========================================================
 int	CGraph :: RejectInlineLinks ( CLink *pLinkPool, FILE *file )
 {
 	int		i,j,k;
@@ -1091,7 +1210,31 @@ int	CGraph :: RejectInlineLinks ( CLink *pLinkPool, FILE *file )
 	return cRejectedLinks;
 }
 
+//=========================================================
+// TestHull is a modelless clip hull that verifies reachable
+// nodes by walking from every node to each of it's connections
+//=========================================================
+class CTestHull : public CBaseMonster 
+{
+
+public:
+	void Spawn( entvars_t *pevMasterNode );
+	virtual int	ObjectCaps( void ) { return CBaseMonster :: ObjectCaps() & ~FCAP_ACROSS_TRANSITION; }
+	void EXPORT CallBuildNodeGraph ( void );
+	void BuildNodeGraph ( void );
+	void EXPORT ShowBadNode ( void );
+	void EXPORT DropDelay ( void );
+	void EXPORT PathFind ( void );
+
+	Vector	vecBadNodeOrigin;
+};
+
+LINK_ENTITY_TO_CLASS( testhull, CTestHull );
+
 // [SDK score 1.0] CTestHull::Spawn
+//=========================================================
+// CTestHull::Spawn
+//=========================================================
 void CTestHull :: Spawn( entvars_t *pevMasterNode )
 {
 	SET_MODEL(ENT(pev), "models/player.mdl");
@@ -1121,6 +1264,10 @@ void CTestHull :: Spawn( entvars_t *pevMasterNode )
 }
 
 // [SDK score 1.0] CTestHull::DropDelay
+//=========================================================
+// TestHull::DropDelay - spawns TestHull on top of 
+// the 0th node and drops it to the ground.
+//=========================================================
 void CTestHull::DropDelay ( void )
 {
 //	UTIL_CenterPrintAll( "Node Graph out of Date. Rebuilding..." );
@@ -1133,6 +1280,10 @@ void CTestHull::DropDelay ( void )
 }
 
 // [SDK score 1.0] CNodeEnt::KeyValue
+//=========================================================
+// nodes start out as ents in the world. As they are spawned,
+// the node info is recorded then the ents are discarded.
+//=========================================================
 void CNodeEnt :: KeyValue( KeyValueData *pkvd )
 {
 	if (FStrEq(pkvd->szKeyName, "hinttype"))
@@ -1151,6 +1302,8 @@ void CNodeEnt :: KeyValue( KeyValueData *pkvd )
 }
 
 // [SDK score 1.0] CNodeEnt::Spawn
+//=========================================================
+//=========================================================
 void CNodeEnt :: Spawn( void )
 {
 	pev->movetype = MOVETYPE_NONE;
@@ -1191,6 +1344,12 @@ void CNodeEnt :: Spawn( void )
 }
 
 // [SDK heurística] CTestHull::ShowBadNode
+//=========================================================
+// CTestHull - ShowBadNode - makes a bad node fizzle. When
+// there's a problem with node graph generation, the test 
+// hull will be placed up the bad node's location and will generate
+// particles
+//=========================================================
 void CTestHull :: ShowBadNode( void )
 {
 	pev->movetype = MOVETYPE_FLY;
@@ -1207,6 +1366,7 @@ void CTestHull :: ShowBadNode( void )
 	pev->nextthink = gpGlobals->time + 0.1;
 }
 
+extern BOOL gTouchDisabled;
 // [SDK score 1.0] CTestHull::CallBuildNodeGraph
 void CTestHull::CallBuildNodeGraph( void )
 {
@@ -1218,6 +1378,14 @@ void CTestHull::CallBuildNodeGraph( void )
 }
 
 // [SDK score 0.93] CTestHull::BuildNodeGraph
+//=========================================================
+// BuildNodeGraph - think function called by the empty walk
+// hull that is spawned by the first node to spawn. This
+// function links all nodes that can see each other, then
+// eliminates all inline links, then uses a monster-sized 
+// hull that walks between each node and each of its links
+// to ensure that a monster can actually fit through the space
+//=========================================================
 void CTestHull :: BuildNodeGraph( void )
 {
 	TraceResult	tr;
@@ -1680,7 +1848,11 @@ void CTestHull :: BuildNodeGraph( void )
 	ALERT( at_console, "Done.\n");
 }
 
+
 // [SDK score 0.8] CTestHull::PathFind
+//=========================================================
+// returns a hardcoded path.
+//=========================================================
 void CTestHull :: PathFind ( void )
 {
 	int	iPath[ 50 ];
@@ -1728,7 +1900,13 @@ void CTestHull :: PathFind ( void )
 
 }
 
+
+// [fora desta etapa: diferente do SDK ou definida em outro arquivo] //========================================================= // CStack Constructor //======
+
 // [SDK score 1.0] CStack::Push
+//=========================================================
+// pushes a value onto the stack
+//=========================================================
 void CStack :: Push( int value )
 {
 	if ( m_level >= MAX_STACK_NODES )
@@ -1741,6 +1919,9 @@ void CStack :: Push( int value )
 }
 
 // [SDK score 1.0] CStack::Pop
+//=========================================================
+// pops a value off of the stack
+//=========================================================
 int CStack :: Pop( void )
 {
 	if ( m_level <= 0 )
@@ -1751,12 +1932,18 @@ int CStack :: Pop( void )
 }
 
 // [SDK score 1.0] CStack::Top
+//=========================================================
+// returns the value on the top of the stack
+//=========================================================
 int CStack :: Top ( void )
 {
 	return m_stack[ m_level - 1 ];
 }
 
 // [SDK score 1.0] CStack::CopyToArray
+//=========================================================
+// copies every element on the stack into an array LIFO 
+//=========================================================
 void CStack :: CopyToArray ( int *piArray )
 {
 	int	i;
@@ -1767,7 +1954,12 @@ void CStack :: CopyToArray ( int *piArray )
 	}
 }
 
+// [fora desta etapa: diferente do SDK ou definida em outro arquivo] //========================================================= // CQueue constructor //======
+
 // [SDK score 1.0] CQueue::Insert
+//=========================================================
+// inserts a value into the queue
+//=========================================================
 void CQueue :: Insert ( int iValue, float fPriority )
 {
 
@@ -1790,6 +1982,9 @@ void CQueue :: Insert ( int iValue, float fPriority )
 }
 
 // [SDK score 1.0] CQueue::Remove
+//=========================================================
+// removes a value from the queue (FIFO)
+//=========================================================
 int CQueue :: Remove ( float &fPriority )
 {
 	if ( m_head == MAX_STACK_NODES )
@@ -1802,7 +1997,12 @@ int CQueue :: Remove ( float &fPriority )
 	return m_queue[ m_head++ ].Id;
 }
 
+// [fora desta etapa: diferente do SDK ou definida em outro arquivo] //========================================================= // CQueue constructor //======
+
 // [SDK score 1.0] CQueuePriority::Insert
+//=========================================================
+// inserts a value into the priority queue
+//=========================================================
 void CQueuePriority :: Insert( int iValue, float fPriority )
 {
 
@@ -1819,6 +2019,10 @@ void CQueuePriority :: Insert( int iValue, float fPriority )
 }
 
 // [SDK score 1.0] CQueuePriority::Remove
+//=========================================================
+// removes the smallest item from the priority queue
+//
+//=========================================================
 int CQueuePriority :: Remove( float &fPriority )
 {
 	int iReturn = m_heap[ 0 ].Id;
@@ -1831,6 +2035,10 @@ int CQueuePriority :: Remove( float &fPriority )
     Heap_SiftDown(0);
     return iReturn;
 }
+
+#define HEAP_LEFT_CHILD(x) (2*(x)+1)
+#define HEAP_RIGHT_CHILD(x) (2*(x)+2)
+#define HEAP_PARENT(x) (((x)-1)/2)
 
 // [SDK score 0.5] CQueuePriority::Heap_SiftDown
 void CQueuePriority::Heap_SiftDown(int iSubRoot)
@@ -1880,6 +2088,12 @@ void CQueuePriority::Heap_SiftUp(void)
 }
 
 // [SDK score 1.0] CGraph::FLoadGraph
+//=========================================================
+// CGraph - FLoadGraph - attempts to load a node graph from disk.
+// if the current level is maps/snar.bsp, maps/graphs/snar.nod
+// will be loaded. If file cannot be loaded, the node tree
+// will be created and saved to disk.
+//=========================================================
 int CGraph :: FLoadGraph ( char *szMapName )
 {
 	char	szFilename[MAX_PATH];
@@ -2051,6 +2265,10 @@ NoMemory:
 }
 
 // [SDK score 1.0] CGraph::FSaveGraph
+//=========================================================
+// CGraph - FSaveGraph - It's not rocket science.
+// this WILL overwrite existing files.
+//=========================================================
 int CGraph :: FSaveGraph ( char *szMapName )
 {
 	
@@ -2117,6 +2335,13 @@ int CGraph :: FSaveGraph ( char *szMapName )
 }
 
 // [SDK score 1.0] CGraph::FSetGraphPointers
+//=========================================================
+// CGraph - FSetGraphPointers - Takes the modelnames of 
+// all of the brush ents that block connections in the node
+// graph and resolves them into pointers to those entities.
+// this is done after loading the graph from disk, whereupon
+// the pointers are not valid.
+//=========================================================
 int CGraph :: FSetGraphPointers ( void )
 {
 	int	i;
@@ -2162,6 +2387,21 @@ int CGraph :: FSetGraphPointers ( void )
 }
 
 // [SDK score 1.0] CGraph::CheckNODFile
+//=========================================================
+// CGraph - CheckNODFile - this function checks the date of 
+// the BSP file that was just loaded and the date of the a
+// ssociated .NOD file. If the NOD file is not present, or 
+// is older than the BSP file, we rebuild it.
+//
+// returns FALSE if the .NOD file doesn't qualify and needs
+// to be rebuilt.
+//
+// !!!BUGBUG - the file times we get back are 20 hours ahead!
+// since this happens consistantly, we can still correctly 
+// determine which of the 2 files is newer. This needs fixed,
+// though. ( I now suspect that we are getting GMT back from
+// these functions and must compensate for local time ) (sjb)
+//=========================================================
 int CGraph :: CheckNODFile ( char *szMapName )
 {
 	int 		retValue;
@@ -2196,6 +2436,14 @@ int CGraph :: CheckNODFile ( char *szMapName )
 
 	return retValue;
 }
+
+#define ENTRY_STATE_EMPTY -1
+
+struct tagNodePair
+{
+	short iSrc;
+	short iDest;
+};
 
 // [SDK score 1.0] CGraph::HashInsert
 void CGraph::HashInsert(int iSrcNode, int iDestNode, int iKey)
@@ -2248,6 +2496,21 @@ void CGraph::HashSearch(int iSrcNode, int iDestNode, int &iKey)
     }
 	iKey = m_pHashLinks[i];
 }
+
+#define NUMBER_OF_PRIMES 177
+
+int Primes[NUMBER_OF_PRIMES] =
+{ 1, 2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67,
+71, 73, 79, 83, 89, 97, 101, 103, 107, 109, 113, 127, 131, 137, 139, 149, 151,
+157, 163, 167, 173, 179, 181, 191, 193, 197, 199, 211, 223, 227, 229, 233, 239,
+241, 251, 257, 263, 269, 271, 277, 281, 283, 293, 307, 311, 313, 317, 331, 337,
+347, 349, 353, 359, 367, 373, 379, 383, 389, 397, 401, 409, 419, 421, 431, 433,
+439, 443, 449, 457, 461, 463, 467, 479, 487, 491, 499, 503, 509, 521, 523, 541,
+547, 557, 563, 569, 571, 577, 587, 593, 599, 601, 607, 613, 617, 619, 631, 641,
+643, 647, 653, 659, 661, 673, 677, 683, 691, 701, 709, 719, 727, 733, 739, 743,
+751, 757, 761, 769, 773, 787, 797, 809, 811, 821, 823, 827, 829, 839, 853, 857,
+859, 863, 877, 881, 883, 887, 907, 911, 919, 929, 937, 941, 947, 953, 967, 971,
+977, 983, 991, 997, 1009, 1013, 1019, 1021, 1031, 1033, 1039, 0 };
 
 // [SDK score 1.0] CGraph::HashChoosePrimes
 void CGraph::HashChoosePrimes(int TableSize)
@@ -2311,6 +2574,9 @@ void CGraph::HashChoosePrimes(int TableSize)
     }
 }
 
+// Renumber nodes so that nodes that link together are together.
+//
+#define UNNUMBERED_NODE -1
 // [SDK heurística] CGraph::SortNodes
 void CGraph::SortNodes(void)
 {
@@ -2867,6 +3133,8 @@ void CGraph :: ComputeStaticRoutingTables( void )
 }
 
 // [SDK score 0.88] CGraph::TestRoutingTables
+// Test those routing tables. Doesn't really work, yet.
+//
 void CGraph :: TestRoutingTables( void )
 {
 	int *pMyPath = new int[m_cNodes];
@@ -3178,155 +3446,3 @@ void CNodeViewer :: DrawThink( void )
 }
 
 
-
-
-// [SDK heurística] CNodeViewer::Spawn
-void CNodeViewer::Spawn( )
-{
-	if ( !WorldGraph.m_fGraphPresent || !WorldGraph.m_fGraphPointersSet )
-	{// protect us in the case that the node graph isn't available or built
-		ALERT ( at_console, "Graph not ready!\n" );
-		UTIL_Remove( this );
-		return;
-	}
-
-
-	if (FClassnameIs( pev, "node_viewer_fly"))
-	{
-		m_iHull = NODE_FLY_HULL;
-		m_afNodeType = bits_NODE_AIR;
-		m_vecColor = Vector( 160, 100, 255 );
-	}
-	else if (FClassnameIs( pev, "node_viewer_large"))
-	{
-		m_iHull = NODE_LARGE_HULL;
-		m_afNodeType = bits_NODE_LAND | bits_NODE_WATER;
-		m_vecColor = Vector( 100, 255, 160 );
-	}
-	else
-	{
-		m_iHull = NODE_HUMAN_HULL;
-		m_afNodeType = bits_NODE_LAND | bits_NODE_WATER;
-		m_vecColor = Vector( 255, 160, 100 );
-	}
-
-
-	m_iBaseNode = WorldGraph.FindNearestNode ( pev->origin, m_afNodeType );
-
-	if ( m_iBaseNode < 0 )
-	{
-		ALERT( at_console, "No nearby node\n" );
-		return;
-	}
-
-	m_nVisited = 0;
-
-	ALERT( at_aiconsole, "basenode %d\n", m_iBaseNode );
-
-	if (WorldGraph.m_cNodes < 128)
-	{
-		for (int i = 0; i < WorldGraph.m_cNodes; i++)
-		{
-			AddNode( i, WorldGraph.NextNodeInRoute( i, m_iBaseNode, m_iHull, 0 ));
-		}
-	}
-	else
-	{
-		// do a depth traversal
-		FindNodeConnections( m_iBaseNode );
-
-		int start = 0;
-		int end;
-		do {
-			end = m_nVisited;
-			// ALERT( at_console, "%d :", m_nVisited );
-			for (end = m_nVisited; start < end; start++)
-			{
-				FindNodeConnections( m_aFrom[start] );
-				FindNodeConnections( m_aTo[start] );
-			}
-		} while (end != m_nVisited);
-	}
-
-	ALERT( at_aiconsole, "%d nodes\n", m_nVisited );
-
-	m_iDraw = 0;
-	SetThink( &CNodeViewer::DrawThink );
-	pev->nextthink = gpGlobals->time;
-}
-
-// [SDK score 1.0] CNodeViewer::FindNodeConnections
-void CNodeViewer :: FindNodeConnections ( int iNode )
-{
-	AddNode( iNode, WorldGraph.NextNodeInRoute( iNode, m_iBaseNode, m_iHull, 0 ));
-	for ( int i = 0 ; i < WorldGraph.m_pNodes[ iNode ].m_cNumLinks ; i++ )
-	{
-		CLink *pToLink = &WorldGraph.NodeLink( iNode, i);
-		AddNode( pToLink->m_iDestNode, WorldGraph.NextNodeInRoute( pToLink->m_iDestNode, m_iBaseNode, m_iHull, 0 ));
-	}
-}
-
-// [SDK score 1.0] CNodeViewer::AddNode
-void CNodeViewer::AddNode( int iFrom, int iTo )
-{
-	if (m_nVisited >= 128)
-	{
-		return;
-	}
-	else
-	{
-		if (iFrom == iTo)
-			return;
-
-		for (int i = 0; i < m_nVisited; i++)
-		{
-			if (m_aFrom[i] == iFrom && m_aTo[i] == iTo)
-				return;
-			if (m_aFrom[i] == iTo && m_aTo[i] == iFrom)
-				return;
-		}
-		m_aFrom[m_nVisited] = iFrom;
-		m_aTo[m_nVisited] = iTo;
-		m_nVisited++;
-	}
-}
-
-// [SDK score 0.5] CNodeViewer::DrawThink
-void CNodeViewer :: DrawThink( void )
-{
-	pev->nextthink = gpGlobals->time;
-
-	for (int i = 0; i < 10; i++)
-	{
-		if (m_iDraw == m_nVisited)
-		{
-			UTIL_Remove( this );
-			return;
-		}
-
-		extern short g_sModelIndexLaser;
-		MESSAGE_BEGIN( MSG_BROADCAST, SVC_TEMPENTITY );
-			WRITE_BYTE( TE_BEAMPOINTS );
-			WRITE_COORD( WorldGraph.m_pNodes[ m_aFrom[m_iDraw] ].m_vecOrigin.x );
-			WRITE_COORD( WorldGraph.m_pNodes[ m_aFrom[m_iDraw] ].m_vecOrigin.y );
-			WRITE_COORD( WorldGraph.m_pNodes[ m_aFrom[m_iDraw] ].m_vecOrigin.z + NODE_HEIGHT );
-
-			WRITE_COORD( WorldGraph.m_pNodes[ m_aTo[m_iDraw] ].m_vecOrigin.x );
-			WRITE_COORD( WorldGraph.m_pNodes[ m_aTo[m_iDraw] ].m_vecOrigin.y );
-			WRITE_COORD( WorldGraph.m_pNodes[ m_aTo[m_iDraw] ].m_vecOrigin.z + NODE_HEIGHT );
-			WRITE_SHORT( g_sModelIndexLaser );
-			WRITE_BYTE( 0 ); // framerate
-			WRITE_BYTE( 0 ); // framerate
-			WRITE_BYTE( 250 ); // life
-			WRITE_BYTE( 40 );  // width
-			WRITE_BYTE( 0 );   // noise
-			WRITE_BYTE( m_vecColor.x );   // r, g, b
-			WRITE_BYTE( m_vecColor.y );   // r, g, b
-			WRITE_BYTE( m_vecColor.z );   // r, g, b
-			WRITE_BYTE( 128 );	// brightness
-			WRITE_BYTE( 0 );		// speed
-		MESSAGE_END();
-
-		m_iDraw++;
-	}
-}
