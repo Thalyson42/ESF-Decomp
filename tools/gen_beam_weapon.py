@@ -49,7 +49,7 @@ info = [f'    p->pszName   = STRING(pev->classname);  // [OK]', f'    p->pszAmmo
         f'    p->iSlot     = {a.get(0)};', f'    p->iPosition = {a.get(1)};', f'    m_iId = p->iId = {a.get(8)};', f'    p->iWeight   = {a.get(10)};',
         f'    p->iFlags    = {a.get(9)};', '    return 1;']
 # ---- sprites e sons ----
-ic = rd('InitChargeSprite'); sprite = re.search(r'SpriteCreate\("([^"]+)"', ic).group(1)
+ic = rd('InitChargeSprite'); att = 'f_1f8' if 'field_1f8' in ic else '1'; sprite = re.search(r'SpriteCreate\("([^"]+)"', ic).group(1)
 cs = rd('EmitChargeSound'); ss = rd('EmitShootSound')
 cls_snd_c = re.search(r'EmitClassSound\([^,]+, "([^"]+)"\)', cs).group(1)
 cls_snd_s = re.search(r'EmitClassSound\([^,]+, "([^"]+)"\)', ss)
@@ -92,7 +92,7 @@ void {cls}::InitChargeSprite(void)
     CSprite *s = CSprite::SpriteCreate("{sprite}", m_pPlayer->pev->origin, TRUE);
     m_pChargeSprite = s;
     if (m_pPlayer->pev->pContainingEntity)
-        s->SetAttachment(m_pPlayer->pev->pContainingEntity, 1);
+        s->SetAttachment(m_pPlayer->pev->pContainingEntity, {att});
     m_pChargeSprite->pev->rendermode  = kRenderTransAdd;
     m_pChargeSprite->pev->rendercolor = Vector(255, 255, 255);
     m_pChargeSprite->pev->renderamt   = 254;
