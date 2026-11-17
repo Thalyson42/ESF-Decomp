@@ -5,6 +5,7 @@
 #include "cbase.h"
 #include "gamerules.h"
 #include "weapons.h"
+#include "player.h"
 #include "powerstruggle.h"
 #include "explodingattack.h"
 
@@ -30,7 +31,7 @@ CPowerStruggle *CPowerStruggle::CreatePowerStruggle(CExplodingAttack *a, CExplod
     ps->AddAttack(a);
     ps->AddAttack(b);
     ps->m_flStalemateTime = 0;
-    SetThink(&CPowerStruggle::PSThink);              // [OK] (campos +0xc/+0x10)
+    ps->SetThink(&CPowerStruggle::PSThink);              // [OK] (campos +0xc/+0x10)
     ps->pev->nextthink = gpGlobals->time;
     PS_DirectorEvent(a, b);                           // [OK]
     return ps;

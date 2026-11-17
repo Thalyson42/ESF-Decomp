@@ -37,7 +37,6 @@ extern cvar_t * melee_wallstick_maxtime;
 extern cvar_t * melee_wallstick_mintime;
 extern cvar_t * nomeleehittime;
 #define ESF_PLAYER_UNNAMED \
-    int f_784; \
     int f_10; \
     int f_174; \
     int f_1f4; \
@@ -84,6 +83,7 @@ extern cvar_t * nomeleehittime;
     int f_774; \
     int f_778; \
     int f_78; \
+    int f_784; \
     int f_794; \
     int f_8d4; \
     int f_930; \

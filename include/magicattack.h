@@ -6,6 +6,7 @@
 class CMagicAttack : public CBaseMonster   // [?] base pela heurística da vtable
 {
 public:
+    float m_flSpeed;      // +0x2a8  módulo da velocidade inicial ([OK]; usado por CExplodingAttack/CBeamAttack)
     virtual void Spawn(void);
     virtual void Precache(void);
     virtual int  BloodColor(void) { return DONT_BLEED; }

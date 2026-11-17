@@ -200,7 +200,7 @@ void CExplodingAttack::Explode(void)
         }
     }
 
-    RadiusDamage(vecCenter, pev, pevAttacker, pev->dmg, flRadius, 0, DMG_MORTAR);   // [OK] 0x800000
+    ::RadiusDamage(vecCenter, pev, pevAttacker, pev->dmg, flRadius, 0, DMG_MORTAR);   // [OK] 0x800000
 
     if (m_fRemoveOnVaporize)
         Remove();                                             // [OK] slot 125

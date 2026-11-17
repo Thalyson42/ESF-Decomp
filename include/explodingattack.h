@@ -8,7 +8,6 @@ enum { ESF_CLASS_KIATTACK = 1 };   // Classify() deste ataque devolve 1; 15 e 16
 class CExplodingAttack : public CMagicAttack
 {
 public:
-    float m_flSpeed;      // +0x2a8  módulo da velocidade inicial ([OK])
     int   f_2c8;          // +0x2c8 [?]
     virtual void Spawn(void);
     virtual void Precache(void);
