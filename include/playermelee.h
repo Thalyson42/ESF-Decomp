@@ -19,6 +19,9 @@ enum MELEE_THROW_STATE {                        // [OK] m_iThrowState (+0x64), d
 enum MELEE_DIR { DIR_FORWARD = 0, DIR_FWD_LEFT, DIR_LEFT, DIR_BACK_LEFT, DIR_BACK, DIR_BACK_RIGHT, DIR_RIGHT, DIR_FWD_RIGHT,   // 0-7 = golpe, 8-15 = o mesmo com alt, 16 = só ataque, 17 = só alt
                  DIR_ATTACK_ONLY = 16, DIR_ALT_ONLY = 17 };
 enum MELEE_STRENGTH { MELEE_WEAK = 0, MELEE_MEDIUM = 1, MELEE_STRONG = 2 };    // [OK] GetMeleeStrength
+enum MELEE_COMBO_STATUS { COMBO_STATUS_NONE = 0 };                                         // [?] valores desconhecidos (só 0 visto)
+enum ANIM_PRIORITY { ANIM_PRIORITY_MEDIUM = 1, ANIM_PRIORITY_MEDIUM_PLUS = 2, ANIM_PRIORITY_LOW = 3 };   // [?] nomes
+struct melee_combo_hit_s;
 
 struct melee_move_s {                           // nó de direção/golpe (0x24 bytes) [OK] AddDirection
     int   m_iIndex;                             // +0x00 contador crescente (m_iAttackerCount/m_iDefenderCount)
@@ -116,7 +119,6 @@ public:
     float GetDmgPerPunch(void);
     int GetEnemyPrepunch(CBasePlayer*);
     int GetMeleeStrength(melee_move_s *pMove);
-    int GetMeleeStrength(melee_move_s *pMove);
     int GetMoveCountFinishedOnly(void);
     int GetMoveCountFinishedOnly(melee_move_s*);
     int GetMoveCount(void);
@@ -185,12 +187,10 @@ public:
     int Powerhit(CBasePlayer *pVictim, Vector vecDir, int iType, float flDmgMult, float flSpeed, float flMin, float flDecel, float flTime);
     int Powerhit(int, CBasePlayer*, Vector, int, float, float, float, float, float);
     int PredictBlockRatio(melee_move_s *pAtk, melee_move_s *pDef, float flMult);
-    int PredictBlockRatio(melee_move_s *pAtk, melee_move_s *pDef, float flMult);
     int PushAfterDeath();
     int PushAwayOtherPlayers();
     void Recover(void);
     void RemoveAllAnims(void);
-    plrmelee_anim_s * RemoveAnim(plrmelee_anim_s *pAnim);
     plrmelee_anim_s * RemoveAnim(plrmelee_anim_s *pAnim);
     int RemoveDir(melee_move_s*);
     void RemoveStruggleBar(void);

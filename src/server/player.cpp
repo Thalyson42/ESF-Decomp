@@ -5,6 +5,23 @@
 #include "cbase.h"
 #include "player.h"
 #include "gamerules.h"
+#include "soundent.h"
+#include "client.h"
+#include "game.h"
+#include "weapons.h"
+#include "esf_classes.h"
+#include "explodingattack.h"
+#include "powerstruggle.h"
+
+// CSprayCan: classe local do SDK (player.cpp), necessária para ImpulseCommands
+class CSprayCan : public CBaseEntity
+{
+public:
+	void	Spawn ( entvars_t *pevOwner );
+	void	Think( void );
+
+	virtual int	ObjectCaps( void ) { return FCAP_DONT_SAVE; }
+};
 
 #define SUITFIRSTUPDATETIME 0.1f     // [OK] ESF: 0.1 (SDK: 3.5)
 #define SUITUPDATETIME      3.5f     // [OK]
@@ -340,7 +357,7 @@ void CBasePlayer::PreThink()
             ESF_PEV_RAW_INT(pev, 0x15c) = 0;                  // [?]
             if (!m_fPoweredUp && !m_fTurbo)
                 ESF_PEV_RAW_INT(pev, 0x148) = 0;              // [?]
-            m_pClass->vfunc_30();                             // [?] callback do personagem (vtable +4, slot 0x30)
+            m_pClass->AddAllAttacks();                             // [?] callback do personagem (vtable +4, slot 0x30)
         }
         f_34c = 0;
     }
@@ -354,15 +371,15 @@ void CBasePlayer::PreThink()
     if (f_378 && !f_33c)                                      // [?]
     {
         RemoveAllWeapons(0);
-        m_pClass->vfunc_30();
+        m_pClass->AddAllAttacks();
         f_378 = 0;
     }
 
     if (gpGlobals->time - f_318 > 0.2f)                       // [OK] tick de ki a cada 0.2 s
     {
-        float flDrain = m_pClass->vfunc_18();                 // [?] custo base por tick do personagem
+        float flDrain = m_pClass->KiCost();                 // [?] custo base por tick do personagem
         if (flDrain < pev->fuser4)
-            pev->fuser4 -= m_pClass->vfunc_18();
+            pev->fuser4 -= m_pClass->KiCost();
         else if (!f_33c)
             Descend(1);
 
@@ -429,7 +446,7 @@ void CBasePlayer::PreThink()
         {
             pevAtk->velocity = Vector(0, 0, 0);
             pev->vuser4 = Vector(0, 0, 0);
-            m_pBlockAttack->m_fHitWall = 1;                   // [?] +0x2b4
+            m_pBlockAttack->f_2b4 = 1;                   // [?] +0x2b4
         }
         if (gpGlobals->time > f_734)                          // [OK] custo do block: 5 de ki a cada 0.2 s
         {
@@ -869,7 +886,7 @@ void CBasePlayer::UpdateClientData(void)
     }
     if (pev->health != m_iClientHealth)
     {
-        int iHealth = max(pev->health, 0);
+        int iHealth = max(pev->health, 0.0f);
         MESSAGE_BEGIN(MSG_ONE, gmsgHealth, NULL, pev->pContainingEntity);
             WRITE_BYTE(iHealth);
         MESSAGE_END();

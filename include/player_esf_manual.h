@@ -1,0 +1,30 @@
+// Membros de CBasePlayer usados pelo código recuperado, escritos à mão (tipos [?] deduzidos do uso).
+#pragma once
+#include "swoop.h"
+#define ESF_PLAYER_EXTRA \
+    CSwoop m_Swoop;                             /* [OK] +0x504 */ \
+    void  RemoveSpecialModes(void); void OnDeathAnim(void); \
+    void  Swoop(void); void CheckWallJump(void); void CheckSubModelStatus(void); void ReleaseCandy(void); \
+    void  RemoveAllWeapons(int iFlag); void Descend(int iFlag); void Ascend(void); \
+    void  StopTurbo(void); void StopBlock(void); void UpdateOldPositions(void); void Spectator_HandleButtons(void); \
+    virtual void UpdateClientData_Hook(void);   /* [?] vtable +0x204 (slot 127) */ \
+    void  PlayAnimation(void);                  /* [OK] ESF: no lugar de SetAnimation(PLAYER_WALK) */ \
+    void  CheckPowerups(entvars_t *pevVictim);  /* [?] assinatura */ \
+    void  ForceCorrectModels(void);             /* [OK] */ \
+    void  WaitToBecomeCandy(CBasePlayer *pAttacker); /* [OK] Buu */ \
+    float m_iRespawnFrames;                     /* [OK] +0x988 (float) */ \
+    Vector m_vecSavedAngles;                    /* [?] +0x7a0 */ \
+    int   m_iPowerLevelDrop;                    /* [?] +0x75c */ \
+    EHANDLE m_hTrain;                           /* [?] +0x108 */ \
+    struct esf_botinfo_s *m_pBotInfo;           /* [?] +0xa04 -> +0x1a = m_iTauntChance */ \
+    CBasePlayer *m_pLastKiller;                 /* [?] +0xd50 */
+// globais ESF usados por player.cpp
+#ifndef ESF_GLOBALS_H
+#define ESF_GLOBALS_H
+#define DRC_CMD_EVENT 3                 // [?]
+struct esf_botinfo_s { char pad[0x1a]; short m_iTauntChance; };   // [?]
+extern cvar_t simplemelee, forcerespawn;
+class CBodySlice { public: static void SpawnBodySlices(entvars_t *pev, int iFlag); };   // [?] assinatura
+class CBotChat { public: void LetBotTaunt(CBasePlayer *pKiller, CBasePlayer *pVictim); };
+extern CBotChat ChatClass;
+#endif

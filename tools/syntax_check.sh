@@ -10,13 +10,21 @@ if [ ! -d $B ]; then
 import sys,re
 p=sys.argv[1]; t=open(p).read()
 i=t.index('class CBasePlayer')
+pre='class CBasePlayer;\n#include "playermelee.h"\n#include "player_esf.h"\n#include "player_esf_methods.h"\n#include "player_esf_manual.h"\n#include "esf_extras.h"\n'
 j=t.index('public:',i)+len('public:')
-t=t[:j]+'\n\t#include "player_esf.h"\n\tESF_PLAYER_FIELDS\n'+t[j:]
+t=t[:i]+pre+t[i:j]+'\n\tESF_PLAYER_FIELDS\n\tESF_PLAYER_UNNAMED\n\tESF_PLAYER_METHODS\n\tESF_PLAYER_EXTRA\n'+t[j:]
+open(p,'w').write(t)
+PY
+  python3 - "$B/dlls/cbase.h" <<'PY'
+import sys
+p=sys.argv[1]; t=open(p).read()
+k=t.index('virtual void Touch(')
+t=t[:k]+'virtual void TouchedByPlayer(class CBasePlayer *) {}   // [?] ESF vtable +0xb4\n\t'+t[k:]
 open(p,'w').write(t)
 PY
 fi
 INC="-I include -I $B/dlls -I $B/engine -I $B/common -I $B/pm_shared -I $B/public"
 for f in "$@"; do
   echo "== $f"
-  g++ -fsyntax-only -fpermissive -w -std=gnu++98 $INC -DLINUX -D_LINUX "$f" 2>&1 | grep -E "error" | cut -c1-170
+  LC_ALL=C g++ -fsyntax-only -fpermissive -w -std=gnu++98 $INC -DLINUX -D_LINUX "$f" 2>&1 | grep -E "error" | cut -c1-170
 done
