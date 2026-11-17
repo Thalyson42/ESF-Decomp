@@ -55,3 +55,7 @@ CBasePlayer::UpdatePlayerSound
 CBasePlayer::WaterMove      # ESF define AIRTIME 90 (SDK: 12) em player.h
 CBasePlayer::PlayerUse
 CBreakable::BreakTouch  # [SDK score ok] só diferença: /4 vs *0.25 (equivalente)
+CGib::StickyGibTouch  # [SDK score ok] conferida linha a linha
+CGib::SpawnHeadGib  # [SDK score ok] conferida linha a linha
+CGib::SpawnRandomGibs  # [SDK score ok] floats hex no decomp eram falso positivo
+CGib::SpawnStickyGibs  # [SDK score ok] idem

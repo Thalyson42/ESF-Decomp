@@ -27,10 +27,6 @@ CFuncRotating::RampPitchVol
 CFuncRotating::Spawn
 CFuncTrackTrain::Next
 CFuncTrain::Activate
-CGib::SpawnHeadGib
-CGib::SpawnRandomGibs
-CGib::SpawnStickyGibs
-CGib::StickyGibTouch
 CGibShooter::ShootThink
 CGraph::ShowNodeConnections
 CLightning::Spawn

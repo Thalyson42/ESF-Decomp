@@ -21,7 +21,7 @@ void CGib :: LimitVelocity( void )
 		pev->velocity = pev->velocity.Normalize() * 1500;		// This should really be sv_maxvelocity * 0.75 or something
 }
 
-// [SDK NÃO CONFERIDA] CGib::SpawnStickyGibs
+// [SDK score 0.4] CGib::SpawnStickyGibs
 void CGib :: SpawnStickyGibs( entvars_t *pevVictim, Vector vecOrigin, int cGibs )
 {
 	int i;
@@ -91,7 +91,7 @@ void CGib :: SpawnStickyGibs( entvars_t *pevVictim, Vector vecOrigin, int cGibs 
 	}
 }
 
-// [SDK NÃO CONFERIDA] CGib::SpawnHeadGib
+// [SDK score 0.43] CGib::SpawnHeadGib
 void CGib :: SpawnHeadGib( entvars_t *pevVictim )
 {
 	CGib *pGib = GetClassPtr( (CGib *)NULL );
@@ -150,7 +150,7 @@ void CGib :: SpawnHeadGib( entvars_t *pevVictim )
 	pGib->LimitVelocity();
 }
 
-// [SDK NÃO CONFERIDA] CGib::SpawnRandomGibs
+// [SDK score 0.57] CGib::SpawnRandomGibs
 void CGib :: SpawnRandomGibs( entvars_t *pevVictim, int cGibs, int human )
 {
 	int cSplat;
@@ -626,7 +626,7 @@ void CBaseEntity :: SUB_FadeOut ( void  )
 	}
 }
 
-// [SDK NÃO CONFERIDA] CGib::StickyGibTouch
+// [SDK score 0.5] CGib::StickyGibTouch
 void CGib :: StickyGibTouch ( CBaseEntity *pOther )
 {
 	Vector	vecSpot;
