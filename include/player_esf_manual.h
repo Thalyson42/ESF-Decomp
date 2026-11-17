@@ -6,7 +6,7 @@
     void  RemoveSpecialModes(void); void OnDeathAnim(void); \
     void  StopPowerUp(void); void RemoveWallJump(void); BOOL CanMelee(CBasePlayer *pOther); \
     void  Spectator_SetMode(int iMode); void StartObserving(void); int GetPotentialPL(void); \
-    void  Swoop(void); void CheckWallJump(void); void CheckSubModelStatus(void); void ReleaseCandy(void); \
+    BOOL CanFly(void); void Swoop(void); void CheckWallJump(void); void CheckSubModelStatus(void); void ReleaseCandy(void); \
     void  RemoveAllWeapons(int iFlag); void Descend(int iFlag); void Ascend(void); \
     void  StopTurbo(void); void StopBlock(void); void UpdateOldPositions(void); void Spectator_HandleButtons(void); \
     virtual void UpdateClientData_Hook(void);   /* [?] vtable +0x204 (slot 127) */ \

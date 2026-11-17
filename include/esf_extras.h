@@ -46,6 +46,7 @@ extern cvar_t * nomeleehittime;
     int f_318; \
     int f_31c; \
     int f_324; \
+    int f_328; \
     int f_330; \
     int f_334; \
     int f_338; \
@@ -65,6 +66,7 @@ extern cvar_t * nomeleehittime;
     int f_3a4; \
     int f_3a8; \
     int f_3e4; \
+    int f_478; \
     int f_4c4; \
     int f_508; \
     int f_5a0; \

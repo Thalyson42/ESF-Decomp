@@ -13,6 +13,15 @@ i=t.index('class CBasePlayer')
 pre='class CBasePlayer;\n#include "playermelee.h"\n#include "player_esf.h"\n#include "player_esf_methods.h"\n#include "player_esf_manual.h"\n#include "esf_extras.h"\n'
 j=t.index('public:',i)+len('public:')
 t=t[:i]+pre+t[i:j]+'\n\tESF_PLAYER_FIELDS\n\tESF_PLAYER_UNNAMED\n\tESF_PLAYER_METHODS\n\tESF_PLAYER_EXTRA\n'+t[j:]
+# funções que o ESF define fora de linha (no SDK são inline no header): vira só declaração
+import re,glob
+names=set()
+for f in glob.glob('src/server/*.cpp'):
+    for l in open(f,errors='ignore'):
+        m=re.match(r'^[\w:\*& ]+?CBasePlayer::(\w+)\(',l)
+        if m: names.add(m.group(1))
+for n in names:
+    t=re.sub(r'(\b%s\s*\([^)]*\))\s*(const)?\s*\{[^{}]*\}'%n, r'\1;', t)
 open(p,'w').write(t)
 PY
   python3 - "$B/dlls/cbase.h" <<'PY'
@@ -37,6 +46,9 @@ PY
   python3 - "$B/dlls/gamerules.h" <<'PY'
 import sys
 g=sys.argv[1]; t=open(g).read()
+k=t.index('class CGameRules')
+k=t.index('public:',k)+7
+t=t[:k]+'\n\tvirtual void UpdatePowerLevels(void) {}   // [?] ESF\n\tint m_iHighestPL;   // [?]\n'+t[k:]
 k=t.index('class CHalfLifeMultiplay')
 k=t.index('public:',k)+7
 t=t[:k]+'\n\tint m_iAveragePL;                                   // [?] ESF\n\tvirtual void GiveBaseItems(CBasePlayer *pPlayer) {}  // [?] vtable +0xf0\n'+t[k:]

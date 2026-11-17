@@ -6,7 +6,7 @@
 #include "gamerules.h"
 #include "weapons.h"
 #include "player.h"
-#include "gamerules.h"
+#include "esf_classes.h"
 
 #define MAX_PL_NORMAL   799999999   // 0x2faf07ff
 #define MAX_PL_POWERED  999999999   // 0x3b9ac9ff
@@ -79,7 +79,7 @@ void CBasePlayer::IncreaseStrength(CBasePlayer *pOther, int iFactor)
 // ---- Ki e velocidade ----
 BOOL CBasePlayer::UseKi(int iCost)
 {
-    float mult = m_pClass->GetKiCostMult();          // [?] virtual da classe (+0x40 na vtable) devolve double
+    float mult = m_pClass->GetKiEfficiency();          // [?] virtual da classe (+0x40 na vtable) devolve double
     float cost = (float)(int)(mult * (float)iCost);
     if (cost > pev->fuser4) return FALSE;             // [OK] ki = pev->fuser4
     pev->fuser4 -= cost;
@@ -125,7 +125,7 @@ void CBasePlayer::StartFly(void)
     if (pev->flags & 0x400) return;                    // [?] bit do flags (0x400)
     if (m_fFlying) return;
     if (!CanFly()) return;                             // virtual +0x8c*... [?] slot 33 (+0x8c)
-    if (m_f328 || (m_f37c && !m_f478) || m_f33c || m_f358 /* ... */) return;
+    if (f_328 || (f_37c && !f_478) || f_33c || f_358 /* ... */) return;
     // condições do decompilado (campos ainda sem nome): +0x328, +0x37c, +0x33c, +0x35c
     if (m_fBlocking) StopBlock();                      // [OK]
     m_fFlying = 1;
@@ -135,9 +135,9 @@ void CBasePlayer::StartFly(void)
 
 void CBasePlayer::StopFly(void)
 {
-    if (m_f364 || !m_fFlying || m_f330) return;        // [OK] condições de saída (campos sem nome)
-    if (m_f37c && !m_f478) return;
-    if (m_f33c || m_f770 || m_f358 || m_f6bc) return;
+    if (f_364 || !m_fFlying || f_330) return;        // [OK] condições de saída (campos sem nome)
+    if (f_37c && !f_478) return;
+    if (f_33c || f_770 || f_358 || f_6bc) return;
     if (m_fBlocking) StopBlock();                      // [OK]
     m_fFlying = 0;
     pev->gravity = 1.0f;                               // [OK]
