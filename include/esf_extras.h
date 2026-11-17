@@ -79,6 +79,7 @@ extern cvar_t * nomeleehittime;
     int f_73c; \
     int f_74c; \
     int f_750; \
+    float f_754; \
     int f_770; \
     int f_774; \
     int f_778; \

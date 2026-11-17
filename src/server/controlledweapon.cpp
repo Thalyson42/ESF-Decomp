@@ -43,14 +43,14 @@ BOOL CControlledBeam::Deploy(void)
     m_fBeamJumpFlying = 0;                    // +0x208
     m_fBeamJumping    = 0;                    // +0x204
     m_iAttackState    = 0;                    // +0xc4
-    return DefaultDeploy(/* &this+0xf4 */ m_szWeaponName);   // [?] só o 1º argumento é visível no decompilado
+    return DefaultDeploy(m_szWeaponName, "", 0, "");   // [?] só o 1º argumento é visível no decompilado
 }
 
 BOOL CControlledBeam::CanHolster(void)
 {
     // [OK] não pode guardar a arma enquanto estiver controlando um feixe ativo
     if (m_pBeam && m_iAttackState == 2 &&
-        (f_beam_2ac(m_pBeam) || f_beam_2b0(m_pBeam)) && !f_beam_2dc(m_pBeam))
+        (m_pBeam->f_2ac || m_pBeam->f_2b0) && !m_pBeam->f_2dc)
         return FALSE;
     return TRUE;
 }
@@ -76,7 +76,7 @@ void CControlledBeam::DisableBeamJump(void)
     {
         m_pBeam->SetTouch(&CExplodingAttack::ExplodeTouch);          // [OK]
         UTIL_MakeVectors(m_pBeam->pev->angles);                      // [?] argumento: &pev->angles
-        m_pBeam->pev->velocity = f_beam_2a8(m_pBeam) * gpGlobals->v_forward;  // [OK] velocidade * frente
+        m_pBeam->pev->velocity = m_pBeam->m_flSpeed * gpGlobals->v_forward;  // [OK] velocidade * frente
         m_fBeamJumpFlying = 0;
     }
     else
@@ -100,7 +100,7 @@ void CControlledBeam::Charge(void)
     {
         m_pPlayer->m_flSpeedMult = m_flChargeSpeedMult;         // [OK] +0xf0 -> player+0x754 (ex.: 0.5)
         m_iAttackState = 1;
-        m_pPlayer->m_fCharging = 1;                             // player+0x334
+        m_pPlayer->f_334 = 1;                             // player+0x334
         m_iCharge = 0;
         EmitChargeSound();                                      // [OK] slot 87 (+0x164)
     }
@@ -124,7 +124,7 @@ void CControlledBeam::Shoot(void)
 {
     m_pPlayer->DrawChargeBar(0);
     SilenceWeaponSounds();                                      // canal 1 mudo
-    m_pPlayer->m_fCharging = 0;
+    m_pPlayer->f_334 = 0;
 
     if (m_iCharge < m_iMaxCharge / 3)                           // [OK] carga mínima = 1/3: senão cancela
     {
@@ -137,7 +137,7 @@ void CControlledBeam::Shoot(void)
     m_iAttackState = 2;
     if (!(m_pPlayer->pev->flags & FL_ONGROUND))                 // [OK] +421&2 = FL_ONGROUND
         m_pPlayer->StartFly();
-    m_pPlayer->m_fKiControl = 1;                                // player+0x33c [?]
+    m_pPlayer->f_33c = 1;                                // player+0x33c [?]
     DisableChargeSprite();                                      // slot 91
     EmitShootSound();                                           // slot 88
     EmitControlSound();                                         // slot 86
@@ -195,7 +195,7 @@ void CControlledBeam::StopAiming(void)
         m_pPlayer->f_778 = 0;                                   // player+1912
         m_pPlayer->ResetSequenceInfo();
     }
-    m_pPlayer->m_fKiControl = 0;                                // player+828
+    m_pPlayer->f_33c = 0;                                // player+828
     if (m_fBeamJumpFlying)                                      // +0x208
     {
         StopBeamJump();
@@ -212,9 +212,9 @@ void CControlledBeam::StopAiming(void)
 BOOL CControlledBeam::CheckWallJump(void)
 {
     // [OK] se o jogador entrou em estado especial (player+0x6c8), cancela a carga e devolve TRUE
-    if (m_pPlayer->f_6c8_wall)
+    if (m_pPlayer->f_6c8)
     {
-        m_pPlayer->m_fCharging = 0;
+        m_pPlayer->f_334 = 0;
         m_iAttackState = 0;
         m_iCharge = 0;
         DisableChargeSprite();
@@ -228,9 +228,9 @@ BOOL CControlledBeam::CheckWallJump(void)
 void CControlledBeam::StartBeamJump(void)
 {
     m_iSavedMoveType = m_pPlayer->pev->movetype;                // [OK] guarda o movetype (+0x200)
-    m_pBeam->f_c = 0;  m_pBeam->f_10 = 0;                       // [?] zera o think/nextthink do feixe
+    m_pBeam->SetThink(NULL); m_pBeam->pev->nextthink = 0;                      // [?] zera o think/nextthink do feixe
     m_pPlayer->pev->movetype = 15;                              // [OK] MOVETYPE_FLY? (15 = MOVETYPE_... conferir)
-    m_pPlayer->f_754_ = 5.0f;                                   // player+0x754 [?]
+    m_pPlayer->f_754 = 5.0f;                                   // player+0x754 [?]
     Vector d = m_pPlayer->pev->origin - m_pBeam->pev->origin;   // [OK] do feixe para o jogador
     float len = d.Length();
     Vector dir = (len == 0) ? Vector(0, 0, 1) : d * (1.0f / len);       // [OK] normaliza; (0,0,1) se zero
@@ -334,7 +334,7 @@ void CControlledBeam::Holster(int skiplocal)
     else if (m_iAttackState == 1)
     {
         m_pPlayer->m_flSpeedMult = 1.0f;                                   // [OK]
-        m_pPlayer->m_fCharging = 0;
+        m_pPlayer->f_334 = 0;
         DisableChargeSprite();                                             // slot 91
         SilenceWeaponSounds(); SilenceVoice(); SilenceBodySounds();        // canais 1, 2, 4
         m_pPlayer->DrawChargeBar(0);

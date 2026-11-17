@@ -8,6 +8,7 @@ enum { ESF_CLASS_KIATTACK = 1 };   // Classify() deste ataque devolve 1; 15 e 16
 class CExplodingAttack : public CMagicAttack
 {
 public:
+    int f_2ac, f_2b0, f_2dc;   // [?] +0x2ac/+0x2b0/+0x2dc flags do feixe (nomes desconhecidos)
     int   f_2c8;          // +0x2c8 [?]
     virtual void Spawn(void);
     virtual void Precache(void);

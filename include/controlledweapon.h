@@ -2,10 +2,12 @@
 // RECUPERADO À MÃO (ESF 1.2.3). Offsets = do hl_i386.so; nomes dos campos são deduzidos do uso.
 #pragma once
 #include "weapons.h"
+#include "explodingattack.h"
 
 class CControlledBeam : public CBasePlayerWeapon
 {
 public:
+    float GetPowerRatio(void);                     // [?] relação carga/máximo; valor descartado em 1 uso
     // --- virtuais (ordem da vtable: ver src/headers/CControlledBeam.h) ---
     virtual void Precache(void);
     virtual BOOL Deploy(void);
@@ -42,7 +44,7 @@ public:
 
     // --- campos (offsets no .so) ---
     int         m_iAttackState;       // +0xc4: 0 parado, 1 carregando, 2 disparado/controlando
-    CBaseEntity *m_pBeam;             // +0xc8: o feixe atual
+    CGuidedAttack *m_pBeam;            // +0xc8: o feixe atual
     int         m_iSavedMoveType;     // +0x200 (usado em StopBeamJump)
     int         m_fBeamJumping;       // +0x204
     int         m_fBeamJumpFlying;    // +0x208
