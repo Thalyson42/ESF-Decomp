@@ -233,3 +233,82 @@ void CHalfLifeMultiplay::Think(void)
     last_frags = frags_remaining;
     last_time = time_remaining;
 }
+
+// ---- CHalfLifeTeamplay::Think (ESF) [OK] vs decomp 0x1278c0 ----
+#include "teamplay_gamerules.h"
+extern int team_scores[]; extern int num_teams;
+extern char BotManager[];                                         // [?] objeto global; +44 = flag "bots ativos"
+extern bool UTIL_IsValidPlayer(CBaseEntity *, int, int);          // [?] assinatura
+#define ESF_TP_F(off) (*(float *)((char *)this + (off)))
+#define ESF_ENT_RAW_INT(e, off) (*(int *)((char *)(e) + (off)))
+
+void CHalfLifeTeamplay::Think(void)
+{
+    if (ESF_TP_F(0x50) != allowspectator.value)
+    {
+        MESSAGE_BEGIN(MSG_ALL, gmsgAllowSpec);
+            WRITE_BYTE((int)allowspectator.value);
+        MESSAGE_END();
+        ESF_TP_F(0x50) = allowspectator.value;
+    }
+    if (ESF_TP_F(0x54) != characterlimit.value)
+    {
+        ((void (*)(CGameRules *, int))(*(void ***)this)[(0x38 / 4)])(this, 0);   // [?]
+        ESF_TP_F(0x54) = characterlimit.value;
+    }
+    g_VoiceGameMgr.Update(gpGlobals->frametime);
+
+    static int last_frags;
+    static int last_time;
+    static float flLastSBotTeamCheck;
+    int frags_remaining = 0;
+    int time_remaining = 0;
+
+    if (g_fGameOver)
+    {
+        CHalfLifeMultiplay::Think();
+        return;
+    }
+    float flTimeLimit = CVAR_GET_FLOAT("mp_timelimit") * 60;
+    time_remaining = (int)(flTimeLimit ? (flTimeLimit - gpGlobals->time) : 0);
+    if (flTimeLimit != 0 && gpGlobals->time >= flTimeLimit)
+    {
+        GoToIntermission();
+        return;
+    }
+    float flFragLimit = fraglimit.value;
+    if (flFragLimit)
+    {
+        int bestfrags = 9999;
+        for (int i = 0; i < num_teams; i++)
+        {
+            if (team_scores[i] >= flFragLimit) { GoToIntermission(); return; }
+            int remain = flFragLimit - team_scores[i];
+            if (remain < bestfrags) bestfrags = remain;
+        }
+        frags_remaining = bestfrags;
+    }
+    if (frags_remaining != last_frags)
+        g_engfuncs.pfnCvar_DirectSet(&fragsleft, UTIL_VarArgs("%i", frags_remaining));
+    if (timeleft.value != last_time)
+        g_engfuncs.pfnCvar_DirectSet(&timeleft, UTIL_VarArgs("%i", time_remaining));
+    last_frags = frags_remaining;
+    last_time = time_remaining;
+
+    // ESF: a cada 0.75 s coloca bots sem time no time "Good"
+    if (flLastSBotTeamCheck >= gpGlobals->time) return;
+    if (!*(int *)(BotManager + 44)) return;
+    flLastSBotTeamCheck = gpGlobals->time + 0.75;
+    for (int i = 1; i <= gpGlobals->maxClients; i++)
+    {
+        CBaseEntity *plr = UTIL_PlayerByIndex(i);
+        if (UTIL_IsValidPlayer(plr, 1, 0))
+        {
+            BOOL fake = FALSE;
+            if (!ESF_ENT_RAW_INT(plr, 0))                         // [?] vfunc +0xa4 do pev (decomp ambíguo); aqui só FL_FAKECLIENT
+                fake = (plr->pev->flags & FL_FAKECLIENT) != 0;
+            if (!fake && plr->pev->team == 2)
+                ((void (*)(CGameRules *, CBaseEntity *, const char *))(*(void ***)this)[0x114 / 4])(this, plr, "Good");   // [?] slot 0x114 = ChangePlayerTeam?
+        }
+    }
+}
