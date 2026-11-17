@@ -473,7 +473,7 @@ void CBasePlayer::SetAnimation( PLAYER_ANIM playerAnim )
 	ResetSequenceInfo( );
 }
 
-// [SDK NÃO CONFERIDA] CBasePlayer::WaterMove
+// [SDK score 0.5] CBasePlayer::WaterMove
 void CBasePlayer::WaterMove()
 {
 	int air;
@@ -594,64 +594,6 @@ BOOL CBasePlayer::IsOnLadder( void )
 	return ( pev->movetype == MOVETYPE_FLY );
 }
 
-// [SDK NÃO CONFERIDA] CBasePlayer::StartDeathCam
-void CBasePlayer::StartDeathCam( void )
-{
-	edict_t *pSpot, *pNewSpot;
-	int iRand;
-
-	if ( pev->view_ofs == g_vecZero )
-	{
-		// don't accept subsequent attempts to StartDeathCam()
-		return;
-	}
-
-	pSpot = FIND_ENTITY_BY_CLASSNAME( NULL, "info_intermission");	
-
-	if ( !FNullEnt( pSpot ) )
-	{
-		// at least one intermission spot in the world.
-		iRand = RANDOM_LONG( 0, 3 );
-
-		while ( iRand > 0 )
-		{
-			pNewSpot = FIND_ENTITY_BY_CLASSNAME( pSpot, "info_intermission");
-			
-			if ( pNewSpot )
-			{
-				pSpot = pNewSpot;
-			}
-
-			iRand--;
-		}
-
-		CopyToBodyQue( pev );
-
-		UTIL_SetOrigin( pev, pSpot->v.origin );
-		pev->angles = pev->v_angle = pSpot->v.v_angle;
-	}
-	else
-	{
-		// no intermission spot. Push them up in the air, looking down at their corpse
-		TraceResult tr;
-		CopyToBodyQue( pev );
-		UTIL_TraceLine( pev->origin, pev->origin + Vector( 0, 0, 128 ), ignore_monsters, edict(), &tr );
-
-		UTIL_SetOrigin( pev, tr.vecEndPos );
-		pev->angles = pev->v_angle = UTIL_VecToAngles( tr.vecEndPos - pev->origin  );
-	}
-
-	// start death cam
-
-	m_afPhysicsFlags |= PFLAG_OBSERVER;
-	pev->view_ofs = g_vecZero;
-	pev->fixangle = TRUE;
-	pev->solid = SOLID_NOT;
-	pev->takedamage = DAMAGE_NO;
-	pev->movetype = MOVETYPE_NONE;
-	pev->modelindex = 0;
-}
-
 // [SDK score 1.0] CBasePlayer::StartObserver
 void CBasePlayer::StartObserver( Vector vecPosition, Vector vecViewAngle )
 {
@@ -723,7 +665,7 @@ void CBasePlayer::StartObserver( Vector vecPosition, Vector vecViewAngle )
 	Observer_SetMode( m_iObserverLastMode );
 }
 
-// [SDK NÃO CONFERIDA] CBasePlayer::PlayerUse
+// [SDK score 0.8] CBasePlayer::PlayerUse
 void CBasePlayer::PlayerUse ( void )
 {
 	if ( IsObserver() )
@@ -993,64 +935,7 @@ void CBasePlayer::CheckTimeBasedDamage()
 	}
 }
 
-// [SDK NÃO CONFERIDA] CBasePlayer::CheckSuitUpdate
-void CBasePlayer::CheckSuitUpdate()
-{
-	int i;
-	int isentence = 0;
-	int isearch = m_iSuitPlayNext;
-	
-	// Ignore suit updates if no suit
-	if ( !(pev->weapons & (1<<WEAPON_SUIT)) )
-		return;
-
-	// if in range of radiation source, ping geiger counter
-	UpdateGeigerCounter();
-
-	if ( g_pGameRules->IsMultiplayer() )
-	{
-		// don't bother updating HEV voice in multiplayer.
-		return;
-	}
-
-	if ( gpGlobals->time >= m_flSuitUpdate && m_flSuitUpdate > 0)
-	{
-		// play a sentence off of the end of the queue
-		for (i = 0; i < CSUITPLAYLIST; i++)
-			{
-			if (isentence = m_rgSuitPlayList[isearch])
-				break;
-			
-			if (++isearch == CSUITPLAYLIST)
-				isearch = 0;
-			}
-
-		if (isentence)
-		{
-			m_rgSuitPlayList[isearch] = 0;
-			if (isentence > 0)
-			{
-				// play sentence number
-
-				char sentence[CBSENTENCENAME_MAX+1];
-				strcpy(sentence, "!");
-				strcat(sentence, gszallsentencenames[isentence]);
-				EMIT_SOUND_SUIT(ENT(pev), sentence);
-			}
-			else
-			{
-				// play sentence group
-				EMIT_GROUPID_SUIT(ENT(pev), -isentence);
-			}
-		m_flSuitUpdate = gpGlobals->time + SUITUPDATETIME;
-		}
-		else
-			// queue is empty, don't check 
-			m_flSuitUpdate = 0;
-	}
-}
-
-// [SDK NÃO CONFERIDA] CBasePlayer::UpdatePlayerSound
+// [SDK score 0.5] CBasePlayer::UpdatePlayerSound
 void CBasePlayer :: UpdatePlayerSound ( void )
 {
 	int iBodyVolume;
@@ -1652,83 +1537,6 @@ void CBasePlayer :: ForceClientDllUpdate( void )
 	// Now force all the necessary messages
 	//  to be sent.
 	UpdateClientData();
-}
-
-// [SDK NÃO CONFERIDA] CBasePlayer::ImpulseCommands
-void CBasePlayer::ImpulseCommands( )
-{
-	TraceResult	tr;// UNDONE: kill me! This is temporary for PreAlpha CDs
-
-	// Handle use events
-	PlayerUse();
-		
-	int iImpulse = (int)pev->impulse;
-	switch (iImpulse)
-	{
-	case 99:
-		{
-
-		int iOn;
-
-		if (!gmsgLogo)
-		{
-			iOn = 1;
-			gmsgLogo = REG_USER_MSG("Logo", 1);
-		} 
-		else 
-		{
-			iOn = 0;
-		}
-		
-		ASSERT( gmsgLogo > 0 );
-		// send "health" update message
-		MESSAGE_BEGIN( MSG_ONE, gmsgLogo, NULL, pev );
-			WRITE_BYTE(iOn);
-		MESSAGE_END();
-
-		if(!iOn)
-			gmsgLogo = 0;
-		break;
-		}
-	case 100:
-        // temporary flashlight for level designers
-        if ( FlashlightIsOn() )
-		{
-			FlashlightTurnOff();
-		}
-        else 
-		{
-			FlashlightTurnOn();
-		}
-		break;
-
-	case	201:// paint decal
-		
-		if ( gpGlobals->time < m_flNextDecalTime )
-		{
-			// too early!
-			break;
-		}
-
-		UTIL_MakeVectors(pev->v_angle);
-		UTIL_TraceLine ( pev->origin + pev->view_ofs, pev->origin + pev->view_ofs + gpGlobals->v_forward * 128, ignore_monsters, ENT(pev), & tr);
-
-		if ( tr.flFraction != 1.0 )
-		{// line hit something, so paint a decal
-			m_flNextDecalTime = gpGlobals->time + decalfrequency.value;
-			CSprayCan *pCan = GetClassPtr((CSprayCan *)NULL);
-			pCan->Spawn( pev );
-		}
-
-		break;
-
-	default:
-		// check all of the cheat impulse commands now
-		CheatImpulseCommands( iImpulse );
-		break;
-	}
-	
-	pev->impulse = 0;
 }
 
 // [SDK score 1.0] CBasePlayer::CheatImpulseCommands

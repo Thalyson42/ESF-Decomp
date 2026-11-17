@@ -153,3 +153,83 @@ void CHalfLifeMultiplay::InitHUD(CBasePlayer *pl)
         MESSAGE_END();
     }
 }
+
+// Think: igual ao SDK, mais envio de "allowspectator" e reação a "characterlimit". [OK] vs decomp 0xdb870
+extern cvar_t timeleft, fragsleft, mp_chattime, allowspectator, characterlimit;
+extern int gmsgAllowSpec;
+#define ESF_GR_F(off) (*(float *)((char *)this + (off)))   // campos ESF da gamerules (+0x50 último allowspectator, +0x54 último characterlimit)
+
+void CHalfLifeMultiplay::Think(void)
+{
+    g_VoiceGameMgr.Update(gpGlobals->frametime);
+
+    static int last_frags;
+    static int last_time;
+    int frags_remaining = 0;
+    int time_remaining = 0;
+
+    if (ESF_GR_F(0x50) != allowspectator.value)               // [OK] ESF
+    {
+        MESSAGE_BEGIN(MSG_ALL, gmsgAllowSpec);
+            WRITE_BYTE((int)allowspectator.value);
+        MESSAGE_END();
+        ESF_GR_F(0x50) = allowspectator.value;
+    }
+    if (ESF_GR_F(0x54) != characterlimit.value)               // [OK] ESF: slot 0x38/4-2 = 12 da vtable
+    {
+        ((void (*)(CGameRules *, int))(*(void ***)this)[(0x38 / 4)])(this, 0);   // [?] assinatura/slot a conferir
+        ESF_GR_F(0x54) = characterlimit.value;
+    }
+
+    if (g_fGameOver)
+    {
+        int time = (int)CVAR_GET_FLOAT("mp_chattime");
+        if (time < 1)
+            CVAR_SET_STRING("mp_chattime", "1");
+        else if (time > MAX_INTERMISSION_TIME)
+            CVAR_SET_STRING("mp_chattime", UTIL_dtos1(MAX_INTERMISSION_TIME));
+
+        m_flIntermissionEndTime = g_flIntermissionStartTime + mp_chattime.value;
+        if (m_flIntermissionEndTime < gpGlobals->time)
+        {
+            if (m_iEndIntermissionButtonHit || ((g_flIntermissionStartTime + MAX_INTERMISSION_TIME) < gpGlobals->time))
+                ChangeLevel();
+        }
+        return;
+    }
+
+    float flTimeLimit = timelimit.value * 60;
+    float flFragLimit = fraglimit.value;
+    time_remaining = (int)(flTimeLimit ? (flTimeLimit - gpGlobals->time) : 0);
+
+    if (flTimeLimit != 0 && gpGlobals->time >= flTimeLimit)
+    {
+        GoToIntermission();
+        return;
+    }
+    if (flFragLimit)
+    {
+        int bestfrags = 9999;
+        for (int i = 1; i <= gpGlobals->maxClients; i++)
+        {
+            CBaseEntity *pPlayer = UTIL_PlayerByIndex(i);
+            if (pPlayer && pPlayer->pev->frags >= flFragLimit)
+            {
+                GoToIntermission();
+                return;
+            }
+            if (pPlayer)
+            {
+                int remain = flFragLimit - pPlayer->pev->frags;
+                if (remain < bestfrags) bestfrags = remain;
+            }
+        }
+        frags_remaining = bestfrags;
+    }
+    if (frags_remaining != last_frags)
+        g_engfuncs.pfnCvar_DirectSet(&fragsleft, UTIL_VarArgs("%i", frags_remaining));
+    if (timeleft.value != last_time)
+        g_engfuncs.pfnCvar_DirectSet(&timeleft, UTIL_VarArgs("%i", time_remaining));
+    last_frags = frags_remaining;
+    last_time = time_remaining;
+}
