@@ -312,3 +312,108 @@ void CHalfLifeTeamplay::Think(void)
         }
     }
 }
+
+// ---- CHalfLifeTeamplay: ChangePlayerTeam, InitHUD, ClientCommand (ESF) [OK] vs decomp 0x128360/0x1281a0/0x127dd0 ----
+extern int gmsgTeamInfo, gmsgScoreInfo, gmsgTeamNames, gmsgVGUIMenu;
+#define ESF_PL_INT(p, off)   (*(int *)((char *)(p) + (off)))
+#define ESF_PL_FLOAT(p, off) (*(float *)((char *)(p) + (off)))
+#define ESF_GR_INT(off)      (*(int *)((char *)this + (off)))
+
+void CHalfLifeTeamplay::ChangePlayerTeam(CBasePlayer *pPlayer, const char *pTeamName, int bKill, int bGib)
+{
+    int clientIndex = pPlayer->entindex();
+    if (bKill)
+    {
+        ESF_GR_INT(0x58) = 1;                                 // [?] flag "morte por troca de time" lida em PlayerKilled
+        pPlayer->TakeDamage(VARS(INDEXENT(0)), VARS(INDEXENT(0)), 900, bGib ? DMG_ALWAYSGIB : DMG_NEVERGIB);   // 0x2000/0x1000
+        ESF_GR_INT(0x58) = 0;
+        ESF_GR_INT(0x5c) = 0;
+    }
+    strncpy(pPlayer->m_szTeamName, pTeamName, TEAM_NAME_LENGTH);
+    g_engfuncs.pfnSetClientKeyValue(clientIndex, g_engfuncs.pfnGetInfoKeyBuffer(pPlayer->edict()), "team", pPlayer->m_szTeamName);
+    pPlayer->pev->team = (strcmp(pTeamName, "Evil") == 0) ? 1 : 2;   // [OK] ESF: 1 = Evil, 2 = Good
+
+    MESSAGE_BEGIN(MSG_ALL, gmsgTeamInfo);
+        WRITE_BYTE(clientIndex);
+        WRITE_STRING(pPlayer->m_szTeamName);
+    MESSAGE_END();
+    MESSAGE_BEGIN(MSG_ALL, gmsgScoreInfo);
+        WRITE_BYTE(clientIndex);
+        WRITE_SHORT((int)pPlayer->pev->frags);
+        WRITE_SHORT(ESF_PL_INT(pPlayer, 0x984));              // deaths
+        WRITE_SHORT(ESF_PL_INT(pPlayer, 0x738));
+        WRITE_SHORT(pPlayer->pev->team);
+        WRITE_SHORT(g_pGameRules->GetTeamIndex(pPlayer->m_szTeamName) + 1);
+    MESSAGE_END();
+}
+
+void CHalfLifeTeamplay::InitHUD(CBasePlayer *pPlayer)
+{
+    CHalfLifeMultiplay::InitHUD(pPlayer);
+
+    MESSAGE_BEGIN(MSG_ONE, gmsgTeamNames, NULL, pPlayer->edict());
+        WRITE_BYTE(2);                                        // [OK] ESF: só 2 times fixos
+        WRITE_STRING("Good");
+        WRITE_STRING("Evil");
+    MESSAGE_END();
+    MESSAGE_BEGIN(MSG_ONE, gmsgVGUIMenu, NULL, pPlayer->edict());
+        WRITE_BYTE(2);                                        // menu de times
+    MESSAGE_END();
+
+    RecountTeams(FALSE);
+    for (int i = 1; i <= gpGlobals->maxClients; i++)
+    {
+        CBaseEntity *plr = UTIL_PlayerByIndex(i);
+        if (plr)
+        {
+            MESSAGE_BEGIN(MSG_ONE, gmsgTeamInfo, NULL, pPlayer->edict());
+                WRITE_BYTE(plr->entindex());
+                WRITE_STRING(plr->TeamID());
+            MESSAGE_END();
+        }
+    }
+}
+
+BOOL CHalfLifeTeamplay::ClientCommand(CBasePlayer *pPlayer, const char *pcmd)
+{
+    if (g_VoiceGameMgr.ClientCommand(pPlayer, pcmd))
+        return TRUE;
+
+    if (FStrEq(pcmd, "menuselect"))
+    {
+        CMD_ARGC();                                           // [OK] ESF: ignorado
+        return TRUE;
+    }
+    if (!FStrEq(pcmd, "jointeam"))
+        return CHalfLifeMultiplay::ClientCommand(pPlayer, pcmd);
+
+    // não troca de time durante power struggle / block struggle  [?] nomes dos campos
+    if (ESF_PL_INT(pPlayer, 0x4c4) || ESF_PL_INT(pPlayer, 0x3e4) || ESF_PL_INT(pPlayer, 0x354) ||
+        ESF_PL_INT(pPlayer, 0x35c) || ESF_PL_INT(pPlayer, 0x358))
+        return TRUE;
+
+    typedef void (*JoinTeamFn)(CGameRules *, CBasePlayer *, const char *);   // [?] vtable +0x114 (ESF: ChangePlayerTeam simplificado)
+    JoinTeamFn JoinTeam = (JoinTeamFn)(*(void ***)this)[0x114 / 4];
+
+    BOOL bBot = FALSE;                                        // bot: usa o time salvo em +0x1060
+    if (!ESF_PL_INT(pPlayer, 0) /* [?] vfunc +0xa4 */)
+        bBot = (pPlayer->pev->flags & FL_FAKECLIENT) != 0;
+    int team;
+    if (bBot)
+        team = *(short *)((char *)pPlayer + 0x1060);
+    else
+    {
+        if (ESF_PL_FLOAT(pPlayer, 0x79c) + 10.0 >= gpGlobals->time && pPlayer->pev->team)
+            return CHalfLifeMultiplay::ClientCommand(pPlayer, pcmd);   // limite de 10 s entre trocas
+        team = atoi(CMD_ARGV(1));
+    }
+    switch (team)
+    {
+    case 1: JoinTeam(this, pPlayer, "Good"); break;
+    case 2: JoinTeam(this, pPlayer, "Evil"); break;
+    case 5: JoinTeam(this, pPlayer, WeakestTeam(pPlayer)); break;   // auto-assign
+    default: break;
+    }
+    ESF_PL_FLOAT(pPlayer, 0x79c) = gpGlobals->time;
+    return TRUE;
+}

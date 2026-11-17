@@ -35,9 +35,6 @@ CGib::SpawnStickyGibs
 CGib::StickyGibTouch
 CGibShooter::ShootThink
 CGraph::ShowNodeConnections
-CHalfLifeTeamplay::ChangePlayerTeam
-CHalfLifeTeamplay::ClientCommand
-CHalfLifeTeamplay::InitHUD
 CLightning::Spawn
 CMomentaryDoor::Use
 CNodeViewer::Spawn
