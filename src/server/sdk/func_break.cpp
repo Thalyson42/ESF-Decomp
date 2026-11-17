@@ -458,7 +458,7 @@ int CBreakable :: TakeDamage( entvars_t* pevInflictor, entvars_t* pevAttacker, f
 	return 1;
 }
 
-// [SDK NÃO CONFERIDA] CBreakable::Die
+// [SDK score 0.67] CBreakable::Die
 void CBreakable::Die( void )
 {
 	Vector vecSpot;// shard origin

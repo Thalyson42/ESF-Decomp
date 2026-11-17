@@ -99,3 +99,136 @@ void CGib::BounceGibTouch(CBaseEntity *pOther)
     }
     pev->velocity = pev->velocity * 0.8;                      // [OK] ESF
 }
+
+// CBaseMonster::TakeDamage = SDK + flag de dano 0x4000000 (sem empurrão). [OK] vs decomp 0xa5810
+int CBaseMonster :: TakeDamage( entvars_t *pevInflictor, entvars_t *pevAttacker, float flDamage, int bitsDamageType )
+{
+	float	flTake;
+	Vector	vecDir;
+
+	if (!pev->takedamage)
+		return 0;
+
+	if ( !IsAlive() )
+	{
+		return DeadTakeDamage( pevInflictor, pevAttacker, flDamage, bitsDamageType );
+	}
+
+	if ( pev->deadflag == DEAD_NO )
+	{
+		// no pain sound during death animation.
+		PainSound();// "Ouch!"
+	}
+
+	//!!!LATER - make armor consideration here!
+	flTake = flDamage;
+
+	// set damage type sustained
+	m_bitsDamageType |= bitsDamageType;
+
+	// grab the vector of the incoming attack. ( pretend that the inflictor is a little lower than it really is, so the body will tend to fly upward a bit).
+	vecDir = Vector( 0, 0, 0 );
+	if (!FNullEnt( pevInflictor ))
+	{
+		CBaseEntity *pInflictor = CBaseEntity :: Instance( pevInflictor );
+		if (pInflictor)
+		{
+			vecDir = ( pInflictor->Center() - Vector ( 0, 0, 10 ) - Center() ).Normalize();
+			vecDir = g_vecAttackDir = vecDir.Normalize();
+		}
+	}
+
+	// add to the damage total for clients, which will be sent as a single
+	// message at the end of the frame
+	// todo: remove after combining shotgun blasts?
+	if ( IsPlayer() )
+	{
+		if ( pevInflictor )
+			pev->dmg_inflictor = ENT(pevInflictor);
+
+		pev->dmg_take += flTake;
+
+		// check for godmode or invincibility
+		if ( pev->flags & FL_GODMODE )
+		{
+			return 0;
+		}
+	}
+
+	// if this is a player, move him around!
+	if ( ( !FNullEnt( pevInflictor ) ) && (pev->movetype == MOVETYPE_WALK) && (!pevAttacker || pevAttacker->solid != SOLID_TRIGGER) && !(bitsDamageType & 0x4000000) )   // [OK] ESF: bit 0x4000000 = dano sem empurrão
+	{
+		pev->velocity = pev->velocity + vecDir * -DamageForce( flDamage );
+	}
+
+	// do the damage
+	pev->health -= flTake;
+
+	
+	// HACKHACK Don't kill monsters in a script.  Let them break their scripts first
+	if ( m_MonsterState == MONSTERSTATE_SCRIPT )
+	{
+		SetConditions( bits_COND_LIGHT_DAMAGE );
+		return 0;
+	}
+
+	if ( pev->health <= 0 )
+	{
+		g_pevLastInflictor = pevInflictor;
+
+		if ( bitsDamageType & DMG_ALWAYSGIB )
+		{
+			Killed( pevAttacker, GIB_ALWAYS );
+		}
+		else if ( bitsDamageType & DMG_NEVERGIB )
+		{
+			Killed( pevAttacker, GIB_NEVER );
+		}
+		else
+		{
+			Killed( pevAttacker, GIB_NORMAL );
+		}
+
+		g_pevLastInflictor = NULL;
+
+		return 0;
+	}
+
+	// react to the damage (get mad)
+	if ( (pev->flags & FL_MONSTER) && !FNullEnt(pevAttacker) )
+	{
+		if ( pevAttacker->flags & (FL_MONSTER | FL_CLIENT) )
+		{// only if the attack was a monster or client!
+			
+			// enemy's last known position is somewhere down the vector that the attack came from.
+			if (pevInflictor)
+			{
+				if (m_hEnemy == NULL || pevInflictor == m_hEnemy->pev || !HasConditions(bits_COND_SEE_ENEMY))
+				{
+					m_vecEnemyLKP = pevInflictor->origin;
+				}
+			}
+			else
+			{
+				m_vecEnemyLKP = pev->origin + ( g_vecAttackDir * 64 ); 
+			}
+
+			MakeIdealYaw( m_vecEnemyLKP );
+
+			// add pain to the conditions 
+			// !!!HACKHACK - fudged for now. Do we want to have a virtual function to determine what is light and 
+			// heavy damage per monster class?
+			if ( flDamage > 0 )
+			{
+				SetConditions(bits_COND_LIGHT_DAMAGE);
+			}
+
+			if ( flDamage >= 20 )
+			{
+				SetConditions(bits_COND_HEAVY_DAMAGE);
+			}
+		}
+	}
+
+	return 1;
+}
