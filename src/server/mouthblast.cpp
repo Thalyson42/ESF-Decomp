@@ -24,7 +24,7 @@ void CMouthblast::Spawn(void)
     m_iDmgPerCharge = 4;
     m_flChargeSpeedMult = 0.5f;
     strcpy(m_szWeaponName, "mouthblast");  // [OK] +0xf4
-    f_1f4 = 0.2f;
+    f_1f4 = 0.25f;
     f_1fc = 3;
     f_1f8 = 3;
     FallInit();

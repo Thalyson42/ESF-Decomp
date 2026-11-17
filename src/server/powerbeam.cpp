@@ -23,7 +23,7 @@ void CPowerBeam::Spawn(void)
     m_iKiCost = 20;
     m_iDmgPerCharge = 4;
     strcpy(m_szWeaponName, "powerbeam");  // [OK] +0xf4
-    f_1f4 = 0.1f;
+    f_1f4 = 0.12f;
     f_1fc = 4;
     f_1f8 = 1;
     FallInit();

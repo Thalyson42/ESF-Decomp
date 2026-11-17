@@ -21,9 +21,9 @@ spawn = ['    Precache();                         // [OK] vtable slot 1',
          '    m_iDefaultAmmo = 0;                 // [OK] +0xc0', '    m_iClip = -1;                       // [OK] +0xb0']
 for off, nm in fld.items():
     if off in vals: spawn.append(f'    {nm} = {vals[off]};')
-if 240 in vals: spawn.append(f'    m_flChargeSpeedMult = {vals[240]}f;')
+if 240 in vals: spawn.append(f'    m_flChargeSpeedMult = {float(vals[240])!r}f;')
 spawn.append(f'    strcpy(m_szWeaponName, "{name}");  // [OK] +0xf4')
-if 500 in vals: spawn += [f'    f_1f4 = {vals[500]:.1f}f;', f'    f_1fc = {vals[508]};', f'    f_1f8 = {vals[504]};']
+if 500 in vals: spawn += [f'    f_1f4 = {vals[500]:.4g}f;', f'    f_1fc = {vals[508]};', f'    f_1f8 = {vals[504]};']
 spawn.append('    FallInit();')
 # ---- Precache ----
 pc = rd('Precache'); pre = []
