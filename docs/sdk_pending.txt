@@ -41,4 +41,3 @@ CTestEffect::TestThink
 CVoiceGameMgr::ClientCommand
 CVoiceGameMgr::ClientConnected
 CVoiceGameMgr::UpdateMasks
-CWorld::Precache

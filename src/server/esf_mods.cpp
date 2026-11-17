@@ -232,3 +232,201 @@ int CBaseMonster :: TakeDamage( entvars_t *pevInflictor, entvars_t *pevAttacker,
 
 	return 1;
 }
+
+// CWorld::Precache = SDK com stepsize 8, sem sons extras, + modelos bodyparts. [OK] vs decomp 0x13a2e0
+void CWorld :: Precache( void )
+{
+	g_pLastSpawn = NULL;
+	
+	CVAR_SET_STRING("sv_gravity", "800"); // 67ft/sec
+	CVAR_SET_STRING("sv_stepsize", "8"  /* [OK] ESF: SDK usa 18 */);
+
+	CVAR_SET_STRING("room_type", "0");// clear DSP
+
+	// Set up game rules
+	if (g_pGameRules)
+	{
+		delete g_pGameRules;
+	}
+
+	g_pGameRules = InstallGameRules( );
+
+	//!!!UNDONE why is there so much Spawn code in the Precache function? I'll just keep it here 
+
+	///!!!LATER - do we want a sound ent in deathmatch? (sjb)
+	//pSoundEnt = CBaseEntity::Create( "soundent", g_vecZero, g_vecZero, edict() );
+	pSoundEnt = GetClassPtr( ( CSoundEnt *)NULL );
+	pSoundEnt->Spawn();
+
+	if ( !pSoundEnt )
+	{
+		ALERT ( at_console, "**COULD NOT CREATE SOUNDENT**\n" );
+	}
+
+	InitBodyQue();
+	
+// init sentence group playback stuff from sentences.txt.
+// ok to call this multiple times, calls after first are ignored.
+
+	SENTENCEG_Init();
+
+// init texture type array from materials.txt
+
+	TEXTURETYPE_Init();
+
+
+// the area based ambient sounds MUST be the first precache_sounds
+
+// player precaches     
+	W_Precache ();									// get weapon precaches
+
+	ClientPrecache();
+
+// sounds used from C physics code
+	PRECACHE_SOUND("common/null.wav");				// clears sound channels
+
+
+	
+	g_Language = (int)CVAR_GET_FLOAT( "sv_language" );
+	if ( g_Language == LANGUAGE_GERMAN )
+	{
+		PRECACHE_MODEL( "models/germangibs.mdl" );
+	}
+	else
+	{
+		PRECACHE_MODEL( "models/hgibs.mdl" );
+		PRECACHE_MODEL( "models/agibs.mdl" );
+	}
+
+//
+// Setup light animation tables. 'a' is total darkness, 'z' is maxbright.
+//
+
+	// 0 normal
+	// [OK] ESF: cortes dos personagens (bodyparts)
+	PRECACHE_MODEL( "models/bodyparts/cell/slice.mdl" );
+	PRECACHE_MODEL( "models/bodyparts/cell2/slice.mdl" );
+	PRECACHE_MODEL( "models/bodyparts/evilbuu/slice.mdl" );
+	PRECACHE_MODEL( "models/bodyparts/fatbuu/slice.mdl" );
+	PRECACHE_MODEL( "models/bodyparts/frieza/slice.mdl" );
+	PRECACHE_MODEL( "models/bodyparts/frieza2/slice.mdl" );
+	PRECACHE_MODEL( "models/bodyparts/gohan/slice.mdl" );
+	PRECACHE_MODEL( "models/bodyparts/goku/slice.mdl" );
+	PRECACHE_MODEL( "models/bodyparts/krillin/slice.mdl" );
+	PRECACHE_MODEL( "models/bodyparts/krillin2/slice.mdl" );
+	PRECACHE_MODEL( "models/bodyparts/piccolo/slice.mdl" );
+	PRECACHE_MODEL( "models/bodyparts/piccolo2/slice.mdl" );
+	PRECACHE_MODEL( "models/bodyparts/ssjgohan/slice.mdl" );
+	PRECACHE_MODEL( "models/bodyparts/ssjgoku/slice.mdl" );
+	PRECACHE_MODEL( "models/bodyparts/ssjtrunks/slice.mdl" );
+	PRECACHE_MODEL( "models/bodyparts/ssjvegeta/slice.mdl" );
+	PRECACHE_MODEL( "models/bodyparts/trunks/slice.mdl" );
+	PRECACHE_MODEL( "models/bodyparts/vegeta/slice.mdl" );
+
+	LIGHT_STYLE(0, "m");
+	
+	// 1 FLICKER (first variety)
+	LIGHT_STYLE(1, "mmnmmommommnonmmonqnmmo");
+	
+	// 2 SLOW STRONG PULSE
+	LIGHT_STYLE(2, "abcdefghijklmnopqrstuvwxyzyxwvutsrqponmlkjihgfedcba");
+	
+	// 3 CANDLE (first variety)
+	LIGHT_STYLE(3, "mmmmmaaaaammmmmaaaaaabcdefgabcdefg");
+	
+	// 4 FAST STROBE
+	LIGHT_STYLE(4, "mamamamamama");
+	
+	// 5 GENTLE PULSE 1
+	LIGHT_STYLE(5,"jklmnopqrstuvwxyzyxwvutsrqponmlkj");
+	
+	// 6 FLICKER (second variety)
+	LIGHT_STYLE(6, "nmonqnmomnmomomno");
+	
+	// 7 CANDLE (second variety)
+	LIGHT_STYLE(7, "mmmaaaabcdefgmmmmaaaammmaamm");
+	
+	// 8 CANDLE (third variety)
+	LIGHT_STYLE(8, "mmmaaammmaaammmabcdefaaaammmmabcdefmmmaaaa");
+	
+	// 9 SLOW STROBE (fourth variety)
+	LIGHT_STYLE(9, "aaaaaaaazzzzzzzz");
+	
+	// 10 FLUORESCENT FLICKER
+	LIGHT_STYLE(10, "mmamammmmammamamaaamammma");
+
+	// 11 SLOW PULSE NOT FADE TO BLACK
+	LIGHT_STYLE(11, "abcdefghijklmnopqrrqponmlkjihgfedcba");
+	
+	// 12 UNDERWATER LIGHT MUTATION
+	// this light only distorts the lightmap - no contribution
+	// is made to the brightness of affected surfaces
+	LIGHT_STYLE(12, "mmnnmmnnnmmnn");
+	
+	// styles 32-62 are assigned by the light program for switchable lights
+
+	// 63 testing
+	LIGHT_STYLE(63, "a");
+
+	for ( int i = 0; i < ARRAYSIZE(gDecals); i++ )
+		gDecals[i].index = DECAL_INDEX( gDecals[i].name );
+
+// init the WorldGraph.
+	WorldGraph.InitGraph();
+
+// make sure the .NOD file is newer than the .BSP file.
+	if ( !WorldGraph.CheckNODFile ( ( char * )STRING( gpGlobals->mapname ) ) )
+	{// NOD file is not present, or is older than the BSP file.
+		WorldGraph.AllocNodes ();
+	}
+	else
+	{// Load the node graph for this level
+		if ( !WorldGraph.FLoadGraph ( (char *)STRING( gpGlobals->mapname ) ) )
+		{// couldn't load, so alloc and prepare to build a graph.
+			ALERT ( at_console, "*Error opening .NOD file\n" );
+			WorldGraph.AllocNodes ();
+		}
+		else
+		{
+			ALERT ( at_console, "\n*Graph Loaded!\n" );
+		}
+	}
+
+	if ( pev->speed > 0 )
+		CVAR_SET_FLOAT( "sv_zmax", pev->speed );
+	else
+		CVAR_SET_FLOAT( "sv_zmax", 4096 );
+
+	if ( pev->netname )
+	{
+		ALERT( at_aiconsole, "Chapter title: %s\n", STRING(pev->netname) );
+		CBaseEntity *pEntity = CBaseEntity::Create( "env_message", g_vecZero, g_vecZero, NULL );
+		if ( pEntity )
+		{
+			pEntity->SetThink( &CBaseEntity::SUB_CallUseToggle );
+			pEntity->pev->message = pev->netname;
+			pev->netname = 0;
+			pEntity->pev->nextthink = gpGlobals->time + 0.3;
+			pEntity->pev->spawnflags = SF_MESSAGE_ONCE;
+		}
+	}
+
+	if ( pev->spawnflags & SF_WORLD_DARK )
+		CVAR_SET_FLOAT( "v_dark", 1.0 );
+	else
+		CVAR_SET_FLOAT( "v_dark", 0.0 );
+
+	if ( pev->spawnflags & SF_WORLD_TITLE )
+		gDisplayTitle = TRUE;		// display the game title if this key is set
+	else
+		gDisplayTitle = FALSE;
+
+	if ( pev->spawnflags & SF_WORLD_FORCETEAM )
+	{
+		CVAR_SET_FLOAT( "mp_defaultteam", 1 );
+	}
+	else
+	{
+		CVAR_SET_FLOAT( "mp_defaultteam", 0 );
+	}
+}

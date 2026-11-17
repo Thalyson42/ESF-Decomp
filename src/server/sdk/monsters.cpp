@@ -686,7 +686,7 @@ BOOL CBaseMonster :: FCanCheckAttacks ( void )
 	return FALSE;
 }
 
-// [SDK NÃO CONFERIDA] CBaseMonster::CheckEnemy
+// [SDK score 0.67] CBaseMonster::CheckEnemy
 int CBaseMonster :: CheckEnemy ( CBaseEntity *pEnemy )
 {
 	float	flDistToEnemy;
