@@ -40,7 +40,7 @@ t=t[:k]+'\n\tfloat f_1f4; int f_1f8; int f_1fc;  /* [?] campos ESF da arma */ vi
 open(w,'w').write(t)
 c=sys.argv[2]; t=open(c).read()
 k=t.index('virtual void Touch(')
-t=t[:k]+'virtual class CBaseEntity *vfunc_12c(void) { return 0; } virtual int vfunc_item_28(void) { return 0; } virtual int vfunc_104(int) { return 0; } virtual int vfunc_fc(void) { return 0; } virtual int vfunc_item_18(void) { return 0; }   // [?]\n\t'+t[k:]
+t=t[:k]+'virtual class CBaseEntity *vfunc_12c(void) { return 0; } virtual int vfunc_item_28(void) { return 0; } virtual int vfunc_104(int) { return 0; } virtual int vfunc_fc(void) { return 0; } virtual void vfunc_1fc(void) {} virtual int vfunc_item_18(void) { return 0; }   // [?]\n\t'+t[k:]
 open(c,'w').write(t)
 PY
   python3 - "$B/dlls/gamerules.h" <<'PY'
