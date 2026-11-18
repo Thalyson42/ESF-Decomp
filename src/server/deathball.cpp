@@ -14,10 +14,10 @@ void CDeathBall::Spawn(void)
     m_iId = 17;                      // [OK] +0x88
     m_iDefaultAmmo = 0;              // [OK] +0xc0
     m_iClip = -1;                    // [OK] +0xb0
-    f_0c8 = 45;                      // [OK] carga maxima
-    f_0d0 = 20;
+    m_iMaxCharge = 45;                      // [OK] carga maxima
+    m_iKiCost = 20;
     f_0cc = 0.5f;
-    strcpy(m_szWeaponName, "deathball");  // [OK] +0xd4
+    strncpy(m_szWeaponName, "deathball", 16);  // [OK] +0xd4
     FallInit();
 }
 
@@ -73,7 +73,7 @@ void CDeathBall::GrowChargeSprite(void)
 
 void CDeathBall::EnableChargeSprite(void)
 {
-    vfunc_174();         // [?] slot 0x174 desconhecido
+    GrowChargeSprite();   // [OK] +0x174         // [?] slot 0x174 desconhecido
     ((CSprite *)f_1d4)->TurnOn();
 }
 

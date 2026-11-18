@@ -14,10 +14,10 @@ void CSpecialBeamCannon::Spawn(void)
     m_iId = 11;                      // [OK] +0x88
     m_iDefaultAmmo = 0;              // [OK] +0xc0
     m_iClip = -1;                    // [OK] +0xb0
-    f_0c8 = 21;                      // [OK]
-    f_0d0 = 20;
+    m_iMaxCharge = 21;                      // [OK]
+    m_iKiCost = 20;
     f_0cc = 0.5f;
-    strncpy(m_szWeaponName, "specialbeamcannon", 16);  // [OK] 4 dwords copiados para +0xd4
+    strncpy(m_szWeaponName, "specialbeamcannon", 16);  // [OK] +0xd4
     FallInit();
 }
 
