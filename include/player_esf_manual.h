@@ -2,6 +2,7 @@
 #pragma once
 #include "swoop.h"
 #define ESF_PLAYER_EXTRA \
+    int f_76c;                                  /* [?] +0x76c (aura/carregando) */ \
     CSwoop m_Swoop;                             /* [OK] +0x504 */ \
     void  RemoveSpecialModes(void); void OnDeathAnim(void); void StopAniTrigger(int iTrigger); \
     void  StopPowerUp(void); void RemoveWallJump(void); BOOL CanMelee(CBasePlayer *pOther); \
