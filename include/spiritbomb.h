@@ -1,13 +1,7 @@
 // spiritbomb.h -- CSpiritBomb (Goku). RECUPERADO de decomp_raw/CSpiritBomb. Derivada de CBasePlayerWeapon.
 #pragma once
-class CSpiritBombAttack : public CBaseEntity   // [?] assinaturas (ver decomp_raw/CSpiritBombAttack)
-{
-public:
-    static CSpiritBombAttack *CreateSpiritBomb(CBasePlayer *pPlayer, Vector *pvecPos, short sSprite);
-    static void ShootSpiritBomb(CSpiritBombAttack *pBomb, Vector *pvecVel, int iDamage);                       // modo 1
-    static void ShootSpiritBomb(CBasePlayer *pPlayer, Vector *pvecStart, Vector *pvecVel, int iDamage, float flScale, short sSprite);   // modo 2
-    void Grow(void);
-};
+#include "explodingattack.h"
+#include "spiritbombattack.h"
 class CSpiritBomb : public CBasePlayerWeapon
 {
 public:

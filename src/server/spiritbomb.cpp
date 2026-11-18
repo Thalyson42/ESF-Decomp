@@ -133,7 +133,7 @@ void CSpiritBomb::PrimaryAttack(void)
         m_fShoot1 = 1;
         m_pPlayer->m_flSpeedMult = 0;                             // [OK] +0x754
         m_iCharge = 0;
-        m_pBomb = CSpiritBombAttack::CreateSpiritBomb(m_pPlayer, &end, m_usSprite);   // [OK]
+        m_pBomb = CSpiritBombAttack::CreateSpiritBomb(m_pPlayer->pev, end, m_usSprite);   // [OK]
         MESSAGE_BEGIN(MSG_ALL, gmsgAddEffect, m_pPlayer->pev->origin);   // [OK] tipo 2
             WRITE_BYTE(1);
             WRITE_SHORT(ENTINDEX(m_pBomb->edict()));
@@ -214,7 +214,7 @@ void CSpiritBomb::Shoot1(void)
     MESSAGE_END();
     if (m_iCharge < 30)                                           // [OK] carga minima 30: senao cancela
     {
-        m_pBomb->vfunc_1fc();                                     // [?] remove a bola
+        m_pBomb->Remove();                                        // [OK] slot 125 = CMagicAttack::Remove
         m_pBomb = NULL;
         EMIT_SOUND_DYN(ENT(m_pPlayer->pev), CHAN_VOICE, "common/null.wav", 1.0, 0.8, 0, 100);
         return;
@@ -229,7 +229,7 @@ void CSpiritBomb::Shoot1(void)
     Vector dir = tr.vecEndPos - m_pBomb->pev->origin;             // [?] ponto de origem da subtracao
     m_pPlayer->SetAnimation((PLAYER_ANIM)5);
     Vector vel = dir.Normalize() * 1000;                          // [OK] 1000
-    CSpiritBombAttack::ShootSpiritBomb(m_pBomb, &vel, m_iCharge * 3);
+    m_pBomb->ShootSpiritBomb(vel, m_iCharge * 3);
 }
 
 void CSpiritBomb::Shoot2(void)
@@ -254,5 +254,5 @@ void CSpiritBomb::Shoot2(void)
     m_pPlayer->SetAnimation((PLAYER_ANIM)6);
     Vector vel = fwd.Normalize() * 1000;                          // [OK]
     float flScale = (float)(m_iCharge * 0.25 / 45.0);             // [OK]
-    CSpiritBombAttack::ShootSpiritBomb(m_pPlayer, &start, &vel, m_iCharge * 3, flScale, m_usSprite);
+    CSpiritBombAttack::ShootSpiritBomb(m_pPlayer->pev, start, vel, m_iCharge * 3, flScale, m_usSprite);
 }
