@@ -10,7 +10,7 @@ public:
     void Spawn(void);
     void Precache(void);
     int  GetItemInfo(ItemInfo *p);
-    int  iItemSlot(void) { return 2; }
+    int  iItemSlot(void) { return 3; }   // [OK]
     BOOL Deploy(void);
     void PrimaryAttack(void);
     void SecondaryAttack(void);
