@@ -3,6 +3,7 @@
 #include "util.h"
 #include "cbase.h"
 #include "player.h"
+#include "weapons.h"
 #include "tasks.h"
 
 #define TASK_DONE() (m_iState = 2)
@@ -82,4 +83,64 @@ void CComboTask::TaskThink(void)
         m_pBot->DeleteCombos();
     }
     TASK_DONE();
+}
+
+// ---- CIdleTask / CRecoverHPTask / CBlindedTask ----
+extern char *g_pBotManager;   // [?] &BotManager; byte +0xd4b (3403) = bots congelados/parados
+
+void CIdleTask::TaskThink(void)
+{
+    BOOL fStay = (g_pBotManager && g_pBotManager[0xd4b]) || BOTF(m_pBot, int, 0x364);   // [OK]
+    if (!fStay)
+    {
+        unsigned int uMode = BOTF(m_pBot, int, 0x49c) - 9;                 // [OK] 9 ou 10
+        if (uMode <= 1 || (BOT_P3E4(m_pBot) == 4 && BOT_P37C(m_pBot)))
+            fStay = TRUE;
+        if (!fStay)
+        {
+            TASK_DONE();
+            return;
+        }
+    }
+    m_pBot->ResetMoveSpeed();
+}
+
+void CRecoverHPTask::TaskThink(void)
+{
+    if ((int)m_pBot->pev->fuser4 > 199 || (int)*(float *)((char *)m_pBot->pev + 0x160) <= 20)   // [OK] +0x260 ki; [?] +0x160
+    {
+        if ((int)m_pBot->pev->fuser4 > 24)
+        {
+            CBasePlayerItem *pItem = BOTF(m_pBot, CBasePlayerItem *, 0x968);   // [OK] item ativo
+            if (pItem && pItem->m_iId != 29)                                   // [OK] 29 = regeneration
+                m_pBot->SelectItem("weapon_regeneration");
+            *(int *)((char *)m_pPev + 0x200) |= 1;                             // [?] IN_ATTACK
+            m_pBot->ResetMoveSpeed();
+            return;
+        }
+    }
+    TASK_DONE();
+}
+
+void CBlindedTask::TaskThink(void)
+{
+    if (!BOTF(m_pBot, int, 0x344))          // [OK] nao esta mais cego
+    {
+        TASK_DONE();
+        return;
+    }
+    m_pBot->SetMoveDir(8);                  // [OK]
+    switch (RANDOM_LONG(0, 2))
+    {
+    case 0: m_pBot->SetMoveDir(2); break;   // [OK]
+    case 1: m_pBot->SetMoveDir(4); break;
+    default: break;
+    }
+    if (RANDOM_LONG(1, 1000) > 39)          // [OK] 0x27
+        return;
+    if (BOTF(m_pBot, char, 0x9fc) <= 2)
+    {
+        if (RANDOM_LONG(1, 100) < *(short *)((char *)BOTF(m_pBot, void *, 0xa04) + 0x26))   // [?] chance de teleporte da habilidade
+            m_pBot->Teleport();
+    }
 }
