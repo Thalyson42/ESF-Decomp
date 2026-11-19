@@ -822,3 +822,103 @@ void CShootCandyTask::TaskThink(void)
     if (TASKF(float, 0x28) - gpGlobals->time <= 0.75)               // [OK] sem doce e quase sem tempo
         TASK_DONE();
 }
+
+// ---- CBeamJumpTask ----
+extern entvars_t *UTIL_GetLastAttackFromPlayer(CBasePlayer *pPlayer);   // [?] funcao livre: ultimo ataque lancado pelo jogador
+extern BOOL IsNull(entvars_t *pev);                                      // [?] sobrecarga
+
+#define BEAMJUMP_ACTIVE(task) (BOTF((task)->m_pBot, int, 0x33c) && *(int *)((char *)&(task)->m_pEdict->v + 0x108) == 15)   // [OK] edict+0x188
+
+int CBeamJumpTask::GetBotSenseChecks(void)
+{
+    if (BEAMJUMP_ACTIVE(this))
+        return 0;                                    // [OK] em beam jump nao sente nada
+    return 15;
+}
+
+BOOL CBeamJumpTask::ReactOnDanger(danger_info_s *pDanger)
+{
+    if (!BEAMJUMP_ACTIVE(this) && pDanger->m_iDanger > 159)
+    {
+        if (BOTF(m_pBot, int, 0x6d0) <= 0)
+            m_pEdict->v.button |= 0x800;
+        else if (*(int *)((char *)&m_pEdict->v + 0x20c) == 7)    // [?] classe 7 = espada
+            m_pBot->SelectItem("weapon_sword");
+        else
+            m_pBot->SelectItem("weapon_melee");
+        return TRUE;
+    }
+    return FALSE;
+}
+
+void CBeamJumpTask::TaskThink(void)
+{
+    m_pEdict->v.button |= IN_JUMP;                   // [OK]
+    if (!(TASKF(float, 0x18) > gpGlobals->time))     // [OK] acabou o tempo
+    {
+        TASK_DONE();
+        return;
+    }
+    BOOL fBeaming = BEAMJUMP_ACTIVE(this);
+    BOOL fContinue = FALSE;
+    if (!BOTF(m_pBot, int, 0x334))
+    {
+        if (fBeaming)
+            fContinue = TRUE;
+        else if (BOTF(m_pBot, int, 0x33c))
+            goto aim;                                // [OK] mesmo caminho do else
+    }
+    else
+    {
+aim:
+        if (!fBeaming)
+        {
+            // mira no ponto escolhido (bot+0xb24..0xb2c) e atira quando carregou
+            Vector vecAng = m_pBot->GetAimAngles(Vector(BOTF(m_pBot, float, 0xb24), BOTF(m_pBot, float, 0xb28), BOTF(m_pBot, float, 0xb2c)));
+            BOTF(m_pBot, float, 0xc10) = vecAng.x;
+            BOTF(m_pBot, float, 0xc14) = vecAng.y;
+            BOTF(m_pBot, float, 0xc18) = vecAng.z;
+            if (BOTF(m_pBot, int, 0x6d0) && TASKF(float, 0x20) + 0.2 >= gpGlobals->time)
+                m_pEdict->v.button |= IN_ATTACK;
+        }
+        fContinue = TRUE;
+    }
+    if (!fContinue)
+    {
+        TASK_DONE();
+        return;
+    }
+    entvars_t *pLast = UTIL_GetLastAttackFromPlayer(m_pBot);
+    if (IsNull(pLast) && gpGlobals->time + 0.4 > TASKF(float, 0x18))   // [OK] sem ataque e quase no fim
+    {
+        TASK_DONE();
+        return;
+    }
+    CBasePlayer *pEnemy = BOT_ENEMY(m_pBot);
+    if (fBeaming && pEnemy)
+    {
+        float flEnemyDist  = (pEnemy->pev->origin - m_pBot->pev->origin).Length();
+        float flAtkEnemy   = (pLast->origin - pEnemy->pev->origin).Length();
+        float flAtkBot     = (pLast->origin - m_pBot->pev->origin).Length();
+        if (flEnemyDist > 950.0f)
+        {
+            // ataque proprio ja longe do inimigo e longe de mim: segue; senao termina
+            if (pLast->dmg * 9.0 > flAtkEnemy && pLast->dmg * 11.0 < flAtkBot)
+            {
+                TASK_DONE();
+                return;
+            }
+        }
+    }
+    if (TASKF(float, 0x1c) > gpGlobals->time)
+        return;
+    if (fBeaming)
+    {
+        TASKF(float, 0x1c) = gpGlobals->time + 0.1;  // [OK]
+        if (!CheckForCollide(m_pEdict, 8, 50.0f))
+            return;
+    }
+    else
+        return;
+    TASK_DONE();
+}

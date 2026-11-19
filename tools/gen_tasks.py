@@ -15,6 +15,7 @@ def const_ret(path):
         if m: return int(m.group(1),0)
     return None
 EXTRA={'CShootScatterShotsTask':['CBaseEntity *GetFurthestScatterShot(void);'],
+       'CBeamJumpTask':[],
        'CKameTorpTask':['void ChargeKameTorps(void);','short CountTorps(void);','BOOL SetMoveAwayDir(void);']}   # funcoes proprias escritas a mao
 classes=sorted(d for d in os.listdir(RAW) if d.endswith('Task') and d!='CBaseTask')
 h=['// tasks.h -- GERADO por tools/gen_tasks.py: declaracoes das tarefas do bot (todas derivam de CBaseTask).','#pragma once','#include "bot.h"','']
