@@ -19,7 +19,7 @@ void CAscendTask::TaskThink(void)
 void CRecoverMeleeTask::TaskThink(void)
 {
     if (BOT_P37C(m_pBot) && (BOTF(m_pBot, int, 0x49c) == 6 || BOT_P3E4(m_pBot)))   // [OK]
-        *(int *)((char *)m_pPev + 0x200) |= 3;      // [?] botoes ATTACK|JUMP
+        m_pEdict->v.button |= 3;   // botoes ATTACK|JUMP
     else
         TASK_DONE();
 }
@@ -44,12 +44,12 @@ void CWallJumpTask::TaskThink(void)
         return;
     }
     m_pBot->ResetMoveSpeed();
-    *(int *)((char *)m_pPev + 0x200) |= 2;  // [?] IN_JUMP
+    m_pEdict->v.button |= 2;   // IN_JUMP
 }
 
 void CJumpOffGroundTask::TaskThink(void)
 {
-    *(int *)((char *)m_pPev + 0x200) |= 2;  // [?] IN_JUMP
+    m_pEdict->v.button |= 2;   // IN_JUMP
     m_pBot->ResetMoveSpeed();
     m_pBot->SetMoveDir(*(int *)((char *)this + 0x18));  // [OK] task+0x18 = direcao
     if (BOT_P3E4(m_pBot) == 5 && BOT_P37C(m_pBot))      // [OK] ainda no impulso
@@ -114,7 +114,7 @@ void CRecoverHPTask::TaskThink(void)
             CBasePlayerItem *pItem = BOTF(m_pBot, CBasePlayerItem *, 0x968);   // [OK] item ativo
             if (pItem && pItem->m_iId != 29)                                   // [OK] 29 = regeneration
                 m_pBot->SelectItem("weapon_regeneration");
-            *(int *)((char *)m_pPev + 0x200) |= 1;                             // [?] IN_ATTACK
+            m_pEdict->v.button |= 1;   // IN_ATTACK
             m_pBot->ResetMoveSpeed();
             return;
         }
@@ -152,8 +152,8 @@ void CShootLaser1Task::TaskThink(void)
 {
     CBasePlayer *pEnemy = TASKF(CBasePlayer *, 0x10);                  // [OK]
     if (pEnemy && TASKF(float, 0x18) >= gpGlobals->time               // [OK] fim da tarefa
-        && (double)BOTF(m_pBot, int, 0x24c) > *(float *)((char *)m_pPev + 0x1e0)   // [OK]
-        && 150.0 <= *(float *)((char *)m_pPev + 0x2e0))                // [OK]
+        && (double)BOTF(m_pBot, int, 0x24c) > m_pEdict->v.health   // [OK]
+        && 150.0 <= m_pEdict->v.fuser4)                // [OK]
     {
         if (!m_pBot->CanAttackPlayer(pEnemy))
             PEV_BYTE1A5(pEnemy->pev) &= 239;                           // [OK] desmarca o alvo
@@ -177,7 +177,7 @@ void CPowerStruggleTask::TaskThink(void)
         TASK_DONE();
         return;
     }
-    *(int *)((char *)m_pPev + 0x200) |= 1;                             // [?] IN_ATTACK (pressiona para vencer o struggle)
+    m_pEdict->v.button |= 1;   // IN_ATTACK (pressiona para vencer o struggle)
     if (!*((char *)BOTF(m_pBot, void *, 0xa00) + 0x3e))                // [OK] habilidade: usa turbo no struggle?
         return;
     if ((int)m_pBot->pev->fuser4 <= 20)
@@ -188,20 +188,20 @@ void CPowerStruggleTask::TaskThink(void)
 
 void CNormalJumpTask::TaskThink(void)
 {
-    *(int *)((char *)m_pPev + 0x200) |= 2;                             // [?] IN_JUMP
+    m_pEdict->v.button |= 2;   // IN_JUMP
     if (TASKF(float, 0x18) <= gpGlobals->time)                         // [OK] acabou o tempo de salto
     {
         TASK_DONE();
         return;
     }
-    if (0.0 > *(float *)((char *)m_pPev + 0xa8))                       // [?] pev+0xa8 < 0: ja descendo
+    if (0.0 > m_pEdict->v.velocity.z)                       // [OK] edict+0xa8 = v.velocity.z < 0: ja descendo
     {
         TASK_DONE();
         return;
     }
-    if (0.1 > *(float *)((char *)m_pPev + 0x19c))                      // [?]
+    if (0.1 > *(float *)((char *)&m_pEdict->v + 0x11c))                      // [?]
     {
-        if (*((unsigned char *)m_pPev + 0x225) & 2)
+        if (*((unsigned char *)&m_pEdict->v + 0x1a5) & 2)
             m_pBot->StopFly();
         else
         {
@@ -239,7 +239,7 @@ void CShootNonChargebleTask::TaskThink(void)
         if (!fReady)
         {
             if (fCanAttack)
-                *(int *)((char *)m_pPev + 0x200) |= BOTF(m_pBot, int, 0xb7c);   // [OK] botao do ataque escolhido
+                m_pEdict->v.button |= BOTF(m_pBot, int, 0xb7c);   // [OK] botao do ataque escolhido
             return;
         }
     }
@@ -253,7 +253,7 @@ extern BOOL EntIsInFieldOfView(CBaseEntity *pViewer, CBaseEntity *pTarget);   //
 void CKickEnemyTask::TaskThink(void)
 {
     CBasePlayer *pEnemy = BOT_ENEMY(m_pBot);
-    if (!pEnemy || *(int *)((char *)m_pEnemy->pev + 0x108) == 11 || !m_pBot->CanAttackPlayer(pEnemy))   // [OK]
+    if (!pEnemy || m_pEnemy->pev->movetype == 11 || !m_pBot->CanAttackPlayer(pEnemy))   // [OK]
     {
         TASK_DONE();
         return;
@@ -296,7 +296,7 @@ void CKickEnemyTask::TaskThink(void)
     CBasePlayerItem *pItem = BOTF(m_pBot, CBasePlayerItem *, 0x968);
     if (pItem && pItem->m_iId != 1 && pItem->m_iId != 2)               // [OK] nao esta com arma corpo a corpo
     {
-        if (*(int *)((char *)m_pPev + 0x28c) == 7)                     // [?] classe 7 usa espada
+        if (*(int *)((char *)&m_pEdict->v + 0x20c) == 7)                     // [?] classe 7 usa espada
             m_pBot->SelectItem("weapon_sword");
         else
             m_pBot->SelectItem("weapon_melee");
@@ -306,5 +306,91 @@ void CKickEnemyTask::TaskThink(void)
         m_pBot->ToggleTurbo(1);
         BOTF(m_pBot, float, 0xab4) = gpGlobals->time + 1.5;
     }
-    *(int *)((char *)m_pPev + 0x200) |= 0x800;                          // [?] byte +0x201 |= 8
+    m_pEdict->v.button |= 0x800;   // byte +0x201 |= 8
+}
+
+// ---- CShootScatterShotsTask ----
+CBaseEntity *CShootScatterShotsTask::GetFurthestScatterShot(void)
+{
+    CBaseEntity *pFurthest = NULL, *pShot = NULL;
+    float flMax = 0;
+    while ((pShot = UTIL_FindEntityByClassname(pShot, "scattershot")) != NULL)   // [OK]
+    {
+        if (FNullEnt(pShot->edict()) || pShot->pev->owner != m_pEdict)           // [OK] so os tiros do proprio bot
+            continue;
+        float flDist = (pShot->pev->origin - m_pBot->pev->origin).Length();
+        if (flDist > flMax)
+        {
+            flMax = flDist;
+            pFurthest = pShot;
+        }
+    }
+    return pFurthest;
+}
+
+BOOL CShootScatterShotsTask::ReactOnDanger(danger_info_s *pDanger)
+{
+    if (pDanger->m_iDanger > 59)
+    {
+        if (RANDOM_LONG(1, 100) <= *(short *)((char *)BOTF(m_pBot, void *, 0xa04) + 0x26))
+            m_pBot->Teleport();                                  // [OK]
+        else if (m_pBot->BotShouldFallDown())
+        {
+            if (BOTF(m_pBot, int, 0x320))
+                m_pBot->StopFly();
+            BOTF(m_pBot, char, 0xa10) = 0;
+            BOTF(m_pBot, float, 0xa14) = gpGlobals->time + RANDOM_FLOAT(0.8, 1.2);   // [OK]
+        }
+        else
+            return TRUE;                                         // [OK] deixa a tarefa tratar
+    }
+    return FALSE;
+}
+
+void CShootScatterShotsTask::TaskThink(void)
+{
+    if (!(TASKF(float, 0x18) >= gpGlobals->time && (int)m_pEdict->v.fuser4 > 19))   // [OK] fim da tarefa / ki minimo
+    {
+        TASK_DONE();
+        return;
+    }
+    CBasePlayer *pEnemy = BOT_ENEMY(m_pBot);
+    if (!pEnemy)
+    {
+        if (gpGlobals->time - 2.0 < BOTF(m_pBot, float, 0xb40))    // [OK] perdeu o alvo ha menos de 2 s
+        {
+            m_pBot->GoToAnPreviousLocation();
+            return;
+        }
+        TASK_DONE();
+        return;
+    }
+    m_pBot->BotCombatMovement();
+    if (!m_pBot->CanAttackPlayer(pEnemy))
+        return;
+    m_pEdict->v.button |= IN_ATTACK;   // [OK]
+    BOOL fTurbo = TRUE;
+    if (TASKF(char, 0x20))                                         // [OK] ja soltou o scattershot
+        m_pEdict->v.button |= 0x800;
+    else
+    {
+        CBaseEntity *pShot = NULL;
+        if (!(TASKF(float, 0x1c) + 0.55 > gpGlobals->time) && (pShot = GetFurthestScatterShot()) != NULL)   // [OK]
+        {
+            float flShotDist  = (pShot->pev->origin - m_pBot->pev->origin).Length();
+            float flEnemyDist = (pEnemy->pev->origin - m_pBot->pev->origin).Length();
+            int iThresh = (BOTF(m_pBot, char, 0x9fc) * 5 + 5) * 5;  // [OK]
+            if (flShotDist - (iThresh + 225.0) > flEnemyDist)
+            {
+                m_pEdict->v.button |= 0x800;   // [OK] dispara o contrair/explodir
+                TASK_DONE();
+                return;
+            }
+        }
+    }
+    if (fTurbo && BOTF(m_pBot, char, 0x9fc) <= 1)                  // [OK]
+    {
+        m_pBot->ToggleTurbo(1);
+        BOTF(m_pBot, float, 0xab4) = gpGlobals->time + 1.5;
+    }
 }

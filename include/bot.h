@@ -44,9 +44,10 @@ public:
     BOOL CanMeleeKickPlayer(CBasePlayer *pPlayer);
     BOOL CanAttackPlayer(CBasePlayer *pPlayer);
     void ShootHealthBeam(CBasePlayer *pPlayer);
+    BOOL BotShouldFallDown(void);
 };
 
-struct danger_info_s;
+struct danger_info_s { char pad[0x18]; int m_iDanger; };   // [?] +0x18 = tipo/intensidade do perigo (>59 = ataque)
 extern BOOL UTIL_IsValidPlayer(CBaseEntity *pEnt, short a, short b);   // [?] assinatura; recuperar de decomp_raw (funcao livre)
 
 class CBaseTask
@@ -55,7 +56,7 @@ public:
     float m_flDelay;        // +0x00 [OK] proximo instante em que a tarefa pode agir
     int   m_iState;         // +0x04 [OK] GetTaskState (2 = combo)
     CBot *m_pBot;           // +0x08 [OK]
-    entvars_t *m_pPev;      // +0x0c [OK] usado como |= em +0x200 (botoes de entrada, IN_*) [?] campo do entvars ESF
+    edict_t *m_pEdict;      // +0x0c [OK] edict do bot; edict+0x200 = v.button (entvars +0x180), edict+0x1e0 = v.health, +0x2e0 = v.fuser4 (ki)
     CBasePlayer *m_pEnemy;  // +0x10 [OK]
     virtual ~CBaseTask() {}
     virtual int  GetNesserelyChecks(void) = 0;   // slot 1 [OK] mascaras de verificacao do bot (ver CBot::CheckBotInternalStatus etc.)

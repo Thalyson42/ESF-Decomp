@@ -385,6 +385,7 @@ public:
     virtual int TaskIdentify(void);
     virtual BOOL ShouldManageEnemies(void);
     virtual BOOL ReactOnDanger(danger_info_s *pDanger);
+    CBaseEntity *GetFurthestScatterShot(void);
 };
 
 class CSwoopTask : public CBaseTask
