@@ -1,0 +1,216 @@
+// tasks_consts.cpp -- GERADO por tools/gen_tasks.py: metodos de tarefa que so devolvem constante.
+// [OK] valores lidos de decomp_raw/<classe>/*.c. TaskThink e logica complexa: um .cpp por classe em src/bot/.
+#include "extdll.h"
+#include "util.h"
+#include "cbase.h"
+#include "player.h"
+#include "tasks.h"
+
+int CAbsorbHealthTask::GetNesserelyChecks(void) { return 0; }
+int CAbsorbHealthTask::GetBotStatusChecks(void) { return 2; }
+int CAbsorbHealthTask::GetBotSenseChecks(void) { return 8; }
+int CAbsorbHealthTask::GetBotMiscChecks(void) { return 0; }
+int CAbsorbHealthTask::TaskIdentify(void) { return 32; }
+BOOL CAbsorbHealthTask::ShouldManageEnemies(void) { return 0; }
+int CAscendTask::GetNesserelyChecks(void) { return 0; }
+int CAscendTask::GetBotStatusChecks(void) { return 0; }
+int CAscendTask::GetBotSenseChecks(void) { return 11; }
+int CAscendTask::GetBotMiscChecks(void) { return 4; }
+int CAscendTask::TaskIdentify(void) { return 10; }
+BOOL CAscendTask::ShouldManageEnemies(void) { return 1; }
+int CBeamJumpTask::GetNesserelyChecks(void) { return 0; }
+int CBeamJumpTask::GetBotStatusChecks(void) { return 0; }
+int CBeamJumpTask::GetBotMiscChecks(void) { return 0; }
+int CBeamJumpTask::TaskIdentify(void) { return 22; }
+BOOL CBeamJumpTask::ShouldManageEnemies(void) { return 0; }
+int CBlindedTask::GetNesserelyChecks(void) { return 0; }
+int CBlindedTask::GetBotStatusChecks(void) { return 0; }
+int CBlindedTask::GetBotSenseChecks(void) { return 0; }
+int CBlindedTask::GetBotMiscChecks(void) { return 0; }
+int CBlindedTask::TaskIdentify(void) { return 11; }
+BOOL CBlindedTask::ShouldManageEnemies(void) { return 0; }
+BOOL CBlindedTask::ReactOnDanger(danger_info_s *) { return 0; }
+int CBlockTask::GetNesserelyChecks(void) { return 0; }
+int CBlockTask::GetBotStatusChecks(void) { return 0; }
+int CBlockTask::GetBotSenseChecks(void) { return 15; }
+int CBlockTask::GetBotMiscChecks(void) { return 0; }
+int CBlockTask::TaskIdentify(void) { return 2; }
+BOOL CBlockTask::ReactOnDanger(danger_info_s *) { return 0; }
+int CChargeAttackTask::GetNesserelyChecks(void) { return 0; }
+int CChargeAttackTask::GetBotStatusChecks(void) { return 0; }
+int CChargeAttackTask::GetBotSenseChecks(void) { return 15; }
+int CChargeAttackTask::GetBotMiscChecks(void) { return 0; }
+int CChargeAttackTask::TaskIdentify(void) { return 13; }
+BOOL CChargeAttackTask::ShouldManageEnemies(void) { return 1; }
+int CCombatTask::GetNesserelyChecks(void) { return 0; }
+int CCombatTask::GetBotStatusChecks(void) { return 30; }
+int CCombatTask::GetBotSenseChecks(void) { return 15; }
+int CCombatTask::GetBotMiscChecks(void) { return 12; }
+int CCombatTask::TaskIdentify(void) { return 5; }
+BOOL CCombatTask::ShouldManageEnemies(void) { return 1; }
+int CComboTask::GetNesserelyChecks(void) { return 0; }
+int CComboTask::GetBotStatusChecks(void) { return 0; }
+int CComboTask::GetBotSenseChecks(void) { return 15; }
+int CComboTask::GetBotMiscChecks(void) { return 0; }
+int CComboTask::TaskIdentify(void) { return 12; }
+BOOL CComboTask::ShouldManageEnemies(void) { return 1; }
+BOOL CComboTask::ReactOnDanger(danger_info_s *) { return 0; }
+int CControlBeamTask::GetNesserelyChecks(void) { return 0; }
+int CControlBeamTask::GetBotStatusChecks(void) { return 0; }
+int CControlBeamTask::GetBotSenseChecks(void) { return 15; }
+int CControlBeamTask::GetBotMiscChecks(void) { return 0; }
+int CControlBeamTask::TaskIdentify(void) { return 15; }
+BOOL CControlBeamTask::ShouldManageEnemies(void) { return 0; }
+int CControlFriezaDiscTask::GetNesserelyChecks(void) { return 2; }
+int CControlFriezaDiscTask::GetBotStatusChecks(void) { return 0; }
+int CControlFriezaDiscTask::GetBotSenseChecks(void) { return 15; }
+int CControlFriezaDiscTask::GetBotMiscChecks(void) { return 0; }
+int CControlFriezaDiscTask::TaskIdentify(void) { return 14; }
+BOOL CControlFriezaDiscTask::ShouldManageEnemies(void) { return 1; }
+int CCounterMeleeTask::GetNesserelyChecks(void) { return 0; }
+int CCounterMeleeTask::GetBotStatusChecks(void) { return 0; }
+int CCounterMeleeTask::GetBotSenseChecks(void) { return 0; }
+int CCounterMeleeTask::GetBotMiscChecks(void) { return 0; }
+int CCounterMeleeTask::TaskIdentify(void) { return 4; }
+BOOL CCounterMeleeTask::ShouldManageEnemies(void) { return 0; }
+BOOL CCounterMeleeTask::ReactOnDanger(danger_info_s *) { return 0; }
+int CDBTask::GetNesserelyChecks(void) { return 0; }
+int CDBTask::GetBotStatusChecks(void) { return 2; }
+int CDBTask::GetBotSenseChecks(void) { return 15; }
+int CDBTask::GetBotMiscChecks(void) { return 0; }
+int CDBTask::TaskIdentify(void) { return 27; }
+BOOL CDBTask::ShouldManageEnemies(void) { return 0; }
+int CDrainEntsTask::GetNesserelyChecks(void) { return 0; }
+int CDrainEntsTask::GetBotStatusChecks(void) { return 2; }
+int CDrainEntsTask::GetBotSenseChecks(void) { return 8; }
+int CDrainEntsTask::GetBotMiscChecks(void) { return 0; }
+int CDrainEntsTask::TaskIdentify(void) { return 31; }
+BOOL CDrainEntsTask::ShouldManageEnemies(void) { return 0; }
+int CFinishMeleeTask::GetNesserelyChecks(void) { return 0; }
+int CFinishMeleeTask::GetBotStatusChecks(void) { return 0; }
+int CFinishMeleeTask::GetBotSenseChecks(void) { return 0; }
+int CFinishMeleeTask::GetBotMiscChecks(void) { return 0; }
+int CFinishMeleeTask::TaskIdentify(void) { return 8; }
+BOOL CFinishMeleeTask::ShouldManageEnemies(void) { return 0; }
+BOOL CFinishMeleeTask::ReactOnDanger(danger_info_s *) { return 0; }
+int CHuntEnemyTask::GetNesserelyChecks(void) { return 0; }
+int CHuntEnemyTask::GetBotStatusChecks(void) { return 30; }
+int CHuntEnemyTask::GetBotSenseChecks(void) { return 15; }
+int CHuntEnemyTask::GetBotMiscChecks(void) { return 14; }
+int CHuntEnemyTask::TaskIdentify(void) { return 29; }
+BOOL CHuntEnemyTask::ShouldManageEnemies(void) { return 0; }
+BOOL CHuntEnemyTask::ReactOnDanger(danger_info_s *) { return 1; }
+int CIdleTask::GetNesserelyChecks(void) { return 0; }
+int CIdleTask::GetBotStatusChecks(void) { return 0; }
+int CIdleTask::GetBotSenseChecks(void) { return 0; }
+int CIdleTask::GetBotMiscChecks(void) { return 4; }
+int CIdleTask::TaskIdentify(void) { return 20; }
+BOOL CIdleTask::ShouldManageEnemies(void) { return 0; }
+BOOL CIdleTask::ReactOnDanger(danger_info_s *) { return 0; }
+int CJumpOffGroundTask::GetNesserelyChecks(void) { return 0; }
+int CJumpOffGroundTask::GetBotStatusChecks(void) { return 0; }
+int CJumpOffGroundTask::GetBotSenseChecks(void) { return 0; }
+int CJumpOffGroundTask::GetBotMiscChecks(void) { return 0; }
+int CJumpOffGroundTask::TaskIdentify(void) { return 28; }
+BOOL CJumpOffGroundTask::ShouldManageEnemies(void) { return 0; }
+BOOL CJumpOffGroundTask::ReactOnDanger(danger_info_s *) { return 0; }
+int CKameTorpTask::GetNesserelyChecks(void) { return 0; }
+int CKameTorpTask::GetBotStatusChecks(void) { return 0; }
+int CKameTorpTask::GetBotSenseChecks(void) { return 15; }
+int CKameTorpTask::GetBotMiscChecks(void) { return 0; }
+int CKameTorpTask::TaskIdentify(void) { return 19; }
+BOOL CKameTorpTask::ShouldManageEnemies(void) { return 1; }
+int CKickEnemyTask::GetNesserelyChecks(void) { return 0; }
+int CKickEnemyTask::GetBotStatusChecks(void) { return 2; }
+int CKickEnemyTask::GetBotSenseChecks(void) { return 3; }
+int CKickEnemyTask::GetBotMiscChecks(void) { return 0; }
+int CKickEnemyTask::TaskIdentify(void) { return 3; }
+BOOL CKickEnemyTask::ShouldManageEnemies(void) { return 1; }
+int CLookAroundTask::GetNesserelyChecks(void) { return 0; }
+int CLookAroundTask::GetBotStatusChecks(void) { return 30; }
+int CLookAroundTask::GetBotSenseChecks(void) { return 15; }
+int CLookAroundTask::GetBotMiscChecks(void) { return 30; }
+int CLookAroundTask::TaskIdentify(void) { return 16; }
+BOOL CLookAroundTask::ShouldManageEnemies(void) { return 0; }
+int CNormalJumpTask::GetNesserelyChecks(void) { return 0; }
+int CNormalJumpTask::GetBotStatusChecks(void) { return 0; }
+int CNormalJumpTask::GetBotSenseChecks(void) { return 0; }
+int CNormalJumpTask::GetBotMiscChecks(void) { return 0; }
+int CNormalJumpTask::TaskIdentify(void) { return 23; }
+BOOL CNormalJumpTask::ShouldManageEnemies(void) { return 0; }
+BOOL CNormalJumpTask::ReactOnDanger(danger_info_s *) { return 0; }
+int CNormalMovementTask::GetNesserelyChecks(void) { return 0; }
+int CNormalMovementTask::GetBotStatusChecks(void) { return 30; }
+int CNormalMovementTask::GetBotSenseChecks(void) { return 15; }
+int CNormalMovementTask::GetBotMiscChecks(void) { return 62; }
+int CNormalMovementTask::TaskIdentify(void) { return 6; }
+BOOL CNormalMovementTask::ShouldManageEnemies(void) { return 0; }
+int CPowerStruggleTask::GetNesserelyChecks(void) { return 0; }
+int CPowerStruggleTask::GetBotStatusChecks(void) { return 0; }
+int CPowerStruggleTask::GetBotSenseChecks(void) { return 0; }
+int CPowerStruggleTask::GetBotMiscChecks(void) { return 4; }
+int CPowerStruggleTask::TaskIdentify(void) { return 9; }
+BOOL CPowerStruggleTask::ShouldManageEnemies(void) { return 0; }
+BOOL CPowerStruggleTask::ReactOnDanger(danger_info_s *) { return 0; }
+int CPowerUpTask::GetNesserelyChecks(void) { return 0; }
+int CPowerUpTask::GetBotStatusChecks(void) { return 0; }
+int CPowerUpTask::GetBotSenseChecks(void) { return 15; }
+int CPowerUpTask::GetBotMiscChecks(void) { return 0; }
+int CPowerUpTask::TaskIdentify(void) { return 0; }
+BOOL CPowerUpTask::ShouldManageEnemies(void) { return 1; }
+int CRecoverHPTask::GetNesserelyChecks(void) { return 0; }
+int CRecoverHPTask::GetBotStatusChecks(void) { return 0; }
+int CRecoverHPTask::GetBotSenseChecks(void) { return 15; }
+int CRecoverHPTask::GetBotMiscChecks(void) { return 4; }
+int CRecoverHPTask::TaskIdentify(void) { return 17; }
+BOOL CRecoverHPTask::ShouldManageEnemies(void) { return 1; }
+int CRecoverMeleeTask::GetNesserelyChecks(void) { return 0; }
+int CRecoverMeleeTask::GetBotStatusChecks(void) { return 0; }
+int CRecoverMeleeTask::GetBotSenseChecks(void) { return 0; }
+int CRecoverMeleeTask::GetBotMiscChecks(void) { return 0; }
+int CRecoverMeleeTask::TaskIdentify(void) { return 21; }
+BOOL CRecoverMeleeTask::ShouldManageEnemies(void) { return 0; }
+BOOL CRecoverMeleeTask::ReactOnDanger(danger_info_s *) { return 0; }
+int CShootCandyTask::GetNesserelyChecks(void) { return 0; }
+int CShootCandyTask::GetBotStatusChecks(void) { return 2; }
+int CShootCandyTask::GetBotSenseChecks(void) { return 10; }
+int CShootCandyTask::GetBotMiscChecks(void) { return 0; }
+int CShootCandyTask::TaskIdentify(void) { return 24; }
+BOOL CShootCandyTask::ShouldManageEnemies(void) { return 1; }
+int CShootLaser1Task::GetNesserelyChecks(void) { return 0; }
+int CShootLaser1Task::GetBotStatusChecks(void) { return 2; }
+int CShootLaser1Task::GetBotSenseChecks(void) { return 15; }
+int CShootLaser1Task::GetBotMiscChecks(void) { return 0; }
+int CShootLaser1Task::TaskIdentify(void) { return 30; }
+BOOL CShootLaser1Task::ShouldManageEnemies(void) { return 1; }
+int CShootNonChargebleTask::GetNesserelyChecks(void) { return 0; }
+int CShootNonChargebleTask::GetBotStatusChecks(void) { return 0; }
+int CShootNonChargebleTask::GetBotSenseChecks(void) { return 15; }
+int CShootNonChargebleTask::GetBotMiscChecks(void) { return 0; }
+int CShootNonChargebleTask::TaskIdentify(void) { return 26; }
+BOOL CShootNonChargebleTask::ShouldManageEnemies(void) { return 1; }
+int CShootScatterShotsTask::GetNesserelyChecks(void) { return 0; }
+int CShootScatterShotsTask::GetBotStatusChecks(void) { return 0; }
+int CShootScatterShotsTask::GetBotSenseChecks(void) { return 15; }
+int CShootScatterShotsTask::GetBotMiscChecks(void) { return 0; }
+int CShootScatterShotsTask::TaskIdentify(void) { return 25; }
+BOOL CShootScatterShotsTask::ShouldManageEnemies(void) { return 1; }
+int CSwoopTask::GetNesserelyChecks(void) { return 0; }
+int CSwoopTask::GetBotStatusChecks(void) { return 0; }
+int CSwoopTask::GetBotSenseChecks(void) { return 0; }
+int CSwoopTask::GetBotMiscChecks(void) { return 0; }
+int CSwoopTask::TaskIdentify(void) { return 7; }
+BOOL CSwoopTask::ShouldManageEnemies(void) { return 1; }
+BOOL CSwoopTask::ReactOnDanger(danger_info_s *) { return 0; }
+int CTeleportTask::GetNesserelyChecks(void) { return 0; }
+int CTeleportTask::GetBotStatusChecks(void) { return 0; }
+int CTeleportTask::GetBotSenseChecks(void) { return 15; }
+int CTeleportTask::GetBotMiscChecks(void) { return 0; }
+int CTeleportTask::TaskIdentify(void) { return 1; }
+BOOL CTeleportTask::ShouldManageEnemies(void) { return 0; }
+int CWallJumpTask::GetNesserelyChecks(void) { return 0; }
+int CWallJumpTask::GetBotStatusChecks(void) { return 0; }
+int CWallJumpTask::GetBotSenseChecks(void) { return 15; }
+int CWallJumpTask::GetBotMiscChecks(void) { return 0; }
+int CWallJumpTask::TaskIdentify(void) { return 18; }
+BOOL CWallJumpTask::ShouldManageEnemies(void) { return 0; }

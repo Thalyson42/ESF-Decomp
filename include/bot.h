@@ -38,6 +38,13 @@ public:
     CBot *m_pBot;           // +0x08 [OK]
     CBasePlayer *m_pEnemy;  // +0x10 [OK]
     virtual ~CBaseTask() {}
+    virtual int  GetNesserelyChecks(void) = 0;   // slot 1 [OK] mascaras de verificacao do bot (ver CBot::CheckBotInternalStatus etc.)
+    virtual int  GetBotStatusChecks(void) = 0;   // slot 2
+    virtual int  GetBotSenseChecks(void) = 0;    // slot 3
+    virtual int  GetBotMiscChecks(void) = 0;     // slot 4
+    virtual void TaskThink(void) = 0;            // slot 5
+    virtual int  TaskIdentify(void) = 0;         // slot 6
+    virtual BOOL ShouldManageEnemies(void) = 0;  // slot 7
     virtual void ManageEnemies(void);                         // slot 8
     virtual BOOL ReactOnDanger(danger_info_s *p) { return 1; }  // slot 9 [OK] retorna 1
     float GetTaskDelay(void) { return m_flDelay; }
