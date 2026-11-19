@@ -38,6 +38,9 @@ public:
     void SetMoveDir(int iDir);
     void DeleteCombos(void);
     void ToggleTurbo(short fOn);
+    void GoToAnPreviousLocation(void);
+    void BotCombatMovement(void);
+    void AddShootDelay(void);
     BOOL CanAttackPlayer(CBasePlayer *pPlayer);
     void ShootHealthBeam(CBasePlayer *pPlayer);
 };

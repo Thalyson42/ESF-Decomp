@@ -216,3 +216,33 @@ void CNormalJumpTask::TaskThink(void)
     if (RANDOM_LONG(1, 100) <= *(short *)((char *)BOTF(m_pBot, void *, 0xa04) + 0x26))
         m_pBot->Teleport();
 }
+
+// ---- CShootNonChargebleTask ----
+void CShootNonChargebleTask::TaskThink(void)
+{
+    CBasePlayer *pEnemy = TASKF(CBasePlayer *, 0x10);                  // [OK]
+    if (!pEnemy)
+    {
+        if (gpGlobals->time - 2.0 <= BOTF(m_pBot, float, 0xb40))       // [OK] perdeu o alvo ha menos de 2 s
+            m_pBot->GoToAnPreviousLocation();
+        else
+            TASK_DONE();
+        return;
+    }
+    m_pBot->BotCombatMovement();                                       // [OK]
+    BOOL fReady = BOTF(m_pBot, float, 0xb78) <= gpGlobals->time;       // [OK] atraso entre tiros acabou
+    BOOL fCanAttack = TRUE;
+    if ((int)m_pBot->pev->fuser4 > 14)                                 // [OK] ki minimo
+    {
+        if (!m_pBot->CanAttackPlayer(pEnemy))
+            fCanAttack = FALSE;
+        if (!fReady)
+        {
+            if (fCanAttack)
+                *(int *)((char *)m_pPev + 0x200) |= BOTF(m_pBot, int, 0xb7c);   // [OK] botao do ataque escolhido
+            return;
+        }
+    }
+    m_pBot->AddShootDelay();                                           // [OK]
+    TASK_DONE();
+}
