@@ -144,3 +144,75 @@ void CBlindedTask::TaskThink(void)
             m_pBot->Teleport();
     }
 }
+
+// ---- CShootLaser1Task / CPowerStruggleTask / CNormalJumpTask ----
+#define PEV_BYTE1A5(p) (*((unsigned char *)(p) + 0x1a5))   // [?] byte de flags do entvars do alvo (bit 0x10 = marcado)
+
+void CShootLaser1Task::TaskThink(void)
+{
+    CBasePlayer *pEnemy = TASKF(CBasePlayer *, 0x10);                  // [OK]
+    if (pEnemy && TASKF(float, 0x18) >= gpGlobals->time               // [OK] fim da tarefa
+        && (double)BOTF(m_pBot, int, 0x24c) > *(float *)((char *)m_pPev + 0x1e0)   // [OK]
+        && 150.0 <= *(float *)((char *)m_pPev + 0x2e0))                // [OK]
+    {
+        if (!m_pBot->CanAttackPlayer(pEnemy))
+            PEV_BYTE1A5(pEnemy->pev) &= 239;                           // [OK] desmarca o alvo
+        else
+        {
+            m_pBot->ResetMoveSpeed();
+            PEV_BYTE1A5(pEnemy->pev) |= 16;                            // [OK] marca o alvo
+            m_pBot->ShootHealthBeam(pEnemy);
+            if (BOTF(m_pBot, float, 0xbb4) <= gpGlobals->time)         // [OK]
+                BOTF(m_pBot, float, 0xbb4) = gpGlobals->time + 0.1;
+            return;
+        }
+    }
+    TASK_DONE();
+}
+
+void CPowerStruggleTask::TaskThink(void)
+{
+    if (!BOTF(m_pBot, int, 0x354) && !BOTF(m_pBot, int, 0x35c))        // [OK] m_fInPowerStruggle / m_fInBlockStruggle
+    {
+        TASK_DONE();
+        return;
+    }
+    *(int *)((char *)m_pPev + 0x200) |= 1;                             // [?] IN_ATTACK (pressiona para vencer o struggle)
+    if (!*((char *)BOTF(m_pBot, void *, 0xa00) + 0x3e))                // [OK] habilidade: usa turbo no struggle?
+        return;
+    if ((int)m_pBot->pev->fuser4 <= 20)
+        return;
+    m_pBot->ToggleTurbo(1);                                            // [OK]
+    BOTF(m_pBot, float, 0xab4) = gpGlobals->time + 1.5;                // [OK]
+}
+
+void CNormalJumpTask::TaskThink(void)
+{
+    *(int *)((char *)m_pPev + 0x200) |= 2;                             // [?] IN_JUMP
+    if (TASKF(float, 0x18) <= gpGlobals->time)                         // [OK] acabou o tempo de salto
+    {
+        TASK_DONE();
+        return;
+    }
+    if (0.0 > *(float *)((char *)m_pPev + 0xa8))                       // [?] pev+0xa8 < 0: ja descendo
+    {
+        TASK_DONE();
+        return;
+    }
+    if (0.1 > *(float *)((char *)m_pPev + 0x19c))                      // [?]
+    {
+        if (*((unsigned char *)m_pPev + 0x225) & 2)
+            m_pBot->StopFly();
+        else
+        {
+            TASK_DONE();
+            return;
+        }
+    }
+    m_pBot->SetMoveDir(BOTF(m_pBot, char, 0xaf8));                     // [OK]
+    if (TASKF(float, 0x1c) >= gpGlobals->time)
+        return;
+    TASKF(float, 0x1c) = gpGlobals->time + RANDOM_FLOAT(0.25, 0.4);    // [OK]
+    if (RANDOM_LONG(1, 100) <= *(short *)((char *)BOTF(m_pBot, void *, 0xa04) + 0x26))
+        m_pBot->Teleport();
+}

@@ -3,6 +3,7 @@
 #pragma once
 class CBot;
 #define BOTF(b, type, off) (*(type *)((char *)(b) + (off)))
+#define TASKF(type, off)    (*(type *)((char *)this + (off)))   // campo proprio da tarefa por offset (a partir de this)
 #define BOT_ENEMY(b)         BOTF(b, CBasePlayer *, 0xb6c)   // inimigo atual
 #define BOT_SKILL(b)         BOTF(b, float *, 0xa00)         // [?] tabela de habilidade: [0],[1] atraso geral; [0x30/4],[0x34/4] atraso de inimigo
 #define BOT_ENEMY_DELAY(b)   BOTF(b, float, 0xb3c)           // [?] proximo instante para reavaliar inimigos
@@ -36,6 +37,9 @@ public:
     void ResetMoveSpeed(void);
     void SetMoveDir(int iDir);
     void DeleteCombos(void);
+    void ToggleTurbo(short fOn);
+    BOOL CanAttackPlayer(CBasePlayer *pPlayer);
+    void ShootHealthBeam(CBasePlayer *pPlayer);
 };
 
 struct danger_info_s;
