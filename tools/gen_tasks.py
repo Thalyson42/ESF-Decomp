@@ -14,7 +14,8 @@ def const_ret(path):
         m=re.fullmatch(r'return (0x[0-9a-f]+|\d+);',lines[1])
         if m: return int(m.group(1),0)
     return None
-EXTRA={'CShootScatterShotsTask':['CBaseEntity *GetFurthestScatterShot(void);']}   # funcoes proprias escritas a mao
+EXTRA={'CShootScatterShotsTask':['CBaseEntity *GetFurthestScatterShot(void);'],
+       'CKameTorpTask':['void ChargeKameTorps(void);','short CountTorps(void);','BOOL SetMoveAwayDir(void);']}   # funcoes proprias escritas a mao
 classes=sorted(d for d in os.listdir(RAW) if d.endswith('Task') and d!='CBaseTask')
 h=['// tasks.h -- GERADO por tools/gen_tasks.py: declaracoes das tarefas do bot (todas derivam de CBaseTask).','#pragma once','#include "bot.h"','']
 c=['// tasks_consts.cpp -- GERADO por tools/gen_tasks.py: metodos de tarefa que so devolvem constante.','// [OK] valores lidos de decomp_raw/<classe>/*.c. TaskThink e logica complexa: um .cpp por classe em src/bot/.','#include "extdll.h"','#include "util.h"','#include "cbase.h"','#include "player.h"','#include "tasks.h"','']

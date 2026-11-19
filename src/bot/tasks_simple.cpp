@@ -550,3 +550,186 @@ void CBlockTask::TaskThink(void)
     if (!BOTF(m_pBot, int, 0x32c))
         m_pBot->StartBlock();                                       // [OK]
 }
+
+// ---- CKameTorpTask ----
+// task+0x18 fim do desvio, +0x1c direcao (bits de SetMoveDir), +0x20/+0x24 proximos instantes de desvio, +0x28 mirou,
+// +0x2c estado (0 carrega, 1 power up, 2 atira, 3 desvia, 4 foge), +0x30 prazo, +0x34 fim, +0x38 maximo de torpedos
+extern BOOL CheckForCollide(edict_t *pEdict, int iDir, float flDist);        // [?] funcao livre do ESF
+extern Vector GetFurthestCollision(CBasePlayer *pPlayer, float flMaxDist);   // [?] idem
+
+static BOOL KameTryAxis(CKameTorpTask *pTask, edict_t *pEdict, int r, int bitFirst, int bitSecond)
+{
+    int *pDir = (int *)((char *)pTask + 0x1c);
+    int bitA = (r == 1) ? bitFirst : bitSecond;      // r==1 tenta o primeiro, r==2 o segundo
+    int bitB = (r == 1) ? bitSecond : bitFirst;
+    if (!CheckForCollide(pEdict, bitA, 35.0f)) { *pDir |= bitA; return TRUE; }
+    if (!CheckForCollide(pEdict, bitB, 35.0f)) { *pDir |= bitB; return TRUE; }
+    return FALSE;
+}
+
+BOOL CKameTorpTask::SetMoveAwayDir(void)
+{
+    TASKF(int, 0x1c) = 0;
+    BOOL fFound = FALSE;
+    int r = RANDOM_LONG(0, 2);                       // [OK] eixo frente/tras: 16 e 8
+    if (r) fFound = KameTryAxis(this, m_pEdict, r, 16, 8);
+    r = RANDOM_LONG(fFound ? 0 : 1, 2);              // [OK] sem direcao ainda: nao pode "pular" o eixo
+    if (r) fFound |= KameTryAxis(this, m_pEdict, r, 2, 4);      // esquerda/direita
+    r = RANDOM_LONG(fFound ? 0 : 1, 2);
+    if (r) fFound |= KameTryAxis(this, m_pEdict, r, 32, 64);    // cima/baixo
+    return fFound;
+}
+
+short CKameTorpTask::CountTorps(void)
+{
+    short n = 0;
+    CBaseEntity *pTorp = NULL;
+    while ((pTorp = UTIL_FindEntityByClassname(pTorp, "Kame Torpedo")) != NULL)   // [OK]
+    {
+        if (!IsNull(pTorp->edict()) && pTorp->pev->owner == m_pEdict && pTorp->pev->velocity.Length() <= 0.0f)   // [OK] parados
+            n++;
+    }
+    return n;
+}
+
+void CKameTorpTask::ChargeKameTorps(void)
+{
+    if (BOTF(m_pBot, int, 0x6d0) > 99 || !BOTF(m_pBot, char, 0xaf0))   // [?] +0x6d0 carga do ataque, +0xaf0 flag "carregando"
+    {
+        if (BOTF(m_pBot, int, 0x6d0) == 100)
+        {
+            BOTF(m_pBot, char, 0xaf0) = 0;
+            if (!SetMoveAwayDir())
+                return;
+            TASKF(int, 0x2c) = 3;                    // [OK] desvia depois de carregar
+            TASKF(float, 0x18) = gpGlobals->time + RANDOM_FLOAT(0.13, 0.25);
+            return;
+        }
+        if (CountTorps() >= TASKF(short, 0x38))      // [OK] ja tem torpedos suficientes
+        {
+            TASKF(int, 0x2c) = 2;
+            TASKF(float, 0x34) = gpGlobals->time + 4.0;
+            return;
+        }
+        BOTF(m_pBot, char, 0xaf0) = 1;
+        CBasePlayerItem *pItem = BOTF(m_pBot, CBasePlayerItem *, 0x968);
+        if (pItem && pItem->m_iId != 32)             // [OK] 32 = kame torpedo
+            m_pBot->SelectItem("weapon_kametorpedo");
+    }
+    m_pEdict->v.button |= IN_ATTACK;                 // [OK]
+}
+
+BOOL CKameTorpTask::ReactOnDanger(danger_info_s *pDanger)
+{
+    int d = pDanger->m_iDanger;
+    if ((unsigned short)(d - 100) <= 59)
+        m_pEdict->v.button |= 0x800;                 // [OK]
+    else if (d <= 59)
+        TASKF(int, 0x38) = 3;                        // [OK] perigo baixo: ate 3 torpedos
+    else
+    {
+        if (d > 99)
+        {
+            m_pEdict->v.button |= 0x800;
+            return TRUE;
+        }
+        TASKF(int, 0x38) = 1;
+    }
+    return FALSE;
+}
+
+void CKameTorpTask::TaskThink(void)
+{
+    m_pBot->ResetMoveSpeed();
+    if (TASKF(float, 0x30) < gpGlobals->time && 0.0 < TASKF(float, 0x30))   // [OK] prazo vencido
+    {
+        TASKF(int, 0x2c) = 2;
+        TASKF(float, 0x30) = 0;
+        TASKF(float, 0x34) = gpGlobals->time + 3.0;
+    }
+    int iKi = (int)m_pEdict->v.fuser4;
+    if (iKi <= 149)                                  // [OK] sem ki: volta a carregar
+    {
+        TASKF(int, 0x2c) = 1;
+        BOTF(m_pBot, char, 0xaf0) = 0;
+    }
+    switch (TASKF(int, 0x2c))
+    {
+    case 0:
+        ChargeKameTorps();
+        break;
+    case 1:
+        if (iKi > 700)
+        {
+            TASKF(int, 0x2c) = 0;
+            if (BOTF(m_pBot, int, 0x330))
+                m_pBot->StopPowerUp();
+        }
+        else if (!BOTF(m_pBot, int, 0x330))
+            m_pBot->StartPowerUp();
+        break;
+    case 2:
+        if (!BOT_ENEMY(m_pBot))
+        {
+            if (TASKF(float, 0x30) >= gpGlobals->time)
+            {
+                TASKF(int, 0x2c) = 4;
+                return;
+            }
+            if (!TASKF(char, 0x28))
+            {
+                Vector vecFar = GetFurthestCollision(m_pBot, 1000.0f);   // [OK]
+                if (vecFar != g_vecZero)
+                {
+                    Vector vecAng = m_pBot->GetAimAngles(vecFar);
+                    BOTF(m_pBot, float, 0xc10) = vecAng.x;
+                    BOTF(m_pBot, float, 0xc14) = vecAng.y;
+                    BOTF(m_pBot, float, 0xc18) = vecAng.z;
+                }
+                TASKF(char, 0x28) = 1;
+            }
+        }
+        else if (TASKF(float, 0x30) >= gpGlobals->time)
+        {
+            if ((int)m_pEdict->v.fuser4 > 10 && !m_pBot->CanAttackPlayer(TASKF(CBasePlayer *, 0x10)))
+                return;
+        }
+        if (!RANDOM_LONG(0, 4))
+            m_pEdict->v.button |= 0x800;
+        if (TASKF(float, 0x34) < gpGlobals->time)
+            TASK_DONE();
+        if (!CountTorps())
+            TASK_DONE();
+        break;
+    case 3:
+        m_pBot->SetMoveDir(TASKF(int, 0x1c));
+        if (TASKF(float, 0x18) > gpGlobals->time)
+            return;
+        TASKF(int, 0x1c) = 0;
+        TASKF(int, 0x2c) = 0;
+        break;
+    case 4:
+        if (BOT_ENEMY(m_pBot))
+            TASKF(int, 0x2c) = 2;
+        else if (TASKF(float, 0x24) < gpGlobals->time)
+        {
+            TASKF(float, 0x24) = gpGlobals->time + RANDOM_FLOAT(1.75, 2.75);
+            if (!SetMoveAwayDir())
+                return;
+            TASKF(int, 0x2c) = 3;
+            TASKF(float, 0x18) = gpGlobals->time + RANDOM_FLOAT(0.13, 0.25);
+            TASKF(float, 0x20) = TASKF(float, 0x18) + RANDOM_FLOAT(0.2, 0.45);
+        }
+        else if (TASKF(float, 0x20) < gpGlobals->time)
+        {
+            TASKF(float, 0x20) = gpGlobals->time + RANDOM_FLOAT(0.35, 0.75);
+            float flYaw = BOTF(m_pBot, float, 0xc14);
+            if (!BOTF(m_pBot, int, 0xff0))
+                flYaw += RANDOM_FLOAT(40, 50);       // [OK] gira para um lado
+            else
+                flYaw -= RANDOM_FLOAT(40, 50);       // ...ou para o outro
+            BOTF(m_pBot, float, 0xc14) = UTIL_WrapAngle(flYaw);
+        }
+        break;
+    }
+}

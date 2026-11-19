@@ -231,6 +231,9 @@ public:
     virtual int TaskIdentify(void);
     virtual BOOL ShouldManageEnemies(void);
     virtual BOOL ReactOnDanger(danger_info_s *pDanger);
+    void ChargeKameTorps(void);
+    short CountTorps(void);
+    BOOL SetMoveAwayDir(void);
 };
 
 class CKickEnemyTask : public CBaseTask
