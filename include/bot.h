@@ -45,8 +45,10 @@ public:
     BOOL CanAttackPlayer(CBasePlayer *pPlayer);
     void ShootHealthBeam(CBasePlayer *pPlayer);
     BOOL BotShouldFallDown(void);
+    Vector GetAimAngles(Vector vecTarget);   // [OK] mangled: GetAimAngles__4CBotG6Vector (retorna Vector por valor)
 };
 
+extern float UTIL_WrapAngle(float flAngle);   // [?] funcao livre do ESF
 struct danger_info_s { char pad[0x18]; int m_iDanger; };   // [?] +0x18 = tipo/intensidade do perigo (>59 = ataque)
 extern BOOL UTIL_IsValidPlayer(CBaseEntity *pEnt, short a, short b);   // [?] assinatura; recuperar de decomp_raw (funcao livre)
 

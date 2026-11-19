@@ -442,3 +442,47 @@ void CControlFriezaDiscTask::TaskThink(void)
         return;
     m_pEdict->v.button |= IN_ATTACK;                               // [OK]
 }
+
+// ---- CLookAroundTask ----
+// task+0x18..0x47: 4 pontos (Vector) alcancados olhando em volta; +0x48 passo (1..4); +0x4c proximo instante
+void CLookAroundTask::TaskThink(void)
+{
+    Vector *pLook = (Vector *)((char *)this + 0x18);                   // [OK] pLook[0..3]
+    if (TASKF(float, 0x4c) < gpGlobals->time)
+    {
+        TASKF(int, 0x48)++;
+        if (TASKF(int, 0x48) > 4)
+        {
+            float flBest = 0;
+            Vector vecBest = g_vecZero;
+            for (int i = 0; i < 4; i++)
+            {
+                float flDist = (pLook[i] - m_pEdict->v.origin).Length();   // [OK] edict+0x88 = origin
+                if (flDist > flBest)
+                {
+                    flBest = flDist;
+                    vecBest = pLook[i];                                // [OK] olha para o ponto mais distante
+                }
+            }
+            Vector vecAng = m_pBot->GetAimAngles(vecBest);
+            BOTF(m_pBot, float, 0xc10) = vecAng.x;                     // [OK] angulo ideal (pitch, yaw, roll)
+            BOTF(m_pBot, float, 0xc14) = vecAng.y;
+            BOTF(m_pBot, float, 0xc18) = vecAng.z;
+            TASK_DONE();
+            return;
+        }
+        float flYaw = BOTF(m_pBot, float, 0xc14) + RANDOM_LONG(80, 100);   // [OK] gira ~90 graus
+        BOTF(m_pBot, float, 0xc14) = UTIL_WrapAngle(flYaw);
+        UTIL_MakeVectors(m_pEdict->v.v_angle);                         // [?] angulos usados no decompilado ilegiveis
+        TraceResult tr;
+        Vector vecEnd = m_pEdict->v.origin + gpGlobals->v_forward * 10000.0;
+        UTIL_TraceHull(m_pEdict->v.origin, vecEnd, ignore_monsters, human_hull, m_pEdict, &tr);   // [OK] hull 1
+        pLook[TASKF(int, 0x48) - 1] = tr.vecEndPos;                    // [OK]
+        TASKF(float, 0x4c) = gpGlobals->time + RANDOM_FLOAT(0.4, 0.8); // [?] decompilado soma mais 2x um valor perdido
+    }
+    m_pBot->ResetMoveSpeed();
+    if (RANDOM_LONG(0, 5) > 4)
+        BOTF(m_pBot, float, 0xc10) = UTIL_WrapAngle(BOTF(m_pBot, float, 0xc10) + RANDOM_LONG(-10, 10));   // [OK] tremida no pitch
+    if (RANDOM_LONG(0, 5) > 4)
+        BOTF(m_pBot, float, 0xc14) = UTIL_WrapAngle(BOTF(m_pBot, float, 0xc14) + RANDOM_LONG(-10, 10));   // [OK] tremida no yaw
+}
