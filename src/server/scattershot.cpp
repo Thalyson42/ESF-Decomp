@@ -183,7 +183,7 @@ void CScatterShotAttack::ContractThink(void)
     float flDist = vecToTarget.Length();
     if (flDist > m_flContractDist)                                     // [OK] ja passou do ponto: some
     {
-        Remove();                                                      // [OK] vtable +0x200 [?] (slot 126 vs 125)
+        Explode();                                                     // [OK] vtable +0x200 (slot 126 = Explode)
         return;
     }
     Vector vecDir = vecToTarget.Normalize();

@@ -5,6 +5,7 @@
 class CRock : public CExplodingAttack
 {
 public:
+    void Spawn(void);
     static CRock *CreateRock(Vector vecPos, entvars_t *pevOwner, float flScale, float flRange);
     void Shoot(Vector vecVelocity);
     void RotateThink(void);
