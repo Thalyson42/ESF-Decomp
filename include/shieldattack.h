@@ -1,14 +1,26 @@
 // shieldattack.h -- CShieldAttack (barreira de ki do Gohan) + CShield/CShieldAtk. RECUPERADO de decomp_raw/CShieldAttack, CShield, CShieldAtk
 #pragma once
-class CShield : public CBaseEntity     // [?] base (decomp_raw/CShield)
+#include "explodingattack.h"
+class CShield : public CBaseEntity     // classname "Shield" [OK]; Classify() = 16
 {
 public:
-    char  m_fBroken;                   // +0x6c [?] marcado quando o escudo foi destruido
-    float m_flPower;                   // +0x1e0 [?] forca acumulada (vira o dano do disparo)
+    int  m_iSize;                      // +0x64 [OK] raio da bolha (40 -> 110); tambem enviado ao cliente
+    float m_flNextGain;                // +0x68 [OK] proximo ganho de forca (a cada 1.75 s)
+    char m_fBroken;                    // +0x6c [OK] 1 = escudo quebrado (dono ficou sem ki)
+    // a forca acumulada do escudo fica em pev->dmg (+0x1e0)
+    void Spawn(void);
+    void Precache(void) {}
+    int  Classify(void) { return 16; }
     static CShield *CreateShield(CBasePlayer *pPlayer);
+    static CBaseEntity *GetOwner(entvars_t *pev);
+    void CreateExplosion(void);
+    void ExpandShieldThink(void);
+    void ShieldThink(void);
+    void ShieldTouch(CBaseEntity *pOther);
+    void UpdateShieldClient(void);
     void Remove(void);
 };
-class CShieldAtk : public CBaseEntity
+class CShieldAtk : public CExplodingAttack     // [OK] usa ExplodeTouch/NormalThink
 {
 public:
     static CShieldAtk *ShootShield(entvars_t *pevShooter, Vector vecOrigin, Vector vecVelocity, int iDamage);

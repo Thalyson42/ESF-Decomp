@@ -1,5 +1,5 @@
 // shieldattack.cpp -- RECUPERADO de decomp_raw/CShieldAttack (12 funcoes). [OK] valores do decompilado; [?] nomes.
-// CShield (11) e CShieldAtk (1) ficam para a etapa seguinte.
+// CShield e CShieldAtk estao em shield.cpp.
 #include "extdll.h"
 #include "util.h"
 #include "cbase.h"
@@ -131,7 +131,7 @@ void CShieldAttack::SecondaryAttack(void)
     if (m_iState != 1)
         vf_148();                            // [OK]
     float flNow = UTIL_WeaponTimeBase();
-    m_iDamage = (int)m_pShield->m_flPower;   // [?] +0x1e0 do escudo: forca acumulada
+    m_iDamage = (int)m_pShield->pev->dmg;   // [OK] pev+0x1e0 do escudo: forca acumulada
     RemoveShield();
     if (m_iDamage && m_pPlayer->UseKi(40))   // [OK] 40 de ki para soltar o golpe
     {
@@ -154,7 +154,7 @@ void CShieldAttack::SecondaryAttack(void)
 
 void CShieldAttack::WeaponIdle(void)
 {
-    if (m_iState > 0 && m_pShield && m_pShield->m_fBroken)   // [OK] escudo quebrado
+    if (m_iState > 0 && m_pShield && m_pShield->m_fBroken)   // [OK] +0x6c escudo quebrado
     {
         RemoveShield();
         m_pPlayer->f_6bc = 0;
