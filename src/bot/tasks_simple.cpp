@@ -394,3 +394,51 @@ void CShootScatterShotsTask::TaskThink(void)
         BOTF(m_pBot, float, 0xab4) = gpGlobals->time + 1.5;
     }
 }
+
+// ---- CControlFriezaDiscTask ----
+extern CBaseEntity *UTIL_GetAttackFromPlayerByName(CBasePlayer *pPlayer, const char *szName);   // [?] funcao livre
+extern int UTIL_GetHeadingPercentage(CBasePlayer *pPlayer, CBasePlayer *pTarget);              // [?] funcao livre
+
+BOOL CControlFriezaDiscTask::ReactOnDanger(danger_info_s *pDanger)
+{
+    return pDanger->m_iDanger > 59;                                // [?] o decompilado usa um _ccall de comparacao com 59
+}
+
+void CControlFriezaDiscTask::TaskThink(void)
+{
+    CBasePlayer *pEnemy = BOT_ENEMY(m_pBot);
+    if (!(TASKF(float, 0x24) >= gpGlobals->time && pEnemy))        // [OK] fim da tarefa / sem inimigo
+    {
+        TASK_DONE();
+        return;
+    }
+    if (m_pBot->GetMaxSpeed() > 0)
+        m_pBot->BotCombatMovement();
+    CBaseEntity *pDisc = UTIL_GetAttackFromPlayerByName(m_pBot, "Frieza Disc");   // [OK]
+    if (!pDisc)
+    {
+        // ainda nao lancou o disco: espera enquanto sobrar tempo
+        if (TASKF(float, 0x20) - 1.0 <= TASKF(float, 0x24) - gpGlobals->time)
+            return;
+        TASK_DONE();
+        return;
+    }
+    if (pEnemy->pev->velocity.Length() > 550.0f)                   // [OK] inimigo rapido
+        TASKF(float, 0x18) = gpGlobals->time;
+    else
+        TASKF(float, 0x1c) = gpGlobals->time;
+    float flDiscDist  = (pDisc->pev->origin - m_pBot->pev->origin).Length();
+    float flEnemyDist = (pEnemy->pev->origin - m_pBot->pev->origin).Length();
+    float flThresh = (BOTF(m_pBot, char, 0x9fc) + 1) * 250.0 / 1.5;   // [OK]
+    if (flDiscDist - flThresh > flEnemyDist && m_pBot->GetMaxSpeed() == 0.0f)
+        m_pEdict->v.button |= 0x800;                               // [OK] byte +0x201 |= 8
+    if (pDisc->pev->velocity.Length() != 0.0f)                     // [OK] disco ainda em movimento: so guia
+        return;
+    BOOL fFire = TRUE;
+    if (gpGlobals->time - 0.5 < TASKF(float, 0x18))
+        if (gpGlobals->time - 4.0 < TASKF(float, 0x1c))
+            fFire = UTIL_GetHeadingPercentage(m_pBot, pEnemy) > 74;   // [?] _ccall compara com 74
+    if (!fFire || !m_pBot->CanAttackPlayer(pEnemy))
+        return;
+    m_pEdict->v.button |= IN_ATTACK;                               // [OK]
+}
