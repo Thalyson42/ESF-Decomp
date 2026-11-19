@@ -14,9 +14,9 @@ void CShield::Spawn(void)
 {
     Precache();                                    // [OK] vtable slot 1 (vazio)
     SET_MODEL(ENT(pev), "sprites/null.spr");
-    pev->movetype = MOVETYPE_FLY;                  // [OK] 5
-    pev->solid = SOLID_NOT;                        // [OK] 0
-    *((int *)pev + 67) = 1;                        // [?] pev+0x10c (dword 67) = 1
+    *((int *)pev + 82) = 5;                        // [?] pev+0x148 = 5 (campo sem nome)
+    pev->movetype = MOVETYPE_NONE;                 // [OK] +0x108 = 0
+    pev->solid = SOLID_TRIGGER;                    // [OK] +0x10c = 1
 }
 
 CBaseEntity *CShield::GetOwner(entvars_t *pevShield)
@@ -158,7 +158,7 @@ CShieldAtk *CShieldAtk::ShootShield(entvars_t *pevShooter, Vector vecOrigin, Vec
     CShieldAtk *p = GetClassPtr((CShieldAtk *)NULL);   // [OK]
     p->Spawn();                                        // [OK]
     p->pev->movetype = MOVETYPE_FLY;                   // [OK] 5
-    p->pev->solid = SOLID_BBOX;                        // [OK] 1
+    p->pev->solid = SOLID_TRIGGER;                     // [OK] 1
     SET_MODEL(ENT(p->pev), "sprites/shieldattack.spr");
     p->m_iExplosionType = 4;                           // [OK] +0x2d4
     p->m_iRadiusMult = 4;                              // [OK] +0x2d0
