@@ -5,6 +5,8 @@
     int f_76c;                                  /* [?] +0x76c (aura/carregando) */ \
     CSwoop m_Swoop;                             /* [OK] +0x504 */ \
     void  RemoveSpecialModes(void); void OnDeathAnim(void); void StopAniTrigger(int iTrigger); \
+    void Teleport(void);        /* [?] declaracao so para o bot (decomp_raw/CBasePlayer/Teleport) */ \
+    void StartPowerUp(void);    /* [?] idem */ \
     void  StopPowerUp(void); void RemoveWallJump(void); BOOL CanMelee(CBasePlayer *pOther); \
     void  Spectator_SetMode(int iMode); void StartObserving(void); int GetPotentialPL(void); \
     BOOL CanFly(void); void Swoop(void); void CheckWallJump(void); void CheckSubModelStatus(void); void ReleaseCandy(void); \

@@ -8,6 +8,9 @@ class CBot;
 #define BOT_ENEMY_DELAY(b)   BOTF(b, float, 0xb3c)           // [?] proximo instante para reavaliar inimigos
 #define BOT_FASTMODE(b)      BOTF(b, short, 0xba4)           // [?] >0 = sem atraso geral
 #define BOT_TASKMODE(b)      BOTF(b, int, 0x1068)            // [?] 12 = combo ativo
+#define BOT_P37C(b)          BOTF(b, int, 0x37c)             // [?] flag de estado do jogador (lutando/voando)
+#define BOT_P3E4(b)          BOTF(b, int, 0x3e4)             // [?] estado: 3/4/5 = defendendo/preso
+#define BOT_P770(b)          BOTF(b, int, 0x770)             // [?] 
 #define BOT_COMBO(b)         BOTF(b, CBotCombo *, 0x1070)    // combo em andamento
 
 enum EComboType { COMBO_0 = 0 };   // [?] valores reais ainda nao mapeados
@@ -16,15 +19,23 @@ class CBotCombo
 {
 public:
     CBotCombo(CBot *pBot, EComboType type);   // 24 bytes [OK]
-    CBot *m_pBot;                              // [?]
-    EComboType m_Type;                         // [?]
-    int pad[4];
+    int   f_00;
+    void *f_04;             // [?] provavelmente o CBot
+    void *f_08;             // [?] tipo do combo
+    int   f_0c;
+    int   m_iStatus;        // +0x10 [OK] 0 = nao ativado, 2 = terminou
+    int   m_iSavedMode;     // +0x14 [OK] copiado de volta para BOT_TASKMODE ao terminar
+    void  Activate(void);
+    void  ExcuteCombo(void);   // (sic) nome original
 };
 
 class CBot : public CBasePlayer
 {
 public:
     CBasePlayer *GetBestEnemyFromList(void);
+    void ResetMoveSpeed(void);
+    void SetMoveDir(int iDir);
+    void DeleteCombos(void);
 };
 
 struct danger_info_s;
@@ -36,6 +47,7 @@ public:
     float m_flDelay;        // +0x00 [OK] proximo instante em que a tarefa pode agir
     int   m_iState;         // +0x04 [OK] GetTaskState (2 = combo)
     CBot *m_pBot;           // +0x08 [OK]
+    entvars_t *m_pPev;      // +0x0c [OK] usado como |= em +0x200 (botoes de entrada, IN_*) [?] campo do entvars ESF
     CBasePlayer *m_pEnemy;  // +0x10 [OK]
     virtual ~CBaseTask() {}
     virtual int  GetNesserelyChecks(void) = 0;   // slot 1 [OK] mascaras de verificacao do bot (ver CBot::CheckBotInternalStatus etc.)
