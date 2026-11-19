@@ -733,3 +733,92 @@ void CKameTorpTask::TaskThink(void)
         break;
     }
 }
+
+// ---- CShootCandyTask ----
+// task+0x1c proximo teleporte, +0x20 recuar ate, +0x24 proxima busca de doce, +0x28 prazo da busca, +0x2c ultimo instante perto
+BOOL CShootCandyTask::ReactOnDanger(danger_info_s *pDanger)
+{
+    return pDanger->m_iDanger > 59;                  // [?] _ccall comparando com 59
+}
+
+void CShootCandyTask::TaskThink(void)
+{
+    if ((int)m_pEdict->v.fuser4 <= 49)               // [OK] sem ki
+    {
+        TASK_DONE();
+        return;
+    }
+    CBasePlayer *pEnemy = BOT_ENEMY(m_pBot);
+    BOOL fSearchCandy = FALSE;
+    if (pEnemy)
+    {
+        if (m_pBot->CanAttackPlayer(pEnemy))
+        {
+            float flDist = (pEnemy->pev->origin - m_pBot->pev->origin).Length();
+            if (flDist <= 950.0)                     // [OK]
+            {
+                if (flDist > 500.0)
+                {
+                    if (TASKF(float, 0x1c) <= gpGlobals->time)
+                    {
+                        TASKF(float, 0x1c) = gpGlobals->time + 0.2;
+                        if (RANDOM_LONG(1, 100) <= *(short *)((char *)BOTF(m_pBot, void *, 0xa04) + 0x26))
+                            m_pBot->Teleport();      // [OK] aproxima teleportando
+                    }
+                    else if ((int)m_pEdict->v.fuser4 > 250)
+                        m_pBot->ToggleTurbo(1);
+                }
+                else if (flDist < 75.0)
+                {
+                    TASKF(float, 0x2c) = gpGlobals->time;
+                    TASKF(float, 0x20) = gpGlobals->time + 0.35;   // [OK] muito perto: recua um pouco
+                }
+                else
+                    TASKF(float, 0x2c) = gpGlobals->time;
+                if (gpGlobals->time - 3.5 <= TASKF(float, 0x2c))   // [OK] esteve na faixa de tiro ha menos de 3.5 s
+                {
+                    if (TASKF(float, 0x20) > gpGlobals->time)
+                        m_pBot->SetMoveDir(8);
+                    CBasePlayerItem *pItem = BOTF(m_pBot, CBasePlayerItem *, 0x968);
+                    if (pItem && pItem->m_iId != 20)               // [OK] 20 = candy
+                        m_pBot->SelectItem("weapon_candy");
+                    m_pEdict->v.button |= IN_ATTACK;
+                    return;
+                }
+            }
+        }
+        TASK_DONE();
+        return;
+    }
+    if (TASKF(float, 0x28) == 0.0f)
+    {
+        TASKF(float, 0x28) = gpGlobals->time + 1.0;                 // [OK] procura doce por 1 s
+        fSearchCandy = TRUE;
+    }
+    else if (TASKF(float, 0x28) >= gpGlobals->time && BOTF(m_pBot, int, 0xb70))
+        fSearchCandy = TRUE;
+    if (!fSearchCandy)
+    {
+        TASK_DONE();
+        return;
+    }
+    if (TASKF(float, 0x24) >= gpGlobals->time)
+        return;
+    TASKF(float, 0x24) = gpGlobals->time + 0.15;                    // [OK]
+    CBaseEntity *pCandy = NULL;
+    while ((pCandy = UTIL_FindEntityByClassname(pCandy, "candy")) != NULL)   // [OK]
+    {
+        if (IsNull(pCandy->edict()))
+            continue;
+        if ((pCandy->pev->origin - m_pBot->pev->origin).Length() <= 750.0)   // [OK]
+        {
+            Vector vecAng = m_pBot->GetAimAngles(pCandy->pev->origin);       // mira no doce
+            BOTF(m_pBot, float, 0xc10) = vecAng.x;
+            BOTF(m_pBot, float, 0xc14) = vecAng.y;
+            BOTF(m_pBot, float, 0xc18) = vecAng.z;
+            return;
+        }
+    }
+    if (TASKF(float, 0x28) - gpGlobals->time <= 0.75)               // [OK] sem doce e quase sem tempo
+        TASK_DONE();
+}
