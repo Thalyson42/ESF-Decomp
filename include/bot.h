@@ -45,6 +45,8 @@ public:
     BOOL CanAttackPlayer(CBasePlayer *pPlayer);
     void ShootHealthBeam(CBasePlayer *pPlayer);
     BOOL BotShouldFallDown(void);
+    void StartBlock(void);
+    void StopBlock(void);
     Vector GetAimAngles(Vector vecTarget);   // [OK] mangled: GetAimAngles__4CBotG6Vector (retorna Vector por valor)
 };
 

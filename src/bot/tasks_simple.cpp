@@ -486,3 +486,67 @@ void CLookAroundTask::TaskThink(void)
     if (RANDOM_LONG(0, 5) > 4)
         BOTF(m_pBot, float, 0xc14) = UTIL_WrapAngle(BOTF(m_pBot, float, 0xc14) + RANDOM_LONG(-10, 10));   // [OK] tremida no yaw
 }
+
+// ---- CBlockTask ----
+extern BOOL IsNull(edict_t *pEnt);          // [?] funcoes livres do ESF
+extern BOOL IsAttack(edict_t *pEnt);
+extern void WrapAngles(Vector &vecAngles);
+
+BOOL CBlockTask::ShouldManageEnemies(void)
+{
+    return BOTF(m_pBot, int, 0xa1c) == 3;                           // [OK]
+}
+
+void CBlockTask::TaskThink(void)
+{
+    m_pBot->ResetMoveSpeed();
+    BOOL fStop = (TASKF(float, 0x18) < gpGlobals->time &&           // [OK] fim do tempo de bloqueio...
+                  !(BOTF(m_pBot, int, 0x358) || BOTF(m_pBot, int, 0x49c) == 2 || BOTF(m_pBot, short, 0xa18) > 159))
+                 || (int)m_pEdict->v.fuser4 <= 7;                   // [OK] ...ou ki acabou (1e-44 = int 7)
+    if (fStop)
+    {
+        if (BOTF(m_pBot, int, 0x32c))
+            m_pBot->StopBlock();                                    // [OK]
+        TASK_DONE();
+        return;
+    }
+    if (BOTF(m_pBot, int, 0x358))                                   // [OK] m_fBlockStruggling
+    {
+        if (*((char *)BOTF(m_pBot, void *, 0xa00) + 0x3e))
+        {
+            m_pBot->ToggleTurbo(1);
+            BOTF(m_pBot, float, 0xab4) = gpGlobals->time + 1.5;
+        }
+        CBaseEntity *pInAtk = BOTF(m_pBot, CBaseEntity *, 0xac0);   // [OK] ataque que esta sendo bloqueado
+        edict_t *pAtk = pInAtk ? ENT(pInAtk->pev) : NULL;
+        if (pAtk && !IsNull(pAtk) && IsAttack(pAtk))
+        {
+            BOOL fAimAtAttack = TRUE;
+            edict_t *pOwner = pAtk->v.owner;                        // [OK] edict+0x218
+            if (!IsNull(pOwner))
+            {
+                Vector vecAng = UTIL_VecToAngles(pOwner->v.origin - m_pEdict->v.origin);
+                WrapAngles(vecAng);
+                float flYaw   = UTIL_WrapAngle(pAtk->v.angles.y + 180.0);   // [OK]
+                float flPitch = UTIL_WrapAngle(pAtk->v.angles.x + 180.0);
+                if (20.0 > fabs(flYaw - vecAng.y) && 20.0 > fabs(flPitch - vecAng.x))
+                {
+                    // o atacante ja esta mirando de volta: acompanha o dono do ataque
+                    BOTF(m_pBot, float, 0xc10) = vecAng.x;
+                    BOTF(m_pBot, float, 0xc14) = vecAng.y;
+                    BOTF(m_pBot, float, 0xc18) = vecAng.z;
+                    fAimAtAttack = FALSE;
+                }
+            }
+            if (fAimAtAttack)
+            {
+                Vector vecAng = m_pBot->GetAimAngles(pAtk->v.origin);   // [OK]
+                BOTF(m_pBot, float, 0xc10) = vecAng.x;
+                BOTF(m_pBot, float, 0xc14) = vecAng.y;
+                BOTF(m_pBot, float, 0xc18) = vecAng.z;
+            }
+        }
+    }
+    if (!BOTF(m_pBot, int, 0x32c))
+        m_pBot->StartBlock();                                       // [OK]
+}
