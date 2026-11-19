@@ -41,6 +41,7 @@ public:
     void GoToAnPreviousLocation(void);
     void BotCombatMovement(void);
     void AddShootDelay(void);
+    BOOL CanMeleeKickPlayer(CBasePlayer *pPlayer);
     BOOL CanAttackPlayer(CBasePlayer *pPlayer);
     void ShootHealthBeam(CBasePlayer *pPlayer);
 };

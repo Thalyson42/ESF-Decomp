@@ -246,3 +246,65 @@ void CShootNonChargebleTask::TaskThink(void)
     m_pBot->AddShootDelay();                                           // [OK]
     TASK_DONE();
 }
+
+// ---- CKickEnemyTask ----
+extern BOOL EntIsInFieldOfView(CBaseEntity *pViewer, CBaseEntity *pTarget);   // [?] funcao livre; assinatura a confirmar
+
+void CKickEnemyTask::TaskThink(void)
+{
+    CBasePlayer *pEnemy = BOT_ENEMY(m_pBot);
+    if (!pEnemy || *(int *)((char *)m_pEnemy->pev + 0x108) == 11 || !m_pBot->CanAttackPlayer(pEnemy))   // [OK]
+    {
+        TASK_DONE();
+        return;
+    }
+    if (m_pBot->CanMeleeKickPlayer(m_pEnemy))
+        TASKF(float, 0x18) = gpGlobals->time;                          // [OK] ultima vez que podia chutar
+    else if (gpGlobals->time - TASKF(float, 0x18) > 0.2f)
+    {
+        TASK_DONE();
+        return;
+    }
+    float flDist = (pEnemy->pev->origin - m_pBot->pev->origin).Length();
+    if (flDist < 30.0f)
+        m_pBot->SetMoveDir(8);                                         // [OK] recua
+    else if (flDist < 350.0f)
+    {
+        m_pBot->SetMoveDir(0x10);                                      // [OK] avanca
+        if (flDist > 150.0f && !EntIsInFieldOfView(m_pBot, pEnemy) && !EntIsInFieldOfView(pEnemy, m_pBot))
+            m_pBot->ResetMoveSpeed();                                  // [OK] ninguem se ve: para
+    }
+    else if (flDist < 750.0f)
+    {
+        if ((int)m_pBot->pev->fuser4 <= 450)                           // [OK] sem ki para teleportar
+        {
+            TASK_DONE();
+            return;
+        }
+        if (RANDOM_LONG(1, 100) > *(short *)((char *)BOTF(m_pBot, void *, 0xa04) + 0x26))
+        {
+            TASK_DONE();
+            return;
+        }
+        m_pBot->Teleport();
+    }
+    else
+    {
+        TASK_DONE();
+        return;
+    }
+    CBasePlayerItem *pItem = BOTF(m_pBot, CBasePlayerItem *, 0x968);
+    if (pItem && pItem->m_iId != 1 && pItem->m_iId != 2)               // [OK] nao esta com arma corpo a corpo
+    {
+        if (*(int *)((char *)m_pPev + 0x28c) == 7)                     // [?] classe 7 usa espada
+            m_pBot->SelectItem("weapon_sword");
+        else
+            m_pBot->SelectItem("weapon_melee");
+    }
+    if (*((char *)BOTF(m_pBot, void *, 0xa00) + 0x3e) && (int)m_pBot->pev->fuser4 > 200)   // [OK] turbo se tiver ki
+    {
+        m_pBot->ToggleTurbo(1);
+        BOTF(m_pBot, float, 0xab4) = gpGlobals->time + 1.5;
+    }
+    *(int *)((char *)m_pPev + 0x200) |= 0x800;                          // [?] byte +0x201 |= 8
+}
