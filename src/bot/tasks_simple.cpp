@@ -1804,3 +1804,157 @@ void CDBTask::TaskThink(void)
     else
         TASK_DONE();
 }
+
+// ---- CControlBeamTask ----
+// task+0x18: instante limite do raio; +0x1c: flag "reagiu ao ataque inimigo". Bot: +0x33c carregando, +0xab4 atraso, +0xb14 flag, +0xa1c
+extern BOOL IsBeamAttack(edict_t *pEnt);                              // [?]
+extern BOOL IsNonBeamAttack(edict_t *pEnt);                           // [?]
+extern BOOL EntIsInFieldOfView(entvars_t *pViewer, entvars_t *pTarget);   // [?] sobrecarga
+
+#define CB_RELEASE() (m_pEdict->v.button |= 0x800)                    // [OK] solta o botao do raio (button+1 |= 8)
+#define CB_AIM(vec) do { Vector _a = m_pBot->GetAimAngles(vec); \
+    BOTF(m_pBot, float, 0xc10) = _a.x; BOTF(m_pBot, float, 0xc14) = _a.y; BOTF(m_pBot, float, 0xc18) = _a.z; } while (0)
+
+BOOL CControlBeamTask::ReactOnDanger(danger_info_s *pDanger)
+{
+    if (pDanger->m_iDanger > 59)
+    {
+        entvars_t *pOwn = UTIL_GetLastAttackFromPlayer(m_pBot);
+        if (!pOwn)
+        {
+            CB_RELEASE();
+            return FALSE;
+        }
+        float flDist = (pOwn->origin - m_pBot->pev->origin).Length();
+        float flLimit = pOwn->dmg * 12.5;                             // [OK] +0x1e0
+        CBasePlayer *pEnemy = BOT_ENEMY(m_pBot);
+        entvars_t *pEnemyAtk = NULL;
+        if (pEnemy && BOTF(m_pBot, int, 0xa1c) == 1)
+            pEnemyAtk = UTIL_GetLastAttackFromPlayer(pEnemy);
+        if (pEnemyAtk && EntIsInFieldOfView(pOwn, pEnemyAtk))
+        {
+            CB_AIM(pEnemyAtk->origin);
+            TASKF(char, 0x1c) = 1;
+        }
+        else if (pDanger->m_iDanger <= 159)
+        {
+            if (m_pBot->BotCanBeamJump(1))
+            {
+                BOTF(m_pBot, int, 0x1068) = 22;                       // [OK] modo: beam jump
+                TASK_DONE();
+            }
+            else if (flDist > flLimit && pDanger->m_iDanger > 99)
+            {
+                CB_RELEASE();
+                return FALSE;
+            }
+        }
+        else
+        {
+            CB_RELEASE();
+            return FALSE;
+        }
+    }
+    return FALSE;
+}
+
+void CControlBeamTask::TaskThink(void)
+{
+    BOTF(m_pBot, float, 0xab4) = gpGlobals->time + 1.5;
+    if (!BOTF(m_pBot, int, 0x33c) && TASKF(float, 0x18) - gpGlobals->time <= 9.5)
+    {
+        TASK_DONE();
+        return;
+    }
+    if (TASKF(float, 0x18) < gpGlobals->time)
+    {
+        CB_RELEASE();
+        return;
+    }
+    CBasePlayer *pEnemy = BOT_ENEMY(m_pBot);
+    entvars_t *pOwn = UTIL_GetLastAttackFromPlayer(m_pBot);
+    if (m_pBot->IsValidEnemy(pEnemy))
+    {
+        if (!pOwn)
+        {
+            if (TASKF(float, 0x18) - gpGlobals->time >= 9.0)
+                m_pBot->AimAtEnemy(pEnemy);
+            else
+                TASK_DONE();
+            return;
+        }
+        entvars_t *pEnemyAtk = UTIL_GetLastAttackFromPlayer(pEnemy);
+        if (pEnemyAtk && (IsBeamAttack(pEnemyAtk->pContainingEntity) || IsNonBeamAttack(pEnemyAtk->pContainingEntity))
+            && EntIsInFieldOfView(pOwn, pEnemyAtk))
+        {
+            CB_AIM(pEnemyAtk->origin);                                 // reage ao ataque inimigo
+            TASKF(char, 0x1c) = 1;
+            return;
+        }
+        float flDistBot   = (pOwn->origin - m_pBot->pev->origin).Length();
+        float flDistEnemy = (pOwn->origin - pEnemy->pev->origin).Length();
+        if (BOTF(m_pBot, char, 0xb14) && flDistEnemy <= BOTF(m_pBot, float *, 0xa00)[0x38 / 4])   // [OK]
+        {
+            CB_RELEASE();                                              // raio ja chegou perto o bastante
+            return;
+        }
+        float flDistEdict = (pOwn->origin - m_pEdict->v.origin).Length();
+        if (flDistBot - 500.0 <= flDistEdict)
+        {
+            if (flDistBot - 100.0 >= flDistEdict)
+                CB_AIM(pEnemy->pev->origin);                           // [OK] mira no inimigo
+            else
+                m_pBot->AimAtEnemy(pEnemy);
+            return;
+        }
+        CB_RELEASE();
+        return;
+    }
+
+    // sem inimigo valido: desvia do proprio raio
+    if (!pOwn)
+    {
+        CB_RELEASE();
+        return;
+    }
+    float flReach = pOwn->dmg * 12.0;                                  // [OK]
+    if ((pOwn->origin - m_pBot->pev->origin).Length() >= flReach)
+        return;
+    UTIL_MakeVectors(pOwn->angles);
+    Vector vecEnd = pOwn->origin + gpGlobals->v_forward * 800.0;
+    TraceResult tr;
+    UTIL_TraceHull(pOwn->origin, vecEnd, ignore_monsters, point_hull, pOwn->pContainingEntity, &tr);   // [OK]
+    if (tr.flFraction * 800.0 >= 800.0f)
+        return;                                                        // nada no caminho
+    if (m_pBot->BotCanBeamJump(1))
+    {
+        BOTF(m_pBot, int, 0x1068) = 22;
+        return;
+    }
+    edict_t *pe = pOwn->pContainingEntity;
+    float &yaw = BOTF(m_pBot, float, 0xc14), &pitch = BOTF(m_pBot, float, 0xc10);
+    BOOL fYawDone = FALSE;
+    // yaw: 2 = esquerda, 4 = direita
+    if (RANDOM_LONG(0, 1) == 0)
+    {
+        if (!CheckForCollide(pe, 2, 800.0f))      { yaw = UTIL_WrapAngle(yaw + RANDOM_FLOAT(40, 50)); return; }   // [?] sinais
+        if (!CheckForCollide(pe, 4, 800.0f))      { yaw = UTIL_WrapAngle(yaw - RANDOM_FLOAT(40, 50)); return; }
+    }
+    else
+    {
+        if (!CheckForCollide(pe, 4, 800.0f))      { yaw = UTIL_WrapAngle(yaw - RANDOM_FLOAT(40, 50)); return; }
+        if (!CheckForCollide(pe, 2, 800.0f))      { yaw = UTIL_WrapAngle(yaw + RANDOM_FLOAT(40, 50)); return; }
+    }
+    (void)fYawDone;
+    // pitch: 64 = cima, 32 = baixo
+    if (RANDOM_LONG(0, 1) == 0)
+    {
+        if (!CheckForCollide(pe, 64, 800.0f))     { pitch = UTIL_WrapAngle(pitch + RANDOM_FLOAT(40, 50)); return; }
+        if (!CheckForCollide(pe, 32, 800.0f))     { pitch = UTIL_WrapAngle(pitch - RANDOM_FLOAT(40, 50)); return; }
+    }
+    else
+    {
+        if (!CheckForCollide(pe, 32, 800.0f))     { pitch = UTIL_WrapAngle(pitch - RANDOM_FLOAT(40, 50)); return; }
+        if (!CheckForCollide(pe, 64, 800.0f))     { pitch = UTIL_WrapAngle(pitch + RANDOM_FLOAT(40, 50)); return; }
+    }
+}
