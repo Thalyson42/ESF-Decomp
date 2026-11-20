@@ -1636,3 +1636,171 @@ void CNormalMovementTask::CheckFOV(void)
         BOTF(m_pBot, float, 0xaec) += 1.5f;
     }
 }
+
+// ---- CDBTask (Dragon Balls) ----
+// task+0x18: instante em que vai pular para largar a esfera no ponto de reuniao. Bot: +0xb30 esfera alvo, +0xb39 flag, +0x760 (1888) "tem esfera"
+extern Vector GatherDBPosForTeamGood, GatherDBPosForTeamEvil;   // [OK] pontos de reuniao das esferas por time
+extern BOOL UTIL_DBsAreGathered(void);                          // [?] funcoes livres
+extern BOOL UTIL_DBsAreActive(void);
+extern BOOL IsNull(CBaseEntity *pEnt);                          // [?] sobrecarga
+
+BOOL CDBTask::HeadToNextDBWP(void)
+{
+    if (m_pBot->ReachedGoalWP())
+        return FALSE;
+    if (!m_pBot->CurrentWPIsValid())
+    {
+        short iWP = WaypointFindReachable(m_pEdict, 1250.0f, *(int *)((char *)&m_pEdict->v + 0x1ac));   // [OK]
+        if (iWP == -1)
+            return FALSE;
+        BOTF(m_pBot, int, 0x1008) = iWP;
+        BOTF(m_pBot, float, 0xff8) = waypoints[iWP].x;
+        BOTF(m_pBot, float, 0xffc) = waypoints[iWP].y;
+        BOTF(m_pBot, float, 0x1000) = waypoints[iWP].z;
+        BOTF(m_pBot, float, 0x1004) = gpGlobals->time;
+    }
+    return m_pBot->HeadToWaypoint();
+}
+
+BOOL CDBTask::GoToDB(void)
+{
+    CBaseEntity *pDB = BOTF(m_pBot, CBaseEntity *, 0xb30);
+    if (!IsNull(pDB) && !UTIL_DBsAreGathered() && UTIL_DBsAreActive())
+    {
+        if (m_pBot->CanReachPoint(pDB->pev->origin))              // [OK] vtable +0xe4
+        {
+            Vector vecAng = m_pBot->GetAimAngles(pDB->pev->origin);
+            BOTF(m_pBot, float, 0xc10) = vecAng.x;
+            BOTF(m_pBot, float, 0xc14) = vecAng.y;
+            BOTF(m_pBot, float, 0xc18) = vecAng.z;
+            BOTF(m_pBot, int, 0x1008) = -1;                       // [OK] esquece o waypoint atual: vai direto
+            return TRUE;
+        }
+        if (BOTF(m_pBot, int, 0x1024) != -1)
+            return HeadToNextDBWP();
+    }
+    TASK_DONE();
+    return FALSE;
+}
+
+BOOL CDBTask::CheckThrowToDBSpot(void)
+{
+    Vector vecSpot = (*(int *)((char *)m_pBot->pev + 0x1ac) == 1) ? GatherDBPosForTeamGood : GatherDBPosForTeamEvil;   // [OK]
+    float flDist = (vecSpot - m_pEdict->v.origin).Length();
+    if (flDist >= 150.0f)
+        return FALSE;
+    if (0.1f < *(float *)((char *)&m_pEdict->v + 0x11c) && (*(unsigned char *)((char *)&m_pEdict->v + 0x1a5) & 2))   // [?] voando
+    {
+        m_pEdict->v.button |= 0x800;                              // [OK] solta a esfera
+        return TRUE;
+    }
+    int iDir;
+    if (flDist < 125.0f)
+        iDir = 8;                                                 // [OK] perto demais: recua
+    else
+    {
+        m_pBot->ResetMoveSpeed();
+        if (m_pEdict->v.origin.z - 175.0f >= vecSpot.z)
+            iDir = 32;                                            // [OK] bem acima do ponto: desce
+        else if (m_pEdict->v.origin.z - 200.0f >= vecSpot.z)
+            iDir = 64;                                            // [OK] (literal; nunca e alcancado depois do teste acima)
+        else
+        {
+            if (TASKF(float, 0x18) == 0.0f)
+            {
+                TASKF(float, 0x18) = gpGlobals->time + 0.25;      // [OK] espera 0.25 s
+                return FALSE;
+            }
+            if (TASKF(float, 0x18) < gpGlobals->time)
+            {
+                m_pEdict->v.button |= 0x800;
+                return TRUE;
+            }
+            return FALSE;
+        }
+    }
+    m_pBot->SetMoveDir(iDir);
+    return FALSE;
+}
+
+BOOL CDBTask::GoToDBSpot(void)
+{
+    if (GatherDBPosForTeamGood == g_vecZero)
+        return FALSE;
+    if (GatherDBPosForTeamEvil == g_vecZero)
+        return FALSE;
+    Vector &vecSpot = (*(int *)((char *)&m_pEdict->v + 0x1ac) == 1) ? GatherDBPosForTeamGood : GatherDBPosForTeamEvil;   // [OK] edict+0x22c
+    if (m_pBot->CanReachPoint(vecSpot))
+    {
+        if (BOTF(m_pBot, int, 0x1008) != -1)
+            BOTF(m_pBot, int, 0x1008) = -1;
+        if (CheckThrowToDBSpot())
+            m_pBot->TurnAround();                                 // [OK] largou a esfera: sai de perto
+        else
+        {
+            Vector vecAng = m_pBot->GetAimAngles(vecSpot);
+            BOTF(m_pBot, float, 0xc10) = vecAng.x;
+            BOTF(m_pBot, float, 0xc14) = vecAng.y;
+            BOTF(m_pBot, float, 0xc18) = vecAng.z;
+        }
+        return TRUE;
+    }
+    if (BOTF(m_pBot, int, 0x1024) != -1)
+        return HeadToNextDBWP();
+    return FALSE;
+}
+
+BOOL CDBTask::GoToGatheredSpot(void)
+{
+    if (!BOTF(m_pBot, char, 0xb39))
+    {
+        CBaseEntity *pDB = BOTF(m_pBot, CBaseEntity *, 0xb30);
+        if (!IsNull(pDB))
+        {
+            Vector vecPos = pDB->pev->origin;
+            if (m_pBot->CanReachPoint(vecPos))
+            {
+                if (BOTF(m_pBot, int, 0x1008) != -1)
+                    BOTF(m_pBot, int, 0x1008) = -1;
+                if ((vecPos - m_pEdict->v.origin).Length() < 100.0f)   // [OK] chegou
+                {
+                    if (RANDOM_LONG(1, 100) <= 50)
+                        m_pEdict->v.button |= 0x20;                    // [OK] botao de pegar/usar
+                    m_pBot->ResetMoveSpeed();
+                }
+                else
+                {
+                    Vector vecAng = m_pBot->GetAimAngles(vecPos);
+                    BOTF(m_pBot, float, 0xc10) = vecAng.x;
+                    BOTF(m_pBot, float, 0xc14) = vecAng.y;
+                    BOTF(m_pBot, float, 0xc18) = vecAng.z;
+                }
+                return TRUE;
+            }
+            if (BOTF(m_pBot, int, 0x1024) != -1)
+                return HeadToNextDBWP();
+        }
+    }
+    return FALSE;
+}
+
+void CDBTask::TaskThink(void)
+{
+    if ((int)m_pEdict->v.fuser4 <= 249)                            // [OK] sem ki
+    {
+        BOTF(m_pBot, int, 0x1068) = 0;
+        TASK_DONE();
+        return;
+    }
+    BOOL fBusy;
+    if (UTIL_DBsAreGathered())
+        fBusy = GoToGatheredSpot();
+    else if (!BOTF(m_pBot, int, 0x760))                            // [OK] +0x760 (1888): nao carrega esfera
+        fBusy = GoToDB();
+    else
+        fBusy = GoToDBSpot();
+    if (fBusy)
+        m_pBot->ToggleTurbo(1);                                    // [OK]
+    else
+        TASK_DONE();
+}

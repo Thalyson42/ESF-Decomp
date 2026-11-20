@@ -155,6 +155,11 @@ public:
     virtual void TaskThink(void);
     virtual int TaskIdentify(void);
     virtual BOOL ShouldManageEnemies(void);
+    BOOL GoToDB(void);
+    BOOL GoToDBSpot(void);
+    BOOL GoToGatheredSpot(void);
+    BOOL CheckThrowToDBSpot(void);
+    BOOL HeadToNextDBWP(void);
 };
 
 class CDrainEntsTask : public CBaseTask
