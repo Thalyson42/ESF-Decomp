@@ -91,6 +91,12 @@ public:
     virtual int TaskIdentify(void);
     virtual BOOL ShouldManageEnemies(void);
     virtual BOOL ReactOnDanger(danger_info_s *pDanger);
+    int GetAttackIndex(int iAttack);
+    float GetMaxDistForAttackById(int iAttack);
+    float GetMaxDistForAttackByTableIndex(int iIndex);
+    float GetMinDistForAttackById(int iAttack);
+    float GetMinDistForAttackByTableIndex(int iIndex);
+    int GetAttackPercent(CBasePlayer *pEnemy, int iAttack);
 };
 
 class CComboTask : public CBaseTask

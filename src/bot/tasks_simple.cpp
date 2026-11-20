@@ -2444,3 +2444,108 @@ void CSwoopTask::TaskThink(void)
     (void)fKeep;
     TASK_DONE();
 }
+
+// ---- CCombatTask: tabela de ataques e escolha ----
+// BotWeaponInfoTable: entradas de 21 ints (84 bytes) terminadas por id 0; [0] id do ataque, [19] distancia minima, [20] maxima
+struct bot_weapon_info_s { int iAttack; int aiData[18]; float flMinDist; float flMaxDist; };   // [OK] stride 84
+extern bot_weapon_info_s BotWeaponInfoTable[];
+
+int CCombatTask::GetAttackIndex(int iAttack)
+{
+    for (int i = 0; BotWeaponInfoTable[i].iAttack; i++)
+        if (BotWeaponInfoTable[i].iAttack == iAttack)
+            return i;
+    return 0;                                                       // [OK] nao achado: primeira entrada
+}
+
+float CCombatTask::GetMaxDistForAttackByTableIndex(int iIndex)
+{
+    return BotWeaponInfoTable[iIndex].flMaxDist;                    // [OK]
+}
+
+float CCombatTask::GetMaxDistForAttackById(int iAttack)
+{
+    return BotWeaponInfoTable[GetAttackIndex(iAttack)].flMaxDist;   // [OK]
+}
+
+float CCombatTask::GetMinDistForAttackByTableIndex(int iIndex)
+{
+    float flMin = BotWeaponInfoTable[iIndex].flMinDist;
+    int iLevel = *(int *)(SW_SKILL2(m_pBot) + 0x34);                // [OK] nivel de habilidade
+    if (iLevel == 0)
+        return flMin * 0.8f;
+    if (iLevel == 2)
+        return flMin * 1.2f;
+    return flMin;
+}
+
+float CCombatTask::GetMinDistForAttackById(int iAttack)
+{
+    return GetMinDistForAttackByTableIndex(GetAttackIndex(iAttack));
+}
+
+BOOL CCombatTask::ReactOnDanger(danger_info_s *pDanger)
+{
+    return pDanger->m_iDanger > 59;                                 // [OK] (cmp word [+0x18], 0x3b; setg)
+}
+
+// Chance (0..100) de usar o ataque iAttack contra pEnemy. Tabela de habilidades do bot: shorts em SW_SKILL2(bot)+2..+0x10.
+int CCombatTask::GetAttackPercent(CBasePlayer *pEnemy, int iAttack)
+{
+    char *pBM = g_pBotManager;
+    if (!pBM || !pBM[0xd47])
+        return 0;
+    char *pSkill = SW_SKILL2(m_pBot);
+    float fS4 = *(short *)(pSkill + 4),  fS6 = *(short *)(pSkill + 6),  fS8 = *(short *)(pSkill + 8),  fSE = *(short *)(pSkill + 0xe);
+    float fS2 = *(short *)(pSkill + 2),  fSA = *(short *)(pSkill + 0xa), fSC = *(short *)(pSkill + 0xc), fS10 = *(short *)(pSkill + 0x10);
+    if (BOTF(pEnemy, int, 0x334) || BOTF(pEnemy, int, 0x338))
+    {
+        // inimigo carregando: se o bot ve a carga, aumenta a chance de ataques que interrompem esse tipo de carga
+        short sCharge = BOTF(pEnemy, short, 0x6d0);
+        int iLevel = (unsigned char)BOTF(m_pBot, char, 0x9fc);
+        if (iLevel <= 4)
+        {
+            int iRange = 10 + 5 * iLevel;                           // [OK] tabela de saltos: 10,15,20,25,30
+            sCharge += RANDOM_LONG(-iRange, iRange);
+        }
+        CBasePlayerItem *pItem = BOTF(pEnemy, CBasePlayerItem *, 0x968);
+        if (sCharge > 0 && pItem)
+        {
+            switch (BOTF(pItem, int, 0x88))                         // [OK] tabela por id da arma do inimigo (4..24)
+            {
+            case 4: case 18:                            fS4 *= 1.75; break;
+            case 16: case 22:                           fS6 *= 1.75; break;
+            case 5: case 6: case 15: case 23:           fS8 *= 1.75; break;
+            case 11: case 12: case 13: case 17: case 19: case 24:   fSE *= 1.75; break;
+            }
+        }
+    }
+    else if (BOTF(pEnemy, int, 0x37c) && (unsigned)(BOTF(pEnemy, int, 0x3e4) - 3) <= 1)
+    {
+        fS2 *= 1.75; fSC *= 1.75;                                   // [OK] inimigo preso/defendendo
+    }
+    else if (pEnemy->pev->fuser1 == 0.0f)                           // [?] pev+0x210 (campo exato a confirmar)
+    {
+        fS2 *= 1.25f; fSC *= 1.25f;
+    }
+    float fResult;
+    switch (iAttack)
+    {
+    case 1: case 2:                                         return 0;
+    case 3: case 30: case 21:                               fResult = fS2; break;
+    case 4: case 18:                                        fResult = fS4; break;
+    case 22: case 16:                                       fResult = fS6; break;
+    case 5: case 6: case 15: case 23:                       fResult = fS8; break;
+    case 7: case 10:                                        fResult = fSA; break;
+    case 9: case 14: case 20:                               fResult = fSC; break;
+    case 11: case 12: case 13: case 17: case 19: case 24: case 33:   fResult = fSE; break;
+    case 32:                                                fResult = fS10; break;
+    case 128:
+        if (BOTF(m_pBot, short, 0xba4) > 0)
+            return *(short *)((char *)BOTF(m_pBot, void *, 0xba8) + 0xc);
+        return 0;
+    case 8:                                                 return *(short *)(pSkill + 0x12);
+    default:                                                return 0;
+    }
+    return (short)(int)fResult;
+}
