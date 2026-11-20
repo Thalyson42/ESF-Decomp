@@ -4,6 +4,7 @@
 #include "cbase.h"
 #include "player.h"
 #include "weapons.h"
+#include "esf_classes.h"
 #include "tasks.h"
 
 #define TASK_DONE() (m_iState = 2)
@@ -920,5 +921,150 @@ aim:
     }
     else
         return;
+    TASK_DONE();
+}
+
+// ---- CChargeAttackTask ----
+// task+0x18 ultimo instante com inimigo rapido (>550), +0x1c ultimo instante com inimigo lento
+extern BOOL EntityHeadsToPlayer(CBasePlayer *pBot, entvars_t *pAttack);   // [?] funcao livre
+#define BOT_ATTACK(b) BOTF(b, bot_attack_s *, 0xb80)                      // [OK] ataque escolhido
+#define BOT_CHARGE(b) BOTF(b, int, 0x6d0)                                 // [?] carga do ataque (100 = cheio)
+
+BOOL CChargeAttackTask::ReactOnDanger(danger_info_s *pDanger)
+{
+    if (pDanger->m_iDanger <= 59)
+        return FALSE;
+    CBot *pBot = m_pBot;
+    BOOL fCanTeleport = BOT_CHARGE(pBot) <= 0 ? TRUE : pBot->m_pClass->CanTeleportWhileCharging() != 0;   // [OK] vtable +0x44
+    if (RANDOM_LONG(1, 100) <= *(short *)((char *)BOTF(pBot, void *, 0xa04) + 0x26) && fCanTeleport)
+    {
+        pBot->Teleport();                                       // [OK]
+        return FALSE;
+    }
+    if (pBot->BotShouldFallDown())
+    {
+        if (BOTF(pBot, int, 0x320))
+            pBot->StopFly();
+        BOTF(pBot, char, 0xa10) = 0;
+        BOTF(pBot, float, 0xa14) = gpGlobals->time + RANDOM_FLOAT(0.8, 1.2);
+        return FALSE;
+    }
+    if (BOT_CHARGE(pBot) <= 32)
+        return TRUE;                                            // [OK] pouca carga: deixa para o chamador
+    if (BOT_ATTACK(pBot) && BOT_ATTACK(pBot)->m_fBeamJump && pDanger->m_iDanger <= 99 && pBot->BotCanBeamJump(0))
+    {
+        BOTF(pBot, int, 0x1068) = 22;                           // [OK] foge com beam jump
+        TASK_DONE();
+        m_pEdict->v.button |= IN_ATTACK;
+        return FALSE;
+    }
+    BOOL fHandled = FALSE;
+    if (BOT_ENEMY(pBot) && BOTF(pBot, int, 0xa1c) == 1)
+    {
+        entvars_t *pLast = UTIL_GetLastAttackFromPlayer(BOT_ENEMY(pBot));
+        if (pLast && EntityHeadsToPlayer(pBot, pLast))          // [OK] ataque do inimigo vem em minha direcao
+        {
+            fHandled = TRUE;
+            pBot->AddShootDelay();
+            BOTF(pBot, char, 0xb14) = RANDOM_LONG(1, 100) <= *(short *)((char *)BOTF(pBot, void *, 0xa04) + 0x2a);   // [OK]
+            BOTF(pBot, int, 0x1068) = 15;
+            TASK_DONE();
+            Vector vecAng = pBot->GetAimAngles(pLast->origin);
+            BOTF(pBot, float, 0xc10) = vecAng.x;
+            BOTF(pBot, float, 0xc14) = vecAng.y;
+            BOTF(pBot, float, 0xc18) = vecAng.z;
+        }
+    }
+    if (!fHandled && pDanger->m_iDanger > 99)
+    {
+        if (!BOT_ATTACK(pBot))
+            return TRUE;
+        if (pBot->AttackIsBeam(BOT_ATTACK(pBot)))
+        {
+            if (*(int *)((char *)&m_pEdict->v + 0x20c) == 7)    // [?] classe 7 = espada
+            {
+                pBot->SelectItem("weapon_sword");
+                return TRUE;
+            }
+            pBot->SelectItem("weapon_melee");
+        }
+        return TRUE;
+    }
+    return FALSE;
+}
+
+void CChargeAttackTask::TaskThink(void)
+{
+    CBot *pBot = m_pBot;
+    CBasePlayer *pEnemy = BOT_ENEMY(pBot);
+    if (!(BOT_ATTACK(pBot) && (pEnemy || !(gpGlobals->time - 2.0 >= BOTF(pBot, float, 0xb40)))))   // [OK] ataque escolhido e alvo (ou perdido ha < 2 s)
+    {
+        TASK_DONE();
+        return;
+    }
+    int iAtk = BOT_ATTACK(pBot)->m_iAttack;
+    if (iAtk == 16 || iAtk == 22 || iAtk == 12 || iAtk == 15 || iAtk == 13 || iAtk == 24 || iAtk == 19)
+        pBot->ResetMoveSpeed();                                 // [OK] estes ataques exigem ficar parado
+    else if (!pEnemy)
+        pBot->GoToAnPreviousLocation();
+    else
+        pBot->BotCombatMovement();
+    if (pEnemy)
+    {
+        if (pEnemy->pev->velocity.Length() > 550.0f)            // [OK]
+            TASKF(float, 0x18) = gpGlobals->time;
+        else
+            TASKF(float, 0x1c) = gpGlobals->time;
+    }
+    BOOL fFull = BOT_CHARGE(pBot) == 100;                       // [OK] carga cheia
+    int iKi = (int)m_pEdict->v.fuser4;
+    BOOL fKeepCharging = FALSE;                                 // true = vai para o trecho "carrega/atira"
+    if (iKi > 14)
+    {
+        if (pEnemy)
+        {
+            if (gpGlobals->time - 0.5 < TASKF(float, 0x18) && gpGlobals->time - 4.0 < TASKF(float, 0x1c))
+            {
+                if (UTIL_GetHeadingPercentage(pBot, pEnemy) <= 74)   // [OK] inimigo nao esta de frente
+                    fKeepCharging = TRUE;
+            }
+            else if (!pBot->CanAttackPlayer(pEnemy))
+                fFull = FALSE;
+        }
+        if (!fKeepCharging && !fFull)
+            fKeepCharging = TRUE;
+    }
+    if (fKeepCharging)
+    {
+        m_pEdict->v.button |= BOTF(pBot, int, 0xb7c);           // [OK] botao do ataque
+        if (iKi <= 124 && BOTF(pBot, int, 0x324))               // [OK] +0x324 = powered up
+            pBot->ToggleTurbo(0);
+        else if (iAtk != 7 && iAtk != 10 && iAtk != 33)
+        {
+            if (*((char *)BOTF(pBot, void *, 0xa00) + 0x3e) && (int)m_pEdict->v.fuser4 > 250 && BOT_CHARGE(pBot) <= 10)
+                pBot->ToggleTurbo(1);
+        }
+        BOTF(pBot, float, 0xab4) = gpGlobals->time + 1.5;
+        return;
+    }
+    // soltou o ataque: termina a tarefa e escolhe o proximo modo
+    pBot->AddShootDelay();
+    if (pEnemy && BOTF(pEnemy, int, 0x770) && !*((char *)BOTF(pBot, void *, 0xa04) + 0x38))   // [?] campos do inimigo/habilidade
+    {
+        if (*(int *)((char *)&m_pEdict->v + 0x20c) == 7)
+            pBot->SelectItem("weapon_sword");
+        else
+            pBot->SelectItem("weapon_melee");
+    }
+    else if (iAtk == 10)
+        BOTF(pBot, int, 0x1068) = 14;
+    else if (BOT_CHARGE(pBot) > 0)
+    {
+        BOTF(pBot, char, 0xb14) = RANDOM_LONG(1, 100) <= *(short *)((char *)BOTF(pBot, void *, 0xa04) + 0x2a);
+        if (!pEnemy && pBot->BotCanBeamJump(0) && BOT_ATTACK(pBot)->m_fBeamJump)
+            BOTF(pBot, int, 0x1068) = 22;
+        else
+            BOTF(pBot, int, 0x1068) = 15;
+    }
     TASK_DONE();
 }

@@ -30,6 +30,8 @@ public:
     void  ExcuteCombo(void);   // (sic) nome original
 };
 
+struct bot_attack_s { int m_iAttack; char pad[0x42]; char m_fBeamJump; };   // [?] +0x00 id do ataque (7,10,12,13,15,16,19,22,24,33 usados), +0x46 usado em beam jump
+
 class CBot : public CBasePlayer
 {
 public:
@@ -45,6 +47,8 @@ public:
     BOOL CanAttackPlayer(CBasePlayer *pPlayer);
     void ShootHealthBeam(CBasePlayer *pPlayer);
     BOOL BotShouldFallDown(void);
+    BOOL BotCanBeamJump(short fArg);
+    BOOL AttackIsBeam(bot_attack_s *pAttack);
     void StartBlock(void);
     void StopBlock(void);
     Vector GetAimAngles(Vector vecTarget);   // [OK] mangled: GetAimAngles__4CBotG6Vector (retorna Vector por valor)
