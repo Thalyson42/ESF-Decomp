@@ -1369,3 +1369,62 @@ void CFinishMeleeTask::TaskThink(void)
     }
     TASK_DONE();
 }
+
+// ---- CCounterMeleeTask ----
+// Os dois switches foram lidos do assembly (0x14f590): estado do bot (+0x49c) - 3 => 0,4,5: ChargeMeleeCombo; 1,6,7,8: consome a fila de
+// botoes (bot+0xb84); 2,3 e fora de 3..11: termina. Fila: lista encadeada simples {dado, proximo, anterior}.
+struct bot_btn_node_s { int m_iButtons; bot_btn_node_s *next; bot_btn_node_s *prev; };
+struct bot_btn_list_s { bot_btn_node_s *head; bot_btn_node_s *tail; };
+
+void CCounterMeleeTask::TaskThink(void)
+{
+    if (BOTF(m_pBot, int, 0x37c))                                  // [OK]
+    {
+        m_pBot->ResetMoveSpeed();
+        if (!BOTF(m_pBot, int, 0x480))
+            m_pEdict->v.button |= IN_ATTACK;                       // [OK]
+        unsigned int uIdx = BOTF(m_pBot, int, 0x49c) - 3;
+        if (uIdx <= 8)
+        {
+            switch (uIdx)
+            {
+            case 0: case 4: case 5:
+                m_pBot->ChargeMeleeCombo();                        // [OK]
+                return;
+            case 1: case 6: case 7: case 8:
+            {
+                bot_btn_list_s *pList = (bot_btn_list_s *)((char *)m_pBot + 0xb84);   // [OK]
+                if (!pList->head)
+                    return;                                        // [OK] fila vazia: espera
+                bot_btn_node_s *pNode = pList->head;               // consome o primeiro botao
+                int iButtons = pNode->m_iButtons;
+                if (pNode == pList->tail)
+                    pList->tail = pNode->next;
+                pList->head = pList->head->next;
+                if (pList->head)
+                    pList->head->prev = NULL;
+                pNode->next = NULL;
+                delete pNode;
+                BOOL fRandom = iButtons == 0;
+                if (!fRandom && RANDOM_LONG(1, 100) <= *(short *)((char *)BOTF(m_pBot, void *, 0xa00) + 0x3c))
+                    fRandom = TRUE;                                // [OK] as vezes erra de proposito (habilidade +0x3c)
+                if (fRandom)
+                {
+                    switch (RANDOM_LONG(1, 4))                     // [OK] botao aleatorio: 8, 0x10, 0x200 ou 0x400
+                    {
+                    case 1: iButtons = 0x8; break;
+                    case 2: iButtons = 0x10; break;
+                    case 3: iButtons = 0x200; break;
+                    default: iButtons = 0x400; break;
+                    }
+                }
+                m_pEdict->v.button |= iButtons;
+                return;
+            }
+            default:
+                break;
+            }
+        }
+    }
+    TASK_DONE();
+}
