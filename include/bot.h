@@ -14,7 +14,8 @@ class CBot;
 #define BOT_P770(b)          BOTF(b, int, 0x770)             // [?] 
 #define BOT_COMBO(b)         BOTF(b, CBotCombo *, 0x1070)    // combo em andamento
 
-enum EComboType { COMBO_0 = 0 };   // [?] valores reais ainda nao mapeados
+enum EComboType { COMBO_0 = 0 };
+enum EComboUse { COMBO_USE_ALWAYS = 0, COMBO_USE_NEVER = 1, COMBO_USE_RANDOM = 2 };   // [?] nomes; 0 e 2 confirmados pelo switch de PrepareAttack   // [?] valores reais ainda nao mapeados
 
 class CBotCombo
 {

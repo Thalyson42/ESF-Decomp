@@ -97,6 +97,8 @@ public:
     float GetMinDistForAttackById(int iAttack);
     float GetMinDistForAttackByTableIndex(int iIndex);
     int GetAttackPercent(CBasePlayer *pEnemy, int iAttack);
+    void PrepareAttack(int iAttack, EComboUse eUse);
+    void AttackWithMelee(BOOL fCombo);
 };
 
 class CComboTask : public CBaseTask

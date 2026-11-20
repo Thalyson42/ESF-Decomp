@@ -2447,7 +2447,7 @@ void CSwoopTask::TaskThink(void)
 
 // ---- CCombatTask: tabela de ataques e escolha ----
 // BotWeaponInfoTable: entradas de 21 ints (84 bytes) terminadas por id 0; [0] id do ataque, [19] distancia minima, [20] maxima
-struct bot_weapon_info_s { int iAttack; int aiData[18]; float flMinDist; float flMaxDist; };   // [OK] stride 84
+struct bot_weapon_info_s { int iAttack; char szWeapon[64]; char fSecondary; char fCombo; short sPad; float flCharge; float flMinDist; float flMaxDist; };   // [OK] stride 84; +0x44 usa botao secundario, +0x45 ataque com combo, +0x48 tempo de carga
 extern bot_weapon_info_s BotWeaponInfoTable[];
 
 int CCombatTask::GetAttackIndex(int iAttack)
@@ -2548,4 +2548,121 @@ int CCombatTask::GetAttackPercent(CBasePlayer *pEnemy, int iAttack)
     default:                                                return 0;
     }
     return (short)(int)fResult;
+}
+
+// ---- CCombatTask::PrepareAttack ----
+// Escolhe a arma, configura o ataque (bot+0xb80/0xb78/0xb7c) e decide se vira combo ou se muda o modo do bot (+0x1068).
+void CCombatTask::PrepareAttack(int iAttack, EComboUse eUse)
+{
+    BOOL fCombo = FALSE;
+    switch (eUse)
+    {
+    case COMBO_USE_ALWAYS:
+        fCombo = TRUE;
+        break;
+    case COMBO_USE_RANDOM:
+        if (BOTF(m_pBot, char, 0x9fc) <= 1 && *(short *)SW_SKILL2(m_pBot) > 0)
+        {
+            float flChance = *(short *)(SW_SKILL2(m_pBot) + 0x26);                // [OK]
+            flChance += (gpGlobals->time - BOTF(m_pBot, float, 0xab0)) * flChance;
+            int iKi = (int)m_pEdict->v.fuser4;
+            if (iKi <= 199)       flChance = 0;
+            else if (iKi <= 399)  flChance *= 0.6;
+            else if (iKi <= 599)  flChance *= 0.8;
+            else if (iKi <= 699)  flChance *= 0.9;
+            float flDist = (m_pEnemy->pev->origin - m_pEdict->v.origin).Length();
+            if ((unsigned)(iAttack - 1) <= 1)                                     // ataques corpo a corpo
+            {
+                if (flDist > 2100.0f || BOTF(m_pBot, char, 0x9fc))
+                    flChance = 0;
+                if (!EntIsInFieldOfView(m_pEnemy, m_pBot))
+                    flChance *= 1.5;
+            }
+            else
+            {
+                if (flDist < 500.0f)        flChance *= 1.25;
+                else if (flDist < 1000.0f)  flChance *= 1.05f;
+                else if (flDist < 1750.0f)  flChance *= 0.85f;
+                else                        flChance = 0;
+            }
+            if (RANDOM_FLOAT(1.0f, 100.0f) <= flChance)                           // [?] o decompilador perdeu o resultado
+                fCombo = TRUE;
+        }
+        break;
+    default:
+        break;
+    }
+
+    bot_weapon_info_s *pInfo = &BotWeaponInfoTable[GetAttackIndex(iAttack)];
+    CBasePlayerItem *pItem = BOTF(m_pBot, CBasePlayerItem *, 0x968);
+    if (pItem && BOTF(pItem, int, 0x88) != iAttack)
+        m_pBot->SelectItem(pInfo->szWeapon);                                      // [OK] troca para a arma do ataque
+
+    if ((unsigned)(iAttack - 1) <= 1)
+    {
+        AttackWithMelee(fCombo);
+        return;
+    }
+    switch (iAttack)
+    {
+    case 32:  BOTF(m_pBot, int, 0x1068) = 19; TASK_DONE(); return;
+    case 128: BOTF(m_pBot, int, 0x1068) = 30; TASK_DONE(); return;
+    case 20:  BOTF(m_pBot, int, 0x1068) = 24; TASK_DONE(); return;
+    case 21:  BOTF(m_pBot, int, 0x1068) = 25; TASK_DONE(); return;
+    }
+
+    RANDOM_LONG(1, 100);                                                          // [?] resultado descartado
+    EComboType eCombo;
+    if (pInfo->fCombo)
+    {
+        BOTF(m_pBot, bot_weapon_info_s *, 0xb80) = pInfo;
+        BOTF(m_pBot, int, 0xb7c) = pInfo->fSecondary ? 0x800 : 1;
+        if (iAttack == 4 && pInfo->fSecondary && RANDOM_LONG(1, 100) <= *(short *)SW_SKILL2(m_pBot))
+            eCombo = (EComboType)28;
+        else if (!fCombo)
+        {
+            if ((int)m_pEdict->v.fuser4 > 449)
+            {
+                BOTF(m_pBot, int, 0x1068) = 13;
+                TASK_DONE();
+                return;
+            }
+            eCombo = (EComboType)26;
+        }
+        else
+        {
+            MakeCombo((EComboType)6);
+            BOTF(m_pBot, float, 0xab0) = gpGlobals->time + RANDOM_FLOAT(10.0f, 20.0f);   // [?]
+            return;
+        }
+    }
+    else if (pInfo->flCharge > 0.0f)
+    {
+        BOTF(m_pBot, bot_weapon_info_s *, 0xb80) = pInfo;
+        BOTF(m_pBot, float, 0xb78) = pInfo->flCharge;
+        BOTF(m_pBot, int, 0xb7c) = pInfo->fSecondary ? 0x800 : 1;
+        if (fCombo)
+        {
+            MakeCombo((EComboType)7);
+            BOTF(m_pBot, float, 0xab0) = gpGlobals->time + RANDOM_FLOAT(10.0f, 20.0f);   // [?]
+            return;
+        }
+        if ((int)m_pEdict->v.fuser4 > 449)
+        {
+            BOTF(m_pBot, int, 0x1068) = 26;
+            TASK_DONE();
+            return;
+        }
+        eCombo = (EComboType)27;
+    }
+    else
+    {
+        if (!pInfo->fSecondary)
+            m_pEdict->v.button |= 1;                                              // [OK] atira (botao primario)
+        else
+            m_pEdict->v.button |= 0x800;
+        m_pBot->AddShootDelay();
+        return;
+    }
+    MakeCombo(eCombo);
 }
