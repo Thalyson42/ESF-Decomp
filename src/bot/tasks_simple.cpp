@@ -1958,3 +1958,191 @@ void CControlBeamTask::TaskThink(void)
         if (!CheckForCollide(pe, 64, 800.0f))     { pitch = UTIL_WrapAngle(pitch + RANDOM_FLOAT(40, 50)); return; }
     }
 }
+
+// ---- CDrainEntsTask (drena ki/PL de jogadores e ataques proximos) ----
+// task+0x18: fim do dreno; +0x1c: lista de entidades afetadas (velocidade original guardada).
+// Lista [OK]: cabeca/cauda; no = {dado, proximo, anterior} (12 bytes); dado = {ent, vel(3 floats), flag} (20 bytes)
+struct drain_entry_s { CBaseEntity *pEnt; Vector vecVel; int fTouched; };
+struct drain_node_s  { drain_entry_s *pData; drain_node_s *pNext; drain_node_s *pPrev; };
+struct drain_list_s  { drain_node_s *pHead; drain_node_s *pTail; };
+extern BOOL IsOtherAttack(edict_t *pEnt);                      // [?]
+extern void UTIL_DamagePlayer(CBasePlayer *pAttacker, CBasePlayer *pVictim, const char *szWeapon, float flDamage);   // [?]
+extern void UTIL_DrawBeamToAll(Vector vecStart, Vector vecEnd, int a, int b, int c, int r, int g, int bl, int d);   // [?] largura, brilho...
+
+void CDrainEntsTask::DrainPlayer(CBasePlayer *pVictim)
+{
+    int iVictimPL = pVictim->m_iPowerLevel;
+    int iBotPL = m_pBot->m_iPowerLevel;
+    float flSpeed = pVictim->pev->velocity.Length();
+    if (flSpeed > 10.0f)
+    {
+        float flFrac = 0.05f;                                  // [?] valor inicial (o decompilador perdeu)
+        if (iBotPL - iVictimPL > 0)
+            flFrac = (float)(iBotPL - iVictimPL) / 10000000.0;
+        if (flFrac < 0.05f) flFrac = 0.05f;                    // [OK] limites
+        else if (flFrac > 0.95f) flFrac = 0.95f;
+        pVictim->pev->velocity = pVictim->pev->velocity - pVictim->pev->velocity.Normalize() * (flSpeed * flFrac);   // freia a vitima
+    }
+    iVictimPL -= 950;                                          // [OK]
+    iBotPL += 950;
+    if (pVictim->m_iPowerLevel <= 2850)
+        UTIL_DamagePlayer(m_pBot, pVictim, "Super bot laser", 1.0 + pVictim->pev->health);   // [OK] mata
+    else if (iBotPL <= 999999998)
+    {
+        pVictim->SetPowerLevel(iVictimPL);
+        m_pBot->SetPowerLevel(iBotPL);
+        m_pBot->SetMaxPowerLevel(iBotPL);
+    }
+    pVictim->UseKi(3);
+    m_pBot->UseKi(3);
+}
+
+void CDrainEntsTask::DrainAttack(CBaseEntity *pAttack)
+{
+    drain_list_s *pList = TASKF(drain_list_s *, 0x1c);
+    drain_entry_s *pEntry = NULL;
+    for (drain_node_s *pNode = pList->pHead; pNode; pNode = pNode->pNext)
+        if (pNode->pData->pEnt == pAttack)
+        {
+            pNode->pData->fTouched = 1;
+            pEntry = pNode->pData;
+            break;
+        }
+    if (!pEntry)
+    {
+        pEntry = new drain_entry_s;
+        pEntry->pEnt = pAttack;
+        pEntry->vecVel = pAttack->pev->velocity;               // [OK] guarda a velocidade original
+        pEntry->fTouched = 1;
+        drain_node_s *pNew = new drain_node_s;
+        pNew->pData = pEntry; pNew->pNext = NULL; pNew->pPrev = NULL;
+        if (!pList->pHead)
+            pList->pHead = pList->pTail = pNew;
+        else
+        {
+            pNew->pPrev = pList->pTail;
+            pList->pTail->pNext = pNew;
+            pList->pTail = pNew;
+        }
+    }
+    if (pAttack->pev->velocity.Length() > 0.0f)
+        pAttack->pev->velocity = pEntry->vecVel / 100.0f;      // [OK] quase para o ataque
+    pAttack->pev->health -= m_pBot->m_iPowerLevel / 1000000.0 * 0.375;   // [?] +0x1e0 e health? sim: entvars+0x160
+    m_pBot->UseKi(5);
+    m_pBot->IncreasePL(500);
+    if (pAttack->pev->health <= 2.0f)
+    {
+        pAttack->pev->health = 1.0f;
+        DispatchTouch(pAttack->pev->pContainingEntity, m_pEdict);   // [OK] explode o ataque no bot
+    }
+}
+
+void CDrainEntsTask::TaskThink(void)
+{
+    if ((int)m_pEdict->v.fuser4 < 150)                         // [OK] sem ki
+    {
+        TASK_DONE();
+        return;
+    }
+    if (TASKF(float, 0x18) < gpGlobals->time || BOT_P37C(m_pBot))
+    {
+        TASK_DONE();
+        return;
+    }
+    if (m_pBot->GetMaxSpeed() == 0)
+    {
+        TASK_DONE();
+        return;
+    }
+    BOOL fAny = FALSE;
+    m_pBot->ResetMoveSpeed();
+    if (BOTF(m_pBot, int, 0x324))
+    {
+        m_pBot->ToggleTurbo(0);
+        return;
+    }
+    m_pEdict->v.rendermode = 0;                                // [OK] brilho em volta do bot (glow shell)
+    m_pEdict->v.renderfx = 19;
+    m_pEdict->v.renderamt = 25.0f;
+    m_pEdict->v.rendercolor = Vector(255, 255, 255);
+    BOOL fBeam = FALSE;
+    if (BOTF(m_pBot, float, 0xbb4) <= gpGlobals->time)
+    {
+        BOTF(m_pBot, float, 0xbb4) = gpGlobals->time + 0.1;
+        fBeam = TRUE;
+    }
+    drain_list_s *pList = TASKF(drain_list_s *, 0x1c);
+    for (drain_node_s *pN = pList->pHead; pN; pN = pN->pNext)
+        pN->pData->fTouched = 0;
+    CBaseEntity *pEnt = NULL;
+    while ((int)m_pEdict->v.fuser4 > 19)
+    {
+        pEnt = UTIL_FindEntityInSphere(pEnt, m_pEdict->v.origin, 800.0f);   // [OK] raio 800
+        if (!pEnt)
+            break;
+        if (pEnt == m_pBot || IsNull(pEnt))
+            continue;
+        BOOL fPlayer = pEnt->IsPlayer();
+        if (!fPlayer && (!IsAttack(pEnt->pev->pContainingEntity) || IsOtherAttack(pEnt->pev->pContainingEntity)))
+            continue;
+        CBasePlayer *pPlayer = NULL;
+        if (fPlayer)
+        {
+            if ((pEnt->pev->origin - m_pEdict->v.origin).Length() < 350.0f)
+            {
+                TASK_DONE();                                   // [OK] muito perto: vai para o melee
+                return;
+            }
+            pPlayer = (CBasePlayer *)pEnt;
+            if (!UTIL_IsValidPlayer(pPlayer, 1, 1))
+                continue;
+        }
+        BOOL fOk = TRUE;
+        if (g_teamplay)
+        {
+            int iTeam = *(int *)((char *)&m_pEdict->v + 0x1ac);
+            if (pPlayer && *(int *)((char *)pPlayer->pev + 0x1ac) == iTeam)
+                fOk = FALSE;
+            else if (!IsNull(pEnt->pev->owner) && *(int *)((char *)&pEnt->pev->owner->v + 0x1ac) == iTeam)
+                fOk = FALSE;
+        }
+        if (!fOk || (pPlayer && !m_pBot->CanAttackPlayer(pPlayer)) || !m_pBot->CanReachPoint(pEnt->pev->origin))
+            continue;
+        fAny = TRUE;
+        if (fBeam)
+            UTIL_DrawBeamToAll(m_pBot->GetGunPosition(), pEnt->pev->origin, 20, 8, 125, 255, 255, 250, 5);   // [?] argumentos
+        if (pPlayer)
+            DrainPlayer(pPlayer);
+        else
+            DrainAttack(pEnt);
+        TASKF(float, 0x18) += 0.2f;                            // [OK] prolonga o dreno
+    }
+    if (fAny)
+    {
+        if (BOTF(m_pBot, float, 0xbbc) <= gpGlobals->time)
+        {
+            EMIT_SOUND_DYN2(m_pEdict, CHAN_WEAPON, "weapons/basicbeam_chargeoriginal.wav", 1.0, 0.8, 0, 100);   // [OK]
+            BOTF(m_pBot, float, 0xbbc) = gpGlobals->time + 0.3;
+        }
+    }
+    else if (gpGlobals->time + 1.0 < TASKF(float, 0x18))
+        TASKF(float, 0x18) = gpGlobals->time + 0.9;            // [OK] encurta se nao ha alvo
+    // devolve a velocidade original aos ataques que sairam do alcance
+    drain_node_s *pN = pList->pHead;
+    while (pN)
+    {
+        drain_entry_s *pData = pN->pData;
+        drain_node_s *pNext = pN->pNext;
+        if (!pData->fTouched)
+        {
+            if (pList->pHead == pN) { pList->pHead = pN->pNext; if (pList->pHead) pList->pHead->pPrev = NULL; if (pList->pTail == pN) pList->pTail = pN->pNext; }
+            else if (pList->pTail == pN) { pList->pTail = pN->pPrev; pList->pTail->pNext = NULL; }
+            else { pN->pPrev->pNext = pN->pNext; pN->pNext->pPrev = pN->pPrev; }
+            delete pN;
+            if (!IsNull(pData->pEnt))
+                pData->pEnt->pev->velocity = pData->vecVel;
+            delete pData;
+        }
+        pN = pNext;
+    }
+}

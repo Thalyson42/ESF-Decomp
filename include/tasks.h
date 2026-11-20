@@ -172,6 +172,8 @@ public:
     virtual void TaskThink(void);
     virtual int TaskIdentify(void);
     virtual BOOL ShouldManageEnemies(void);
+    void DrainPlayer(CBasePlayer *pVictim);
+    void DrainAttack(CBaseEntity *pAttack);
 };
 
 class CFinishMeleeTask : public CBaseTask

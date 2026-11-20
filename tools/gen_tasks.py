@@ -16,6 +16,7 @@ def const_ret(path):
     return None
 EXTRA={'CShootScatterShotsTask':['CBaseEntity *GetFurthestScatterShot(void);'],
        'CBeamJumpTask':[],
+       'CDrainEntsTask':['void DrainPlayer(CBasePlayer *pVictim);','void DrainAttack(CBaseEntity *pAttack);'],
        'CDBTask':['BOOL GoToDB(void);','BOOL GoToDBSpot(void);','BOOL GoToGatheredSpot(void);','BOOL CheckThrowToDBSpot(void);','BOOL HeadToNextDBWP(void);'],
        'CNormalMovementTask':['void BotCheckUpDown(void);','void BotLook(void);','void BotTurnAtWall(Vector *pvecWallNormal);','void CheckFOV(void);','void CheckSkyBox(void);'],
        'CFinishMeleeTask':['BOOL IsValidThrowVictim(CBasePlayer *pVictim);','void CheckPlayerToThrowAt(void);','void CheckObstacleToThrowAt(void);'],
