@@ -49,6 +49,11 @@ public:
     void ShootHealthBeam(CBasePlayer *pPlayer);
     BOOL BotShouldFallDown(void);
     void MakePlayerList(void);
+    BOOL CanReachPoint(const Vector &vecPoint);   // [?] vtable +0xe4
+    BOOL ReachedGoalWP(void);
+    BOOL CurrentWPIsValid(void);
+    BOOL HeadToWaypoint(void);
+    BOOL CheckForHuntEnemy(void);
     BOOL BotCanBeamJump(short fArg);
     BOOL AttackIsBeam(bot_attack_s *pAttack);
     void StartBlock(void);

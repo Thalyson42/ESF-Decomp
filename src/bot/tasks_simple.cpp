@@ -1125,3 +1125,110 @@ void CAbsorbHealthTask::TaskThink(void)
     }
     TASK_DONE();
 }
+
+// ---- CHuntEnemyTask ----
+// task+0x18 proxima reavaliacao. Bot: +0x1034 jogador cacado, +0x1024 waypoint destino (-1 = nenhum), +0x1008 waypoint atual,
+// +0xff8 posicao do waypoint atual, +0x1004 instante, +0x1038 ultima posicao conhecida (x,y,z,tempo), +0x1048 anterior, +0x105c ultima distancia
+struct waypoint_s { float x, y, z; int flags; };       // [OK] 16 bytes por waypoint
+extern waypoint_s waypoints[];
+extern int num_waypoints;
+extern short WaypointFindReachable(edict_t *pEdict, float flRange, int iTeam);                      // [?] funcoes livres de waypoint
+extern short WaypointFindNearest(Vector *pvecPos, edict_t *pEdict, float flRange, int iTeam);
+extern short WaypointRouteFromTo(short iFrom, short iTo, int iTeam);
+
+void CHuntEnemyTask::TaskThink(void)
+{
+    CBasePlayer *pHunted = BOTF(m_pBot, CBasePlayer *, 0x1034);
+    if (UTIL_IsValidPlayer((CBaseEntity *)pHunted, 1, 1))
+    {
+        int iTeam = *(int *)((char *)&m_pEdict->v + 0x1ac);     // [OK] edict+0x22c
+        if (BOTF(m_pBot, int, 0x1024) == -1 || !num_waypoints)
+        {
+            // sem waypoints: segue o rastro do jogador (5 posicoes recentes dele, 16 bytes cada, em jogador+0x6d4)
+            Vector vecLast(BOTF(m_pBot, float, 0x1038), BOTF(m_pBot, float, 0x103c), BOTF(m_pBot, float, 0x1040));
+            float flDist = (vecLast - m_pBot->pev->origin).Length();
+            BOOL fStuck = flDist < 60.0f;                       // [OK] chegou ao ponto
+            if (0.0f < BOTF(m_pBot, float, 0x105c) && flDist > BOTF(m_pBot, float, 0x105c))
+                fStuck = TRUE;                                  // [OK] esta se afastando
+            BOTF(m_pBot, float, 0x105c) = flDist;
+            if (!fStuck)
+            {
+                if (TASKF(float, 0x18) < gpGlobals->time)
+                {
+                    TASKF(float, 0x18) = gpGlobals->time + 0.8;
+                    int iBest = -1, iBestScore = 0;
+                    float flNearest = 9999.9f;
+                    for (int i = 4; i >= 0; i--)
+                    {
+                        float *pTrail = (float *)((char *)pHunted + 0x6d4 + i * 16);   // x,y,z,tempo
+                        if (gpGlobals->time - 15.0f > pTrail[3])
+                            continue;                           // [OK] ponto velho (> 15 s)
+                        Vector vecTrail(pTrail[0], pTrail[1], pTrail[2]);
+                        float flTrailDist = (vecTrail - m_pBot->pev->origin).Length();
+                        if (flTrailDist > 6000.0f || flTrailDist < 300.0f)
+                            continue;                           // [OK] longe demais / perto demais
+                        if (vecTrail == Vector(BOTF(m_pBot, float, 0x1048), BOTF(m_pBot, float, 0x104c), BOTF(m_pBot, float, 0x1050)))
+                            continue;                           // [OK] ja foi ate la
+                        if (!m_pBot->CanReachPoint(vecTrail))   // [?] vtable +0xe4 do bot
+                            continue;
+                        int iScore = 1;                         // [?] o decompilado soma 1 por "mais perto" em dois acumuladores iguais
+                        if (flTrailDist < flNearest) { flNearest = flTrailDist; iScore = 3; }
+                        if (iScore >= iBestScore) { iBestScore = iScore; iBest = i; }
+                    }
+                    if (iBest > -1)
+                    {
+                        float *pTrail = (float *)((char *)pHunted + 0x6d4 + iBest * 16);
+                        BOTF(m_pBot, float, 0x1048) = BOTF(m_pBot, float, 0x1038);   // guarda o ponto anterior
+                        BOTF(m_pBot, float, 0x104c) = BOTF(m_pBot, float, 0x103c);
+                        BOTF(m_pBot, float, 0x1050) = BOTF(m_pBot, float, 0x1040);
+                        BOTF(m_pBot, float, 0x1054) = BOTF(m_pBot, float, 0x1044);
+                        BOTF(m_pBot, float, 0x1038) = pTrail[0];
+                        BOTF(m_pBot, float, 0x103c) = pTrail[1];
+                        BOTF(m_pBot, float, 0x1040) = pTrail[2];
+                        BOTF(m_pBot, float, 0x1044) = pTrail[3];
+                    }
+                }
+                Vector vecAng = m_pBot->GetAimAngles(Vector(BOTF(m_pBot, float, 0x1038), BOTF(m_pBot, float, 0x103c), BOTF(m_pBot, float, 0x1040)));
+                BOTF(m_pBot, float, 0xc10) = vecAng.x;
+                BOTF(m_pBot, float, 0xc14) = vecAng.y;
+                BOTF(m_pBot, float, 0xc18) = vecAng.z;
+                m_pBot->ToggleTurbo(1);
+                return;
+            }
+            if (m_pBot->CheckForHuntEnemy())
+                return;
+        }
+        else if (!m_pBot->ReachedGoalWP())
+        {
+            BOOL fNavigate = TRUE;
+            if (!m_pBot->CurrentWPIsValid())
+            {
+                short iWP = WaypointFindReachable(m_pEdict, 1250.0f, iTeam);   // [OK]
+                if (iWP != -1)
+                {
+                    BOTF(m_pBot, int, 0x1008) = iWP;
+                    BOTF(m_pBot, float, 0xff8) = waypoints[iWP].x;
+                    BOTF(m_pBot, float, 0xffc) = waypoints[iWP].y;
+                    BOTF(m_pBot, float, 0x1000) = waypoints[iWP].z;
+                    BOTF(m_pBot, float, 0x1004) = gpGlobals->time;
+                }
+                else
+                    fNavigate = FALSE;
+            }
+            if (fNavigate)
+            {
+                if (TASKF(float, 0x18) < gpGlobals->time)
+                {
+                    TASKF(float, 0x18) = gpGlobals->time + 1.5;
+                    Vector vecPos = pHunted->pev->origin;
+                    short iNear = WaypointFindNearest(&vecPos, ENT(pHunted->pev), 750.0f, g_teamplay ? iTeam : -1);   // [OK]
+                    if (iNear != -1 && WaypointRouteFromTo(BOTF(m_pBot, int, 0x1008), iNear, iTeam) != -1)
+                        BOTF(m_pBot, int, 0x1024) = iNear;      // [OK] novo destino
+                }
+                if (m_pBot->HeadToWaypoint())
+                    return;
+            }
+        }
+    }
+    TASK_DONE();
+}
