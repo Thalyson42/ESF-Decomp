@@ -180,6 +180,9 @@ public:
     virtual int TaskIdentify(void);
     virtual BOOL ShouldManageEnemies(void);
     virtual BOOL ReactOnDanger(danger_info_s *pDanger);
+    BOOL IsValidThrowVictim(CBasePlayer *pVictim);
+    void CheckPlayerToThrowAt(void);
+    void CheckObstacleToThrowAt(void);
 };
 
 class CHuntEnemyTask : public CBaseTask

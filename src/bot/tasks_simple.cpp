@@ -1232,3 +1232,140 @@ void CHuntEnemyTask::TaskThink(void)
     }
     TASK_DONE();
 }
+
+// ---- CFinishMeleeTask ----
+// task+0x28 modo (short: 1 = combo carregado, 2 = arremesso), +0x2a (char) minimo de golpes, +0x2c vitima, +0x30 ponto alvo (x,y,z), +0x3c achou obstaculo
+BOOL CFinishMeleeTask::IsValidThrowVictim(CBasePlayer *pVictim)
+{
+    if (pVictim->pev->velocity.Length() > 600.0f)                  // [OK] muito rapido
+        return FALSE;
+    if ((pVictim->pev->origin - m_pBot->pev->origin).Length() > 1500.0f)   // [OK] muito longe
+        return FALSE;
+    return m_pBot->CanMelee(pVictim) == 1;                         // [OK]
+}
+
+void CFinishMeleeTask::CheckPlayerToThrowAt(void)
+{
+    CBasePlayer *pBest = NULL;
+    float flBest = 9999.0f;
+    if (!BOTF(m_pBot, char, 0xa20))
+        m_pBot->MakePlayerList();
+    int iCount = BOTF(m_pBot, int, 0xaac);
+    for (int i = 0; i < iCount; i++)
+    {
+        CBasePlayer *pPlayer = BOTF(m_pBot, CBasePlayer *, 0xa24 + i * 4);
+        float flDist = (pPlayer->pev->origin - m_pBot->pev->origin).Length();
+        if (flDist <= 1500.0f && flDist < flBest &&
+            (!g_teamplay || *(int *)((char *)m_pBot->pev + 0x1ac) != *(int *)((char *)pPlayer->pev + 0x1ac)))   // [?] campo de time do pev
+        {
+            BOOL fNear = flDist <= 2300.0f || BOTF(m_pBot, short, 0xba4) > 0;   // [OK]
+            if ((EntIsInFieldOfView(m_pBot, pPlayer) || fNear) && IsValidThrowVictim(pPlayer))
+            {
+                flBest = flDist;
+                pBest = pPlayer;
+            }
+        }
+    }
+    if (iCount && pBest)
+        TASKF(CBasePlayer *, 0x2c) = pBest;                        // [OK]
+}
+
+// Varre 5 pitches x 5 yaws (angulos lidos do assembly: pitch 0,-40,40,-89,89; yaw 0,-90,-45,45,90) em volta da visao do bot, tracando
+// para frente e para tras (3000 un.); escolhe a parede mais proxima (>125 un.) como alvo do arremesso
+void CFinishMeleeTask::CheckObstacleToThrowAt(void)
+{
+    static const float s_flPitch[5] = { 0.0f, -40.0f, 40.0f, -89.0f, 89.0f };   // [OK] .rodata 0x1ad420..
+    static const float s_flYaw[5]   = { 0.0f, -90.0f, -45.0f, 45.0f, 90.0f };
+    float flBest = 9999.0f;
+    Vector vecBest = g_vecZero;
+    for (int i = 0; i < 5; i++)
+    {
+        for (int j = 0; j < 5; j++)
+        {
+            Vector vecAng = m_pEdict->v.v_angle;                   // [?] edict+0xf4: angulos de visao
+            WrapAngles(vecAng);
+            vecAng.x = s_flPitch[i];
+            vecAng.y = UTIL_WrapAngle(s_flYaw[j] + vecAng.y);
+            UTIL_MakeVectors(vecAng);
+            Vector vecFwdEnd = m_pEdict->v.origin + gpGlobals->v_forward * 3000.0;
+            Vector vecBackEnd = m_pEdict->v.origin - gpGlobals->v_forward * 3000.0;
+            TraceResult trF, trB;
+            UTIL_TraceHull(m_pEdict->v.origin, vecFwdEnd, ignore_monsters, human_hull, m_pEdict, &trF);
+            UTIL_TraceHull(m_pEdict->v.origin, vecBackEnd, ignore_monsters, human_hull, m_pEdict, &trB);
+            float flDistF = (trF.vecEndPos - m_pEdict->v.origin).Length();
+            float flDistB = (trB.vecEndPos - m_pEdict->v.origin).Length();
+            float flCand;
+            Vector vecCand;
+            if (flDistB > flDistF && trF.flFraction > 0 && flDistF > 125.0f)
+            {
+                flCand = flDistF;                                  // [OK] parede a frente
+                vecCand = vecFwdEnd;
+            }
+            else if (trB.flFraction > 0 && flDistB > 125.0f)
+            {
+                flCand = flDistB;                                  // [OK] parede atras
+                vecCand = vecBackEnd;
+            }
+            else
+                continue;
+            if (flCand < flBest)
+            {
+                flBest = flCand;
+                vecBest = vecCand;
+            }
+        }
+    }
+    if (vecBest != g_vecZero)
+    {
+        TASKF(float, 0x30) = vecBest.x;                            // [OK]
+        TASKF(float, 0x34) = vecBest.y;
+        TASKF(float, 0x38) = vecBest.z;
+    }
+    TASKF(char, 0x3c) = 1;                                         // [OK] sempre marca que ja procurou
+}
+
+void CFinishMeleeTask::TaskThink(void)
+{
+    if (BOTF(m_pBot, int, 0x37c))                                  // [OK] em combate corpo a corpo
+    {
+        int iState = BOTF(m_pBot, int, 0x49c);
+        if (iState == 1 || iState == 3 || iState == 5)
+        {
+            m_pBot->ResetMoveSpeed();
+            if (iState == 1 && BOTF(m_pBot, int, 0x438) < TASKF(char, 0x2a) && (int)m_pEdict->v.fuser4 > 150)   // [OK] ainda faltam golpes
+                return;
+            if (TASKF(short, 0x28) != 1 && BOTF(m_pBot, int, 0x49c) != 3)
+            {
+                // modo arremesso
+                if (TASKF(short, 0x28) != 2 && BOTF(m_pBot, int, 0x49c) != 5)
+                    return;
+                if (BOTF(m_pBot, float, 0x41c) * 100.0 >= 30.0)    // [?] +0x41c = fracao/forca do golpe
+                {
+                    CBasePlayer *pVictim = TASKF(CBasePlayer *, 0x2c);
+                    if (!m_pBot->IsValidEnemy(pVictim) || !IsValidThrowVictim(pVictim))
+                        TASKF(CBasePlayer *, 0x2c) = NULL;
+                    if (!TASKF(CBasePlayer *, 0x2c))
+                        CheckPlayerToThrowAt();
+                    if (!TASKF(char, 0x3c) && !TASKF(CBasePlayer *, 0x2c))
+                        CheckObstacleToThrowAt();
+                    if (TASKF(CBasePlayer *, 0x2c))
+                        m_pBot->AimAtEnemy(TASKF(CBasePlayer *, 0x2c));
+                    else
+                    {
+                        Vector vecAng = m_pBot->GetAimAngles(Vector(TASKF(float, 0x30), TASKF(float, 0x34), TASKF(float, 0x38)));
+                        BOTF(m_pBot, float, 0xc10) = vecAng.x;
+                        BOTF(m_pBot, float, 0xc14) = vecAng.y;
+                        BOTF(m_pBot, float, 0xc18) = vecAng.z;
+                    }
+                }
+                m_pEdict->v.button = 0x800;                        // [OK] atribui (nao faz OR): so o botao do arremesso
+                return;
+            }
+            m_pBot->ChargeMeleeCombo();
+            void *pCombo = BOTF(m_pBot, void *, 0xb8c);
+            if (!pCombo || *(int *)pCombo || BOTF(m_pBot, float, 0xb90) >= gpGlobals->time)
+                return;                                            // [OK] combo ainda em andamento
+        }
+    }
+    TASK_DONE();
+}

@@ -16,6 +16,7 @@ def const_ret(path):
     return None
 EXTRA={'CShootScatterShotsTask':['CBaseEntity *GetFurthestScatterShot(void);'],
        'CBeamJumpTask':[],
+       'CFinishMeleeTask':['BOOL IsValidThrowVictim(CBasePlayer *pVictim);','void CheckPlayerToThrowAt(void);','void CheckObstacleToThrowAt(void);'],
        'CAbsorbHealthTask':['BOOL ShootAbsorbHealthBeams(void);'],
        'CKameTorpTask':['void ChargeKameTorps(void);','short CountTorps(void);','BOOL SetMoveAwayDir(void);']}   # funcoes proprias escritas a mao
 classes=sorted(d for d in os.listdir(RAW) if d.endswith('Task') and d!='CBaseTask')

@@ -49,6 +49,9 @@ public:
     void ShootHealthBeam(CBasePlayer *pPlayer);
     BOOL BotShouldFallDown(void);
     void MakePlayerList(void);
+    BOOL IsValidEnemy(CBasePlayer *pPlayer);
+    void AimAtEnemy(CBasePlayer *pPlayer);
+    void ChargeMeleeCombo(void);
     BOOL CanReachPoint(const Vector &vecPoint);   // [?] vtable +0xe4
     BOOL ReachedGoalWP(void);
     BOOL CurrentWPIsValid(void);
