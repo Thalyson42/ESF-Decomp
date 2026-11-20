@@ -2146,3 +2146,301 @@ void CDrainEntsTask::TaskThink(void)
         pN = pNext;
     }
 }
+
+// ---- CSwoopTask (investida em voo) ----
+// task+0x18 secundario ja checado, +0x19 usa secundario, +0x1a/+0x1c deriva (short), +0x20/+0x24 alvo da deriva,
+// +0x28 fim da investida, +0x2c proxima checagem, +0x30 combo criado, +0x34 ultimo instante fora de alcance do melee
+// Bot: m_Swoop em +0x504 (tipo = 0..5), +0xbe4 modo (0 nada, 1 desvio fixo, 2 deriva), +0xbe8/+0xbec/+0xbf0 desvio, +0xbfc tempo
+#define COMBO_NONE ((EComboType)38)                                  // [OK]
+#define SW_SKILL(b)  BOTF(b, char *, 0xa00)
+#define SW_SKILL2(b) BOTF(b, char *, 0xa04)
+
+float CSwoopTask::GetSwoopLifeTime(void)
+{
+    float flDist = BOTF(m_pBot, float, 0xa18) * 10.0f;
+    if (flDist > 1500.0f)
+        flDist = 1500.0f;
+    Vector vecStart = m_pEdict->v.origin;
+    UTIL_MakeVectors(m_pEdict->v.v_angle);
+    Vector vecEnd = vecStart;                                        // [?] tipo 4 / invalido: sem deslocamento
+    switch (m_pBot->m_Swoop.m_iType)
+    {
+    case 0: vecEnd = vecStart + gpGlobals->v_right   * flDist; break;   // [OK] tabela de saltos lida do binario
+    case 1: vecEnd = vecStart - gpGlobals->v_right   * flDist; break;
+    case 2: vecEnd = vecStart - gpGlobals->v_up      * flDist; break;
+    case 3: vecEnd = vecStart + gpGlobals->v_up      * flDist; break;
+    case 5: vecEnd = vecStart - gpGlobals->v_forward * flDist; break;
+    }
+    TraceResult tr;
+    UTIL_TraceHull(vecStart, vecEnd, dont_ignore_monsters, human_hull, m_pEdict, &tr);
+    if (tr.flFraction <= 0.0f)
+        return 0.1f;                                                 // [OK] (a constante 0.1 e retornada assim mesmo)
+    return flDist * tr.flFraction / 1500.0 * 2.0 + gpGlobals->time;  // [OK]
+}
+
+void CSwoopTask::CheckSecondaryFire(void)
+{
+    TASKF(char, 0x18) = 1;
+    if (CVAR_GET_FLOAT("mp_simplemelee") != 1.0)
+    {
+        unsigned short usChance = *(unsigned short *)(SW_SKILL2(m_pBot) + 0x16);   // [?] chance do tiro secundario
+        if (m_pEnemy->pev->health < 5.0f && BOTF(m_pBot, int, 0x9fc) <= 2)
+            usChance = (unsigned short)(int)(usChance * 1.5);
+        if ((int)m_pEdict->v.fuser4 <= 299)
+            usChance = (unsigned short)(int)(usChance * 1.2f);
+        if (RANDOM_LONG(1, 100) > usChance)
+            return;
+    }
+    TASKF(char, 0x19) = 1;
+}
+
+BOOL CSwoopTask::IsAvoidDangerSwoop(void)
+{
+    return m_pBot->m_Swoop.m_iType != 4;                            // [OK]
+}
+
+BOOL CSwoopTask::ReactOnDanger(danger_info_s *pDanger)
+{
+    return FALSE;                                                    // [OK]
+}
+
+void CSwoopTask::SelectSwoopType(void)
+{
+    if (!m_pEnemy)
+        return;
+    float flDist = (m_pEnemy->pev->origin - m_pBot->pev->origin).Length();
+    BOTF(m_pBot, int, 0xbe4) = 0;
+    if (RANDOM_LONG(1, 100) > 70 || BOTF(m_pBot, int, 0x9fc) || flDist <= 800.0f)
+        return;
+    if (RANDOM_LONG(0, 1))
+    {
+        // modo 2: deriva aleatoria
+        BOTF(m_pBot, int, 0xbe4) = 2;
+        BOTF(m_pBot, Vector, 0xbe8) = g_vecZero;
+        if (RANDOM_LONG(0, 1)) { TASKF(float, 0x20) = RANDOM_LONG(16, 18);   TASKF(short, 0x1a) = RANDOM_LONG(2, 3);   }
+        else                   { TASKF(float, 0x20) = RANDOM_LONG(-18, -16); TASKF(short, 0x1a) = RANDOM_LONG(-3, -2); }
+        if (RANDOM_LONG(0, 1)) { TASKF(float, 0x24) = RANDOM_LONG(16, 18);   TASKF(short, 0x1c) = RANDOM_LONG(2, 3);   }
+        else                   { TASKF(float, 0x24) = RANDOM_LONG(-18, -16); TASKF(short, 0x1c) = RANDOM_LONG(-3, -2); }
+        return;
+    }
+    // modo 1: escolhe ao acaso (pesos iguais, 50 cada) entre as direcoes livres
+    struct { int iDir; Vector vec; } aOpt[4] = {
+        { 2, Vector(0, 20, 0) }, { 4, Vector(0, -20, 0) }, { 32, Vector(20, 0, 0) }, { 64, Vector(-20, 0, 0) } };   // [OK]
+    Vector aFree[4];
+    int nFree = 0;
+    for (int i = 0; i < 4; i++)
+        if (!CheckForCollide(m_pEdict, aOpt[i].iDir, 200.0f))
+            aFree[nFree++] = aOpt[i].vec;
+    int iPick = RANDOM_LONG(0, nFree * 50);
+    int iIdx = iPick / 50;                                           // [?] faixas [i*50, i*50+50)
+    if (iIdx < nFree)
+    {
+        BOTF(m_pBot, Vector, 0xbe8) = aFree[iIdx];
+        BOTF(m_pBot, int, 0xbe4) = 1;
+    }
+}
+
+void CSwoopTask::TaskThink(void)
+{
+    m_pBot->ResetMoveSpeed();
+    BOOL fKeep = FALSE;                                              // TRUE = tarefa continua (senao encerra)
+    BOOL fFinish = FALSE;                                            // vai para o bloco final (botao, secundario, esquiva)
+    if (BOTF(m_pBot, float, 0xbfc) != 0.0f && *(int *)((char *)m_pEdict + 0x188) == 11 && m_pEnemy)   // [?] 0x188 = estado do jogador
+    {
+        m_pBot->m_Swoop.GetSwoopTime();
+        if (BOTF(m_pBot, float, 0xbfc) > 2.25f && SW_SKILL(m_pBot)[0x40] && (int)m_pEdict->v.fuser4 > 250 && m_pEnemy)
+        {
+            int iLevel = *(int *)(SW_SKILL2(m_pBot) + 0x34);
+            short sBase = *(short *)SW_SKILL2(m_pBot);
+            if (m_pBot->m_Swoop.m_iType != 4)
+            {
+                short sChance = (short)(int)(sBase * 0.75);
+                if (iLevel == 2) sChance = (short)(int)(0.75 * sChance);
+                else if (!iLevel) sChance = (short)(int)(sChance * 1.25);
+                if (RANDOM_LONG(1, 100) <= sChance && EntIsInFieldOfView(m_pBot, m_pEnemy)
+                    && (m_pEnemy->pev->origin - m_pBot->pev->origin).Length() < 1500.0f)
+                {
+                    MakeCombo((EComboType)2);                        // [?] tipo 2
+                    TASKF(char, 0x30) = 1;
+                    return;
+                }
+            }
+            else
+            {
+                short sChance = (short)(int)(sBase * 0.75);
+                if (iLevel == 2) sChance = (short)(int)(0.75 * sChance);
+                else if (!iLevel) sChance = (short)(int)(sChance * 1.25);
+                if (RANDOM_LONG(1, 100) <= sChance && EntIsInFieldOfView(m_pBot, m_pEnemy)
+                    && (m_pEnemy->pev->origin - m_pBot->pev->origin).Length() > 1250.0f)
+                {
+                    EComboType eChain = m_pBot->MakeAttackChainSwoop();
+                    if (eChain != COMBO_NONE)
+                    {
+                        MakeCombo(eChain);
+                        TASKF(char, 0x30) = 1;
+                        return;
+                    }
+                }
+            }
+        }
+
+        char *pBM = g_pBotManager;
+        if (m_pBot->m_Swoop.m_iType == 4)
+        {
+            if (!*(short *)SW_SKILL2(m_pBot) || !pBM || !pBM[0xd47] || !pBM[0xd46])
+            {
+                TASK_DONE();
+                CBasePlayerItem *pItem = BOTF(m_pBot, CBasePlayerItem *, 0x968);
+                if (pItem && (unsigned)(BOTF(pItem, int, 0x88) - 1) <= 1)
+                    m_pBot->SelectItem("weapon_genericbeam");
+                return;
+            }
+            if (m_pBot->CanMelee(m_pEnemy))
+            {
+                BOOL fAim = FALSE;
+                if (BOTF(m_pBot, float, 0xc28) < 20.0f && BOTF(m_pBot, float, 0xc2c) < 20.0f)
+                {
+                    TASKF(float, 0x34) = gpGlobals->time;
+                    fAim = TRUE;
+                }
+                else if (gpGlobals->time - TASKF(float, 0x34) > 1.0f && SW_SKILL(m_pBot)[0x40] && (int)m_pEdict->v.fuser4 > 250)
+                {
+                    EComboType eAway = m_pBot->MakeAwayChainSwoop(m_pEnemy);
+                    if (eAway != COMBO_NONE)
+                    {
+                        MakeCombo(eAway);
+                        TASKF(char, 0x30) = 1;
+                        return;
+                    }
+                    fAim = TRUE;
+                }
+                else
+                    fAim = TRUE;
+                (void)fAim;
+                float flEnemyDist = (m_pEnemy->pev->origin - m_pBot->pev->origin).Length();
+                if (BOTF(m_pBot, float, 0xc28) <= 100.0f || flEnemyDist <= 700.0f)
+                {
+                    CBasePlayerItem *pItem = BOTF(m_pBot, CBasePlayerItem *, 0x968);
+                    if (pItem)
+                    {
+                        if (BOTF(pItem, int, 0x88) != 2 && *(int *)((char *)m_pEdict + 0x28c) == 7)
+                            m_pBot->SelectItem("weapon_sword");
+                        else if (!(BOTF(pItem, int, 0x88) == 1 || *(int *)((char *)m_pEdict + 0x28c) == 7))
+                            m_pBot->SelectItem("weapon_melee");
+                    }
+                    int iMode = BOTF(m_pBot, int, 0xbe4);
+                    if (iMode)
+                    {
+                        float flMin = (iMode == 2) ? 200.0f : 750.0f, flMax = (iMode == 2) ? 1700.0f : 2200.0f;
+                        if (flMin < flEnemyDist && flMax >= flEnemyDist)
+                        {
+                            Vector vecAng = m_pBot->GetAimAngles(m_pEnemy->pev->origin);
+                            BOTF(m_pBot, Vector, 0xc10) = vecAng;
+                            if (iMode == 2)
+                            {
+                                // deriva: cada eixo oscila ate o alvo (+0x20/+0x24) e troca de sentido
+                                float &fx = BOTF(m_pBot, float, 0xbe8), &fy = BOTF(m_pBot, float, 0xbec);
+                                if (TASKF(short, 0x1a) > 0)
+                                {
+                                    if (fx >= TASKF(float, 0x20)) { TASKF(float, 0x20) = RANDOM_LONG(-18, -16); TASKF(short, 0x1a) = RANDOM_LONG(-3, -2); }
+                                }
+                                else if (fx <= TASKF(float, 0x20)) { TASKF(float, 0x20) = RANDOM_LONG(16, 18); TASKF(short, 0x1a) = RANDOM_LONG(2, 3); }
+                                if (TASKF(short, 0x1c) > 0)
+                                {
+                                    if (fy >= TASKF(float, 0x24)) { TASKF(float, 0x24) = RANDOM_LONG(-18, -16); TASKF(short, 0x1c) = RANDOM_LONG(-3, -2); }
+                                }
+                                else if (fy <= TASKF(float, 0x24)) { TASKF(float, 0x24) = RANDOM_LONG(16, 18); TASKF(short, 0x1c) = RANDOM_LONG(2, 3); }
+                                fx += TASKF(short, 0x1a);
+                                fy += TASKF(short, 0x1c);
+                            }
+                            Vector vecSum = BOTF(m_pBot, Vector, 0xc10) + BOTF(m_pBot, Vector, 0xbe8);
+                            WrapAngles(vecSum);
+                            BOTF(m_pBot, Vector, 0xc10) = vecSum;
+                        }
+                    }
+                    fFinish = TRUE;
+                }
+            }
+        }
+        else if (TASKF(float, 0x28) >= gpGlobals->time)
+        {
+            if (TASKF(float, 0x2c) >= gpGlobals->time || !SW_SKILL(m_pBot)[0x40] || (int)m_pEdict->v.fuser4 <= 250)
+                fFinish = TRUE;
+            else
+            {
+                RANDOM_FLOAT(0.2f, 0.5f);                            // [?] resultado descartado
+                TASKF(float, 0x2c) = gpGlobals->time + 0.2;
+                float flDist = 9999.9f;
+                BOOL fFall = TRUE;                                   // cai em L54de54 (checa a trajetoria)
+                if (m_pEnemy)
+                {
+                    flDist = (m_pEnemy->pev->origin - m_pBot->pev->origin).Length();
+                    if (RANDOM_LONG(1, 100) <= *(short *)(SW_SKILL2(m_pBot) + 40) && EntIsInFieldOfView(m_pBot, m_pEnemy) && flDist < 750.0f)
+                    {
+                        int iChance = 50;
+                        int iLvl = *(int *)(SW_SKILL2(m_pBot) + 52);
+                        if (iLvl == 2) iChance = 25; else if (!iLvl) iChance = 75;
+                        BOOL fCan = FALSE;
+                        if (*(short *)SW_SKILL2(m_pBot) > 0 && pBM && pBM[0xd47] && pBM[0xd46])
+                            fCan = m_pBot->CanAttackPlayer(m_pEnemy);
+                        if (RANDOM_LONG(1, 100) <= iChance && fCan)
+                        {
+                            MakeCombo((EComboType)2);
+                            TASKF(char, 0x30) = 1;
+                            return;
+                        }
+                        EComboType eChain = m_pBot->MakeNormalChainSwoop();
+                        if (eChain != COMBO_NONE)
+                        {
+                            MakeCombo(eChain);
+                            TASKF(char, 0x30) = 1;
+                            return;
+                        }
+                        fFinish = TRUE;
+                        fFall = FALSE;
+                    }
+                }
+                if (fFall)
+                {
+                    Vector vecDir = m_pBot->m_Swoop.GetCurrentDirection();
+                    Vector vecEnd = m_pEdict->v.origin + vecDir * 50.0f;   // [?] o decompilador perdeu a soma com a origem
+                    TraceResult tr;
+                    UTIL_TraceHull(m_pEdict->v.origin, vecEnd, ignore_monsters, human_hull, m_pEdict, &tr);
+                    if (tr.flFraction >= 1.0f)
+                        fFinish = TRUE;
+                    else
+                    {
+                        BOOL fDone = FALSE;
+                        if (flDist < 750.0f && RANDOM_LONG(1, 100) <= *(short *)(SW_SKILL2(m_pBot) + 40))
+                        {
+                            EComboType eChain = m_pBot->MakeNormalChainSwoop();
+                            if (eChain != COMBO_NONE)
+                            {
+                                MakeCombo(eChain);
+                                TASKF(char, 0x30) = 1;
+                                return;
+                            }
+                        }
+                        if (0.2f <= tr.flFraction)
+                            fFinish = TRUE;
+                        (void)fDone;
+                    }
+                }
+            }
+        }
+    }
+    if (fFinish)
+    {
+        m_pBot->SetSwoopButton();
+        if (!TASKF(char, 0x18))
+            CheckSecondaryFire();
+        if (TASKF(char, 0x19))
+            m_pEdict->v.button |= 0x800;                             // [OK] button+1 |= 8
+        EComboType eAvoid = m_pBot->AvoidAttacksWhileSwoop();
+        if (eAvoid != COMBO_NONE)
+            MakeCombo(eAvoid);
+        return;
+    }
+    (void)fKeep;
+    TASK_DONE();
+}

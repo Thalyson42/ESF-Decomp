@@ -418,6 +418,10 @@ public:
     virtual int TaskIdentify(void);
     virtual BOOL ShouldManageEnemies(void);
     virtual BOOL ReactOnDanger(danger_info_s *pDanger);
+    float GetSwoopLifeTime(void);
+    void CheckSecondaryFire(void);
+    void SelectSwoopType(void);
+    BOOL IsAvoidDangerSwoop(void);
 };
 
 class CTeleportTask : public CBaseTask

@@ -50,6 +50,11 @@ public:
     BOOL BotShouldFallDown(void);
     void MakePlayerList(void);
     void TurnAround(void);
+    EComboType MakeAttackChainSwoop(void);               // [?] 38 = nenhuma
+    EComboType MakeAwayChainSwoop(CBasePlayer *pEnemy);  // [?]
+    EComboType MakeNormalChainSwoop(void);               // [?]
+    EComboType AvoidAttacksWhileSwoop(void);             // [?]
+    void SetSwoopButton(void);                           // [?]
     void CheckStrafe(void);
     BOOL IsValidEnemy(CBasePlayer *pPlayer);
     void AimAtEnemy(CBasePlayer *pPlayer);
