@@ -12,6 +12,7 @@ public:
     virtual void TaskThink(void);
     virtual int TaskIdentify(void);
     virtual BOOL ShouldManageEnemies(void);
+    BOOL ShootAbsorbHealthBeams(void);
 };
 
 class CAscendTask : public CBaseTask

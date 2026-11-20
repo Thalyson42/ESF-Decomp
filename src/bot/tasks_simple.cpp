@@ -1068,3 +1068,60 @@ void CChargeAttackTask::TaskThink(void)
     }
     TASK_DONE();
 }
+
+// ---- CAbsorbHealthTask ----
+
+BOOL CAbsorbHealthTask::ShootAbsorbHealthBeams(void)
+{
+    if (!BOTF(m_pBot, int, 0xa20))
+        m_pBot->MakePlayerList();                                  // [OK]
+    int iCount = BOTF(m_pBot, int, 0xaac);                         // [OK] numero de jogadores na lista
+    if (!iCount)
+        return FALSE;
+    BOOL fShot = FALSE;
+    for (int i = 0; i < iCount; i++)
+    {
+        CBasePlayer *pTarget = BOTF(m_pBot, CBasePlayer *, 0xa24 + i * 4);   // [OK] lista de jogadores do bot
+        if (g_teamplay && *(int *)((char *)&m_pEdict->v + 0x1ac) == *((int *)pTarget->pev + 107))   // [OK] +0x22c / +0x1ac: mesmo time
+            continue;
+        if (!m_pBot->CanAttackPlayer(pTarget))
+            continue;
+        float flFrac = 0.95f;                                      // [OK] "33s?" = 0x3f733333
+        int iDiff = BOTF(m_pBot, int, 0x744) - *(int *)((char *)pTarget + 0x744);   // [?] contador do jogador (+0x744)
+        if (iDiff > 0)
+            flFrac = (float)((double)iDiff / 10000000.0);
+        if (flFrac < 0.05f) flFrac = 0.05f;                        // [OK] limita entre 5% e 95%
+        else if (flFrac > 0.95f) flFrac = 0.95f;
+        Vector vecVel = pTarget->pev->velocity;
+        float flSpeed = vecVel.Length();
+        Vector vecDir = flSpeed == 0.0f ? Vector(0, 0, 1) : vecVel * (1.0f / flSpeed);
+        pTarget->pev->velocity = vecVel - vecDir * (flSpeed * flFrac);   // [OK] freia o alvo
+        m_pBot->ShootHealthBeam(pTarget);                          // [OK]
+        fShot = TRUE;
+        if ((double)BOTF(m_pBot, int, 0x24c) <= m_pEdict->v.health)   // [OK] vida cheia: para
+            return FALSE;
+    }
+    if (BOTF(m_pBot, float, 0xbb4) <= gpGlobals->time)             // [OK]
+        BOTF(m_pBot, float, 0xbb4) = gpGlobals->time + 0.19;
+    return fShot;
+}
+
+void CAbsorbHealthTask::TaskThink(void)
+{
+    if ((double)BOTF(m_pBot, int, 0x24c) > m_pEdict->v.health &&   // [OK] precisa de vida
+        (int)m_pEdict->v.fuser4 >= 100 && !BOTF(m_pBot, int, 0x37c))
+    {
+        m_pBot->ToggleTurbo(0);
+        char *pv = (char *)&m_pEdict->v;                           // [?] campos do entvars ESF configurando os raios
+        *(int *)(pv + 0x148) = 0;
+        *(int *)(pv + 0x15c) = 19;
+        *(float *)(pv + 0x14c) = 25.0f;
+        *(float *)(pv + 0x150) = 125.0f;
+        *(float *)(pv + 0x154) = 255.0f;
+        *(float *)(pv + 0x158) = 255.0f;
+        m_pBot->ResetMoveSpeed();
+        if (ShootAbsorbHealthBeams())
+            return;
+    }
+    TASK_DONE();
+}
