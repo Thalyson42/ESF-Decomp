@@ -49,6 +49,8 @@ public:
     void ShootHealthBeam(CBasePlayer *pPlayer);
     BOOL BotShouldFallDown(void);
     void MakePlayerList(void);
+    void TurnAround(void);
+    void CheckStrafe(void);
     BOOL IsValidEnemy(CBasePlayer *pPlayer);
     void AimAtEnemy(CBasePlayer *pPlayer);
     void ChargeMeleeCombo(void);

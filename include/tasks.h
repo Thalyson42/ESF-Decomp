@@ -288,6 +288,11 @@ public:
     virtual void TaskThink(void);
     virtual int TaskIdentify(void);
     virtual BOOL ShouldManageEnemies(void);
+    void BotCheckUpDown(void);
+    void BotLook(void);
+    void BotTurnAtWall(Vector *pvecWallNormal);
+    void CheckFOV(void);
+    void CheckSkyBox(void);
 };
 
 class CPowerStruggleTask : public CBaseTask

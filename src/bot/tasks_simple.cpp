@@ -1428,3 +1428,211 @@ void CCounterMeleeTask::TaskThink(void)
     }
     TASK_DONE();
 }
+
+// ---- CNormalMovementTask ----
+extern char *g_pBotManager;   // BotManager+0xd48 (3400): bots ativos
+
+void CNormalMovementTask::TaskThink(void)
+{
+    m_pEdict->v.v_angle.z = 0;                                       // [OK] edict+0xfc
+    m_pEdict->v.angles.y = m_pEdict->v.v_angle.y;                    // [OK] edict+0xd4 = edict+0xf8: o corpo acompanha a visao
+    m_pEdict->v.angles.z = 0;                                        // [OK] edict+0xd8
+    BOOL fMoving = FALSE;
+    if (m_pBot->GetMaxSpeed() == 0.0f)                               // [OK] parado (ex.: congelado)
+        return;
+    if (!(g_pBotManager && g_pBotManager[0xd48]))
+        return;
+    if (BOTF(m_pBot, float, 0x1030) <= gpGlobals->time && BOTF(m_pBot, int, 0x320) && num_waypoints)   // [OK] voando e com waypoints
+    {
+        BOOL fValid = m_pBot->CurrentWPIsValid();
+        if (!fValid)
+        {
+            short iWP = WaypointFindReachable(m_pEdict, 400.0f, g_teamplay ? *(int *)((char *)&m_pEdict->v + 0x1ac) : -1);   // [OK]
+            if (iWP == -1)
+                goto no_waypoint;
+            BOTF(m_pBot, int, 0x1008) = iWP;
+            BOTF(m_pBot, float, 0xff8) = waypoints[iWP].x;
+            BOTF(m_pBot, float, 0xffc) = waypoints[iWP].y;
+            BOTF(m_pBot, float, 0x1000) = waypoints[iWP].z;
+            BOTF(m_pBot, float, 0x1004) = gpGlobals->time;
+        }
+        fMoving = m_pBot->HeadToWaypoint();
+    }
+no_waypoint:
+    if (fMoving)
+        return;
+    if (BOTF(m_pBot, float, 0xb20) < gpGlobals->time)                // [OK] acabou o tempo de movimento normal
+    {
+        BOTF(m_pBot, int, 0x1068) = 16;                              // [OK] proximo modo
+        TASK_DONE();
+        return;
+    }
+    if (BOTF(m_pBot, float, 0xff4) <= gpGlobals->time)
+        BotCheckUpDown();
+    m_pBot->CheckStrafe();
+    if (BOTF(m_pBot, float, 0xd88) > gpGlobals->time)
+        return;
+    if (BOTF(m_pBot, float, 0xd8c) < gpGlobals->time)
+    {
+        BotLook();
+        CheckFOV();
+        BOTF(m_pBot, float, 0xd8c) = gpGlobals->time + RANDOM_FLOAT(0.8, 1.2);   // [OK]
+    }
+    CheckSkyBox();
+}
+
+struct bot_look_entry_s { float m_flDist; int m_iContents; Vector m_vecEnd; Vector m_vecNormal; };   // [OK] 32 bytes, tabela em bot+0xd90 (19 entradas)
+
+void CNormalMovementTask::BotCheckUpDown(void)
+{
+    if (!BOTF(m_pBot, int, 0x320))                                  // [OK] no chao: olha 40 graus para baixo
+    {
+        BOTF(m_pBot, float, 0xc10) = 40.0f;
+        return;
+    }
+    BOTF(m_pBot, float, 0xff4) = gpGlobals->time + 3.0;             // [OK]
+    BOOL fUp = CheckForCollide(m_pEdict, 0x100, 100.0f);            // [OK] 0x42c80000 = 100.0
+    BOOL fDown = CheckForCollide(m_pEdict, 0x200, 100.0f);
+    float flPitch;
+    if (fUp && fDown)
+        flPitch = 0;
+    else if (fUp)
+        flPitch = RANDOM_FLOAT(-35.0, -25.0);                       // [?] o decompilado perdeu o retorno do RandomFloat
+    else if (fDown)
+        flPitch = RANDOM_FLOAT(25.0, 35.0);
+    else
+        switch (RANDOM_LONG(1, 3))
+        {
+        case 1: flPitch = RANDOM_FLOAT(-35.0, -25.0); break;
+        case 2: flPitch = RANDOM_FLOAT(25.0, 35.0); break;
+        default: flPitch = 0; break;
+        }
+    BOTF(m_pBot, float, 0xc10) = flPitch;                           // [OK] pitch ideal
+}
+
+// Varre 19 direcoes (-45..+45 graus em passos de 5) com um traco de 10000 un., guarda distancia/contents/ponto/normal na tabela do bot e
+// mira na mais longa (corredor mais aberto). [OK] lido do assembly em 0x171ad0
+void CNormalMovementTask::BotLook(void)
+{
+    if (BOTF(m_pBot, float, 0xd88) > gpGlobals->time)
+        return;
+    bot_look_entry_s *pTable = (bot_look_entry_s *)((char *)m_pBot + 0xd90);
+    int iBest = -1;
+    float flBest = 0;
+    int i = 0;
+    for (float flOffset = -45.0f; flOffset <= 45.0f; flOffset += 5.0f, i++)
+    {
+        Vector vecAng = m_pEdict->v.v_angle;
+        WrapAngles(vecAng);
+        vecAng.y = UTIL_WrapAngle(vecAng.y + flOffset);            // [?] o assembly embrulha (angulo + offset)
+        UTIL_MakeVectors(vecAng);
+        Vector vecEnd = m_pEdict->v.origin + gpGlobals->v_forward * 10000.0;
+        TraceResult tr;
+        UTIL_TraceHull(m_pEdict->v.origin, vecEnd, ignore_monsters, human_hull, m_pEdict, &tr);
+        pTable[i].m_flDist = 10000.0f * tr.flFraction;             // [OK]
+        pTable[i].m_iContents = UTIL_PointContents(tr.vecEndPos);  // [OK]
+        pTable[i].m_vecEnd = tr.vecEndPos;
+        pTable[i].m_vecNormal = tr.vecPlaneNormal;
+        if (pTable[i].m_flDist > flBest)
+        {
+            flBest = pTable[i].m_flDist;
+            iBest = i;
+        }
+    }
+    if (iBest >= 0)
+    {
+        Vector vecAim = m_pBot->GetAimAngles(pTable[iBest].m_vecEnd);
+        BOTF(m_pBot, float, 0xc10) = vecAim.x;
+        BOTF(m_pBot, float, 0xc14) = vecAim.y;
+        BOTF(m_pBot, float, 0xc18) = vecAim.z;
+    }
+}
+
+void CNormalMovementTask::CheckSkyBox(void)
+{
+    if (BOTF(m_pBot, float, 0xd88) > gpGlobals->time)
+        return;
+    Vector vecAng = m_pEdict->v.v_angle;
+    WrapAngles(vecAng);
+    UTIL_MakeVectors(vecAng);
+    Vector vecEye = m_pEdict->v.origin + *(Vector *)((char *)m_pEdict + 0x1f4);   // [?] edict[125..127] = deslocamento do olho (view_ofs)
+    Vector vecEnd = vecEye + gpGlobals->v_forward * 400.0;
+    if (UTIL_PointContents(vecEnd) != CONTENTS_SKY)                // [OK] -6
+        return;
+    m_pBot->TurnAround();                                          // [OK] encara o ceu: vira
+    BOTF(m_pBot, float, 0xd88) = gpGlobals->time + 1.0;
+    BOTF(m_pBot, float, 0xaec) += 1.5f;                            // [OK] bot+0xaec (699*4)
+}
+
+void CNormalMovementTask::BotTurnAtWall(Vector *pvecWallNormal)
+{
+    Vector vecWallAng = UTIL_VecToAngles(*pvecWallNormal);
+    float flYaw = m_pEdict->v.v_angle.y + 180.0f;                  // [OK] edict+0xf8
+    if (flYaw > 359.0f) flYaw -= 360.0f;
+    float flWall = vecWallAng.y - 180.0f;
+    if (flWall < 0.0f) flWall += 360.0f;
+    float flLeft = flWall - 90.0f;
+    if (RANDOM_LONG(1, 100) <= 50)
+        flLeft -= RANDOM_FLOAT(5.0, 20.0);                         // [?] o decompilado perdeu o retorno do RandomFloat (usa 5.0)
+    if (flLeft < 0.0f) flLeft += 360.0f;
+    float flRight = flWall + 90.0f;
+    if (RANDOM_LONG(1, 100) <= 50)
+        flRight += RANDOM_FLOAT(5.0, 20.0);
+    if (flRight > 359.0f) flRight -= 360.0f;
+    int iDiffL = abs((int)(flYaw - flLeft));
+    if (iDiffL > 179) iDiffL = abs((int)(iDiffL - 360.0));
+    int iDiffR = abs((int)(flYaw - flRight));
+    if (iDiffR > 179) iDiffR = abs((int)(iDiffR - 360.0));
+    float flPick = flRight;
+    if (iDiffL > iDiffR)
+        flPick = flLeft;                                           // [OK] literal do decompilado
+    if (flPick > 180.0f) flPick -= 360.0f;
+    BOTF(m_pBot, float, 0xc14) = UTIL_WrapAngle(flPick);          // [OK] yaw ideal
+}
+
+// Decide entre pular, virar ou seguir quando a frente esta bloqueada. Usa a tabela de BotLook: [0] = -45 graus, [10] = frente, [18] = +45.
+static BOOL NormalMoveCanJump(CNormalMovementTask *pTask, edict_t *pEdict, float flAhead)
+{
+    char *pv = (char *)&pEdict->v;
+    if (!(0.1f < *(float *)(pv + 0x11c) && *(int *)(pv + 0x1c0) != 3 && !(*(unsigned char *)(pv + 0x1a5) & 2)))   // [?] campos do entvars ESF (edict+0x19c/+0x240/+0x225)
+        return FALSE;
+    UTIL_MakeVectors(pEdict->v.v_angle);
+    Vector vecStart = pEdict->v.origin + Vector(0, 0, 200);       // [OK] traca 200 un. acima: o obstaculo e baixo?
+    Vector vecEnd = vecStart + gpGlobals->v_forward * flAhead;
+    TraceResult tr;
+    UTIL_TraceHull(vecStart, vecEnd, ignore_monsters, human_hull, pEdict, &tr);
+    return tr.flFraction >= 1.0f;                                  // [OK] livre: da para pular
+}
+
+void CNormalMovementTask::CheckFOV(void)
+{
+    if (BOTF(m_pBot, float, 0xd88) > gpGlobals->time)
+        return;
+    bot_look_entry_s *pTable = (bot_look_entry_s *)((char *)m_pBot + 0xd90);
+    float flLeft = pTable[0].m_flDist, flRight = pTable[18].m_flDist, flFront = pTable[10].m_flDist;   // [OK] +0xd90, +0xfd0, +0xed0
+    if (70.0f > flLeft && 70.0f > flRight)                        // [OK] bloqueado dos dois lados
+    {
+        if (70.0f > flFront)
+        {
+            if (45.0f > flFront && NormalMoveCanJump(this, m_pEdict, 80.0f))
+            {
+                m_pEdict->v.button |= IN_JUMP;                    // [OK]
+                return;
+            }
+            m_pBot->TurnAround();                                 // [OK]
+            BOTF(m_pBot, float, 0xd88) = gpGlobals->time + 1.0;
+        }
+        return;
+    }
+    if (70.0f > flFront)                                          // [OK] so a frente bloqueada
+    {
+        if (NormalMoveCanJump(this, m_pEdict, 40.0f))
+        {
+            m_pEdict->v.button |= IN_JUMP;
+            return;
+        }
+        BotTurnAtWall(&pTable[10].m_vecNormal);                   // [OK] +0xee4 = normal da parede a frente
+        BOTF(m_pBot, float, 0xd88) = gpGlobals->time + 1.0;
+        BOTF(m_pBot, float, 0xaec) += 1.5f;
+    }
+}
