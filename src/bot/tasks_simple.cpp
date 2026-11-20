@@ -2742,3 +2742,143 @@ void CCombatTask::AttackWithMelee(BOOL fCombo)
     MakeCombo((EComboType)iChosen);
     BOTF(m_pBot, float, 0xab0) = gpGlobals->time + RANDOM_FLOAT(10.0f, 20.0f);   // [?]
 }
+
+// ---- CCombatTask::TaskThink ----
+// Escolhe e dispara ataques contra o inimigo atual. Bot: +0xb74 atraso de disparo, +0xba4 modo rapido, +0xba8 -> dados (short +0xc = chance),
+// +0x760 carregando esfera, +0x37c estado, +0x1068 modo da tarefa (19/26/32 = ataques especiais).
+extern BOOL CBot_HasWeapon(CBot *pBot, int iWeapon);             // [?] CBot::HasWeapon
+extern CBaseEntity *UTIL_FindEntityByClassname(CBaseEntity *pStart, const char *szName);
+
+void CCombatTask::TaskThink(void)
+{
+    CBasePlayer *pEnemy = BOT_ENEMY(m_pBot);
+    if (!pEnemy)
+    {
+        TASK_DONE();
+        return;
+    }
+    m_pBot->BotCombatMovement();
+    float flDist = (pEnemy->pev->origin - m_pBot->pev->origin).Length();
+    BOOL fNoneInRange = TRUE;                                          // [OK] v18
+    if (!EntIsInFieldOfView(m_pBot, pEnemy) && !EntIsInFieldOfView(pEnemy, m_pBot))
+    {
+        m_pBot->ResetMoveSpeed();                                      // [OK] nao se veem: so para
+        return;
+    }
+    if (SW_SKILL(m_pBot)[0x3e] && flDist < 800.0f)
+        m_pBot->ToggleTurbo(1);
+    if (BOTF(m_pBot, float, 0xb74) > gpGlobals->time)
+        return;                                                        // [OK] atraso entre disparos
+    if (!(g_pBotManager && g_pBotManager[0xd47]))
+        return;
+    if (CVAR_GET_FLOAT("mp_ceasefire") == 1.0)
+        return;
+    if (!m_pBot->HasWeapons())
+        return;
+
+    if (BOTF(m_pBot, int, 0x760))
+        m_pEdict->v.button |= 1;                                       // [OK]
+    if (BOTF(m_pBot, short, 0xba4) > 0 && m_pBot->pev->health <= 69 && (int)m_pEdict->v.fuser4 > 150
+        && m_pBot->GetMaxSpeed() > 0 && !BOTF(m_pBot, int, 0x37c))
+    {
+        if (RANDOM_LONG(1, 100) <= *(short *)((char *)BOTF(m_pBot, void *, 0xba8) + 0xc))
+        {
+            BOTF(m_pBot, int, 0x1068) = 32;                            // [OK] vida baixa no modo rapido: modo especial
+            TASK_DONE();
+            return;
+        }
+    }
+
+    int iMelee = (*(int *)((char *)m_pEdict + 0x28c) == 7) ? 2 : 1;   // [OK] espada = ataque 2, soco = 1
+    BOOL fCanMelee = FALSE;
+    if (GetMinDistForAttackById(iMelee) < flDist && GetMaxDistForAttackById(iMelee) >= flDist)
+        fCanMelee = m_pBot->CanMelee(pEnemy) != 0;
+
+    char *pSkill = SW_SKILL2(m_pBot);
+    if (*(short *)pSkill == 100)
+    {
+        if (fCanMelee)
+            PrepareAttack(iMelee, COMBO_USE_RANDOM);                   // [OK] agressividade maxima: sempre melee
+        return;
+    }
+
+    if (*(int *)((char *)m_pEdict + 0x28c) == 2)
+    {
+        // Kame Torpedo parado: solta
+        CBaseEntity *pTorp = NULL;
+        while ((pTorp = UTIL_FindEntityByClassname(pTorp, "Kame Torpedo")) != NULL)
+        {
+            if (!IsNull(pTorp) && pTorp->pev->owner == m_pEdict && pTorp->pev->velocity.Length() <= 0.0f)
+            {
+                m_pEdict->v.button |= 0x800;
+                TASK_DONE();
+                BOTF(m_pBot, int, 0x1068) = 19;
+                return;
+            }
+        }
+    }
+    float flChance = *(short *)pSkill;
+    if (*(int *)((char *)pEnemy->pev + 0x108) == 11 && flDist < 2500.0f)
+        flChance *= 1.5;
+    if (*(int *)(pSkill + 0x34) == 2 && 20.0f > m_pEdict->v.health)    // [?] +0x1e0
+        flChance *= 0.75;
+    if (!fCanMelee)
+        flChance = 0;
+    if (RANDOM_FLOAT(1.0f, 100.0f) <= flChance)
+    {
+        PrepareAttack(iMelee, COMBO_USE_RANDOM);
+        return;
+    }
+
+    // escolhe um ataque a distancia entre os que o bot tem (peso = GetAttackPercent)
+    struct { int iLo, iHi, iAttack; } aSel[64];
+    int nSel = 0, iTotal = 0;
+    BOOL fBold = RANDOM_LONG(1, 100) <= *(short *)(pSkill + 0x26);     // [OK] aceita atacar mesmo mais perto que o minimo
+    for (int i = 0; BotWeaponInfoTable[i].iAttack && nSel < 64; i++)
+    {
+        int iAttack = BotWeaponInfoTable[i].iAttack;
+        if (!CBot_HasWeapon(m_pBot, iAttack))
+            continue;
+        if (iAttack == 8 && BOTF(pEnemy, int, 0x344))
+            continue;
+        int iPct = GetAttackPercent(pEnemy, iAttack);
+        if (!iPct)
+            continue;
+        if (GetMinDistForAttackByTableIndex(i) > flDist)
+        {
+            if (!fBold)
+                continue;
+            iPct = (int)(iPct * 0.75);
+        }
+        if (GetMaxDistForAttackByTableIndex(i) >= flDist)
+        {
+            if (fNoneInRange == 1)
+                fNoneInRange = 0;
+            if (iAttack == 12 && CheckForCollide(m_pEdict, 32, 250.0f))
+                continue;
+            if ((iAttack == 3 || iAttack == 21 || iAttack == 30) && CheckForCollide(m_pEdict, 6, 225.0f))
+                continue;
+            if (iPct)
+            {
+                aSel[nSel].iLo = iTotal; aSel[nSel].iHi = iTotal + iPct; aSel[nSel++].iAttack = iAttack;
+                iTotal += iPct;
+            }
+        }
+    }
+    int iPick = RANDOM_LONG(0, iTotal);
+    int iChosen = 0;
+    for (int i = 0; i < nSel; i++)
+        if (iPick >= aSel[i].iLo && iPick < aSel[i].iHi)
+        {
+            iChosen = aSel[i].iAttack;
+            break;
+        }
+    if (fNoneInRange)
+    {
+        m_pBot->ToggleTurbo(1);                                        // [?] nada ao alcance: aproxima com turbo
+        return;
+    }
+    if (!iChosen)
+        return;
+    PrepareAttack(iChosen, (GetMinDistForAttackById(iChosen) > flDist) ? COMBO_USE_ALWAYS : COMBO_USE_RANDOM);   // [?] valor do primeiro caso
+}
