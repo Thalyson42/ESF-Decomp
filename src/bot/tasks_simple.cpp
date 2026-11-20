@@ -2666,3 +2666,79 @@ void CCombatTask::PrepareAttack(int iAttack, EComboUse eUse)
     }
     MakeCombo(eCombo);
 }
+
+// ---- CCombatTask::AttackWithMelee ----
+// Escolhe um combo corpo a corpo. Pesos [OK]: ids 21/22 = 50 (so de 1250 a 1750), 23 = 25, 24 = 50, 20 = 25; padrao: combo 2.
+void CCombatTask::AttackWithMelee(BOOL fCombo)
+{
+    if (25.0f <= BOTF(m_pBot, float, 0xc28) && BOTF(m_pBot, char, 0x9fc) > 2)
+        return;
+    if (m_pBot->GetMaxSpeed() == 0)
+        return;
+    CBasePlayerItem *pItem = BOTF(m_pBot, CBasePlayerItem *, 0x968);
+    if (pItem)
+    {
+        if (*(int *)((char *)m_pEdict + 0x28c) == 7)
+        {
+            if (BOTF(pItem, int, 0x88) != 2)
+                m_pBot->SelectItem("weapon_sword");
+        }
+        else if (BOTF(pItem, int, 0x88) != 1)
+            m_pBot->SelectItem("weapon_melee");
+    }
+    if (*(short *)SW_SKILL2(m_pBot) <= 99)
+    {
+        if (RANDOM_LONG(1, 100) <= *(short *)(SW_SKILL2(m_pBot) + 4))
+            MakeCombo((EComboType)28);                                       // [OK] (nao retorna)
+    }
+    if (!fCombo)
+    {
+        if ((int)m_pEdict->v.fuser4 > 149)
+            MakeCombo((EComboType)2);
+        else
+            MakeCombo((EComboType)25);
+        return;
+    }
+    int iW20 = 25, iW21 = 50, iW23 = 25, iW24 = 50;
+    CBasePlayer *pEnemy = BOT_ENEMY(m_pBot);
+    float flDist = (pEnemy->pev->origin - m_pBot->pev->origin).Length();
+    if (flDist > 1200.0f)
+        iW20 = 0;
+    else if ((short)UTIL_GetHeadingPercentage(m_pBot, pEnemy) > 64)
+        iW20 = (int)(iW20 * 0.25);
+    if (*(int *)((char *)pEnemy->pev + 0x108) == 11)                          // [?] estado do inimigo
+    {
+        iW23 = 0;
+        iW20 = 0;
+    }
+    if (BOTF(pEnemy, int, 0x3e4) == 1)
+        iW20 = (int)(iW20 * 1.5);
+    int iKi = (int)m_pEdict->v.fuser4;
+    if ((int)flDist / 400 > iKi / 200 - 1)
+        iW20 = 0;
+    if (iKi > 480)
+        iW24 = 0;
+    if (flDist < 1250.0f)
+        iW21 = 0;
+    if (!(flDist >= 850.0f && flDist <= 1750.0f))
+        iW21 = 0;
+
+    struct { int iLo, iHi, iCombo; } aSel[5];
+    int nSel = 0, iTotal = 0;
+    if (iW21) { aSel[nSel].iLo = iTotal; aSel[nSel].iHi = iTotal + iW21; aSel[nSel++].iCombo = 21; iTotal += iW21;
+                aSel[nSel].iLo = iTotal; aSel[nSel].iHi = iTotal + iW21; aSel[nSel++].iCombo = 22; iTotal += iW21; }
+    if (iW23) { aSel[nSel].iLo = iTotal; aSel[nSel].iHi = iTotal + iW23; aSel[nSel++].iCombo = 23; iTotal += iW23; }
+    if (iW24) { aSel[nSel].iLo = iTotal; aSel[nSel].iHi = iTotal + iW24; aSel[nSel++].iCombo = 24; iTotal += iW24; }
+    if (iW20) { aSel[nSel].iLo = iTotal; aSel[nSel].iHi = iTotal + iW20; aSel[nSel++].iCombo = 20; iTotal += iW20; }
+
+    int iPick = RANDOM_LONG(0, iTotal);
+    int iChosen = 2;                                                         // [OK] padrao
+    for (int i = 0; i < nSel; i++)
+        if (iPick >= aSel[i].iLo && iPick < aSel[i].iHi)                     // [?] limites do FindSelection
+        {
+            iChosen = aSel[i].iCombo;
+            break;
+        }
+    MakeCombo((EComboType)iChosen);
+    BOTF(m_pBot, float, 0xab0) = gpGlobals->time + RANDOM_FLOAT(10.0f, 20.0f);   // [?]
+}
