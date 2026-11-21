@@ -1459,3 +1459,153 @@ void CBot::CheckSBotStuff(void)
         g_engfuncs.pfnSetClientKeyValue(iIdx, pInfo, "name", szNew);
     }
 }
+
+// ---------------------------------------------------------------------------
+// Dragon Balls. Bot: +0xb30 esfera alvo, +0xb34 proxima checagem, +0x760 (carregando esfera), +0x1024 wp destino
+// ---------------------------------------------------------------------------
+extern Vector GatherDBPosForTeamGood, GatherDBPosForTeamEvil;                 // [OK] pontos de reuniao das esferas por time
+extern BOOL UTIL_DBsAreGathered(void);                                        // [?]
+extern BOOL UTIL_DBsAreActive(void);                                          // [?]
+
+static Vector *GatherPosForTeam(CBot *pBot)
+{
+    return (pBot->pev->team == 1) ? &GatherDBPosForTeamGood : &GatherDBPosForTeamEvil;   // [OK] literal do original
+}
+
+void CBot::CheckDragonBalls(void)
+{
+    if (BOTF(this, float, 0xb34) <= gpGlobals->time)
+    {
+        BOTF(this, float, 0xb34) = gpGlobals->time + 0.75f;                   // [OK]
+        if (UTIL_DBsAreGathered())
+            SearchGatheredSpot();
+        else if (BOTF(this, int, 0x760))
+            SearchDBGatherSpot();
+        else if (!BOT_ENEMY(this))
+            SearchDragonBall();
+    }
+}
+
+short CBot::SearchNearestWPForDBSpot(void)
+{
+    if (GatherDBPosForTeamGood == g_vecZero)
+        return -1;
+    if (GatherDBPosForTeamEvil == g_vecZero)
+        return -1;
+    Vector vecPos = *GatherPosForTeam(this);
+    return WaypointFindNearest(&vecPos, pev->pContainingEntity, 1000.0f, pev->team);   // [OK]
+}
+
+BOOL CBot::SearchDBGatherSpot(void)
+{
+    if (GatherDBPosForTeamGood == g_vecZero)
+        return FALSE;
+    if (GatherDBPosForTeamEvil == g_vecZero || !BOTF(this, int, 0x760))
+        return FALSE;
+    if (CanReachPoint(*GatherPosForTeam(this)))                               // [?] vtable +0xe4
+        return TRUE;
+    short iWP = -1;
+    if (num_waypoints)
+        iWP = SearchNearestWPForDBSpot();
+    if (iWP != -1)
+    {
+        Vector vecPos = pev->origin;
+        short iMine = WaypointFindNearest(&vecPos, pev->pContainingEntity, 1750.0f, pev->team);
+        if (iMine != -1 && (unsigned short)WaypointRouteFromTo(iMine, iWP, pev->team) != 0xffff)
+        {
+            BOTF(this, int, 0x1024) = iWP;
+            return TRUE;
+        }
+    }
+    return FALSE;
+}
+
+BOOL CBot::SearchGatheredSpot(void)
+{
+    if (BOTF(this, char, 0xb39))                                              // [?]
+        return FALSE;
+    CBaseEntity *pBall = UTIL_FindEntityByClassname(NULL, "dragonball");
+    if (IsNull(pBall->edict()))
+        return FALSE;
+    Vector vecBall = pBall->pev->origin;
+    if (CanReachPoint(vecBall))
+    {
+        BOTF(this, CBaseEntity *, 0xb30) = pBall;
+        return TRUE;
+    }
+    short iBall = -1;
+    if (num_waypoints)
+    {
+        Vector v = vecBall;
+        iBall = WaypointFindNearest(&v, pev->pContainingEntity, 1750.0f, pev->team);
+    }
+    if (iBall != -1)
+    {
+        Vector vecMe = pev->origin;
+        short iMine = WaypointFindNearest(&vecMe, pev->pContainingEntity, 1750.0f, pev->team);
+        if (iMine != -1 && (unsigned short)WaypointRouteFromTo(iMine, iBall, pev->team) != 0xffff)
+        {
+            BOTF(this, int, 0x1024) = iBall;
+            BOTF(this, CBaseEntity *, 0xb30) = pBall;
+            return TRUE;
+        }
+    }
+    return FALSE;
+}
+
+BOOL CBot::SearchDragonBall(void)
+{
+    if (!g_teamplay)
+        return FALSE;
+    if (CVAR_GET_FLOAT("mp_gamemode") != 2.0f)                                // [OK]
+        return FALSE;
+    if (BOTF(this, int, 0x760))
+        return TRUE;
+    if (UTIL_DBsAreGathered() || !UTIL_DBsAreActive())
+        return FALSE;
+
+    CBaseEntity *pEnt = NULL, *pBest = NULL;
+    float flBest = 9999.9f;
+    short iBestWP = -1, iBallWP = -1, iMyWP = -1;
+    Vector vecGather = *GatherPosForTeam(this);
+    if (num_waypoints)
+    {
+        Vector v = pev->origin;
+        iMyWP = WaypointFindNearest(&v, pev->pContainingEntity, 1750.0f, pev->team);
+    }
+    for (;;)
+    {
+        pEnt = UTIL_FindEntityByClassname(pEnt, "dragonball");
+        if (!pEnt)
+            break;
+        if (IsNull(pEnt->edict()))
+            continue;
+        float flDist = (pEnt->pev->origin - pev->origin).Length();
+        if (flDist >= flBest)
+            continue;
+        if ((pEnt->pev->origin - vecGather).Length() < 1000.0f)               // [OK] esfera ja esta no ponto de reuniao
+            continue;
+        if (!CanReachPoint(pEnt->pev->origin))                                // [?] vtable +0xe4
+        {
+            if (iMyWP == -1)
+                continue;
+            Vector v = pEnt->pev->origin;
+            iBallWP = WaypointFindNearest(&v, pEnt->pev->pContainingEntity, 750.0f, pev->team);
+            if (iBallWP == -1 || (unsigned short)WaypointRouteFromTo(iMyWP, iBallWP, pev->team) == 0xffff)
+                continue;
+        }
+        flBest = flDist;
+        pBest = pEnt;
+        if (iBallWP != -1)
+            iBestWP = iBallWP;
+        iBallWP = -1;
+    }
+    if (!pBest)
+        return FALSE;
+    BOTF(this, CBaseEntity *, 0xb30) = pBest;
+    if (iBestWP == -1)
+        BOTF(this, Vector, 0xc10) = GetAimAngles(pBest->pev->origin);         // [OK]
+    else
+        BOTF(this, int, 0x1024) = iBestWP;
+    return TRUE;
+}
