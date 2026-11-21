@@ -86,7 +86,9 @@ public:
     void ChangeAggressionLevel(int iLevel);
     void PickBotName(char *szName);
     void PlayerConnect(const char *szAddress);
-    int  KickLastBot(short sFlag);
+    void KickLastBot(bool bMsg);
+    void KickBots(short sTeam);
+    void ChangeBotSkill(short sSkill);
     void MapFree(void);
     void MakeRandomPersonalities(void);
     BOOL HandleBotCommands(edict_t *pEntity);

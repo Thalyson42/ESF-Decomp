@@ -945,3 +945,84 @@ void CBotManager::BotFillThink(void)
         return;
     CreateBot(-1, -1, NULL, -1, -1);
 }
+
+// ---------------------------------------------------------------------------
+// Kick / skill
+// ---------------------------------------------------------------------------
+static void KickBotPlayer(CBasePlayer *p)
+{
+    char szCmd[64];
+    *(int *)((char *)p + 0xa08) = 1;                                          // [OK] CBot: sendo expulso
+    sprintf(szCmd, "kick \"%s\"\n", STRING(p->pev->netname));                 // netname = pev+0x1d0 + gpGlobals->pStringBase
+    g_engfuncs.pfnServerCommand(szCmd);
+}
+
+// Expulsa todos os bots (sTeam: 1 Good, 2 Evil, -1 todos; sem teamplay sempre todos)
+void CBotManager::KickBots(short sTeam)
+{
+    if (!g_teamplay)
+        sTeam = -1;
+    for (int i = 1; i <= gpGlobals->maxClients; i++)
+    {
+        CBasePlayer *pPl = (CBasePlayer *)UTIL_PlayerByIndex(i);
+        if (!UTIL_IsValidPlayer(pPl, 0, 0))
+            continue;
+        if (IsBotPlayer(pPl) && (pPl->pev->team == sTeam || sTeam == -1))
+            KickBotPlayer(pPl);
+    }
+    f_d24 = 0;
+    if (sTeam == 1)
+        std::cout << "All bots removed in team good\n";
+    else if (sTeam == 2)
+        std::cout << "All bots removed in team evil\n";
+    else
+        std::cout << "All bots removed\n";
+}
+
+// Expulsa o ultimo bot (indice mais alto) e zera o estado de "adicionar varios"
+void CBotManager::KickLastBot(bool bMsg)
+{
+    for (int i = gpGlobals->maxClients; i >= 1; i--)
+    {
+        CBasePlayer *pPl = (CBasePlayer *)UTIL_PlayerByIndex(i);
+        if (!UTIL_IsValidPlayer(pPl, 0, 0))
+            continue;
+        if (IsBotPlayer(pPl))
+        {
+            KickBotPlayer(pPl);
+            break;
+        }
+    }
+    f_d24 = 0;
+    f_014 = f_015 = f_016 = f_017 = f_018 = 0;                                // memset(+20, 0, 5)
+    if (bMsg)
+        std::cout << "Last bot kicked\n";
+}
+
+// Muda o nivel de skill de todos os bots (1 = melhor, 5 = pior; -1 = aleatorio); atualiza sv_botskill
+void CBotManager::ChangeBotSkill(short sSkill)
+{
+    if (sSkill == -1)
+        sSkill = RANDOM_LONG(1, 5);
+    if ((unsigned short)(sSkill - 1) > 4)
+    {
+        std::cout << "Invalid botskill ! Choose a number between 1(best) and 5(worst)\n";
+        return;
+    }
+    for (int i = 1; i <= gpGlobals->maxClients; i++)
+    {
+        CBasePlayer *pPl = (CBasePlayer *)UTIL_PlayerByIndex(i);
+        if (!UTIL_IsValidPlayer(pPl, 0, 0))
+            continue;
+        if (IsBotPlayer(pPl))
+        {
+            *(char *)((char *)pPl + 0x9fc) = (char)(sSkill - 1);              // nivel de skill
+            *(char **)((char *)pPl + 0xa00) = (char *)this + sSkill * 0x44 + 3884;   // tabela de skill (+0xf70 + (n-1)*0x44)
+        }
+    }
+    if ((float)(sSkill - 1) != CVAR_GET_FLOAT("sv_botskill"))
+        CVAR_SET_FLOAT("sv_botskill", (float)(sSkill - 1));
+
+    static const char *aNames[] = { "Best", "Good", "Medium", "Weak", "Bad" };
+    std::cout << "EVERY bot has now the skill " << aNames[sSkill - 1] << "\n";
+}
