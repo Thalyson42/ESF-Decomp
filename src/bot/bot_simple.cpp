@@ -1197,3 +1197,83 @@ BOOL CBot::CheckForHuntEnemy(void)
     }
     return TRUE;                                                              // [?] valor de retorno nao decompilado com precisao
 }
+
+// ---------------------------------------------------------------------------
+// BotCombatMovement: a cada ~1s testa 3 inclinacoes (0, -30, +30) x 5 guinadas (-90,-45,0,45,90) com
+// UTIL_TraceHull de 10000 unidades e escolhe a direcao mais livre. +0xb64 proximo teste, +0xb68 mascara de direcao
+// (2 esq, 4 dir, 8 tras, 0x10 frente, 0x20/0x40 pulo/abaixar [?]).
+// Tabelas de salto: 0x171270 (guinada por j) e 0x171650 (mascara por j), lidas do assembly.
+// ---------------------------------------------------------------------------
+void CBot::BotCombatMovement(void)
+{
+    CBasePlayer *pEnemy = BOT_ENEMY(this);
+    if (!pEnemy)
+        return;
+    if ((float)GetMaxSpeed() == 0.0f)                                         // [OK]
+        return;
+    if (!*((char *)g_pBotManager + 0xd48))                                    // [OK] BotManager+3400
+        return;
+
+    short &sDirMask = BOTF(this, short, 0xb68);
+    float &flNext = BOTF(this, float, 0xb64);
+
+    float flDist = (pEnemy->pev->origin - pev->origin).Length();              // [OK]
+    if (BOTF(this, char, 0x9fc) > 2 && !EntIsInFieldOfView(this, pEnemy))     // [OK] nivel > 2 e inimigo fora do campo de visao
+    {
+        ResetMoveSpeed();
+        sDirMask = 0;
+    }
+
+    float flBest = 0;
+    int iBestI = 0, iBestJ = 0;
+    BOOL bCanPitch = !BOTF(this, int, 0x320);                                 // [?]
+    if (flNext < gpGlobals->time)
+    {
+        BOOL bClose = 1300.0f > flDist;                                       // [OK] RandomFloat(1300,1600) descartado no original
+        RANDOM_FLOAT(1300.0f, 1600.0f);
+        Vector vecOrigin = pev->origin;                                       // [?] vfunc +0xd0
+
+        static const float s_flYaw[5] = { -90.0f, -45.0f, 0.0f, 45.0f, 90.0f };   // [OK] tabela de salto
+        for (int i = 0; i <= 2; i++)
+        {
+            float flPitch;
+            if (i == 0)       flPitch = 0;
+            else if (i == 1) { if (!bCanPitch) continue; flPitch = -30.0f; }
+            else              flPitch = 30.0f;
+
+            for (int j = 0; j <= 4; j++)
+            {
+                Vector vecAng = pev->v_angle;
+                vecAng.y = UTIL_WrapAngle(s_flYaw[j] + vecAng.y);             // [OK]
+                vecAng.x = UTIL_WrapAngle(flPitch);
+                UTIL_MakeVectors(vecAng);
+                Vector vecEnd = bClose ? vecOrigin - gpGlobals->v_forward * 10000.0f
+                                       : vecOrigin + gpGlobals->v_forward * 10000.0f;   // [?] o decompilado acumula no mesmo temporario
+                TraceResult tr;
+                UTIL_TraceHull(pev->origin + pev->view_ofs, vecEnd, ignore_monsters, 1, pev->pContainingEntity, &tr);   // [OK]
+                float flFree = (pev->origin - tr.vecEndPos).Length();
+                if (flFree > flBest)
+                {
+                    flBest = flFree;
+                    iBestI = i;
+                    iBestJ = j;
+                }
+            }
+        }
+        sDirMask = 0;
+        flNext = gpGlobals->time + RANDOM_FLOAT(0.8f, 1.2f);                  // [?] resultado do RandomFloat perdido
+        if (iBestI == 1)      sDirMask |= 0x20;
+        else if (iBestI == 2) sDirMask |= 0x40;
+        switch (iBestJ)                                                       // [OK] tabela de salto 0x171650
+        {
+        case 0: sDirMask |= 2; break;
+        case 1: sDirMask |= 2; sDirMask |= bClose ? 8 : 0x10; break;
+        case 2: sDirMask |= bClose ? 8 : 0x10; break;
+        case 3: sDirMask |= 4; sDirMask |= bClose ? 8 : 0x10; break;
+        case 4: sDirMask |= 4; break;
+        }
+    }
+    ResetMoveSpeed();
+    SetMoveDir(sDirMask);
+    CheckStrafe();
+}
