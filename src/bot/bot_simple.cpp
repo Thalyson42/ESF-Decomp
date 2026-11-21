@@ -1101,3 +1101,99 @@ void CBot::AimAtEnemy(CBasePlayer *pEnemy)
         vecAim = PredictEntityPos(pEnemy, flLead, 1);
     BOTF(this, Vector, 0xc10) = GetAimAngles(vecAim);                         // [OK]
 }
+
+// ---------------------------------------------------------------------------
+// CheckForHuntEnemy: escolhe um jogador para cacar. Bot: +0x1034 alvo, +0x1024 wp destino, +0x1008 wp atual,
+// +0x1038 ultima posicao conhecida (x,y,z,tempo), +0x1048 anterior, +0x105c ultima distancia, +0x1058 recarga.
+// Jogador: historico de 5 posicoes {x,y,z,tempo} de 16 bytes em +0x6d4.
+// ---------------------------------------------------------------------------
+extern short WaypointFindNearest(Vector *pvecPos, edict_t *pEdict, float flRange, int iTeam);   // [?]
+
+BOOL CBot::CheckForHuntEnemy(void)
+{
+    if (!BOTF(this, int, 0x320) || !*((char *)g_pBotManager + 0xd46) || BOTF(this, float, 0x1058) > gpGlobals->time)   // [?] 0x320 = vivo/ativo
+        return FALSE;
+    BOTF(this, float, 0x1058) = gpGlobals->time + 1.25f;                      // [OK]
+
+    CBasePlayer *pTarget = NULL;
+    Vector vecMe = pev->origin;
+    unsigned short wpTarget = 0xffff;                                         // wp proximo do alvo
+    unsigned short wpMe = 0xffff;                                             // wp proximo do bot
+    unsigned short sBestIdx = 0xffff, sBestScore = 0;                         // melhor ponto do historico
+    float flBest = 9999.9f, flBestTrail = 9999.9f;
+
+    if (num_waypoints)
+    {
+        Vector v = pev->origin;
+        wpMe = WaypointFindNearest(&v, pev->pContainingEntity, 1750.0f, g_teamplay ? pev->team : -1);   // [OK]
+    }
+
+    for (int i = 1; i <= gpGlobals->maxClients; i++)
+    {
+        CBasePlayer *pPl = (CBasePlayer *)UTIL_PlayerByIndex(i);
+        if (pPl == (CBasePlayer *)this)
+            continue;
+        if (!(UTIL_IsValidPlayer(pPl, 1, 1) && (!g_teamplay || pev->team != pPl->pev->team)))
+            continue;
+        float flDist = (pPl->pev->origin - pev->origin).Length();
+        if (flDist > flBest)
+            continue;
+
+        if (wpMe != 0xffff)
+        {
+            Vector v = pPl->pev->origin;
+            unsigned short wpPl = WaypointFindNearest(&v, pPl->pev->pContainingEntity, 750.0f, pev->team);
+            if (wpPl != 0xffff && (unsigned short)WaypointRouteFromTo(wpMe, wpPl, pev->team) != 0xffff)
+            {
+                wpTarget = wpPl;                                              // alvo alcancavel por waypoints
+                flBest = flDist;
+                pTarget = pPl;
+                continue;
+            }
+        }
+
+        for (int k = 4; k >= 0; k--)                                          // historico de posicoes do alvo
+        {
+            float *pPos = &BOTF(pPl, float, 0x6d4 + k * 16);
+            Vector vecTrail(pPos[0], pPos[1], pPos[2]);
+            if (gpGlobals->time - 15.0f > pPos[3])
+                continue;
+            float flD = (vecTrail - vecMe).Length();
+            if (flD > 6000.0f || flD < 300.0f)
+                continue;
+            unsigned short sScore = 1;
+            if (flD < flBest)      { flBest = flD; sScore = 2; }
+            if (flD < flBestTrail) { flBestTrail = flD; sScore += 1; }
+            BOOL bSame = (pPos[0] == BOTF(this, float, 0x1048) && pPos[1] == BOTF(this, float, 0x104c) && pPos[2] == BOTF(this, float, 0x1050));
+            if (!bSame && sScore >= sBestScore && CanReachPoint(vecTrail))    // [?] vtable +0xe4
+            {
+                sBestScore = sScore;
+                sBestIdx = k;
+                wpTarget = 0xffff;
+                pTarget = pPl;
+            }
+        }
+    }
+
+    if (!pTarget)
+        return FALSE;
+    BOTF(this, CBasePlayer *, 0x1034) = pTarget;
+    if (wpTarget != 0xffff)
+    {
+        BOTF(this, int, 0x1024) = wpTarget;
+        BOTF(this, int, 0x1008) = wpMe;
+    }
+    else if (sBestIdx != 0xffff)
+    {
+        for (int j = 0; j < 4; j++)                                           // 0x1038.. -> 0x1048..
+            BOTF(this, int, 0x1048 + j * 4) = BOTF(this, int, 0x1038 + j * 4);
+        float *pPos = &BOTF(pTarget, float, 0x6d4 + sBestIdx * 16);
+        for (int j = 0; j < 4; j++)
+            BOTF(this, float, 0x1038 + j * 4) = pPos[j];
+        BOTF(this, int, 0x105c) = 0;
+        Vector vecLast(BOTF(this, float, 0x1038), BOTF(this, float, 0x103c), BOTF(this, float, 0x1040));
+        BOTF(this, Vector, 0xc10) = GetAimAngles(vecLast);                    // [OK]
+        ToggleTurbo(1);
+    }
+    return TRUE;                                                              // [?] valor de retorno nao decompilado com precisao
+}
