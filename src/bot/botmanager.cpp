@@ -240,3 +240,63 @@ void CBotManager::PlayerConnect(const char *szAddress)
             KickLastBot(0);
     }
 }
+
+extern void WaypointFree(void);
+extern void HandleNormalBotCommands(void);
+
+// Fim do mapa: libera waypoints e expulsa todos os bots
+void CBotManager::MapFree(void)
+{
+    WaypointFree();
+    for (int i = 1; i <= gpGlobals->maxClients; i++)
+    {
+        CBasePlayer *pPl = (CBasePlayer *)UTIL_PlayerByIndex(i);
+        if (!UTIL_IsValidPlayer(pPl, 0, 0))
+            continue;
+        BOOL bBot = FALSE;
+        if (!pPl->IsNetClient())                                              // [?] vtable +0xa4
+            bBot = (*((unsigned char *)pPl->pev + 0x1a5) & 32) != 0;
+        if (bBot && pPl)
+        {
+            char szCmd[128];
+            sprintf(szCmd, "kick \"%s\"\n", STRING(pPl->pev->netname));       // [OK]
+            SERVER_COMMAND(szCmd);
+        }
+    }
+}
+
+// 9 personalidades de 60 bytes a partir de +0xd50: 25 percentuais (shorts), agressividade (+52) e flag (+56)
+void CBotManager::MakeRandomPersonalities(void)
+{
+    static const int s_iOrder[25] = { 0, 2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24, 26, 28, 30, 36, 32, 34, 38, 40, 42, 44, 46, 48 };   // [OK] ordem das chamadas ao RandomLong
+    for (int i = 0; i <= 8; i++)
+    {
+        char *pPers = (char *)this + 3408 + i * 60;
+        for (int k = 0; k < 25; k++)
+            *(short *)(pPers + s_iOrder[k]) = RANDOM_LONG(0, 100);
+        int iAggr = RANDOM_LONG(0, 2);
+        if (iAggr == 1)      *(int *)(pPers + 52) = 1;
+        else if (iAggr == 0) *(int *)(pPers + 52) = 2;
+        else if (iAggr == 2) *(int *)(pPers + 52) = 0;
+        *(char *)(pPers + 56) = RANDOM_LONG(0, 1) ? 1 : 0;
+    }
+}
+
+// Comandos do console do host (servidor nao dedicado)
+BOOL CBotManager::HandleBotCommands(edict_t *pEntity)
+{
+    if (g_engfuncs.pfnIsDedicatedServer())
+        return FALSE;
+    edict_t *pHost = f_00c ? (edict_t *)f_00c : g_engfuncs.pfnPEntityOfEntOffset(0);   // [?]
+    CBaseEntity *pHostEnt = pHost ? (CBaseEntity *)pHost->pvPrivateData : NULL;
+    if (!pHostEnt || pHostEnt->pev->pContainingEntity == pEntity)             // so o host pode usar
+    {
+        HandleNonDedBotCommands();
+        if (f_d45 || (HandleNormalBotCommands(), f_d45))
+        {
+            f_d45 = 0;
+            return TRUE;
+        }
+    }
+    return FALSE;
+}

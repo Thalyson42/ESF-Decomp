@@ -83,4 +83,8 @@ public:
     void PickBotName(char *szName);
     void PlayerConnect(const char *szAddress);
     int  KickLastBot(short sFlag);
+    void MapFree(void);
+    void MakeRandomPersonalities(void);
+    BOOL HandleBotCommands(edict_t *pEntity);
+    void HandleNonDedBotCommands(void);
 };
