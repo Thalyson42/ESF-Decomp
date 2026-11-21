@@ -2112,3 +2112,57 @@ void CBot::LetBotPickAClass(void)
         return;
     ChatClass.LetBotSayAWelcomeSentence(this);
 }
+
+// ---------------------------------------------------------------------------
+// Esquiva durante o swoop. Retorno 38 = nenhuma tarefa nova.
+// bot: +0xbe4 modo (1 = deriva), +0xbe8/+0xbec deriva, +0xbf4 proxima checagem, +0xc10/+0xc14 angulos ideais, +0xff0 lado preferido
+// ---------------------------------------------------------------------------
+void CBot::MakeAvoidSwoopTask(void)
+{
+    short sDir = GetBestEscapeSwoopDir(RANDOM_LONG(0, 1) != 0);               // [OK]
+    switch (sDir)
+    {
+    case 8:  MakeCombo((EComboType)3); break;
+    case 2:  MakeCombo((EComboType)0); break;
+    case 4:  MakeCombo((EComboType)1); break;
+    case 32: MakeCombo((EComboType)4); break;
+    case 64: MakeCombo((EComboType)5); break;
+    default: break;                                                           // [OK] nada
+    }
+}
+
+EComboType CBot::AvoidAttacksWhileSwoop(void)
+{
+    if (BOTF(this, float, 0xbf4) > gpGlobals->time)
+        return (EComboType)38;
+    BOTF(this, float, 0xbf4) = gpGlobals->time + 0.15f;                       // [OK]
+    CBaseEntity *pAttack = GetNearestHostileAttack(50.0f, 2250.0f);           // [OK]
+    if (!pAttack)
+        return (EComboType)38;
+
+    float flDist = (pAttack->pev->origin - pev->origin).Length();
+    if (flDist > 350.0f && BOTF(BOTF(this, char *, 0xa00), char, 0x40))       // [OK]
+    {
+        EComboType iTask = MakeAttackAvoidChainSwoop();
+        if (iTask != 38)
+            return iTask;                                                     // [?] corpo do if perdido; devolve a nova tarefa
+    }
+    float &flPitch = BOTF(this, float, 0xc10);
+    float &flYaw = BOTF(this, float, 0xc14);
+    if (BOTF(this, int, 0xbe4) != 1)
+    {
+        if (!BOTF(this, int, 0xff0))
+            flYaw = UTIL_WrapAngle(RANDOM_FLOAT(85.0f, 95.0f) + flYaw);       // [?] RandomFloat(85,95) perdido pelo decompilador
+        else
+            flYaw = UTIL_WrapAngle(flYaw - RANDOM_FLOAT(85.0f, 95.0f));
+    }
+    else if (BOTF(this, float, 0xbe8) < 0.0f)
+        flPitch = UTIL_WrapAngle(flPitch - RANDOM_FLOAT(85.0f, 95.0f));
+    else if (BOTF(this, float, 0xbe8) > 0.0f)
+        flPitch = UTIL_WrapAngle(RANDOM_FLOAT(85.0f, 95.0f) + flPitch);
+    else if (BOTF(this, float, 0xbec) < 0.0f)
+        flYaw = UTIL_WrapAngle(flYaw - RANDOM_FLOAT(85.0f, 95.0f));
+    else if (BOTF(this, float, 0xbec) > 0.0f)
+        flYaw = UTIL_WrapAngle(RANDOM_FLOAT(85.0f, 95.0f) + flYaw);
+    return (EComboType)38;
+}
