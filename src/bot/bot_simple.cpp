@@ -2230,3 +2230,65 @@ short CBot::GetBestEscapeSwoopDir(bool bBack)
     }
     return 32;
 }
+
+// ---------------------------------------------------------------------------
+// Cadeias de swoop: sorteio ponderado entre direcoes livres (CheckForCollide 650). Retorno 38 = nada.
+// m_Swoop.m_iType em +0x504. Cada entrada: tipo excluido, direcao testada, id do combo, peso.
+// ---------------------------------------------------------------------------
+struct swoop_choice_s { int iExcludeType; int iDir; int iCombo; int iWeight; };
+
+static EComboType PickSwoopChain(CBot *pBot, swoop_choice_s *pChoices, int nChoices)
+{
+    int iType = BOTF(pBot, int, 0x504);
+    int iTotal = 0;
+    int aLo[5], aHi[5], aId[5], n = 0;
+    for (int i = 0; i < nChoices; i++)
+    {
+        swoop_choice_s &c = pChoices[i];
+        if (iType == c.iExcludeType || c.iWeight == 0)
+            continue;
+        if (CheckForCollide(pBot->pev->pContainingEntity, c.iDir, 650.0f))    // [OK]
+            continue;
+        aLo[n] = iTotal;
+        aHi[n] = iTotal + c.iWeight;
+        aId[n] = c.iCombo;
+        n++;
+        iTotal += c.iWeight;
+    }
+    int iPick = RANDOM_LONG(0, iTotal);                                       // [OK]
+    for (int i = 0; i < n; i++)
+        if (iPick >= aLo[i] && iPick < aHi[i])                                // FindSelection: faixa [lo, hi)
+            return (EComboType)aId[i];
+    return (EComboType)38;
+}
+
+EComboType CBot::MakeNormalChainSwoop(void)
+{
+    swoop_choice_s c[4] = { {2, 2, 0, 50}, {3, 4, 1, 50}, {0, 32, 4, 50}, {1, 64, 5, 50} };       // [OK]
+    return PickSwoopChain(this, c, 4);
+}
+
+EComboType CBot::MakeAttackChainSwoop(void)
+{
+    swoop_choice_s c[4] = { {2, 2, 29, 50}, {3, 4, 30, 50}, {0, 32, 31, 50}, {1, 64, 32, 50} };   // [OK]
+    return PickSwoopChain(this, c, 4);
+}
+
+EComboType CBot::MakeAttackAvoidChainSwoop(void)                              // [OK] identica a MakeAttackChainSwoop no original
+{
+    swoop_choice_s c[4] = { {2, 2, 29, 50}, {3, 4, 30, 50}, {0, 32, 31, 50}, {1, 64, 32, 50} };
+    return PickSwoopChain(this, c, 4);
+}
+
+// Foge de pEnemy: direcoes que levam ate ele recebem peso 15 em vez de 50
+EComboType CBot::MakeAwayChainSwoop(CBaseEntity *pEnemy)
+{
+    int iDir = UTIL_EntDir(this, pEnemy->pev->origin);                        // [OK]
+    swoop_choice_s c[5] = { {2, 2, 0, 50}, {3, 4, 1, 50}, {0, 32, 4, 50}, {1, 64, 5, 50}, {5, 8, 3, 50} };
+    if (iDir & 2)  c[0].iWeight = 15;
+    if (iDir & 4)  c[1].iWeight = 15;
+    if (iDir & 32) c[2].iWeight = 15;
+    if (iDir & 64) c[3].iWeight = 15;
+    if (iDir & 8)  c[4].iWeight = 15;
+    return PickSwoopChain(this, c, 5);
+}

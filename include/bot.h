@@ -113,7 +113,7 @@ public:
     void MakePlayerList(void);
     void TurnAround(void);
     EComboType MakeAttackChainSwoop(void);               // [?] 38 = nenhuma
-    EComboType MakeAwayChainSwoop(CBasePlayer *pEnemy);  // [?]
+    EComboType MakeAwayChainSwoop(CBaseEntity *pEnemy);  // [OK] arg = CBaseEntity* (mangled P11CBaseEntity)
     EComboType MakeNormalChainSwoop(void);               // [?]
     EComboType AvoidAttacksWhileSwoop(void);             // [?]
     void SetSwoopButton(void);                           // [?]
