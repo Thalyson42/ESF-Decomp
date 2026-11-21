@@ -1701,3 +1701,140 @@ void CBot::LetBotJoinTeam(void)
     g_pGameRules->ClientCommand(this, "jointeam");                            // [?] vfunc +0x60 do objeto em +0x44 do gamerules
     BOTF(this, int, 0x9ec) = 2;
 }
+
+// ---------------------------------------------------------------------------
+// CreateInit(sTeam, sClass, sSkillLevel, sPersonality, sSBotLevel). Tabelas no BotManager (+0xd14 personalidades de 60 bytes,
+// +0xf2c niveis de 68 bytes, +0x1084 SBot de 16 bytes).
+// ---------------------------------------------------------------------------
+void CBot::CreateInit(short sTeam, short sClass, short sLevel, short sPersonality, short sSBot)
+{
+    *((unsigned char *)pev + 0x1a5) |= 32;                                    // [OK] marca como bot (usado por IsNetClient/bot-like)
+    BOTF(this, float, 0x9f8) = gpGlobals->time;
+    BOTF(this, int, 0x9e8) = 1;
+    BOTF(this, float, 0x9e4) = gpGlobals->time + 0.15f;                       // [OK]
+    BOTF(this, int, 0x9ec) = g_teamplay ? 1 : 2;                              // [OK] estagio de entrada
+    BOTF(this, int, 0x9e0) = 0;
+    BOTF(this, int, 0xb70) = 0;
+    BOTF(this, int, 0xd50) = 0;
+    BOTF(this, char *, 0xa00) = (char *)g_pBotManager + 3884 + 0x44 * sLevel;  // [OK] tabela de habilidade
+    BOTF(this, char, 0x9fc) = (char)sLevel - 1;
+    BOTF(this, short, 0x1060) = -1;
+    BOTF(this, short, 0x9f0) = -1;
+    if ((unsigned short)(sTeam - 1) <= 1) BOTF(this, short, 0x1060) = sTeam;
+    if ((unsigned short)(sClass - 1) <= 8) BOTF(this, short, 0x9f0) = sClass;
+    if ((unsigned short)(sPersonality - 1) > 8)
+    {
+        short sDef = *(short *)((char *)g_pBotManager + 3948);
+        sPersonality = ((unsigned short)(sDef - 1) <= 8) ? sDef : (short)RANDOM_LONG(1, 9);
+    }
+    BOTF(this, int *, 0xa04) = (int *)((char *)g_pBotManager + 3348 + 60 * sPersonality);   // [OK]
+    BOTF(this, int, 0xaa8) = 0;
+    BOTF(this, int, 0xaa4) = 0;
+    BOTF(this, int, 0x1064) = 0;
+    BOTF(this, int, 0xb8c) = 0;
+    BOTF(this, int, 0x1070) = 0;
+    if (sSBot > 3)
+        sSBot = RANDOM_LONG(1, 3);
+    BOTF(this, short, 0xba4) = sSBot;
+    BOTF(this, char *, 0xba8) = (char *)g_pBotManager + 4292 + 16 * sSBot;      // [?] o original testa uma funcao (14,14,...) antes
+    BOTF(this, int, 0xa08) = 0;
+}
+
+// ---------------------------------------------------------------------------
+// Spawn: zera todo o estado de decisao do bot
+// ---------------------------------------------------------------------------
+void CBot::Spawn(void)
+{
+    CBasePlayer::Spawn();
+    pev->flags = 8200;                                                        // [OK] pev+0x1a4 = 0x2008
+    BOTF(this, int, 0xae8) = 0;
+    BOTF(this, float, 0x9f4) = gpGlobals->time;
+    BOTF(this, short, 0xb68) = 0;
+    BOTF(this, int, 0xb64) = 0;
+    BOTF(this, int, 0xac0) = 0;
+    BOTF(this, char, 0xb1c) = 0;
+    BOTF(this, int, 0xaec) = 0;
+    BOTF(this, int, 0xaf4) = 0;
+    BOTF(this, int, 0xb30) = 0;
+    BOTF(this, int, 0xb34) = 0;
+    BOTF(this, char, 0xb38) = 0;
+    BOTF(this, char, 0xb39) = 0;
+    BOTF(this, int, 0xbb8) = 0;
+    BOTF(this, int, 0xbbc) = 0;
+    BOTF(this, int, 0x1068) = 33;                                             // [OK] nenhuma tarefa pendente
+    KillCurrentTask();
+    BOTF(this, int, 0xafc) = 0;
+    BOTF(this, int, 0xb3c) = 0;                                              // 2876
+    BOTF(this, int, 0xb40) = 0;                                               // 2880
+    BOTF(this, short, 0xaf8) = 0;
+    memset((char *)this + 2884, 0, 32);                                       // [OK] lista de inimigos
+    memset((char *)this + 2596, 0, 128);                                      // [OK] lista de jogadores
+    BOTF(this, char, 0xa20) = 0;
+    BOTF(this, char, 0xaac) = 0;
+    BOTF(this, short, 0xb00) = 0;
+    BOTF(this, int, 0xff4) = 0;
+    BOTF(this, short, 0xa18) = 0;
+    BOTF(this, int, 0xa1c) = 0;
+    BOTF(this, int, 0xc00) = 0;
+
+    Vector vecAng = pev->v_angle;
+    WrapAngles(vecAng);
+    BOTF(this, Vector, 0xc10) = vecAng;
+    BOTF(this, Vector, 0xc1c) = vecAng;
+    BOTF(this, int, 0xc28) = 0;
+    BOTF(this, int, 0xc2c) = 0;
+    BOTF(this, int, 0xbe4) = 0;
+    BOTF(this, Vector, 0xbe8) = g_vecZero;
+    BOTF(this, int, 0xbf4) = 0;
+    ClearMeleeComboList();
+    memset((char *)this + 2960, 0, 20);                                       // [OK] 0xb90.. estado de carga de combo
+    BOTF(this, Vector, 0xb24) = g_vecZero;
+    DeleteCombos();
+    BOTF(this, int, 0xab0) = 0;
+    BOTF(this, int, 0x1034) = 0;
+    BOTF(this, int, 0x1058) = 0;
+    BOTF(this, Vector, 0x1038) = Vector(0, 0, 0);
+    BOTF(this, int, 0x1044) = 0;
+    BOTF(this, int, 0x105c) = 0;
+    BOTF(this, char, 0xc44) = 0;
+    BOTF(this, int, 0xc48) = 0;
+    BOTF(this, char, 0xc4c) = 0;
+    BOTF(this, float, 0xd4c) = gpGlobals->time;
+    BOTF(this, float, 0xd5c) = gpGlobals->time;
+    BOTF(this, char, 0xd54) = 0;
+    BOTF(this, int, 0xd58) = 0;
+    ResetMoveSpeed();
+    BOTF(this, int, 0xd64) = 2;
+    BOTF(this, int, 0xab8) = 0;
+    BOTF(this, int, 0xabc) = 0;
+    BOTF(this, int, 0xb08) = 0;
+    BOTF(this, int, 0xb0c) = 0;
+    BOTF(this, int, 0xab4) = 0;
+    BOTF(this, int, 0xb10) = 0;
+    BOTF(this, float, 0xd74) = 9999.0f;
+    BOTF(this, float, 0xd78) = 9999.0f;
+    BOTF(this, float, 0xd7c) = 9999.0f;
+    BOTF(this, int, 0xd84) = 0;
+    BOTF(this, int, 0xd88) = 0;
+    BOTF(this, int, 0x1030) = 0;
+    BOTF(this, int, 0xff0) = (RANDOM_LONG(1, 100) <= 50) ? 0 : 1;
+    BOTF(this, int, 0xb6c) = 0;
+    BOTF(this, int, 0xb74) = 0;
+    BOTF(this, int, 0xb78) = 0;
+    BOTF(this, int, 0xb80) = 0;
+    BOTF(this, int, 0xb20) = 0;
+    BOTF(this, int, 0xbac) = 0;
+    BOTF(this, short, 0xbb0) = 0xff;
+    BOTF(this, short, 0xbb2) = -1;
+    BOTF(this, int, 0xbb4) = 0;
+    BOTF(this, int, 0xbb8) = 0;
+    BOTF(this, int, 0xbbc) = 0;
+    BOTF(this, int, 0x1030) = 0;
+    BOTF(this, Vector, 0xff8) = Vector(0, 0, 0);
+    BOTF(this, int, 0x1004) = 0;
+    memset((char *)this + 0x1008, -1, 24);                                    // [OK] wp atual + historico = -1
+    BOTF(this, float, 0x1020) = gpGlobals->time;
+    BOTF(this, int, 0x1024) = -1;
+    BOTF(this, int, 0x1028) = 0;
+    BOTF(this, int, 0x102c) = 0;
+}
