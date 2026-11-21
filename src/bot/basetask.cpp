@@ -5,6 +5,15 @@
 #include "player.h"
 #include "bot.h"
 
+CBaseTask::CBaseTask(CBot *pBot)
+{
+    m_pBot = pBot;                             // [OK] +8
+    m_pEdict = pBot->pev->pContainingEntity;   // [OK] +0xc
+    m_pEnemy = BOT_ENEMY(pBot);                // [OK] +0x10
+    m_iState = 1;                              // [OK] +4
+    SetGeneralDelay();                         // [OK]
+}
+
 void CBaseTask::MakeCombo(EComboType type)
 {
     m_iState = 2;                              // [OK]

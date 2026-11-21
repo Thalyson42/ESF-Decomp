@@ -1969,6 +1969,14 @@ extern BOOL IsOtherAttack(edict_t *pEnt);                      // [?]
 extern void UTIL_DamagePlayer(CBasePlayer *pAttacker, CBasePlayer *pVictim, const char *szWeapon, float flDamage);   // [?]
 extern void UTIL_DrawBeamToAll(Vector vecStart, Vector vecEnd, int a, int b, int c, int r, int g, int bl, int d);   // [?] largura, brilho...
 
+CDrainEntsTask::CDrainEntsTask(CBot *pBot) : CBaseTask(pBot)
+{
+    TASKF(float, 0x18) = RANDOM_FLOAT(3.0f, 7.0f) + m_flDelay;     // [OK] (CBot::MakeTask, bloco 31)
+    drain_list_s *pList = new drain_list_s;
+    pList->pHead = NULL; pList->pTail = NULL;
+    TASKF(drain_list_s *, 0x1c) = pList;
+}
+
 void CDrainEntsTask::DrainPlayer(CBasePlayer *pVictim)
 {
     int iVictimPL = pVictim->m_iPowerLevel;

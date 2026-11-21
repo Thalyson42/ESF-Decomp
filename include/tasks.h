@@ -5,6 +5,7 @@
 class CAbsorbHealthTask : public CBaseTask
 {
 public:
+    CAbsorbHealthTask(CBot *pBot);   // [OK] construtor (task_ctors.cpp)
     virtual int GetNesserelyChecks(void);
     virtual int GetBotStatusChecks(void);
     virtual int GetBotSenseChecks(void);
@@ -18,6 +19,7 @@ public:
 class CAscendTask : public CBaseTask
 {
 public:
+    CAscendTask(CBot *pBot);   // [OK] construtor (task_ctors.cpp)
     virtual int GetNesserelyChecks(void);
     virtual int GetBotStatusChecks(void);
     virtual int GetBotSenseChecks(void);
@@ -31,6 +33,7 @@ public:
 class CBeamJumpTask : public CBaseTask
 {
 public:
+    CBeamJumpTask(CBot *pBot);   // [OK] construtor (task_ctors.cpp)
     virtual int GetNesserelyChecks(void);
     virtual int GetBotStatusChecks(void);
     virtual int GetBotSenseChecks(void);
@@ -44,6 +47,7 @@ public:
 class CBlindedTask : public CBaseTask
 {
 public:
+    CBlindedTask(CBot *pBot);   // [OK] construtor (task_ctors.cpp)
     virtual int GetNesserelyChecks(void);
     virtual int GetBotStatusChecks(void);
     virtual int GetBotSenseChecks(void);
@@ -57,6 +61,7 @@ public:
 class CBlockTask : public CBaseTask
 {
 public:
+    CBlockTask(CBot *pBot);   // [OK] construtor (task_ctors.cpp)
     virtual int GetNesserelyChecks(void);
     virtual int GetBotStatusChecks(void);
     virtual int GetBotSenseChecks(void);
@@ -70,6 +75,7 @@ public:
 class CChargeAttackTask : public CBaseTask
 {
 public:
+    CChargeAttackTask(CBot *pBot);   // [OK] construtor (task_ctors.cpp)
     virtual int GetNesserelyChecks(void);
     virtual int GetBotStatusChecks(void);
     virtual int GetBotSenseChecks(void);
@@ -83,6 +89,7 @@ public:
 class CCombatTask : public CBaseTask
 {
 public:
+    CCombatTask(CBot *pBot);   // [OK] construtor (task_ctors.cpp)
     virtual int GetNesserelyChecks(void);
     virtual int GetBotStatusChecks(void);
     virtual int GetBotSenseChecks(void);
@@ -104,6 +111,7 @@ public:
 class CComboTask : public CBaseTask
 {
 public:
+    CComboTask(CBot *pBot);   // [OK] construtor (task_ctors.cpp)
     virtual int GetNesserelyChecks(void);
     virtual int GetBotStatusChecks(void);
     virtual int GetBotSenseChecks(void);
@@ -117,6 +125,7 @@ public:
 class CControlBeamTask : public CBaseTask
 {
 public:
+    CControlBeamTask(CBot *pBot);   // [OK] construtor (task_ctors.cpp)
     virtual int GetNesserelyChecks(void);
     virtual int GetBotStatusChecks(void);
     virtual int GetBotSenseChecks(void);
@@ -130,6 +139,7 @@ public:
 class CControlFriezaDiscTask : public CBaseTask
 {
 public:
+    CControlFriezaDiscTask(CBot *pBot);   // [OK] construtor (task_ctors.cpp)
     virtual int GetNesserelyChecks(void);
     virtual int GetBotStatusChecks(void);
     virtual int GetBotSenseChecks(void);
@@ -143,6 +153,7 @@ public:
 class CCounterMeleeTask : public CBaseTask
 {
 public:
+    CCounterMeleeTask(CBot *pBot);   // [OK] construtor (task_ctors.cpp)
     virtual int GetNesserelyChecks(void);
     virtual int GetBotStatusChecks(void);
     virtual int GetBotSenseChecks(void);
@@ -156,6 +167,7 @@ public:
 class CDBTask : public CBaseTask
 {
 public:
+    CDBTask(CBot *pBot);   // [OK] construtor (task_ctors.cpp)
     virtual int GetNesserelyChecks(void);
     virtual int GetBotStatusChecks(void);
     virtual int GetBotSenseChecks(void);
@@ -173,6 +185,7 @@ public:
 class CDrainEntsTask : public CBaseTask
 {
 public:
+    CDrainEntsTask(CBot *pBot);   // [OK] construtor (task_ctors.cpp)
     virtual int GetNesserelyChecks(void);
     virtual int GetBotStatusChecks(void);
     virtual int GetBotSenseChecks(void);
@@ -187,6 +200,7 @@ public:
 class CFinishMeleeTask : public CBaseTask
 {
 public:
+    CFinishMeleeTask(CBot *pBot);   // [OK] construtor (task_ctors.cpp)
     virtual int GetNesserelyChecks(void);
     virtual int GetBotStatusChecks(void);
     virtual int GetBotSenseChecks(void);
@@ -203,6 +217,7 @@ public:
 class CHuntEnemyTask : public CBaseTask
 {
 public:
+    CHuntEnemyTask(CBot *pBot);   // [OK] construtor (task_ctors.cpp)
     virtual int GetNesserelyChecks(void);
     virtual int GetBotStatusChecks(void);
     virtual int GetBotSenseChecks(void);
@@ -216,6 +231,7 @@ public:
 class CIdleTask : public CBaseTask
 {
 public:
+    CIdleTask(CBot *pBot);   // [OK] construtor (task_ctors.cpp)
     virtual int GetNesserelyChecks(void);
     virtual int GetBotStatusChecks(void);
     virtual int GetBotSenseChecks(void);
@@ -229,6 +245,7 @@ public:
 class CJumpOffGroundTask : public CBaseTask
 {
 public:
+    CJumpOffGroundTask(CBot *pBot);   // [OK] construtor (task_ctors.cpp)
     virtual int GetNesserelyChecks(void);
     virtual int GetBotStatusChecks(void);
     virtual int GetBotSenseChecks(void);
@@ -242,6 +259,7 @@ public:
 class CKameTorpTask : public CBaseTask
 {
 public:
+    CKameTorpTask(CBot *pBot);   // [OK] construtor (task_ctors.cpp)
     virtual int GetNesserelyChecks(void);
     virtual int GetBotStatusChecks(void);
     virtual int GetBotSenseChecks(void);
@@ -258,6 +276,7 @@ public:
 class CKickEnemyTask : public CBaseTask
 {
 public:
+    CKickEnemyTask(CBot *pBot);   // [OK] construtor (task_ctors.cpp)
     virtual int GetNesserelyChecks(void);
     virtual int GetBotStatusChecks(void);
     virtual int GetBotSenseChecks(void);
@@ -271,6 +290,7 @@ public:
 class CLookAroundTask : public CBaseTask
 {
 public:
+    CLookAroundTask(CBot *pBot);   // [OK] construtor (task_ctors.cpp)
     virtual int GetNesserelyChecks(void);
     virtual int GetBotStatusChecks(void);
     virtual int GetBotSenseChecks(void);
@@ -283,6 +303,7 @@ public:
 class CNormalJumpTask : public CBaseTask
 {
 public:
+    CNormalJumpTask(CBot *pBot);   // [OK] construtor (task_ctors.cpp)
     virtual int GetNesserelyChecks(void);
     virtual int GetBotStatusChecks(void);
     virtual int GetBotSenseChecks(void);
@@ -296,6 +317,7 @@ public:
 class CNormalMovementTask : public CBaseTask
 {
 public:
+    CNormalMovementTask(CBot *pBot);   // [OK] construtor (task_ctors.cpp)
     virtual int GetNesserelyChecks(void);
     virtual int GetBotStatusChecks(void);
     virtual int GetBotSenseChecks(void);
@@ -313,6 +335,7 @@ public:
 class CPowerStruggleTask : public CBaseTask
 {
 public:
+    CPowerStruggleTask(CBot *pBot);   // [OK] construtor (task_ctors.cpp)
     virtual int GetNesserelyChecks(void);
     virtual int GetBotStatusChecks(void);
     virtual int GetBotSenseChecks(void);
@@ -326,6 +349,7 @@ public:
 class CPowerUpTask : public CBaseTask
 {
 public:
+    CPowerUpTask(CBot *pBot);   // [OK] construtor (task_ctors.cpp)
     virtual int GetNesserelyChecks(void);
     virtual int GetBotStatusChecks(void);
     virtual int GetBotSenseChecks(void);
@@ -339,6 +363,7 @@ public:
 class CRecoverHPTask : public CBaseTask
 {
 public:
+    CRecoverHPTask(CBot *pBot);   // [OK] construtor (task_ctors.cpp)
     virtual int GetNesserelyChecks(void);
     virtual int GetBotStatusChecks(void);
     virtual int GetBotSenseChecks(void);
@@ -352,6 +377,7 @@ public:
 class CRecoverMeleeTask : public CBaseTask
 {
 public:
+    CRecoverMeleeTask(CBot *pBot);   // [OK] construtor (task_ctors.cpp)
     virtual int GetNesserelyChecks(void);
     virtual int GetBotStatusChecks(void);
     virtual int GetBotSenseChecks(void);
@@ -365,6 +391,7 @@ public:
 class CShootCandyTask : public CBaseTask
 {
 public:
+    CShootCandyTask(CBot *pBot);   // [OK] construtor (task_ctors.cpp)
     virtual int GetNesserelyChecks(void);
     virtual int GetBotStatusChecks(void);
     virtual int GetBotSenseChecks(void);
@@ -378,6 +405,7 @@ public:
 class CShootLaser1Task : public CBaseTask
 {
 public:
+    CShootLaser1Task(CBot *pBot);   // [OK] construtor (task_ctors.cpp)
     virtual int GetNesserelyChecks(void);
     virtual int GetBotStatusChecks(void);
     virtual int GetBotSenseChecks(void);
@@ -391,6 +419,7 @@ public:
 class CShootNonChargebleTask : public CBaseTask
 {
 public:
+    CShootNonChargebleTask(CBot *pBot);   // [OK] construtor (task_ctors.cpp)
     virtual int GetNesserelyChecks(void);
     virtual int GetBotStatusChecks(void);
     virtual int GetBotSenseChecks(void);
@@ -404,6 +433,7 @@ public:
 class CShootScatterShotsTask : public CBaseTask
 {
 public:
+    CShootScatterShotsTask(CBot *pBot);   // [OK] construtor (task_ctors.cpp)
     virtual int GetNesserelyChecks(void);
     virtual int GetBotStatusChecks(void);
     virtual int GetBotSenseChecks(void);
@@ -418,6 +448,7 @@ public:
 class CSwoopTask : public CBaseTask
 {
 public:
+    CSwoopTask(CBot *pBot);   // [OK] construtor (task_ctors.cpp)
     virtual int GetNesserelyChecks(void);
     virtual int GetBotStatusChecks(void);
     virtual int GetBotSenseChecks(void);
@@ -435,6 +466,7 @@ public:
 class CTeleportTask : public CBaseTask
 {
 public:
+    CTeleportTask(CBot *pBot);   // [OK] construtor (task_ctors.cpp)
     virtual int GetNesserelyChecks(void);
     virtual int GetBotStatusChecks(void);
     virtual int GetBotSenseChecks(void);
@@ -443,11 +475,13 @@ public:
     virtual int TaskIdentify(void);
     virtual BOOL ShouldManageEnemies(void);
     virtual BOOL ReactOnDanger(danger_info_s *pDanger);
+    int GetRandomTeleDir(void);
 };
 
 class CWallJumpTask : public CBaseTask
 {
 public:
+    CWallJumpTask(CBot *pBot);   // [OK] construtor (task_ctors.cpp)
     virtual int GetNesserelyChecks(void);
     virtual int GetBotStatusChecks(void);
     virtual int GetBotSenseChecks(void);

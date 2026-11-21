@@ -62,7 +62,11 @@ public:
     void  MakeCombo(EComboType type);
     int   ClassifyAttack(const char *szClassname);
     void  CheckDragonBalls(void);
-    void  MakeTask(int iTask);                    // [?] CBot::MakeTask(int) (modo da tarefa +0x1068)
+    void  MakeTask(int iTask);
+    void  KillCurrentTask(void);
+    void  BotPerformTasks(void);
+    BOOL  DangerousPlForBot(long lPL);
+    void  MakeMeleeComboList(void);                    // [?] CBot::MakeTask(int) (modo da tarefa +0x1068)
     void  ManageEnemyList(void);                  // [?]
     void  BotPreThink(void);
     CBasePlayer *GetBestEnemyFromList(void);
@@ -111,6 +115,7 @@ public:
     CBot *m_pBot;           // +0x08 [OK]
     edict_t *m_pEdict;      // +0x0c [OK] edict do bot; edict+0x200 = v.button (entvars +0x180), edict+0x1e0 = v.health, +0x2e0 = v.fuser4 (ki)
     CBasePlayer *m_pEnemy;  // +0x10 [OK]
+    CBaseTask(CBot *pBot);                       // [OK] __9CBaseTaskP4CBot (basetask.cpp)
     virtual ~CBaseTask() {}
     virtual int  GetNesserelyChecks(void) = 0;   // slot 1 [OK] mascaras de verificacao do bot (ver CBot::CheckBotInternalStatus etc.)
     virtual int  GetBotStatusChecks(void) = 0;   // slot 2

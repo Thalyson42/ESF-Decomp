@@ -19,6 +19,7 @@ EXTRA={'CShootScatterShotsTask':['CBaseEntity *GetFurthestScatterShot(void);'],
        'CDrainEntsTask':['void DrainPlayer(CBasePlayer *pVictim);','void DrainAttack(CBaseEntity *pAttack);'],
        'CSwoopTask':['float GetSwoopLifeTime(void);','void CheckSecondaryFire(void);','void SelectSwoopType(void);','BOOL IsAvoidDangerSwoop(void);'],
        'CCombatTask':['int GetAttackIndex(int iAttack);','float GetMaxDistForAttackById(int iAttack);','float GetMaxDistForAttackByTableIndex(int iIndex);','float GetMinDistForAttackById(int iAttack);','float GetMinDistForAttackByTableIndex(int iIndex);','int GetAttackPercent(CBasePlayer *pEnemy, int iAttack);','void PrepareAttack(int iAttack, EComboUse eUse);','void AttackWithMelee(BOOL fCombo);'],
+       'CTeleportTask':['int GetRandomTeleDir(void);'],
        'CDBTask':['BOOL GoToDB(void);','BOOL GoToDBSpot(void);','BOOL GoToGatheredSpot(void);','BOOL CheckThrowToDBSpot(void);','BOOL HeadToNextDBWP(void);'],
        'CNormalMovementTask':['void BotCheckUpDown(void);','void BotLook(void);','void BotTurnAtWall(Vector *pvecWallNormal);','void CheckFOV(void);','void CheckSkyBox(void);'],
        'CFinishMeleeTask':['BOOL IsValidThrowVictim(CBasePlayer *pVictim);','void CheckPlayerToThrowAt(void);','void CheckObstacleToThrowAt(void);'],
@@ -29,7 +30,7 @@ h=['// tasks.h -- GERADO por tools/gen_tasks.py: declaracoes das tarefas do bot 
 c=['// tasks_consts.cpp -- GERADO por tools/gen_tasks.py: metodos de tarefa que so devolvem constante.','// [OK] valores lidos de decomp_raw/<classe>/*.c. TaskThink e logica complexa: um .cpp por classe em src/bot/.','#include "extdll.h"','#include "util.h"','#include "cbase.h"','#include "player.h"','#include "tasks.h"','']
 ids={}
 for cl in classes:
-    d=os.path.join(RAW,cl); h.append('class %s : public CBaseTask\n{\npublic:'%cl)
+    d=os.path.join(RAW,cl); h.append('class %s : public CBaseTask\n{\npublic:\n    %s(CBot *pBot);   // [OK] construtor (task_ctors.cpp)'%(cl,cl))
     for m in ORDER:
         f=glob.glob(os.path.join(d,m+'__*.c'))
         if not f: continue
