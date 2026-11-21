@@ -591,3 +591,43 @@ void CBot::BotAim(void)
     pev->angles.z = 0;
     pev->v_angle.x = -pev->v_angle.x;
 }
+
+// ---------------------------------------------------------------------------
+// CanAttackPlayer / IsValidEnemy
+// ---------------------------------------------------------------------------
+BOOL CBot::CanAttackPlayer(CBasePlayer *pPlayer)
+{
+    char *pSkill = BOTF(this, char *, 0xa04);                                 // [OK]
+    if (!(pSkill[0x38] || !BOTF(pPlayer, int, 0x770)))                        // [OK]
+        return FALSE;
+    if (BOTF(pPlayer, int, 0x354) || BOTF(pPlayer, int, 0x358) ||             // [?] flags de estado do alvo
+        BOTF(pPlayer, int, 0x35c) || BOTF(pPlayer, int, 0x350))
+        return FALSE;
+    if (!pPlayer->IsAlive())                                                  // [?] vtable +0x8c
+        return FALSE;
+    if (BOTF(pPlayer, int, 0x4c4))                                            // [?]
+        return FALSE;
+    // g_pGameRules->vtbl+0x44 (slot ~16): CanHavePlayerItem-like "FPlayerCanTakeDamage" [?]
+    return g_pGameRules->FPlayerCanTakeDamage(this, pPlayer) ? TRUE : FALSE;
+}
+
+BOOL CBot::IsValidEnemy(CBasePlayer *pPlayer)
+{
+    if (!UTIL_IsValidPlayer(pPlayer, 1, 1))                                   // [OK]
+        return FALSE;
+    if (g_teamplay && pev->team == pPlayer->pev->team)                        // [OK] +0x1ac
+        return FALSE;
+
+    float dx = pPlayer->pev->origin.x - pev->origin.x;                        // [?] vfuncs +0xd0/+0x1e0 retornam posicao
+    float dy = pPlayer->pev->origin.y - pev->origin.y;
+    float flDist = sqrt(dx * dx + dy * dy);                                   // [OK] distancia 2D
+    BOOL bNear = (flDist <= 2300.0f || BOT_FASTMODE(this) > 0);               // [OK]
+
+    if (!EntIsInFieldOfView(this, pPlayer) && !bNear)
+        return FALSE;
+
+    if (!BOTF(this, char, 0xa20))                                             // [OK]
+        return CanReachPoint(pPlayer->pev->origin) == 1;                      // [?] vtable +0xe4
+    int idx = ENTINDEX(pPlayer->pev->pContainingEntity) - 1;                  // [OK]
+    return ((1 << (idx & 31)) & BOTF(this, unsigned int, 0xaa4)) != 0;        // [OK]
+}
