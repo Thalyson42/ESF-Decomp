@@ -1977,3 +1977,89 @@ void CBot::MakeMeleeComboList(void)
         ComboListAdd(pList, 1, 0xa00);
     }
 }
+
+// ---------------------------------------------------------------------------
+// ChargeMeleeCombo: +0xb8c lista de passos, +0xb90 proximo instante, +0xb94/+0xb98 botao, +0xb9c mascara, +0xba0 instante
+// ---------------------------------------------------------------------------
+void CBot::ChargeMeleeCombo(void)
+{
+    combo_list_s *pList = BOTF(this, combo_list_s *, 0xb8c);
+    if (!pList)
+    {
+        if (BOTF(this, float, 0xb90) < gpGlobals->time)
+        {
+            int iButtons = 0;
+            int iRoll = RANDOM_LONG(1, 2);
+            if (iRoll == 1)      iButtons = 1;
+            else if (iRoll == 2) iButtons = 0x800;
+
+            int w0 = 50, w1 = 50, w2 = 50;                                    // pesos: fraco / medio / forte
+            if (BOTF(this, char, 0x9fc) > 2)
+            {
+                w0 = 75;
+                w1 = 25;
+            }
+            else
+            {
+                float flStun = 0.0f;
+                CBasePlayer *pEnemy = BOTF(this, CBasePlayer *, 0x4a8);       // [?] alvo cujo atordoamento importa
+                if (pEnemy)
+                    flStun = ((CPlayerMelee *)((char *)pEnemy + 0x380))->GetStunTime();
+                if (flStun > 0.0f)
+                {
+                    CPlayerMelee *pMe = (CPlayerMelee *)((char *)this + 0x380);
+                    float flLeft = flStun - pMe->TotalCmbTime();              // [?] resultado do FPU perdido; assume-se TotalCmbTime
+                    float *pVals = (float *)pMe->GetSkillValues();
+                    if (flLeft <= pVals[3])
+                        w2 = 150;
+                }
+            }
+            int iLevel = BOTF(BOTF(this, char *, 0xa04), int, 0x34);
+            if (iLevel == 2)      w2 = (int)((double)w2 * 1.2);
+            else if (iLevel == 0) w0 = (int)((double)w0 * 1.2);
+
+            int iTotal = w0 + w1 + w2;
+            int iPick = RANDOM_LONG(0, iTotal);                               // [OK] FindSelection: faixas [lo, lo+peso)
+            MELEE_STRENGTH iStrength = (MELEE_STRENGTH)0;
+            int iLo = 0;
+            int aW[3] = { w0, w1, w2 };
+            for (int i = 0; i < 3; i++)
+            {
+                if (aW[i] && iPick >= iLo && iPick < iLo + aW[i])
+                {
+                    iStrength = (MELEE_STRENGTH)i;
+                    break;
+                }
+                iLo += aW[i];
+            }
+
+            int iDir = RANDOM_LONG(0, 2);
+            if (iDir == 0)      iButtons |= 8;
+            else if (iDir == 1) iButtons |= 16;
+            int iSide = RANDOM_LONG(0, 1);                                    // [?] argumentos do RandomLong(0,1)
+            if (iSide == 0)      iButtons |= 0x200;
+            else if (iSide == 1) iButtons |= 0x400;
+            SetComboChargeButton(iStrength, iButtons);
+        }
+    }
+    else if (BOTF(this, float, 0xb90) < gpGlobals->time && pList->pHead)      // proximo passo do combo
+    {
+        combo_node_s *pNode = pList->pHead;
+        combo_step_s *pStep = (combo_step_s *)pNode->pData;
+        if (pNode == pList->pTail)
+            pList->pTail = pNode->pNext;
+        pList->pHead = pNode->pNext;
+        if (pList->pHead)
+            pList->pHead->pPrev = NULL;
+        pNode->pNext = NULL;
+        delete pNode;
+        SetComboChargeButton((MELEE_STRENGTH)pStep->iKind, pStep->iButtons);
+        delete pStep;
+    }
+
+    pev->button = BOTF(this, int, 0xb9c);                                     // [OK] pev+0x180
+    if (BOTF(this, float, 0xba0) > gpGlobals->time)
+        pev->button |= BOTF(this, int, 0xb98);
+    else
+        pev->button |= BOTF(this, int, 0xb94);
+}
