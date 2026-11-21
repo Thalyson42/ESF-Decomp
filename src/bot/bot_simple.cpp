@@ -2063,3 +2063,52 @@ void CBot::ChargeMeleeCombo(void)
     else
         pev->button |= BOTF(this, int, 0xb94);
 }
+
+#include <iostream>
+// ligacao direta aos simbolos originais (nao ha declaracao nos headers do SDK)  [?] IsValidClass e virtual no original (vtable +0x100)
+extern BOOL GameRules_IsValidClass(void *pRules, const char *szClass, CBasePlayer *pPlayer) asm("IsValidClass__10CGameRulesPCcP11CBasePlayer");
+extern void Player_ChangeClass(CBasePlayer *pPlayer, const char *szClass) asm("ChangeClass__11CBasePlayerPCc");
+
+// LetBotPickAClass: usa a classe preferida (+0x9f0, 1..9) se valida; senao sorteia entre as classes permitidas (peso 50 cada)
+void CBot::LetBotPickAClass(void)
+{
+    static const char *s_szClasses[9] = { "buu", "goku", "gohan", "krillin", "frieza", "piccolo", "trunks", "vegeta", "cell" };   // [OK] tabela de salto 0x13b32c
+    const char *szClass = NULL;
+    short sPref = BOTF(this, short, 0x9f0);
+    if ((unsigned short)(sPref - 1) <= 8)
+        szClass = s_szClasses[sPref - 1];
+
+    if (szClass && GameRules_IsValidClass(g_pGameRules, szClass, this))
+        Player_ChangeClass(this, szClass);
+    else
+    {
+        int iTotal = 0;
+        const char *aszOk[9];
+        int aLo[9];
+        int nOk = 0;
+        for (int i = 0; i < 9; i++)                                           // [OK] ordem do original: buu, goku, gohan, krillin, frieza, piccolo, trunks, vegeta, cell
+            if (GameRules_IsValidClass(g_pGameRules, s_szClasses[i], this))
+            {
+                aszOk[nOk] = s_szClasses[i];
+                aLo[nOk] = iTotal;
+                nOk++;
+                iTotal += 50;
+            }
+        int iPick = RANDOM_LONG(0, iTotal);
+        szClass = NULL;
+        for (int i = 0; i < nOk; i++)                                         // FindSelection: faixa [lo, lo+50)
+            if (iPick >= aLo[i] && iPick < aLo[i] + 50)
+            {
+                szClass = aszOk[i];
+                break;
+            }
+        if (szClass && GameRules_IsValidClass(g_pGameRules, szClass, this))
+            Player_ChangeClass(this, szClass);
+        else
+            std::cout << "Error: Bot " << STRING(pev->netname) << " couldn't pick a class!\n";   // [OK]
+    }
+    BOTF(this, int, 0x9e8) = 0;
+    if (RANDOM_LONG(1, 100) > 50)
+        return;
+    ChatClass.LetBotSayAWelcomeSentence(this);
+}
