@@ -80,6 +80,7 @@ public:
     BOOL  DangerousPlForBot(long lPL);
     void  MakeMeleeComboList(void);                    // [?] CBot::MakeTask(int) (modo da tarefa +0x1068)
     void  ManageEnemyList(void);                  // [?]
+    CBasePlayer *BotFindEnemy(void);
     void  BotPreThink(void);
     CBasePlayer *GetBestEnemyFromList(void);
     void ResetMoveSpeed(void);

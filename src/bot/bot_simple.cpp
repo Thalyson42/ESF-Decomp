@@ -631,3 +631,175 @@ BOOL CBot::IsValidEnemy(CBasePlayer *pPlayer)
     int idx = ENTINDEX(pPlayer->pev->pContainingEntity) - 1;                  // [OK]
     return ((1 << (idx & 31)) & BOTF(this, unsigned int, 0xaa4)) != 0;        // [OK]
 }
+
+// ---------------------------------------------------------------------------
+// ManageEnemyList: 4 entradas de 8 bytes em +0xb44 {short prioridade; (pad); CBasePlayer* @+4}
+// ---------------------------------------------------------------------------
+int EnemyPriorityCmp(const void *a, const void *b)                            // [OK] 0x153ed0
+{
+    return *(const short *)b - *(const short *)a;                             // ordem decrescente
+}
+
+void CBot::ManageEnemyList(void)
+{
+    short *pList = &BOTF(this, short, 0xb44);                                 // [OK]
+    #define ENT(i)  (*(CBasePlayer **)((char *)pList + 8 * (i) + 4))
+    #define PRI(i)  (*(short *)((char *)pList + 8 * (i)))
+
+    float flBest = 9999.9f;
+    for (int n = 0; n < 4; n++)
+    {
+        BOOL bValid = IsValidEnemy(ENT(n));
+        if (!bValid || !CanAttackPlayer(ENT(n)))
+        {
+            CBasePlayer *pNew = BotFindEnemy();
+            if (pNew)
+                ENT(n) = pNew;
+            else if (!bValid)
+            {
+                if (UTIL_IsValidPlayer(ENT(n), 0, 1))
+                    BOTF(this, CBasePlayer *, 0xb70) = ENT(n);                // [?] ultimo inimigo conhecido
+                ENT(n) = NULL;
+            }
+        }
+    }
+
+    for (int n = 0; n < 4; n++)
+    {
+        CBasePlayer *pEnt = ENT(n);
+        if (!pEnt)
+        {
+            PRI(n) = -100;                                                    // [OK] 0xff9c
+            continue;
+        }
+        int iPri = 1;
+        if (BOTF(pEnt, int, 0x770))
+            iPri = 0;
+
+        BOOL bBotLike = FALSE;
+        if (!pEnt->IsNetClient())                                             // [?] vtable +0xa4
+            bBotLike = (*((unsigned char *)pEnt->pev + 0x1a5) & 32) != 0;     // [?]
+        if (bBotLike)
+        {
+            CBasePlayer *pTarget = BOTF(pEnt, CBasePlayer *, 0xb6c);          // inimigo do alvo
+            if (pTarget != (CBasePlayer *)this && UTIL_IsValidPlayer(pTarget, 1, 1))
+                iPri -= 2;
+        }
+        if (*(int *)((char *)pEnt->pev + 0x108) == 11)                        // [?]
+            iPri += 2;
+        if (BOTF(pEnt, int, 0x334) || BOTF(pEnt, int, 0x338))
+            iPri += 2;
+        if ((short)UTIL_GetHeadingPercentage(this, pEnt) > 64)
+            iPri += 1;
+        if (EntIsInFieldOfView(this, pEnt))
+            iPri += 1;
+
+        float flDist = (pEnt->pev->origin - pev->origin).Length();            // [OK]
+        if (flDist < flBest)
+        {
+            float flDiff = flBest - flDist;
+            iPri = (flDiff > 300.0f ? iPri + 1 : flDiff > 800.0f ? iPri + 2 : iPri + 3);   // [OK] literal do decompilado
+            flBest = flDist;
+        }
+        if (flDist < 400.0f)
+            iPri += 2;
+        else if (flDist < 800.0f)
+            iPri += 1;
+
+        if (!CanAttackPlayer(pEnt))
+            iPri -= 2;
+        PRI(n) = (short)iPri;
+    }
+    qsort(pList, 4, 8, EnemyPriorityCmp);
+    #undef ENT
+    #undef PRI
+}
+
+// ---------------------------------------------------------------------------
+// BotFindEnemy: pontua cada jogador da lista (+0xa24, contagem char em +0xaac)
+// ---------------------------------------------------------------------------
+CBasePlayer *CBot::BotFindEnemy(void)
+{
+    if (!*((char *)g_pBotManager + 0xd46))                                    // [OK] BotManager+3398
+        return NULL;
+
+    CBasePlayer *pBest = NULL;
+    short sBest = -100;                                                       // [OK] 0xff9c
+    BOT_ENEMY(this) = NULL;
+
+    if (BOT_ENEMY_DELAY(this) <= gpGlobals->time)
+    {
+        float *pSkill = BOT_SKILL(this);
+        BOT_ENEMY_DELAY(this) = RANDOM_FLOAT(pSkill[0x30 / 4], pSkill[0x34 / 4]) + gpGlobals->time;   // [?] resultado do RandomFloat perdido pelo decompilador
+        if (!BOTF(this, char, 0xa20))
+            MakePlayerList();
+
+        if (BOTF(this, char, 0xaac))
+        {
+            float flNearest = 9000.0f;
+            for (int idx = 0; idx < BOTF(this, char, 0xaac); idx++)
+            {
+                CBasePlayer *pPl = BOTF(this, CBasePlayer *, 0xa24 + idx * 4);   // [OK]
+                short sScore = 1;
+                if (EnemyIsInList(pPl))
+                    continue;
+                if (g_teamplay && pev->team == pPl->pev->team)
+                    continue;
+
+                float dx = pPl->pev->origin.x - pev->origin.x;                // [?] vfuncs +0xd0/+0x1e0
+                float dy = pPl->pev->origin.y - pev->origin.y;
+                BOOL bNear = (sqrt(dx * dx + dy * dy) <= 2300.0f || BOT_FASTMODE(this) > 0);   // [OK]
+                BOOL bSeen = EntIsInFieldOfView(this, pPl);
+                BOOL bSeesMe = EntIsInFieldOfView(pPl, this);
+                float flDist = (pPl->pev->origin - pev->origin).Length();
+
+                if (!bSeen && !bNear)
+                    continue;
+
+                if (flDist < flNearest) { flNearest = flDist; sScore += 2; }
+                if (bSeen)   sScore += 2;
+                if (bSeesMe) sScore += 2;
+                CBasePlayer *pLast = BOTF(this, CBasePlayer *, 0xb70);        // [?] ultimo inimigo
+                if (pLast && pPl == pLast)
+                    sScore += (short)RANDOM_LONG(1, 4);
+                if (!CanAttackPlayer(pPl))
+                    sScore -= 3;
+                if (BOTF(pPl, int, 0x770))
+                    sScore -= (short)RANDOM_LONG(1, 2);
+                if (DangerousPlForBot(pPl->m_iPowerLevel))                    // [OK] +0x744
+                    if ((int)pev->health <= 29)                               // [OK] pev+0x160
+                        sScore -= 1;
+
+                for (int i = 1; i <= gpGlobals->maxClients; i++)              // outros bots que ja miram neste alvo
+                {
+                    CBasePlayer *pOther = (CBasePlayer *)UTIL_PlayerByIndex(i);
+                    if (pOther == (CBasePlayer *)this)
+                        continue;
+                    if (!UTIL_IsValidPlayer(pOther, 1, 1))
+                        continue;
+                    BOOL bBotLike = FALSE;
+                    if (!pOther->IsNetClient())                               // [?] vtable +0xa4
+                        bBotLike = (*((unsigned char *)pOther->pev + 0x1a5) & 32) != 0;
+                    if (!bBotLike || !pOther)
+                        continue;
+                    if (BOTF(pOther, CBasePlayer *, 0xb6c) == pPl)            // [OK] +2924
+                    {
+                        if (sScore <= 0)
+                            break;
+                        sScore--;
+                    }
+                }
+                if (sScore > sBest)
+                {
+                    pBest = pPl;
+                    sBest = sScore;
+                }
+            }
+        }
+    }
+    if (!pBest)
+        return NULL;
+    BOTF(this, int, 0x1034) = 0;                                              // [?]
+    BOTF(this, int, 0x1058) = 0;                                              // [?]
+    return pBest;
+}
