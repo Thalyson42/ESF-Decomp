@@ -568,3 +568,80 @@ void CBotManager::RestoreBots(void)
         return;
     f_024 = 0;
 }
+
+// ---------------------------------------------------------------------------
+// sbot.cfg: 3 entradas de 16 bytes em +4292 {short ki_gain, short health_gain, int powerlevel,
+// int transparency_val, short sbotlaser_percent}; secoes [SUPERBOT] [MEGABOT] [ULTIMATEBOT]
+// ---------------------------------------------------------------------------
+void CBotManager::CreateSuperbotSettings(void)
+{
+    char szFile[256] = { 0 };
+    char *pBase = (char *)this + 4292;
+    memset(pBase, 0, 48);
+    BuildBotFileName(szFile, "sbot.cfg", 0);
+    FILE *fp = fopen(szFile, "r");
+
+    for (int i = 0; i <= 2; i++)                                              // valores aleatorios padrao
+    {
+        *(short *)(pBase + i * 16 + 0)  = RANDOM_LONG(-1, 5);
+        *(short *)(pBase + i * 16 + 2)  = RANDOM_LONG(-1, 5);
+        *(int   *)(pBase + i * 16 + 4)  = RANDOM_LONG(3500000, 10000000);
+        *(int   *)(pBase + i * 16 + 8)  = RANDOM_LONG(1, 255);
+        *(short *)(pBase + i * 16 + 12) = RANDOM_LONG(0, 100);
+    }
+    g_engfuncs.pfnServerPrint("Reading sbot.cfg file... ");
+    if (!fp)
+    {
+        g_engfuncs.pfnServerPrint("file not found, random settings will be used\n");
+        return;
+    }
+
+    int idx = -1;
+    char szLine[256];
+    while (fgets(szLine, sizeof(szLine), fp))
+    {
+        // normaliza: tab -> espaco, colapsa espacos repetidos, tira CR/LF
+        char szNorm[256];
+        int n = 0;
+        for (char *p = szLine; *p && *p != '\n' && *p != '\r'; p++)
+        {
+            char c = (*p == '\t') ? ' ' : *p;
+            if (c == ' ' && n > 0 && szNorm[n - 1] == ' ')
+                continue;
+            if (c == ' ' && n == 0)
+                continue;                                                     // espacos iniciais (fgetc loop inicial)
+            szNorm[n++] = c;
+        }
+        szNorm[n] = 0;
+
+        char *pValue = strchr(szNorm, ' ');
+        if (pValue)
+            *pValue++ = 0;
+        if (szNorm[0] == '#' || !szNorm[0])
+            continue;
+
+        if (!strcmp(szNorm, "[SUPERBOT]"))
+            idx = 0;
+        else if (!strcmp(szNorm, "[MEGABOT]"))
+            idx = 1;
+        else if (!strcmp(szNorm, "[ULTIMATEBOT]"))
+            idx = 2;
+
+        if (!pValue || !*pValue || idx == -1)
+            continue;
+        long v = strtol(pValue, NULL, 10);
+        char *pE = pBase + idx * 16;
+        if (!strcmp(szNorm, "ki_gain"))
+            *(short *)(pE + 0) = (v >= -1 && v <= 1000) ? (short)v : (short)RANDOM_LONG(-1, 5);
+        else if (!strcmp(szNorm, "health_gain"))
+            *(short *)(pE + 2) = (v >= -1 && v <= 250) ? (short)v : (short)RANDOM_LONG(-1, 5);
+        else if (!strcmp(szNorm, "powerlevel"))
+            *(int *)(pE + 4) = (v >= 650000 && v <= 99999999) ? (int)v : RANDOM_LONG(650000, 10000000);
+        else if (!strcmp(szNorm, "transparency_val"))
+            *(int *)(pE + 8) = (v == -1 || (v >= 1 && v <= 255)) ? (int)v : RANDOM_LONG(1, 255);
+        else if (!strcmp(szNorm, "sbotlaser_percent"))
+            *(short *)(pE + 12) = (v >= 0 && v <= 100) ? (short)v : (short)RANDOM_LONG(0, 100);
+    }
+    fclose(fp);
+    g_engfuncs.pfnServerPrint("done\n");
+}
