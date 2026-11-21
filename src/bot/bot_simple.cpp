@@ -803,3 +803,116 @@ CBasePlayer *CBot::BotFindEnemy(void)
     BOTF(this, int, 0x1058) = 0;                                              // [?]
     return pBest;
 }
+
+// ---------------------------------------------------------------------------
+// Waypoints: bot+0x1008 wp atual, +0x100c..+0x101c historico (5), +0x1004 instante,
+// +0x1020 recarga de 10s, +0x1024 wp destino, +0xff8 posicao do wp atual, +0x102c distancia anterior
+// ---------------------------------------------------------------------------
+BOOL CBot::FindWaypoint(void)
+{
+    short iTeam = g_teamplay ? (short)pev->team : -1;                         // [OK]
+    void *pPath = NULL;
+    int iDummy = 0;
+    float flDist[3] = { 9999.0f, 9999.0f, 9999.0f };
+    int   iWP[3]    = { -1, -1, -1 };
+    int  *pCur = &BOTF(this, int, 0x1008);                                    // 0x1008..0x101c = 6 ints
+
+    for (;;)
+    {
+        int iNode = WaypointFindPath(&pPath, &iDummy, (short)pCur[0], iTeam);
+        if (iNode == -1)
+            break;
+        if (iNode == pCur[0] || iNode == pCur[1] || iNode == pCur[2] ||
+            iNode == pCur[3] || iNode == pCur[4] || iNode == pCur[5])
+            continue;
+        Vector vecWP(waypoints[iNode].x, waypoints[iNode].y, waypoints[iNode].z);
+        float flD = (vecWP - pev->origin).Length();
+        if (flD < flDist[0])      { flDist[2] = flDist[1]; iWP[2] = iWP[1]; flDist[1] = flDist[0]; iWP[1] = iWP[0]; flDist[0] = flD; iWP[0] = iNode; }
+        else if (flD < flDist[1]) { flDist[2] = flDist[1]; iWP[2] = iWP[1]; flDist[1] = flD; iWP[1] = iNode; }
+        else if (flD < flDist[2]) { flDist[2] = flD; iWP[2] = iNode; }
+    }
+
+    int iPick;
+    if (RANDOM_LONG(1, 100) > 20 || BOTF(this, float, 0x1020) > gpGlobals->time)
+        iPick = iWP[0];                                                       // [OK] o mais proximo
+    else
+    {
+        BOTF(this, float, 0x1020) = gpGlobals->time + 10.0f;                  // [OK]
+        if (iWP[2] != -1)      iPick = iWP[RANDOM_LONG(0, 2)];
+        else if (iWP[1] != -1) iPick = iWP[RANDOM_LONG(0, 1)];
+        else if (iWP[0] != -1) iPick = iWP[0];
+        else return FALSE;
+    }
+    if (iPick == -1)
+        return FALSE;
+
+    pCur[5] = pCur[4]; pCur[4] = pCur[3]; pCur[3] = pCur[2]; pCur[2] = pCur[1]; pCur[1] = pCur[0];
+    pCur[0] = iPick;
+    BOTF(this, float, 0xff8) = waypoints[iPick].x;
+    BOTF(this, float, 0xffc) = waypoints[iPick].y;
+    BOTF(this, float, 0x1000) = waypoints[iPick].z;
+    BOTF(this, float, 0x1004) = gpGlobals->time;
+    return TRUE;                                                              // [?] valor de retorno em al nao decompilado com precisao
+}
+
+BOOL CBot::HeadToWaypoint(void)
+{
+    if (BOTF(this, int, 0x1008) == -1)
+        return FALSE;
+    short iTeam = g_teamplay ? (short)pev->team : -1;                         // [OK]
+    BOOL bArrived = FALSE;
+    Vector vecWP(BOTF(this, float, 0xff8), BOTF(this, float, 0xffc), BOTF(this, float, 0x1000));
+    float flDist = (vecWP - pev->origin).Length();
+    float flLast = BOTF(this, float, 0x102c);
+    if (1.0f < flLast && flDist > flLast)                                     // [OK] esta se afastando
+        bArrived = TRUE;
+    if (flDist < 75.0f)
+        bArrived = TRUE;
+    BOTF(this, float, 0x102c) = flDist;
+
+    if (bArrived)
+    {
+        BOTF(this, float, 0x102c) = 0;
+        if (BOTF(this, int, 0x1024) != -1)
+        {
+            unsigned short iNext = (unsigned short)WaypointRouteFromTo((short)BOTF(this, int, 0x1008), (short)BOTF(this, int, 0x1024), iTeam);
+            if (iNext != 0xffff)
+            {
+                BOTF(this, int, 0x1008) = iNext;
+                BOTF(this, float, 0xff8) = waypoints[iNext].x;
+                BOTF(this, float, 0xffc) = waypoints[iNext].y;
+                BOTF(this, float, 0x1000) = waypoints[iNext].z;
+                BOTF(this, float, 0x1004) = gpGlobals->time;
+            }
+        }
+        else
+        {
+            int iter = 4;
+            for (;;)
+            {
+                if (FindWaypoint())
+                    break;
+                if (iter)
+                {
+                    BOTF(this, int, 0x100c + iter * 4) = -1;          // 4108 + iter*4 [OK]
+                    iter--;
+                }
+                else
+                {
+                    BOTF(this, int, 0x1008) = -1;
+                    for (int i = 0; i <= 4; i++)
+                        BOTF(this, int, 0x100c + i * 4) = -1;
+                    return FALSE;
+                }
+            }
+        }
+    }
+
+    Vector vecTarget(BOTF(this, float, 0xff8), BOTF(this, float, 0xffc), BOTF(this, float, 0x1000));
+    Vector vecAngles = GetAimAngles(vecTarget);
+    BOTF(this, Vector, 0xc10) = vecAngles;                                    // [OK] angulos ideais
+    if ((15.0f < BOTF(this, float, 0xc28) && 15.0f < BOTF(this, float, 0xc30)) ||
+        (15.0f < BOTF(this, float, 0xc2c) && 15.0f < BOTF(this, float, 0xc34)))
+        ResetMoveSpeed();
+    return TRUE;
+}

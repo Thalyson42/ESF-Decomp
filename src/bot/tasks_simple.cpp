@@ -1129,12 +1129,8 @@ void CAbsorbHealthTask::TaskThink(void)
 // ---- CHuntEnemyTask ----
 // task+0x18 proxima reavaliacao. Bot: +0x1034 jogador cacado, +0x1024 waypoint destino (-1 = nenhum), +0x1008 waypoint atual,
 // +0xff8 posicao do waypoint atual, +0x1004 instante, +0x1038 ultima posicao conhecida (x,y,z,tempo), +0x1048 anterior, +0x105c ultima distancia
-struct waypoint_s { float x, y, z; int flags; };       // [OK] 16 bytes por waypoint
-extern waypoint_s waypoints[];
-extern int num_waypoints;
 extern short WaypointFindReachable(edict_t *pEdict, float flRange, int iTeam);                      // [?] funcoes livres de waypoint
 extern short WaypointFindNearest(Vector *pvecPos, edict_t *pEdict, float flRange, int iTeam);
-extern short WaypointRouteFromTo(short iFrom, short iTo, int iTeam);
 
 void CHuntEnemyTask::TaskThink(void)
 {

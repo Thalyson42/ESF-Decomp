@@ -109,6 +109,7 @@ public:
     BOOL ReachedGoalWP(void);
     BOOL CurrentWPIsValid(void);
     BOOL HeadToWaypoint(void);
+    BOOL FindWaypoint(void);
     BOOL CheckForHuntEnemy(void);
     BOOL BotCanBeamJump(short fArg);
     void StartBlock(void);
@@ -144,3 +145,10 @@ public:
     void  SetGeneralDelay(void);
     void  MakeCombo(EComboType type);
 };
+
+// ---- Waypoints (funcoes livres) ----
+struct waypoint_s { float x, y, z; int flags; };       // [OK] 16 bytes por waypoint
+extern waypoint_s waypoints[];
+extern int num_waypoints;
+extern short WaypointRouteFromTo(short iFrom, short iTo, int iTeam);
+extern short WaypointFindPath(void **pPath, int *pIndex, short iWP, int iTeam);   // [?] iterador de caminhos a partir de iWP
