@@ -79,6 +79,8 @@ public:
     void  BotPerformTasks(void);
     BOOL  DangerousPlForBot(long lPL);
     void  MakeMeleeComboList(void);                    // [?] CBot::MakeTask(int) (modo da tarefa +0x1068)
+    void  ClearMeleeComboList(void);
+    int   SetComboChargeButton(MELEE_STRENGTH iStrength, int iButtons);
     void  ManageEnemyList(void);                  // [?]
     CBasePlayer *BotFindEnemy(void);
     void  BotPreThink(void);

@@ -1277,3 +1277,68 @@ void CBot::BotCombatMovement(void)
     SetMoveDir(sDirMask);
     CheckStrafe();
 }
+
+// ---------------------------------------------------------------------------
+// Lista de combos: +0xb8c -> { head, tail }, no = { dado, prox, ant }
+// ---------------------------------------------------------------------------
+struct combo_node_s { void *pData; combo_node_s *pNext; combo_node_s *pPrev; };
+struct combo_list_s { combo_node_s *pHead; combo_node_s *pTail; };
+
+void CBot::ClearMeleeComboList(void)
+{
+    combo_list_s *pList = BOTF(this, combo_list_s *, 0xb8c);
+    if (!pList)
+        return;
+    while (pList->pHead && pList->pHead->pData)                               // [OK] remove cabeca ate esvaziar
+    {
+        combo_node_s *pNode = pList->pHead;
+        void *pData = pNode->pData;
+        if (pNode == pList->pTail)
+            pList->pTail = pNode->pNext;
+        pList->pHead = pNode->pNext;
+        if (pList->pHead)
+            pList->pHead->pPrev = NULL;
+        pNode->pNext = NULL;
+        delete pNode;
+        delete (char *)pData;
+    }
+    combo_node_s *p = pList->pHead;                                           // sobras (dado nulo)
+    while (p)
+    {
+        combo_node_s *pDel = p;
+        p = p->pNext;
+        pDel->pNext = NULL;
+        pDel->pPrev = NULL;
+        delete pDel;
+    }
+    pList->pTail = NULL;
+    pList->pHead = NULL;
+    delete pList;
+    BOTF(this, combo_list_s *, 0xb8c) = NULL;
+}
+
+// Define quanto tempo carregar o combo (+0xb90) e quais botoes/direcoes usar (+0xb9c mascara, +0xb94/+0xb98 botao)
+int CBot::SetComboChargeButton(MELEE_STRENGTH iStrength, int iButtons)
+{
+    CPlayerMelee *pMelee = (CPlayerMelee *)((char *)this + 0x380);            // [OK] a3 + 896
+    float *pVals = (float *)pMelee->GetSkillValues();
+    float r0 = RANDOM_FLOAT(pVals[0], pVals[1]);                              // [?] ordem dos argumentos do RandomFloat
+    float r1 = RANDOM_FLOAT(pVals[1], pVals[2]);
+    float r2 = RANDOM_FLOAT(pVals[2], pVals[3]);
+    float flCharge = 0;
+    if (iStrength == 0)      flCharge = r0;
+    else if (iStrength == 1) flCharge = r1;
+    else if (iStrength == 2) flCharge = r2;
+    else flCharge = BOTF(this, float, 0xb90);                                 // sem mudanca
+    BOTF(this, float, 0xb90) = flCharge + gpGlobals->time;
+    BOTF(this, int, 0xb9c) = 0;
+    BOTF(this, int, 0xb98) = BOTF(this, int, 0xb94);
+    BOTF(this, float, 0xba0) = gpGlobals->time + 0.15f;                       // [OK]
+    if (iButtons & 0x8)   { SetMoveDir(16); BOTF(this, int, 0xb9c) |= 0x8; }
+    if (iButtons & 0x10)  { SetMoveDir(8);  BOTF(this, int, 0xb9c) |= 0x10; }
+    if (iButtons & 0x200) { SetMoveDir(2);  BOTF(this, int, 0xb9c) |= 0x200; }
+    if (iButtons & 0x400) { SetMoveDir(4);  BOTF(this, int, 0xb9c) |= 0x400; }
+    if (iButtons & 0x1)   BOTF(this, int, 0xb94) = 1;
+    if (iButtons & 0x800) BOTF(this, int, 0xb94) = 0x800;
+    return iButtons;
+}
