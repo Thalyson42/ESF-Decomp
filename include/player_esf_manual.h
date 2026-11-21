@@ -11,7 +11,7 @@
     void  Spectator_SetMode(int iMode); void StartObserving(void); int GetPotentialPL(void); \
     BOOL CanFly(void); void Swoop(void); void CheckWallJump(void); void CheckSubModelStatus(void); void ReleaseCandy(void); \
     void  RemoveAllWeapons(int iFlag); void Descend(int iFlag); void Ascend(void); \
-    void  StopTurbo(void); void StartTurbo(void); void MakeCandy(const char *szName); void StopBlock(void); void UpdateOldPositions(void); void Spectator_HandleButtons(void); \
+    void  StopTurbo(void); void StartTurbo(void); void MakeCandy(const char *szName); void StartAscend(void); void StopBlock(void); void UpdateOldPositions(void); void Spectator_HandleButtons(void); \
     virtual void UpdateClientData_Hook(void);   /* [?] vtable +0x204 (slot 127) */ \
     void  PlayAnimation(void);                  /* [OK] ESF: no lugar de SetAnimation(PLAYER_WALK) */ \
     void  CheckPowerups(entvars_t *pevVictim);  /* [?] assinatura */ \
@@ -30,7 +30,7 @@
 struct esf_botinfo_s { char pad[0x1a]; short m_iTauntChance; };   // [?]
 extern cvar_t simplemelee, forcerespawn;
 class CBodySlice { public: static void SpawnBodySlices(entvars_t *pev, int iFlag); };   // [?] assinatura
-class CBotChat { public: void LetBotTaunt(CBasePlayer *pKiller, CBasePlayer *pVictim); };
+class CBotChat { public: void LetBotTaunt(CBasePlayer *pKiller, CBasePlayer *pVictim); void LetBotCheckForReply(CBasePlayer *pBot); void LetBotSaySomething(CBasePlayer *pBot); };   // [?] nome CChatClass no binario
 extern CBotChat ChatClass;
 #endif
 // usados por playermelee.cpp (assinaturas [?], só para compilar a sintaxe)

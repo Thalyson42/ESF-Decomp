@@ -362,3 +362,153 @@ void CBot::CheckNecessarilyThings(void)
     }
     MakeTask(iNew);
 }
+
+// ---- CBot::CheckBotInternalStatus / CheckBotMiscThings ----
+// A tarefa atual diz quais verificacoes valem (GetBotStatusChecks / GetBotMiscChecks); sem tarefa, todas valem.
+#define SKILL_S(b, off) (*(short *)(BOTF(b, char *, 0xa04) + (off)))
+
+void CBot::CheckBotInternalStatus(void)
+{
+    CBaseTask *pTask = BOTF(this, CBaseTask *, 0x1064);
+    int iMask = pTask ? pTask->GetBotStatusChecks() : 0;
+    BOOL fAll = !pTask;
+    short sAggr = BOTF(this, short, 0xa18);                          // [?] agressividade/estado de vida do bot
+
+    // 4: carregar poder (PowerUp)
+    if (((iMask & 4) || fAll) && BotCanPowerUp())
+    {
+        int iKi = (int)pev->fuser4;
+        if (iKi <= 999 && BOTF(this, float, 0xb10) <= gpGlobals->time && !BOTF(this, int, 0x330))
+        {
+            int iThr = 750;
+            CBasePlayer *pEnemy = BOT_ENEMY(this);
+            if (pEnemy && (pEnemy->pev->origin - pev->origin).Length() < 1250.0f)
+            {
+                int iLevel = *(int *)(BOTF(this, char *, 0xa04) + 0x34);
+                if (iLevel == 1) iThr = 750; else if (iLevel == 0) iThr = 700; else if (iLevel == 2) iThr = 800;
+            }
+            if (BOTF(this, char, 0x9fc))
+                iThr -= BOTF(this, char, 0x9fc) * 80;
+            if (sAggr > 59)
+            {
+                iThr = 20;
+                if (sAggr <= 99) iThr = 100;
+            }
+            if (iKi <= iThr)
+            {
+                if (iKi > 225 && sAggr > 59 && RANDOM_LONG(1, 100) <= SKILL_S(this, 0x26))
+                {
+                    MakeCombo((EComboType)37);
+                    return;
+                }
+                if (!BotShouldFallDown())
+                {
+                    MakeTask(0);
+                    StartPowerUp();
+                    return;
+                }
+                MakeCombo((EComboType)8);
+                return;
+            }
+        }
+    }
+    // 2: voar / pousar
+    if ((iMask & 2) || fAll)
+    {
+        if (BOTF(this, float, 0xa14) < gpGlobals->time)
+        {
+            BOTF(this, char, 0xa10) = (RANDOM_LONG(1, 100) <= SKILL_S(this, 0x2c)) ? 1 : 0;
+            BOTF(this, float, 0xa14) = RANDOM_FLOAT(15.0f, 30.0f) + gpGlobals->time;   // [?] RandomFloat perdido no decompilado
+        }
+        if (BOTF(this, int, 0x320))
+        {
+            if (!BOTF(this, char, 0xa10))
+                StopFly();
+        }
+        else if (BOTF(this, char, 0xa10))
+            StartFly();
+    }
+    // 8: ascender
+    if (((iMask & 8) || fAll) && BOTF(this, float, 0xb18) <= gpGlobals->time && BotCanAscend())
+    {
+        BOTF(this, float, 0xb18) = gpGlobals->time + 0.5f;
+        short sChance;
+        if (!sAggr || BOTF(this, int, 0xa1c) == 3 || BOTF(this, int, 0xa1c) == 5) sChance = 100;
+        else if (sAggr <= 20) sChance = 95;
+        else sChance = ((unsigned short)(sAggr - 60) <= 39) ? 30 : 0;
+        if (RANDOM_LONG(1, 100) <= sChance)
+        {
+            if (BotShouldFallDown())
+            {
+                MakeCombo((EComboType)9);
+                return;
+            }
+            StartAscend();
+        }
+    }
+    // 16: recuperar vida
+    if (!((iMask & 16) || fAll))
+        return;
+    if (*(int *)((char *)pev + 0x20c) != 1)                          // [?] campo do pev
+        return;
+    if ((int)pev->health > 75)
+        return;
+    short sChance = 100;
+    if (sAggr > 0)
+        sChance = (short)(100 - sAggr / 1.5);
+    if (RANDOM_LONG(1, 100) > (short)(sChance - (int)pev->health))
+        return;
+    MakeTask(0x11);
+}
+
+void CBot::CheckBotMiscThings(void)
+{
+    CBaseTask *pTask = BOTF(this, CBaseTask *, 0x1064);
+    int iMask = pTask ? pTask->GetBotMiscChecks() : 0;
+    BOOL fAll = !pTask;
+    int iNew;
+    if (((iMask & 2) || fAll) && g_pBotManager[0xd46])
+    {
+        CBasePlayer *pBest = GetBestEnemyFromList();
+        BOT_ENEMY(this) = pBest;
+        if (pBest)
+        {
+            MakeTask(5);                                             // [OK] tem inimigo: combate
+            return;
+        }
+    }
+    // conversa (chat do bot)
+    if (((iMask & 4) || fAll) && g_pBotManager[0xd4d] && BOTF(this, float, 0xc48) < gpGlobals->time)
+    {
+        int iRoll = RANDOM_LONG(1, 100);
+        if (BOTF(this, float, 0xd5c) < gpGlobals->time)
+        {
+            if (iRoll <= SKILL_S(this, 0x18))
+                ChatClass.LetBotCheckForReply(this);
+            BOTF(this, float, 0xd5c) = RANDOM_FLOAT(5.5f, 15.0f) + gpGlobals->time;   // [?]
+        }
+        if (BOTF(this, float, 0xd4c) < gpGlobals->time)
+        {
+            if (iRoll <= SKILL_S(this, 0x18))
+                ChatClass.LetBotSaySomething(this);
+            BOTF(this, float, 0xd4c) = RANDOM_FLOAT(15.0f, 40.0f) + gpGlobals->time;  // [?]
+        }
+    }
+    if (((iMask & 16) || fAll) && CheckForHuntEnemy())
+        iNew = 29;                                                   // cacar inimigo
+    else
+    {
+        if (!(iMask & 32) && !fAll)
+            return;
+        if (BOTF(this, float, 0xaec) >= gpGlobals->time)
+            return;
+        if (BotShouldMakeKameTorps())
+            iNew = 19;
+        else
+        {
+            BOTF(this, float, 0xaec) = RANDOM_FLOAT(22.0f, 40.0f) + gpGlobals->time;  // [?]
+            return;
+        }
+    }
+    MakeTask(iNew);
+}
