@@ -518,3 +518,53 @@ void CBotManager::CreateSuperBot(short sClass, const char *szName, short sSkill,
     }
     f_02c++;
 }
+
+// ---------------------------------------------------------------------------
+// Fila de bots a recriar (lista encadeada {head,tail}, nos {data,next,prev})
+// ---------------------------------------------------------------------------
+struct bot_restore_entry_s
+{
+    unsigned char ucSkill;       // +0
+    unsigned char ucPersonality; // +1
+    short sClass;                // +2
+    short sTeam;                 // +4
+    char szName[34];             // +6
+};
+struct bot_restore_node_s { bot_restore_entry_s *pData; bot_restore_node_s *pNext, *pPrev; };
+struct bot_restore_list_s { bot_restore_node_s *pHead, *pTail; };
+
+// Recria um bot da fila a cada 2 segundos (f_020 = proximo instante, f_024 = em andamento)
+void CBotManager::RestoreBots(void)
+{
+    if (f_020 >= 1.0f && f_020 <= gpGlobals->time)
+    {
+        bot_restore_list_s *pList = m_pRestoreList;
+        if (pList && pList->pHead)
+        {
+            if (!f_024)
+                f_024 = 1;
+            bot_restore_node_s *pNode = pList->pHead;
+            bot_restore_entry_s *pEnt = pNode->pData;
+            if (pNode == pList->pTail)                                        // original: tail = node->next
+                pList->pTail = pNode->pNext;
+            pList->pHead = pNode->pNext;
+            if (pList->pHead)
+                pList->pHead->pPrev = NULL;
+            pNode->pNext = NULL;
+            delete pNode;
+
+            short sSBot = *(short *)((char *)pEnt + 0x28);
+            if (sSBot > 0)
+                CreateSuperBot(pEnt->sClass, pEnt->szName, (short)(pEnt->ucPersonality + 1), sSBot);
+            else
+                CreateBot(pEnt->sTeam, pEnt->sClass, pEnt->szName, (short)(pEnt->ucSkill + 1), pEnt->ucPersonality);
+            f_020 = gpGlobals->time + 2.0f;
+            delete pEnt;
+            return;
+        }
+        f_020 = 0;
+    }
+    else if (!f_024)
+        return;
+    f_024 = 0;
+}

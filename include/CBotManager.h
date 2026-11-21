@@ -4,6 +4,7 @@
 class CBotManager {
 public:
     // campos observados (offset em bytes a partir de `this`; inclui os herdados)
+    struct bot_restore_list_s *m_pRestoreList;  // +0x0: fila de bots a recriar [?]
     char f_004;  // +0x4 (4)
     char f_005;  // +0x5 (5)
     float f_008;  // +0x8 (8)
@@ -91,6 +92,7 @@ public:
     short GetRandomDBSpotIndex(short sTeam);
     void DeleteDBGatherSpot(void);
     void PlaceNewDBGatherSpot(void);
+    void RestoreBots(void);
     void CreateBot(short sTeam, short sClass, const char *szName, short sSkill, short sPersonality);
     void CreateSuperBot(short sClass, const char *szName, short sSkill, short sSBotLevel);
 };
