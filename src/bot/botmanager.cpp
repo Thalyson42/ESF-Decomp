@@ -300,3 +300,85 @@ BOOL CBotManager::HandleBotCommands(edict_t *pEntity)
     }
     return FALSE;
 }
+
+// ---------------------------------------------------------------------------
+// Pontos de reuniao das Dragon Balls: 10 por time, 16 bytes {x,y,z, char apagado}
+// ---------------------------------------------------------------------------
+struct gather_spot_s { Vector vecPos; char bDeleted; char pad[3]; };
+extern gather_spot_s GatherSpotsForTeamGood[10];
+extern gather_spot_s GatherSpotsForTeamEvil[10];
+
+// jogador do host (servidor nao dedicado): f_00c (edict) ou o primeiro jogador
+// vfunc em vtable +0xe4 (this, Vector*) -> int
+static int HostCanReach(CBasePlayer *p, const Vector &v)
+{
+    typedef int (*pfn_t)(void *, const Vector *);
+    void **vt = *(void ***)p;
+    return ((pfn_t)vt[0xe4 / 4])(p, &v);                                      // [?]
+}
+
+static CBasePlayer *GetHostPlayer(CBotManager *pMgr)
+{
+    if (g_engfuncs.pfnIsDedicatedServer())
+        return NULL;
+    edict_t *pHost = pMgr->f_00c ? (edict_t *)pMgr->f_00c : g_engfuncs.pfnPEntityOfEntOffset(0);   // [?]
+    return pHost ? (CBasePlayer *)pHost->pvPrivateData : NULL;                // [OK] edict+0x7c
+}
+
+short CBotManager::GetNearestDBSpotIndex(CBasePlayer *pPlayer, float flMaxDist)
+{
+    CBasePlayer *pHost = GetHostPlayer(this);                                 // [?] o argumento pPlayer e ignorado no original
+    if (!UTIL_IsValidPlayer(pHost, 0, 0))
+        return -1;
+    Vector vecPos = pHost->pev->origin;
+    float flBest = 9999.9f;
+    short sBest = -1;
+    gather_spot_s *pSpots = (pHost->pev->team == 0) ? GatherSpotsForTeamGood : GatherSpotsForTeamEvil;   // [OK]
+    for (short i = 0; i <= 9; i++)
+    {
+        if (pSpots[i].bDeleted)
+            continue;
+        float flD = (pSpots[i].vecPos - vecPos).Length();
+        if (flD < flBest && flD <= flMaxDist && HostCanReach(pHost, pSpots[i].vecPos))   // [?] vtable +0xe4
+        {
+            flBest = flD;
+            sBest = i;
+        }
+    }
+    return sBest;
+}
+
+short CBotManager::GetRandomDBSpotIndex(short sTeam)
+{
+    gather_spot_s *pSpots = (sTeam == 1) ? GatherSpotsForTeamGood : GatherSpotsForTeamEvil;
+    short aIdx[10];
+    int n = 0, iTotal = 0;
+    for (short i = 0; i <= 9; i++)
+        if (!pSpots[i].bDeleted)
+        {
+            aIdx[n++] = i;
+            iTotal += 50;                                                     // peso 50 cada
+        }
+    int iPick = RANDOM_LONG(0, iTotal);                                       // [OK]
+    for (int k = 0; k < n; k++)
+        if (iPick >= k * 50 && iPick < (k + 1) * 50)                          // FindSelection: faixa [lo, lo+50)
+            return aIdx[k];
+    return -1;                                                                // [?] valor de retorno final nao visivel no decompilado
+}
+
+// Marca como apagado o ponto de reuniao mais proximo (75 unidades) do host; so no modo mp_gamemode == 2
+void CBotManager::DeleteDBGatherSpot(void)
+{
+    if (!g_teamplay)
+        return;
+    if (CVAR_GET_FLOAT("mp_gamemode") != 2.0f)
+        return;
+    CBasePlayer *pHost = GetHostPlayer(this);
+    if (!UTIL_IsValidPlayer(pHost, 0, 0))
+        return;
+    short sIdx = GetNearestDBSpotIndex(pHost, 75.0f);
+    if (sIdx <= -1)
+        return;
+    gather_spot_s *pSpots = (pHost->pev->team == 0) ? GatherSpotsForTeamGood : GatherSpotsForTeamEvil;
+    pSpots[sIdx].bDeleted = 1;
+}
