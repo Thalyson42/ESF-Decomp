@@ -91,4 +91,6 @@ public:
     short GetRandomDBSpotIndex(short sTeam);
     void DeleteDBGatherSpot(void);
     void PlaceNewDBGatherSpot(void);
+    void CreateBot(short sTeam, short sClass, const char *szName, short sSkill, short sPersonality);
+    void CreateSuperBot(short sClass, const char *szName, short sSkill, short sSBotLevel);
 };

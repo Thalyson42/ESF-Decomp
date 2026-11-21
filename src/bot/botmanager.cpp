@@ -412,3 +412,109 @@ void CBotManager::PlaceNewDBGatherSpot(void)
     pSpots[i].vecPos = (tr.flFraction < 1.0f) ? tr.vecEndPos : pHost->pev->origin;
     pSpots[i].bDeleted = 0;
 }
+
+// ---------------------------------------------------------------------------
+// Criacao de bots (fake clients)
+// ---------------------------------------------------------------------------
+extern BOOL ClientConnect(edict_t *pEntity, const char *pszName, const char *pszAddress, char szRejectReason[128]);
+extern void ClientPutInServer(edict_t *pEntity);
+
+// remove caracteres fora de 32..126 e aspas (0x22) do nome
+static void SanitizeBotName(char *sz)
+{
+    int len = strlen(sz);
+    for (int i = 0; i < len; i++)
+        if ((unsigned char)(sz[i] - 32) > 94 || sz[i] == '"')
+        {
+            for (int j = i; j < len; j++)
+                sz[j] = sz[j + 1];
+            len--;
+        }
+}
+
+// cria o fake client + CBot; retorna o CBot ou NULL (mensagens como no original)
+static CBot *SpawnFakeBot(char *szName, char *szReject)
+{
+    edict_t *pEdict = g_engfuncs.pfnCreateFakeClient(szName);
+    if (!pEdict || !g_engfuncs.pfnEntOffsetOfPEntity(pEdict))
+    {
+        ALERT(at_console, "Max. Players reached.  Can't create bot!\n");
+        return NULL;
+    }
+    ALERT(at_console, "Creating bot...\n");
+    g_engfuncs.pfnFreeEntPrivateData(pEdict);
+    pEdict->pvPrivateData = NULL;                                             // edict+0x7c
+    CBot *pBot = GetClassPtr((CBot *)NULL);                                   // [OK] pev = &edict->v
+    if (!pBot)
+    {
+        ALERT(at_console, "Error ! Couldn't create bot\n");
+        return NULL;
+    }
+    ClientConnect(pEdict, szName, "127.0.0.1", szReject);
+    ClientPutInServer(pEdict);
+    return pBot;
+}
+
+void CBotManager::CreateBot(short sTeam, short sClass, const char *szName, short sSkill, short sPersonality)
+{
+    char szFull[128];
+    char szReject[128];
+    if (szName && *szName)
+    {
+        strncpy(szFull, szName, 31);
+        szFull[32] = 0;
+    }
+    else if (f_03e > 0)
+        PickBotName(szFull);
+    else
+        strcpy(szFull, "Bot");                                                // 0x746f42 = "Bot"
+
+    if ((unsigned short)(sSkill - 1) > 4)                                     // fora de 1..5
+        sSkill = (short)(1.0f + sv_bot_skill.value);
+
+    SanitizeBotName(szFull);
+    CBot *pBot = SpawnFakeBot(szFull, szReject);
+    if (!pBot)
+        return;
+    pBot->CreateInit(sTeam, sClass, sSkill, sPersonality, -1);
+    f_004++;                                                                  // [?] contador (campo +4)
+    f_010 = gpGlobals->time + 5.0f;
+}
+
+void CBotManager::CreateSuperBot(short sClass, const char *szName, short sSkill, short sSBotLevel)
+{
+    char szFull[128];
+    char szBase[64];
+    char szReject[128];
+    if (sSBotLevel <= 0)
+        sSBotLevel = 1;
+    else if (sSBotLevel > 3)
+        sSBotLevel = 3;
+
+    if (szName && *szName)
+    {
+        strncpy(szBase, szName, 31);
+        szBase[32] = 0;
+    }
+    else if (f_03e > 0)
+        PickBotName(szBase);
+    else
+        strcpy(szBase, "Bot");
+
+    sprintf(szFull, "[SBot%i]", sSBotLevel);
+    strncat(szFull, szBase, 32 - strlen(szFull));
+    SanitizeBotName(szFull);
+
+    CBot *pBot = SpawnFakeBot(szFull, szReject);
+    if (!pBot)
+        return;
+    pBot->CreateInit(2, sClass, 1, sSkill, sSBotLevel);
+    f_004++;
+    f_010 = gpGlobals->time + 5.0f;
+    if (!f_02c)
+    {
+        f_028 = (int)CVAR_GET_FLOAT("mp_plcatchup");                          // [?] valor guardado em +0x28
+        CVAR_SET_FLOAT("mp_plcathcup", 0);                                    // grafia do original
+    }
+    f_02c++;
+}
