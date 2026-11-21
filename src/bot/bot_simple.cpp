@@ -1676,3 +1676,28 @@ void CBot::SenseHit(danger_info_s &Danger)
     Danger.m_cFlags[0] = Danger.m_cFlags[1] = Danger.m_cFlags[2] = 0;
     BOTF(this, float, 0xab8) = 0;
 }
+
+// LetBotJoinTeam: +0x1060 time desejado (1 ou 2, senao -1 = escolher o menos populoso), +0x9ec estagio de entrada
+void CBot::LetBotJoinTeam(void)
+{
+    short &sTeam = BOTF(this, short, 0x1060);
+    if ((unsigned short)(sTeam - 1) > 1)
+        sTeam = -1;
+    if (sTeam == -1)
+    {
+        int iTeam1 = 0, iTeam2 = 0;
+        for (int i = 1; i <= gpGlobals->maxClients; i++)
+        {
+            CBasePlayer *pPl = (CBasePlayer *)UTIL_PlayerByIndex(i);
+            if (!UTIL_IsValidPlayer(pPl, 0, 0))
+                continue;
+            if (pPl->pev->team == 1)      iTeam1++;
+            else if (pPl->pev->team == 2) iTeam2++;
+        }
+        if (iTeam1 > iTeam2)      sTeam = 2;
+        else if (iTeam1 < iTeam2) sTeam = 1;
+        else                      sTeam = RANDOM_LONG(1, 2);                  // [OK]
+    }
+    g_pGameRules->ClientCommand(this, "jointeam");                            // [?] vfunc +0x60 do objeto em +0x44 do gamerules
+    BOTF(this, int, 0x9ec) = 2;
+}
