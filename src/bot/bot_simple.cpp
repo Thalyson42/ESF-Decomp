@@ -1930,3 +1930,50 @@ void CBot::BotPreThink(void)
     }
     CheckSBotStuff();
 }
+
+// ---------------------------------------------------------------------------
+// MakeMeleeComboList: sorteia 1 de 2 sequencias fixas de passos {tipo, mascara de botoes}
+// ---------------------------------------------------------------------------
+struct combo_step_s { int iKind; int iButtons; };                             // [OK] 8 bytes
+
+static void ComboListAdd(combo_list_s *pList, int iKind, int iButtons)
+{
+    combo_step_s *pStep = new combo_step_s;
+    pStep->iKind = iKind;
+    pStep->iButtons = iButtons;
+    combo_node_s *pNode = new combo_node_s;
+    pNode->pNext = NULL;
+    pNode->pPrev = NULL;
+    pNode->pData = pStep;
+    if (!pList->pHead)
+        pList->pHead = pList->pTail = pNode;
+    else
+    {
+        pList->pTail->pNext = pNode;
+        pNode->pPrev = pList->pTail;
+        pList->pTail = pNode;
+    }
+}
+
+void CBot::MakeMeleeComboList(void)
+{
+    ClearMeleeComboList();
+    combo_list_s *pList = new combo_list_s;
+    pList->pHead = NULL;
+    pList->pTail = NULL;
+    BOTF(this, combo_list_s *, 0xb8c) = pList;
+    int iSeq = RANDOM_LONG(1, 2);
+    if (iSeq == 1)
+    {
+        ComboListAdd(pList, 0, 0x11);                                         // [OK] valores lidos do decompilado
+        ComboListAdd(pList, 0, 0x211);
+        ComboListAdd(pList, 0, 0x201);
+    }
+    else if (iSeq == 2)
+    {
+        ComboListAdd(pList, 0, 0x11);
+        ComboListAdd(pList, 0, 0x411);
+        ComboListAdd(pList, 0, 0x401);
+        ComboListAdd(pList, 1, 0xa00);
+    }
+}
