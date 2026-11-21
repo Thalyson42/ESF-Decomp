@@ -77,6 +77,7 @@ public:
     void CreateSuperbotSettings(void);
     void CreateSkillData(void);
     void InitSkillDate(void);
+    void BotBalanceTeamsThink(void);
     void ChangeBotBoolSetting(bool &bSetting, short sValue, const char *szName);
     void SBotRulesThink(void);
     void ChangeSBotLaserPercent(short sPercent);

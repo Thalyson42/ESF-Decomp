@@ -826,3 +826,64 @@ void CBotManager::CreateSkillData(void)
     fclose(fp);
     g_engfuncs.pfnServerPrint("done\n");
 }
+
+// ---------------------------------------------------------------------------
+// Balanceamento de times (a cada 5 s): se um time tem 2+ jogadores a mais, move bots (flag 0x1a5&32) para o outro
+// ---------------------------------------------------------------------------
+static bool IsBotPlayer(CBasePlayer *p)
+{
+    return !p->IsNetClient() && (*((unsigned char *)p->pev + 0x1a5) & 32) != 0;    // [?] vtable +0xa4 e flag de bot
+}
+
+void CBotManager::BotBalanceTeamsThink(void)
+{
+    if (f_008 >= gpGlobals->time)
+        return;
+    f_008 = gpGlobals->time + 5.0f;
+    if (!f_d4c || !f_004 || !g_teamplay)
+        return;
+
+    int nTeam1 = 0, nTeam2 = 0;
+    for (int i = 1; i <= gpGlobals->maxClients; i++)
+    {
+        CBasePlayer *pPl = (CBasePlayer *)UTIL_PlayerByIndex(i);
+        if (UTIL_IsValidPlayer(pPl, 1, 0))
+        {
+            if (pPl->pev->team == 1) nTeam1++;
+            if (pPl->pev->team == 2) nTeam2++;
+        }
+    }
+
+    if (nTeam1 - 1 > nTeam2)
+    {
+        for (int i = 1; i <= gpGlobals->maxClients; i++)
+        {
+            CBasePlayer *pPl = (CBasePlayer *)UTIL_PlayerByIndex(i);
+            if (!UTIL_IsValidPlayer(pPl, 0, 0))
+                continue;
+            if (IsBotPlayer(pPl) && pPl->pev->team == 1)
+            {
+                *(short *)((char *)pPl + 0x1060) = 2;
+                g_pGameRules->ClientCommand(pPl, "jointeam");                 // [?] vfunc do gamerules
+                nTeam1--;
+                if (nTeam1 <= nTeam2)
+                    return;
+            }
+        }
+    }
+    else if (nTeam2 - 1 > nTeam1)
+    {
+        for (int i = 1; i <= gpGlobals->maxClients; i++)
+        {
+            CBasePlayer *pPl = (CBasePlayer *)UTIL_PlayerByIndex(i);
+            if (!UTIL_IsValidPlayer(pPl, 0, 0))
+                continue;
+            if (IsBotPlayer(pPl) && pPl->pev->team == 2)
+            {
+                *(short *)((char *)pPl + 0x1060) = 1;
+                g_pGameRules->ClientCommand(pPl, "jointeam");
+                return;                                                       // so move um (assimetria do original)
+            }
+        }
+    }
+}
