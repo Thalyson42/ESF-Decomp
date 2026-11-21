@@ -645,3 +645,184 @@ void CBotManager::CreateSuperbotSettings(void)
     fclose(fp);
     g_engfuncs.pfnServerPrint("done\n");
 }
+
+// Valores padrao das 5 tabelas de skill (68 bytes cada, a partir de +0xf70): 15 floats, short combo%, 3 flags.
+// Valores dos floats lidos do binario ([ebx-X] = GOT-X); [OK] conforme o assembly (incl. escrita dupla em +0xfa0/+0xfe4/+0x1028/+0x10b0).
+void CBotManager::InitSkillDate(void)
+{
+    char *p = (char *)this;
+    *(char *)(p + 0xfae) = 1;
+    *(float *)(p + 0xf70) = 0.015f;
+    *(float *)(p + 0xf74) = 0.035f;
+    *(float *)(p + 0xf88) = 15.0f;
+    *(float *)(p + 0xf8c) = 20.0f;
+    *(float *)(p + 0xf90) = 10.0f;
+    *(float *)(p + 0xf94) = 10.0f;
+    *(float *)(p + 0xf78) = 330.0f;
+    *(float *)(p + 0xf7c) = 355.0f;
+    *(float *)(p + 0xf80) = 350.0f;
+    *(float *)(p + 0xf84) = 375.0f;
+    *(float *)(p + 0xf98) = 0.1f;
+    *(float *)(p + 0xf9c) = 0.4f;
+    *(float *)(p + 0xfa0) = 0.09f;
+    *(float *)(p + 0xfa0) = 0.12f;
+    *(float *)(p + 0xfa8) = 150.0f;
+    *(short *)(p + 0xfac) = 0;
+    *(char *)(p + 0xfaf) = 1;
+    *(char *)(p + 0xfb0) = 1;
+    *(char *)(p + 0xff2) = 1;
+    *(float *)(p + 0xfb4) = 150.0f;
+    *(float *)(p + 0xfb8) = 0.045f;
+    *(float *)(p + 0xfcc) = 0.045f;
+    *(float *)(p + 0xfd0) = 25.0f;
+    *(float *)(p + 0xfd4) = 25.0f;
+    *(float *)(p + 0xfd8) = 25.0f;
+    *(float *)(p + 0xfbc) = 250.0f;
+    *(float *)(p + 0xfc0) = 265.0f;
+    *(float *)(p + 0xfc4) = 260.0f;
+    *(float *)(p + 0xfc8) = 285.0f;
+    *(float *)(p + 0xfdc) = 0.3f;
+    *(float *)(p + 0xfe0) = 0.6f;
+    *(float *)(p + 0xfe4) = 0.6f;
+    *(float *)(p + 0xfe4) = 0.17f;
+    *(float *)(p + 0xfec) = 165.0f;
+    *(short *)(p + 0xff0) = 15;
+    *(char *)(p + 0xff3) = 1;
+    *(char *)(p + 0xff4) = 1;
+    *(char *)(p + 0x1036) = 1;
+    *(float *)(p + 0xff8) = 0.075f;
+    *(float *)(p + 0xffc) = 0.01f;
+    *(float *)(p + 0x1010) = 0.01f;
+    *(float *)(p + 0x1014) = 30.0f;
+    *(float *)(p + 0x1018) = 30.0f;
+    *(float *)(p + 0x101c) = 30.0f;
+    *(float *)(p + 0x1000) = 190.0f;
+    *(float *)(p + 0x1004) = 125.0f;
+    *(float *)(p + 0x1008) = 210.0f;
+    *(float *)(p + 0x100c) = 240.0f;
+    *(float *)(p + 0x1020) = 0.5f;
+    *(float *)(p + 0x1024) = 1.1f;
+    *(float *)(p + 0x1028) = 0.18f;
+    *(float *)(p + 0x1028) = 0.22f;
+    *(float *)(p + 0x1030) = 230.0f;
+    *(short *)(p + 0x1034) = 25;
+    *(char *)(p + 0x1037) = 0;
+    *(char *)(p + 0x1038) = 0;
+    *(char *)(p + 0x107a) = 0;
+    *(float *)(p + 0x103c) = 0.15f;
+    *(float *)(p + 0x1040) = 0.2f;
+    *(float *)(p + 0x1054) = 0.2f;
+    *(float *)(p + 0x1058) = 35.0f;
+    *(float *)(p + 0x105c) = 35.0f;
+    *(float *)(p + 0x1060) = 35.0f;
+    *(float *)(p + 0x1044) = 155.0f;
+    *(float *)(p + 0x1048) = 170.0f;
+    *(float *)(p + 0x104c) = 175.0f;
+    *(float *)(p + 0x1050) = 195.0f;
+    *(float *)(p + 0x1064) = 1.2f;
+    *(float *)(p + 0x1068) = 1.6f;
+    *(float *)(p + 0x106c) = 1.6f;
+    *(float *)(p + 0x1074) = 1.6f;
+    *(short *)(p + 0x1078) = 50;
+    *(char *)(p + 0x107b) = 0;
+    *(char *)(p + 0x107c) = 0;
+    *(char *)(p + 0x10be) = 0;
+    *(float *)(p + 0x1080) = 1.6f;
+    *(float *)(p + 0x1084) = 1.6f;
+    *(float *)(p + 0x1098) = 1.6f;
+    *(float *)(p + 0x109c) = 40.0f;
+    *(float *)(p + 0x10a0) = 40.0f;
+    *(float *)(p + 0x10a4) = 40.0f;
+    *(float *)(p + 0x1088) = 60.0f;
+    *(float *)(p + 0x108c) = 90.0f;
+    *(float *)(p + 0x1090) = 800.0f;
+    *(float *)(p + 0x1094) = 110.0f;
+    *(float *)(p + 0x10a8) = 1.5f;
+    *(float *)(p + 0x10ac) = 2.0f;
+    *(float *)(p + 0x10b0) = 2.0f;
+    *(float *)(p + 0x10b0) = 0.36f;
+    *(float *)(p + 0x10b8) = 340.0f;
+    *(short *)(p + 0x10bc) = 75;
+    *(char *)(p + 0x10bf) = 0;
+    *(char *)(p + 0x10c0) = 0;
+}
+
+// skill.cfg: secoes [SKILL1]..[SKILL5] (nao diferencia maiusculas); chave valor por linha, '#' = comentario
+void CBotManager::CreateSkillData(void)
+{
+    static const struct { const char *szKey; int iOff; } aFloats[] = {
+        { "min_general_delay", 0 },          { "max_general_delay", 4 },
+        { "min_x_aim_speed", 8 },            { "max_x_aim_speed", 12 },
+        { "min_y_aim_speed", 16 },           { "max_y_aim_speed", 20 },
+        { "min_x_aim_offset", 24 },          { "max_x_aim_offset", 28 },
+        { "min_y_aim_offset", 32 },          { "max_y_aim_offset", 36 },
+        { "min_attack_delay", 40 },          { "max_attack_delay", 44 },
+        { "min_enemy_search_delay", 48 },    { "max_enemy_search_delay", 52 },
+        { "min_beam_explode_distance", 56 },
+    };
+    InitSkillDate();
+
+    char szFile[256] = { 0 };
+    BuildBotFileName(szFile, "skill.cfg", 0);
+    FILE *fp = fopen(szFile, "r");
+    g_engfuncs.pfnServerPrint("Reading skill.cfg file... ");
+    if (!fp)
+    {
+        g_engfuncs.pfnServerPrint("file not found, default settings will be used\n");
+        return;
+    }
+
+    int iSkill = -1;
+    char szLine[256];
+    while (fgets(szLine, sizeof(szLine), fp))
+    {
+        char szNorm[256];
+        int n = 0;
+        for (char *p = szLine; *p && *p != '\n' && *p != '\r'; p++)
+        {
+            char c = (*p == '\t') ? ' ' : *p;
+            if (c == ' ' && (n == 0 || szNorm[n - 1] == ' '))
+                continue;
+            szNorm[n++] = c;
+        }
+        szNorm[n] = 0;
+        char *pValue = strchr(szNorm, ' ');
+        if (pValue)
+            *pValue++ = 0;
+        if (szNorm[0] == '#' || !szNorm[0])
+            continue;
+
+        for (int k = 0; k < 5; k++)
+        {
+            char szSec[16];
+            sprintf(szSec, "[SKILL%d]", k + 1);
+            if (!strcasecmp(szNorm, szSec))
+                iSkill = k;
+        }
+        if (!pValue || !*pValue || iSkill == -1)
+            continue;
+
+        float flVal = (float)strtod(pValue, NULL);
+        char *pE = (char *)this + 0xf70 + iSkill * 0x44;
+        bool bDone = false;
+        for (unsigned k = 0; k < sizeof(aFloats) / sizeof(aFloats[0]); k++)
+            if (!strcasecmp(szNorm, aFloats[k].szKey))
+            {
+                *(float *)(pE + aFloats[k].iOff) = flVal;
+                bDone = true;
+                break;
+            }
+        if (bDone)
+            continue;
+        if (!strcasecmp(szNorm, "random_combo_button_percent"))
+            *(short *)(pE + 60) = (short)(int)flVal;
+        else if (!strcasecmp(szNorm, "uses_turbo"))
+            *(char *)(pE + 62) = (flVal != 0.0f);
+        else if (!strcasecmp(szNorm, "uses_meleecombos"))
+            *(char *)(pE + 63) = (flVal != 0.0f);
+        else if (!strcasecmp(szNorm, "uses_chainswoop"))
+            *(char *)(pE + 64) = (flVal != 0.0f);
+    }
+    fclose(fp);
+    g_engfuncs.pfnServerPrint("done\n");
+}
