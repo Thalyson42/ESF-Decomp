@@ -979,7 +979,7 @@ BOOL CChargeAttackTask::ReactOnDanger(danger_info_s *pDanger)
     {
         if (!BOT_ATTACK(pBot))
             return TRUE;
-        if (pBot->AttackIsBeam(BOT_ATTACK(pBot)))
+        if (pBot->AttackIsBeam((bot_weapon_info_s *)BOT_ATTACK(pBot)))
         {
             if (*(int *)((char *)&m_pEdict->v + 0x20c) == 7)    // [?] classe 7 = espada
             {
@@ -2447,8 +2447,6 @@ void CSwoopTask::TaskThink(void)
 
 // ---- CCombatTask: tabela de ataques e escolha ----
 // BotWeaponInfoTable: entradas de 21 ints (84 bytes) terminadas por id 0; [0] id do ataque, [19] distancia minima, [20] maxima
-struct bot_weapon_info_s { int iAttack; char szWeapon[64]; char fSecondary; char fCombo; short sPad; float flCharge; float flMinDist; float flMaxDist; };   // [OK] stride 84; +0x44 usa botao secundario, +0x45 ataque com combo, +0x48 tempo de carga
-extern bot_weapon_info_s BotWeaponInfoTable[];
 
 int CCombatTask::GetAttackIndex(int iAttack)
 {

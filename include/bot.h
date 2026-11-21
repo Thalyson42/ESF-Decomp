@@ -34,9 +34,37 @@ public:
 extern int g_teamplay;   // [OK] flag global de teamplay
 struct bot_attack_s { int m_iAttack; char pad[0x42]; char m_fBeamJump; };   // [?] +0x00 id do ataque (7,10,12,13,15,16,19,22,24,33 usados), +0x46 usado em beam jump
 
+// entrada de BotWeaponInfoTable [OK] 84 bytes (id 0 termina a tabela)
+struct bot_weapon_info_s { int iAttack; char szWeapon[64]; char fSecondary; char fCombo; char fBeamJump; char fBeam; float flCharge; float flMinDist; float flMaxDist; };
+extern bot_weapon_info_s BotWeaponInfoTable[];
+
 class CBot : public CBasePlayer
 {
 public:
+    virtual void Spawn(void);                                                        // vtable[0]  [OK]
+    virtual int  TakeDamage(entvars_t *pevInflictor, entvars_t *pevAttacker, float flDamage, int bitsDamageType);   // [OK]
+    virtual BOOL IsNetClient(void);                                                  // [OK] retorna 0
+    virtual void Touch(CBaseEntity *pOther);                                         // [OK]
+    int   GetHealth(void);
+    int   GetKi(void);
+    void  SetHealth(int iHealth);
+    void  SetKi(int iKi);
+    BOOL  IsSuperBot(void);
+    float GetDistance(Vector vecPos);
+    BOOL  EnemyIsInList(CBasePlayer *pPlayer);
+    BOOL  EntIsInFOV(CBaseEntity *pEnt);
+    BOOL  EntHeadsToBot(CBaseEntity *pEnt);
+    BOOL  AttackIsBeam(bot_weapon_info_s *pAttack);
+    BOOL  BotCanAscend(void);
+    void  SetIdealAngles(Vector vecAngles);
+    void  AimToVec(Vector vecTarget);
+    void  SetSkill(unsigned char ucLevel, struct bot_skill_s *pSkill);
+    void  MakeCombo(EComboType type);
+    int   ClassifyAttack(const char *szClassname);
+    void  CheckDragonBalls(void);
+    void  MakeTask(int iTask);                    // [?] CBot::MakeTask(int) (modo da tarefa +0x1068)
+    void  ManageEnemyList(void);                  // [?]
+    void  BotPreThink(void);
     CBasePlayer *GetBestEnemyFromList(void);
     void ResetMoveSpeed(void);
     void SetMoveDir(int iDir);
@@ -66,7 +94,6 @@ public:
     BOOL HeadToWaypoint(void);
     BOOL CheckForHuntEnemy(void);
     BOOL BotCanBeamJump(short fArg);
-    BOOL AttackIsBeam(bot_attack_s *pAttack);
     void StartBlock(void);
     void StopBlock(void);
     Vector GetAimAngles(Vector vecTarget);   // [OK] mangled: GetAimAngles__4CBotG6Vector (retorna Vector por valor)
