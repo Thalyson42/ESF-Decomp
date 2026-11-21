@@ -80,4 +80,7 @@ public:
     void ChangeSBotLaserPercent(short sPercent);
     void ChangePersoPercentSetting(int iMemberOffset, short sPercent, const char *szName);   // [?] original: ponteiro para membro de bot_personality_s (offset+1)
     void ChangeAggressionLevel(int iLevel);
+    void PickBotName(char *szName);
+    void PlayerConnect(const char *szAddress);
+    int  KickLastBot(short sFlag);
 };

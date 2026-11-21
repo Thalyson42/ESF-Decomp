@@ -158,3 +158,85 @@ void CBotManager::ChangeAggressionLevel(int iLevel)
     else if (iLevel == 2) strcpy(szName, "Defensive");
     std::cout << "The personality setting aggression level is now for each personality " << szName << "\n";
 }
+
+extern void BuildBotFileName(char *szOut, const char *szFile, int iFlag);      // [?] funcao livre __FPcPCci (nome real: BuildBotFileName__FPcN20)
+
+// Nomes de bots: ate 100 entradas de 33 bytes a partir de +0x40; contagem em +0x3e (short)
+void CBotManager::LoadBotNames(void)
+{
+    char szPath[256];
+    BuildBotFileName(szPath, "bot_names.txt", 0);
+    FILE *fp = fopen(szPath, "r");
+    g_engfuncs.pfnServerPrint("Reading bot_names file... ");
+    if (!fp)
+    {
+        g_engfuncs.pfnServerPrint("file not found\n");
+        return;
+    }
+    char szLine[80];
+    while (f_03e <= 99 && fgets(szLine, 80, fp))
+    {
+        int iLen = strlen(szLine);
+        if (szLine[iLen - 1] == '\n')
+        {
+            szLine[iLen - 1] = 0;
+            iLen--;
+        }
+        for (int i = 0; i < iLen; i++)                                        // remove caracteres fora de ' '..'~' e aspas
+        {
+            if (((unsigned char)(szLine[i] - 32) > 94 || szLine[i] == '"') && i < iLen)
+                for (int j = i; j < iLen; j++)
+                    szLine[j] = szLine[j + 1];                                // [OK] igual ao original (nao reexamina a posicao)
+        }
+        if (szLine[0])
+        {
+            strncpy((char *)this + 0x40 + f_03e * 33, szLine, 32);            // [OK] shl 5 + idx = 33 * idx
+            f_03e++;
+        }
+    }
+    fclose(fp);
+    g_engfuncs.pfnServerPrint("done\n");
+}
+
+// Escolhe um nome da lista que nenhum jogador valido esteja usando (comeca em posicao aleatoria)
+void CBotManager::PickBotName(char *szName)
+{
+    int iPick = RANDOM_LONG(1, f_03e) - 1;
+    int iTries = 0;
+    BOOL bUsed;
+    do
+    {
+        bUsed = FALSE;
+        const char *szCandidate = (char *)this + 0x40 + iPick * 33;
+        for (int i = 1; i <= gpGlobals->maxClients; i++)
+        {
+            CBasePlayer *pPl = (CBasePlayer *)UTIL_PlayerByIndex(i);
+            if (UTIL_IsValidPlayer(pPl, 0, 0) && !strcmp(szCandidate, STRING(pPl->pev->netname)))
+            {
+                bUsed = TRUE;
+                break;
+            }
+        }
+        if (!bUsed)
+            break;
+        iPick++;
+        if (iPick == f_03e)
+            iPick = 0;
+        iTries++;
+        if (iTries == f_03e)
+            bUsed = FALSE;                                                    // todos usados: aceita este
+    } while (bUsed);
+    strcpy(szName, (char *)this + 0x40 + iPick * 33);                         // [?] o decompilado corta aqui; destino = argumento
+}
+
+// Conexao de um jogador: conta (+0xd44) e, se nao for local (127.0.0.1), agenda checagem e remove bot excedente
+void CBotManager::PlayerConnect(const char *szAddress)
+{
+    f_d44++;
+    if (strncmp(szAddress, "127.0.0.1", 10) != 0)                             // [?] comparacao de 10 bytes, resultado em flag
+    {
+        f_010 = gpGlobals->time + 30.0f;                                      // [OK]
+        if (f_d44 > f_01a && f_01a != -1)
+            KickLastBot(0);
+    }
+}
