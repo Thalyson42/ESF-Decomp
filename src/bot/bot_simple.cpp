@@ -1342,3 +1342,34 @@ int CBot::SetComboChargeButton(MELEE_STRENGTH iStrength, int iButtons)
     if (iButtons & 0x800) BOTF(this, int, 0xb94) = 0x800;
     return iButtons;
 }
+
+extern BOOL IsNull(edict_t *pEnt);                                            // [?] funcao livre do ESF
+
+// Ataque inimigo ("magic_attack") mais proximo dentro de [flMin, flMax], de frente, visivel e alcancavel
+CBaseEntity *CBot::GetNearestHostileAttack(float flMinDist, float flMaxDist)
+{
+    CBaseEntity *pEnt = NULL;
+    CBaseEntity *pBest = NULL;
+    float flBest = 9999.9f;
+    for (;;)
+    {
+        pEnt = UTIL_FindEntityByString(pEnt, "globalname", "magic_attack");   // [OK]
+        if (!pEnt)
+            break;
+        if (IsNull(pEnt->edict()))
+            continue;
+        if (g_teamplay && pEnt->pev->owner && !IsNull(pEnt->pev->owner) &&
+            pEnt->pev->owner->v.team == pev->team)                            // [OK] ataque do proprio time
+            continue;
+        float flDist = (pEnt->pev->origin - pev->origin).Length();
+        if (flDist < flMinDist || flDist > flMaxDist)
+            continue;
+        if (flDist > flBest || (short)UTIL_GetHeadingPercentage(this, pEnt) <= 64 ||
+            (BOTF(this, char, 0x9fc) && !EntIsInFieldOfView(this, pEnt)) ||
+            !CanReachPoint(pEnt->pev->origin))                                // [?] vtable +0xe4
+            continue;
+        pBest = pEnt;
+        flBest = flDist;
+    }
+    return pBest;
+}
