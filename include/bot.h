@@ -63,6 +63,8 @@ public:
     int   ClassifyAttack(const char *szClassname);
     void  CheckDragonBalls(void);
     void  BotThink(void);
+    void  BotChangePitch(float flSpeed, float flTarget);
+    void  BotChangeYaw(float flSpeed, float flTarget);
     BOOL  BotCanPowerUp(void);
     BOOL  BotShouldMakeKameTorps(void);
     void  CheckNecessarilyThings(void);

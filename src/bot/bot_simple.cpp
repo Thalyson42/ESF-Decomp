@@ -512,3 +512,82 @@ void CBot::CheckBotMiscThings(void)
     }
     MakeTask(iNew);
 }
+
+// ---- mira do bot ----
+// Aproxima o angulo atual (cur) do alvo pelo caminho mais curto, com passo limitado. [OK] casos lidos dos gotos do decompilado.
+static float BotApproachAngle(float flCur, float flTarget, float flSpeed)
+{
+    float flDiff = fabs(flCur - flTarget);
+    float flStep = flSpeed * *(float *)(g_pBotManager + 0xd40);      // [OK] BotManager+3392 (escala de tempo)
+    if (flStep > flDiff)
+        flStep = flDiff;
+    BOOL fUp;                                                        // TRUE = soma o passo
+    if (flTarget >= 0.0f)
+    {
+        if (flCur >= 0.0f)  fUp = (flCur <= flTarget);
+        else                fUp = !(flCur + 180.0f <= flTarget);     // alvo do outro lado de +-180: gira para tras
+    }
+    else
+    {
+        if (flCur >= 0.0f)  fUp = (flCur - 180.0f > flTarget);
+        else                fUp = (flCur <= flTarget);
+    }
+    float flNew = fUp ? flCur + flStep : flCur - flStep;
+    if (flNew > 180.0f)  flNew -= 360.0f;
+    if (flNew < -180.0f) flNew += 360.0f;
+    return flNew;
+}
+
+void CBot::BotChangePitch(float flSpeed, float flTarget)
+{
+    pev->v_angle.x = BotApproachAngle(-pev->v_angle.x, flTarget, flSpeed);   // [OK] pitch usa o sinal invertido
+}
+
+void CBot::BotChangeYaw(float flSpeed, float flTarget)
+{
+    pev->v_angle.y = BotApproachAngle(pev->v_angle.y, flTarget, flSpeed);
+}
+
+void CBot::BotAim(void)
+{
+    if (BOTF(this, float, 0xc00) > gpGlobals->time)
+        return;
+    Vector vecIdeal = BOTF(this, Vector, 0xc10);
+    WrapAngles(vecIdeal);
+    if (vecIdeal.y > 180.0f) vecIdeal.y -= 360.0f;
+    if (vecIdeal.x > 180.0f) vecIdeal.x -= 360.0f;
+    if (BOTF(this, short, 0xba4) > 1)
+    {
+        WrapAngles(vecIdeal);                                        // modo rapido: mira instantanea
+        pev->v_angle = vecIdeal;
+    }
+    else
+    {
+        float *pSkill = BOTF(this, float *, 0xa00);
+        float flPitchSpeed = RANDOM_FLOAT(pSkill[2], pSkill[3]);     // [?] ordem das 4 sorteadas
+        float flYawSpeed   = RANDOM_FLOAT(pSkill[4], pSkill[5]);
+        float flPitchErr   = RANDOM_FLOAT(pSkill[6], pSkill[7]);
+        float flYawErr     = RANDOM_FLOAT(pSkill[8], pSkill[9]);
+        float flDeltaPitch = fabs(vecIdeal.x + pev->v_angle.x);
+        float flDeltaYaw   = fabs(vecIdeal.y - pev->v_angle.y);
+        float flNoiseP = 0, flNoiseY = 0;
+        if (flPitchErr != 0.0f)
+            flNoiseP = RANDOM_LONG(0, 1) ? flPitchErr / 100.0f * flDeltaPitch : -(flPitchErr / 100.0f * flDeltaPitch);   // erro proporcional ao giro
+        if (flYawErr != 0.0f)
+            flNoiseY = RANDOM_LONG(0, 1) ? flYawErr / 100.0f * flDeltaYaw : -(flYawErr / 100.0f * flDeltaYaw);
+        float flRateP = (flDeltaPitch >= 1.0f) ? flDeltaPitch / 70.0f * flPitchSpeed : flPitchSpeed * 0.01f;   // [OK]
+        float flRateY = (flDeltaYaw   >= 1.0f) ? flDeltaYaw   / 60.0f * flYawSpeed   : flYawSpeed   * 0.015f;
+        vecIdeal.x = UTIL_WrapAngle(flNoiseP + vecIdeal.x);
+        vecIdeal.y = UTIL_WrapAngle(flNoiseY + vecIdeal.y);
+        BOTF(this, float, 0xc34) = BOTF(this, float, 0xc2c);         // guarda o erro anterior
+        BOTF(this, float, 0xc30) = BOTF(this, float, 0xc28);
+        BotChangePitch(flRateP, vecIdeal.x);
+        BOTF(this, float, 0xc2c) = vecIdeal.x;
+        BotChangeYaw(flRateY, vecIdeal.y);
+        BOTF(this, float, 0xc28) = vecIdeal.y;
+    }
+    pev->angles.x = pev->v_angle.x / 3.0f;                           // [OK]
+    pev->angles.y = pev->v_angle.y;
+    pev->angles.z = 0;
+    pev->v_angle.x = -pev->v_angle.x;
+}
