@@ -1013,3 +1013,71 @@ BOOL CBot::BotShouldFallDown(void)
     }
     return CheckForCollide(pev->pContainingEntity, 64, 1200.0f) ? FALSE : TRUE;   // [OK]
 }
+
+extern CBaseEntity *UTIL_GetLastAttackFromPlayer(CBasePlayer *pPlayer);       // [OK] retorno tem pev em +0
+extern Vector GetNearestCollision(CBaseEntity *pEnt, float flRange);          // [?] retorno por valor (Vector zero = nada)
+
+// bBeam: TRUE = usar o ultimo ataque lancado contra o bot; FALSE = o proprio bot. [OK] retorna TRUE se achou colisao
+BOOL CBot::BotCanBeamJump(short bBeam)
+{
+    CBaseEntity *pAttack = NULL;
+    if (bBeam)
+    {
+        if (!BOTF(this, int, 0x33c))
+            return FALSE;
+        pAttack = UTIL_GetLastAttackFromPlayer(this);
+        if (!pAttack)
+            return FALSE;
+    }
+    Vector vecHit = GetNearestCollision(pAttack ? pAttack : (CBaseEntity *)this, 200.0f);   // [?] 200.0f constante lida da GOT
+    if (vecHit == g_vecZero)
+        return FALSE;
+    BOTF(this, Vector, 0xb24) = vecHit;                                       // [OK]
+    BOTF(this, Vector, 0xc10) = GetAimAngles(vecHit);                         // [OK]
+    return TRUE;
+}
+
+BOOL CBot::BotShouldMakeKameTorps(void)
+{
+    if (!*((char *)g_pBotManager + 0xd47) || !*((char *)g_pBotManager + 0xd46))   // [OK] BotManager+3399/+3398
+        return FALSE;
+    if (!HasWeapons())
+        return FALSE;
+    RANDOM_LONG(1, 100);                                                      // [OK] resultado descartado
+    if (RANDOM_LONG(1, 100) > BOTF(BOTF(this, char *, 0xa04), short, 0x10))   // [OK]
+        return FALSE;
+    void *pClass = BOTF(this, void *, 0x764);
+    if ((*(int (**)(void *))(*(char **)pClass + 52))(pClass) != 2)            // [OK] vtable +0x34 da classe == 2
+        return FALSE;
+
+    for (int i = 1; i <= gpGlobals->maxClients; i++)
+    {
+        CBasePlayer *pPl = (CBasePlayer *)UTIL_PlayerByIndex(i);
+        if (!UTIL_IsValidPlayer(pPl, 1, 1))
+            continue;
+        float flDist = (pPl->pev->origin - pev->origin).Length();
+        if (flDist > 5000.0f)                                                 // [OK]
+            continue;
+        if (g_teamplay && pev->team == pPl->pev->team && flDist < 2300.0f)    // [OK] mesmo time e perto: ignora
+            continue;
+        if (flDist < 2300.0f)
+            return TRUE;                                                      // [OK]
+    }
+
+    if (g_teamplay)
+    {
+        if (!BOTF(this, char, 0xa20))
+            MakePlayerList();
+        for (int i = 0; i < BOTF(this, char, 0xaac); i++)
+        {
+            CBasePlayer *pMate = BOTF(this, CBasePlayer *, 0xa24 + i * 4);
+            BOOL bBotLike = FALSE;
+            if (!pMate->IsNetClient())                                        // [?] vtable +0xa4
+                bBotLike = (*((unsigned char *)pMate->pev + 0x1a5) & 32) != 0;
+            if (bBotLike && pev->team == pMate->pev->team && pMate &&
+                UTIL_IsValidPlayer(BOTF(pMate, CBasePlayer *, 0xb6c), 1, 1))  // aliado com inimigo valido
+                return TRUE;
+        }
+    }
+    return FALSE;
+}
