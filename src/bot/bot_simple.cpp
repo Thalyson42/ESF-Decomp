@@ -1609,3 +1609,70 @@ BOOL CBot::SearchDragonBall(void)
         BOTF(this, int, 0x1024) = iBestWP;
     return TRUE;
 }
+
+// ---------------------------------------------------------------------------
+// MakePlayerList: +0xa24 lista de ate 32 jogadores visiveis, +0xaac contagem, +0xaa4 mascara "alcancavel", +0xaa8 mascara "ja checado",
+// +0xa20 lista valida. Se o jogador e bot, a lista dele e atualizada em espelho.
+// ---------------------------------------------------------------------------
+void CBot::MakePlayerList(void)
+{
+    int iMe = g_engfuncs.pfnIndexOfEdict(pev->pContainingEntity);
+    for (int i = 0; i <= 31; i++)
+        BOTF(this, CBasePlayer *, 0xa24 + i * 4) = NULL;
+    BOTF(this, int, 0xaac) = 0;
+    unsigned int uMyBit = 1u << ((iMe - 1) & 31);
+
+    for (int i = 1; i <= gpGlobals->maxClients; i++)
+    {
+        CBasePlayer *pPl = (CBasePlayer *)UTIL_PlayerByIndex(i);
+        unsigned int uBit = 1u << ((i - 1) & 31);
+        unsigned int &uChecked = BOTF(this, unsigned int, 0xaa8);
+        unsigned int &uReach = BOTF(this, unsigned int, 0xaa4);
+        if (uBit & uChecked)                                                  // ja calculado (por outro bot)
+        {
+            if (uBit & uReach)
+            {
+                BOTF(this, CBasePlayer *, 0xa24 + BOTF(this, int, 0xaac) * 4) = pPl;
+                BOTF(this, int, 0xaac)++;
+            }
+            continue;
+        }
+        if ((CBasePlayer *)this == pPl || !UTIL_IsValidPlayer(pPl, 1, 1))
+            continue;
+
+        BOOL bBotLike = FALSE;
+        if (!pPl->IsNetClient())                                              // [?] vtable +0xa4
+            bBotLike = (*((unsigned char *)pPl->pev + 0x1a5) & 32) != 0;
+        if (bBotLike && pPl)
+            BOTF(pPl, unsigned int, 0xaa8) |= uMyBit;                         // espelha: o outro bot tambem ja checou este par
+        uChecked |= uBit;
+        if (CanReachPoint(pPl->pev->origin))                                  // [?] vtable +0xe4
+        {
+            BOTF(this, CBasePlayer *, 0xa24 + BOTF(this, int, 0xaac) * 4) = pPl;
+            BOTF(this, int, 0xaac)++;
+            uReach |= uBit;
+            if (bBotLike)
+                BOTF(pPl, unsigned int, 0xaa4) |= uMyBit;
+        }
+    }
+    BOTF(this, char, 0xa20) = 1;
+}
+
+// SenseHit: quando o bot e atingido (+0xab8 = instante do golpe) preenche o danger_info_s
+void CBot::SenseHit(danger_info_s &Danger)
+{
+    if (!(gpGlobals->time - 0.5f < BOTF(this, float, 0xab8)))                 // [OK] golpe nos ultimos 0.5s
+        return;
+    char *pSkill = BOTF(this, char *, 0xa04);
+    Danger.m_iDanger = 175;                                                   // [OK] 0xaf
+    int iLevel = BOTF(pSkill, int, 0x34);
+    if (iLevel == 0)      Danger.m_iDanger = (short)(int)((float)Danger.m_iDanger * 0.85f);   // [OK]
+    else if (iLevel == 2) Danger.m_iDanger = (short)(int)((float)Danger.m_iDanger * 1.25f);
+    Danger.m_fl0  = (float)BOTF(pSkill, short, 0x26) * 1.75f;                 // [OK]
+    Danger.m_fl4  = (float)BOTF(pSkill, short, 0x28) * 0.2f;
+    Danger.m_fl8  = 0.01f;
+    Danger.m_flC  = (float)BOTF(pSkill, short, 0x30) * 0.3f;
+    Danger.m_fl10 = (float)BOTF(pSkill, short, 0x2e) * 0.3f;
+    Danger.m_cFlags[0] = Danger.m_cFlags[1] = Danger.m_cFlags[2] = 0;
+    BOTF(this, float, 0xab8) = 0;
+}

@@ -2,6 +2,7 @@
 // BOTF(bot, tipo, offset) da acesso nomeado. Offsets [OK] vem do decompilado; nomes [?] sao interpretacao.
 #pragma once
 class CBot;
+struct danger_info_s;
 #define BOTF(b, type, off) (*(type *)((char *)(b) + (off)))
 #define TASKF(type, off)    (*(type *)((char *)this + (off)))   // campo proprio da tarefa por offset (a partir de this)
 #define BOT_ENEMY(b)         BOTF(b, CBasePlayer *, 0xb6c)   // inimigo atual
@@ -80,6 +81,7 @@ public:
     BOOL  DangerousPlForBot(long lPL);
     void  MakeMeleeComboList(void);                    // [?] CBot::MakeTask(int) (modo da tarefa +0x1068)
     void  ClearMeleeComboList(void);
+    void  SenseHit(danger_info_s &Danger);
     BOOL  SearchGatheredSpot(void);
     BOOL  SearchDBGatherSpot(void);
     BOOL  SearchDragonBall(void);
@@ -126,7 +128,7 @@ public:
 };
 
 extern float UTIL_WrapAngle(float flAngle);   // [?] funcao livre do ESF
-struct danger_info_s { char pad[0x18]; int m_iDanger; };   // [?] +0x18 = tipo/intensidade do perigo (>59 = ataque)
+struct danger_info_s { float m_fl0, m_fl4, m_fl8, m_flC, m_fl10; char pad14[4]; short m_iDanger; char m_cFlags[3]; };   // [OK] SenseHit: +0x18 short (>59 = ataque), +0x1a..0x1c bytes zerados
 extern BOOL UTIL_IsValidPlayer(CBaseEntity *pEnt, short a, short b);   // [?] assinatura; recuperar de decomp_raw (funcao livre)
 
 class CBaseTask
