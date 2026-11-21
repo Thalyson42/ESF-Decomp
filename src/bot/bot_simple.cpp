@@ -1081,3 +1081,23 @@ BOOL CBot::BotShouldMakeKameTorps(void)
     }
     return FALSE;
 }
+
+extern Vector PredictEntityPos(CBaseEntity *pEnt, float flTime, short fFlag);   // [?] funcao livre; retorno por valor
+
+void CBot::AimAtEnemy(CBasePlayer *pEnemy)
+{
+    float flDist = (pEnemy->pev->origin - pev->origin).Length();              // [OK]
+    float flSpeed = pEnemy->pev->velocity.Length();                           // [OK] pev+0x20
+    float flLead = 0.0f;
+    if (flSpeed + 35.0f < flDist)                                             // [OK]
+    {
+        BOOL bIs11 = (*(int *)((char *)pev + 0x108) == 11);                   // [?] campo raw
+        char cSkill = BOTF(this, char, 0x9fc);
+        if (cSkill == 0)      flLead = bIs11 ? RANDOM_FLOAT(0.6f, 1.1f) : RANDOM_FLOAT(0.2f, 0.4f);   // [OK] constantes lidas da GOT
+        else if (cSkill == 1) flLead = bIs11 ? RANDOM_FLOAT(0.4f, 0.8f) : RANDOM_FLOAT(0.1f, 0.2f);
+    }
+    Vector vecAim = pEnemy->pev->origin;
+    if (flLead > 0.0f)
+        vecAim = PredictEntityPos(pEnemy, flLead, 1);
+    BOTF(this, Vector, 0xc10) = GetAimAngles(vecAim);                         // [OK]
+}
