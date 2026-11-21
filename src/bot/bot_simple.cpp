@@ -916,3 +916,100 @@ BOOL CBot::HeadToWaypoint(void)
         ResetMoveSpeed();
     return TRUE;
 }
+
+// ---------------------------------------------------------------------------
+// CheckStrafe: bot+0xd60 proximo instante, +0xd64 direcao (0 = esquerda, 1 = direita, 2 = nenhuma), +0xd68 movimento lateral
+// ---------------------------------------------------------------------------
+extern BOOL CheckForCollide(edict_t *pEdict, int iDir, float flDist);        // [?] funcao livre do ESF
+
+void CBot::CheckStrafe(void)
+{
+    float flSpeed = (float)GetMaxSpeed();
+    if (flSpeed == 0.0f)
+        return;
+
+    int &iStrafe = BOTF(this, int, 0xd64);
+    float &flNext = BOTF(this, float, 0xd60);
+    if (iStrafe == 0)      BOTF(this, float, 0xd68) = -flSpeed;               // [OK]
+    else if (iStrafe == 1) BOTF(this, float, 0xd68) = flSpeed;
+
+    if (flNext > gpGlobals->time)
+        return;
+    iStrafe = 2;
+    flNext = gpGlobals->time + 0.8f;                                          // [OK]
+
+    BOOL bA = CheckForCollide(pev->pContainingEntity, 2, 70.0f);              // [OK] 0x428c0000 = 70.0
+    BOOL bB = CheckForCollide(pev->pContainingEntity, 4, 70.0f);
+    if (bA && !bB)
+    {
+        iStrafe = 1;
+        flNext = gpGlobals->time + RANDOM_FLOAT(0.3f, 0.7f);                  // [?] 0.3..0.7 ("333?" = 0.7f)
+        return;
+    }
+    if (!bA && bB)
+    {
+        iStrafe = 0;
+    }
+    else
+    {
+        // livre dos dois lados (ou preso nos dois): desvia de companheiros de time proximos
+        if (!g_teamplay)
+            return;
+        if (!BOTF(this, char, 0xa20))
+            MakePlayerList();
+        CBasePlayer *pNear = NULL;
+        float flNearest = 400.0f;
+        for (int i = 0; i < BOTF(this, char, 0xaac); i++)
+        {
+            CBasePlayer *pPl = BOTF(this, CBasePlayer *, 0xa24 + i * 4);
+            if (pev->team != pPl->pev->team)
+                continue;
+            float flD = (pPl->pev->origin - pev->origin).Length();
+            if (flD <= 400.0f && ((short)UTIL_GetHeadingPercentage(this, pPl) > 64 || EntIsInFieldOfView(this, pPl)))
+                if (flD < flNearest) { flNearest = flD; pNear = pPl; }
+        }
+        if (!pNear)
+            return;
+        int iDir = UTIL_EntDir(this, pNear->pev->origin);
+        if (!(iDir & 2) && ((iDir & 4) || RANDOM_LONG(0, 1)))
+            iStrafe = 0;
+        else
+            iStrafe = 1;
+    }
+    flNext = gpGlobals->time + RANDOM_FLOAT(0.3f, 0.7f);                      // [?]
+}
+
+BOOL CBot::BotCanPowerUp(void)
+{
+    if (*((unsigned char *)pev + 0x1a7) & 4)                                  // [OK]
+        return FALSE;
+    static const int s_off[] = { 0x364, 0x330, 0x334, 0x33c };                // [?] flags de estado, todas devem ser 0
+    for (int i = 0; i < 4; i++)
+        if (BOTF(this, int, s_off[i]))
+            return FALSE;
+    if (!IsAlive())                                                           // [?] vtable +0x8c
+        return FALSE;
+    static const int s_off2[] = { 0x328, 0x340, 0x770, 0x37c, 0x478, 0x6bc };
+    for (int i = 0; i < 6; i++)
+        if (BOTF(this, int, s_off2[i]))
+            return FALSE;
+    return TRUE;
+}
+
+BOOL CBot::BotShouldFallDown(void)
+{
+    if ((unsigned short)(BOTF(this, unsigned short, 0xa18) - 60) > 98)        // [OK] estado fora de 60..158
+        return FALSE;
+    RANDOM_LONG(1, 100);                                                      // [OK] resultado descartado (chamada original mantida)
+    if (RANDOM_LONG(1, 100) > BOTF(BOTF(this, char *, 0xa04), short, 0x2e))   // [?] tipo/offset de +0x2e
+        return FALSE;
+    CBasePlayer *pEnemy = BOT_ENEMY(this);
+    int iMode = BOTF(this, int, 0xa1c);
+    if ((iMode == 3 || iMode == 5) && pEnemy)
+    {
+        float flDist = (pEnemy->pev->origin - pev->origin).Length();
+        if (!(flDist >= 1000.0f || pev->origin.z - 350.0 <= pEnemy->pev->origin.z))
+            return FALSE;                                                     // inimigo perto e abaixo: nao cair
+    }
+    return CheckForCollide(pev->pContainingEntity, 64, 1200.0f) ? FALSE : TRUE;   // [OK]
+}
