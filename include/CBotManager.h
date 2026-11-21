@@ -90,4 +90,5 @@ public:
     short GetNearestDBSpotIndex(CBasePlayer *pPlayer, float flMaxDist);
     short GetRandomDBSpotIndex(short sTeam);
     void DeleteDBGatherSpot(void);
+    void PlaceNewDBGatherSpot(void);
 };

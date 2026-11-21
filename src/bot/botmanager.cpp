@@ -382,3 +382,33 @@ void CBotManager::DeleteDBGatherSpot(void)
     gather_spot_s *pSpots = (pHost->pev->team == 0) ? GatherSpotsForTeamGood : GatherSpotsForTeamEvil;
     pSpots[sIdx].bDeleted = 1;
 }
+
+// Coloca um novo ponto de reuniao no chao sob o host (usa um slot marcado como apagado); so mp_gamemode == 2
+void CBotManager::PlaceNewDBGatherSpot(void)
+{
+    if (!g_teamplay)
+        return;
+    if (CVAR_GET_FLOAT("mp_gamemode") != 2.0f)
+        return;
+    CBasePlayer *pHost = GetHostPlayer(this);
+    if (!UTIL_IsValidPlayer(pHost, 0, 0))
+        return;
+
+    bool bGood = (pHost->pev->team == 0);
+    gather_spot_s *pSpots = bGood ? GatherSpotsForTeamGood : GatherSpotsForTeamEvil;
+    short i = 0;
+    while (i <= 9 && !pSpots[i].bDeleted)
+        i++;
+    if (i > 9)
+    {
+        std::cout << (bGood ? "Cannot create new DragonBall spot for team good, max reached.\n"
+                            : "Cannot create new DragonBall spot for team evil, max reached.\n");
+        return;
+    }
+
+    TraceResult tr;
+    Vector vecEnd = pHost->pev->origin + Vector(0, 0, -9999.0f);
+    UTIL_TraceLine(pHost->pev->origin, vecEnd, ignore_monsters, ENT(pHost->pev), &tr);
+    pSpots[i].vecPos = (tr.flFraction < 1.0f) ? tr.vecEndPos : pHost->pev->origin;
+    pSpots[i].bDeleted = 0;
+}
