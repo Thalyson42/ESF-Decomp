@@ -78,6 +78,7 @@ public:
     void CreateSkillData(void);
     void InitSkillDate(void);
     void BotBalanceTeamsThink(void);
+    void BotFillThink(void);
     void ChangeBotBoolSetting(bool &bSetting, short sValue, const char *szName);
     void SBotRulesThink(void);
     void ChangeSBotLaserPercent(short sPercent);

@@ -887,3 +887,61 @@ void CBotManager::BotBalanceTeamsThink(void)
         }
     }
 }
+
+// ---------------------------------------------------------------------------
+// Preenchimento de bots (fill server / add multiple / sv_numbots). Espera 15 s depois do inicio do mapa.
+// f_014/f_015/f_016: fill server / metade do time / time; f_017 time; f_018 quantidade pendente; f_d24 modo sv_numbots;
+// f_d44 numero de jogadores ativos; f_01c bots desejados (-1 = nenhum)
+// ---------------------------------------------------------------------------
+void CBotManager::BotFillThink(void)
+{
+    if (15.0f > gpGlobals->time || !g_pGameRules)
+        return;
+
+    if (!g_engfuncs.pfnIsDedicatedServer() && !f_025)
+    {
+        CBasePlayer *pHost = GetHostPlayer(this);
+        if (UTIL_IsValidPlayer(pHost, 1, 0))
+        {
+            f_025 = 1;                                                        // host ja entrou
+            if (1.0f <= f_020 && f_020 >= gpGlobals->time + 1.0f)
+                f_020 = gpGlobals->time + 1.0f;
+            if (1.0f <= f_034 && f_034 >= gpGlobals->time + 1.0f)
+                f_034 = gpGlobals->time + 1.0f;
+            if (1.0f <= f_010 && f_010 >= gpGlobals->time + 1.0f)
+                f_010 = gpGlobals->time + 1.0f;
+        }
+    }
+
+    RestoreBots();
+    if (f_024)
+        return;
+    if (f_010 > gpGlobals->time)
+        return;
+
+    if (f_d24)
+    {
+        if (f_d44 < gpGlobals->maxClients - 1 && (float)f_004 < CVAR_GET_FLOAT("sv_numbots"))
+        {
+            CreateBot(-1, -1, NULL, -1, -1);
+            return;
+        }
+        f_d24 = 0;
+    }
+
+    if (IsAddingMultipleBots())
+    {
+        if (f_018 && f_d44 < gpGlobals->maxClients - 1)
+        {
+            short sTeam = (f_015 || f_016) ? (short)f_017 : (short)-1;
+            CreateBot(sTeam, -1, NULL, -1, -1);
+            f_018--;
+            return;
+        }
+        f_014 = f_015 = f_016 = f_017 = f_018 = 0;                            // memset(+20, 0, 5)
+    }
+
+    if (f_d44 >= f_01c || f_01c == -1)
+        return;
+    CreateBot(-1, -1, NULL, -1, -1);
+}
