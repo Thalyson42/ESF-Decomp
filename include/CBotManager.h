@@ -75,4 +75,9 @@ public:
     void CreateBotPersonalities(void);
     void CreateSuperbotSettings(void);
     void CreateSkillData(void);
+    void ChangeBotBoolSetting(bool &bSetting, short sValue, const char *szName);
+    void SBotRulesThink(void);
+    void ChangeSBotLaserPercent(short sPercent);
+    void ChangePersoPercentSetting(int iMemberOffset, short sPercent, const char *szName);   // [?] original: ponteiro para membro de bot_personality_s (offset+1)
+    void ChangeAggressionLevel(int iLevel);
 };

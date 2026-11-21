@@ -89,3 +89,72 @@ void CBotManager::CalcMSec(void)
     f_d40 = f_d38 / 1000.0f;
     f_d3c = gpGlobals->time;
 }
+
+// sValue: 1 liga, 0 desliga, -1 alterna
+void CBotManager::ChangeBotBoolSetting(bool &bSetting, short sValue, const char *szName)
+{
+    if (sValue == 1)
+        bSetting = true;
+    else if (sValue == 0)
+        bSetting = false;
+    else if (sValue == -1)
+        bSetting = !bSetting;                                                 // [OK]
+    std::cout << szName;
+    std::cout << (bSetting ? " is now ENABLED\n" : " is now DISABLED\n");
+}
+
+// Desliga o "catch-up" de power level enquanto super bots estao ativos (a cada 0.75 s)
+void CBotManager::SBotRulesThink(void)
+{
+    if (f_030 > gpGlobals->time)
+        return;
+    if (!f_02c)
+        return;
+    f_030 = gpGlobals->time + 0.75f;                                          // [OK]
+    if (CVAR_GET_FLOAT("mp_plcatchup") == 1.0f)
+        CVAR_SET_FLOAT("mp_plcatchup", 0);
+}
+
+// Tabela de super bots em +0x10c4: 16 bytes por entrada, short da porcentagem do laser em +12
+void CBotManager::ChangeSBotLaserPercent(short sPercent)
+{
+    if (sPercent == -1)
+        sPercent = RANDOM_LONG(1, 100);
+    for (int i = 0; i <= 2; i++)
+        *(short *)((char *)this + 4304 + i * 16) = sPercent;                  // [OK]
+    char szNum[24];
+    memset(szNum, 0, sizeof(szNum));
+    sprintf(szNum, "%d", sPercent);
+    std::cout << "Super bot laser percent for EVERY superbot is now: " << szNum << "\n";
+}
+
+// Personalidades: 9 entradas de 60 bytes a partir de +0xd50 (3408)
+void CBotManager::ChangePersoPercentSetting(int iMemberOffset, short sPercent, const char *szName)
+{
+    if (sPercent == -1)
+        sPercent = RANDOM_LONG(0, 100);
+    if ((unsigned short)sPercent > 100)
+    {
+        std::cout << "Wrong value! Should be between -1 and 100\n";
+        return;
+    }
+    for (int i = 0; i <= 8; i++)
+        *(short *)((char *)this + iMemberOffset + 60 * i + 3407) = sPercent;  // [OK] 3407 = 3408 - 1 (ponteiro p/ membro = offset+1)
+    char szNum[24];
+    memset(szNum, 0, sizeof(szNum));
+    sprintf(szNum, "%d", sPercent);
+    std::cout << "The personality setting " << szName << " is now for each personality " << szNum << "\n";
+}
+
+// iLevel: 0 agressivo, 1 normal, 2 defensivo (int em +0xd84 + 60*i)
+void CBotManager::ChangeAggressionLevel(int iLevel)
+{
+    for (int i = 0; i <= 8; i++)
+        *(int *)((char *)this + 0xd84 + 60 * i) = iLevel;                     // [OK]
+    char szName[24];
+    memset(szName, 0, sizeof(szName));
+    if (iLevel == 1)      strcpy(szName, "Normal");
+    else if (iLevel == 0) strcpy(szName, "Aggressive");
+    else if (iLevel == 2) strcpy(szName, "Defensive");
+    std::cout << "The personality setting aggression level is now for each personality " << szName << "\n";
+}
