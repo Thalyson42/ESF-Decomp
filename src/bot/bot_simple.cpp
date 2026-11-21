@@ -1887,3 +1887,46 @@ BOOL CBot::CanMeleeKickPlayer(CBasePlayer *pPlayer)
 {
     return EntIsInFieldOfView(this, pPlayer) && pPlayer->CanMelee(this);      // [OK]
 }
+
+extern void UTIL_HostSay(CBasePlayer *pPlayer, int iTeamOnly, char *pText);   // [OK] __FP11CBasePlayeriPc
+extern void UTIL_DamagePlayer(CBasePlayer *pAttacker, CBasePlayer *pVictim, const char *szWeapon, float flDamage);   // [OK] __FP11CBasePlayerT0PCcf
+extern void UTIL_DrawBeamToAll(Vector vecStart, Vector vecEnd, int a, int b, int c, int r, int g, int bl, int d);
+
+// Laser do super bot: gasta 110 de ki, cura 2 de vida do bot e causa 2 de dano; desenha o feixe a cada chamada
+void CBot::ShootHealthBeam(CBasePlayer *pTarget)
+{
+    if ((int)pev->fuser4 <= 109)                                              // [OK] ki pev+0x260... (fuser4)
+        return;
+    if (BOTF(this, float, 0xbb8) < gpGlobals->time)
+    {
+        BOTF(this, float, 0xbb8) = gpGlobals->time + 0.1f;                    // [OK]
+        UseKi(110);
+        pev->health += 2.0f;
+        UTIL_DamagePlayer(this, pTarget, "Super bot laser", 2.0f);            // [OK]
+    }
+    if (BOTF(this, float, 0xbb4) > gpGlobals->time)                           // [OK] ainda em recarga: sem feixe
+        return;
+    UTIL_DrawBeamToAll(pev->origin, pTarget->pev->origin, 40, 20, 125, 255, 255, 250, 0);   // [OK] [?] significado dos argumentos
+}
+
+void CBot::BotPreThink(void)
+{
+    *((unsigned char *)pev + 0x1a5) |= 32;                                    // [OK]
+    pev->button = 0;                                                          // [OK] pev+0x180
+    BOTF(this, char, 0xa20) = 0;                                              // lista de jogadores invalida a cada quadro
+    BOTF(this, char, 0xaac) = 0;
+    if (!BOTF(this, char, 0xac4))                                             // [OK] guarda o nome original
+        strcpy(&BOTF(this, char, 0xac4), STRING(pev->netname));
+    if (gpGlobals->time - BOTF(this, float, 0x9f4) < 2.5f && BOTF(this, int, 0xd50))   // [OK]
+    {
+        ChatClass.LetBotWhine(this, BOTF(this, int, 0xd50));
+        BOTF(this, int, 0xd50) = 0;
+    }
+    if (BOTF(this, char, 0xc44) && BOTF(this, float, 0xc48) < gpGlobals->time)
+    {
+        BOTF(this, char, 0xc44) = 0;
+        if (*((char *)g_pBotManager + 0xd4d))                                 // [OK] chat ligado
+            UTIL_HostSay(this, 0, &BOTF(this, char, 0xc4c));
+    }
+    CheckSBotStuff();
+}
