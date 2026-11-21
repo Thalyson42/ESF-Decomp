@@ -1373,3 +1373,89 @@ CBaseEntity *CBot::GetNearestHostileAttack(float flMinDist, float flMaxDist)
     }
     return pBest;
 }
+
+// ---------------------------------------------------------------------------
+// CheckSBotStuff: "super bot". Tabela no BotManager: entrada (nivel-1)*16 a partir de +0x10c4 (4292):
+//   +0 short regen de ki (0xffff = encher), +2 short regen de vida (0xffff = encher), +4 int power level, +8 int renderamt (-1 = pulsar)
+// Bot: +0xba4 nivel, +0xbac proxima rodada, +0xbb0 short alfa, +0xbb2 short passo do pulso, +0x1060 flag de time.
+// ---------------------------------------------------------------------------
+void CBot::CheckSBotStuff(void)
+{
+    char *pEntry = (char *)g_pBotManager + 4292 + (BOTF(this, short, 0xba4) - 1) * 16;   // [OK]
+    short &sAlpha = BOTF(this, short, 0xbb0);
+    short &sStep = BOTF(this, short, 0xbb2);
+
+    if (pev->renderfx != 19)
+        pev->rendermode = 2;                                                  // [OK] pev+0x148
+    if (*(int *)(pEntry + 8) == -1)
+    {
+        if (pev->renderfx != 19)                                              // pulso de transparencia
+        {
+            if (sAlpha <= 19)       sStep = 1;
+            else if (sAlpha > 254)  sStep = -1;
+            sAlpha += sStep * 3;
+            if (sAlpha > 0xff)      sAlpha = 0xff;
+            else if (sAlpha < 0)    sAlpha = 0;
+            pev->renderamt = (float)sAlpha;                                   // [OK] pev+0x14c
+        }
+    }
+    else if (pev->renderfx != 19)
+        pev->renderamt = (float)*(int *)(pEntry + 8);
+
+    if (BOTF(this, float, 0xbac) < gpGlobals->time)
+    {
+        BOTF(this, float, 0xbac) = gpGlobals->time + 1.0f;                    // [OK]
+        int iPL = *(int *)(pEntry + 4);
+        if (m_iPowerLevel < iPL)
+        {
+            SetPowerLevel(iPL);
+            SetMaxPowerLevel(iPL);
+        }
+        int iKi = (int)pev->fuser4;                                           // [OK] ki
+        if (iKi <= 999)
+        {
+            if (*(unsigned short *)pEntry == 0xffff)
+                iKi = 1000;
+            else
+            {
+                iKi += *(short *)pEntry;
+                if (iKi > 1000) iKi = 1000;
+            }
+            pev->fuser4 = (float)iKi;
+        }
+        int iHealth = (int)pev->health;
+        int iMax = BOTF(this, int, 0x24c);                                    // [?] vida maxima
+        if (iHealth < iMax)
+        {
+            if (*(unsigned short *)(pEntry + 2) == 0xffff)
+                pev->health = (float)iMax;
+            else
+            {
+                iHealth = (int)((double)*(short *)(pEntry + 2) + pev->health);
+                if (iHealth > iMax) iHealth = (short)iMax;
+                pev->health = (float)iHealth;
+            }
+        }
+    }
+
+    if (pev->team != 2)                                                       // [OK] SBots ficam no time 2 (Good)
+    {
+        BOTF(this, short, 0x1060) = 2;
+        g_pGameRules->ClientCommand(this, "jointeam");                        // [?] vfunc do gamerules (+0x60 do objeto em +0x44)
+    }
+
+    char szTag[32];
+    sprintf(szTag, "[SBot%i]", BOTF(this, short, 0xba4));                     // [OK]
+    char szName[32];
+    memset(szName, 0, sizeof(szName));
+    strncpy(szName, STRING(pev->netname), sizeof(szName) - 1);
+    BOOL bHasTag = strstr(szName, szTag) != NULL;
+    if (strncmp(szTag, STRING(pev->netname), 7) != 0 && !bHasTag)             // [OK] poe o prefixo no nome
+    {
+        char szNew[64];
+        char *pInfo = g_engfuncs.pfnGetInfoKeyBuffer(pev->pContainingEntity);
+        int iIdx = g_engfuncs.pfnIndexOfEdict(pev->pContainingEntity);
+        sprintf(szNew, "%s%s", szTag, STRING(pev->netname));
+        g_engfuncs.pfnSetClientKeyValue(iIdx, pInfo, "name", szNew);
+    }
+}

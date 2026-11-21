@@ -80,6 +80,7 @@ public:
     BOOL  DangerousPlForBot(long lPL);
     void  MakeMeleeComboList(void);                    // [?] CBot::MakeTask(int) (modo da tarefa +0x1068)
     void  ClearMeleeComboList(void);
+    void  CheckSBotStuff(void);
     CBaseEntity *GetNearestHostileAttack(float flMinDist, float flMaxDist);
     int   SetComboChargeButton(MELEE_STRENGTH iStrength, int iButtons);
     void  ManageEnemyList(void);                  // [?]
