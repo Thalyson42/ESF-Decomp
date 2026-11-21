@@ -4,6 +4,7 @@
 #include "cbase.h"
 #include "player.h"
 #include "weapons.h"
+#include "gamerules.h"
 #include "esf_classes.h"
 #include "bot.h"
 
@@ -201,4 +202,163 @@ void CBot::GoToAnPreviousLocation(void)
             SetMoveDir(iDir);
         }
     }
+}
+
+// ---- CBot::BotThink e CheckNecessarilyThings ----
+extern char *g_pBotManager;                                        // [?] &BotManager: +0xd38 msec, +0xd48 bots ativos, +0xd4b parados
+extern void ESF_MakeWish(void *pGameRules, CBasePlayer *pPlayer, const char *szWish);   // [?] g_pGameRules->+0x44 -> vfunc +0x60 (desejo do Shenron)
+#define BM_MSEC()   ((unsigned char)g_pBotManager[0xd38])          // [OK] (int)BotManager+3384 & 0xff
+
+void CBot::BotThink(void)
+{
+    edict_t *pEdict = pev->pContainingEntity;                      // [OK] pev+0x208
+    if (BOTF(this, char, 0x9e8))                                   // fase de entrada: escolhe time/classe
+    {
+        if (BOTF(this, float, 0x9e4) <= gpGlobals->time)
+        {
+            if (BOTF(this, int, 0x9ec) == 1)      LetBotJoinTeam();
+            else if (BOTF(this, int, 0x9ec) == 2) LetBotPickAClass();
+            BOTF(this, float, 0x9e4) = gpGlobals->time + 0.15f;
+        }
+        g_engfuncs.pfnRunPlayerMove(pEdict, pev->v_angle, (float)GetMaxSpeed(), 0, 0, (unsigned short)pev->button, 0, BM_MSEC());   // [?] args do ramo
+        return;
+    }
+
+    if (pev->health < 1.0f || *(int *)((char *)pev + 0x170) || BOTF(this, int, 0x328))
+    {
+        if (RANDOM_LONG(1, 100) > 50)
+            pev->button = 1;                                       // [OK] morto: clica para renascer
+    }
+    else if (BOTF(this, int, 0x348))
+    {
+        const char *szWish = NULL;
+        switch (RANDOM_LONG(1, 3))
+        {
+        case 1: szWish = "immortality"; break;
+        case 2: szWish = "strength";    break;
+        case 3: szWish = "friendship";  break;
+        }
+        ESF_MakeWish(g_pGameRules, this, szWish);
+    }
+    else
+    {
+        CBaseEntity *pObj = BOTF(this, CBaseEntity *, 0x728);
+        if (pObj && BOTF(pObj, int, 0x364))
+            MakeCandy(pev->health < 80.0f ? "cookie" : pev->health < 120.0f ? "chocolate" : "donut");   // [OK]
+        if (BOTF(this, float, 0xab4) < gpGlobals->time && BOTF(this, float, 0xab4) > 0.0f)
+        {
+            ToggleTurbo(0);
+            BOTF(this, float, 0xab4) = 0;
+        }
+        BOTF(this, float, 0xd70) = (float)GetMaxSpeed();           // frente = velocidade maxima por padrao
+        CheckNecessarilyThings();
+        BotSense();
+        CheckBotInternalStatus();
+        CheckBotMiscThings();
+        if (!BOTF(this, CBaseTask *, 0x1064))
+            MakeTask(6);                                           // [OK] sem tarefa: movimento normal
+        BotPerformTasks();
+        BotAim();
+        if (!g_pBotManager[0xd48])
+            memset((char *)this + 0xd68, 0, 12);
+        if (*(int *)((char *)pev + 0x108) == 11 && BOTF(this, float, 0xbfc) != 0.0f)
+        {
+            if (g_pBotManager[0xd48]) SetSwoopButton();
+            else                      ResetMoveSpeed();
+        }
+        float flMax = (float)GetMaxSpeed();
+        if (flMax < BOTF(this, float, 0xd68)) BOTF(this, float, 0xd68) = flMax;
+        if (flMax < BOTF(this, float, 0xd70)) BOTF(this, float, 0xd70) = flMax;
+        if (BOTF(this, float, 0xd70) > 0)      pev->button |= 0x8;
+        else if (BOTF(this, float, 0xd70) < 0) pev->button |= 0x10;
+        if (BOTF(this, float, 0xd68) > 0)      pev->button |= 0x400;
+        else if (BOTF(this, float, 0xd68) < 0) pev->button |= 0x200;
+        BOTF(this, float, 0xd84) = BOTF(this, float, 0xd70);
+        pev->maxspeed = (float)GetMaxSpeed();
+        g_engfuncs.pfnRunPlayerMove(pEdict, pev->v_angle, BOTF(this, float, 0xd70), BOTF(this, float, 0xd68),
+                                    BOTF(this, float, 0xd6c), (unsigned short)pev->button, 0, BM_MSEC());
+        BOTF(this, float, 0xd68) = 0;
+        BOTF(this, float, 0xd6c) = 0;
+        BOTF(this, int, 0xaa4) = 0;
+        BOTF(this, int, 0xaa8) = 0;
+        return;
+    }
+    g_engfuncs.pfnRunPlayerMove(pEdict, pev->v_angle, 0, 0, 0, (unsigned short)pev->button, 0, BM_MSEC());   // [OK]
+}
+
+// Decide a tarefa necessaria pelo estado do jogador (codigos de tarefa: ver ETaskId em tasks.h).
+void CBot::CheckNecessarilyThings(void)
+{
+    CBaseTask *pTask = BOTF(this, CBaseTask *, 0x1064);
+    int iCur = pTask ? pTask->TaskIdentify() : -1;
+    int iNew = -1;
+    if (BOTF(this, int, 0x32c) && (!pTask || iCur != 2))
+        StopBlock();
+    BOOL fFreeState = FALSE;                                       // vai para o bloco "L581a82" (sem estado de luta)
+    if (BOTF(this, int, 0x344))
+        iNew = 11;                                                 // cego
+    else if (BOTF(this, int, 0x358))
+        iNew = 2;                                                  // bloqueio
+    else
+    {
+        BOOL fSkipWall = (pTask && iCur == 18);
+        if (!fSkipWall && (BOTF(this, int, 0x6c8) || (BOTF(this, int, 0x37c) && BOTF(this, int, 0x3e4) == 3)))
+            iNew = 18;                                             // wall jump
+        else if (BOTF(this, int, 0x770))
+            iNew = 10;                                             // ascender
+        else if (g_pBotManager[0xd4b] || BOTF(this, int, 0x364))
+            iNew = 20;                                             // parado: ocioso
+        else if (!BOTF(this, int, 0x37c))
+            fFreeState = TRUE;
+        else
+        {
+            int iMelee = BOTF(this, int, 0x49c);
+            int iSt = BOTF(this, int, 0x3e4);
+            if (iSt == 4)                                          iNew = 20;
+            else if (iMelee == 2)                                  iNew = 2;
+            else if (iSt == 5)                                     iNew = 28;
+            else if (iMelee == 6 || (iSt && iSt != 3))             iNew = 21;
+            else if (iMelee == 1)                                  iNew = 8;
+            else if ((unsigned)(iMelee - 3) > 1 && iMelee != 7 && iMelee != 8 && iMelee != 11 && iMelee != 9 && iMelee != 10)
+            {
+                if (*(int *)((char *)pev + 0x108) != 11)
+                    fFreeState = TRUE;
+                else if (pTask && iCur == 12)
+                    fFreeState = TRUE;
+                else
+                    iNew = 7;                                      // swoop
+            }
+            else
+            {
+                if (pTask && iCur == 8)
+                    return;
+                iNew = 4;                                          // contra-melee
+            }
+        }
+    }
+    if (fFreeState)
+    {
+        if (BOTF(this, int, 0x354) || BOTF(this, int, 0x35c))
+            iNew = 9;                                              // power struggle
+        else
+        {
+            if (BOTF(this, int, 0x330) && (!pTask || (iCur != 0 && iCur != 12)))
+                StopPowerUp();
+            if (!BOTF(this, int, 0x33c))
+                return;
+            if (BOTF(this, int, 0x35c))
+                return;
+            CBasePlayerItem *pItem = BOTF(this, CBasePlayerItem *, 0x968);
+            if (BOTF(pItem, int, 0x88) == 10)
+                iNew = 14;
+            else
+            {
+                if (!pTask) { MakeTask(15); return; }
+                if (iCur == 15 || iCur == 22)
+                    return;
+                iNew = 15;
+            }
+        }
+    }
+    MakeTask(iNew);
 }

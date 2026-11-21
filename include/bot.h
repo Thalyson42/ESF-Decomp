@@ -62,6 +62,14 @@ public:
     void  MakeCombo(EComboType type);
     int   ClassifyAttack(const char *szClassname);
     void  CheckDragonBalls(void);
+    void  BotThink(void);
+    void  CheckNecessarilyThings(void);
+    void  BotSense(void);
+    void  CheckBotInternalStatus(void);
+    void  CheckBotMiscThings(void);
+    void  BotAim(void);
+    void  LetBotJoinTeam(void);
+    void  LetBotPickAClass(void);
     void  MakeTask(int iTask);
     void  KillCurrentTask(void);
     void  BotPerformTasks(void);

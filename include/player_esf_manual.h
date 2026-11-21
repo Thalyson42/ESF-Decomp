@@ -11,7 +11,7 @@
     void  Spectator_SetMode(int iMode); void StartObserving(void); int GetPotentialPL(void); \
     BOOL CanFly(void); void Swoop(void); void CheckWallJump(void); void CheckSubModelStatus(void); void ReleaseCandy(void); \
     void  RemoveAllWeapons(int iFlag); void Descend(int iFlag); void Ascend(void); \
-    void  StopTurbo(void); void StartTurbo(void); void StopBlock(void); void UpdateOldPositions(void); void Spectator_HandleButtons(void); \
+    void  StopTurbo(void); void StartTurbo(void); void MakeCandy(const char *szName); void StopBlock(void); void UpdateOldPositions(void); void Spectator_HandleButtons(void); \
     virtual void UpdateClientData_Hook(void);   /* [?] vtable +0x204 (slot 127) */ \
     void  PlayAnimation(void);                  /* [OK] ESF: no lugar de SetAnimation(PLAYER_WALK) */ \
     void  CheckPowerups(entvars_t *pevVictim);  /* [?] assinatura */ \
