@@ -81,6 +81,8 @@ public:
     BOOL  DangerousPlForBot(long lPL);
     void  MakeMeleeComboList(void);                    // [?] CBot::MakeTask(int) (modo da tarefa +0x1068)
     void  ClearMeleeComboList(void);
+    float EnemyIsInMeleeRange(CBasePlayer *pEnemy);
+    void  SenseSurroundingSounds(danger_info_s &Danger);
     void  CreateInit(short sTeam, short sClass, short sLevel, short sPersonality, short sSBot);
     void  SenseHit(danger_info_s &Danger);
     BOOL  SearchGatheredSpot(void);

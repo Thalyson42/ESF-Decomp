@@ -1838,3 +1838,52 @@ void CBot::Spawn(void)
     BOTF(this, int, 0x1028) = 0;
     BOTF(this, int, 0x102c) = 0;
 }
+
+// ---------------------------------------------------------------------------
+// Pequenas funcoes de waypoint/melee
+// ---------------------------------------------------------------------------
+BOOL CBot::CurrentWPIsValid(void)
+{
+    int iWP = BOTF(this, int, 0x1008);
+    if (iWP != -1 && BOTF(this, float, 0x1004) + 5.0 >= gpGlobals->time)      // [OK] wp atual escolhido ha menos de 5s
+    {
+        Vector vecWP(waypoints[iWP].x, waypoints[iWP].y, waypoints[iWP].z);
+        return CanReachPoint(vecWP) == 1;                                     // [?] vtable +0xe4
+    }
+    return FALSE;
+}
+
+BOOL CBot::ReachedGoalWP(void)
+{
+    int iCur = BOTF(this, int, 0x1008), iGoal = BOTF(this, int, 0x1024);
+    if (iCur == -1 || iGoal == -1 || iCur != iGoal)
+        return FALSE;
+    BOOL bReached = FALSE;
+    Vector vecWP(waypoints[iCur].x, waypoints[iCur].y, waypoints[iCur].z);
+    if ((vecWP - pev->origin).Length() < 50.0f && CanReachPoint(vecWP))       // [OK]
+        bReached = TRUE;
+    return bReached;                                                          // [?] o decompilado devolve 0, mas o valor local e claramente o resultado
+}
+
+// cosseno entre a direcao frontal do bot (angles) e a direcao 2D ate o inimigo
+float CBot::EnemyIsInMeleeRange(CBasePlayer *pEnemy)
+{
+    UTIL_MakeVectors(pev->angles);                                            // [OK] pev+0x50
+    float dx = pEnemy->pev->origin.x - pev->origin.x;
+    float dy = pEnemy->pev->origin.y - pev->origin.y;
+    float flLen = sqrt(dx * dx + dy * dy);
+    float nx = 0, ny = 0;
+    if (flLen != 0.0f)
+    {
+        nx = dx / flLen;
+        ny = dy / flLen;
+    }
+    return nx * gpGlobals->v_forward.x + ny * gpGlobals->v_forward.y;         // [OK]
+}
+
+void CBot::SenseSurroundingSounds(danger_info_s &Danger) { }                  // [OK] vazia no original
+
+BOOL CBot::CanMeleeKickPlayer(CBasePlayer *pPlayer)
+{
+    return EntIsInFieldOfView(this, pPlayer) && pPlayer->CanMelee(this);      // [OK]
+}
