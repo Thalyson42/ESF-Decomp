@@ -2166,3 +2166,67 @@ EComboType CBot::AvoidAttacksWhileSwoop(void)
         flYaw = UTIL_WrapAngle(RANDOM_FLOAT(85.0f, 95.0f) + flYaw);
     return (EComboType)38;
 }
+
+// ---------------------------------------------------------------------------
+// GetBestEscapeSwoopDir: testa 750 unidades em cima/baixo/direita/esquerda (e atras se bBack); pontua por espaco livre (fracao*10),
+// penaliza direcoes que se aproximam do inimigo previsto e a direcao de outros jogadores.
+// Retorno: 32 cima, 64 baixo, 4 direita, 2 esquerda, 8 atras (mascaras de UTIL_EntDir)
+// ---------------------------------------------------------------------------
+short CBot::GetBestEscapeSwoopDir(bool bBack)
+{
+    Vector vecMe = pev->origin;
+    TraceResult tr;
+    UTIL_MakeVectors(pev->v_angle);                                           // [?] o original usa os vetores globais ja calculados
+    Vector vUp = gpGlobals->v_up, vRight = gpGlobals->v_right, vFwd = gpGlobals->v_forward;
+
+    int iUp, iDown, iRight, iLeft, iBackScore = 0;
+    UTIL_TraceHull(vecMe, vecMe + vUp * 750.0f, dont_ignore_monsters, 1, pev->pContainingEntity, &tr);     iUp = (int)(10.0 * tr.flFraction);
+    UTIL_TraceHull(vecMe, vecMe - vUp * 750.0f, dont_ignore_monsters, 1, pev->pContainingEntity, &tr);     iDown = (int)(10.0 * tr.flFraction);
+    UTIL_TraceHull(vecMe, vecMe + vRight * 750.0f, dont_ignore_monsters, 1, pev->pContainingEntity, &tr);  iRight = (int)(10.0 * tr.flFraction);
+    UTIL_TraceHull(vecMe, vecMe - vRight * 750.0f, dont_ignore_monsters, 1, pev->pContainingEntity, &tr);  iLeft = (int)(10.0 * tr.flFraction);
+    if (bBack)
+    {
+        UTIL_TraceHull(vecMe, vecMe - vFwd * 750.0f, dont_ignore_monsters, 1, pev->pContainingEntity, &tr);
+        iBackScore = (int)(10.0 * tr.flFraction);
+    }
+
+    CBasePlayer *pEnemy = BOT_ENEMY(this);
+    if (UTIL_IsValidPlayer(pEnemy, 1, 1) && pEnemy->pev->movetype == 11)      // [?] movetype 11 (campo raw 0x108)
+    {
+        Vector vecPred = PredictEntityPos(pEnemy, 1.0f, 1);
+        float flNow = (vecPred - vecMe).Length();
+        UTIL_MakeVectors(pev->angles);                                        // [OK] pev+0x50
+        vFwd = gpGlobals->v_forward;
+        vUp = gpGlobals->v_up;
+        vRight = gpGlobals->v_right;
+        if ((vecPred - (vecMe - vFwd * 100.0f)).Length() - 200.0 < flNow) iBackScore--;   // [?] distancia candidato->previsto
+        if ((vecPred - (vecMe + vUp * 100.0f)).Length() - 200.0 < flNow)  iUp--;
+        if ((vecPred - (vecMe - vUp * 100.0f)).Length() - 200.0 < flNow)  iDown--;
+        if ((vecPred - (vecMe + vRight * 100.0f)).Length() - 200.0 < flNow) iRight--;
+        if ((vecPred - (vecMe - vRight * 100.0f)).Length() - 200.0 < flNow) iLeft--;
+    }
+
+    if (!BOTF(this, char, 0xa20))
+        MakePlayerList();
+    for (int i = 0; i < BOTF(this, int, 0xaac); i++)
+    {
+        CBasePlayer *pPl = BOTF(this, CBasePlayer *, 0xa24 + i * 4);
+        int iDir = UTIL_EntDir(this, pPl->pev->origin);
+        if (iDir & 8)  iBackScore--;
+        if (iDir & 2)  iLeft--;
+        if (iDir & 4)  iRight--;
+        if (iDir & 32) iUp--;
+        if (iDir & 64) iDown--;
+    }
+
+    if (iUp <= iDown || iUp <= iRight || iUp <= iLeft || iUp <= iBackScore)
+    {
+        if (iDown > iUp && iDown > iRight && iDown > iLeft && iDown > iBackScore)  return 64;
+        if (iRight > iUp && iRight > iDown && iRight > iLeft && iRight > iBackScore) return 4;
+        if (iLeft > iUp && iLeft > iDown && iLeft > iRight && iLeft > iBackScore)   return 2;
+        if (iBackScore > iUp && iBackScore > iDown && iBackScore > iRight && iBackScore > iLeft) return 8;
+        static const short s_sTie[5] = { 32, 64, 4, 2, 8 };                   // [OK] tabela de salto 0x174a44...
+        return s_sTie[bBack ? RANDOM_LONG(0, 4) : RANDOM_LONG(0, 3)];
+    }
+    return 32;
+}
