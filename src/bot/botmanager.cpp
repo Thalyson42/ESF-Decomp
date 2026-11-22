@@ -1695,3 +1695,94 @@ void CBotManager::CreateDBGatherSpots(void)
     if (pEvil)
         GatherDBPosForTeamEvil = pEvil->pev->origin;
 }
+
+// ---------------------------------------------------------------------------
+// bot_personality.cfg: 9 personalidades de 60 bytes a partir de +3408 ([BOT1]..[BOT9]); defaults aleatorios
+// (MakeRandomPersonalities) e depois o arquivo sobrescreve. Chaves *_percent (0..100) = shorts em sequencia.
+// +3460 aggression_level (defensive=2 / normal=1 / aggressive=0), +3464 transkiller (0/1); +0xf6c default_personality (0..8).
+// ---------------------------------------------------------------------------
+void CBotManager::CreateBotPersonalities(void)
+{
+    static const char *aPercentKeys[] = {
+        "melee_percent", "kiblast_percent", "lightbeam_percent", "mediumbeam_percent", "heavybeam_percent",
+        "disc_percent", "laser_percent", "heavyball_percent", "kametorp_percent", "solarflare_percent",
+        "meleecombo_percent", "meleekick_percent", "chat_percent", "taunt_percent", "whine_percent",
+        "chat_tag_percent", "chat_drop_percent", "chat_swap_percent", "chat_lower_percent", "teleport_percent",
+        "swoop_percent", "beamexplode_percent", "fly_percent", "stopfly_percent", "jump_percent", "block_percent",
+    };                                                                        // short k em +3408 + 60*idx + 2*k
+    char szFile[256] = { 0 };
+    memset((char *)this + 3408, 0, 540);
+    BuildBotFileName(szFile, "bot_personality.cfg", 0);
+    FILE *fp = fopen(szFile, "r");
+    g_engfuncs.pfnServerPrint("Reading bot_personalities file... ");
+    MakeRandomPersonalities();
+    if (!fp)
+    {
+        g_engfuncs.pfnServerPrint("file not found, random settings will be used\n");
+        return;
+    }
+
+    int idx = 0;
+    char szLine[256];
+    while (fgets(szLine, sizeof(szLine), fp))
+    {
+        char szNorm[256];
+        int n = 0;
+        for (char *p = szLine; *p && *p != '\n' && *p != '\r'; p++)
+        {
+            char c = (*p == '\t') ? ' ' : *p;
+            if (c == ' ' && (n == 0 || szNorm[n - 1] == ' '))
+                continue;
+            szNorm[n++] = c;
+        }
+        szNorm[n] = 0;
+        char *pValue = strchr(szNorm, ' ');
+        if (pValue)
+            *pValue++ = 0;
+        if (szNorm[0] == '#' || !szNorm[0])
+            continue;
+
+        for (int k = 0; k < 9; k++)
+        {
+            char szSec[16];
+            sprintf(szSec, "[BOT%d]", k + 1);
+            if (!strcmp(szNorm, szSec))
+                idx = k;
+        }
+        if (!pValue || !*pValue)
+            continue;
+
+        long v = strtol(pValue, NULL, 10);
+        char *pP = (char *)this + 3408 + 60 * idx;
+        if (!strcmp(szNorm, "default_personality"))
+        {
+            if ((unsigned long)v <= 8)
+                *(short *)((char *)this + 3948) = (short)v;
+            continue;
+        }
+        bool bDone = false;
+        for (int k = 0; k < 26; k++)
+            if (!strcmp(szNorm, aPercentKeys[k]))
+            {
+                if ((unsigned long)v <= 100)
+                    *(unsigned short *)(pP + 2 * k) = (unsigned short)v;
+                bDone = true;
+                break;
+            }
+        if (bDone)
+            continue;
+        if (!strcmp(szNorm, "aggression_level"))
+        {
+            if (!strcmp(pValue, "defensive"))
+                *(unsigned int *)(pP + 52) = 2;
+            else if (!strcmp(pValue, "normal"))
+                *(unsigned int *)(pP + 52) = 1;
+            else if (!strcmp(pValue, "aggressive"))
+                *(unsigned int *)(pP + 52) = 0;
+        }
+        else if (!strcmp(szNorm, "transkiller") && (unsigned long)v <= 1)
+            *(unsigned char *)(pP + 56) = (v == 1);
+    }
+    fclose(fp);
+    g_engfuncs.pfnServerPrint("done\n");
+}
