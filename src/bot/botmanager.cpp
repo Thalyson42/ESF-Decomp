@@ -1026,3 +1026,70 @@ void CBotManager::ChangeBotSkill(short sSkill)
     static const char *aNames[] = { "Best", "Good", "Medium", "Weak", "Bad" };
     std::cout << "EVERY bot has now the skill " << aNames[sSkill - 1] << "\n";
 }
+
+// ---------------------------------------------------------------------------
+// Think por frame / abertura do bot.cfg
+// ---------------------------------------------------------------------------
+extern int g_waypoint_on;
+extern int PrintingInGameHelp;
+extern void WaypointThink(edict_t *pEntity);
+
+void CBotManager::Think(void)
+{
+    CalcMSec();
+    BotFillThink();
+    BotBalanceTeamsThink();
+    SBotRulesThink();
+    if (PrintingInGameHelp)
+        ShowInGameBotHelpWindow();
+    if (f_038 && 1.0f <= f_034 && f_034 <= gpGlobals->time)                   // arquivo bot.cfg aberto e proximo comando vencido
+        BotCFGFileThink();
+    if (g_waypoint_on)
+    {
+        CBasePlayer *pHost = GetHostPlayer(this);
+        if (UTIL_IsValidPlayer(pHost, 0, 0))
+            WaypointThink(pHost->pev->pContainingEntity);                     // pev+0x208
+    }
+    if (sv_bot_skill.value != (float)f_d2c)                                   // sv_botskill mudou (0..4)
+    {
+        ChangeBotSkill((short)(1.0f + sv_bot_skill.value));
+        f_d2c = (short)sv_bot_skill.value;
+    }
+    for (int i = 1; i <= gpGlobals->maxClients; i++)
+    {
+        CBasePlayer *pPl = (CBasePlayer *)UTIL_PlayerByIndex(i);
+        if (UTIL_IsValidPlayer(pPl, 0, 0) && IsBotPlayer(pPl))
+        {
+            ((CBot *)pPl)->BotPreThink();
+            ((CBot *)pPl)->BotThink();
+        }
+    }
+}
+
+// Abre <mapa>_bot.cfg (em "maps"), senao bot.cfg; f_034 = proximo comando (+20 s no host, +5 s dedicado)
+void CBotManager::OpenBotCFGFile(void)
+{
+    char szMsg[256], szPath[256], szMap[64];
+    if (!f_03c)
+        return;
+    f_038 = 0;
+    strcpy(szMap, STRING(gpGlobals->mapname));
+    strcat(szMap, "_bot.cfg");
+    BuildBotFileName(szPath, "maps", szMap);
+    f_038 = (int)fopen(szPath, "r");
+    if (f_038)
+    {
+        sprintf(szMsg, "Executing %s\n", szPath);
+        ALERT(at_console, szMsg);
+    }
+    else
+    {
+        BuildBotFileName(szPath, "bot.cfg", 0);
+        sprintf(szMsg, "Executing %s\n", szPath);
+        ALERT(at_console, szMsg);
+        f_038 = (int)fopen(szPath, "r");
+        if (!f_038)
+            ALERT(at_console, "bot.cfg file not found\n");
+    }
+    f_034 = gpGlobals->time + (g_engfuncs.pfnIsDedicatedServer() ? 5.0f : 20.0f);
+}
