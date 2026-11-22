@@ -174,7 +174,12 @@ CChatClass::CChatClass()
     m_pTauntNodes = new TList<CChatNode *>;
     m_pWhineNodes = new TList<CChatNode *>;
     memset(m_PrevMsg, 0, sizeof(m_PrevMsg));
-    // [?] o binario ainda percorre 5 posicoes zerando vetores locais (codigo sem efeito no decompilado)
+    for (unsigned char i = 0; i <= 4; i++)                       // [OK] zera as 3 listas de frases recentes (+0x358/+0x36c/+0x380)
+    {
+        m_pRecentNormal[i] = 0;
+        m_pRecentWhine[i] = 0;
+        m_pRecentTaunt[i] = 0;
+    }
 }
 
 static void DeleteNodeList(TList<CChatClass::CChatNode *> *&pList)
@@ -703,4 +708,198 @@ void CChatClass::MakeSentenceChoiceList3(CChatSentence *pS, TMultiChoice<CChatSe
     if (!pS->ucPercent)
         return;
     AddChoice(pM, pS, pS->ucPercent);
+}
+
+// Monta a lista ponderada de respostas possiveis a uma mensagem antiga: procura palavras (separadas por pontuacao),
+// depois palavras (separadas por espaco) e por fim caracteres isolados (nos tipo TOKEN). Devolve 1 se achou algo.
+char CChatClass::CreateResponseList(SOldChatText *pOld, TMultiChoice<CChatSentence *> *pM)
+{
+    char szBuf[80];
+    char bFound = 0;
+    memset(szBuf, 0, sizeof(szBuf));
+    strcpy(szBuf, pOld->szText);
+
+    for (int iPass = 0; iPass < 2; iPass++)
+    {
+        const char *szSeps = (iPass == 0) ? " ,.;:[](){}-=+*-/\\<>?!@#$%%^&\n\r\t" : " \n\r\t";
+        if (iPass == 1)
+            strcpy(szBuf, pOld->szText);
+        char *pTok = strtok(szBuf, szSeps);
+        while (pTok)
+        {
+            CChatNode *pNode = 0;
+            for (TLink<CChatNode *> *l = m_pNormalNodes->head; l; l = l->next)
+            {
+                if (KeyWordIsInNodeList(l->data, pTok))
+                {
+                    pNode = l->data;
+                    break;
+                }
+            }
+            if (pNode)
+            {
+                bFound = 1;
+                for (TLink<CChatSentence *> *s = pNode->pSentences->head; s; s = s->next)
+                    MakeSentenceChoiceList2(s->data, pM, m_pRecentNormal, pOld->szSender);   // [OK] SOldChatText comeca pelo nome do autor
+            }
+            pTok = strtok(0, szSeps);
+        }
+    }
+
+    // terceira passada: caracteres isolados (nos TOKEN)
+    for (unsigned short i = 0; i < (unsigned short)strlen(pOld->szText) && pOld->szText[i]; i++)
+    {
+        CChatNode *pNode = 0;
+        for (TLink<CChatNode *> *l = m_pNormalNodes->head; l; l = l->next)
+        {
+            if (KeyTokenIsInNodeList(l->data, pOld->szText[i]))
+            {
+                pNode = l->data;
+                break;
+            }
+        }
+        if (pNode)
+        {
+            bFound = 1;
+            for (TLink<CChatSentence *> *s = pNode->pSentences->head; s; s = s->next)
+                MakeSentenceChoiceList2(s->data, pM, m_pRecentNormal, pOld->szSender);
+        }
+    }
+    return bFound;
+}
+
+// ---------------------------------------------------------------- fala dos bots
+// campos do CBot usados aqui (por offset): +0xa04 personalidade, +0xc44 "quer falar", +0xc48 hora de falar, +0xc4c texto (255)
+typedef TMultiChoice<CChatClass::CChatSentence *> TSentenceChoice;
+
+static void InitChoice(TSentenceChoice *pM)
+{
+    pM->iTotal = 0;
+    pM->pChoices = new TList<TChoice<CChatClass::CChatSentence *> *>;
+}
+
+// sorteia um valor em [0, total] e devolve a frase da faixa [lo, hi) que o contem (FindSelection); depois libera a lista
+static CChatClass::CChatSentence *PickAndFreeChoice(TSentenceChoice *pM)
+{
+    CChatClass::CChatSentence *pSel = 0;
+    int r = RANDOM_LONG(0, pM->iTotal);
+    for (TLink<TChoice<CChatClass::CChatSentence *> *> *l = pM->pChoices->head; l; l = l->next)
+    {
+        if (r >= l->data->lo && r < l->data->hi)
+        {
+            pSel = l->data->value;
+            break;
+        }
+    }
+    while (pM->pChoices->head)
+        delete pM->pChoices->PopFront();
+    pM->pChoices->ClearLinks();
+    delete pM->pChoices;
+    pM->pChoices = 0;
+    return pSel;
+}
+
+static void ScheduleBotMessage(CBot *pBot)
+{
+    BOTF(pBot, char, 0xc44) = 1;
+    float fRnd = RANDOM_FLOAT(0, 5.0f);
+    BOTF(pBot, float, 0xc48) = (float)(fRnd + 5.0 + gpGlobals->time);
+}
+
+static CChatClass::CChatNode *FindKeywordNode(CChatClass *pThis, TList<CChatClass::CChatNode *> *pList, const char *szKey)
+{
+    for (TLink<CChatClass::CChatNode *> *l = pList->head; l; l = l->next)
+        if (pThis->KeyWordIsInNodeList(l->data, szKey))
+            return l->data;
+    return 0;
+}
+
+void CChatClass::LetBotSayAWelcomeSentence(CBot *pBot)
+{
+    TSentenceChoice M;
+    InitChoice(&M);
+    for (TLink<CChatSentence *> *l = m_pWelcomeNode->pSentences->head; l; l = l->next)
+        MakeSentenceChoiceList3(l->data, &M);
+    CChatSentence *pSel = PickAndFreeChoice(&M);
+    if (!pSel)
+        return;
+    ScheduleBotMessage(pBot);
+    char szName[33];
+    memset(szName, 0, 32);
+    strcpy(szName, STRING(pBot->pev->netname));
+    char szText[256];
+    memset(szText, 0, 255);
+    if (pSel->bCanModify)
+        MakeChatSentence(BOTF(pBot, bot_personality_s *, 0xa04), pSel->pszText, szText);
+    else
+        strcpy(szText, pSel->pszText);
+    FillInNames(pBot, szText, (char *)pBot + 0xc4c, szName, (char *)STRING(pBot->pev->netname));
+}
+
+// fala espontanea: frases do no "All" da lista normal
+void CChatClass::LetBotSaySomething(CBot *pBot)
+{
+    TSentenceChoice M;
+    InitChoice(&M);
+    char szOwn[33];
+    memset(szOwn, 0, 32);
+    strcpy(szOwn, STRING(pBot->pev->netname));
+    CChatNode *pNode = FindKeywordNode(this, m_pNormalNodes, "All");
+    if (pNode)
+    {
+        for (TLink<CChatSentence *> *l = pNode->pSentences->head; l; l = l->next)
+            MakeSentenceChoiceList(l->data, &M, m_pRecentNormal);
+    }
+    CChatSentence *pSel = PickAndFreeChoice(&M);
+    if (!pSel)
+        return;
+    StoreRecentUsedSentence(m_pRecentNormal, pSel);
+    ScheduleBotMessage(pBot);
+    char szName[33];
+    memset(szName, 0, 32);
+    strcpy(szName, pSel->szName[0] ? pSel->szName : STRING(pBot->pev->netname));   // [OK]
+    char szText[256];
+    memset(szText, 0, 255);
+    if (pSel->bCanModify)
+        MakeChatSentence(BOTF(pBot, bot_personality_s *, 0xa04), pSel->pszText, szText);
+    else
+        strcpy(szText, pSel->pszText);
+    FillInNames(pBot, szText, (char *)pBot + 0xc4c, szName, szOwn);
+}
+
+static void BotReactToPlayer(CChatClass *pThis, CBot *pBot, CBasePlayer *pOther, TList<CChatClass::CChatNode *> *pList,
+                             CChatClass::CChatSentence **ppRecent)
+{
+    CChatClass::CChatNode *pNode = FindKeywordNode(pThis, pList, "All");
+    if (!pNode)
+        return;
+    TSentenceChoice M;
+    InitChoice(&M);
+    for (TLink<CChatClass::CChatSentence *> *l = pNode->pSentences->head; l; l = l->next)
+        pThis->MakeSentenceChoiceList(l->data, &M, ppRecent);
+    CChatClass::CChatSentence *pSel = PickAndFreeChoice(&M);
+    if (!pSel)
+        return;
+    pThis->StoreRecentUsedSentence(ppRecent, pSel);
+    ScheduleBotMessage(pBot);
+    char szText[256];
+    memset(szText, 0, 255);
+    char szName[33];
+    memset(szName, 0, 32);
+    pThis->HumanizeName(BOTF(pBot, bot_personality_s *, 0xa04), STRING(pOther->pev->netname), szName);
+    if (pSel->bCanModify)
+        pThis->MakeChatSentence(BOTF(pBot, bot_personality_s *, 0xa04), pSel->pszText, szText);
+    else
+        strcpy(szText, pSel->pszText);
+    pThis->FillInNames(pBot, szText, (char *)pBot + 0xc4c, szName, (char *)STRING(pBot->pev->netname));
+}
+
+void CChatClass::LetBotTaunt(CBot *pBot, CBasePlayer *pVictim)
+{
+    BotReactToPlayer(this, pBot, pVictim, m_pTauntNodes, m_pRecentTaunt);
+}
+
+void CChatClass::LetBotWhine(CBot *pBot, CBasePlayer *pAttacker)
+{
+    BotReactToPlayer(this, pBot, pAttacker, m_pWhineNodes, m_pRecentWhine);
 }

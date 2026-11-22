@@ -82,6 +82,9 @@ public:
     TList<CChatNode *> *m_pNormalNodes;   // +0x34c
     TList<CChatNode *> *m_pTauntNodes;    // +0x350
     TList<CChatNode *> *m_pWhineNodes;    // +0x354
+    CChatSentence *m_pRecentNormal[5];    // +0x358 ultimas frases normais usadas [OK]
+    CChatSentence *m_pRecentWhine[5];     // +0x36c
+    CChatSentence *m_pRecentTaunt[5];     // +0x380  (tamanho total 0x394)
 
     CChatClass();
     ~CChatClass();
@@ -118,7 +121,7 @@ public:
     void MakeSentenceChoiceList(CChatSentence *pS, TMultiChoice<CChatSentence *> *pM, CChatSentence **ppRecent);
     void MakeSentenceChoiceList2(CChatSentence *pS, TMultiChoice<CChatSentence *> *pM, CChatSentence **ppRecent, const char *szName);
     void MakeSentenceChoiceList3(CChatSentence *pS, TMultiChoice<CChatSentence *> *pM);
-    void CreateResponseList(SOldChatText *pOld, TMultiChoice<CChatSentence *> *pM, CChatSentence *pExtra);
+    char CreateResponseList(SOldChatText *pOld, TMultiChoice<CChatSentence *> *pM);
     // fala dos bots
     void LetBotSayAWelcomeSentence(CBot *pBot);
     void LetBotSaySomething(CBot *pBot);
