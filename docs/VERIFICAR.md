@@ -34,3 +34,8 @@ Itens em que a recuperação ficou ambígua. Marcar como resolvido ao confirmar.
 - `0xa04` é o ponteiro de personalidade (9 x 60 bytes em CBotManager+3408), não uma "skill struct": +0x34 = agressividade (0 agressivo, 1 normal, 2 defensivo).
   Os 5 pesos lidos (shorts +0x26/+0x28/+0x2e/+0x30/+0x32) correspondem a campos *_percent da personalidade (ver CreateBotPersonalities).
 - O argumento de ClassifyAttack é `STRING(pev->classname)` ([?] inferido de `*v9 + gpGlobals->pStringBase`).
+
+## CBot::SenseSurroundingPlayers (0x175e80)
+- Mesma cadeia final de ramos mortos (>160 / >200 / >175 / >150) que SenseSurroundingAttacks.
+- O ramo "jogador voando" assume `pev->movetype == 11` (offset 0x108 inferido de `(*v10)[13].padding_0[4]` com elementos de 20 bytes);
+  o teste `EntIsInFieldOfView` aparece duas vezes no pseudo-C (a segunda é redundante).

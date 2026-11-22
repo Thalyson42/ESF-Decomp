@@ -2505,3 +2505,147 @@ void CBot::SenseSurroundingAttacks(danger_info_s &Danger)
     Danger.m_cFlags[0] = 0;                                                   // +0x1a
     Danger.m_cFlags[1] = 1;                                                   // +0x1b
 }
+
+// ---------------------------------------------------------------------------
+// SenseSurroundingPlayers: avalia os inimigos ao redor (lista em +0xa24, +0xaac itens) e acumula o perigo em Danger.
+// Mesmo esquema de SenseSurroundingAttacks: 5 pesos da personalidade (+0xa04), pontuacao "iter" por distancia,
+// diferenca de powerlevel, saude propria e direcao; o melhor jogador (>19) preenche Danger +0x00..+0x14.
+//  - jogador voando (movetype 11): faixas de distancia ate 2000 e exige direcao >= limiar (75 -> x1.2 agressivo / x0.85 defensivo)
+//  - jogador no chao: so dentro do campo de visao e a menos de 250
+// No fim: Danger +0x1a/+0x1b/+0x1c = distancia ao melhor < 250, > 350, < 1500.
+// [OK] constantes do assembly; cadeia final >160/>200/>175/>150 tem ramos mortos como em SenseSurroundingAttacks.
+// ---------------------------------------------------------------------------
+void CBot::SenseSurroundingPlayers(danger_info_s &Danger)
+{
+    int iBest = 0;                                                            // short v7
+    if (!BOTF(this, char, 0xa20))
+        MakePlayerList();
+    int nPlayers = BOTF(this, int, 0xaac);
+    if (!nPlayers)
+        return;
+
+    char *pPers = BOTF(this, char *, 0xa04);
+    int iAggr = *(int *)(pPers + 0x34);
+    char cMinHeading = 75;
+    if (iAggr == 2)
+        cMinHeading = (char)(int)(75 * 0.85);
+    else if (iAggr == 0)
+        cMinHeading = (char)(int)(75 * 1.2);
+
+    CBasePlayer **ppList = &BOTF(this, CBasePlayer *, 0xa24);
+    for (int i = 0; i < nPlayers; i++)
+    {
+        CBasePlayer *pPl = ppList[i];
+        if (g_teamplay && pPl->pev->team == pev->team)
+            continue;
+        float flDist = (pPl->pev->origin - pev->origin).Length();
+        if (flDist > 2000.0f)
+            continue;
+        short sHeading = (short)UTIL_GetHeadingPercentage(this, pPl);
+        if (!EntIsInFieldOfView(this, pPl) || !CanAttackPlayer(pPl))
+            continue;
+
+        float w0 = (float)*(short *)(pPers + 0x26);                           // v6
+        float w1 = (float)*(short *)(pPers + 0x28);                           // v5
+        float w2 = (float)*(short *)(pPers + 0x32);                           // v4
+        float w3 = (float)*(short *)(pPers + 0x30);                           // v3
+        float w4 = (float)*(short *)(pPers + 0x2e);                           // v2
+        int iter = 0;
+        int iPLDiff = BOTF(pPl, int, 0x744) - BOTF(this, int, 0x744);
+
+        if (pPl->pev->movetype == 11)
+        {
+            if (sHeading < cMinHeading)
+                continue;
+            if (flDist < 150.0f)       { iter = 160; w0 *= 1.7f;  w1 *= 0.01f; w2 *= 1.1f;  w3 *= 0.01f; w4 *= 0.01f; }
+            else if (flDist < 350.0f)  { iter = 130; w0 *= 1.3f;  w1 *= 0.1f;  w2 *= 0.75f; w3 *= 0.1f;  w4 *= 0.1f;  }
+            else if (flDist < 500.0f)  { iter = 100; w0 *= 1.25f; w1 *= 0.25f; w2 *= 0.3f;  w3 *= 0.25f; w4 *= 0.25f; }
+            else if (flDist < 750.0f)  { iter = 100; w0 *= 1.05f; w1 *= 0.4f;  w2 *= 0.1f;  w3 *= 0.45f; w4 *= 0.45f; }
+            else if (flDist < 875.0f)  { iter = 85;  w1 *= 0.5f;  w2 *= 0.07f; w3 *= 0.6f;  w4 *= 0.6f;  }
+            else if (flDist < 1000.0f) { iter = 65;  w1 *= 0.85f; w2 *= 0.05f; }
+            else if (flDist < 1250.0f) { iter = 35;  w0 *= 0.9f;  w2 *= 0.03f; }
+            else if (flDist < 2000.0f) { iter = 15;  w0 *= 0.75f; w2 *= 0.01f; w3 *= 0.5f;  w4 *= 0.5f;  }
+
+            if (iPLDiff > 3000000)      { iter += 45; w0 *= 1.55f; w2 *= 0.01f; w3 *= 0.9f;  w4 *= 0.9f;  }
+            else if (iPLDiff > 2500000) { iter += 30; w0 *= 1.45f; w2 *= 0.01f; w3 *= 0.95f; w4 *= 0.95f; }
+            else if (iPLDiff > 1500000) { iter += 20; w0 *= 1.2f;  w2 *= 0.02f; }
+            else if (iPLDiff > 800000)  { iter += 10; w2 *= 0.2f; }
+
+            if (pev->health < 10.0f)      { iter += 25; w0 *= 1.25f; w1 *= 0.95f; w2 *= 0.01f; w3 *= 0.9f; w4 *= 0.9f; }
+            else if (pev->health < 25.0f) { iter += 15; w0 *= 1.1f;  w2 *= 0.05f; }
+            else if (pev->health < 35.0f) { iter += 10; w2 *= 0.15f; }
+
+            if (sHeading <= 89)      iter -= 12;
+            else if (sHeading <= 94) iter -= 5;
+        }
+        else
+        {
+            if (flDist < 50.0f)        { iter = 150; w0 *= 1.7f;  w1 *= 0.01f; w2 *= 0.1f;  w3 *= 0.01f; w4 *= 0.01f; }
+            else if (flDist < 120.0f)  { iter = 120; w0 *= 1.3f;  w1 *= 0.1f;  w2 *= 0.01f; w3 *= 0.25f; w4 *= 0.25f; }
+            else if (flDist < 175.0f)  { iter = 80;  w0 *= 1.05f; w1 *= 0.35f; w2 *= 0.01f; w3 *= 0.85f; w4 *= 0.85f; }
+            else if (flDist < 250.0f)  { iter = 60;  w0 *= 0.9f;  w1 *= 0.85f; w2 *= 0.01f; }
+            else
+                continue;
+
+            if (iPLDiff > 3000000)      { iter += 35; w0 *= 1.55f; w2 *= 0.01f; w3 *= 0.9f;  w4 *= 0.9f;  }
+            else if (iPLDiff > 2500000) { iter += 25; w0 *= 1.45f; w2 *= 0.01f; w3 *= 0.95f; w4 *= 0.95f; }
+            else if (iPLDiff > 1500000) { iter += 15; w0 *= 1.2f;  w2 *= 0.02f; }
+
+            if (pev->health < 10.0f)      { iter += 30; w0 *= 1.25f; w1 *= 0.95f; w2 *= 0.01f; w3 *= 0.9f; w4 *= 0.9f; }
+            else if (pev->health < 25.0f) { iter += 20; w0 *= 1.1f;  w2 *= 0.05f; }
+            else if (pev->health < 35.0f) { iter += 10; w2 *= 0.15f; }
+
+            if (sHeading <= 89)      iter -= 25;
+            else if (sHeading <= 94) iter -= 10;
+        }
+
+        if (iAggr == 0)
+            iter = (short)(int)((double)(short)iter * 0.85);
+        else if (iAggr == 2)
+            iter = (short)(int)((double)(short)iter * 1.25);
+
+        if ((short)iter > 19)
+        {
+            if ((short)iter > iBest)
+            {
+                iBest = (short)iter;
+                Danger.m_fl0 = w0;
+                Danger.m_fl4 = w1;
+                Danger.m_fl8 = w2;
+                Danger.m_flC = w3;
+                Danger.m_fl10 = w4;
+                *(CBasePlayer **)&Danger.pad14 = pPl;
+            }
+            Danger.m_iDanger += (unsigned short)iter;
+        }
+    }
+
+    // ajuste final (ramos > 200 e > 175 sao mortos, como no binario)
+    if (Danger.m_iDanger > 160)
+    {
+        Danger.m_fl0 *= 1.75f; Danger.m_fl4 *= 1.55f; Danger.m_fl8 *= 0.01f;
+        Danger.m_flC *= 0.5f;  Danger.m_fl10 *= 0.5f;
+    }
+    else if (Danger.m_iDanger > 200)
+    {
+        Danger.m_fl0 *= 1.5f;  Danger.m_fl4 *= 1.25f; Danger.m_fl8 *= 0.07f;
+        Danger.m_flC *= 0.75f; Danger.m_fl10 *= 0.75f;
+    }
+    else if (Danger.m_iDanger > 175)
+    {
+        Danger.m_fl0 *= 1.25f; Danger.m_fl4 *= 1.1f;  Danger.m_fl8 *= 0.15f;
+        Danger.m_flC *= 0.9f;  Danger.m_fl10 *= 0.9f;
+    }
+    else if (Danger.m_iDanger > 150)
+    {
+        Danger.m_fl0 *= 1.02f; Danger.m_fl4 *= 1.02f; Danger.m_fl8 *= 0.15f;
+    }
+    Danger.m_cFlags[0] = Danger.m_cFlags[1] = Danger.m_cFlags[2] = 0;
+    CBasePlayer *pBest = *(CBasePlayer **)&Danger.pad14;
+    if (!pBest)
+        return;
+    float flD = (pBest->pev->origin - pev->origin).Length();
+    Danger.m_cFlags[0] = flD < 250.0f;
+    Danger.m_cFlags[1] = flD > 350.0f;
+    Danger.m_cFlags[2] = flD < 1500.0f;
+}
