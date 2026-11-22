@@ -11,7 +11,7 @@
     void  Spectator_SetMode(int iMode); void StartObserving(void); int GetPotentialPL(void); \
     BOOL CanFly(void); void Swoop(void); void CheckWallJump(void); void CheckSubModelStatus(void); void ReleaseCandy(void); \
     void  RemoveAllWeapons(int iFlag); void Descend(int iFlag); void Ascend(void); \
-    void  StopTurbo(void); void StartTurbo(void); void MakeCandy(const char *szName); void StartAscend(void); void StopBlock(void); void UpdateOldPositions(void); void Spectator_HandleButtons(void); \
+    void  StopTurbo(void); void StartTurbo(void); int MakeCandy(const char *szName); void StartAscend(void); void StopBlock(void); void UpdateOldPositions(void); void Spectator_HandleButtons(void); \
     virtual void UpdateClientData_Hook(void);   /* [?] vtable +0x204 (slot 127) */ \
     void  PlayAnimation(void);                  /* [OK] ESF: no lugar de SetAnimation(PLAYER_WALK) */ \
     void  CheckPowerups(entvars_t *pevVictim);  /* [?] assinatura */ \
@@ -19,7 +19,11 @@
     void  WaitToBecomeCandy(CBasePlayer *pAttacker); /* [OK] Buu */ \
     float m_iRespawnFrames;                     /* [OK] +0x988 (float) */ \
     Vector m_vecSavedAngles;                    /* [?] +0x7a0 */ \
-    int   m_iPowerLevelDrop;                    /* [?] +0x75c */ \
+    int   m_iSensuBeans;                        /* [OK] +0x75c feijoes Sensu (max 5) */ \
+    CBasePlayer *m_pCandyTarget;                /* [OK] +0x728 vitima que o Buu vai transformar */ \
+    float m_flCandyTime;                        /* [OK] +0x72c */ \
+    int   m_fWaitingCandy;                      /* [OK] +0x364 esperando virar doce */ \
+    BOOL  GiveBean(int iAmount); BOOL TakeBean(void); int BecomeCandy(const char *szName, CBaseEntity *pBuu); \
     EHANDLE m_hTrain;                           /* [?] +0x108 */ \
     struct esf_botinfo_s *m_pBotInfo;           /* [?] +0xa04 -> +0x1a = m_iTauntChance */ \
     CBasePlayer *m_pLastKiller;                 /* [?] +0xd50 */

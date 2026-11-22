@@ -614,7 +614,7 @@ void CBasePlayer::PlayerDeathThink()
             pev->velocity = flForward * pev->velocity.Normalize();
     }
 
-    if (HasWeapons() || m_iPowerLevelDrop > 0)                // [?] +0x75c: também larga item se tiver PL/drop pendente
+    if (HasWeapons() || m_iSensuBeans > 0)                // [?] +0x75c: também larga item se tiver PL/drop pendente
         PackDeadPlayerItems();
 
     if (m_flSpeedMult != 0.0f)                                // [OK] ESF: zera efeitos do estado anterior
