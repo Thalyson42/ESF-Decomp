@@ -903,3 +903,96 @@ void CChatClass::LetBotWhine(CBot *pBot, CBasePlayer *pAttacker)
 {
     BotReactToPlayer(this, pBot, pAttacker, m_pWhineNodes, m_pRecentWhine);
 }
+
+template <class T> static T PickChoiceNoFree(TMultiChoice<T> *pM)
+{
+    int r = RANDOM_LONG(0, pM->iTotal);
+    for (TLink<TChoice<T> *> *l = pM->pChoices->head; l; l = l->next)
+        if (r >= l->data->lo && r < l->data->hi)
+            return l->data->value;
+    return 0;
+}
+
+template <class T> static void FreeChoiceList(TMultiChoice<T> *pM)
+{
+    if (!pM->pChoices)
+        return;
+    while (pM->pChoices->head)
+        delete pM->pChoices->PopFront();
+    pM->pChoices->ClearLinks();
+    delete pM->pChoices;
+    pM->pChoices = 0;
+}
+
+// Responde a uma mensagem recente (ultimos 5 segundos): cada mensagem antiga vira uma lista de respostas e recebe um peso
+// (50 - 10*i, x0.1 se cita outro jogador, x1.25 se cita o proprio bot); sorteia mensagem e depois a frase.
+void CChatClass::LetBotCheckForReply(CBot *pBot)
+{
+    TSentenceChoice aSub[5];
+    for (int i = 0; i < 5; i++)
+        InitChoice(&aSub[i]);
+    TMultiChoice<TSentenceChoice *> M;
+    M.iTotal = 0;
+    M.pChoices = new TList<TChoice<TSentenceChoice *> *>;
+
+    char szOwn[33];
+    memset(szOwn, 0, 32);
+    strcpy(szOwn, STRING(pBot->pev->netname));
+
+    if (m_PrevMsg[0].szText[0] && gpGlobals->time - 5.0 < m_PrevMsg[0].fTime)
+    {
+        for (unsigned char i = 0; i <= 4; i++)
+        {
+            SOldChatText *pMsg = &m_PrevMsg[i];
+            if (!pMsg->szText[0] || !(gpGlobals->time - 5.0 < pMsg->fTime) || !pMsg->szSender[0] || !strcmp(szOwn, pMsg->szSender))
+                continue;
+            unsigned char ucWeight = 50 - i * 10;
+            for (short j = 1; j <= gpGlobals->maxClients; j++)
+            {
+                CBaseEntity *pPl = UTIL_PlayerByIndex(j);
+                if (!UTIL_IsValidPlayer(pPl, 0, 0))
+                    continue;
+                char szOther[33];
+                strcpy(szOther, STRING(pPl->pev->netname));
+                if (strstr(pMsg->szText, szOther))
+                    ucWeight = (unsigned char)(int)((double)ucWeight * 0.1);
+                else if (strstr(pMsg->szText, szOwn))
+                    ucWeight = (unsigned char)(int)((double)ucWeight * 1.25);
+            }
+            if (CreateResponseList(pMsg, &aSub[i]) && ucWeight)
+            {
+                TChoice<TSentenceChoice *> *pC = new TChoice<TSentenceChoice *>;
+                pC->lo = M.iTotal;
+                pC->hi = (short)ucWeight + M.iTotal;
+                pC->value = &aSub[i];
+                M.pChoices->Append(pC);
+                M.iTotal += ucWeight;
+            }
+        }
+    }
+
+    TSentenceChoice *pSub = PickChoiceNoFree(&M);
+    FreeChoiceList(&M);
+    CChatSentence *pSel = 0;
+    if (pSub)
+        pSel = PickChoiceNoFree(pSub);
+    if (pSel)
+    {
+        StoreRecentUsedSentence(m_pRecentNormal, pSel);
+        BOTF(pBot, char, 0xc44) = 1;
+        BOTF(pBot, float, 0xc48) = RANDOM_FLOAT(1.0f, 2.5f) + gpGlobals->time;
+        BOTF(pBot, float, 0xd4c) = RANDOM_FLOAT(10.0f, 20.0f) + BOTF(pBot, float, 0xd4c);
+        char szName[33];
+        memset(szName, 0, 32);
+        strcpy(szName, pSel->szName[0] ? pSel->szName : STRING(pBot->pev->netname));
+        char szText[256];
+        memset(szText, 0, 255);
+        if (pSel->bCanModify)
+            MakeChatSentence(BOTF(pBot, bot_personality_s *, 0xa04), pSel->pszText, szText);
+        else
+            strcpy(szText, pSel->pszText);
+        FillInNames(pBot, szText, (char *)pBot + 0xc4c, szName, szOwn);
+    }
+    for (int i = 4; i >= 0; i--)
+        FreeChoiceList(&aSub[i]);
+}
