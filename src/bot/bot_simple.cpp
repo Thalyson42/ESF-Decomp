@@ -2649,3 +2649,273 @@ void CBot::SenseSurroundingPlayers(danger_info_s &Danger)
     Danger.m_cFlags[1] = flD > 350.0f;
     Danger.m_cFlags[2] = flD < 1500.0f;
 }
+
+// ---------------------------------------------------------------------------
+// BotSense: junta os perigos ao redor (ataques, jogadores, sons, golpe recebido), escolhe o mais forte (+0xa18 = valor,
+// +0xa1c = origem: 1 ataque, 2 som, 3 jogador novo, 4 golpe, 5 jogador ja inimigo) e decide a reacao:
+//   0 teleporte/combo/tarefa 1; 1 desviar (swoop); 2 tarefa 2; 3 tarefa 23; 4 parar de voar; 5 tarefa 31 (SBot)
+// Antes disso, com o inimigo perto e o bot armado, pode partir direto para melee/combos/tele-melee.
+// Pesos das reacoes = (int) dos 5 floats do perigo (+0..+0x10) e, para a 5, o % do laser do SBot (+0xba8 -> +12).
+// ---------------------------------------------------------------------------
+void CBot::BotSense(void)
+{
+    danger_info_s aAtk, aPl, aSnd, aHit;
+    memset(&aAtk, 0, sizeof(aAtk));
+    memset(&aPl, 0, sizeof(aPl));
+    memset(&aSnd, 0, sizeof(aSnd));
+    memset(&aHit, 0, sizeof(aHit));
+
+    CBaseTask *pTask = BOTF(this, CBaseTask *, 0x1064);
+    int iChecks = 0;
+    bool bAll = false;
+    if (pTask)
+        iChecks = pTask->GetBotSenseChecks();                                 // vtable slot 3: mascara 1 sons, 2 ataques/golpe, 4 jogadores
+    else
+        bAll = true;
+    BOTF(this, int, 0xa1c) = 0;
+    BOTF(this, int, 0xa18) = 0;
+    if (!iChecks && !bAll)
+        return;
+
+    if ((iChecks & 2) || bAll) SenseSurroundingAttacks(aAtk);
+    if ((iChecks & 4) || bAll) SenseSurroundingPlayers(aPl);
+    if ((iChecks & 1) || bAll) SenseSurroundingSounds(aSnd);
+    if ((iChecks & 2) || bAll) SenseHit(aHit);
+
+    danger_info_s *pD = NULL;
+    if (aAtk.m_iDanger)
+    {
+        pD = &aAtk;
+        BOTF(this, int, 0xa1c) = 1;
+    }
+    CBasePlayer *pPlEnemy = *(CBasePlayer **)&aPl.pad14;
+    if ((unsigned short)aPl.m_iDanger && (!pD || aPl.m_iDanger > pD->m_iDanger))
+    {
+        pD = &aPl;
+        if (BOTF(this, CBasePlayer *, 0xb6c) == pPlEnemy || EnemyIsInList(pPlEnemy))
+            BOTF(this, int, 0xa1c) = 5;
+        else
+            BOTF(this, int, 0xa1c) = 3;
+    }
+    if ((unsigned short)aSnd.m_iDanger && (!pD || aSnd.m_iDanger > pD->m_iDanger))
+    {
+        pD = &aSnd;
+        BOTF(this, int, 0xa1c) = 2;
+    }
+    if ((unsigned short)aHit.m_iDanger && (!pD || aHit.m_iDanger > pD->m_iDanger))
+    {
+        pD = &aHit;
+        BOTF(this, int, 0xa1c) = 4;
+    }
+
+    BOOL bReact = FALSE;
+    if (pD)
+    {
+        BOTF(this, int, 0xa18) = pD->m_iDanger;
+        bReact = pTask ? pTask->ReactOnDanger(pD) : TRUE;                     // vtable slot 9
+    }
+    if (!bReact)
+        return;
+
+    // o ki baixo (< 300) reduz o peso 0 e aumenta o peso 4
+    int iKi = (int)pev->fuser4;
+    if (iKi <= 299)
+    {
+        double dF = 0.0;
+        if (iKi)
+            dF = (double)iKi / 1000.0;
+        pD->m_fl0 = (float)(dF * pD->m_fl0);
+        pD->m_fl10 = (float)((2.0 - dF) * pD->m_fl10);
+    }
+
+    // pode lutar? (armado + botshoot + flag +3398)
+    bool bArmed = false;
+    if (HasWeapons() && g_pBotManager[3399])
+        bArmed = g_pBotManager[3398] != 0;
+
+    CBasePlayer *pEnemy = *(CBasePlayer **)&pD->pad14;
+    char *pPers = BOTF(this, char *, 0xa04);
+    int iAggr = *(int *)(pPers + 0x34);
+
+    // --- ataque direto (melee / combos) quando o inimigo esta ao alcance ---
+    if (pD->m_cFlags[2] && pEnemy && bArmed && EnemyIsInMeleeRange(pEnemy))
+    {
+        short sMeleePct = *(short *)pPers;                                    // % de melee da personalidade
+        float flDist = (pEnemy->pev->origin - pev->origin).Length();
+        if (iAggr == 0)
+            sMeleePct = (short)(int)((double)sMeleePct * 1.25);
+        else if (iAggr == 2)
+            sMeleePct = (short)(int)((double)sMeleePct * 0.8);
+
+        if (pEnemy->pev->movetype != 11)                                      // inimigo no chao
+        {
+            BOOL bKick = CanMeleeKickPlayer(pEnemy);
+            if (RANDOM_LONG(1, 100) <= sMeleePct)
+            {
+                if (flDist < 175.0f && bKick)
+                {
+                    BOTF(this, CBasePlayer *, 0xb6c) = pEnemy;
+                    MakeTask(3);
+                    return;
+                }
+                if ((int)pev->fuser4 > 400 && flDist < 350.0f && BOTF(this, char, 0x9fc) <= 2)
+                {
+                    BOTF(this, CBasePlayer *, 0xb6c) = pEnemy;
+                    if (RANDOM_LONG(1, 100) <= *(short *)(pPers + 0x26))
+                    {
+                        MakeCombo((EComboType)20);
+                        return;
+                    }
+                    if (flDist > 225.0f)
+                        MakeCombo((EComboType)2);
+                    return;
+                }
+            }
+        }
+        else                                                                  // inimigo voando
+        {
+            if (RANDOM_LONG(1, 100) <= sMeleePct)
+            {
+                if (flDist > 150.0f && flDist < 850.0f && BOTF(this, char, 0x9fc) <= 1 && (int)pev->fuser4 > 400)
+                {
+                    if (RANDOM_LONG(1, 100) <= *(short *)(pPers + 0x26) && MakeTeleMelee(pEnemy))
+                    {
+                        BOTF(this, CBasePlayer *, 0xb6c) = pEnemy;
+                        return;
+                    }
+                }
+                if (flDist > 500.0f)
+                {
+                    if (BOTF(this, float, 0xb74) <= gpGlobals->time && RANDOM_LONG(1, 100) <= 65)
+                    {
+                        BOTF(this, CBasePlayer *, 0xb6c) = pEnemy;
+                        MakeCombo((EComboType)2);
+                        return;
+                    }
+                }
+            }
+        }
+    }
+
+    // --- tail: ajustes pelo estado do bot ---
+    if (pev->waterlevel == 3)                                                 // submerso
+        pD->m_fl10 = pD->m_flC = 0;
+    if (!(pev->flags & FL_ONGROUND))
+        pD->m_flC = 0;
+    else
+        pD->m_fl10 = 0;
+    if (pD->m_fl10 > 0.0f && CheckForCollide(pev->pContainingEntity, 64, 1200.0f))
+        pD->m_fl10 = 0;
+
+    // solarflare: inimigo (jogador) colado, bot forte e com a arma 8
+    bool bFlare = false;
+    if (pEnemy && pEnemy->IsPlayer())
+    {
+        float flD2 = (pEnemy->pev->origin - pev->origin).Length();
+        if (pD->m_cFlags[0] && ((int)pev->fuser4 > 600 && bArmed) && flD2 < 250.0f && HasWeapon(8) && !BOTF(pEnemy, int, 0x344))
+            bFlare = RANDOM_LONG(1, 100) <= *(short *)(pPers + 18);
+    }
+
+    // --- sorteio ponderado da reacao ---
+    struct { int iType; int iWeight; } aOpt[6];
+    int nOpt = 0, iTotal = 0;
+    float aW[5] = { pD->m_fl0, pD->m_fl4, pD->m_fl8, pD->m_flC, pD->m_fl10 };
+    for (int k = 0; k < 5; k++)
+        if ((int)aW[k])
+        {
+            aOpt[nOpt].iType = k;
+            aOpt[nOpt].iWeight = (int)aW[k];
+            iTotal += (int)aW[k];
+            nOpt++;
+        }
+    if (pD->m_cFlags[1] && pEnemy && BOTF(this, short, 0xba4) > 0 && (int)pev->fuser4 > 200 &&
+        (double)GetMaxSpeed() > 0.0 && bArmed)
+    {
+        short sLaser = *(short *)(BOTF(this, char *, 0xba8) + 12);            // % laser do SBot
+        if (sLaser)
+        {
+            aOpt[nOpt].iType = 5;
+            aOpt[nOpt].iWeight = sLaser;
+            iTotal += sLaser;
+            nOpt++;
+        }
+    }
+    int iReact = 6;
+    int iPick = RANDOM_LONG(0, iTotal);
+    int iLo = 0;
+    for (int k = 0; k < nOpt; k++)
+    {
+        if (iPick >= iLo && iPick < iLo + aOpt[k].iWeight)
+        {
+            iReact = aOpt[k].iType;
+            break;
+        }
+        iLo += aOpt[k].iWeight;
+    }
+
+    switch (iReact)
+    {
+    case 0:
+        if (bFlare)
+            Teleport();
+        else if (RANDOM_LONG(1, 100) <= *(short *)(pPers + 0x26) && pD->m_iDanger > 299)
+            MakeCombo((EComboType)10);
+        else
+            MakeTask(1);
+        if (pD->m_iDanger > 159)
+            BOTF(this, int, 0xb08) = 0;
+        break;
+    case 1:
+        BOTF(this, CBasePlayer *, 0xbf8) = pEnemy;
+        MakeAvoidSwoopTask();
+        break;
+    case 2:
+        MakeTask(2);
+        break;
+    case 3:
+    {
+        MakeTask(23);
+        int r = RANDOM_LONG(1, 3);                                            // [OK] (1,3): ramo r==0 nunca ocorre
+        if (!r)
+            BOTF(this, short, 0xaf8) = 2;
+        else if (r == 1)
+            BOTF(this, short, 0xaf8) = 4;
+        if (RANDOM_LONG(0, 1))
+            BOTF(this, char, 0xaf8) |= 8;
+        break;
+    }
+    case 4:
+        BOTF(this, char, 0xa10) = 0;
+        if (m_fFlying)
+            StopFly();
+        BOTF(this, float, 0xa14) = gpGlobals->time + RANDOM_FLOAT(1.0f, 1.4f);
+        break;
+    case 5:
+        MakeTask(31);
+        break;
+    default:
+        break;
+    }
+
+    if (bFlare)
+    {
+        if (BOTF(this, char *, 0x968) && *(int *)(BOTF(this, char *, 0x968) + 0x88) != 8)
+            SelectItem("weapon_solarflare");
+        pev->button |= 1;
+    }
+}
+
+// O bot possui a arma de id iWeapon? Procura nas 10 listas de itens (+0x940, encadeadas por +0x84, id em +0x88).
+// id 128 so vale para SBot (+0xba4 > 0); ids 7 e 10 (discos) so se bots podem usar discos (BotManager+3401).
+BOOL CBot::HasWeapon(int iWeapon)
+{
+    if (!(BOTF(this, short, 0xba4) > 0 || (unsigned)iWeapon != 128))
+        return FALSE;
+    if (!(g_pBotManager[3401] || ((unsigned)iWeapon != 7 && (unsigned)iWeapon != 10)))
+        return FALSE;
+    for (int iSlot = 0; iSlot <= 9; iSlot++)
+        for (char *pItem = BOTF(this, char *, 0x940 + iSlot * 4); pItem; pItem = *(char **)(pItem + 0x84))
+            if (*(unsigned int *)(pItem + 0x88) == (unsigned)iWeapon)
+                return TRUE;
+    return FALSE;
+}

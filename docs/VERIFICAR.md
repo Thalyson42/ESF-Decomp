@@ -39,3 +39,13 @@ Itens em que a recuperação ficou ambígua. Marcar como resolvido ao confirmar.
 - Mesma cadeia final de ramos mortos (>160 / >200 / >175 / >150) que SenseSurroundingAttacks.
 - O ramo "jogador voando" assume `pev->movetype == 11` (offset 0x108 inferido de `(*v10)[13].padding_0[4]` com elementos de 20 bytes);
   o teste `EntIsInFieldOfView` aparece duas vezes no pseudo-C (a segunda é redundante).
+
+## CBot::BotSense (0x176cb0)
+- Layout das 4 `danger_info_s` locais assumido de 32 bytes cada (memset); o decompilado mostra variáveis soltas.
+- Bloco final (SelectItem "weapon_solarflare" + `pev->button |= 1`) só executa se o flag de solarflare (`bFlare`) for verdadeiro; a ação 0 chama `CBasePlayer::Teleport`
+  nesse caso (o nome da função pode ser enganoso). `RandomLong(1,3)` na ação 3: o ramo `== 0` nunca ocorre (como no binário).
+- `+0xb74` (float) é um tempo de espera de combo; `+0xaf8` guarda flags/valor do combo de tarefa 23; `+0xb08`, `+0xbf8`, `+0xa10`, `+0xa14` nomes [?].
+- `g_pBotManager[3398]` ainda sem nome (usado junto com `[3399]` botshoot para "pode lutar").
+
+## CBot::HasWeapon (0x1534b0)
+- Offsets +0x940 (10 listas), +0x84 (próximo), +0x88 (id) lidos do decompilado; ids 7 e 10 = discos.

@@ -82,6 +82,7 @@ public:
     void  MakeMeleeComboList(void);                    // [?] CBot::MakeTask(int) (modo da tarefa +0x1068)
     void  ClearMeleeComboList(void);
     BOOL  MakeTeleMelee(CBasePlayer *pEnemy);
+    BOOL  HasWeapon(int iWeapon);                       // [OK] 0x1534b0, ver src/server/bot.cpp
     void  MakeAvoidSwoopTask(void);
     EComboType MakeAttackAvoidChainSwoop(void);
     short GetBestEscapeSwoopDir(bool bFlag);
