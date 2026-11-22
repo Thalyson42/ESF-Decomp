@@ -1033,6 +1033,7 @@ void CBotManager::ChangeBotSkill(short sSkill)
 extern int g_waypoint_on;
 extern int PrintingInGameHelp;
 extern void WaypointThink(edict_t *pEntity);
+extern void UTIL_Printf(const char *szMsg, int iA, int iB);               // [?] funcao livre do ESF (args 1,0)
 
 void CBotManager::Think(void)
 {
@@ -1092,4 +1093,176 @@ void CBotManager::OpenBotCFGFile(void)
             ALERT(at_console, "bot.cfg file not found\n");
     }
     f_034 = gpGlobals->time + (g_engfuncs.pfnIsDedicatedServer() ? 5.0f : 20.0f);
+}
+
+// ---------------------------------------------------------------------------
+// Executa uma linha do bot.cfg por vez (quando f_034 vence). Comandos: addbot, addsbot, botskill, shouldbotschat,
+// botsusediscs, botshoot, min_bots, max_bots, pause, bot_fill, bot_balanceteams; o resto vai para o servidor.
+// Argumentos separados por espaco (ate 5). Fim do arquivo: fecha e zera f_034/f_038.
+// ---------------------------------------------------------------------------
+void CBotManager::BotCFGFileThink(void)
+{
+    if (f_034 > gpGlobals->time)
+        return;
+    FILE *fp = (FILE *)f_038;
+    if (!fp)
+        return;
+
+    // le uma linha: ignora espacos iniciais, tab -> espaco, colapsa espacos repetidos
+    char szLine[256];
+    int n = 0, c;
+    while ((c = fgetc(fp)) == ' ')
+        ;
+    if (c != EOF && c != '\n' && c != '\r')
+    {
+        for (;;)
+        {
+            if (c == '\t')
+                c = ' ';
+            szLine[n++] = (char)c;
+            c = fgetc(fp);
+            if (szLine[n - 1] == ' ' && c == ' ')
+                while ((c = fgetc(fp)) == ' ')
+                    ;
+            if (c == EOF || c == '\n')
+                break;
+            if (c == '\r')
+            {
+                c = fgetc(fp);                                                // consome o \n depois do \r
+                break;
+            }
+            if (n >= 250)
+                break;
+        }
+    }
+    else if (c == '\r')
+        c = fgetc(fp);
+    if (c == EOF)
+    {
+        fclose(fp);
+        f_038 = 0;
+        f_034 = 0;
+    }
+    szLine[n] = 0;
+
+    char szCmdLine[256];
+    strcpy(szCmdLine, szLine);
+    strcat(szCmdLine, "\n");
+
+    // separa comando + argumentos
+    char *pCmd = szLine;
+    char *aArg[5] = { NULL, NULL, NULL, NULL, NULL };
+    {
+        char *p = szLine;
+        int iArg = 0;
+        while (*p && *p != ' ')
+            p++;
+        while (*p == ' ' && iArg < 5)
+        {
+            *p++ = 0;
+            aArg[iArg++] = p;
+            while (*p && *p != ' ')
+                p++;
+        }
+    }
+    if (*pCmd == '#' || !*pCmd)                                               // [?] comentarios/linha vazia
+        return;
+
+    if (!strcmp(pCmd, "addbot"))
+    {
+        short sTeam = -1, sClass = -1, sSkill = -1, sPers = -1;
+        const char *szName = NULL;
+        if (aArg[2] && *aArg[2] && *aArg[2] != '*')
+            szName = aArg[2];
+        if (aArg[0] && *aArg[0])
+            sTeam = g_teamplay ? (short)strtol(aArg[0], NULL, 10) : (short)-1;
+        if (aArg[1] && *aArg[1])
+            sClass = (short)strtol(aArg[1], NULL, 10);
+        if (aArg[3] && *aArg[3])
+            sSkill = (short)strtol(aArg[3], NULL, 10);
+        if (aArg[4] && *aArg[4])
+            sPers = (short)strtol(aArg[4], NULL, 10);
+        CreateBot(sTeam, sClass, szName, sSkill, sPers);
+        f_034 = gpGlobals->time + 2.0f;
+        f_010 = gpGlobals->time + 5.0f;
+    }
+    else if (!strcmp(pCmd, "addsbot"))
+    {
+        if (!g_teamplay)
+        {
+            std::cout << "Cannot create Super Bots in free fight!\n";
+            return;
+        }
+        short sLevel = -1, sClass = -1, sSkill = -1;
+        const char *szName = NULL;
+        if (aArg[3] && *aArg[3] && *aArg[3] != '*')
+            szName = aArg[3];
+        if (aArg[0] && *aArg[0] && *aArg[0] != '*')
+            sLevel = (short)strtol(aArg[0], NULL, 10);
+        if (aArg[1] && *aArg[1] && *aArg[1] != '*')
+            sClass = (short)strtol(aArg[1], NULL, 10);
+        if (aArg[2] && *aArg[2] && *aArg[2] != '*')
+            sSkill = (short)strtol(aArg[2], NULL, 10);
+        CreateSuperBot(sClass, szName, sSkill, sLevel);
+        f_034 = gpGlobals->time + 2.0f;
+        f_010 = gpGlobals->time + 5.0f;
+    }
+    else if (!strcmp(pCmd, "botskill"))
+    {
+        long v = strtol(aArg[0] ? aArg[0] : "", NULL, 10);
+        if ((unsigned long)(v - 1) <= 4)
+            ChangeBotSkill((short)v);
+    }
+    else if (!strcmp(pCmd, "shouldbotschat"))
+        *((char *)this + 3405) = aArg[0] && strtol(aArg[0], NULL, 10) ? 1 : 0;
+    else if (!strcmp(pCmd, "botsusediscs"))
+    {
+        if (aArg[0] && *aArg[0])
+            *((char *)this + 3401) = strtol(aArg[0], NULL, 10) ? 1 : 0;
+    }
+    else if (!strcmp(pCmd, "botshoot"))
+        *((char *)this + 3399) = aArg[0] && strtol(aArg[0], NULL, 10) ? 1 : 0;
+    else if (!strcmp(pCmd, "min_bots"))
+    {
+        f_01a = (short)strtol(aArg[0] ? aArg[0] : "", NULL, 10);
+        if (f_01a > 31)
+            f_01a = -1;
+    }
+    else if (!strcmp(pCmd, "max_bots"))
+    {
+        f_01c = (short)strtol(aArg[0] ? aArg[0] : "", NULL, 10);
+        if (f_01c > 31)
+            f_01c = -1;
+    }
+    else if (!strcmp(pCmd, "pause"))
+    {
+        if (aArg[0] && *aArg[0])
+            f_034 = (float)strtod(aArg[0], NULL) + gpGlobals->time;
+    }
+    else if (!strcmp(pCmd, "bot_fill"))
+    {
+        const char *sz = aArg[0] ? aArg[0] : "";
+        if (!strcmp(sz, "full"))
+            FillServer();
+        else if (!strcmp(sz, "half_good"))
+            FillAHalfTeam(1);
+        else if (!strcmp(sz, "half_evil"))
+            FillAHalfTeam(2);
+        else if (!strcmp(sz, "full_good"))
+            FillATeam(1);
+        else if (!strcmp(sz, "full_evil"))
+            FillATeam(2);
+    }
+    else if (!strcmp(pCmd, "bot_balanceteams"))
+    {
+        if (aArg[0] && *aArg[0])
+            f_d4c = strtol(aArg[0], NULL, 10) ? 1 : 0;
+    }
+    else
+    {
+        char szMsg[300];
+        sprintf(szMsg, "executing server command: %s\n", szCmdLine);
+        UTIL_Printf(szMsg, 1, 0);
+        g_engfuncs.pfnServerCommand(szCmdLine);
+    }
 }
