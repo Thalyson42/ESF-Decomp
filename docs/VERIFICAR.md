@@ -49,3 +49,9 @@ Itens em que a recuperação ficou ambígua. Marcar como resolvido ao confirmar.
 
 ## CBot::HasWeapon (0x1534b0)
 - Offsets +0x940 (10 listas), +0x84 (próximo), +0x88 (id) lidos do decompilado; ids 7 e 10 = discos.
+
+## NMenu (src/bot/nmenu.cpp)
+- [?] ShowMenu (host local): ordem exata do fallback do edict do host e argumentos de UTIL_IsValidPlayer (lixo de pilha no decompilado).
+- [?] MainMenu opcao 3 usa `cout <<` (virtual call em cout+0x200 no binario); texto "This option is NOT available in free fight" quando g_teamplay == 0.
+- [OK] Menu de Debug: o texto diz "Bots Ignore Human Players" na opcao 3 mas o binario liga ela ao campo "observer" (+3402); mantido.
+- [OK] ChatMenu: opcoes 1 e 2 levam ao mesmo menu (toggle de chat).
