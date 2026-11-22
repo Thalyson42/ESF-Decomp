@@ -82,6 +82,8 @@ public:
     void BotCFGFileThink(void);
     void OpenBotCFGFile(void);
     void Think(void);
+    void MapInit(void);
+    void DisconnectPlayer(edict_t *pEdict);
     void ChangeBotBoolSetting(bool &bSetting, short sValue, const char *szName);
     void SBotRulesThink(void);
     void ChangeSBotLaserPercent(short sPercent);

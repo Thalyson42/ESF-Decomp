@@ -1266,3 +1266,143 @@ void CBotManager::BotCFGFileThink(void)
         g_engfuncs.pfnServerCommand(szCmdLine);
     }
 }
+
+// ---------------------------------------------------------------------------
+// MapInit / DisconnectPlayer
+// ---------------------------------------------------------------------------
+extern void WaypointInit(void);
+extern void WaypointLoad(int iFlag);                                          // [?] argumento 0
+extern int m_iSpriteTexture;
+
+// Inicio de mapa: zera o estado, abre o bot.cfg (o caminho "esf\maps\<mapa>_bot.cfg\" do original nunca abre no Linux;
+// quem abre de fato e OpenBotCFGFile), carrega waypoints e precacheia sons.
+void CBotManager::MapInit(void)
+{
+    char szCfg[128], szPath[256];
+    f_010 = gpGlobals->time + 30.0f;
+    f_020 = 0;
+    f_008 = 0;
+    f_030 = 0;
+    f_034 = 0;
+    f_014 = f_015 = f_016 = f_017 = f_018 = 0;
+    f_024 = 0;
+    f_d24 = 1;
+    strcpy(szCfg, STRING(gpGlobals->mapname));
+    strcat(szCfg, "_bot.cfg");
+    sprintf(szPath, "esf\\maps\\%s\\", szCfg);
+    f_038 = (int)fopen(szPath, "r");
+    if (f_038)
+    {
+        std::cout << "Executing " << szPath << "\n";
+        bot_restore_list_s *pList = m_pRestoreList;
+        while (pList->pHead)                                                  // esvazia a fila de restauracao
+        {
+            bot_restore_node_s *pNode = pList->pHead;
+            bot_restore_entry_s *pEnt = pNode->pData;
+            if (pNode == pList->pTail)
+                pList->pTail = pNode->pNext;
+            pList->pHead = pNode->pNext;
+            if (pList->pHead)
+                pList->pHead->pPrev = NULL;
+            pNode->pNext = NULL;
+            delete pNode;
+            delete pEnt;
+        }
+        f_034 = gpGlobals->time + (g_engfuncs.pfnIsDedicatedServer() ? 5.0f : 20.0f);
+    }
+    else
+    {
+        OpenBotCFGFile();
+        f_020 = gpGlobals->time + (g_engfuncs.pfnIsDedicatedServer() ? 5.0f : 30.0f);
+    }
+    WaypointInit();
+    WaypointLoad(0);
+    PRECACHE_SOUND("weapons/xbow_hit1.wav");
+    PRECACHE_SOUND("weapons/mine_activate.wav");
+    PRECACHE_SOUND("common/wpn_hudoff.wav");
+    PRECACHE_SOUND("common/wpn_hudon.wav");
+    PRECACHE_SOUND("common/wpn_moveselect.wav");
+    PRECACHE_SOUND("common/wpn_denyselect.wav");
+    PRECACHE_SOUND("weapons/basicbeam_chargeoriginal.wav");
+    PRECACHE_MODEL("models/mechgibs.mdl");
+    m_iSpriteTexture = PRECACHE_MODEL("sprites/lgtning.spr");
+    f_025 = 0;
+    f_005 = f_004;
+    f_004 = 0;
+}
+
+// Um jogador saiu: se for bot, atualiza contadores e (se nao foi expulso) guarda seus dados na fila de restauracao
+// para recria-lo no proximo mapa; depois libera combos, tarefa e listas do bot.
+void CBotManager::DisconnectPlayer(edict_t *pEdict)
+{
+    f_d44--;
+    edict_t *pEnt = pEdict ? pEdict : g_engfuncs.pfnPEntityOfEntOffset(0);
+    CBasePlayer *pPl = pEnt ? (CBasePlayer *)pEnt->pvPrivateData : NULL;
+    if (!pPl || !IsBotPlayer(pPl))
+        return;
+    CBot *pBot = (CBot *)pPl;
+    f_004--;
+
+    short sSBot = *(short *)((char *)pBot + 0xba4);
+    if (sSBot > 0)
+    {
+        f_02c--;
+        if (f_02c <= 0)                                                       // [?] ultimo SBot: restaura mp_plcatchup
+            CVAR_SET_FLOAT("mp_plcatchup", (float)f_028);
+    }
+
+    if (!*(int *)((char *)pBot + 0xa08))                                      // nao foi expulso -> guardar para restaurar
+    {
+        void *pPers = *(void **)((char *)pBot + 0xa04);
+        short sPersIdx = -1;
+        if (pPers)
+            for (int k = 0; k <= 8; k++)
+                if ((char *)this + 3408 + k * 60 == (char *)pPers)            // 9 personalidades de 60 bytes
+                {
+                    sPersIdx = k;
+                    break;
+                }
+
+        unsigned char *pE = (unsigned char *)operator new(52);
+        pE[0] = *(unsigned char *)((char *)pBot + 0x9fc);                     // skill
+        pE[1] = (unsigned char)sPersIdx;                                      // personalidade
+        *(short *)(pE + 2) = *(short *)((char *)pBot + 0x9f0);                // classe
+        *(short *)(pE + 4) = *(short *)((char *)pBot + 0x1060);               // time desejado
+        strncpy((char *)pE + 6, (char *)pBot + 0xac4, 31);                    // nome
+        pE[0x26] = 0;
+        *(short *)(pE + 0x28) = sSBot;
+        *(float *)(pE + 0x30) = gpGlobals->time;
+
+        bot_restore_list_s *pList = m_pRestoreList;
+        bot_restore_node_s *pNode = new bot_restore_node_s;
+        pNode->pData = (bot_restore_entry_s *)pE;
+        pNode->pNext = NULL;
+        pNode->pPrev = NULL;
+        if (!pList->pHead)
+        {
+            pList->pHead = pNode;
+            pList->pTail = pNode;
+        }
+        else
+        {
+            pNode->pPrev = pList->pTail;
+            pList->pTail->pNext = pNode;
+            pList->pTail = pNode;
+        }
+    }
+
+    pBot->DeleteCombos();
+    pBot->KillCurrentTask();
+    struct sllnode_s { void *pData; sllnode_s *pNext; sllnode_s *pPrev; };
+    struct sll_s { sllnode_s *pHead; sllnode_s *pTail; };
+    sll_s *pTaskList = (sll_s *)((char *)pBot + 0xb84);                       // [?] lista de 0xb84
+    for (sllnode_s *p = pTaskList->pHead; p; )
+    {
+        sllnode_s *pNext = p->pNext;
+        delete p;
+        p = pNext;
+    }
+    pTaskList->pHead = NULL;
+    pTaskList->pTail = NULL;
+    pBot->ClearMeleeComboList();
+}
