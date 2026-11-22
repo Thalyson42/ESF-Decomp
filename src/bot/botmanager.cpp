@@ -1271,7 +1271,6 @@ void CBotManager::BotCFGFileThink(void)
 // MapInit / DisconnectPlayer
 // ---------------------------------------------------------------------------
 extern void WaypointInit(void);
-extern void WaypointLoad(int iFlag);                                          // [?] argumento 0
 extern int m_iSpriteTexture;
 
 // Inicio de mapa: zera o estado, abre o bot.cfg (o caminho "esf\maps\<mapa>_bot.cfg\" do original nunca abre no Linux;
@@ -1316,7 +1315,7 @@ void CBotManager::MapInit(void)
         f_020 = gpGlobals->time + (g_engfuncs.pfnIsDedicatedServer() ? 5.0f : 30.0f);
     }
     WaypointInit();
-    WaypointLoad(0);
+    WaypointLoad(NULL);
     PRECACHE_SOUND("weapons/xbow_hit1.wav");
     PRECACHE_SOUND("weapons/mine_activate.wav");
     PRECACHE_SOUND("common/wpn_hudoff.wav");
@@ -1405,4 +1404,164 @@ void CBotManager::DisconnectPlayer(edict_t *pEdict)
     pTaskList->pHead = NULL;
     pTaskList->pTail = NULL;
     pBot->ClearMeleeComboList();
+}
+
+// ---------------------------------------------------------------------------
+// Comandos de console so para servidor nao dedicado (host): killbotinfront, waypoint, autowaypoint,
+// pathwaypoint, dbgatherspot. f_d45 = 1 enquanto trata um comando conhecido.
+// ---------------------------------------------------------------------------
+extern int g_auto_waypoint, g_path_waypoint, DrawDBSpots;
+extern void WaypointAdd(edict_t *pEntity);
+extern void WaypointDelete(edict_t *pEntity);
+extern void WaypointSave(void);
+extern int  WaypointLoad(edict_t *pEntity);                                   // [?] mesma funcao usada com 0 em MapInit
+extern void WaypointPrintInfo(edict_t *pEntity);
+extern void WaypointCreatePath(edict_t *pEntity, int iType);
+extern void WaypointRemovePath(edict_t *pEntity, int iType);
+extern void ClientKill(edict_t *pEntity);
+
+void CBotManager::HandleNonDedBotCommands(void)
+{
+    CBasePlayer *pHost = GetHostPlayer(this);
+    if (!pHost)
+        return;
+    const char *szCmd = g_engfuncs.pfnCmd_Argv(0);
+    const char *szArg = g_engfuncs.pfnCmd_Argv(1);
+    f_d45 = 1;
+    edict_t *pHostEdict = pHost->pev->pContainingEntity;
+    const char *szMsg = NULL;
+
+    if (!strcmp(szCmd, "killbotinfront"))
+    {
+        UTIL_MakeVectors(pHost->pev->v_angle);
+        Vector vecStart = pHost->pev->origin;
+        Vector vecEnd = vecStart + gpGlobals->v_forward * 10000.0f;
+        TraceResult tr;
+        UTIL_TraceHull(vecStart, vecEnd, dont_ignore_monsters, head_hull, pHostEdict, &tr);
+        edict_t *pHit = tr.pHit;
+        if (FNullEnt(pHit))
+            return;
+        if ((pHit->v.flags & (FL_CLIENT | FL_FAKECLIENT)) == (FL_CLIENT | FL_FAKECLIENT))   // 0x2008
+            ClientKill(pHit);
+        return;
+    }
+    if (!strcmp(szCmd, "waypoint"))
+    {
+        if (!strcmp(szArg, "on"))
+        {
+            g_waypoint_on = 1;
+            szMsg = "waypoints are ON\n";
+        }
+        else if (!strcmp(szArg, "off"))
+        {
+            g_waypoint_on = 0;
+            szMsg = "waypoints are OFF\n";
+        }
+        else if (!strcmp(szArg, "add"))
+        {
+            g_waypoint_on = 1;
+            WaypointAdd(pHostEdict);
+            return;
+        }
+        else if (!strcmp(szArg, "delete"))
+        {
+            g_waypoint_on = 1;
+            WaypointDelete(pHostEdict);
+            return;
+        }
+        else if (!strcmp(szArg, "save"))
+        {
+            WaypointSave();
+            szMsg = "waypoints saved\n";
+        }
+        else if (!strcmp(szArg, "load"))
+            szMsg = WaypointLoad(pHostEdict) ? "waypoints loaded\n" : "Error loading waypoints for this map\n";
+        else if (!strcmp(szArg, "info"))
+        {
+            WaypointPrintInfo(pHostEdict);
+            return;
+        }
+        else
+            szMsg = g_waypoint_on ? "waypoints are ON\n" : "waypoints are OFF\n";
+    }
+    else if (!strcmp(szCmd, "autowaypoint"))
+    {
+        if (!strcmp(szArg, "on"))
+        {
+            g_auto_waypoint = 1;
+            g_waypoint_on = 1;
+        }
+        else if (!strcmp(szArg, "off"))
+            g_auto_waypoint = 0;
+        std::cout << "autowaypoint is ";
+        szMsg = g_auto_waypoint ? "ON\n" : "OFF\n";
+    }
+    else if (!strcmp(szCmd, "pathwaypoint"))
+    {
+        if (!strcmp(szArg, "on"))
+        {
+            g_path_waypoint = 1;
+            g_waypoint_on = 1;
+            szMsg = "pathwaypoint is ON\n";
+        }
+        else if (!strcmp(szArg, "off"))
+        {
+            g_path_waypoint = 0;
+            szMsg = "pathwaypoint is OFF\n";
+        }
+        else if (!strcmp(szArg, "create1")) { WaypointCreatePath(pHostEdict, 1); return; }
+        else if (!strcmp(szArg, "create2")) { WaypointCreatePath(pHostEdict, 2); return; }
+        else if (!strcmp(szArg, "remove1")) { WaypointRemovePath(pHostEdict, 1); return; }
+        else if (!strcmp(szArg, "remove2")) { WaypointRemovePath(pHostEdict, 2); return; }
+        else
+            return;
+    }
+    else if (!strcmp(szCmd, "dbgatherspot"))
+    {
+        if (CVAR_GET_FLOAT("mp_gamemode") != 2.0f)
+            szMsg = "Error: Cannot use dragonball commands when CPDB mode is off!\n";
+        else if (!strcmp(szArg, "on"))
+        {
+            std::cout << "DB gather spots are being drawed\n";
+            DrawDBSpots = 1;
+            return;
+        }
+        else if (!strcmp(szArg, "off"))
+        {
+            std::cout << "DB gather spots are not being drawed\n";
+            DrawDBSpots = 0;
+            return;
+        }
+        else if (!strcmp(szArg, "add"))
+        {
+            std::cout << "Adding dragonball gather spot...\n";
+            PlaceNewDBGatherSpot();
+            return;
+        }
+        else if (!strcmp(szArg, "delete"))
+        {
+            std::cout << "Deleting dragonball gather spot...\n";
+            DeleteDBGatherSpot();
+            return;
+        }
+        else if (!strcmp(szArg, "save"))
+        {
+            SaveCustomGatherDBSpots();
+            return;
+        }
+        else if (!strcmp(szArg, "load"))
+        {
+            InitCustomGatherDBSpots();
+            return;
+        }
+        else
+            return;
+    }
+    else
+    {
+        f_d45 = 0;                                                            // comando desconhecido
+        return;
+    }
+    if (szMsg)
+        std::cout << szMsg;
 }

@@ -98,6 +98,8 @@ public:
     void MakeRandomPersonalities(void);
     BOOL HandleBotCommands(edict_t *pEntity);
     void HandleNonDedBotCommands(void);
+    void SaveCustomGatherDBSpots(void);
+    void InitCustomGatherDBSpots(void);
     short GetNearestDBSpotIndex(CBasePlayer *pPlayer, float flMaxDist);
     short GetRandomDBSpotIndex(short sTeam);
     void DeleteDBGatherSpot(void);
