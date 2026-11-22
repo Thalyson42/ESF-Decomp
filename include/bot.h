@@ -81,6 +81,7 @@ public:
     BOOL  DangerousPlForBot(long lPL);
     void  MakeMeleeComboList(void);                    // [?] CBot::MakeTask(int) (modo da tarefa +0x1068)
     void  ClearMeleeComboList(void);
+    BOOL  MakeTeleMelee(CBasePlayer *pEnemy);
     void  MakeAvoidSwoopTask(void);
     EComboType MakeAttackAvoidChainSwoop(void);
     short GetBestEscapeSwoopDir(bool bFlag);

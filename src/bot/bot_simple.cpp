@@ -2292,3 +2292,46 @@ EComboType CBot::MakeAwayChainSwoop(CBaseEntity *pEnemy)
     if (iDir & 8)  c[4].iWeight = 15;
     return PickSwoopChain(this, c, 5);
 }
+
+// Escolhe um combo de teleporte+melee conforme as direcoes livres de colisao (650 u) e a distancia ao inimigo:
+// pesos 40/75/45; sorteio ponderado RandomLong(0, total), faixa [lo, lo+peso). Guarda o inimigo em +0xb6c e cria o combo.
+BOOL CBot::MakeTeleMelee(CBasePlayer *pEnemy)
+{
+    struct { int iType; int iWeight; } aOpt[10];
+    int n = 0, iTotal = 0;
+    float flDist = (pEnemy->pev->origin - pev->origin).Length();
+    edict_t *pEdict = pev->pContainingEntity;
+    #define TELE_OPT(dir, type, w) \
+        if (!CheckForCollide(pEdict, (dir), 650.0f)) { aOpt[n].iType = (type); aOpt[n].iWeight = (w); n++; iTotal += (w); }
+
+    if (flDist > 450.0f)
+    {
+        TELE_OPT(2, 14, 40)
+        TELE_OPT(4, 15, 40)
+        TELE_OPT(8, 13, 40)
+    }
+    TELE_OPT(32, 16, 75)
+    TELE_OPT(64, 17, 75)
+    TELE_OPT(0x40000, 11, 40)
+    TELE_OPT(0x80000, 12, 40)
+    if (flDist < 600.0f)
+    {
+        TELE_OPT(0x40000, 18, 45)
+        TELE_OPT(0x80000, 19, 45)
+    }
+    #undef TELE_OPT
+
+    int iPick = RANDOM_LONG(0, iTotal);                                       // [OK]
+    int iLo = 0;
+    for (int i = 0; i < n; i++)
+    {
+        if (iPick >= iLo && iPick < iLo + aOpt[i].iWeight)
+        {
+            BOTF(this, CBasePlayer *, 0xb6c) = pEnemy;                        // inimigo atual
+            MakeCombo((EComboType)aOpt[i].iType);                             // [?] valores 11..19 = combos de teletransporte
+            return TRUE;
+        }
+        iLo += aOpt[i].iWeight;
+    }
+    return FALSE;
+}
