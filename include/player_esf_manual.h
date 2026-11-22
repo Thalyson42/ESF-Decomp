@@ -30,8 +30,8 @@
 struct esf_botinfo_s { char pad[0x1a]; short m_iTauntChance; };   // [?]
 extern cvar_t simplemelee, forcerespawn;
 class CBodySlice { public: static void SpawnBodySlices(entvars_t *pev, int iFlag); };   // [?] assinatura
-class CBotChat { public: void LetBotTaunt(CBasePlayer *pKiller, CBasePlayer *pVictim); void LetBotCheckForReply(CBasePlayer *pBot); void LetBotSaySomething(CBasePlayer *pBot); void LetBotWhine(CBasePlayer *pBot, int iReason); void LetBotSayAWelcomeSentence(CBasePlayer *pBot); void ReadChatFile(void); };   // [?] nome CChatClass no binario
-extern CBotChat ChatClass;
+#include "CChatClass.h"
+extern CChatClass ChatClass;                   // [OK] objeto global do chat dos bots
 #endif
 // usados por playermelee.cpp (assinaturas [?], só para compilar a sintaxe)
 #ifndef ESF_MELEE_GLOBALS_H

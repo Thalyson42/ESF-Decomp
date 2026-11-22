@@ -996,3 +996,188 @@ void CChatClass::LetBotCheckForReply(CBot *pBot)
     for (int i = 4; i >= 0; i--)
         FreeChoiceList(&aSub[i]);
 }
+
+// ---------------------------------------------------------------- arquivo de frases (esf_bot_chat.txt)
+// Formato: secoes [bot_welcome] [bot_chat] [bot_taunt] [bot_whine]; dentro de cada uma, linhas "keyword a b c...",
+// "keyword2 ...", "keytoken x y ..." definem as chaves e as linhas entre { } sao as frases (ate 6 chaves por linha).
+extern void BuildBotFileName(char *szOut, const char *szName, int iFlag);   // [?] assinatura (funcao livre)
+
+void CChatClass::ReadChatFile(void)
+{
+    static char server_cmd[256];                 // [?] buffer estatico do binario (server_cmd.2781), so e preenchido
+    char szFile[256];
+    char szSentence[80];
+    char szLine[84];
+    char szLineCopy[84];
+    char szKeys[6][64];
+    char szTokens[6];
+    int iSection = 4;                            // 0 welcome, 1 chat, 2 whine, 3 taunt, 4 = nenhuma
+    int iKeyType = 3;                            // 0 keyword, 1 keyword2, 2 keytoken, 3 = ainda nenhum
+    int bInBlock = 0;
+
+    memset(szSentence, 0, sizeof(szSentence));
+    for (int i = 0; i <= 4; i++)                 // [OK] zera as frases recentes
+    {
+        m_pRecentNormal[i] = 0;
+        m_pRecentWhine[i] = 0;
+        m_pRecentTaunt[i] = 0;
+    }
+    for (int i = 0; i <= 5; i++)
+    {
+        szKeys[i][0] = 0;
+        szTokens[i] = 0;
+    }
+
+    BuildBotFileName(szFile, "esf_bot_chat.txt", 0);
+    g_engfuncs.pfnServerPrint("Reading bot_chat file... ");
+    FILE *f = fopen(szFile, "r");
+    if (!f)
+    {
+        g_engfuncs.pfnServerPrint("file not found\n");
+        return;
+    }
+
+    while (f)
+    {
+        // ---- le uma linha: ignora espacos iniciais, troca TAB por espaco, junta espacos repetidos
+        int n = 0;
+        szLine[0] = 0;
+        int c;
+        while (1)
+        {
+            c = fgetc(f);
+            if (c == 9 || c == 32)
+                continue;
+            if (c == 10 || c == EOF)
+                break;
+            if (c == 13)
+            {
+                c = fgetc(f);
+                break;
+            }
+            while (1)
+            {
+                if (c == 9)
+                    c = 32;
+                szLine[n] = (char)c;
+                c = fgetc(f);
+                if (szLine[n] == 32 && c == 32)
+                {
+                    do
+                        c = fgetc(f);
+                    while (szLine[n] == 32 && c == 32);
+                }
+                if (n < 78)                       // [?] o binario nao limita o tamanho da linha
+                    n++;
+                if (c == EOF)
+                    break;
+                if (c == 13)
+                {
+                    c = fgetc(f);
+                    goto LineDone;
+                }
+                if (c == 10)
+                    break;
+            }
+            break;
+        }
+    LineDone:
+        if (c == EOF)
+        {
+            fclose(f);
+            f = 0;
+        }
+        szLine[n] = 0;
+        strcpy(server_cmd, szLine);
+        strcat(server_cmd, "\n");
+        strcpy(szLineCopy, szLine);
+
+        strtok(szLine, " ,");
+        char *pTok[6];
+        for (int i = 0; i < 6; i++)
+            pTok[i] = strtok(0, " ,");
+
+        if (szLineCopy[0] == '#' || !szLineCopy[0])
+            continue;
+        if (!strcmp(szLineCopy, "[bot_welcome]")) { iSection = 0; continue; }
+        if (!strcmp(szLineCopy, "[bot_chat]"))    { iSection = 1; continue; }
+        if (!strcmp(szLineCopy, "[bot_taunt]"))   { iSection = 3; continue; }
+        if (!strcmp(szLineCopy, "[bot_whine]"))   { iSection = 2; continue; }
+        if (iSection == 4)
+            continue;
+        if (szLineCopy[0] == '{') { bInBlock = 1; continue; }
+        if (szLineCopy[0] == '}') { bInBlock = 0; continue; }
+
+        if (!strncasecmp(szLineCopy, "keyword", 7) || !strncasecmp(szLineCopy, "keyword2", 8))
+        {
+            for (int i = 0; i <= 5; i++)
+                szKeys[i][0] = 0;
+            iKeyType = !strncasecmp(szLineCopy, "keyword2", 8);
+            for (int i = 0; i < 6; i++)
+            {
+                if (pTok[i] && *pTok[i])
+                {
+                    strncpy(szKeys[i], pTok[i], 63);
+                    szKeys[i][63] = 0;
+                }
+            }
+        }
+        else if (!strncasecmp(szLineCopy, "keytoken", 8))
+        {
+            for (int i = 0; i <= 5; i++)
+                szTokens[i] = 0;
+            iKeyType = 2;
+            for (int i = 0; i < 6; i++)
+                if (pTok[i] && *pTok[i])
+                    szTokens[i] = *pTok[i];
+        }
+        else
+        {
+            if (!bInBlock)
+                continue;
+            strncpy(szSentence, szLineCopy, 79);
+            szSentence[79] = 0;
+            int iLen = (int)strlen(szSentence);
+            if (iLen > 0 && szSentence[iLen - 1] == 10)
+                szSentence[iLen - 1] = 0;
+            if (iKeyType == 3)
+                iKeyType = 0;
+            if (iSection == 0)
+                m_pWelcomeNode->AddSentence(szSentence);
+            else if (iSection == 1)
+            {
+                if ((unsigned int)iKeyType <= 1)
+                {
+                    if (!szKeys[0][0])
+                        strcpy(szKeys[0], "All");
+                    AddNormalChatSentence(szSentence, szKeys[0], (EKeyType)iKeyType);
+                    for (int i = 1; i <= 5; i++)
+                        if (szKeys[i][0])
+                            AddNormalChatSentence(szSentence, szKeys[i], (EKeyType)iKeyType);
+                }
+                else
+                {
+                    if (!szTokens[0])
+                        szTokens[0] = 32;
+                    AddNormalChatSentence(szSentence, &szTokens[0], (EKeyType)iKeyType);
+                    for (int i = 1; i <= 5; i++)
+                        if (szTokens[i])
+                            AddNormalChatSentence(szSentence, &szTokens[i], (EKeyType)iKeyType);
+                }
+            }
+            else if (iSection == 3)
+            {
+                if (!szKeys[0][0])
+                    strcpy(szKeys[0], "All");
+                AddTauntChatSentence(szSentence, "All", (EKeyType)iKeyType);
+            }
+            else if (iSection == 2)
+            {
+                if (!szKeys[0][0])
+                    strcpy(szKeys[0], "All");
+                AddWhineChatSentence(szSentence, "All", (EKeyType)iKeyType);
+            }
+        }
+    }
+    g_engfuncs.pfnServerPrint("done\n");
+}

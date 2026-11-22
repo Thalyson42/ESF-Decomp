@@ -11,7 +11,7 @@
 #include <iostream>
 
 extern CBotManager BotManager;
-extern CBotChat ChatClass;
+extern CChatClass ChatClass;
 extern cvar_t sv_num_bots, sv_bot_skill;                                      // [OK] CBotManager::sv_num_bots / sv_bot_skill (estaticos)
 extern void HandleNormalBotCommands(void);
 extern void ShowInGameBotHelpWindow(void);

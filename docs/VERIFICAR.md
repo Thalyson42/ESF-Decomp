@@ -55,3 +55,10 @@ Itens em que a recuperação ficou ambígua. Marcar como resolvido ao confirmar.
 - [?] MainMenu opcao 3 usa `cout <<` (virtual call em cout+0x200 no binario); texto "This option is NOT available in free fight" quando g_teamplay == 0.
 - [OK] Menu de Debug: o texto diz "Bots Ignore Human Players" na opcao 3 mas o binario liga ela ao campo "observer" (+3402); mantido.
 - [OK] ChatMenu: opcoes 1 e 2 levam ao mesmo menu (toggle de chat).
+
+## CChatClass (src/bot/chat.cpp)
+- [?] CutTags 2a passada: indice `q[-len(tag2)]` copiado literalmente do binario (ponteiro anterior ao deslocamento).
+- [?] StoreChatMsg: o decompilado perdeu o `return` do teste de mensagem repetida.
+- [?] ReadChatFile: o binario nao limita o tamanho da linha (aqui limitado a 78); buffer estatico server_cmd sem uso.
+- [?] Secoes taunt/whine copiam "All" como chave (o binario passa a string literal "All" independente do keyword).
+- [OK] Tamanho da classe 0x394: 5 mensagens antigas (168 bytes), 4 ponteiros, 3 listas de 5 frases recentes (+0x358 normal, +0x36c whine, +0x380 taunt).

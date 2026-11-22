@@ -573,7 +573,7 @@ void CBasePlayer::Killed(entvars_t *pevAttacker, int iGib)
             if (!pKiller->IsNetClient() && (pKiller->pev->flags & FL_FAKECLIENT))     // [OK] bot matou
             {
                 if (RANDOM_LONG(1, 100) <= ((CBasePlayer *)pKiller)->m_pBotInfo->m_iTauntChance)   // [?] +0xa04->+0x1a
-                    ChatClass.LetBotTaunt((CBasePlayer *)pKiller, this);
+                    ChatClass.LetBotTaunt((CBot *)pKiller, this);              // [OK] (bot que matou, vitima)
             }
             if (!IsNetClient() && (pev->flags & FL_FAKECLIENT))
                 m_pLastKiller = (CBasePlayer *)pKiller;       // [?] +0xd50: bot lembra quem o matou

@@ -1919,7 +1919,7 @@ void CBot::BotPreThink(void)
         strcpy(&BOTF(this, char, 0xac4), STRING(pev->netname));
     if (gpGlobals->time - BOTF(this, float, 0x9f4) < 2.5f && BOTF(this, int, 0xd50))   // [OK]
     {
-        ChatClass.LetBotWhine(this, BOTF(this, int, 0xd50));
+        ChatClass.LetBotWhine(this, BOTF(this, CBasePlayer *, 0xd50));   // [OK] 2o argumento = quem atacou
         BOTF(this, int, 0xd50) = 0;
     }
     if (BOTF(this, char, 0xc44) && BOTF(this, float, 0xc48) < gpGlobals->time)
