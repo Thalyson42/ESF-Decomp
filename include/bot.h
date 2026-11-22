@@ -89,6 +89,7 @@ public:
     void  SenseSurroundingSounds(danger_info_s &Danger);
     void  CreateInit(short sTeam, short sClass, short sLevel, short sPersonality, short sSBot);
     void  SenseHit(danger_info_s &Danger);
+    void  SenseSurroundingAttacks(danger_info_s &Danger);
     BOOL  SearchGatheredSpot(void);
     BOOL  SearchDBGatherSpot(void);
     BOOL  SearchDragonBall(void);

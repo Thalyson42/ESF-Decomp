@@ -2335,3 +2335,173 @@ BOOL CBot::MakeTeleMelee(CBasePlayer *pEnemy)
     }
     return FALSE;
 }
+
+// ---------------------------------------------------------------------------
+// SenseSurroundingAttacks: avalia ataques "magic_attack" proximos e acumula o perigo em Danger.
+//  - roda a cada 0.1 s (timer em +0xae8); a personalidade (+0xa04) fornece 5 pesos base (shorts +0x26/+0x28/+0x2e/+0x30/+0x32)
+//    e a agressividade (int +0x34: 0 agressivo, 2 defensivo) ajusta limiar de direcao (75 -> x1.2 / x0.85) e pontuacao (x0.85 / x1.25)
+//  - a pontuacao (iter) vem da distancia, da diferenca de powerlevel (+0x744) com o dono, do dano (pev->dmg),
+//    da saude propria, de a direcao apontar para o bot e do tipo do ataque (ClassifyAttack)
+//  - o ataque de maior pontuacao (>19) preenche Danger +0x00..+0x14; Danger +0x18 soma todas as pontuacoes.
+//  - [OK] constantes lidas do assembly (tools/annotate_asm.py); cadeia final de >160/>200/>175/>150 tem ramos
+//    inalcancaveis no original (ver docs/VERIFICAR.md), mantida como esta no binario.
+// ---------------------------------------------------------------------------
+void CBot::SenseSurroundingAttacks(danger_info_s &Danger)
+{
+    if (BOTF(this, float, 0xae8) > gpGlobals->time)
+        return;
+    BOTF(this, float, 0xae8) = gpGlobals->time + 0.1f;
+
+    char *pPers = BOTF(this, char *, 0xa04);
+    int iAggr = *(int *)(pPers + 0x34);
+    char cMinHeading = 75;
+    if (iAggr == 2)
+        cMinHeading = (char)(int)(75 * 0.85);
+    else if (iAggr == 0)
+        cMinHeading = (char)(int)(75 * 1.2);
+
+    CBaseEntity *pAttack = NULL;
+    int iBest = 0;                                                            // short v6
+    while ((pAttack = UTIL_FindEntityByString(pAttack, "globalname", "magic_attack")) != NULL)
+    {
+        edict_t *pOwnerEdict = pAttack->pev->owner;
+        if (FNullEnt(pOwnerEdict) || (g_teamplay && pOwnerEdict->v.team == pev->team))
+            continue;
+        if (pAttack->pev->velocity.Length() < 10.0f)                          // parado
+            continue;
+        short sHeading = (short)UTIL_GetHeadingPercentage(this, (CBasePlayer *)pAttack);
+        if (sHeading < cMinHeading)
+            continue;
+
+        float flDist = (pAttack->pev->origin - pev->origin).Length();
+        if (flDist > 2000.0f)
+            continue;
+        if (flDist > 250.0f && !EntIsInFieldOfView(this, pAttack))
+            continue;
+        if (!CanReachPoint(pAttack->pev->origin))                             // vtable +0xe4
+            continue;
+
+        float v5 = (float)*(short *)(pPers + 0x26);
+        float v4 = (float)*(short *)(pPers + 0x28);
+        float v3 = (float)*(short *)(pPers + 0x32);
+        float v2 = (float)*(short *)(pPers + 0x30);
+        float v1 = (float)*(short *)(pPers + 0x2e);
+        int iter = 0;
+
+        // 1) distancia ao ataque
+        if (flDist < 150.0f)      { iter = 160; v5 *= 1.7f;  v4 *= 0.01f; v3 *= 1.5f;  v2 *= 0.01f; v1 *= 0.01f; }
+        else if (flDist < 350.0f) { iter = 145; v5 *= 1.5f;  v4 *= 0.02f; v3 *= 1.15f; v2 *= 0.1f;  v1 *= 0.1f;  }
+        else if (flDist < 500.0f) { iter = 125; v5 *= 1.25f; v4 *= 0.15f; v2 *= 0.3f;  v1 *= 0.15f; }
+        else if (flDist < 750.0f) { iter = 100; v5 *= 1.1f;  v4 *= 0.3f;  v3 *= 0.95f; v2 *= 0.55f; v1 *= 0.2f;  }
+        else if (flDist < 875.0f) { iter = 85;  v4 *= 0.5f;  v3 *= 0.95f; v2 *= 0.7f;  v1 *= 0.4f;  }
+        else if (flDist < 1000.0f){ iter = 75;  v4 *= 0.85f; v3 *= 0.9f;  v1 *= 0.75f; }
+        else if (flDist < 1250.0f){ iter = 60;  v3 *= 0.8f;  v2 *= 0.85f; }
+        else if (flDist < 2000.0f){ iter = 25;  v5 *= 0.95f; v4 *= 1.05f; v3 *= 0.3f;  v2 *= 0.5f;  v1 *= 1.05f; }
+
+        // 2) diferenca de powerlevel entre o dono do ataque e este bot
+        edict_t *pOw = pAttack->pev->owner;
+        if (!pOw)
+            pOw = g_engfuncs.pfnPEntityOfEntOffset(0);
+        CBasePlayer *pOwner = pOw ? (CBasePlayer *)pOw->pvPrivateData : NULL;
+        if (!pOwner)
+            continue;
+        int iPLDiff = BOTF(pOwner, int, 0x744) - BOTF(this, int, 0x744);
+        if (iPLDiff > 5000000)      { iter += 75; v5 *= 1.75f; v3 *= 0.01f; v2 *= 0.9f;  v1 *= 0.9f;  }
+        else if (iPLDiff > 3000000) { iter += 65; v5 *= 1.55f; v3 *= 0.01f; v2 *= 0.95f; v1 *= 0.95f; }
+        else if (iPLDiff > 2500000) { iter += 55; v5 *= 1.2f;  v3 *= 0.01f; }
+        else if (iPLDiff > 1750000) { iter += 35; v3 *= 0.1f; }
+        else if (iPLDiff > 1250000) { iter += 20; v3 *= 0.45f; }
+        else if (iPLDiff > 800000)  { iter += 10; v3 *= 0.75f; }
+
+        // 3) dano do ataque (pev->dmg)
+        float flDmg = pAttack->pev->dmg;
+        if (flDmg > 125.0f)     { iter += 40; v5 *= 1.75f; v4 *= 0.9f; v3 *= 0.25f; v2 *= 0.9f; v1 *= 0.9f; }
+        else if (flDmg > 85.0f) { iter += 25; v5 *= 1.45f; v3 *= 0.5f; }
+        else if (flDmg > 65.0f) { iter += 10; v5 *= 1.2f;  v3 *= 0.8f; }
+        else if (flDmg > 40.0f) { iter += 4; }
+
+        // 4) saude propria
+        if (flDmg > pev->health)
+        {
+            iter += 60; v5 *= 1.45f; v3 *= 0.5f;
+        }
+        if (pev->health < 10.0f)
+        {
+            iter += 45; v5 *= 1.55f; v4 *= 0.9f; v3 *= 0.01f; v2 *= 0.8f; v1 *= 0.75f;
+        }
+        else if (pev->health < 25.0f)
+        {
+            iter += 25; v5 *= 1.25f; v4 *= 0.95f; v3 *= 0.05f; v2 *= 0.95f; v1 *= 0.9f;
+        }
+        else if (pev->health < 35.0f)
+        {
+            iter += 10; v3 *= 0.05f;
+        }
+
+        // 5) o ataque nao esta bem apontado para o bot
+        if (sHeading <= 89)
+            iter -= 35;
+        else if (sHeading <= 94)
+            iter -= 12;
+
+        // 6) tipo do ataque
+        switch (ClassifyAttack(STRING(pAttack->pev->classname)))
+        {
+        case 1: iter -= 70; v5 *= 0.35f; v4 *= 0.35f; v3 *= 1.75f; v2 *= 0.8f; break;
+        case 2: iter -= 50; v5 *= 0.85f; v4 *= 0.85f; v3 *= 1.25f; v2 *= 0.85f; v1 *= 0.85f; break;
+        case 3: iter -= 35; v4 *= 0.95f; v3 *= 0.95f; break;
+        case 4: v5 *= 1.1f; v4 *= 1.1f; v3 *= 0.75f; break;
+        case 5: v5 *= 1.1f; v4 *= 1.15f; v3 *= 0.65f; break;
+        case 6: iter += 5; v5 *= 1.25f; v4 *= 0.85f; v3 = 0; v2 *= 0.95f; v1 *= 0.95f; break;
+        case 7: v5 *= 1.25f; v3 = 0; break;
+        default: break;
+        }
+
+        // 7) agressividade: agressivo x0.85, defensivo x1.25 (iter vira short truncado)
+        if (iAggr == 0)
+            iter = (short)(int)((double)(short)iter * 0.85);
+        else if (iAggr == 2)
+            iter = (short)(int)((double)(short)iter * 1.25);
+
+        if ((short)iter > 19)
+        {
+            if ((short)iter > iBest)
+            {
+                iBest = (short)iter;
+                Danger.m_fl0 = v5;
+                Danger.m_fl4 = v4;
+                Danger.m_fl8 = v3;
+                Danger.m_flC = v2;
+                Danger.m_fl10 = v1;
+                *(CBaseEntity **)&Danger.pad14 = pAttack;                     // +0x14: ataque mais perigoso
+            }
+            Danger.m_iDanger += (unsigned short)iter;
+        }
+    }
+
+    // ajuste final pelo perigo total acumulado (a ordem >160, >200, >175, >150 e a do binario: ramos 200/175 sao mortos)
+    float *pF = &Danger.m_fl0;
+    if (Danger.m_iDanger > 160)
+    {
+        Danger.m_fl0 *= 1.75f; Danger.m_fl4 *= 1.55f; Danger.m_fl8 *= 0.01f;
+        Danger.m_flC *= 0.5f;  Danger.m_fl10 *= 0.5f;
+    }
+    else if (Danger.m_iDanger > 200)
+    {
+        Danger.m_fl0 *= 1.5f;  Danger.m_fl4 *= 1.25f; Danger.m_fl8 *= 0.25f;
+        Danger.m_flC *= 0.75f; Danger.m_fl10 *= 0.75f;
+    }
+    else if (Danger.m_iDanger > 175)
+    {
+        Danger.m_fl0 *= 1.25f; Danger.m_fl4 *= 1.1f;  Danger.m_fl8 *= 0.35f;
+        Danger.m_flC *= 0.9f;  Danger.m_fl10 *= 0.9f;
+    }
+    else if (Danger.m_iDanger > 150)
+    {
+        Danger.m_fl0 *= 1.02f; Danger.m_fl4 *= 1.02f; Danger.m_fl8 *= 0.75f;
+    }
+    (void)pF;
+    Danger.m_cFlags[2] = 0;                                                   // +0x1c
+    Danger.m_cFlags[0] = 0;                                                   // +0x1a
+    Danger.m_cFlags[1] = 1;                                                   // +0x1b
+}

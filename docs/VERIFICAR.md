@@ -27,3 +27,10 @@ Itens em que a recuperação ficou ambígua. Marcar como resolvido ao confirmar.
 - CBotManager::DisconnectPlayer: condição para restaurar `mp_plcatchup` ao sair o último SBot (assumido `f_02c <= 0`; no pseudo-C aparece como `_ccall(4,19,f_02c-1,...)`).
 - CBotManager::BotCFGFileThink: assumido que linhas iniciadas por `#` e vazias são ignoradas (outros parsers do mod fazem isso; no pseudo-C deste não aparece).
 - CBotManager::MapInit: o caminho `esf\\maps\\<mapa>_bot.cfg\\` (com barras invertidas e `\\` final) nunca abre no Linux; na prática só OpenBotCFGFile abre.
+
+## CBot::SenseSurroundingAttacks (0x1750f0)
+- Cadeia final sobre o perigo total (+0x18): o binário testa `> 160`, depois `> 200`, `> 175`, `> 150` (nessa ordem, comparações com sinal);
+  os ramos `> 200` e `> 175` nunca executam (o `> 160` os captura). Mantido idêntico ao binário. Provável erro do código original.
+- `0xa04` é o ponteiro de personalidade (9 x 60 bytes em CBotManager+3408), não uma "skill struct": +0x34 = agressividade (0 agressivo, 1 normal, 2 defensivo).
+  Os 5 pesos lidos (shorts +0x26/+0x28/+0x2e/+0x30/+0x32) correspondem a campos *_percent da personalidade (ver CreateBotPersonalities).
+- O argumento de ClassifyAttack é `STRING(pev->classname)` ([?] inferido de `*v9 + gpGlobals->pStringBase`).
