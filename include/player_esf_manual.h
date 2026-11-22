@@ -22,6 +22,7 @@
     int   m_iSensuBeans;                        /* [OK] +0x75c feijoes Sensu (max 5) */ \
     CBasePlayer *m_pCandyTarget;                /* [OK] +0x728 vitima que o Buu vai transformar */ \
     float m_flCandyTime;                        /* [OK] +0x72c */ \
+    int   m_fStrangled;                         /* [OK] +0x360 estrangulado pelo CBodyPartAttack */ \
     int   m_fWaitingCandy;                      /* [OK] +0x364 esperando virar doce */ \
     BOOL  GiveBean(int iAmount); BOOL TakeBean(void); int BecomeCandy(const char *szName, CBaseEntity *pBuu); \
     EHANDLE m_hTrain;                           /* [?] +0x108 */ \

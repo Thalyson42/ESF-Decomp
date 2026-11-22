@@ -40,6 +40,9 @@ t=t[:k]+'\n\tfloat f_1f4; int f_1f8; int f_1fc;  /* [?] campos ESF da arma */ vi
 open(w,'w').write(t)
 c=sys.argv[2]; t=open(c).read()
 k=t.index('virtual void Touch(')
+ka=t.index('public:',t.index('class CBaseAnimating'))+7
+t=t[:ka]+'\n\tfloat GetAnimTime(int iSequence);   // [OK] metodo ESF (src/server/animating_esf.cpp)\n\t'+t[ka:]
+k=t.index('virtual void Touch(')
 t=t[:k]+'virtual class CBaseEntity *vfunc_12c(void) { return 0; } virtual int vfunc_item_28(void) { return 0; } virtual int vfunc_104(int) { return 0; } virtual int vfunc_fc(void) { return 0; } virtual void vfunc_1fc(void) {} virtual int vfunc_item_18(void) { return 0; }   // [?]\n\t'+t[k:]
 open(c,'w').write(t)
 PY
