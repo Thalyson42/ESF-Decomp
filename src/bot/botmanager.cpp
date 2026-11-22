@@ -1638,3 +1638,60 @@ void CBotManager::InitCustomGatherDBSpots(void)
     fclose(fp);
     std::cout << " Done\n";
 }
+
+// ---------------------------------------------------------------------------
+// Define GatherDBPosForTeamGood/Evil (modo mp_gamemode == 2): usa um ponto aleatorio de cada time; se faltar algum,
+// sorteia entre as entidades item_dragonball (peso 50 cada; o ponto do Evil nunca repete a esfera do Good).
+// ---------------------------------------------------------------------------
+extern Vector GatherDBPosForTeamGood, GatherDBPosForTeamEvil;
+
+// sorteio ponderado: RandomLong(0, 50*n); a faixa do item k e [50k, 50k+50)
+static CBaseEntity *PickRandomDragonBall(CBaseEntity **apBalls, int n)
+{
+    int iPick = RANDOM_LONG(0, n * 50);
+    for (int k = 0; k < n; k++)
+        if (iPick >= k * 50 && iPick < (k + 1) * 50)
+            return apBalls[k];
+    return NULL;
+}
+
+void CBotManager::CreateDBGatherSpots(void)
+{
+    if (!g_teamplay)
+        return;
+    if (CVAR_GET_FLOAT("mp_gamemode") != 2.0f)
+        return;
+
+    short sGood = GetRandomDBSpotIndex(1);
+    short sEvil = GetRandomDBSpotIndex(2);
+    if (sGood > -1 && sEvil > -1)
+    {
+        GatherDBPosForTeamGood = GatherSpotsForTeamGood[sGood].vecPos;
+        GatherDBPosForTeamEvil = GatherSpotsForTeamEvil[sEvil].vecPos;
+        return;
+    }
+    if (sGood == -1)
+        std::cout << "Error: missing DB gather spot for team good!\n";
+    else if (sEvil == -1)
+        std::cout << "Error: missing DB gather spot for team evil!\n";
+
+    CBaseEntity *apBalls[64];
+    int nBalls = 0;
+    CBaseEntity *pEnt = NULL;
+    while ((pEnt = UTIL_FindEntityByClassname(pEnt, "item_dragonball")) != NULL && nBalls < 64)
+        if (!FNullEnt(pEnt->edict()))
+            apBalls[nBalls++] = pEnt;
+
+    CBaseEntity *pGood = PickRandomDragonBall(apBalls, nBalls);
+    if (pGood)
+        GatherDBPosForTeamGood = pGood->pev->origin;
+
+    CBaseEntity *apRest[64];
+    int nRest = 0;
+    for (int i = 0; i < nBalls; i++)
+        if (apBalls[i] != pGood)
+            apRest[nRest++] = apBalls[i];
+    CBaseEntity *pEvil = PickRandomDragonBall(apRest, nRest);
+    if (pEvil)
+        GatherDBPosForTeamEvil = pEvil->pev->origin;
+}

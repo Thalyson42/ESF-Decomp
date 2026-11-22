@@ -99,6 +99,7 @@ public:
     BOOL HandleBotCommands(edict_t *pEntity);
     void HandleNonDedBotCommands(void);
     void SaveCustomGatherDBSpots(void);
+    void CreateDBGatherSpots(void);
     void InitCustomGatherDBSpots(void);
     short GetNearestDBSpotIndex(CBasePlayer *pPlayer, float flMaxDist);
     short GetRandomDBSpotIndex(short sTeam);
