@@ -1271,6 +1271,7 @@ void CBotManager::BotCFGFileThink(void)
 // MapInit / DisconnectPlayer
 // ---------------------------------------------------------------------------
 extern void WaypointInit(void);
+extern int  WaypointLoad(edict_t *pEntity);                                   // [?] MapInit passa NULL (0)
 extern int m_iSpriteTexture;
 
 // Inicio de mapa: zera o estado, abre o bot.cfg (o caminho "esf\maps\<mapa>_bot.cfg\" do original nunca abre no Linux;
@@ -1414,7 +1415,6 @@ extern int g_auto_waypoint, g_path_waypoint, DrawDBSpots;
 extern void WaypointAdd(edict_t *pEntity);
 extern void WaypointDelete(edict_t *pEntity);
 extern void WaypointSave(void);
-extern int  WaypointLoad(edict_t *pEntity);                                   // [?] mesma funcao usada com 0 em MapInit
 extern void WaypointPrintInfo(edict_t *pEntity);
 extern void WaypointCreatePath(edict_t *pEntity, int iType);
 extern void WaypointRemovePath(edict_t *pEntity, int iType);
