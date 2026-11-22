@@ -23,3 +23,7 @@ Itens em que a recuperação ficou ambígua. Marcar como resolvido ao confirmar.
 - CBotManager::GetNearestDBSpotIndex: o 1º argumento (jogador) parece ser ignorado; vfunc +0xe4 (CanReachPoint).
 - CBotManager::GetRandomDBSpotIndex: valor de retorno final não visível no decompilado.
 - CBotManager::CreateBot/CreateSuperBot: campos +0x4 (contador) e +0x28 (guarda mp_plcatchup) com semântica incerta.
+
+- CBotManager::DisconnectPlayer: condição para restaurar `mp_plcatchup` ao sair o último SBot (assumido `f_02c <= 0`; no pseudo-C aparece como `_ccall(4,19,f_02c-1,...)`).
+- CBotManager::BotCFGFileThink: assumido que linhas iniciadas por `#` e vazias são ignoradas (outros parsers do mod fazem isso; no pseudo-C deste não aparece).
+- CBotManager::MapInit: o caminho `esf\\maps\\<mapa>_bot.cfg\\` (com barras invertidas e `\\` final) nunca abre no Linux; na prática só OpenBotCFGFile abre.

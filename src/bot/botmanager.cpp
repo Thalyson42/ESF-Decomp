@@ -1565,3 +1565,76 @@ void CBotManager::HandleNonDedBotCommands(void)
     if (szMsg)
         std::cout << szMsg;
 }
+
+// ---------------------------------------------------------------------------
+// dragonball/<mapa>.dbg : cabecalho de 36 bytes {float versao = 1.0; char mapa[32]} + 10 pontos Good + 10 pontos Evil (16 bytes)
+// ---------------------------------------------------------------------------
+struct dbg_header_s { float flVersion; char szMap[32]; };
+
+void CBotManager::SaveCustomGatherDBSpots(void)
+{
+    if (!g_teamplay)
+        return;
+    if (CVAR_GET_FLOAT("mp_gamemode") != 2.0f)
+        return;
+    char szFileName[32] = { 0 };
+    char szPath[256] = { 0 };
+    strcpy(szFileName, STRING(gpGlobals->mapname));
+    strcat(szFileName, ".dbg");
+    BuildBotFileName(szPath, "dragonball", szFileName);
+    std::cout << "Saving dragonball info file...";
+    FILE *fp = fopen(szPath, "wb");
+    if (!fp)
+    {
+        std::cout << " couldn't create file!\n";
+        return;
+    }
+    dbg_header_s hdr;
+    memset(&hdr, 0, sizeof(hdr));
+    hdr.flVersion = 1.0f;
+    strcpy(hdr.szMap, STRING(gpGlobals->mapname));
+    fwrite(&hdr, 36, 1, fp);
+    for (int i = 0; i <= 9; i++)
+        fwrite(&GatherSpotsForTeamGood[i], 16, 1, fp);
+    for (int i = 0; i <= 9; i++)
+        fwrite(&GatherSpotsForTeamEvil[i], 16, 1, fp);
+    fclose(fp);
+    std::cout << " Done\n";
+}
+
+// Zera todos os pontos (marcados como apagados) e carrega o .dbg se existir e for do mesmo mapa/versao
+void CBotManager::InitCustomGatherDBSpots(void)
+{
+    for (int i = 0; i <= 9; i++)
+    {
+        GatherSpotsForTeamGood[i].vecPos = g_vecZero;
+        GatherSpotsForTeamGood[i].bDeleted = 1;
+        GatherSpotsForTeamEvil[i].vecPos = g_vecZero;
+        GatherSpotsForTeamEvil[i].bDeleted = 1;
+    }
+    char szFileName[32] = { 0 };
+    char szPath[256] = { 0 };
+    strcpy(szFileName, STRING(gpGlobals->mapname));
+    strcat(szFileName, ".dbg");
+    BuildBotFileName(szPath, "dragonball", szFileName);
+    std::cout << "Reading dragonball info file...";
+    FILE *fp = fopen(szPath, "rb");
+    if (!fp)
+    {
+        std::cout << " file not found, db spawnpoints will be used as gather spots.\n";
+        return;
+    }
+    dbg_header_s hdr;
+    fread(&hdr, 36, 1, fp);
+    if (hdr.flVersion != 1.0f || strcmp(STRING(gpGlobals->mapname), hdr.szMap))
+    {
+        fclose(fp);
+        return;
+    }
+    for (int i = 0; i <= 9; i++)
+        fread(&GatherSpotsForTeamGood[i], 16, 1, fp);
+    for (int i = 0; i <= 9; i++)
+        fread(&GatherSpotsForTeamEvil[i], 16, 1, fp);
+    fclose(fp);
+    std::cout << " Done\n";
+}
