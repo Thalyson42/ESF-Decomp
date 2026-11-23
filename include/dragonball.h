@@ -23,3 +23,18 @@ public:
     static CDragonBall *CreateDragonBall(Vector vecOrigin, int nr);
     static CDragonBall *ThrowDragonBall(entvars_t *pevOwner, Vector vecOrigin, Vector vecVelocity, int nr);
 };
+
+class CCariedDragonBall : public CBasePlayerWeapon   // arma "weapon_dragonball": esfera na mao do jogador (player+0x760 = numero)
+{
+public:
+    void Spawn(void);
+    void Precache(void);
+    int  GetItemInfo(ItemInfo *p);
+    int  iItemSlot(void) { return 8; }                  // [OK]
+    BOOL CanDeploy(void);
+    BOOL Deploy(void);
+    void Holster(int skiplocal = 0);
+    void PrimaryAttack(void);                           // arremessa a esfera
+    void SecondaryAttack(void);                         // solta a esfera
+    void DropBall(void);
+};

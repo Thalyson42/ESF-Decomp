@@ -4,6 +4,7 @@
 #include "cbase.h"
 #include "player.h"
 #include "gamerules.h"
+#include "weapons.h"
 #include "player_esf_manual.h"
 #include "dragonball.h"
 
@@ -183,4 +184,109 @@ void CDragonBall::UnStoneThink(void)
     SetTouch(&CDragonBall::PickupTouch);
     SetThink(NULL);
     pev->nextthink = 0;                           // [OK] +0x10c... zera think
+}
+
+// ===== CCariedDragonBall 10/10 =====
+extern int gmsgWeaponUpdate;                            // [?] nome da msg (usada no Holster)
+const char *dragonball_pmodels[7] = {                    // [OK] tabela em 0x1ba110
+    "models/p_db1.mdl", "models/p_db2.mdl", "models/p_db3.mdl", "models/p_db4.mdl",
+    "models/p_db5.mdl", "models/p_db6.mdl", "models/p_db7.mdl" };
+
+void CCariedDragonBall::Spawn(void)
+{
+    Precache();                                         // [OK] vtable slot 1
+    m_iId = 26;                                         // [OK]
+    m_iDefaultAmmo = 0;
+    m_iClip = -1;
+    FallInit();
+}
+
+void CCariedDragonBall::Precache(void)
+{
+    PRECACHE_MODEL("models/p_db1.mdl");
+    PRECACHE_MODEL("models/p_db2.mdl");
+    PRECACHE_MODEL("models/p_db3.mdl");
+    PRECACHE_MODEL("models/p_db4.mdl");
+    PRECACHE_MODEL("models/p_db5.mdl");
+    PRECACHE_MODEL("models/p_db6.mdl");
+    PRECACHE_MODEL("models/p_db7.mdl");
+}
+
+int CCariedDragonBall::GetItemInfo(ItemInfo *p)
+{
+    p->pszName = STRING(pev->classname);
+    p->pszAmmo1 = "ki";
+    p->iMaxAmmo1 = -1;
+    p->pszAmmo2 = NULL;
+    p->iMaxAmmo2 = -1;
+    p->iMaxClip = -1;
+    p->iSlot = 7;                                       // [OK]
+    p->iPosition = 0;
+    m_iId = p->iId = 26;
+    p->iFlags = 0;
+    p->iWeight = 100;
+    return 1;
+}
+
+BOOL CCariedDragonBall::CanDeploy(void)
+{
+    return (unsigned)(PF(m_pPlayer, int, 0x760) - 1) <= 6;   // [OK] so com esfera 1..7 carregada
+}
+
+BOOL CCariedDragonBall::Deploy(void)
+{
+    // [OK] modelo de terceira pessoa depende do numero da esfera
+    m_pPlayer->pev->weaponmodel = MAKE_STRING(dragonball_pmodels[PF(m_pPlayer, int, 0x760) - 1]);
+    m_flNextPrimaryAttack = m_flNextSecondaryAttack = UTIL_WeaponTimeBase() + 0.75;   // [OK] +0x9c/+0xa0
+    return DefaultDeploy("dragonball", "", 0, "");
+}
+
+void CCariedDragonBall::Holster(int skiplocal)
+{
+    MESSAGE_BEGIN(MSG_ONE, gmsgWeaponUpdate, NULL, m_pPlayer->pev);   // [?] nome da msg
+        WRITE_CHAR(-m_iId);                             // [OK] remove a arma do HUD
+    MESSAGE_END();
+    DropBall();                                         // [OK]
+    m_pPlayer->pev->weaponmodel = 0;
+    PF(m_pPlayer, int, 0x6c0) = 0;
+    m_pPlayer->m_flNextAttack = UTIL_WeaponTimeBase() + 0.5;   // [OK] player+0x264
+    SetThink(&CBasePlayerItem::DestroyItem);            // [OK] a arma some apos 0.1 s
+    pev->nextthink = gpGlobals->time + 0.1;
+}
+
+void CCariedDragonBall::DropBall(void)
+{
+    if (!PF(m_pPlayer, int, 0x760))
+        return;
+    UTIL_MakeVectors(m_pPlayer->pev->v_angle);
+    Vector vecSrc = m_pPlayer->GetGunPosition();        // [OK] vtable +0x1e0
+    Vector vecVel = gpGlobals->v_forward * 200 + m_pPlayer->pev->velocity;   // [OK]
+    CDragonBall::ThrowDragonBall(m_pPlayer->pev, vecSrc, vecVel, PF(m_pPlayer, int, 0x760));
+    PF(m_pPlayer, int, 0x760) = 0;
+}
+
+void CCariedDragonBall::PrimaryAttack(void)
+{
+    if (!PF(m_pPlayer, int, 0x760))
+        return;
+    if (PF(m_pPlayer, float, 0x6c0) >= gpGlobals->time)   // [OK] espera 1 s apos pegar
+        return;
+    m_pPlayer->SetAnimation((PLAYER_ANIM)5);
+    UTIL_MakeVectors(m_pPlayer->pev->v_angle);
+    Vector vecVel = gpGlobals->v_forward * 1000;
+    Vector vecSrc = m_pPlayer->GetGunPosition();
+    CDragonBall::ThrowDragonBall(m_pPlayer->pev, vecSrc, vecVel, PF(m_pPlayer, int, 0x760));
+    PF(m_pPlayer, int, 0x760) = 0;
+    RetireWeapon();                                     // [?] vtable +0x14c
+}
+
+void CCariedDragonBall::SecondaryAttack(void)
+{
+    if (!PF(m_pPlayer, int, 0x760))
+        return;
+    if (PF(m_pPlayer, float, 0x6c0) >= gpGlobals->time)
+        return;
+    m_pPlayer->SetAnimation((PLAYER_ANIM)6);
+    DropBall();
+    RetireWeapon();                                     // [?]
 }
