@@ -5,6 +5,7 @@
 #include "cbase.h"
 #include "player.h"
 #include "bot.h"
+#include "CBotManager.h"
 
 #define MAX_WAYPOINTS 1024                    // [OK] loops 0..0x3ff
 #define W_FL_TEAM_SPECIFIC 4                  // [OK] WaypointFindPath testa flags & 4 e (flags & 3) != team
@@ -807,5 +808,93 @@ void WaypointRouteInit(void)                  // [OK] carrega ou calcula (Floyd)
             ALERT(at_console, "ESF_bot - Error writing waypoint paths!\n");
         sprintf(msg, "ESF bot waypoint path calculations for team %d complete!\n", team + 1);
         ALERT(at_console, msg);
+    }
+}
+
+// ---- Think (chamada todo frame pelo dono do servidor / editor) ----
+extern int g_auto_waypoint, g_path_waypoint;
+extern CBotManager BotManager;
+
+static edict_t *WaypointBeamTarget(void)      // [OK] quem ve os feixes: host do listen server (BotManager+0xc) ou o mundo
+{
+    if (IS_DEDICATED_SERVER()) return NULL;   // [?] no binario cai num ponteiro nulo; aqui so evita o crash
+    CBaseEntity *pHost = *(CBaseEntity **)((char *)&BotManager + 0xc);
+    if (!pHost) pHost = CBaseEntity::Instance(g_engfuncs.pfnPEntityOfEntOffset(0));
+    return pHost ? pHost->edict() : NULL;
+}
+
+void WaypointThink(edict_t *pEntity)
+{
+    int  nearest = 0;
+    float min_distance = 9999.0f;
+
+    if (g_auto_waypoint)                      // [OK] auto-waypoint: ao se afastar > 200 u do ultimo, cria um se nenhum esta perto
+    {
+        if ((last_waypoint - pEntity->v.origin).Length() > 200.0f)
+        {
+            float d_min = 9999.0f;
+            for (int i = 0; i < num_waypoints; i++)
+            {
+                if (waypoints[i].flags < 0) continue;
+                if (waypoints[i].flags & W_FL_AIMING) continue;
+                Vector vecWP(waypoints[i].x, waypoints[i].y, waypoints[i].z);
+                if (WaypointReachable(pEntity->v.origin, vecWP, pEntity))
+                {
+                    float d = (vecWP - pEntity->v.origin).Length();
+                    if (d < d_min) d_min = d;
+                }
+            }
+            if (d_min >= 200.0f)
+                WaypointAdd(pEntity);
+        }
+    }
+
+    float distance = 9999.0f;
+    if (!g_waypoint_on) return;
+    for (int i = 0; i < num_waypoints; i++)   // [OK] desenha os waypoints num raio de 500 u a cada 1 s
+    {
+        if (waypoints[i].flags < 0) continue;
+        Vector vecWP(waypoints[i].x, waypoints[i].y, waypoints[i].z);
+        distance = (vecWP - pEntity->v.origin).Length();
+        if (distance < 500.0)
+        {
+            if (distance < min_distance) { nearest = i; min_distance = distance; }
+            if (wp_display_time[i] + 1.0 < gpGlobals->time)
+            {
+                Vector start, end;
+                float height;
+                if (waypoints[i].flags & 8)         // [OK] agachado: barra de 34 u
+                {
+                    start = vecWP - Vector(0, 0, 17); height = 34;
+                }
+                else if (waypoints[i].flags & W_FL_AIMING)   // [OK] mira: barra curta de 14 u
+                {
+                    start = vecWP + Vector(0, 0, 10); height = 14;
+                }
+                else
+                {
+                    start = vecWP - Vector(0, 0, 34); height = 68;
+                }
+                end = start + Vector(0, 0, height);
+                if (!WaypointBeamTarget()) { /* sem destinatario */ }
+                else WaypointDrawBeam(WaypointBeamTarget(), start, end, 30, 0, 0, 0, 255, 250, 5);
+                wp_display_time[i] = gpGlobals->time;
+            }
+        }
+    }
+    if (!g_path_waypoint) return;
+    if (min_distance > 50.0f) return;
+    if (f_path_time <= gpGlobals->time)       // [OK] a cada 1 s desenha os caminhos do waypoint mais proximo
+    {
+        f_path_time = gpGlobals->time + 1.0;
+        for (PATH *p = paths[nearest]; p; p = p->next)
+            for (int k = 0; k <= 3; k++)
+            {
+                if (p->index[k] == -1) continue;
+                Vector a(waypoints[nearest].x, waypoints[nearest].y, waypoints[nearest].z);
+                Vector b(waypoints[p->index[k]].x, waypoints[p->index[k]].y, waypoints[p->index[k]].z);
+                if (WaypointBeamTarget())
+                    WaypointDrawBeam(WaypointBeamTarget(), a, b, 10, 2, 250, 250, 250, 200, 10);   // [OK] linha cinza
+            }
     }
 }
