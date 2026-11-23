@@ -167,8 +167,11 @@ public:
 };
 
 // ---- Waypoints (funcoes livres) ----
-struct waypoint_s { float x, y, z; int flags; };       // [OK] 16 bytes por waypoint
+struct waypoint_s { int flags; float x, y, z; };       // [OK] 16 bytes; flags em +0, origem em +4 (corrigido a partir de WaypointInit/HeadToWaypoint)
 extern waypoint_s waypoints[];
 extern int num_waypoints;
 extern short WaypointRouteFromTo(short iFrom, short iTo, int iTeam);
+extern int   WaypointDistanceFromTo(int iFrom, int iTo, int iTeam);
+extern void  WaypointInit(void);
+extern void  WaypointFree(void);
 extern short WaypointFindPath(void **pPath, int *pIndex, short iWP, int iTeam);   // [?] iterador de caminhos a partir de iWP
