@@ -385,3 +385,163 @@ int WaypointFindNearestEnemyGoal(edict_t *pEntity, int src, int team, int iEnemy
     }
     return min_index;
 }
+
+// ---- Edicao de waypoints (comandos do dono do servidor) ----
+extern int g_waypoint_on;                     // [OK] modo de edicao ligado
+extern int g_path_waypoint_enable;            // [OK] criar caminhos automaticamente
+extern int m_iSpriteTexture;                  // [OK] sprite do feixe
+
+void WaypointDrawBeam(edict_t *pEntity, Vector start, Vector end, int width, int noise,
+                      int red, int green, int blue, int brightness, int speed)   // [OK] TE_BEAMPOINTS so p/ o editor
+{
+    if (!g_waypoint_on) return;
+    MESSAGE_BEGIN(MSG_ONE, SVC_TEMPENTITY, NULL, pEntity);
+        WRITE_BYTE(TE_BEAMPOINTS);
+        WRITE_COORD(start.x); WRITE_COORD(start.y); WRITE_COORD(start.z);
+        WRITE_COORD(end.x);   WRITE_COORD(end.y);   WRITE_COORD(end.z);
+        WRITE_SHORT(m_iSpriteTexture);
+        WRITE_BYTE(1);                        // frame inicial
+        WRITE_BYTE(10);                       // framerate
+        WRITE_BYTE(10);                       // vida
+        WRITE_BYTE(width);
+        WRITE_BYTE(noise);
+        WRITE_BYTE(red); WRITE_BYTE(green); WRITE_BYTE(blue);
+        WRITE_BYTE(brightness);
+        WRITE_BYTE(speed);
+    MESSAGE_END();
+}
+
+void WaypointAdd(edict_t *pEntity)            // [OK]
+{
+    if (num_waypoints > MAX_WAYPOINTS - 1) return;
+    int index = 0;
+    while (index < num_waypoints && waypoints[index].flags >= 0) index++;   // [OK] reaproveita slot deletado
+    waypoints[index].flags = 0;
+    waypoints[index].x = pEntity->v.origin.x;
+    waypoints[index].y = pEntity->v.origin.y;
+    waypoints[index].z = pEntity->v.origin.z;
+    last_waypoint = pEntity->v.origin;
+    wp_display_time[index] = gpGlobals->time;
+    Vector start = pEntity->v.origin - Vector(0, 0, 34);
+    Vector end = start + Vector(0, 0, 68);
+    if (pEntity->v.movetype == 5)             // [OK] MOVETYPE_FLY (+0x108 do entvars): waypoint de voo
+        waypoints[index].flags |= 16;
+    WaypointDrawBeam(pEntity, start, end, 30, 0, 0, 0, 255, 250, 5);
+    if (g_waypoint_on)
+        EMIT_SOUND_DYN(pEntity, CHAN_WEAPON, "weapons/xbow_hit1.wav", 1.0, 0.8, 0, 100);
+    if (index == num_waypoints) num_waypoints++;
+    for (int i = 0; i < num_waypoints; i++)   // [OK] liga o novo ponto aos visiveis, nos dois sentidos
+    {
+        if (i == index || (waypoints[i].flags & W_FL_AIMING)) continue;
+        Vector vecI(waypoints[i].x, waypoints[i].y, waypoints[i].z);
+        if (WaypointReachable(pEntity->v.origin, vecI, pEntity) && g_path_waypoint_enable)
+            WaypointAddPath((short)index, (short)i);
+        if (WaypointReachable(vecI, pEntity->v.origin, pEntity) && g_path_waypoint_enable)
+            WaypointAddPath((short)i, (short)index);
+    }
+}
+
+void WaypointAddAiming(edict_t *pEntity)      // [OK] waypoint de mira 25 u a frente (flag 0x4000)
+{
+    if (num_waypoints > MAX_WAYPOINTS - 1) return;
+    int index = 0;
+    while (index < num_waypoints && waypoints[index].flags >= 0) index++;
+    waypoints[index].flags = W_FL_AIMING;
+    Vector v_angle(pEntity->v.v_angle.x, pEntity->v.v_angle.y, 0);
+    UTIL_MakeVectors(v_angle);
+    Vector pos = pEntity->v.origin + gpGlobals->v_forward * 25;
+    waypoints[index].x = pos.x; waypoints[index].y = pos.y; waypoints[index].z = pos.z;
+    wp_display_time[index] = gpGlobals->time;
+    Vector start = pEntity->v.origin - Vector(0, 0, 10);
+    Vector end = start + Vector(0, 0, 14);
+    WaypointDrawBeam(pEntity, start, end, 30, 0, 0, 0, 255, 250, 5);
+    EMIT_SOUND_DYN(pEntity, CHAN_WEAPON, "weapons/xbow_hit1.wav", 1.0, 0.8, 0, 100);
+    if (index == num_waypoints) num_waypoints++;
+}
+
+void WaypointDelete(edict_t *pEntity)         // [OK]
+{
+    if (num_waypoints <= 0) return;
+    int index = WaypointFindNearest(pEntity, 50.0f, -1);
+    if (index == -1) return;
+    // [OK] flags 0x400/0x8000/0x10000/0x40000 indicam waypoint com mira associada: apaga a mira mais proxima (< 40 u)
+    if ((waypoints[index].flags & 0x400) || (short)waypoints[index].flags < 0 ||
+        (waypoints[index].flags & 0x10000) || (waypoints[index].flags & 0x40000))
+    {
+        int min_index = -1, min_distance = 9999;
+        for (int i = 0; i < num_waypoints; i++)
+        {
+            if (waypoints[i].flags >= 0 && (waypoints[i].flags & W_FL_AIMING))
+            {
+                float d = (Vector(waypoints[i].x, waypoints[i].y, waypoints[i].z) -
+                           Vector(waypoints[index].x, waypoints[index].y, waypoints[index].z)).Length();
+                if ((double)min_distance > d && d < 40.0f) { min_index = i; min_distance = (int)d; }
+            }
+        }
+        if (min_index != -1)
+        {
+            waypoints[min_index].flags = (int)W_FL_DELETED;
+            waypoints[min_index].x = waypoints[min_index].y = waypoints[min_index].z = 0;
+            wp_display_time[min_index] = 0;
+        }
+    }
+    WaypointDeletePath((short)index);
+    if (paths[index])
+    {
+        PATH *p = paths[index];
+        while (p) { PATH *pn = p->next; free(p); p = pn; }
+        paths[index] = NULL;
+    }
+    waypoints[index].flags = (int)W_FL_DELETED;
+    waypoints[index].x = waypoints[index].y = waypoints[index].z = 0;
+    wp_display_time[index] = 0;
+    EMIT_SOUND_DYN(pEntity, CHAN_WEAPON, "weapons/mine_activate.wav", 1.0, 0.8, 0, 100);
+}
+
+void WaypointCreatePath(edict_t *pEntity, int cmd)   // [OK] cmd 1 = origem, cmd 2 = destino (liga origem -> destino)
+{
+    static int waypoint1 = -1, waypoint2 = -1;
+    const char *snd;
+    if (cmd == 1)
+    {
+        waypoint1 = WaypointFindNearest(pEntity, 50.0f, -1);
+        snd = (waypoint1 == -1) ? "common/wpn_moveselect.wav" : "common/wpn_hudoff.wav";
+    }
+    else if (cmd == 2)
+    {
+        waypoint2 = WaypointFindNearest(pEntity, 50.0f, -1);
+        if (waypoint1 != -1 && waypoint2 != -1)
+        {
+            WaypointAddPath((short)waypoint1, (short)waypoint2);
+            EMIT_SOUND_DYN(pEntity, CHAN_WEAPON, "common/wpn_hudon.wav", 1.0, 0.8, 0, 100);
+            return;
+        }
+        snd = "common/wpn_denyselect.wav";
+    }
+    else return;
+    EMIT_SOUND_DYN(pEntity, CHAN_WEAPON, snd, 1.0, 0.8, 0, 100);
+}
+
+void WaypointRemovePath(edict_t *pEntity, int cmd)   // [OK] idem, remove o caminho origem -> destino
+{
+    static int waypoint1 = -1, waypoint2 = -1;
+    const char *snd;
+    if (cmd == 1)
+    {
+        waypoint1 = WaypointFindNearest(pEntity, 50.0f, -1);
+        snd = (waypoint1 == -1) ? "common/wpn_moveselect.wav" : "common/wpn_hudoff.wav";
+    }
+    else if (cmd == 2)
+    {
+        waypoint2 = WaypointFindNearest(pEntity, 50.0f, -1);
+        if (waypoint1 != -1 && waypoint2 != -1)
+        {
+            WaypointDeletePath((short)waypoint1, (short)waypoint2);
+            EMIT_SOUND_DYN(pEntity, CHAN_WEAPON, "common/wpn_hudon.wav", 1.0, 0.8, 0, 100);
+            return;
+        }
+        snd = "common/wpn_denyselect.wav";
+    }
+    else return;
+    EMIT_SOUND_DYN(pEntity, CHAN_WEAPON, snd, 1.0, 0.8, 0, 100);
+}
