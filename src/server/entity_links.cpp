@@ -4,6 +4,7 @@
 #include "cbase.h"
 #include "player.h"
 #include "weapons.h"
+#include "items.h"
 #include "player_esf_manual.h"
 #include "esf_extras.h"
 #include "magicattack.h"
@@ -41,7 +42,7 @@
 #include "tasks.h"
 #include "telekinesis.h"
 
-// [PENDENTE: classe ainda nao recuperada] LINK_ENTITY_TO_CLASS(afterimage, CAfterImage);
+LINK_ENTITY_TO_CLASS(afterimage, CAfterImage);
 // [PENDENTE: classe ainda nao recuperada] LINK_ENTITY_TO_CLASS(aura, CAura);
 LINK_ENTITY_TO_CLASS(bean, CBean);
 LINK_ENTITY_TO_CLASS(bot, CBot);
@@ -51,12 +52,12 @@ LINK_ENTITY_TO_CLASS(dragonball, CDragonBall);
 LINK_ENTITY_TO_CLASS(explodingattack, CExplodingAttack);
 LINK_ENTITY_TO_CLASS(fog, CFog);
 LINK_ENTITY_TO_CLASS(guidedattack, CGuidedAttack);
-// [PENDENTE: classe ainda nao recuperada] LINK_ENTITY_TO_CLASS(item_dragonball, CDragonBallPoint);
-// [PENDENTE: classe ainda nao recuperada] LINK_ENTITY_TO_CLASS(item_sensubeanbag, CSensuBeanBag);
+LINK_ENTITY_TO_CLASS(item_dragonball, CDragonBallPoint);
+LINK_ENTITY_TO_CLASS(item_sensubeanbag, CSensuBeanBag);
 LINK_ENTITY_TO_CLASS(magicattack, CMagicAttack);
 LINK_ENTITY_TO_CLASS(powerstruggle, CPowerStruggle);
-// [PENDENTE: classe ainda nao recuperada] LINK_ENTITY_TO_CLASS(scatterattack, CScatterAttack);
-// [PENDENTE: classe ainda nao recuperada] LINK_ENTITY_TO_CLASS(scattersplit, CScatterSplit);
+LINK_ENTITY_TO_CLASS(scatterattack, CScatterAttack);
+LINK_ENTITY_TO_CLASS(scattersplit, CScatterSplit);
 LINK_ENTITY_TO_CLASS(shenlong, CShenlong);
 // [PENDENTE: classe ainda nao recuperada] LINK_ENTITY_TO_CLASS(weapon_bigbang, CBigBang);
 LINK_ENTITY_TO_CLASS(weapon_bodypart, CBodyPart);
@@ -83,7 +84,7 @@ LINK_ENTITY_TO_CLASS(weapon_mouthblast, CMouthblast);
 LINK_ENTITY_TO_CLASS(weapon_powerbeam, CPowerBeam);
 // [PENDENTE: classe ainda nao recuperada] LINK_ENTITY_TO_CLASS(weapon_regeneration, CRegeneration);
 LINK_ENTITY_TO_CLASS(weapon_renzoku, CRenzoku);
-// [PENDENTE: classe ainda nao recuperada] LINK_ENTITY_TO_CLASS(weapon_scatterbeam, CScatterBeam);
+LINK_ENTITY_TO_CLASS(weapon_scatterbeam, CScatterBeam);
 LINK_ENTITY_TO_CLASS(weapon_scattershot, CScatterShot);
 LINK_ENTITY_TO_CLASS(weapon_sensu, CSensuBean);
 LINK_ENTITY_TO_CLASS(weapon_shieldattack, CShieldAttack);

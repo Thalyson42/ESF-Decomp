@@ -1,5 +1,6 @@
 // candy.h -- itens do Buu (doces), feijao Sensu e armas CSensuBean/CCandyAttack. RECUPERADO de decomp_raw (CCandy*, CBean, CSensuBean, CCandyAttack).
 #pragma once
+#include "items.h"
 class CCandy : public CBaseEntity            // item que o Buu cria ao transformar um jogador em doce
 {
 public:
@@ -58,4 +59,12 @@ public:
     void WeaponIdle(void);
     void PrimaryAttack(void);
     void SecondaryAttack(void);
+};
+
+class CSensuBeanBag : public CItem          // item_sensubeanbag: saco com 3 feijoes (so existe se allowsensubeans == 1)
+{
+public:
+    void Spawn(void);
+    void Precache(void);
+    BOOL MyTouch(CBasePlayer *pPlayer);
 };

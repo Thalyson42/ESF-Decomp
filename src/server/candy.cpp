@@ -6,6 +6,7 @@
 #include "cbase.h"
 #include "gamerules.h"
 #include "weapons.h"
+#include "items.h"
 #include "player.h"
 #include "effects.h"
 #include "esf_classes.h"
@@ -425,4 +426,27 @@ int CBasePlayer::BecomeCandy(const char *szName, CBaseEntity *pBuu)
     pev->flags &= ~16;
     m_fWaitingCandy = 0;
     return 1;
+}
+
+// ===== CSensuBeanBag 3/3 =====
+extern cvar_t allowsensubeans;                       // [OK] cvar do servidor
+
+void CSensuBeanBag::Spawn(void)
+{
+    if (allowsensubeans.value == 1.0)                // [OK] se o cvar nao for 1, o item nem e criado (nada acontece)
+    {
+        Precache();                                  // [OK] vtable slot 1
+        SET_MODEL(ENT(pev), "models/w_sensubeanbag.mdl");   // [OK] string em 0x1a09b3
+        CItem::Spawn();
+    }
+}
+
+void CSensuBeanBag::Precache(void)
+{
+    PRECACHE_MODEL("models/w_sensubeanbag.mdl");
+}
+
+BOOL CSensuBeanBag::MyTouch(CBasePlayer *pPlayer)
+{
+    return pPlayer->GiveBean(3);                     // [OK] 3 feijoes
 }
