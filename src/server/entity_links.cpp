@@ -7,6 +7,7 @@
 #include "player_esf_manual.h"
 #include "esf_extras.h"
 #include "magicattack.h"
+#include "afterimage.h"
 #include "blob.h"
 #include "bodypart.h"
 #include "candy.h"
@@ -49,8 +50,6 @@ LINK_ENTITY_TO_CLASS(dragonball, CDragonBall);
 LINK_ENTITY_TO_CLASS(explodingattack, CExplodingAttack);
 LINK_ENTITY_TO_CLASS(fog, CFog);
 LINK_ENTITY_TO_CLASS(guidedattack, CGuidedAttack);
-// [PENDENTE: classe ainda nao recuperada] LINK_ENTITY_TO_CLASS(info_evil_start, CBaseDMStart);
-// [PENDENTE: classe ainda nao recuperada] LINK_ENTITY_TO_CLASS(info_good_start, CBaseDMStart);
 // [PENDENTE: classe ainda nao recuperada] LINK_ENTITY_TO_CLASS(item_dragonball, CDragonBallPoint);
 // [PENDENTE: classe ainda nao recuperada] LINK_ENTITY_TO_CLASS(item_sensubeanbag, CSensuBeanBag);
 LINK_ENTITY_TO_CLASS(magicattack, CMagicAttack);

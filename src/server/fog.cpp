@@ -1,12 +1,20 @@
-// fog.cpp -- RECOVERED SKELETON (from hl_i386.so symbol table, ESF Beta 1.2.1)
-// Bodies are NOT recovered yet. Addresses are of the Linux .so; see symbols/.
+// fog.cpp -- CFog 2/2. RECUPERADO de decomp_raw/CFog. [OK] = conferido.
 #include "extdll.h"
 #include "util.h"
 #include "cbase.h"
+#include "player_esf_manual.h"
 
+void CFog::Spawn(void)
+{
+    // [OK] vazio (7 bytes: ret). O cliente le os valores pela mensagem de nevoa enviada em outro lugar.
+}
 
-// ===== class CFog (2 methods) =====
-// 0x000bf1c0 size=7     CFog::Spawn   [Spawn__4CFog]
-// TODO: decompile
-// 0x000bf1d0 size=1463  CFog::KeyValue   [KeyValue__4CFogP14KeyValueData_s]
-// TODO: decompile
+void CFog::KeyValue(KeyValueData *pkvd)
+{
+    if (FStrEq(pkvd->szKeyName, "m_iColorR"))      m_iR = atoi(pkvd->szValue);          // [OK]
+    else if (FStrEq(pkvd->szKeyName, "m_iColorG")) m_iG = atoi(pkvd->szValue);
+    else if (FStrEq(pkvd->szKeyName, "m_iColorB")) m_iB = atoi(pkvd->szValue);
+    else if (FStrEq(pkvd->szKeyName, "m_flNear"))  m_flNear = atof(pkvd->szValue);
+    else if (FStrEq(pkvd->szKeyName, "m_flFar"))   m_flFar = atof(pkvd->szValue);
+    else pkvd->fHandled = FALSE;                   // [OK] so o ramo "nao reconhecido" marca fHandled (as chaves reconhecidas nao marcam)
+}

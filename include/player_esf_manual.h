@@ -63,5 +63,13 @@ extern int g_teamplay;                         // [?] ESF mantém "teamplay" em 
 extern entvars_t *g_pevLastInflictor;          // [?] último causador de dano
 extern cvar_t allowspectator, characterlimit, plcatchup;
 extern int gmsgSpectator, gmsgAllowSpec, gmsgVGUIMenu, gmsgScoreInfo, gmsgFog, gmsgTeamInfo, gmsgTeamNames, gmsgPowerLevel;
-class CFog : public CBaseEntity { public: int m_iR, m_iG, m_iB; float m_flStart, m_flEnd; };   // [?] env_fog do ESF
+class CFog : public CBaseEntity    // env_fog do ESF
+{
+public:
+    int   m_iR, m_iG, m_iB;   // +0x64/68/6c [OK] KeyValue m_iColorR/G/B
+    float m_flFar;            // +0x70 [OK] KeyValue m_flFar
+    float m_flNear;           // +0x74 [OK] KeyValue m_flNear
+    void Spawn(void);
+    void KeyValue(KeyValueData *pkvd);
+};
 #endif
