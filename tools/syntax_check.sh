@@ -51,7 +51,7 @@ import sys
 g=sys.argv[1]; t=open(g).read()
 k=t.index('class CGameRules')
 k=t.index('public:',k)+7
-t=t[:k]+'\n\tvirtual void UpdatePowerLevels(void) {}   // [?] ESF\n\tint m_iHighestPL;   // [?]\n'+t[k:]
+t=t[:k]+'\n\tvirtual void UpdatePowerLevels(void) {}   // [?] ESF\n\tvirtual void DragonBallPickUp(int, int) {}   // [OK] +0xf4\n\tvirtual void DragonBallDrop(int, class CDragonBall *) {}   // [OK] +0xf8\n\tint m_iHighestPL;   // [?]\n'+t[k:]
 k=t.index('class CHalfLifeMultiplay')
 k=t.index('public:',k)+7
 t=t[:k]+'\n\tint m_iAveragePL;                                   // [?] ESF\n\tvirtual void GiveBaseItems(CBasePlayer *pPlayer) {}  // [?] vtable +0xf0\n'+t[k:]
