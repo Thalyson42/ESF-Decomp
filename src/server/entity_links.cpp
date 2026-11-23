@@ -11,6 +11,7 @@
 #include "afterimage.h"
 #include "scatterbeam.h"
 #include "bigbang.h"
+#include "burningattack.h"
 #include "blob.h"
 #include "bodypart.h"
 #include "candy.h"
@@ -62,7 +63,7 @@ LINK_ENTITY_TO_CLASS(scattersplit, CScatterSplit);
 LINK_ENTITY_TO_CLASS(shenlong, CShenlong);
 LINK_ENTITY_TO_CLASS(weapon_bigbang, CBigBang);
 LINK_ENTITY_TO_CLASS(weapon_bodypart, CBodyPart);
-// [PENDENTE: classe ainda nao recuperada] LINK_ENTITY_TO_CLASS(weapon_burningattack, CBurningAttack);
+LINK_ENTITY_TO_CLASS(weapon_burningattack, CBurningAttack);
 LINK_ENTITY_TO_CLASS(weapon_candy, CCandyAttack);
 LINK_ENTITY_TO_CLASS(weapon_charged, CChargedAttack);
 LINK_ENTITY_TO_CLASS(weapon_controlled, CControlledBeam);
