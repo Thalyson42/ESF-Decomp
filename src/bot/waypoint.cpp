@@ -693,3 +693,119 @@ void WaypointPrintInfo(edict_t *pEntity)      // [OK] descreve o waypoint mais p
     if (flags & 0x8000)  ClientPrint(pev, HUD_PRINTNOTIFY, "Engineers will build a sentry gun here\n");
     if (flags & 0x10000) ClientPrint(pev, HUD_PRINTNOTIFY, "Engineers will build a dispenser here\n");
 }
+
+// ---- Matrizes de rota ----
+extern BOOL IsValidFile(const char *szPath);                 // [?] funcao livre (existe/legivel)
+extern BOOL FileIsOlder(const char *szFirst, const char *szSecond);   // [?] TRUE se szFirst e mais antigo que szSecond
+
+void WaypointRouteInit(void)                  // [OK] carrega ou calcula (Floyd) as matrizes por time; cache em <mapa>.ESF_wp1..4
+{
+    if (!num_waypoints) return;
+    route_num_waypoints = num_waypoints;
+    char mapname[64], filename[256], filename2[256], suffix[32], msg[256];
+    strcpy(mapname, STRING(gpGlobals->mapname));
+    strcat(mapname, ".ESF_wpt");
+    BuildBotFileName(filename, "waypoints", mapname);   // arquivo de waypoints
+
+    BOOL bUsed[4] = { TRUE, FALSE, FALSE, FALSE };      // [OK] matriz 0 (sem time) sempre; as demais so se ha waypoints do time
+    for (int i = 0; i < route_num_waypoints; i++)
+        if (waypoints[i].flags & W_FL_TEAM_SPECIFIC)
+        {
+            int t = waypoints[i].flags & W_FL_TEAM;
+            if (t >= 1 && t <= 3) bUsed[t] = TRUE;      // [OK]
+        }
+
+    long lSize = (long)route_num_waypoints * route_num_waypoints;
+    for (int team = 0; team <= 3; team++)
+    {
+        if (!bUsed[team]) continue;
+        sprintf(suffix, ".ESF_wp%d", team + 1);
+        strcpy(mapname, STRING(gpGlobals->mapname));
+        strcat(mapname, suffix);
+        BuildBotFileName(filename2, "waypoints", mapname);
+
+        if (IsValidFile(filename2) && FileIsOlder(filename, filename2))   // [OK] cache valido
+        {
+            sprintf(msg, "loading ESF bot waypoint paths for team %d\n", team + 1);
+            ALERT(at_console, msg);
+            shortest_path[team] = (unsigned short *)malloc(lSize * 2);
+            if (!shortest_path[team]) ALERT(at_error, "ESF_bot - Error allocating memory for shortest path!");
+            from_to[team] = (unsigned short *)malloc(lSize * 2);
+            if (!from_to[team]) ALERT(at_error, "ESF_bot - Error allocating memory for from to matrix!");
+            FILE *bfp = fopen(filename2, "rb");
+            if (bfp)
+            {
+                if (fread(shortest_path[team], 2, lSize, bfp) != (size_t)lSize)
+                {
+                    ALERT(at_console, "error reading enough path items, recalculating...\n");
+                    free(shortest_path[team]); shortest_path[team] = NULL;
+                    free(from_to[team]); from_to[team] = NULL;
+                }
+                else if (fread(from_to[team], 2, lSize, bfp) != (size_t)lSize)
+                {
+                    ALERT(at_console, "error reading enough path items, recalculating...\n");
+                    free(shortest_path[team]); shortest_path[team] = NULL;
+                    free(from_to[team]); from_to[team] = NULL;
+                }
+                fclose(bfp);
+            }
+            else
+            {
+                ALERT(at_console, "ESF_bot - Error reading waypoint paths!\n");
+                free(shortest_path[team]); shortest_path[team] = NULL;
+                free(from_to[team]); from_to[team] = NULL;
+            }
+        }
+        if (shortest_path[team]) continue;
+
+        sprintf(msg, "calculating ESF bot waypoint paths for team %d...\n", team + 1);
+        ALERT(at_console, msg);
+        shortest_path[team] = (unsigned short *)malloc(lSize * 2);
+        if (!shortest_path[team]) ALERT(at_error, "ESF_bot - Error allocating memory for shortest path!");
+        from_to[team] = (unsigned short *)malloc(lSize * 2);
+        if (!from_to[team]) ALERT(at_error, "ESF_bot - Error allocating memory for from to matrix!");
+        unsigned short *sp = shortest_path[team], *ft = from_to[team];
+        for (long i = 0; i < lSize; i++) sp[i] = 0xffff;
+        for (int j = 0; j < route_num_waypoints; j++) sp[j + route_num_waypoints * j] = 0;
+        for (int node = 0; node < route_num_waypoints; node++)
+        {
+            for (PATH *p = paths[node]; p; p = p->next)
+                for (int k = 0; k <= 3; k++)
+                {
+                    if (p->index[k] == -1) continue;
+                    int to = p->index[k];
+                    if ((waypoints[to].flags & W_FL_TEAM_SPECIFIC) && (waypoints[to].flags & W_FL_TEAM) != team) continue;   // [OK]
+                    float dist = (Vector(waypoints[node].x, waypoints[node].y, waypoints[node].z) -
+                                  Vector(waypoints[to].x, waypoints[to].y, waypoints[to].z)).Length();
+                    if (dist > 65534.0f) dist = 65534.0f;
+                    if (dist > 400.0f)
+                    {
+                        sprintf(msg, "Waypoint path distance > %4.1f at from %d to %d\n", 400.0, node, to);
+                        ALERT(at_console, msg);                   // [OK] caminho longo demais: ignorado
+                    }
+                    else
+                        sp[to + route_num_waypoints * node] = (unsigned short)(int)dist;
+                }
+        }
+        WaypointFloyds(sp, ft);
+        for (int a = 0; a < route_num_waypoints; a++)
+            for (int b = 0; b < route_num_waypoints; b++)
+                if (sp[route_num_waypoints * a + b] == 0xffff)
+                    ft[route_num_waypoints * a + b] = 0xffff;     // [OK] sem rota
+        FILE *bfp = fopen(filename2, "wb");
+        if (bfp)
+        {
+            if (fwrite(shortest_path[team], 2, lSize, bfp) != (size_t)lSize) { fclose(bfp); remove(filename2); }
+            else
+            {
+                size_t w = fwrite(from_to[team], 2, lSize, bfp);
+                fclose(bfp);
+                if (w != (size_t)lSize) remove(filename2);
+            }
+        }
+        else
+            ALERT(at_console, "ESF_bot - Error writing waypoint paths!\n");
+        sprintf(msg, "ESF bot waypoint path calculations for team %d complete!\n", team + 1);
+        ALERT(at_console, msg);
+    }
+}
