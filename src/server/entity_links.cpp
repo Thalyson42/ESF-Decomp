@@ -8,6 +8,7 @@
 #include "esf_extras.h"
 #include "magicattack.h"
 #include "afterimage.h"
+#include "scatterbeam.h"
 #include "blob.h"
 #include "bodypart.h"
 #include "candy.h"
