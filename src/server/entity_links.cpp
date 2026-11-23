@@ -12,6 +12,7 @@
 #include "scatterbeam.h"
 #include "bigbang.h"
 #include "burningattack.h"
+#include "melee.h"
 #include "blob.h"
 #include "bodypart.h"
 #include "candy.h"
@@ -81,7 +82,7 @@ LINK_ENTITY_TO_CLASS(weapon_kamehameha, CKamehameha);
 LINK_ENTITY_TO_CLASS(weapon_kametorpedo, CKameTorpedo);
 // [PENDENTE: classe ainda nao recuperada] LINK_ENTITY_TO_CLASS(weapon_kiblast, CKiBlast);
 LINK_ENTITY_TO_CLASS(weapon_masenko, CMasenko);
-// [PENDENTE: classe ainda nao recuperada] LINK_ENTITY_TO_CLASS(weapon_melee, CMelee);
+LINK_ENTITY_TO_CLASS(weapon_melee, CMelee);
 LINK_ENTITY_TO_CLASS(weapon_mouthblast, CMouthblast);
 LINK_ENTITY_TO_CLASS(weapon_powerbeam, CPowerBeam);
 // [PENDENTE: classe ainda nao recuperada] LINK_ENTITY_TO_CLASS(weapon_regeneration, CRegeneration);
@@ -93,5 +94,5 @@ LINK_ENTITY_TO_CLASS(weapon_shieldattack, CShieldAttack);
 // [PENDENTE: classe ainda nao recuperada] LINK_ENTITY_TO_CLASS(weapon_solarflare, CSolarFlare);
 LINK_ENTITY_TO_CLASS(weapon_specialbeamcannon, CSpecialBeamCannon);
 LINK_ENTITY_TO_CLASS(weapon_spiritbomb, CSpiritBomb);
-// [PENDENTE: classe ainda nao recuperada] LINK_ENTITY_TO_CLASS(weapon_sword, CSword);
+LINK_ENTITY_TO_CLASS(weapon_sword, CSword);
 LINK_ENTITY_TO_CLASS(weapon_telekinesis, CTelekinesis);
