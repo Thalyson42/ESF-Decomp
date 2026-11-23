@@ -297,3 +297,91 @@ void WaypointFloyds(unsigned short *shortest, unsigned short *from)   // [OK] Fl
                 }
     }
 }
+
+// ---- Metas (goals) ----
+int WaypointFindNearestGoal(Vector v_src, edict_t *pEntity, float range, int team, int flags)   // [OK] por distancia reta, dentro de range
+{
+    if (num_waypoints <= 0) return -1;
+    int min_index = -1, min_distance = 99999;
+    for (int i = 0; i < num_waypoints; i++)
+    {
+        if (waypoints[i].flags < 0 || (waypoints[i].flags & W_FL_AIMING)) continue;
+        if (!WPTeamOK(i, team)) continue;
+        if ((flags & waypoints[i].flags) != flags) continue;
+        int distance = (int)(Vector(waypoints[i].x, waypoints[i].y, waypoints[i].z) - v_src).Length();   // [OK] int
+        if ((double)distance >= range) continue;
+        if (distance < min_distance) { min_index = i; min_distance = distance; }
+    }
+    return min_index;
+}
+
+int WaypointFindNearestGoal(edict_t *pEntity, int src, int team, int flags)   // [OK] por distancia de ROTA (Floyd) a partir de src
+{
+    if (num_waypoints <= 0) return -1;
+    int min_index = -1, min_distance = 99999;
+    for (int i = 0; i < num_waypoints; i++)
+    {
+        if (i == src) continue;
+        if (waypoints[i].flags < 0 || (waypoints[i].flags & W_FL_AIMING)) continue;
+        if (!WPTeamOK(i, team)) continue;
+        if ((flags & waypoints[i].flags) != flags) continue;
+        int distance = WaypointDistanceFromTo(src, i, team);
+        if (distance < min_distance) { min_index = i; min_distance = distance; }
+    }
+    return min_index;
+}
+
+int WaypointFindNearestGoal(edict_t *pEntity, int src, int team, int flags, int *pExclude)   // [OK] idem, ignorando a lista (terminada em 0)
+{
+    if (num_waypoints <= 0) return -1;
+    int min_index = -1, min_distance = 99999;
+    for (int i = 0; i < num_waypoints; i++)
+    {
+        if (i == src) continue;
+        if (waypoints[i].flags < 0 || (waypoints[i].flags & W_FL_AIMING)) continue;
+        if (!WPTeamOK(i, team)) continue;
+        if ((flags & waypoints[i].flags) != flags) continue;
+        int k = 0;
+        if (pExclude[0])
+        {
+            if (i == pExclude[0]) continue;
+            while (pExclude[++k] && i != pExclude[k]) ;
+        }
+        if (i == pExclude[k]) continue;
+        int distance = WaypointDistanceFromTo(src, i, team);
+        if (distance < min_distance) { min_index = i; min_distance = distance; }
+    }
+    return min_index;
+}
+
+int WaypointFindRandomGoal(edict_t *pEntity, int team, int flags)   // [OK] sorteia entre ate 200 candidatos
+{
+    int indexes[200];
+    int count = 0;
+    if (num_waypoints <= 0) return -1;
+    for (int i = 0; i < num_waypoints; i++)
+    {
+        if (waypoints[i].flags < 0 || (waypoints[i].flags & W_FL_AIMING)) continue;
+        if (team != -1 && (waypoints[i].flags & W_FL_TEAM_SPECIFIC) && (waypoints[i].flags & W_FL_TEAM) != team) continue;
+        if ((flags & waypoints[i].flags) != flags) continue;
+        if (count <= 199) indexes[count++] = i;
+    }
+    if (count) return indexes[RANDOM_LONG(1, count) - 1];   // [?] o decompilado le [RandomLong(1,count)] a partir de &indexes[-1]
+    return -1;
+}
+
+int WaypointFindNearestEnemyGoal(edict_t *pEntity, int src, int team, int iEnemy)   // [OK] waypoint a menos de 400 u do jogador
+{
+    if (num_waypoints <= 0 || !iEnemy) return -1;
+    int min_index = -1, min_distance = 400;
+    for (int i = 0; i < num_waypoints; i++)
+    {
+        if (i == src) continue;
+        if (waypoints[i].flags < 0 || (waypoints[i].flags & W_FL_AIMING)) continue;
+        if (!WPTeamOK(i, team)) continue;
+        WaypointDistanceFromTo(src, i, team);            // [OK] resultado descartado no binario
+        float distance = (Vector(waypoints[i].x, waypoints[i].y, waypoints[i].z) - pEntity->v.origin).Length();
+        if ((double)min_distance > distance) { min_index = i; min_distance = (int)distance; }
+    }
+    return min_index;
+}
