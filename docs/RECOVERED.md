@@ -32,4 +32,5 @@ Descoberto: CKamehameha e CGallitGun::Spawn gravam os mesmos campos da classe-ba
 | CCariedDragonBall | src/server/dragonball.cpp | 10/10 | Arma weapon_dragonball (slot 8, id 26). `[?]`: RetireWeapon (vtable +0x14c), nome da msg do Holster. |
 | CHalfLifeCaptureTheDragonBalls | src/server/ctdb.cpp, include/ctdb.h, include/shenlong.h | 10/10 | Modo CTDB. Campos do gamerules por offset (GR_F). `[?]`: argumento de GiveBaseItems no comando strength. CShenlong em src/server/shenlong.cpp. |
 | CShenlong | src/server/shenlong.cpp, include/shenlong.h | 7/7 | Dragao do modo CTDB. `[?]`: limite do pulso de alpha em WishGrantThink; movetype 13; quem registra o Touch. |
+| CLog + CBaseOutput | src/bot/botlog.cpp, include/botlog.h | 11+10 | Log do bot (bot_log.txt) e saida com buffer. CGameCounter/CRevertSaved ja estavam em src/server/sdk/. `[?]`: terminador do buffer em AddToTextString. |
 | CBodyPart (7) + CBodyPartAttack (4) + CBaseAnimating::GetAnimTime | src/server/bodypart.cpp, include/bodypart.h, src/server/animating_esf.cpp | 12 | Arma do Buu que arremessa parte do corpo e estrangula (StrangleThink). `[?]`: globalname "magic_attack" no Spawn, animacao 10. |
