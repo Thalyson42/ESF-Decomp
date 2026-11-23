@@ -159,7 +159,7 @@ void CBotManager::ChangeAggressionLevel(int iLevel)
     std::cout << "The personality setting aggression level is now for each personality " << szName << "\n";
 }
 
-extern void BuildBotFileName(char *szOut, const char *szFile, int iFlag);      // [?] funcao livre __FPcPCci (nome real: BuildBotFileName__FPcN20)
+extern void BuildBotFileName(char *szOut, const char *szDir, const char *szFile);      // [?] funcao livre __FPcPCci (nome real: BuildBotFileName__FPcN20)
 
 // Nomes de bots: ate 100 entradas de 33 bytes a partir de +0x40; contagem em +0x3e (short)
 void CBotManager::LoadBotNames(void)

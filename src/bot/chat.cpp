@@ -1000,7 +1000,7 @@ void CChatClass::LetBotCheckForReply(CBot *pBot)
 // ---------------------------------------------------------------- arquivo de frases (esf_bot_chat.txt)
 // Formato: secoes [bot_welcome] [bot_chat] [bot_taunt] [bot_whine]; dentro de cada uma, linhas "keyword a b c...",
 // "keyword2 ...", "keytoken x y ..." definem as chaves e as linhas entre { } sao as frases (ate 6 chaves por linha).
-extern void BuildBotFileName(char *szOut, const char *szName, int iFlag);   // [?] assinatura (funcao livre)
+extern void BuildBotFileName(char *szOut, const char *szDir, const char *szFile);   // [?] assinatura (funcao livre)
 
 void CChatClass::ReadChatFile(void)
 {

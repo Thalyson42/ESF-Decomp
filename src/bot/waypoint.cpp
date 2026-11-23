@@ -545,3 +545,151 @@ void WaypointRemovePath(edict_t *pEntity, int cmd)   // [OK] idem, remove o cami
     else return;
     EMIT_SOUND_DYN(pEntity, CHAN_WEAPON, snd, 1.0, 0.8, 0, 100);
 }
+
+// ---- Arquivo .ESF_wpt ----
+struct WAYPOINT_HDR                           // [OK] 52 bytes
+{
+    char  filetype[8];                        // "HPB_bot"
+    int   waypoint_file_version;              // 4
+    int   waypoint_file_flags;
+    int   number_of_waypoints;
+    char  mapname[32];
+};
+extern void BuildBotFileName(char *szOut, const char *szDir, const char *szFile);
+extern void WaypointRouteInit(void);
+
+BOOL WaypointLoad(edict_t *pEntity)           // [OK]
+{
+    char mapname[64], filename[256], msg[256];
+    strcpy(mapname, STRING(gpGlobals->mapname));
+    strcat(mapname, ".ESF_wpt");
+    BuildBotFileName(filename, "waypoints", mapname);
+    FILE *bfp = fopen(filename, "rb");
+    BOOL fOldFormat = FALSE;
+    if (!bfp)
+    {
+        fOldFormat = TRUE;                    // [OK] tenta o antigo .wpt e depois renomeia
+        strcpy(mapname, STRING(gpGlobals->mapname));
+        strcat(mapname, ".wpt");
+        BuildBotFileName(filename, "waypoints", mapname);
+        bfp = fopen(filename, "rb");
+        if (!bfp)
+        {
+            if (pEntity)
+            {
+                sprintf(msg, "Waypoint file %s does not exist!\n", filename);
+                ClientPrint(&pEntity->v, HUD_PRINTNOTIFY, msg);
+            }
+            return FALSE;
+        }
+    }
+    WAYPOINT_HDR header;
+    fread(&header, sizeof(header), 1, bfp);
+    if (strncmp(header.filetype, "HPB_bot", 8) != 0)
+    {
+        if (pEntity) { sprintf(msg, "%s is not a ESF bot waypoint file!\n", filename); ClientPrint(&pEntity->v, HUD_PRINTNOTIFY, msg); }
+        fclose(bfp); return FALSE;
+    }
+    if (header.waypoint_file_version != 4)    // [OK]
+    {
+        if (pEntity) ClientPrint(&pEntity->v, HUD_PRINTNOTIFY, "Incompatible ESF bot waypoint file version!\nWaypoints not loaded!\n");
+        fclose(bfp); return FALSE;
+    }
+    header.mapname[31] = 0;
+    if (strcmp(header.mapname, STRING(gpGlobals->mapname)) != 0)
+    {
+        if (pEntity) { sprintf(msg, "%s ESF bot waypoints are not for this map!\n", filename); ClientPrint(&pEntity->v, HUD_PRINTNOTIFY, msg); }
+        fclose(bfp); return FALSE;
+    }
+    WaypointInit();
+    for (int i = 0; i < header.number_of_waypoints; i++)
+    {
+        fread(&waypoints[i], sizeof(waypoint_s), 1, bfp);
+        num_waypoints++;
+    }
+    for (int i = 0; i < num_waypoints; i++)
+    {
+        short num;
+        fread(&num, 2, 1, bfp);
+        for (int k = 0; k < num; k++)
+        {
+            short path_index;
+            fread(&path_index, 2, 1, bfp);
+            WaypointAddPath((short)i, path_index);
+        }
+    }
+    g_waypoint_paths = 1;
+    fclose(bfp);
+    if (fOldFormat)                           // [OK] migra para o nome novo
+    {
+        strcpy(mapname, STRING(gpGlobals->mapname));
+        strcat(mapname, ".ESF_wpt");
+        char newname[256], cmd[600];
+        BuildBotFileName(newname, "waypoints", mapname);
+        sprintf(cmd, "/bin/mv -f %s %s", filename, newname);
+        system(cmd);
+    }
+    WaypointRouteInit();
+    return TRUE;
+}
+
+void WaypointSave(void)                       // [OK]
+{
+    WAYPOINT_HDR header;
+    strcpy(header.filetype, "HPB_bot");
+    header.waypoint_file_version = 4;
+    header.waypoint_file_flags = 0;
+    header.number_of_waypoints = num_waypoints;
+    memset(header.mapname, 0, 32);
+    strncpy(header.mapname, STRING(gpGlobals->mapname), 31);
+    header.mapname[31] = 0;
+    char filename[256], mapname[64];
+    strcpy(mapname, STRING(gpGlobals->mapname));
+    strcat(mapname, ".ESF_wpt");
+    BuildBotFileName(filename, "waypoints", mapname);
+    FILE *bfp = fopen(filename, "wb");
+    fwrite(&header, sizeof(header), 1, bfp);
+    for (int i = 0; i < num_waypoints; i++)
+        fwrite(&waypoints[i], sizeof(waypoint_s), 1, bfp);
+    for (int i = 0; i < num_waypoints; i++)   // [OK] por waypoint: contagem (short) e os indices validos
+    {
+        short count = 0;
+        for (PATH *p = paths[i]; p; p = p->next)
+            for (int k = 0; k <= 3; k++)
+                if (p->index[k] != -1) count++;
+        fwrite(&count, 2, 1, bfp);
+        for (PATH *p = paths[i]; p; p = p->next)
+            for (int k = 0; k <= 3; k++)
+                if (p->index[k] != -1) fwrite(&p->index[k], 2, 1, bfp);
+    }
+    fclose(bfp);
+}
+
+void WaypointPrintInfo(edict_t *pEntity)      // [OK] descreve o waypoint mais proximo (< 50 u)
+{
+    int index = WaypointFindNearest(pEntity, 50.0f, -1);
+    if (index == -1) return;
+    char msg[96];
+    sprintf(msg, "Waypoint %d of %d total\n", index, num_waypoints);
+    ClientPrint(&pEntity->v, HUD_PRINTNOTIFY, msg);
+    int flags = waypoints[index].flags;
+    entvars_t *pev = &pEntity->v;
+    if (flags & W_FL_TEAM_SPECIFIC)
+    {
+        sprintf(msg, "Waypoint is for TEAM %d\n", (flags & W_FL_TEAM) + 1);   // [OK] 4 textos, um por time
+        ClientPrint(pev, HUD_PRINTNOTIFY, msg);
+    }
+    if (flags & 32)      ClientPrint(pev, HUD_PRINTNOTIFY, "Bot will wait for lift before approaching\n");
+    if (flags & 16)      ClientPrint(pev, HUD_PRINTNOTIFY, "This waypoint is on a ladder\n");
+    if (flags & 64)      ClientPrint(pev, HUD_PRINTNOTIFY, "This is a door waypoint\n");
+    if (flags & 128)     ClientPrint(pev, HUD_PRINTNOTIFY, "There is health near this waypoint\n");
+    if (flags & 0x100)   ClientPrint(pev, HUD_PRINTNOTIFY, "There is armor near this waypoint\n");
+    if (flags & 0x200)   ClientPrint(pev, HUD_PRINTNOTIFY, "There is ammo near this waypoint\n");
+    if (flags & 0x20000) ClientPrint(pev, HUD_PRINTNOTIFY, "There is a weapon near this waypoint\n");
+    if (flags & 0x40000) ClientPrint(pev, HUD_PRINTNOTIFY, "Bot will jump here\n");
+    if (flags & 0x400)   ClientPrint(pev, HUD_PRINTNOTIFY, "This is a sniper waypoint\n");
+    if (flags & 0x1000)  ClientPrint(pev, HUD_PRINTNOTIFY, "There is a flag goal near this waypoint\n");
+    if (flags & 0x2000)  ClientPrint(pev, HUD_PRINTNOTIFY, "Bot will go prone here\n");
+    if (flags & 0x8000)  ClientPrint(pev, HUD_PRINTNOTIFY, "Engineers will build a sentry gun here\n");
+    if (flags & 0x10000) ClientPrint(pev, HUD_PRINTNOTIFY, "Engineers will build a dispenser here\n");
+}

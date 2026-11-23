@@ -5,7 +5,7 @@
 #include "botlog.h"
 
 extern void UTIL_Printf(const char *szMsg, int iA, int iB);              // [?] funcao livre do ESF (args 1,0)
-extern void BuildBotFileName(char *szOut, const char *szFile, int iFlag); // [?]
+extern void BuildBotFileName(char *szOut, const char *szDir, const char *szFile); // [?]
 
 // ----- CBaseOutput -----
 void CBaseOutput::Display(void)
