@@ -48,3 +48,6 @@ Descoberto: CKamehameha e CGallitGun::Spawn gravam os mesmos campos da classe-ba
 | CSolarFlare | src/server/solarflare.cpp | 8 | Flash cegante (>500 ki, gasta ate 750). |
 | CAura | src/server/aura.cpp, include/aura.h | 7 | Entidade MOVETYPE_FOLLOW presa ao jogador. |
 | CEnvModel | src/server/envmodel.cpp, include/envmodel.h | 13 | env_model: levantar (Lift), arremessar (Shoot), explodir (ExplodeTouch). Campos +0x2ac..0x2b8 com nomes `[?]`. |
+| pm_shared (movimento) | src/server/pm_shared.cpp | ~45 | SDK pm_shared.c + variacoes ESF (CheckFalling, Jump c/ wall jump, LadderMove, UpdateStepSound, PlayerMove com movetypes 0..15). PM_PlayStepSound vazio. |
+| pm_esf | src/server/pm_esf.cpp | 10 | Exclusivas ESF: PM_WallJump/Push/Extra, PM_MakeJump, PM_VecToAngles, PM_PlayerToss, PM_RideBeam, PM_PlayerSwoopMove, PM_PlayerFlyMove, PM_UpdateClipBox, PM_FixModelHulls (model_t stride 392, hulls em +0xe0). |
+| pm_math / pm_debug | src/server/pm_math.cpp, pm_debug.cpp | ~15 | Identicos ao SDK (PM_ShowClipBox vazio). |

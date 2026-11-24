@@ -209,3 +209,83 @@ void PM_PlayerSwoopMove(void)
     }
     PM_FlyMove();
 }
+
+// ---------------------------------------------------------------------------------------------------------------------------
+// PM_PlayerFlyMove @0x1907e0 [OK] -- identico a PM_WaterMove (sem o *0.8 de velocidade), usando cmd.forwardmove/sidemove/upmove.
+void PM_PlayerFlyMove(void)
+{
+    vec3_t wishvel, wishdir, start, dest, temp;
+    float *forward = (float *)((char *)pmove + 0x14), *right = (float *)((char *)pmove + 0x20);
+    float fmove = PMB(0x45468, float), smove = PMB(0x4546c, float), umove = PMB(0x45470, float);
+    float maxspeed = PMB(0x1f4, float);
+    for (int i = 0; i < 3; i++) wishvel[i] = forward[i] * fmove + right[i] * smove;
+    wishvel[2] += umove;
+    for (int i = 0; i < 3; i++) wishdir[i] = wishvel[i];
+    float wishspeed = VectorNormalize(wishdir);
+    if (wishspeed > maxspeed)
+    {
+        for (int i = 0; i < 3; i++) wishvel[i] *= maxspeed / wishspeed;
+        wishspeed = maxspeed;
+    }
+    float *vel = pmove->velocity;
+    for (int i = 0; i < 3; i++) temp[i] = vel[i];
+    float speed = VectorNormalize(temp), newspeed;
+    if (speed != 0.0f)
+    {
+        newspeed = speed - pmove->frametime * speed * pmove->movevars->friction * pmove->friction;
+        if (newspeed < 0) newspeed = 0;
+        for (int i = 0; i < 3; i++) vel[i] *= newspeed / speed;
+    }
+    else newspeed = 0;
+    if (wishspeed < 0.1f) return;
+    float addspeed = wishspeed - newspeed;
+    if (addspeed > 0)
+    {
+        for (int i = 0; i < 3; i++) wishdir[i] = wishvel[i];
+        VectorNormalize(wishdir);
+        float accelspeed = wishspeed * pmove->frametime * pmove->movevars->accelerate * pmove->friction;
+        if (accelspeed > addspeed) accelspeed = addspeed;
+        for (int i = 0; i < 3; i++) vel[i] += accelspeed * wishdir[i];
+    }
+    for (int i = 0; i < 3; i++) dest[i] = pmove->origin[i] + pmove->frametime * vel[i];
+    for (int i = 0; i < 3; i++) start[i] = dest[i];
+    start[2] += pmove->movevars->stepsize + 1;
+    pmtrace_t tr = pmove->PM_PlayerTrace(start, dest, PM_NORMAL, -1);
+    if (!tr.startsolid && !tr.allsolid)
+    {
+        for (int i = 0; i < 3; i++) pmove->origin[i] = tr.endpos[i];
+        return;
+    }
+    PM_FlyMove();
+}
+
+// PM_UpdateClipBox @0x194380 [OK] -- hulls 0..2 do cliente (player_mins/maxs). Hull 3 nao e tocado.
+void PM_UpdateClipBox(void)
+{
+    static const float m0[3] = {-4, -4, -9}, x0[3] = {4, 4, 9}, m1[3] = {-4, -4, -4}, x1[3] = {4, 4, 5};
+    for (int i = 0; i < 3; i++)
+    {
+        pmove->player_mins[0][i] = m0[i]; pmove->player_maxs[0][i] = x0[i];
+        pmove->player_mins[1][i] = m1[i]; pmove->player_maxs[1][i] = x1[i];
+        pmove->player_mins[2][i] = 0;     pmove->player_maxs[2][i] = 0;
+    }
+}
+
+// PM_FixModelHulls @0x1944e0 [OK] -- pmove->physents[0].model (+0x280) e o vetor de modelos (stride 392 = sizeof(model_t) do engine).
+// Para o mundo (entrada 0) e para cada submodelo cujo nome comeca com '*' (0x2a), ajusta clip_mins/clip_maxs dos hulls 0..2
+// (hull = 40 bytes a partir de +0xe0; clip_mins +0x10, clip_maxs +0x1c dentro do hull).
+void PM_FixModelHulls(void)
+{
+    static const float m0[3] = {-4, -4, -9}, x0[3] = {4, 4, 9}, m1[3] = {-4, -4, -4}, x1[3] = {4, 4, 5};
+    char *base = *(char **)((char *)pmove + 0x280);
+    #define FIXHULLS(m) { \
+        float *h0 = (float *)((m) + 0xe0), *h1 = (float *)((m) + 0x108), *h2 = (float *)((m) + 0x130); \
+        for (int k = 0; k < 3; k++) { h0[k] = m0[k]; h0[3 + k] = x0[k]; h1[k] = m1[k]; h1[3 + k] = x1[k]; h2[k] = 0; h2[3 + k] = 0; } }
+    FIXHULLS(base);
+    for (int i = 0; i < 0x400; i++)
+    {
+        char *m = base + i * 392;
+        if (m[0] == '*') FIXHULLS(m);
+    }
+    #undef FIXHULLS
+}
