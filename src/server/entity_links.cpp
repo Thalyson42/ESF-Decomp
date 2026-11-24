@@ -17,6 +17,7 @@
 #include "kiblast.h"
 #include "fingerlaser.h"
 #include "solarflare.h"
+#include "aura.h"
 #include "blob.h"
 #include "bodypart.h"
 #include "candy.h"
@@ -50,7 +51,7 @@
 #include "telekinesis.h"
 
 LINK_ENTITY_TO_CLASS(afterimage, CAfterImage);
-// [PENDENTE: classe ainda nao recuperada] LINK_ENTITY_TO_CLASS(aura, CAura);
+LINK_ENTITY_TO_CLASS(aura, CAura);
 LINK_ENTITY_TO_CLASS(bean, CBean);
 LINK_ENTITY_TO_CLASS(bot, CBot);
 LINK_ENTITY_TO_CLASS(candy, CCandy);
