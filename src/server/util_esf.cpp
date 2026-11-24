@@ -69,7 +69,7 @@ CBaseEntity *UTIL_CreateEnt(char *pszClassName, const Vector &vecOrigin, const V
 // Entra num time ("Good" = 1, "Evil" = 2) via vfunc do gamerules. Limite de 10 s entre trocas (se ja tem time).
 void UTIL_PlayerJoinTeam(CBasePlayer *pPlayer, int iTeam)
 {
-    if (!g_pGameRules->IsMultiplayer())                    // [OK] vtable +0x20
+    if (!g_pGameRules->IsTeamplay())                       // [OK] vtable +0x20 (no ESF vtable[6] = IsTeamplay; IsMultiplayer/IsDeathmatch foram removidos)
         return;
 
     if (UE_FLOAT(pPlayer, 0x79c) + 10.0 >= gpGlobals->time && pPlayer->pev->team)
