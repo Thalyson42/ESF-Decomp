@@ -182,3 +182,61 @@ char IsAttack(edict_t *pEdict)
     }
     return 0;
 }
+
+// ---- WrapAngles [OK] @0x179740 ----
+// Traz cada componente para perto de [-180,180]. ATENCAO: reproduz o original literalmente (trunca para zero e soma/subtrai (n+1)*360),
+// entao para valores muito grandes ou muito negativos o resultado pode continuar fora do intervalo.
+static inline float WrapAngle1(float a)
+{
+    int n;
+    if (a > 180.0f)
+    {
+        n = (int)(a / 360.0);
+        a = (float)(a - (double)((n + 1) * 360));
+    }
+    if (a < -180.0f)
+    {
+        n = (int)(a / 360.0);
+        a = (float)((double)((n + 1) * 360) + a);
+    }
+    return a;
+}
+
+Vector WrapAngles(Vector vecAngles)
+{
+    static Vector angles;                                  // [OK] o original usa um estatico local (guard tmp_0)
+    angles = vecAngles;
+    angles.x = WrapAngle1(angles.x);
+    angles.y = WrapAngle1(angles.y);
+    angles.z = WrapAngle1(angles.z);
+    return angles;
+}
+
+// ---- UTIL_IsValidPlayer [OK] @0x179b90 ----
+// pPlayer valido e humano/bot conectado. bAlive: exige vfunc +0x8c (IsAlive?) e campo +0x328 zerado. bBotOnly: com o BotManager ativo
+// (byte +0xd4a), so aceita jogadores que sejam bots (FL_FAKECLIENT).
+extern class CBotManager BotManager;
+#define PL_VCALL(p, off) ((int (*)(void *))(*(void ***)((char *)(p) + 0x60))[(off) / 4])((void *)(p))   // [?] vtable do jogador em +0x60 (GCC 2.95)
+
+bool UTIL_IsValidPlayer(CBasePlayer *pPlayer, bool bAlive, bool bBotOnly)
+{
+    if (pPlayer && pPlayer->pev && !IsNull((CBaseEntity *)pPlayer))
+    {
+        bool bContinue = true;
+        if (bBotOnly && *((char *)&BotManager + 0xd4a))    // [?] nome do campo do BotManager
+        {
+            bool bIsBot = false;
+            if (!PL_VCALL(pPlayer, 0xa4))                  // [?] vfunc +0xa4 (IsNetClient?)
+                bIsBot = (pPlayer->pev->flags & FL_FAKECLIENT) != 0;
+            bContinue = bIsBot;
+        }
+        if (bContinue)
+        {
+            if (strcmp(STRING(pPlayer->pev->netname), "") &&
+                (!bAlive || (PL_VCALL(pPlayer, 0x8c) && !UE_INT(pPlayer, 0x328))) &&   // [?] vfunc +0x8c (IsAlive?)
+                (pPlayer->pev->flags & FL_CLIENT))
+                return true;
+        }
+    }
+    return false;
+}
