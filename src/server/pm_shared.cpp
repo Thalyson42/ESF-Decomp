@@ -2719,3 +2719,72 @@ void PM_Physics_Toss()
 // check for in water
 	PM_CheckWater();
 }
+
+extern void PM_MakeJump(float flMult);   // pm_esf.cpp
+// [ESF] PM_Jump: sem super-pulo/duck-jump do SDK. Ordem: iuser4 bloqueia; morto; (tfc) fingindo-se de morto; waterjumptime; gravidade ~0 (voo: vel.z = 200);
+// nadando; no chao -> PM_MakeJump() (vel.z = 1000). Corpo das partes de agua igual ao SDK. [OK] estrutura; sons por tabela de salto (wade1..4) [OK]
+void PM_Jump (void)
+{
+	qboolean tfc = false;
+
+	if ( pmove->iuser4 )                          // [OK] +0x208: estado que impede pular
+		return;
+
+	if (pmove->dead)
+	{
+		pmove->oldbuttons |= IN_JUMP;
+		return;
+	}
+
+	tfc = atoi( pmove->PM_Info_ValueForKey( pmove->physinfo, "tfc" ) ) == 1 ? true : false;
+	if ( tfc && ( pmove->deadflag == ( DEAD_DISCARDBODY + 1 ) ) )
+		return;
+
+	if ( pmove->waterjumptime )
+	{
+		pmove->waterjumptime -= pmove->cmd.msec;
+		if (pmove->waterjumptime < 0)
+			pmove->waterjumptime = 0;
+		return;
+	}
+
+	if ( pmove->gravity < 0.1f )                  // [OK] +0xc0: sem gravidade (voando) -> sobe a 200
+	{
+		pmove->onground = -1;
+		pmove->velocity[2] = 200;
+		return;
+	}
+
+	if (pmove->waterlevel >= 2)
+	{
+		pmove->onground = -1;
+
+		if (pmove->watertype == CONTENTS_WATER)
+			pmove->velocity[2] = 100;
+		else if (pmove->watertype == CONTENTS_SLIME)
+			pmove->velocity[2] = 80;
+		else
+			pmove->velocity[2] = 50;
+
+		if ( pmove->flSwimTime <= 0 )
+		{
+			pmove->flSwimTime = 1000;
+			switch ( pmove->RandomLong( 0, 3 ) )
+			{
+			case 0: pmove->PM_PlaySound( CHAN_BODY, "player/pl_wade1.wav", 1, ATTN_NORM, 0, PITCH_NORM ); break;
+			case 1: pmove->PM_PlaySound( CHAN_BODY, "player/pl_wade2.wav", 1, ATTN_NORM, 0, PITCH_NORM ); break;
+			case 2: pmove->PM_PlaySound( CHAN_BODY, "player/pl_wade3.wav", 1, ATTN_NORM, 0, PITCH_NORM ); break;
+			case 3: pmove->PM_PlaySound( CHAN_BODY, "player/pl_wade4.wav", 1, ATTN_NORM, 0, PITCH_NORM ); break;
+			}
+		}
+		return;
+	}
+
+	if ( pmove->onground != -1 )
+	{
+		if ( pmove->oldbuttons & IN_JUMP )
+			return;                               // [OK] nao pula de novo enquanto o botao estiver apertado
+		PM_MakeJump( 0 );                         // [OK] chao: vel.z = 1000
+	}
+	pmove->oldbuttons |= IN_JUMP;                 // [OK] marca o pulo
+}
