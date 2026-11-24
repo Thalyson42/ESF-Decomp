@@ -195,7 +195,8 @@ int gmsgStatusValue = 0;
 
 
 // [SDK NÃO CONFERIDA: função livre] 
-void LinkUserMessages( void )
+void LinkUserMessages( void );   // ESF: definida em usermsgs_esf.cpp
+void LinkUserMessages_SDK( void )
 {
 	// Already taken care of?
 	if ( gmsgSelAmmo )
