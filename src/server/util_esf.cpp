@@ -240,3 +240,89 @@ bool UTIL_IsValidPlayer(CBasePlayer *pPlayer, bool bAlive, bool bBotOnly)
     }
     return false;
 }
+
+// ---- UTIL_EntDir [OK] @0x17c4c0 ----
+// Direcao relativa do ponto vecTarget em relacao a entidade (usa os eixos de pev->angles). Retorna flags:
+//   direita 4 / esquerda 2,  abaixo 64 / acima 32,  frente 16 / tras 8
+// (compara a distancia do alvo a um ponto 100 unidades a cada lado do eixo)
+int UTIL_EntDir(CBaseEntity *pEntity, Vector vecTarget)
+{
+    Vector vecOrigin = pEntity->pev->origin;
+    int iDir = 0;
+
+    UTIL_MakeVectors(pEntity->pev->angles);
+
+    // direita/esquerda
+    Vector vecMinus = vecOrigin - gpGlobals->v_right * 100;
+    Vector vecPlus = vecOrigin + gpGlobals->v_right * 100;
+    float fDistMinus = (vecTarget - vecMinus).Length();
+    float fDistPlus = (vecTarget - vecPlus).Length();
+    if (fDistPlus < fDistMinus)
+        iDir = 4;
+    else if (fDistPlus > fDistMinus)
+        iDir = 2;
+
+    // altura
+    if (vecOrigin.z > vecTarget.z)
+        iDir |= 64;
+    else if (vecOrigin.z < vecTarget.z)
+        iDir |= 32;
+
+    // frente/tras
+    vecMinus = vecOrigin - gpGlobals->v_forward * 100;
+    vecPlus = vecOrigin + gpGlobals->v_forward * 100;
+    fDistMinus = (vecTarget - vecMinus).Length();
+    fDistPlus = (vecTarget - vecPlus).Length();
+    if (fDistPlus < fDistMinus)
+        iDir |= 16;
+    else if (fDistPlus > fDistMinus)
+        iDir |= 8;
+
+    return iDir;
+}
+
+// ---- UTIL_GetHeadingPercentage [OK] @0x17ea20 ----
+// Quanto o alvo (pTarget) esta vindo na direcao de pSelf: compara a distancia atual com a distancia prevista 0.01 s depois.
+// Retorna (dist_atual - dist_prevista) / (velocidade * 0.01) * 100 (truncado para short); 0 se parado ou se afastando.
+extern Vector PredictEntityPos(CBaseEntity *pEntity, float fTime, bool bFlag);
+
+short UTIL_GetHeadingPercentage(CBaseEntity *pSelf, CBaseEntity *pTarget)
+{
+    if (!pSelf || !pTarget)
+        return 0;
+
+    float fSpeed = pTarget->pev->velocity.Length();
+    if (fSpeed == 0)
+        return 0;
+
+    Vector vecPredicted = PredictEntityPos(pTarget, 0.01f, false);
+    float fDistNow = (pTarget->pev->origin - pSelf->pev->origin).Length();
+    float fDistPredicted = (vecPredicted - pSelf->pev->origin).Length();
+    if (fDistPredicted > fDistNow)
+        return 0;
+
+    float fSpeed2 = pTarget->pev->velocity.Length();
+    return (short)(int)((fDistNow - fDistPredicted) / (fSpeed2 * 0.01f) * 100.0f);
+}
+
+// ---- PredictEntityPos [OK] @0x17c920 ----
+// Posicao prevista da entidade daqui a fTime segundos, seguindo a velocidade atual. Parada (< 10 u/s) => a propria origem.
+// Com bTrace, o trajeto e limitado por um TraceHull (hull 1) e retorna o ponto final do trace.
+Vector PredictEntityPos(CBaseEntity *pEntity, float fTime, bool bTrace)
+{
+    if (pEntity->pev->velocity.Length() < 10.0f)
+        return pEntity->pev->origin;
+
+    float fDist = pEntity->pev->velocity.Length() * fTime;
+    Vector vecStart = pEntity->pev->origin;
+    Vector vecDir = pEntity->pev->velocity.Normalize();    // (0,0,1) se o comprimento for 0 (SDK)
+    Vector vecEnd = vecStart + vecDir * fDist;
+
+    if (bTrace)
+    {
+        TraceResult tr;
+        UTIL_TraceHull(vecStart, vecEnd, dont_ignore_monsters, head_hull, pEntity->pev->pContainingEntity, &tr);
+        return tr.vecEndPos;
+    }
+    return vecEnd;
+}
