@@ -2287,3 +2287,335 @@ void PM_UpdateStepSound( void )
 void PM_PlayStepSound( int step, float fvol )
 {
 }
+
+int PM_CheckStuck (void)
+{
+	vec3_t	base;
+	vec3_t  offset;
+	vec3_t  test;
+	int     hitent;
+	int		idx;
+	float	fTime;
+	int i;
+	pmtrace_t traceresult;
+
+	static float rgStuckCheckTime[MAX_CLIENTS][2]; // Last time we did a full
+
+	// If position is okay, exit
+	hitent = pmove->PM_TestPlayerPosition (pmove->origin, &traceresult );
+	if (hitent == -1 )
+	{
+		PM_ResetStuckOffsets( pmove->player_index, pmove->server );
+		return 0;
+	}
+
+	VectorCopy (pmove->origin, base);
+
+	// 
+	// Deal with precision error in network and cases where the player can get stuck on level transitions in singleplayer.
+	// 
+	if (!pmove->server || !pmove->multiplayer)
+	{
+		// World or BSP model
+		if ( ( hitent == 0 ) ||
+			 ( pmove->physents[hitent].model != NULL ) )
+		{
+			int nReps = 0;
+			PM_ResetStuckOffsets( pmove->player_index, pmove->server );
+			do 
+			{
+				i = PM_GetRandomStuckOffsets(pmove->player_index, pmove->server, offset);
+
+				VectorAdd(base, offset, test);
+				if (pmove->PM_TestPlayerPosition (test, &traceresult ) == -1)
+				{
+					PM_ResetStuckOffsets( pmove->player_index, pmove->server );
+		
+					VectorCopy ( test, pmove->origin );
+					return 0;
+				}
+				nReps++;
+			} while (nReps < 54);
+		}
+	}
+
+	if (pmove->server)
+		idx = 0;
+	else
+		idx = 1;
+
+	fTime = pmove->Sys_FloatTime();
+	// Too soon?
+	if (rgStuckCheckTime[pmove->player_index][idx] >= 
+		( fTime - PM_CHECKSTUCK_MINTIME ) )
+	{
+		return 1;
+	}
+	rgStuckCheckTime[pmove->player_index][idx] = fTime;
+
+	pmove->PM_StuckTouch( hitent, &traceresult );
+
+	i = PM_GetRandomStuckOffsets(pmove->player_index, pmove->server, offset);
+
+	VectorAdd(base, offset, test);
+	if ( ( hitent = pmove->PM_TestPlayerPosition ( test, NULL ) ) == -1 )
+	{
+		//Con_DPrintf("Nudged\n");
+
+		PM_ResetStuckOffsets( pmove->player_index, pmove->server );
+
+		if (i >= 27)
+			VectorCopy ( test, pmove->origin );
+
+		return 0;
+	}
+
+	// If player is flailing while stuck in another player ( should never happen ), then see
+	//  if we can't "unstick" them forceably.
+	if ( pmove->cmd.buttons & ( IN_JUMP | IN_DUCK | IN_ATTACK ) && ( pmove->physents[ hitent ].player != 0 ) )
+	{
+		float x, y, z;
+		float xystep = 8.0;
+		float zstep = 18.0;
+		float xyminmax = xystep;
+		float zminmax = 4 * zstep;
+		
+		for ( z = 0; z <= zminmax; z += zstep )
+		{
+			for ( x = -xyminmax; x <= xyminmax; x += xystep )
+			{
+				for ( y = -xyminmax; y <= xyminmax; y += xystep )
+				{
+					VectorCopy( base, test );
+					test[0] += x;
+					test[1] += y;
+					test[2] += z;
+
+					if ( pmove->PM_TestPlayerPosition ( test, NULL ) == -1 )
+					{
+						VectorCopy( test, pmove->origin );
+						return 0;
+					}
+				}
+			}
+		}
+	}
+
+	//VectorCopy (base, pmove->origin);
+
+	return 1;
+}
+
+void PM_WaterMove (void)
+{
+	int		i;
+	vec3_t	wishvel;
+	float	wishspeed;
+	vec3_t	wishdir;
+	vec3_t	start, dest;
+	vec3_t  temp;
+	pmtrace_t	trace;
+
+	float speed, newspeed, addspeed, accelspeed;
+
+//
+// user intentions
+//
+	for (i=0 ; i<3 ; i++)
+		wishvel[i] = pmove->forward[i]*pmove->cmd.forwardmove + pmove->right[i]*pmove->cmd.sidemove;
+
+	// Sinking after no other movement occurs
+	if (!pmove->cmd.forwardmove && !pmove->cmd.sidemove && !pmove->cmd.upmove)
+		wishvel[2] -= 60;		// drift towards bottom
+	else  // Go straight up by upmove amount.
+		wishvel[2] += pmove->cmd.upmove;
+
+	// Copy it over and determine speed
+	VectorCopy (wishvel, wishdir);
+	wishspeed = VectorNormalize(wishdir);
+
+	// Cap speed.
+	if (wishspeed > pmove->maxspeed)
+	{
+		VectorScale (wishvel, pmove->maxspeed/wishspeed, wishvel);
+		wishspeed = pmove->maxspeed;
+	}
+	// Slow us down a bit.
+	wishspeed *= 0.8;
+
+	VectorAdd (pmove->velocity, pmove->basevelocity, pmove->velocity);
+// Water friction
+	VectorCopy(pmove->velocity, temp);
+	speed = VectorNormalize(temp);
+	if (speed)
+	{
+		newspeed = speed - pmove->frametime * speed * pmove->movevars->friction * pmove->friction;
+
+		if (newspeed < 0)
+			newspeed = 0;
+		VectorScale (pmove->velocity, newspeed/speed, pmove->velocity);
+	}
+	else
+		newspeed = 0;
+
+//
+// water acceleration
+//
+	if ( wishspeed < 0.1f )
+	{
+		return;
+	}
+
+	addspeed = wishspeed - newspeed;
+	if (addspeed > 0)
+	{
+
+		VectorNormalize(wishvel);
+		accelspeed = pmove->movevars->accelerate * wishspeed * pmove->frametime * pmove->friction;
+		if (accelspeed > addspeed)
+			accelspeed = addspeed;
+
+		for (i = 0; i < 3; i++)
+			pmove->velocity[i] += accelspeed * wishvel[i];
+	}
+
+// Now move
+// assume it is a stair or a slope, so press down from stepheight above
+	VectorMA (pmove->origin, pmove->frametime, pmove->velocity, dest);
+	VectorCopy (dest, start);
+	start[2] += pmove->movevars->stepsize + 1;
+	trace = pmove->PM_PlayerTrace (start, dest, PM_NORMAL, -1 );
+	if (!trace.startsolid && !trace.allsolid)	// FIXME: check steep slope?
+	{	// walked up the step, so just keep result and exit
+		VectorCopy (trace.endpos, pmove->origin);
+		return;
+	}
+	
+	// Try moving straight along out normal path.
+	PM_FlyMove ();
+}
+
+// [ESF] PM_LadderMove: velocidade fixa de 200 (MAX_CLIMB_SPEED), sem teto por maxspeed nem multiplicador de agachado (SDK mais novo) [OK]
+void PM_LadderMove( physent_t *pLadder )
+{
+	vec3_t		ladderCenter;
+	trace_t		trace;
+	qboolean	onFloor;
+	vec3_t		floor;
+	vec3_t		modelmins, modelmaxs;
+
+	if ( pmove->movetype == MOVETYPE_NOCLIP )
+		return;
+	
+#if defined( _TFC )
+	// this is how TFC freezes players, so we don't want them climbing ladders
+	if ( pmove->maxspeed <= 1.0 )
+		return;
+#endif
+
+	pmove->PM_GetModelBounds( pLadder->model, modelmins, modelmaxs );
+
+	VectorAdd( modelmins, modelmaxs, ladderCenter );
+	VectorScale( ladderCenter, 0.5, ladderCenter );
+
+	pmove->movetype = MOVETYPE_FLY;
+
+	// On ladder, convert movement to be relative to the ladder
+
+	VectorCopy( pmove->origin, floor );
+	floor[2] += pmove->player_mins[pmove->usehull][2] - 1;
+
+	if ( pmove->PM_PointContents( floor, NULL ) == CONTENTS_SOLID )
+		onFloor = true;
+	else
+		onFloor = false;
+
+	pmove->gravity = 0;
+	pmove->PM_TraceModel( pLadder, pmove->origin, ladderCenter, &trace );
+	if ( trace.fraction != 1.0 )
+	{
+		float forward = 0, right = 0;
+		vec3_t vpn, v_right;
+		float flSpeed = MAX_CLIMB_SPEED;
+
+		// [ESF] sem limite por maxspeed
+
+		AngleVectors( pmove->angles, vpn, v_right, NULL );
+
+		// [ESF] sem multiplicador de agachado
+
+		if ( pmove->cmd.buttons & IN_BACK )
+		{
+			forward -= flSpeed;
+		}
+		if ( pmove->cmd.buttons & IN_FORWARD )
+		{
+			forward += flSpeed;
+		}
+		if ( pmove->cmd.buttons & IN_MOVELEFT )
+		{
+			right -= flSpeed;
+		}
+		if ( pmove->cmd.buttons & IN_MOVERIGHT )
+		{
+			right += flSpeed;
+		}
+
+		if ( pmove->cmd.buttons & IN_JUMP )
+		{
+			pmove->movetype = MOVETYPE_WALK;
+			VectorScale( trace.plane.normal, 270, pmove->velocity );
+		}
+		else
+		{
+			if ( forward != 0 || right != 0 )
+			{
+				vec3_t velocity, perp, cross, lateral, tmp;
+				float normal;
+
+				//ALERT(at_console, "pev %.2f %.2f %.2f - ",
+				//	pev->velocity.x, pev->velocity.y, pev->velocity.z);
+				// Calculate player's intended velocity
+				//Vector velocity = (forward * gpGlobals->v_forward) + (right * gpGlobals->v_right);
+				VectorScale( vpn, forward, velocity );
+				VectorMA( velocity, right, v_right, velocity );
+
+				
+				// Perpendicular in the ladder plane
+	//					Vector perp = CrossProduct( Vector(0,0,1), trace.vecPlaneNormal );
+	//					perp = perp.Normalize();
+				VectorClear( tmp );
+				tmp[2] = 1;
+				CrossProduct( tmp, trace.plane.normal, perp );
+				VectorNormalize( perp );
+
+
+				// decompose velocity into ladder plane
+				normal = DotProduct( velocity, trace.plane.normal );
+				// This is the velocity into the face of the ladder
+				VectorScale( trace.plane.normal, normal, cross );
+
+
+				// This is the player's additional velocity
+				VectorSubtract( velocity, cross, lateral );
+
+				// This turns the velocity into the face of the ladder into velocity that
+				// is roughly vertically perpendicular to the face of the ladder.
+				// NOTE: It IS possible to face up and move down or face down and move up
+				// because the velocity is a sum of the directional velocity and the converted
+				// velocity through the face of the ladder -- by design.
+				CrossProduct( trace.plane.normal, perp, tmp );
+				VectorMA( lateral, -normal, tmp, pmove->velocity );
+				if ( onFloor && normal > 0 )	// On ground moving away from the ladder
+				{
+					VectorMA( pmove->velocity, MAX_CLIMB_SPEED, trace.plane.normal, pmove->velocity );
+				}
+				//pev->velocity = lateral - (CrossProduct( trace.vecPlaneNormal, perp ) * normal);
+			}
+			else
+			{
+				VectorClear( pmove->velocity );
+			}
+		}
+	}
+}

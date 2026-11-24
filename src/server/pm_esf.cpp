@@ -183,7 +183,7 @@ void PM_PlayerSwoopMove(void)
     float newspeed = 0;
     if (spd != 0.0f)
     {
-        newspeed = spd - spd * pmove->frametime * pmove->movevars->friction * pmove->friction;   // [?] atrito
+        newspeed = spd - spd * pmove->frametime * pmove->movevars->friction * pmove->friction;   // [OK] igual a PM_WaterMove
         if (newspeed < 0) newspeed = 0;
         for (int i = 0; i < 3; i++) pmove->velocity[i] *= newspeed / spd;
     }
