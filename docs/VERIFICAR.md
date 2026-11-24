@@ -68,3 +68,9 @@ CExplodingAttack declara f_2dc/m_fReleased em +0x2dc, mas CScatterSplit::m_hTarg
 
 ## CMelee::SecondaryAttack
 Campos do jogador lidos por offset cru: +0x400 (modo), +0x380 (CPlayerMelee), +0x504 (CSwoop), +0x508, +0x968 (arma ativa). Nomes `[?]`.
+
+## pm_esf.cpp (movimento ESF)
+- `pmove->flDuckTime` (+0x8c) e usado como cronometro do wall jump (1160 -> 0); conferir se o playermove_t do ESF tem campo proprio.
+- `PM_PlayerSwoopMove`: formula do atrito (`[?]`) e o trace de colisao (start = end com z + 1 + stepsize) lidos do decompilado, nao do asm completo.
+- `PM_MakeJump`: o multiplicador e a constante 0.0 no binario (fldz); o parametro nao e usado.
+- PM_PlayerToss/PM_RideBeam: corpos identicos (velocity = vuser4); sentido de vuser4 incerto.

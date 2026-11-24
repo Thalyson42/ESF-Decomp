@@ -13,7 +13,8 @@
 extern playermove_t *pmove;
 extern void PM_FlyMove(void);
 extern void PM_FixupGravityVelocity(void);
-extern void VectorNormalize(float *v);
+extern float VectorNormalize(float *v);
+extern void AngleVectors(const float *angles, float *forward, float *right, float *up);
 #define PMB(off,type) (*(type *)((char *)pmove + (off)))
 #define PM_WJ_TIMER   PMB(0x8c, float)        // [?] flDuckTime reutilizado
 #define PM_WJ_STATE   PMB(0x204, int)         // [OK] iuser3: 1 = grudado na parede
@@ -143,5 +144,68 @@ void PM_PlayerToss(void)
 void PM_RideBeam(void)
 {
     for (int i = 0; i < 3; i++) pmove->velocity[i] = PM_WJ_NORMAL(i);   // [OK] idem (corpo identico ao de PM_PlayerToss)
+    PM_FlyMove();
+}
+
+// Movimento do "swoop" (investida em voo). vuser4[0] = direcao (0 cima, 1 baixo, 2 esquerda, 3 direita, 4/default frente, 5 tras),
+// vuser4[1] = velocidade. Depois de montar o wishvel o trecho e um NoClip com atrito/aceleracao. [OK] estrutura (tabela de salto lida do asm); [?] atrito
+void PM_PlayerSwoopMove(void)
+{
+    vec3_t forward, right, up, wishvel, wishdir, ang;
+    AngleVectors(pmove->angles, forward, right, up);
+    int iDir = (int)PMB(0x240, float);                    // [OK] vuser4[0]
+    float flSpeed = PMB(0x244, float);                    // [OK] vuser4[1]
+    switch (iDir)
+    {
+    case 0: case 1:
+        ang[0] = pmove->angles[0]; ang[1] = pmove->angles[1]; ang[2] = pmove->angles[2];
+        if (ang[0] > 25.0f) ang[0] = 25.0f; else if (ang[0] < -25.0f) ang[0] = -25.0f;   // [OK] pitch limitado a +-25 so para subir/descer
+        AngleVectors(ang, NULL, NULL, up);
+        for (int i = 0; i < 3; i++) wishvel[i] = (iDir == 0 ? 1.0f : -1.0f) * up[i] * flSpeed;
+        break;
+    case 2: for (int i = 0; i < 3; i++) wishvel[i] = -right[i] * flSpeed; break;
+    case 3: for (int i = 0; i < 3; i++) wishvel[i] = right[i] * flSpeed; break;
+    case 5: for (int i = 0; i < 3; i++) wishvel[i] = -forward[i] * flSpeed; break;
+    default: for (int i = 0; i < 3; i++) wishvel[i] = forward[i] * flSpeed; break;   // 4 e > 5
+    }
+    for (int i = 0; i < 3; i++) wishdir[i] = wishvel[i];
+    float wishspeed = VectorNormalize(wishdir);
+    if (wishspeed > pmove->maxspeed)
+    {
+        float s = pmove->maxspeed / wishspeed;
+        for (int i = 0; i < 3; i++) wishvel[i] *= s;
+        wishspeed = pmove->maxspeed;
+    }
+    for (int i = 0; i < 3; i++) pmove->velocity[i] += pmove->basevelocity[i];     // [OK]
+    vec3_t v;
+    for (int i = 0; i < 3; i++) v[i] = pmove->velocity[i];
+    float spd = VectorNormalize(v);
+    float newspeed = 0;
+    if (spd != 0.0f)
+    {
+        newspeed = spd - spd * pmove->frametime * pmove->movevars->friction * pmove->friction;   // [?] atrito
+        if (newspeed < 0) newspeed = 0;
+        for (int i = 0; i < 3; i++) pmove->velocity[i] *= newspeed / spd;
+    }
+    if (wishspeed < 0.1f) return;                         // [OK]
+    float addspeed = wishspeed - newspeed;
+    if (addspeed > 0)
+    {
+        for (int i = 0; i < 3; i++) wishdir[i] = wishvel[i];
+        VectorNormalize(wishdir);
+        float accelspeed = wishspeed * pmove->movevars->accelerate * pmove->frametime * pmove->friction;
+        if (accelspeed > addspeed) accelspeed = addspeed;
+        for (int i = 0; i < 3; i++) pmove->velocity[i] += accelspeed * wishdir[i];
+    }
+    vec3_t end, start;
+    for (int i = 0; i < 3; i++) end[i] = pmove->origin[i] + pmove->frametime * pmove->velocity[i];
+    for (int i = 0; i < 3; i++) start[i] = end[i];
+    start[2] = end[2] + 1.0f + pmove->movevars->stepsize;   // [OK] (1 + stepsize)
+    pmtrace_t tr = pmove->PM_PlayerTrace(start, end, PM_NORMAL, -1);
+    if (!tr.startsolid && !tr.allsolid)
+    {
+        for (int i = 0; i < 3; i++) pmove->origin[i] = tr.endpos[i];
+        return;
+    }
     PM_FlyMove();
 }
