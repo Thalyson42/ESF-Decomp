@@ -13,6 +13,7 @@
 #include "bigbang.h"
 #include "burningattack.h"
 #include "melee.h"
+#include "regeneration.h"
 #include "blob.h"
 #include "bodypart.h"
 #include "candy.h"
@@ -85,7 +86,7 @@ LINK_ENTITY_TO_CLASS(weapon_masenko, CMasenko);
 LINK_ENTITY_TO_CLASS(weapon_melee, CMelee);
 LINK_ENTITY_TO_CLASS(weapon_mouthblast, CMouthblast);
 LINK_ENTITY_TO_CLASS(weapon_powerbeam, CPowerBeam);
-// [PENDENTE: classe ainda nao recuperada] LINK_ENTITY_TO_CLASS(weapon_regeneration, CRegeneration);
+LINK_ENTITY_TO_CLASS(weapon_regeneration, CRegeneration);
 LINK_ENTITY_TO_CLASS(weapon_renzoku, CRenzoku);
 LINK_ENTITY_TO_CLASS(weapon_scatterbeam, CScatterBeam);
 LINK_ENTITY_TO_CLASS(weapon_scattershot, CScatterShot);

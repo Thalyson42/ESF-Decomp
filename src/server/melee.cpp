@@ -40,7 +40,7 @@ int CMelee::GetItemInfo(ItemInfo *p)
 {
     p->pszName = STRING(pev->classname);
     p->pszAmmo1 = "ki"; p->iMaxAmmo1 = -1; p->pszAmmo2 = NULL; p->iMaxAmmo2 = -1; p->iMaxClip = -1;
-    p->iSlot = 0; p->iPosition = 1;
+    p->iSlot = 0; p->iPosition = 0;
     m_iId = p->iId = 1;
     p->iFlags = 0; p->iWeight = 25;               // [OK] a1[10] = 25
     return 1;
