@@ -10,7 +10,12 @@
 #define UE_INT(p, off)   (*(int *)((char *)(p) + (off)))
 #define UE_FLOAT(p, off) (*(float *)((char *)(p) + (off)))
 
-extern char IsNull(edict_t *pEdict);   // ESF: free function @0x179a70 (ainda sem corpo recuperado)
+char IsNull(edict_t *pEdict);
+char IsNull(CBaseEntity *pEntity);
+char IsKiBall(edict_t *pEdict);
+char IsBeamAttack(edict_t *pEdict);
+char IsNonBeamAttack(edict_t *pEdict);
+char IsOtherAttack(edict_t *pEdict);
 
 // Define o modelo do jogador. "player" => "models/player.mdl"; senao "models/player/<nome>/<nome>.mdl".
 // Tambem guarda o nome em CBasePlayer+0x168 (nome do modelo atual).
@@ -94,4 +99,86 @@ void TelePortPlayerToPlayer(edict_t *pA, edict_t *pB)
 
     if (tr.flFraction >= 1.0)                              // [OK] fcomp 1.0 @0x17c482
         SET_ORIGIN(pB, vecEnd);
+}
+
+// ---- IsNull [OK] @0x179a70 / @0x179b40 ----
+// TRUE se a entidade nao serve: ponteiro nulo, fora da lista da engine, slot livre ou marcada FL_KILLME (0x40000000).
+char IsNull(edict_t *pEdict)
+{
+    if (pEdict && OFFSET(pEdict) && !pEdict->free && !(pEdict->v.flags & FL_KILLME))
+        return 0;
+    return 1;
+}
+
+char IsNull(CBaseEntity *pEntity)
+{
+    char bResult = 0;
+    if (pEntity && pEntity->pev && !IsNull(pEntity->pev->pContainingEntity))
+        return bResult;
+    bResult = 1;
+    return bResult;
+}
+
+// ---- classificacao de ataques de ki pelo classname [OK] @0x17cb50..0x17d1d0 ----
+// copia o classname para um buffer de 80 bytes (como o original); FALSE se a entidade for invalida/sem classname
+static BOOL GetAttackClassName(edict_t *pEdict, char *pszOut)
+{
+    if (!pEdict || IsNull(pEdict) || !pEdict->v.classname)
+        return FALSE;
+    memset(pszOut, 0, 80);
+    strcpy(pszOut, STRING(pEdict->v.classname));
+    return TRUE;
+}
+
+// raios: blueattack/burningattack/greenattack/purpleattack/yellowattack + kamehameha, gallitgun, masenko, powerbeam, mouthblast, finalflash
+char IsBeamAttack(edict_t *pEdict)
+{
+    char szClass[80];
+    if (!GetAttackClassName(pEdict, szClass))
+        return 0;
+    char bResult = 0;
+    if (!strcmp(szClass, "blueattack") || !strcmp(szClass, "burningattack") || !strcmp(szClass, "greenattack") ||
+        !strcmp(szClass, "purpleattack") || !strcmp(szClass, "yellowattack") || !strcmp(szClass, "kamehameha") ||
+        !strcmp(szClass, "gallitgun") || !strcmp(szClass, "masenko") || !strcmp(szClass, "powerbeam") ||
+        !strcmp(szClass, "mouthblast") || !strcmp(szClass, "finalflash"))
+        bResult = 1;
+    return bResult;
+}
+
+// ataques grandes que nao sao raios (note que os nomes com espaco sao os classnames reais dessas entidades)
+char IsNonBeamAttack(edict_t *pEdict)
+{
+    char szClass[80];
+    if (!GetAttackClassName(pEdict, szClass))
+        return 0;
+    char bResult = 0;
+    if (!strcmp(szClass, "bigbang") || !strcmp(szClass, "finishingbuster") || !strcmp(szClass, "Spirit Bomb") ||
+        !strcmp(szClass, "Special Beam Cannon") || !strcmp(szClass, "Death Ball") || !strcmp(szClass, "shieldattack") ||
+        !strcmp(szClass, "Kame Torpedo") || !strcmp(szClass, "Scattering Beam"))
+        bResult = 1;
+    return bResult;
+}
+
+char IsOtherAttack(edict_t *pEdict)
+{
+    char szClass[80];
+    if (!GetAttackClassName(pEdict, szClass))
+        return 0;
+    char bResult = 0;
+    if (!strcmp(szClass, "Destructo Disc") || !strcmp(szClass, "Frieza Disc") || !strcmp(szClass, "rock"))
+        bResult = 1;
+    return bResult;
+}
+
+// qualquer ataque (raio, nao-raio, bola de ki ou outro)
+char IsAttack(edict_t *pEdict)
+{
+    if (pEdict && !IsNull(pEdict) && pEdict->v.classname)
+    {
+        char bResult = 0;
+        if (IsBeamAttack(pEdict) || IsNonBeamAttack(pEdict) || IsKiBall(pEdict) || IsOtherAttack(pEdict))
+            bResult = 1;
+        return bResult;
+    }
+    return 0;
 }
