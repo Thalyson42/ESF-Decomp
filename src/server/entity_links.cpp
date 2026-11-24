@@ -14,6 +14,7 @@
 #include "burningattack.h"
 #include "melee.h"
 #include "regeneration.h"
+#include "kiblast.h"
 #include "blob.h"
 #include "bodypart.h"
 #include "candy.h"
@@ -81,7 +82,7 @@ LINK_ENTITY_TO_CLASS(weapon_gallitgun, CGallitGun);
 LINK_ENTITY_TO_CLASS(weapon_genericbeam, CGenericBeam);
 LINK_ENTITY_TO_CLASS(weapon_kamehameha, CKamehameha);
 LINK_ENTITY_TO_CLASS(weapon_kametorpedo, CKameTorpedo);
-// [PENDENTE: classe ainda nao recuperada] LINK_ENTITY_TO_CLASS(weapon_kiblast, CKiBlast);
+LINK_ENTITY_TO_CLASS(weapon_kiblast, CKiBlast);
 LINK_ENTITY_TO_CLASS(weapon_masenko, CMasenko);
 LINK_ENTITY_TO_CLASS(weapon_melee, CMelee);
 LINK_ENTITY_TO_CLASS(weapon_mouthblast, CMouthblast);
