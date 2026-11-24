@@ -74,3 +74,6 @@ Campos do jogador lidos por offset cru: +0x400 (modo), +0x380 (CPlayerMelee), +0
 - `PM_PlayerSwoopMove`: formula do atrito (`[?]`) e o trace de colisao (start = end com z + 1 + stepsize) lidos do decompilado, nao do asm completo.
 - `PM_MakeJump`: o multiplicador e a constante 0.0 no binario (fldz); o parametro nao e usado.
 - PM_PlayerToss/PM_RideBeam: corpos identicos (velocity = vuser4); sentido de vuser4 incerto.
+
+## movetype 16 em PM_Physics_Toss
+Onde o SDK compara com MOVETYPE_BOUNCEMISSILE (11), pm_shared do binario usa o literal 16, enquanto o codigo do dll (CBot etc.) compara com 11. Conferir o const.h do ESF (movetype extra?). Tambem: PM_WallJump testa movetype 14 e PM_UpdateStepSound movetype 15.

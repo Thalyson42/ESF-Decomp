@@ -2619,3 +2619,103 @@ void PM_LadderMove( physent_t *pLadder )
 		}
 	}
 }
+
+// [ESF] PM_Physics_Toss: igual ao SDK, mas onde o SDK usa MOVETYPE_BOUNCEMISSILE (11) o binario compara com o literal 16 (3 pontos) [OK]
+void PM_Physics_Toss()
+{
+	pmtrace_t trace;
+	vec3_t	move;
+	float	backoff;
+
+	PM_CheckWater();
+
+	if (pmove->velocity[2] > 0)
+		pmove->onground = -1;
+
+	// If on ground and not moving, return.
+	if ( pmove->onground != -1 )
+	{
+		if (VectorCompare(pmove->basevelocity, vec3_origin) &&
+		    VectorCompare(pmove->velocity, vec3_origin))
+			return;
+	}
+
+	PM_CheckVelocity ();
+
+// add gravity
+	if ( pmove->movetype != MOVETYPE_FLY &&
+		 pmove->movetype != 16 /* [ESF] no SDK seria MOVETYPE_BOUNCEMISSILE (11); o binario compara com 16 */ &&
+		 pmove->movetype != MOVETYPE_FLYMISSILE )
+		PM_AddGravity ();
+
+// move origin
+	// Base velocity is not properly accounted for since this entity will move again after the bounce without
+	// taking it into account
+	VectorAdd (pmove->velocity, pmove->basevelocity, pmove->velocity);
+	
+	PM_CheckVelocity();
+	VectorScale (pmove->velocity, pmove->frametime, move);
+	VectorSubtract (pmove->velocity, pmove->basevelocity, pmove->velocity);
+
+	trace = PM_PushEntity (move);	// Should this clear basevelocity
+
+	PM_CheckVelocity();
+
+	if (trace.allsolid)
+	{	
+		// entity is trapped in another solid
+		pmove->onground = trace.ent;
+		VectorCopy (vec3_origin, pmove->velocity);
+		return;
+	}
+	
+	if (trace.fraction == 1)
+	{
+		PM_CheckWater();
+		return;
+	}
+
+
+	if (pmove->movetype == MOVETYPE_BOUNCE)
+		backoff = 2.0 - pmove->friction;
+	else if (pmove->movetype == 16 /* [ESF] no SDK seria MOVETYPE_BOUNCEMISSILE (11); o binario compara com 16 */)
+		backoff = 2.0;
+	else
+		backoff = 1;
+
+	PM_ClipVelocity (pmove->velocity, trace.plane.normal, pmove->velocity, backoff);
+
+	// stop if on ground
+	if (trace.plane.normal[2] > 0.7)
+	{		
+		float vel;
+		vec3_t base;
+
+		VectorClear( base );
+		if (pmove->velocity[2] < pmove->movevars->gravity * pmove->frametime)
+		{
+			// we're rolling on the ground, add static friction.
+			pmove->onground = trace.ent;
+			pmove->velocity[2] = 0;
+		}
+
+		vel = DotProduct( pmove->velocity, pmove->velocity );
+
+		// Con_DPrintf("%f %f: %.0f %.0f %.0f\n", vel, trace.fraction, ent->velocity[0], ent->velocity[1], ent->velocity[2] );
+
+		if (vel < (30 * 30) || (pmove->movetype != MOVETYPE_BOUNCE && pmove->movetype != 16 /* [ESF] no SDK seria MOVETYPE_BOUNCEMISSILE (11); o binario compara com 16 */))
+		{
+			pmove->onground = trace.ent;
+			VectorCopy (vec3_origin, pmove->velocity);
+		}
+		else
+		{
+			VectorScale (pmove->velocity, (1.0 - trace.fraction) * pmove->frametime * 0.9, move);
+			trace = PM_PushEntity (move);
+		}
+		VectorSubtract( pmove->velocity, base, pmove->velocity )
+	}
+	
+// check for in water
+	PM_CheckWater();
+}
