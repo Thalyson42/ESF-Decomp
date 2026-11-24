@@ -62,3 +62,9 @@ Itens em que a recuperação ficou ambígua. Marcar como resolvido ao confirmar.
 - [?] ReadChatFile: o binario nao limita o tamanho da linha (aqui limitado a 78); buffer estatico server_cmd sem uso.
 - [?] Secoes taunt/whine copiam "All" como chave (o binario passa a string literal "All" independente do keyword).
 - [OK] Tamanho da classe 0x394: 5 mensagens antigas (168 bytes), 4 ponteiros, 3 listas de 5 frases recentes (+0x358 normal, +0x36c whine, +0x380 taunt).
+
+## Layout em +0x2dc (CExplodingAttack / CScatterSplit)
+CExplodingAttack declara f_2dc/m_fReleased em +0x2dc, mas CScatterSplit::m_hTarget tambem usa +0x2dc e CBurningBeam/ShootGuidedMagic escrevem m_fReleased na mesma posicao. Conferir na comparacao com hl.dll se m_fReleased pertence a CGuidedAttack (nao a CExplodingAttack).
+
+## CMelee::SecondaryAttack
+Campos do jogador lidos por offset cru: +0x400 (modo), +0x380 (CPlayerMelee), +0x504 (CSwoop), +0x508, +0x968 (arma ativa). Nomes `[?]`.

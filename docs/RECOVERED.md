@@ -38,3 +38,13 @@ Descoberto: CKamehameha e CGallitGun::Spawn gravam os mesmos campos da classe-ba
 | CScatterBeam + CScatterAttack + CScatterSplit | src/server/scatterbeam.cpp, include/scatterbeam.h | 7+3+3 | Arma do Krillin e seus raios (principal + secundarios que perseguem). Campos de CScatterAttack por offset (SA_S). |
 | Waypoints (funcoes livres) | src/bot/waypoint.cpp | 36 | Sistema de waypoints do bot (botman): Init/Free, caminhos, buscas, goals, Floyd, RouteInit com cache .ESF_wp1-4, Load/Save (.ESF_wpt, versao 4), editor (Add/Delete/Create/RemovePath), Think. `[?]`: destinatario dos feixes em servidor dedicado; mapeamento das matrizes por time em RouteInit. waypoint_s corrigido: flags em +0, origem em +4. |
 | CBodyPart (7) + CBodyPartAttack (4) + CBaseAnimating::GetAnimTime | src/server/bodypart.cpp, include/bodypart.h, src/server/animating_esf.cpp | 12 | Arma do Buu que arremessa parte do corpo e estrangula (StrangleThink). `[?]`: globalname "magic_attack" no Spawn, animacao 10. |
+| CBigBang + CFinishingBuster (template ShootBallAttack<T>) | src/server/bigbang.cpp, include/bigbang.h | 2 classes | Ataques de bola do Vegeta/Trunks; carga max 30, ki 25. |
+| CSensuBeanBag | src/server/candy.cpp, include/candy.h | 3 | Saco de feijoes Sensu. |
+| CBurningAttack + CBurningBeam | src/server/burningattack.cpp, include/burningattack.h | 7+2 | Arma do Trunks (feixe guiado que explode em area). Nome "burningattack" (13 chars) estoura m_szWeaponName[12]: copiado por offset. |
+| CMelee + CSword | src/server/melee.cpp, include/melee.h | 10+6 | Armas de melee; SecondaryAttack usa campos do player por offset (`[?]` nomes). |
+| CRegeneration | src/server/regeneration.cpp | 8 | Cura por ki (+1 vida/tick, 20 ki). |
+| CKiBlast | src/server/kiblast.cpp | 8 | Tiros de ki: primario reto, secundario curvo alternando maos. |
+| CFingerLaser | src/server/fingerlaser.cpp | 8 | Laser que atravessa alvos (150 ki) e laser explosivo (200 ki). |
+| CSolarFlare | src/server/solarflare.cpp | 8 | Flash cegante (>500 ki, gasta ate 750). |
+| CAura | src/server/aura.cpp, include/aura.h | 7 | Entidade MOVETYPE_FOLLOW presa ao jogador. |
+| CEnvModel | src/server/envmodel.cpp, include/envmodel.h | 13 | env_model: levantar (Lift), arremessar (Shoot), explodir (ExplodeTouch). Campos +0x2ac..0x2b8 com nomes `[?]`. |
