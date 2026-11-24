@@ -15,6 +15,7 @@
 #include "melee.h"
 #include "regeneration.h"
 #include "kiblast.h"
+#include "fingerlaser.h"
 #include "blob.h"
 #include "bodypart.h"
 #include "candy.h"
@@ -75,7 +76,7 @@ LINK_ENTITY_TO_CLASS(weapon_destructodisc, CDestructoDisc);
 LINK_ENTITY_TO_CLASS(weapon_dragonball, CCariedDragonBall);
 LINK_ENTITY_TO_CLASS(weapon_eyelaser, CEyelaser);
 LINK_ENTITY_TO_CLASS(weapon_finalflash, CFinalFlash);
-// [PENDENTE: classe ainda nao recuperada] LINK_ENTITY_TO_CLASS(weapon_fingerlaser, CFingerLaser);
+LINK_ENTITY_TO_CLASS(weapon_fingerlaser, CFingerLaser);
 LINK_ENTITY_TO_CLASS(weapon_finishingbuster, CFinishingBuster);
 LINK_ENTITY_TO_CLASS(weapon_friezadisc, CFriezaDisc);
 LINK_ENTITY_TO_CLASS(weapon_gallitgun, CGallitGun);
