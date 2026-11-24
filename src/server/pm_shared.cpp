@@ -1436,3 +1436,93 @@ void PM_ReduceTimers( void )
 			pmove->flSwimTime = 0;
 	}
 }
+
+void PM_Init( struct playermove_s *ppmove )
+{
+	assert( !pm_shared_initialized );
+
+	pmove = ppmove;
+
+	PM_CreateStuckTable();
+	PM_InitTextureTypes();
+
+	pm_shared_initialized = 1;
+}
+
+void PM_Move ( struct playermove_s *ppmove, int server )
+{
+	assert( pm_shared_initialized );
+
+	pmove = ppmove;
+	
+	PM_PlayerMove( ( server != 0 ) ? true : false );
+
+	if ( pmove->onground != -1 )
+	{
+		pmove->flags |= FL_ONGROUND;
+	}
+	else
+	{
+		pmove->flags &= ~FL_ONGROUND;
+	}
+
+	// In single player, reset friction after each movement to FrictionModifier Triggers work still.
+	if ( !pmove->multiplayer && ( pmove->movetype == MOVETYPE_WALK  ) )
+	{
+		pmove->friction = 1.0f;
+	}
+}
+
+// [ESF] PM_CheckParamters: difere do SDK em (1) maxspeed = min(clientmaxspeed, maxspeed) SEM testar clientmaxspeed != 0,
+// (2) o roll da visao e fixo em movevars->rollangle * 4 (o retorno de PM_CalcRoll e descartado) [OK]
+void PM_CheckParamters( void )
+{
+	float spd;
+	float maxspeed;
+	vec3_t v_angle;
+
+	spd = sqrt( pmove->cmd.forwardmove * pmove->cmd.forwardmove +
+		pmove->cmd.sidemove * pmove->cmd.sidemove +
+		pmove->cmd.upmove * pmove->cmd.upmove );
+	maxspeed = pmove->clientmaxspeed;
+	if ( maxspeed >= pmove->maxspeed )
+		maxspeed = pmove->maxspeed;
+	pmove->maxspeed = maxspeed;
+
+	if ( spd > pmove->maxspeed )
+	{
+		float fRatio = pmove->maxspeed / spd;
+		pmove->cmd.forwardmove *= fRatio;
+		pmove->cmd.sidemove    *= fRatio;
+		pmove->cmd.upmove      *= fRatio;
+	}
+
+	if ( pmove->flags & ( FL_FROZEN | FL_ONTRAIN ) || pmove->dead )
+	{
+		pmove->cmd.forwardmove = 0;
+		pmove->cmd.sidemove    = 0;
+		pmove->cmd.upmove      = 0;
+	}
+
+	PM_DropPunchAngle( pmove->punchangle );
+
+	if ( !pmove->dead )
+	{
+		VectorCopy( pmove->cmd.viewangles, v_angle );
+		VectorAdd( v_angle, pmove->punchangle, v_angle );
+		PM_CalcRoll( v_angle, pmove->velocity, pmove->movevars->rollangle, pmove->movevars->rollspeed );   // resultado descartado
+		pmove->angles[ROLL]  = pmove->movevars->rollangle * 4;
+		pmove->angles[PITCH] = v_angle[PITCH];
+		pmove->angles[YAW]   = v_angle[YAW];
+	}
+	else
+	{
+		VectorCopy( pmove->oldangles, pmove->angles );
+	}
+
+	if ( pmove->dead )
+		pmove->view_ofs[2] = PM_DEAD_VIEWHEIGHT;
+
+	if ( pmove->angles[YAW] > 180.0f )
+		pmove->angles[YAW] -= 360.0f;
+}
