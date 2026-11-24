@@ -18,6 +18,7 @@
 #include "fingerlaser.h"
 #include "solarflare.h"
 #include "aura.h"
+#include "envmodel.h"
 #include "blob.h"
 #include "bodypart.h"
 #include "candy.h"
@@ -56,7 +57,7 @@ LINK_ENTITY_TO_CLASS(bean, CBean);
 LINK_ENTITY_TO_CLASS(bot, CBot);
 LINK_ENTITY_TO_CLASS(candy, CCandy);
 LINK_ENTITY_TO_CLASS(dragonball, CDragonBall);
-// [PENDENTE: classe ainda nao recuperada] LINK_ENTITY_TO_CLASS(env_model, CEnvModel);
+LINK_ENTITY_TO_CLASS(env_model, CEnvModel);
 LINK_ENTITY_TO_CLASS(explodingattack, CExplodingAttack);
 LINK_ENTITY_TO_CLASS(fog, CFog);
 LINK_ENTITY_TO_CLASS(guidedattack, CGuidedAttack);
