@@ -391,3 +391,32 @@ void UTIL_Printf(const char *pszMsg, int iDest, edict_t *pEntity)
     else
         (*g_engfuncs.pfnServerPrint)(pszMsg);
 }
+
+// ---- UTIL_DrawBeam [OK] @0x1794d0 ----
+// Envia (so para pPlayer) um TE_BEAMPOINTS de vecStart a vecEnd: startframe 1, framerate 10.
+extern int m_iSpriteTexture;
+
+void UTIL_DrawBeam(edict_t *pPlayer, Vector vecStart, Vector vecEnd, int iWidth, int iNoise, int iRed, int iGreen, int iBlue,
+                   int iBrightness, int iSpeed, int iLife)
+{
+    MESSAGE_BEGIN(MSG_ONE, SVC_TEMPENTITY, NULL, pPlayer);
+        WRITE_BYTE(TE_BEAMPOINTS);
+        WRITE_COORD(vecStart.x);
+        WRITE_COORD(vecStart.y);
+        WRITE_COORD(vecStart.z);
+        WRITE_COORD(vecEnd.x);
+        WRITE_COORD(vecEnd.y);
+        WRITE_COORD(vecEnd.z);
+        WRITE_SHORT(m_iSpriteTexture);
+        WRITE_BYTE(1);                 // startframe
+        WRITE_BYTE(10);                // framerate
+        WRITE_BYTE(iLife);             // [?] ordem dos argumentos: width, noise, r, g, b, brightness, speed, life
+        WRITE_BYTE(iWidth);
+        WRITE_BYTE(iNoise);
+        WRITE_BYTE(iRed);
+        WRITE_BYTE(iGreen);
+        WRITE_BYTE(iBlue);
+        WRITE_BYTE(iBrightness);
+        WRITE_BYTE(iSpeed);
+    MESSAGE_END();
+}
