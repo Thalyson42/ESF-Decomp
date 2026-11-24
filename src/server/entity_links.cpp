@@ -16,6 +16,7 @@
 #include "regeneration.h"
 #include "kiblast.h"
 #include "fingerlaser.h"
+#include "solarflare.h"
 #include "blob.h"
 #include "bodypart.h"
 #include "candy.h"
@@ -94,7 +95,7 @@ LINK_ENTITY_TO_CLASS(weapon_scatterbeam, CScatterBeam);
 LINK_ENTITY_TO_CLASS(weapon_scattershot, CScatterShot);
 LINK_ENTITY_TO_CLASS(weapon_sensu, CSensuBean);
 LINK_ENTITY_TO_CLASS(weapon_shieldattack, CShieldAttack);
-// [PENDENTE: classe ainda nao recuperada] LINK_ENTITY_TO_CLASS(weapon_solarflare, CSolarFlare);
+LINK_ENTITY_TO_CLASS(weapon_solarflare, CSolarFlare);
 LINK_ENTITY_TO_CLASS(weapon_specialbeamcannon, CSpecialBeamCannon);
 LINK_ENTITY_TO_CLASS(weapon_spiritbomb, CSpiritBomb);
 LINK_ENTITY_TO_CLASS(weapon_sword, CSword);
