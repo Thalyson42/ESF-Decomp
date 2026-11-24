@@ -1526,3 +1526,764 @@ void PM_CheckParamters( void )
 	if ( pmove->angles[YAW] > 180.0f )
 		pmove->angles[YAW] -= 360.0f;
 }
+
+void PM_CheckWaterJump (void)
+{
+	vec3_t	vecStart, vecEnd;
+	vec3_t	flatforward;
+	vec3_t	flatvelocity;
+	float curspeed;
+	pmtrace_t tr;
+	int		savehull;
+
+	// Already water jumping.
+	if ( pmove->waterjumptime )
+		return;
+
+	// Don't hop out if we just jumped in
+	if ( pmove->velocity[2] < -180 )
+		return; // only hop out if we are moving up
+
+	// See if we are backing up
+	flatvelocity[0] = pmove->velocity[0];
+	flatvelocity[1] = pmove->velocity[1];
+	flatvelocity[2] = 0;
+
+	// Must be moving
+	curspeed = VectorNormalize( flatvelocity );
+	
+	// see if near an edge
+	flatforward[0] = pmove->forward[0];
+	flatforward[1] = pmove->forward[1];
+	flatforward[2] = 0;
+	VectorNormalize (flatforward);
+
+	// Are we backing into water from steps or something?  If so, don't pop forward
+	if ( curspeed != 0.0 && ( DotProduct( flatvelocity, flatforward ) < 0.0 ) )
+		return;
+
+	VectorCopy( pmove->origin, vecStart );
+	vecStart[2] += WJ_HEIGHT;
+
+	VectorMA ( vecStart, 24, flatforward, vecEnd );
+	
+	// Trace, this trace should use the point sized collision hull
+	savehull = pmove->usehull;
+	pmove->usehull = 2;
+	tr = pmove->PM_PlayerTrace( vecStart, vecEnd, PM_NORMAL, -1 );
+	if ( tr.fraction < 1.0 && fabs( tr.plane.normal[2] ) < 0.1f )  // Facing a near vertical wall?
+	{
+		vecStart[2] += pmove->player_maxs[ savehull ][2] - WJ_HEIGHT;
+		VectorMA( vecStart, 24, flatforward, vecEnd );
+		VectorMA( vec3_origin, -50, tr.plane.normal, pmove->movedir );
+
+		tr = pmove->PM_PlayerTrace( vecStart, vecEnd, PM_NORMAL, -1 );
+		if ( tr.fraction == 1.0 )
+		{
+			pmove->waterjumptime = 2000;
+			pmove->velocity[2] = 225;
+			pmove->oldbuttons |= IN_JUMP;
+			pmove->flags |= FL_WATERJUMP;
+		}
+	}
+
+	// Reset the collision hull
+	pmove->usehull = savehull;
+}
+
+void PM_CreateStuckTable( void )
+{
+	float x, y, z;
+	int idx;
+	int i;
+	float zi[3];
+
+	memset(rgv3tStuckTable, 0, 54 * sizeof(vec3_t));
+
+	idx = 0;
+	// Little Moves.
+	x = y = 0;
+	// Z moves
+	for (z = -0.125 ; z <= 0.125 ; z += 0.125)
+	{
+		rgv3tStuckTable[idx][0] = x;
+		rgv3tStuckTable[idx][1] = y;
+		rgv3tStuckTable[idx][2] = z;
+		idx++;
+	}
+	x = z = 0;
+	// Y moves
+	for (y = -0.125 ; y <= 0.125 ; y += 0.125)
+	{
+		rgv3tStuckTable[idx][0] = x;
+		rgv3tStuckTable[idx][1] = y;
+		rgv3tStuckTable[idx][2] = z;
+		idx++;
+	}
+	y = z = 0;
+	// X moves
+	for (x = -0.125 ; x <= 0.125 ; x += 0.125)
+	{
+		rgv3tStuckTable[idx][0] = x;
+		rgv3tStuckTable[idx][1] = y;
+		rgv3tStuckTable[idx][2] = z;
+		idx++;
+	}
+
+	// Remaining multi axis nudges.
+	for ( x = - 0.125; x <= 0.125; x += 0.250 )
+	{
+		for ( y = - 0.125; y <= 0.125; y += 0.250 )
+		{
+			for ( z = - 0.125; z <= 0.125; z += 0.250 )
+			{
+				rgv3tStuckTable[idx][0] = x;
+				rgv3tStuckTable[idx][1] = y;
+				rgv3tStuckTable[idx][2] = z;
+				idx++;
+			}
+		}
+	}
+
+	// Big Moves.
+	x = y = 0;
+	zi[0] = 0.0f;
+	zi[1] = 1.0f;
+	zi[2] = 6.0f;
+
+	for (i = 0; i < 3; i++)
+	{
+		// Z moves
+		z = zi[i];
+		rgv3tStuckTable[idx][0] = x;
+		rgv3tStuckTable[idx][1] = y;
+		rgv3tStuckTable[idx][2] = z;
+		idx++;
+	}
+
+	x = z = 0;
+
+	// Y moves
+	for (y = -2.0f ; y <= 2.0f ; y += 2.0)
+	{
+		rgv3tStuckTable[idx][0] = x;
+		rgv3tStuckTable[idx][1] = y;
+		rgv3tStuckTable[idx][2] = z;
+		idx++;
+	}
+	y = z = 0;
+	// X moves
+	for (x = -2.0f ; x <= 2.0f ; x += 2.0f)
+	{
+		rgv3tStuckTable[idx][0] = x;
+		rgv3tStuckTable[idx][1] = y;
+		rgv3tStuckTable[idx][2] = z;
+		idx++;
+	}
+
+	// Remaining multi axis nudges.
+	for (i = 0 ; i < 3; i++)
+	{
+		z = zi[i];
+		
+		for (x = -2.0f ; x <= 2.0f ; x += 2.0f)
+		{
+			for (y = -2.0f ; y <= 2.0f ; y += 2.0)
+			{
+				rgv3tStuckTable[idx][0] = x;
+				rgv3tStuckTable[idx][1] = y;
+				rgv3tStuckTable[idx][2] = z;
+				idx++;
+			}
+		}
+	}
+}
+
+void PM_FixPlayerCrouchStuck( int direction )
+{
+	int     hitent;
+	int i;
+	vec3_t test;
+
+	hitent = pmove->PM_TestPlayerPosition ( pmove->origin, NULL );
+	if (hitent == -1 )
+		return;
+	
+	VectorCopy( pmove->origin, test );	
+	for ( i = 0; i < 36; i++ )
+	{
+		pmove->origin[2] += direction;
+		hitent = pmove->PM_TestPlayerPosition ( pmove->origin, NULL );
+		if (hitent == -1 )
+			return;
+	}
+
+	VectorCopy( test, pmove->origin ); // Failed
+}
+
+void PM_WalkMove ()
+{
+	int			clip;
+	int			oldonground;
+	int i;
+
+	vec3_t		wishvel;
+	float       spd;
+	float		fmove, smove;
+	vec3_t		wishdir;
+	float		wishspeed;
+
+	vec3_t dest, start;
+	vec3_t original, originalvel;
+	vec3_t down, downvel;
+	float downdist, updist;
+
+	pmtrace_t trace;
+	
+	// Copy movement amounts
+	fmove = pmove->cmd.forwardmove;
+	smove = pmove->cmd.sidemove;
+	
+	// Zero out z components of movement vectors
+	pmove->forward[2] = 0;
+	pmove->right[2]   = 0;
+	
+	VectorNormalize (pmove->forward);  // Normalize remainder of vectors.
+	VectorNormalize (pmove->right);    // 
+
+	for (i=0 ; i<2 ; i++)       // Determine x and y parts of velocity
+		wishvel[i] = pmove->forward[i]*fmove + pmove->right[i]*smove;
+	
+	wishvel[2] = 0;             // Zero out z part of velocity
+
+	VectorCopy (wishvel, wishdir);   // Determine maginitude of speed of move
+	wishspeed = VectorNormalize(wishdir);
+
+//
+// Clamp to server defined max speed
+//
+	if (wishspeed > pmove->maxspeed)
+	{
+		VectorScale (wishvel, pmove->maxspeed/wishspeed, wishvel);
+		wishspeed = pmove->maxspeed;
+	}
+
+	// Set pmove velocity
+	pmove->velocity[2] = 0;
+	PM_Accelerate (wishdir, wishspeed, pmove->movevars->accelerate);
+	pmove->velocity[2] = 0;
+
+	// Add in any base velocity to the current velocity.
+	VectorAdd (pmove->velocity, pmove->basevelocity, pmove->velocity );
+
+	spd = Length( pmove->velocity );
+
+	if (spd < 1.0f)
+	{
+		VectorClear( pmove->velocity );
+		return;
+	}
+
+	// If we are not moving, do nothing
+	//if (!pmove->velocity[0] && !pmove->velocity[1] && !pmove->velocity[2])
+	//	return;
+
+	oldonground = pmove->onground;
+
+// first try just moving to the destination	
+	dest[0] = pmove->origin[0] + pmove->velocity[0]*pmove->frametime;
+	dest[1] = pmove->origin[1] + pmove->velocity[1]*pmove->frametime;	
+	dest[2] = pmove->origin[2];
+
+	// first try moving directly to the next spot
+	VectorCopy (dest, start);
+	trace = pmove->PM_PlayerTrace (pmove->origin, dest, PM_NORMAL, -1 );
+	// If we made it all the way, then copy trace end
+	//  as new player position.
+	if (trace.fraction == 1)
+	{
+		VectorCopy (trace.endpos, pmove->origin);
+		return;
+	}
+
+	if (oldonground == -1 &&   // Don't walk up stairs if not on ground.
+		pmove->waterlevel  == 0)
+		return;
+
+	if (pmove->waterjumptime)         // If we are jumping out of water, don't do anything more.
+		return;
+
+	// Try sliding forward both on ground and up 16 pixels
+	//  take the move that goes farthest
+	VectorCopy (pmove->origin, original);       // Save out original pos &
+	VectorCopy (pmove->velocity, originalvel);  //  velocity.
+
+	// Slide move
+	clip = PM_FlyMove ();
+
+	// Copy the results out
+	VectorCopy (pmove->origin  , down);
+	VectorCopy (pmove->velocity, downvel);
+
+	// Reset original values.
+	VectorCopy (original, pmove->origin);
+
+	VectorCopy (originalvel, pmove->velocity);
+
+	// Start out up one stair height
+	VectorCopy (pmove->origin, dest);
+	dest[2] += pmove->movevars->stepsize;
+	
+	trace = pmove->PM_PlayerTrace (pmove->origin, dest, PM_NORMAL, -1 );
+	// If we started okay and made it part of the way at least,
+	//  copy the results to the movement start position and then
+	//  run another move try.
+	if (!trace.startsolid && !trace.allsolid)
+	{
+		VectorCopy (trace.endpos, pmove->origin);
+	}
+
+// slide move the rest of the way.
+	clip = PM_FlyMove ();
+
+// Now try going back down from the end point
+//  press down the stepheight
+	VectorCopy (pmove->origin, dest);
+	dest[2] -= pmove->movevars->stepsize;
+	
+	trace = pmove->PM_PlayerTrace (pmove->origin, dest, PM_NORMAL, -1 );
+
+	// If we are not on the ground any more then
+	//  use the original movement attempt
+	if ( trace.plane.normal[2] < 0.7)
+		goto usedown;
+	// If the trace ended up in empty space, copy the end
+	//  over to the origin.
+	if (!trace.startsolid && !trace.allsolid)
+	{
+		VectorCopy (trace.endpos, pmove->origin);
+	}
+	// Copy this origion to up.
+	VectorCopy (pmove->origin, pmove->up);
+
+	// decide which one went farther
+	downdist = (down[0] - original[0])*(down[0] - original[0])
+		     + (down[1] - original[1])*(down[1] - original[1]);
+	updist   = (pmove->up[0]   - original[0])*(pmove->up[0]   - original[0])
+		     + (pmove->up[1]   - original[1])*(pmove->up[1]   - original[1]);
+
+	if (downdist > updist)
+	{
+usedown:
+		VectorCopy (down   , pmove->origin);
+		VectorCopy (downvel, pmove->velocity);
+	} else // copy z value from slide move
+		pmove->velocity[2] = downvel[2];
+
+}
+
+physent_t *PM_Ladder( void )
+{
+	int			i;
+	physent_t	*pe;
+	hull_t		*hull;
+	int			num;
+	vec3_t		test;
+
+	for ( i = 0; i < pmove->nummoveent; i++ )
+	{
+		pe = &pmove->moveents[i];
+		
+		if ( pe->model && (modtype_t)pmove->PM_GetModelType( pe->model ) == mod_brush && pe->skin == CONTENTS_LADDER )
+		{
+
+			hull = (hull_t *)pmove->PM_HullForBsp( pe, test );
+			num = hull->firstclipnode;
+
+			// Offset the test point appropriately for this hull.
+			VectorSubtract ( pmove->origin, test, test);
+
+			// Test the player's hull for intersection with this model
+			if ( pmove->PM_HullPointContents (hull, num, test) == CONTENTS_EMPTY)
+				continue;
+			
+			return pe;
+		}
+	}
+
+	return NULL;
+}
+
+void PM_InitTextureTypes()
+{
+	char buffer[512];
+	int i, j;
+	byte *pMemFile;
+	int fileSize, filePos;
+	static qboolean bTextureTypeInit = false;
+
+	if ( bTextureTypeInit )
+		return;
+
+	memset(&(grgszTextureName[0][0]), 0, CTEXTURESMAX * CBTEXTURENAMEMAX);
+	memset(grgchTextureType, 0, CTEXTURESMAX);
+
+	gcTextures = 0;
+	memset(buffer, 0, 512);
+
+	fileSize = pmove->COM_FileSize( "sound/materials.txt" );
+	pMemFile = pmove->COM_LoadFile( "sound/materials.txt", 5, NULL );
+	if ( !pMemFile )
+		return;
+
+	filePos = 0;
+	// for each line in the file...
+	while ( pmove->memfgets( pMemFile, fileSize, &filePos, buffer, 511 ) != NULL && (gcTextures < CTEXTURESMAX) )
+	{
+		// skip whitespace
+		i = 0;
+		while(buffer[i] && isspace(buffer[i]))
+			i++;
+		
+		if (!buffer[i])
+			continue;
+
+		// skip comment lines
+		if (buffer[i] == '/' || !isalpha(buffer[i]))
+			continue;
+
+		// get texture type
+		grgchTextureType[gcTextures] = toupper(buffer[i++]);
+
+		// skip whitespace
+		while(buffer[i] && isspace(buffer[i]))
+			i++;
+		
+		if (!buffer[i])
+			continue;
+
+		// get sentence name
+		j = i;
+		while (buffer[j] && !isspace(buffer[j]))
+			j++;
+
+		if (!buffer[j])
+			continue;
+
+		// null-terminate name and save in sentences array
+		j = min (j, CBTEXTURENAMEMAX-1+i);
+		buffer[j] = 0;
+		strcpy(&(grgszTextureName[gcTextures++][0]), &(buffer[i]));
+	}
+
+	// Must use engine to free since we are in a .dll
+	pmove->COM_FreeFile ( pMemFile );
+
+	PM_SortTextures();
+
+	bTextureTypeInit = true;
+}
+
+void PM_SortTextures( void )
+{
+	// Bubble sort, yuck, but this only occurs at startup and it's only 512 elements...
+	//
+	int i, j;
+
+	for ( i = 0 ; i < gcTextures; i++ )
+	{
+		for ( j = i + 1; j < gcTextures; j++ )
+		{
+			if ( stricmp( grgszTextureName[ i ], grgszTextureName[ j ] ) > 0 )
+			{
+				// Swap
+				//
+				PM_SwapTextures( i, j );
+			}
+		}
+	}
+}
+
+void PM_ResetStuckOffsets(int nIndex, int server)
+{
+	rgStuckLast[nIndex][server] = 0;
+}
+
+int PM_GetRandomStuckOffsets(int nIndex, int server, vec3_t offset)
+{
+ // Last time we did a full
+	int idx;
+	idx = rgStuckLast[nIndex][server]++;
+
+	VectorCopy(rgv3tStuckTable[idx % 54], offset);
+
+	return (idx % 54);
+}
+
+void PM_SwapTextures( int i, int j )
+{
+	char chTemp;
+	char szTemp[ CBTEXTURENAMEMAX ];
+
+	strcpy( szTemp, grgszTextureName[ i ] );
+	chTemp = grgchTextureType[ i ];
+	
+	strcpy( grgszTextureName[ i ], grgszTextureName[ j ] );
+	grgchTextureType[ i ] = grgchTextureType[ j ];
+
+	strcpy( grgszTextureName[ j ], szTemp );
+	grgchTextureType[ j ] = chTemp;
+}
+
+char PM_FindTextureType( char *name )
+{
+	int left, right, pivot;
+	int val;
+
+	assert( pm_shared_initialized );
+
+	left = 0;
+	right = gcTextures - 1;
+
+	while ( left <= right )
+	{
+		pivot = ( left + right ) / 2;
+
+		val = strnicmp( name, grgszTextureName[ pivot ], CBTEXTURENAMEMAX-1 );
+		if ( val == 0 )
+		{
+			return grgchTextureType[ pivot ];
+		}
+		else if ( val > 0 )
+		{
+			left = pivot + 1;
+		}
+		else if ( val < 0 )
+		{
+			right = pivot - 1;
+		}
+	}
+
+	return CHAR_TEX_CONCRETE;
+}
+
+void PM_CatagorizeTextureType( void )
+{
+	vec3_t start, end;
+	const char *pTextureName;
+
+	VectorCopy( pmove->origin, start );
+	VectorCopy( pmove->origin, end );
+
+	// Straight down
+	end[2] -= 64;
+
+	// Fill in default values, just in case.
+	pmove->sztexturename[0] = '\0';
+	pmove->chtexturetype = CHAR_TEX_CONCRETE;
+
+	pTextureName = pmove->PM_TraceTexture( pmove->onground, start, end );
+	if ( !pTextureName )
+		return;
+
+	// strip leading '-0' or '+0~' or '{' or '!'
+	if (*pTextureName == '-' || *pTextureName == '+')
+		pTextureName += 2;
+
+	if (*pTextureName == '{' || *pTextureName == '!' || *pTextureName == '~' || *pTextureName == ' ')
+		pTextureName++;
+	// '}}'
+	
+	strcpy( pmove->sztexturename, pTextureName);
+	pmove->sztexturename[ CBTEXTURENAMEMAX - 1 ] = 0;
+		
+	// get texture type
+	pmove->chtexturetype = PM_FindTextureType( pmove->sztexturename );	
+}
+
+void PM_PlayWaterSounds( void )
+{
+	// Did we enter or leave water?
+	if  ( ( pmove->oldwaterlevel == 0 && pmove->waterlevel != 0 ) ||
+		  ( pmove->oldwaterlevel != 0 && pmove->waterlevel == 0 ) )
+	{
+		switch ( pmove->RandomLong(0,3) )
+		{
+		case 0:
+			pmove->PM_PlaySound( CHAN_BODY, "player/pl_wade1.wav", 1, ATTN_NORM, 0, PITCH_NORM );
+			break;
+		case 1:
+			pmove->PM_PlaySound( CHAN_BODY, "player/pl_wade2.wav", 1, ATTN_NORM, 0, PITCH_NORM );
+			break;
+		case 2:
+			pmove->PM_PlaySound( CHAN_BODY, "player/pl_wade3.wav", 1, ATTN_NORM, 0, PITCH_NORM );
+			break;
+		case 3:
+			pmove->PM_PlaySound( CHAN_BODY, "player/pl_wade4.wav", 1, ATTN_NORM, 0, PITCH_NORM );
+			break;
+		}
+	}
+}
+
+int PM_MapTextureTypeStepType(char chTextureType)
+{
+	switch (chTextureType)
+	{
+		default:
+		case CHAR_TEX_CONCRETE:	return STEP_CONCRETE;	
+		case CHAR_TEX_METAL: return STEP_METAL;	
+		case CHAR_TEX_DIRT: return STEP_DIRT;	
+		case CHAR_TEX_VENT: return STEP_VENT;	
+		case CHAR_TEX_GRATE: return STEP_GRATE;	
+		case CHAR_TEX_TILE: return STEP_TILE;
+		case CHAR_TEX_SLOSH: return STEP_SLOSH;
+	}
+}
+
+// [ESF] PM_UpdateStepSound: igual ao SDK com velwalk/velrun = 80/90 no chao (SDK: 120/210), sem FL_DUCKING/FL_IMMUNE_LAVA e com saida antecipada em movetype 15 [OK]
+void PM_UpdateStepSound( void )
+{
+	int	fWalking;
+	float fvol;
+	vec3_t knee;
+	vec3_t feet;
+	vec3_t center;
+	float height;
+	float speed;
+	float velrun;
+	float velwalk;
+	float flduck;
+	int	fLadder;
+	int step;
+
+	if ( pmove->flTimeStepSound > 0 )
+		return;
+
+	if ( pmove->flags & FL_FROZEN )
+		return;
+
+	if ( pmove->movetype == 15 )                     // [ESF] movetype 15: sem som de passos
+		return;
+
+	PM_CatagorizeTextureType();
+
+	speed = Length( pmove->velocity );
+
+	// determine if we are on a ladder
+	//The Barnacle Grapple sets the FL_IMMUNE_LAVA flag to indicate that the player is not on a ladder - Solokiller
+	fLadder = ( pmove->movetype == MOVETYPE_FLY );   // [ESF] sem o teste FL_IMMUNE_LAVA
+
+	// UNDONE: need defined numbers for run, walk, crouch, crouch run velocities!!!!	
+	if ( fLadder )                                   // [ESF] sem agachar
+	{
+		velwalk = 60;		// These constants should be based on cl_movespeedkey * cl_forwardspeed somehow
+		velrun = 80;		// UNDONE: Move walking to server
+		flduck = 100;
+	}
+	else
+	{
+		velwalk = 80;  // [ESF]
+		velrun = 90;   // [ESF]
+		flduck = 0;
+	}
+
+	// If we're on a ladder or on the ground, and we're moving fast enough,
+	//  play step sound.  Also, if pmove->flTimeStepSound is zero, get the new
+	//  sound right away - we just started moving in new level.
+	if ( (fLadder || ( pmove->onground != -1 ) ) &&
+		( Length( pmove->velocity ) > 0.0 ) &&
+		( speed >= velwalk || !pmove->flTimeStepSound ) )
+	{
+		fWalking = speed < velrun;		
+
+		VectorCopy( pmove->origin, center );
+		VectorCopy( pmove->origin, knee );
+		VectorCopy( pmove->origin, feet );
+
+		height = pmove->player_maxs[ pmove->usehull ][ 2 ] - pmove->player_mins[ pmove->usehull ][ 2 ];
+
+		knee[2] = pmove->origin[2] - 0.3 * height;
+		feet[2] = pmove->origin[2] - 0.5 * height;
+
+		// find out what we're stepping in or on...
+		if (fLadder)
+		{
+			step = STEP_LADDER;
+			fvol = 0.35;
+			pmove->flTimeStepSound = 350;
+		}
+		else if ( pmove->PM_PointContents ( knee, NULL ) == CONTENTS_WATER )
+		{
+			step = STEP_WADE;
+			fvol = 0.65;
+			pmove->flTimeStepSound = 600;
+		}
+		else if ( pmove->PM_PointContents ( feet, NULL ) == CONTENTS_WATER )
+		{
+			step = STEP_SLOSH;
+			fvol = fWalking ? 0.2 : 0.5;
+			pmove->flTimeStepSound = fWalking ? 400 : 300;		
+		}
+		else
+		{
+			// find texture under player, if different from current texture, 
+			// get material type
+			step = PM_MapTextureTypeStepType( pmove->chtexturetype );
+
+			switch ( pmove->chtexturetype )
+			{
+			default:
+			case CHAR_TEX_CONCRETE:						
+				fvol = fWalking ? 0.2 : 0.5;
+				pmove->flTimeStepSound = fWalking ? 400 : 300;
+				break;
+
+			case CHAR_TEX_METAL:	
+				fvol = fWalking ? 0.2 : 0.5;
+				pmove->flTimeStepSound = fWalking ? 400 : 300;
+				break;
+
+			case CHAR_TEX_DIRT:	
+				fvol = fWalking ? 0.25 : 0.55;
+				pmove->flTimeStepSound = fWalking ? 400 : 300;
+				break;
+
+			case CHAR_TEX_VENT:	
+				fvol = fWalking ? 0.4 : 0.7;
+				pmove->flTimeStepSound = fWalking ? 400 : 300;
+				break;
+
+			case CHAR_TEX_GRATE:
+				fvol = fWalking ? 0.2 : 0.5;
+				pmove->flTimeStepSound = fWalking ? 400 : 300;
+				break;
+
+			case CHAR_TEX_TILE:	
+				fvol = fWalking ? 0.2 : 0.5;
+				pmove->flTimeStepSound = fWalking ? 400 : 300;
+				break;
+
+			case CHAR_TEX_SLOSH:
+				fvol = fWalking ? 0.2 : 0.5;
+				pmove->flTimeStepSound = fWalking ? 400 : 300;
+				break;
+			}
+		}
+		
+		pmove->flTimeStepSound += flduck; // slower step time if ducking
+
+		// play the sound
+		// 35% volume if ducking
+		if ( pmove->flags & FL_DUCKING )
+		{
+			fvol *= 0.35;
+		}
+
+		PM_PlayStepSound( step, fvol );
+	}
+}
+
+// [ESF] PM_PlayStepSound: corpo vazio no binario (7 bytes: so "ret"): o ESF nao toca sons de passos [OK]
+void PM_PlayStepSound( int step, float fvol )
+{
+}
