@@ -326,3 +326,68 @@ Vector PredictEntityPos(CBaseEntity *pEntity, float fTime, bool bTrace)
     }
     return vecEnd;
 }
+
+// ---- UTIL_DamagePlayer [OK] @0x17f1e0 ----
+// Causa dano em pTarget em nome de pPlayer usando uma entidade "info_target" estatica como inflictor (classname = pszClassName,
+// util para o aviso de morte). O calculo de posicao antes da copia da origem e morto no original, mas e reproduzido.
+float UTIL_DamagePlayer(CBasePlayer *pPlayer, CBasePlayer *pTarget, const char *pszClassName, float flDamage)
+{
+    static CBaseEntity *pDamageEnt = NULL;                 // [OK] estatico local (pDamageEnt.2804)
+
+    if (!pDamageEnt)
+    {
+        pDamageEnt = UTIL_CreateEnt("info_target", Vector(0, 0, 0), Vector(0, 0, 0), NULL);
+        if (!pDamageEnt)
+            return 0;                                      // [?] valor de retorno indefinido no original
+    }
+
+    Vector vecAngles = WrapAngles(pTarget->pev->angles + Vector(180, 180, 180));
+    UTIL_MakeVectors(vecAngles);
+
+    Vector vecDir = pDamageEnt->pev->origin.Normalize();
+    pDamageEnt->pev->origin = gpGlobals->v_forward * 10 + vecDir * 180;   // sobrescrito logo abaixo
+
+    pDamageEnt->pev->origin = pPlayer->pev->origin;
+    pDamageEnt->pev->owner = pPlayer->pev->pContainingEntity;
+    pDamageEnt->pev->classname = MAKE_STRING(pszClassName);
+
+    pTarget->TakeDamage(pDamageEnt->pev, pPlayer->pev, flDamage, 0);       // vtable +0x34
+    return flDamage;
+}
+
+// ---- UTIL_Printf [OK] @0x179c80 ----
+// Imprime msg para pEntity (destino iDest: 1 e 2 vao para o console do servidor). Sem entidade valida, usa o host do listen server
+// (BotManager+0xc, ou o mundo se vazio). Dedicado => ServerPrint.
+void UTIL_Printf(const char *pszMsg, int iDest, edict_t *pEntity)
+{
+    if (IsNull(pEntity))
+    {
+        CBaseEntity *pHost = NULL;
+        if (!IS_DEDICATED_SERVER())
+        {
+            edict_t *pHostEdict = *(edict_t **)((char *)&BotManager + 0xc);   // [?] nome do campo
+            if (!pHostEdict)
+                pHostEdict = INDEXENT(0);
+            if (pHostEdict)
+                pHost = (CBaseEntity *)pHostEdict->pvPrivateData;
+        }
+        if (!IsNull(pHost))
+        {
+            pHost = NULL;
+            if (!IS_DEDICATED_SERVER())
+            {
+                edict_t *pHostEdict = *(edict_t **)((char *)&BotManager + 0xc);
+                if (!pHostEdict)
+                    pHostEdict = INDEXENT(0);
+                if (pHostEdict)
+                    pHost = (CBaseEntity *)pHostEdict->pvPrivateData;
+            }
+            pEntity = pHost->pev->pContainingEntity;
+        }
+    }
+
+    if ((unsigned int)(iDest - 1) > 1 && !IsNull(pEntity))
+        ClientPrint(&pEntity->v, iDest, pszMsg, NULL, NULL, NULL, NULL);
+    else
+        (*g_engfuncs.pfnServerPrint)(pszMsg);
+}
