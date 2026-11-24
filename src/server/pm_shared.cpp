@@ -1314,3 +1314,125 @@ int PM_GetPhysEntInfo( int ent )
 }
 
 /* [PENDENTE] PM_Init */ void PM_Init( struct playermove_s *ppmove );
+
+// [ESF] PM_CheckFalling: igual ao SDK, mas os sons de queda sao "weapons/groundhit.wav" (queda forte no canal 6, o do tfc no canal 2) [OK]
+void PM_CheckFalling( void )
+{
+	if ( pmove->onground != -1 &&
+		 !pmove->dead &&
+		 pmove->flFallVelocity >= PLAYER_FALL_PUNCH_THRESHHOLD )
+	{
+		float fvol = 0.5;
+
+		if ( pmove->waterlevel > 0 )
+		{
+		}
+		else if ( pmove->flFallVelocity > PLAYER_MAX_SAFE_FALL_SPEED )
+		{
+			pmove->PM_PlaySound( 6, "weapons/groundhit.wav", 1, ATTN_NORM, 0, PITCH_NORM );
+			fvol = 1.0;
+		}
+		else if ( pmove->flFallVelocity > PLAYER_MAX_SAFE_FALL_SPEED / 2 )
+		{
+			qboolean tfc = false;
+			tfc = atoi( pmove->PM_Info_ValueForKey( pmove->physinfo, "tfc" ) ) == 1 ? true : false;
+			if ( tfc )
+			{
+				pmove->PM_PlaySound( CHAN_VOICE, "weapons/groundhit.wav", 1, ATTN_NORM, 0, PITCH_NORM );
+			}
+			fvol = 0.85;
+		}
+		else if ( pmove->flFallVelocity < PLAYER_MIN_BOUNCE_SPEED )
+		{
+			fvol = 0;
+		}
+
+		if ( fvol > 0.0 )
+		{
+			pmove->flTimeStepSound = 0;
+			PM_UpdateStepSound();
+			PM_PlayStepSound( PM_MapTextureTypeStepType( pmove->chtexturetype ), fvol );
+		}
+	}
+
+	if ( pmove->onground != -1 )
+	{
+		pmove->flFallVelocity = 0;
+	}
+}
+
+void PM_DropPunchAngle ( vec3_t punchangle )
+{
+	float	len;
+	
+	len = VectorNormalize ( punchangle );
+	len -= (10.0 + len * 0.5) * pmove->frametime;
+	len = max( len, 0.0f );
+	VectorScale ( punchangle, len, punchangle);
+}
+
+void PM_AirAccelerate (vec3_t wishdir, float wishspeed, float accel)
+{
+	int			i;
+	float		addspeed, accelspeed, currentspeed, wishspd = wishspeed;
+		
+	if (pmove->dead)
+		return;
+	if (pmove->waterjumptime)
+		return;
+
+	// Cap speed
+	//wishspd = VectorNormalize (pmove->wishveloc);
+	
+	if (wishspd > 30)
+		wishspd = 30;
+	// Determine veer amount
+	currentspeed = DotProduct (pmove->velocity, wishdir);
+	// See how much to add
+	addspeed = wishspd - currentspeed;
+	// If not adding any, done.
+	if (addspeed <= 0)
+		return;
+	// Determine acceleration speed after acceleration
+
+	accelspeed = accel * wishspeed * pmove->frametime * pmove->friction;
+	// Cap it
+	if (accelspeed > addspeed)
+		accelspeed = addspeed;
+	
+	// Adjust pmove vel.
+	for (i=0 ; i<3 ; i++)
+	{
+		pmove->velocity[i] += accelspeed*wishdir[i];	
+	}
+}
+
+extern void PM_WallJumpPush(void);   // pm_esf.cpp
+// [ESF] PM_ReduceTimers: o cronometro flDuckTime (+0x8c) tambem controla o wall jump: ao zerar, salta da parede (PM_WallJumpPush) e limpa iuser3/vuser4 [OK]
+void PM_ReduceTimers( void )
+{
+	if ( pmove->flTimeStepSound > 0 )
+	{
+		pmove->flTimeStepSound -= pmove->cmd.msec;
+		if ( pmove->flTimeStepSound < 0 )
+			pmove->flTimeStepSound = 0;
+	}
+	if ( pmove->flDuckTime > 0 )
+	{
+		pmove->flDuckTime -= pmove->cmd.msec;
+		if ( pmove->flDuckTime <= 0 )
+		{
+			if ( pmove->iuser3 == 1 )
+				PM_WallJumpPush();
+			pmove->flDuckTime = 0;
+			pmove->iuser3 = 0;
+			VectorClear( pmove->vuser4 );
+		}
+	}
+	if ( pmove->flSwimTime > 0 )
+	{
+		pmove->flSwimTime -= pmove->cmd.msec;
+		if ( pmove->flSwimTime < 0 )
+			pmove->flSwimTime = 0;
+	}
+}
