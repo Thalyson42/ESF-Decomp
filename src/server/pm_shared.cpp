@@ -2788,3 +2788,214 @@ void PM_Jump (void)
 	}
 	pmove->oldbuttons |= IN_JUMP;                 // [OK] marca o pulo
 }
+
+extern void PM_PlayerFlyMove(void);      // pm_esf (ainda pendente)
+extern void PM_PlayerSwoopMove(void);    // pm_esf.cpp
+extern void PM_PlayerToss(void);         // pm_esf.cpp
+extern void PM_RideBeam(void);           // pm_esf.cpp
+extern int  PM_WallJump(void);           // pm_esf.cpp
+// [ESF] PM_PlayerMove: despacho por movetype lido da tabela de salto do binario (0..15):
+//   0 nada; 1,4,7,9,12,13 -> "Bogus pmove player movetype"; 2 -> PM_PlayerToss; 3 WALK (com wall jump e pulo variavel);
+//   5 FLY; 6,10 -> Physics_Toss; 8 NOCLIP; 11 -> SWOOP (PM_PlayerSwoopMove); 14 -> WALK de voo (PM_PlayerFlyMove / wall jump); 15 -> PM_RideBeam. [OK]
+// Sem PM_Duck/agachar (SDK novo). Diferencas no WALK: AddCorrectGravity antes do movimento (se nao esta na agua e iuser3 != 1). [OK]
+void PM_PlayerMove ( qboolean server )
+{
+	physent_t *pLadder = NULL;
+
+	pmove->server = server;
+	PM_CheckParamters();
+	pmove->numtouch = 0;
+	pmove->frametime = pmove->cmd.msec * 0.001;
+	PM_ReduceTimers();
+	AngleVectors (pmove->angles, pmove->forward, pmove->right, pmove->up);
+
+	if ( pmove->spectator || pmove->iuser1 > 0 )
+	{
+		PM_SpectatorMove();
+		PM_CatagorizePosition();
+		return;
+	}
+
+	if ( pmove->movetype != MOVETYPE_NOCLIP && pmove->movetype != MOVETYPE_NONE )
+	{
+		if ( PM_CheckStuck() )
+			return;
+	}
+
+	PM_CatagorizePosition();
+	pmove->oldwaterlevel = pmove->waterlevel;
+	if ( pmove->onground == -1 )
+		pmove->flFallVelocity = -pmove->velocity[2];
+
+	g_onladder = 0;
+	if ( !pmove->dead && !( pmove->flags & FL_ONTRAIN ) )
+	{
+		pLadder = PM_Ladder();
+		if ( pLadder )
+			g_onladder = 1;
+	}
+
+	PM_UpdateStepSound();
+
+	if ( !pmove->dead && !( pmove->flags & FL_ONTRAIN ) )
+	{
+		if ( pLadder )
+			PM_LadderMove( pLadder );
+		else if ( pmove->movetype != MOVETYPE_WALK && pmove->movetype != MOVETYPE_NOCLIP &&
+		          pmove->movetype != 14 && pmove->movetype != 2 && pmove->movetype != 15 && pmove->movetype != 11 )
+			pmove->movetype = MOVETYPE_WALK;           // [OK] movetypes ESF (2, 11, 14, 15) sao preservados
+	}
+
+	if ( pmove->onground != -1 && ( pmove->cmd.buttons & IN_USE ) )   // [OK] buttons & 32
+		VectorScale( pmove->velocity, 0.3, pmove->velocity );
+
+	if ( pmove->movetype > 15 )
+	{
+		pmove->Con_DPrintf( "Bogus pmove player movetype %i on (%i) 0=cl 1=sv\n", pmove->movetype, pmove->server );
+		return;
+	}
+
+	switch ( pmove->movetype )
+	{
+	default:
+		pmove->Con_DPrintf( "Bogus pmove player movetype %i on (%i) 0=cl 1=sv\n", pmove->movetype, pmove->server );
+		break;
+
+	case MOVETYPE_NONE:
+		break;
+
+	case MOVETYPE_NOCLIP:
+		PM_NoClip();
+		break;
+
+	case MOVETYPE_TOSS:
+	case MOVETYPE_BOUNCE:
+		PM_Physics_Toss();
+		break;
+
+	case 11:                                           // [OK] swoop
+		PM_CheckWater();
+		VectorAdd( pmove->velocity, pmove->basevelocity, pmove->velocity );
+		PM_PlayerSwoopMove();
+		VectorSubtract( pmove->velocity, pmove->basevelocity, pmove->velocity );
+		break;
+
+	case MOVETYPE_FLY:
+		PM_CheckWater();
+		if ( pmove->cmd.buttons & IN_JUMP )
+		{
+			if ( !pLadder )
+				PM_Jump();
+		}
+		else
+			pmove->oldbuttons &= ~IN_JUMP;
+		VectorAdd( pmove->velocity, pmove->basevelocity, pmove->velocity );
+		PM_FlyMove();
+		VectorSubtract( pmove->velocity, pmove->basevelocity, pmove->velocity );
+		break;
+
+	case 15:
+		PM_CheckWater();
+		PM_RideBeam();
+		break;
+
+	case 2:
+		PM_CheckWater();
+		PM_PlayerToss();
+		break;
+
+	case 14:                                           // [OK] caminhada de voo
+		PM_CheckWater();
+		if ( pmove->onground == -1 && PM_WallJump() )
+		{
+			if ( !( pmove->cmd.buttons & IN_JUMP ) )
+				pmove->oldbuttons &= ~IN_JUMP;
+			VectorCopy( pmove->velocity, pmove->basevelocity );
+			PM_AirMove();
+			PM_CatagorizePosition();
+			break;
+		}
+		if ( pmove->cmd.buttons & IN_JUMP )
+			pmove->cmd.upmove = 320.0f;                // [OK]
+		else
+			pmove->oldbuttons &= ~IN_JUMP;
+		if ( pmove->gravity < 0.1 )
+			PM_PlayerFlyMove();
+		else
+			PM_FlyMove();
+		break;
+
+	case MOVETYPE_WALK:
+		if ( !PM_InWater() && pmove->iuser3 != 1 )
+			PM_AddCorrectGravity();
+
+		if ( pmove->waterjumptime )
+		{
+			PM_WaterJump();
+			PM_FlyMove();
+			PM_CheckWater();
+			return;
+		}
+
+		if ( pmove->waterlevel >= 2 )
+		{
+			if ( pmove->waterlevel == 2 )
+				PM_CheckWaterJump();
+			if ( pmove->velocity[2] < 0 && pmove->waterjumptime )
+				pmove->waterjumptime = 0;
+			if ( pmove->cmd.buttons & IN_JUMP )
+				PM_Jump();
+			else
+				pmove->oldbuttons &= ~IN_JUMP;
+			PM_WaterMove();
+			VectorSubtract( pmove->velocity, pmove->basevelocity, pmove->velocity );
+			PM_CatagorizePosition();
+		}
+		else
+		{
+			if ( pmove->onground == -1 && PM_WallJump() )     // [OK] grudado na parede: so AirMove
+			{
+				if ( !( pmove->cmd.buttons & IN_JUMP ) )
+					pmove->oldbuttons &= ~IN_JUMP;
+				VectorCopy( pmove->velocity, pmove->basevelocity );
+				PM_AirMove();
+				PM_CatagorizePosition();
+				break;
+			}
+
+			if ( pmove->cmd.buttons & IN_JUMP )
+			{
+				if ( !pLadder )
+					PM_Jump();
+			}
+			else
+			{
+				// pulo variavel: soltar o botao no ar corta a subida pela metade [OK]
+				if ( ( pmove->oldbuttons & IN_JUMP ) && pmove->onground == -1 && pmove->velocity[2] > 0 )
+					pmove->velocity[2] *= 0.5;
+				pmove->oldbuttons &= ~IN_JUMP;
+			}
+
+			if ( pmove->onground != -1 )
+			{
+				pmove->velocity[2] = 0;
+				PM_Friction();
+			}
+			PM_CheckVelocity();
+			if ( pmove->onground != -1 )
+				PM_WalkMove();
+			else
+				PM_AirMove();
+			PM_CatagorizePosition();
+			VectorSubtract( pmove->velocity, pmove->basevelocity, pmove->velocity );
+			PM_CheckVelocity();
+			if ( !PM_InWater() )
+				PM_FixupGravityVelocity();
+			if ( pmove->onground != -1 )
+				pmove->velocity[2] = 0;
+			PM_CheckFalling();
+		}
+		PM_PlayWaterSounds();
+		break;
+	}
+}
