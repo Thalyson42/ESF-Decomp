@@ -453,3 +453,37 @@ void ServerDeactivate(void)
         BotManager.MapFree();
     }
 }
+
+// ---- ClientConnect ----
+// BotManager.PlayerConnect(endereco); se o endereco for "loopback" (host de listen server), guarda a edict em BotManager+0xc [?].
+BOOL ClientConnect(edict_t *pEntity, const char *pszName, const char *pszAddress, char szRejectReason[128])
+{
+    BotManager.PlayerConnect(pszAddress);
+    if (strcmp(pszAddress, "loopback") == 0)
+        BotManager.f_00c = (int)pEntity;
+    return g_pGameRules->ClientConnected(pEntity, pszName, pszAddress, szRejectReason);
+}
+
+// ---- ClientPutInServer ---- como o SDK, mas zera o campo +0x764 [?] antes
+void ClientPutInServer(edict_t *pEntity)
+{
+    CBasePlayer *pPlayer = GetClassPtr((CBasePlayer *)&pEntity->v);
+    *(int *)((char *)pPlayer + 0x764) = 0;
+    pPlayer->SetCustomDecalFrames(-1);
+    pPlayer->Spawn();
+    pPlayer->pev->flags |= FL_CLIENT;
+}
+
+// ---- CreateInstancedBaselines ---- no ESF so zera um entity_state_t local (nao faz nada)
+void CreateInstancedBaselines(void)
+{
+    entity_state_t state;
+    memset(&state, 0, sizeof(state));
+}
+
+// ---- GetWeaponData ---- sem dados de arma: zera o buffer de 0xb00 bytes (weapon_data_t[32])
+int GetWeaponData(struct edict_s *player, struct weapon_data_s *info)
+{
+    memset(info, 0, 0xb00);
+    return 1;
+}

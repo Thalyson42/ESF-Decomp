@@ -493,7 +493,7 @@ void BuildBotFileName(char *szOut, const char *szDir, const char *szFile)
 }
 
 // ---- IsValidFile ---- true se o arquivo abre para leitura
-char IsValidFile(const char *szPath)
+BOOL IsValidFile(const char *szPath)
 {
     FILE *fp = fopen(szPath, "r");
     if (fp)
@@ -559,4 +559,16 @@ CBaseEntity *UTIL_GetLastAttackFromPlayer(CBasePlayer *pPlayer)
             pLast = pEnt;
     }
     return pLast;
+}
+
+// ---- FileIsOlder ---- sempre TRUE
+BOOL FileIsOlder(const char *szFile1, const char *szFile2)
+{
+    return 1;
+}
+
+// ---- EntityHeadsToPlayer [OK] ---- heading (short) > 64, comparacao com sinal
+BOOL EntityHeadsToPlayer(CBasePlayer *pPlayer, CBaseEntity *pEnt)
+{
+    return UTIL_GetHeadingPercentage(pPlayer, pEnt) > 64;
 }
