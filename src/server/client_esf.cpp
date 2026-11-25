@@ -301,3 +301,53 @@ void UTIL_HostSay(CBasePlayer *pPlayer, int teamonly, char *pMessage)
 
     g_engfuncs.pfnServerPrint(text);
 }
+
+// ---- CreateBaseline ----
+// Igual ao SDK, exceto: no ramo de entidade comum (player == 0) o ESF NAO copia v.friction (o SDK copia; aqui o campo fica como esta).
+// Retorna 0 no SDK; o binario devolve o ultimo valor calculado (irrelevante: a engine ignora o retorno).
+#include "entity_state.h"
+
+int CreateBaseline(int player, int eindex, struct entity_state_s *baseline, struct edict_s *entity, int playermodelindex,
+                   vec3_t player_mins, vec3_t player_maxs)
+{
+    baseline->origin = entity->v.origin;
+    baseline->angles = entity->v.angles;
+    baseline->frame = entity->v.frame;
+    baseline->skin = (short)entity->v.skin;
+
+    // informacao de render
+    baseline->rendermode = (byte)entity->v.rendermode;
+    baseline->renderamt = (byte)entity->v.renderamt;
+    baseline->rendercolor.r = (byte)entity->v.rendercolor.x;
+    baseline->rendercolor.g = (byte)entity->v.rendercolor.y;
+    baseline->rendercolor.b = (byte)entity->v.rendercolor.z;
+    baseline->renderfx = (byte)entity->v.renderfx;
+
+    if (player)
+    {
+        baseline->mins = player_mins;
+        baseline->maxs = player_maxs;
+        baseline->colormap = eindex;
+        baseline->modelindex = playermodelindex;
+        baseline->friction = 1.0f;
+        baseline->movetype = MOVETYPE_WALK;
+        baseline->scale = entity->v.scale;
+        baseline->solid = SOLID_SLIDEBOX;
+        baseline->framerate = 1.0f;
+        baseline->gravity = 1.0f;
+    }
+    else
+    {
+        baseline->mins = entity->v.mins;
+        baseline->maxs = entity->v.maxs;
+        baseline->colormap = 0;
+        baseline->modelindex = entity->v.modelindex;
+        baseline->movetype = entity->v.movetype;
+        baseline->scale = entity->v.scale;
+        baseline->solid = entity->v.solid;
+        baseline->framerate = entity->v.framerate;
+        baseline->gravity = entity->v.gravity;
+        // [OK] sem baseline->friction (diferenca em relacao ao SDK)
+    }
+    return 0;
+}
