@@ -239,3 +239,65 @@ void Host_Say(edict_t *pEntity, int teamonly)
             GETPLAYERAUTHID(pEntity), GETPLAYERUSERID(pEntity), temp, p);
     }
 }
+
+// ---- UTIL_HostSay ----
+// "Fala" de um jogador/bot feita pelo servidor (usada pelo CChatClass dos bots). Como Host_Say, mas sem anti-flood, sem log e sem
+// bloqueio de voz: o texto valido vai para o ChatClass, depois para todos (ou so para o mesmo pev->team se teamonly) e para o console.
+void UTIL_HostSay(CBasePlayer *pPlayer, int teamonly, char *pMessage)
+{
+    if (!pMessage || !*pMessage)
+        return;
+
+    // so mensagens com algum caractere imprimivel que nao seja espaco
+    char *pc;
+    for (pc = pMessage; pc != NULL && *pc != 0; pc++)
+    {
+        if (isprint(*pc) && !isspace(*pc))
+        {
+            pc = NULL;
+            break;
+        }
+    }
+    if (pc != NULL)
+        return;
+
+    char text[128];
+    if (teamonly)
+        sprintf(text, "%c(TEAM) %s: ", 2, STRING(pPlayer->pev->netname));
+    else
+        sprintf(text, "%c%s: ", 2, STRING(pPlayer->pev->netname));
+
+    int j = sizeof(text) - 2 - strlen(text);
+    if ((int)strlen(pMessage) > j)
+        pMessage[j] = 0;
+
+    ChatClass.StoreChatMsg(pPlayer->pev->pContainingEntity, pMessage);
+
+    strcat(text, pMessage);
+    strcat(text, "\n");
+
+    if (!gmsgSayText)
+        gmsgSayText = REG_USER_MSG("SayText", -1);
+
+    CBaseEntity *pReceiver = NULL;
+    while ((pReceiver = UTIL_FindEntityByClassname(pReceiver, "player")) != NULL)
+    {
+        if (FNullEnt(pReceiver->pev->pContainingEntity))       // [OK] break (como no SDK), nao continue
+            break;
+
+        if (pReceiver != (CBaseEntity *)pPlayer && (!teamonly || pPlayer->pev->team == pReceiver->pev->team))
+        {
+            MESSAGE_BEGIN(MSG_ONE, gmsgSayText, NULL, pReceiver->pev);
+                WRITE_BYTE(ENTINDEX(pPlayer->pev->pContainingEntity));
+                WRITE_STRING(text);
+            MESSAGE_END();
+        }
+    }
+
+    MESSAGE_BEGIN(MSG_ONE, gmsgSayText, NULL, pPlayer->pev);
+        WRITE_BYTE(ENTINDEX(pPlayer->pev->pContainingEntity));
+        WRITE_STRING(text);
+    MESSAGE_END();
+
+    g_engfuncs.pfnServerPrint(text);
+}
