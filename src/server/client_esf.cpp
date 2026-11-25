@@ -9,6 +9,8 @@
 #include "esf_extras.h"
 #include "CBotManager.h"
 
+#include <ctype.h>
+#define UE_FLOAT(p, off) (*(float *)((char *)(p) + (off)))
 extern int gmsgSayText;
 extern int g_serveractive;
 extern CBotManager BotManager;
@@ -117,4 +119,123 @@ void ClientUserInfoChanged(edict_t *pEntity, char *infobuffer)
     }
 
     g_pGameRules->ClientUserInfoChanged(GetClassPtr((CBasePlayer *)&pEntity->v), infobuffer);   // vtable do gamerules +0x64
+}
+
+// ---- Host_Say @0x49f7c0 ----
+// Igual ao SDK (say / say_team / comando "puro" tratado como fala), com duas diferencas do ESF:
+//   * o texto validado e guardado em ChatClass.StoreChatMsg (para as respostas dos bots) antes de ser enviado;
+//   * o intervalo anti-flood fica no campo +0x9dc do jogador (SDK: m_flNextChatTime), 1 s entre mensagens.
+#include "CChatClass.h"
+#include "voice_gamemgr.h"
+extern CChatClass ChatClass;
+extern CVoiceGameMgr g_VoiceGameMgr;
+
+void Host_Say(edict_t *pEntity, int teamonly)
+{
+    CBasePlayer *client;
+    int j;
+    char *p;
+    char text[128];
+    char szTemp[256];
+    const char *cpSay = "say";
+    const char *cpSayTeam = "say_team";
+    const char *pcmd = CMD_ARGV(0);
+
+    if (CMD_ARGC() == 0)
+        return;
+
+    client = (CBasePlayer *)GetClassPtr((CBasePlayer *)&pEntity->v);
+    if (UE_FLOAT(client, 0x9dc) > gpGlobals->time)         // [?] nome do campo (m_flNextChatTime)
+        return;
+
+    if (!stricmp(pcmd, cpSay) || !stricmp(pcmd, cpSayTeam))
+    {
+        if (CMD_ARGC() <= 1)
+            return;
+        p = (char *)CMD_ARGS();
+    }
+    else
+    {
+        if (CMD_ARGC() >= 2)
+            sprintf(szTemp, "%s %s", pcmd, CMD_ARGS());
+        else
+            sprintf(szTemp, "%s", pcmd);
+        p = szTemp;
+    }
+
+    // remove as aspas de fora
+    if (*p == '"')
+    {
+        p++;
+        p[strlen(p) - 1] = 0;
+    }
+
+    // so mensagens com algum caractere imprimivel que nao seja espaco
+    char *pc;
+    for (pc = p; pc != NULL && *pc != 0; pc++)
+    {
+        if (isprint(*pc) && !isspace(*pc))
+        {
+            pc = NULL;
+            break;
+        }
+    }
+    if (pc != NULL)
+        return;
+
+    ChatClass.StoreChatMsg(pEntity, p);                    // [OK] ESF
+
+    if (teamonly)
+        sprintf(text, "%c(TEAM) %s: ", 2, STRING(pEntity->v.netname));
+    else
+        sprintf(text, "%c%s: ", 2, STRING(pEntity->v.netname));
+
+    j = sizeof(text) - 2 - strlen(text);                   // -2: '\n' e o terminador
+    if ((int)strlen(p) > j)
+        p[j] = 0;
+
+    strcat(text, p);
+    strcat(text, "\n");
+
+    UE_FLOAT(client, 0x9dc) = gpGlobals->time + 1.0f;      // CHAT_INTERVAL
+
+    CBaseEntity *pReceiver = NULL;
+    while ((pReceiver = UTIL_FindEntityByClassname(pReceiver, "player")) != NULL)
+    {
+        if (!pReceiver->pev)
+            continue;
+        if (pReceiver->edict() == pEntity)
+            continue;
+        if (!pReceiver->IsNetClient())                     // vtable +0xa4
+            continue;
+        if (g_VoiceGameMgr.PlayerHasBlockedPlayer((CBasePlayer *)pReceiver, client))
+            continue;
+        if (teamonly && g_pGameRules->PlayerRelationship(pReceiver, CBaseEntity::Instance(pEntity)) != GR_TEAMMATE)   // [?] vtable +0xc8
+            continue;
+
+        MESSAGE_BEGIN(MSG_ONE, gmsgSayText, NULL, pReceiver->pev);
+            WRITE_BYTE(ENTINDEX(pEntity));
+            WRITE_STRING(text);
+        MESSAGE_END();
+    }
+
+    // e para o proprio jogador (e o console do servidor)
+    MESSAGE_BEGIN(MSG_ONE, gmsgSayText, NULL, &pEntity->v);
+        WRITE_BYTE(ENTINDEX(pEntity));
+        WRITE_STRING(text);
+    MESSAGE_END();
+
+    g_engfuncs.pfnServerPrint(text);
+
+    const char *temp = teamonly ? "say_team" : "say";
+    if (g_teamplay)
+    {
+        UTIL_LogPrintf("\"%s<%i><%s><%s>\" %s \"%s\"\n", STRING(pEntity->v.netname), GETPLAYERUSERID(pEntity),
+            GETPLAYERAUTHID(pEntity), g_engfuncs.pfnInfoKeyValue(g_engfuncs.pfnGetInfoKeyBuffer(pEntity), "model"), temp, p);
+    }
+    else
+    {
+        UTIL_LogPrintf("\"%s<%i><%s><%i>\" %s \"%s\"\n", STRING(pEntity->v.netname), GETPLAYERUSERID(pEntity),
+            GETPLAYERAUTHID(pEntity), GETPLAYERUSERID(pEntity), temp, p);
+    }
 }
