@@ -1,4 +1,4 @@
-// precache_esf.cpp -- ClientPrecache do ESF. [OK] @0x4a2b10 (lista de recursos lida do decompilado, na mesma ordem)
+// precache_esf.cpp -- ClientPrecache do ESF. [OK] (lista de recursos lida do decompilado, na mesma ordem)
 #include "extdll.h"
 #include "util.h"
 #include "cbase.h"

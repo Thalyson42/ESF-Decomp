@@ -1,4 +1,4 @@
-// collide_esf.cpp -- deteccao de colisao do ESF (usada pelos bots/melee). [OK] CheckForCollide @0x17d330
+// collide_esf.cpp -- deteccao de colisao do ESF (usada pelos bots/melee). [OK] CheckForCollide
 #include "extdll.h"
 #include "util.h"
 #include "cbase.h"

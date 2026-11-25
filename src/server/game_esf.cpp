@@ -1,5 +1,5 @@
 // game_esf.cpp -- game.cpp do ESF: definicao e registro dos cvars do mod.
-// [OK] valores lidos da secao .data de hl_i386.so (struct cvar_t: name, string, flags, value, next); GameDLLInit @0x4a2e00
+// [OK] valores lidos da secao .data de hl_i386.so (struct cvar_t: name, string, flags, value, next); GameDLLInit
 #include "extdll.h"
 #include "util.h"
 #include "cbase.h"

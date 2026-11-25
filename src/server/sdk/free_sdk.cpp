@@ -14,7 +14,7 @@
 #include "entity_state.h"
 
 extern cvar_t *g_psv_gravity;   // [OK] cvar "sv_gravity" (definida em GameDLLInit)
-void CopyToBodyQue(entvars_t *pev);   // [OK] @0x1a0a30 (client.cpp do ESF)
+void CopyToBodyQue(entvars_t *pev);   // definido em client.cpp do ESF (sdk/player.cpp tambem o declara extern)
 int BuildChangeList(LEVELLIST *pLevelList, int maxList);
 #ifndef VectorCopy
 #define VectorCopy(a,b) {(b)[0]=(a)[0];(b)[1]=(a)[1];(b)[2]=(a)[2];}

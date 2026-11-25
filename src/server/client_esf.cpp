@@ -1,5 +1,5 @@
 // client_esf.cpp -- partes de client.cpp do ESF que diferem do SDK.
-// [OK] conferido contra o decompilado de hl_i386.so: ClientDisconnect @0x49f470, ServerActivate @0x4a0ee0
+// [OK] conferido contra o decompilado de hl_i386.so: ClientDisconnect, ServerActivate
 #include "extdll.h"
 #include "util.h"
 #include "cbase.h"
@@ -72,7 +72,7 @@ void ServerActivate(edict_t *pEdictList, int edictCount, int clientMax)
     BotManager.MapInit();
 }
 
-// ClientUserInfoChanged @0x4a0b90 -- igual ao SDK, exceto: a mensagem "changed name" e enviada SEMPRE (sem o teste maxClients > 1).
+// ClientUserInfoChanged -- igual ao SDK, exceto: a mensagem "changed name" e enviada SEMPRE (sem o teste maxClients > 1).
 extern int g_teamplay;
 
 void ClientUserInfoChanged(edict_t *pEntity, char *infobuffer)
@@ -121,7 +121,7 @@ void ClientUserInfoChanged(edict_t *pEntity, char *infobuffer)
     g_pGameRules->ClientUserInfoChanged(GetClassPtr((CBasePlayer *)&pEntity->v), infobuffer);   // vtable do gamerules +0x64
 }
 
-// ---- Host_Say @0x49f7c0 ----
+// ---- Host_Say ----
 // Igual ao SDK (say / say_team / comando "puro" tratado como fala), com duas diferencas do ESF:
 //   * o texto validado e guardado em ChatClass.StoreChatMsg (para as respostas dos bots) antes de ser enviado;
 //   * o intervalo anti-flood fica no campo +0x9dc do jogador (SDK: m_flNextChatTime), 1 s entre mensagens.

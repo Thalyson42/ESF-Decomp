@@ -1,6 +1,6 @@
 // util_esf.cpp -- funcoes livres pequenas do ESF (util.cpp do mod).
-// [OK] conferido contra o decompilado de hl_i386.so: UTIL_SetPlayerModel @0x1347d0, IsKiBall @0x17d070,
-//      UTIL_CreateEnt @0x17f430, UTIL_PlayerJoinTeam @0x180010, TelePortPlayerToPlayer @0x17c390
+// [OK] conferido contra o decompilado de hl_i386.so: UTIL_SetPlayerModel, IsKiBall,
+//      UTIL_CreateEnt, UTIL_PlayerJoinTeam, TelePortPlayerToPlayer
 #include "extdll.h"
 #include "util.h"
 #include "cbase.h"
@@ -97,11 +97,11 @@ void TelePortPlayerToPlayer(edict_t *pA, edict_t *pB)
     TraceResult tr;
     UTIL_TraceHull(vecStart, vecEnd, dont_ignore_monsters, head_hull, pA, &tr);   // hull 1 [OK]
 
-    if (tr.flFraction >= 1.0)                              // [OK] fcomp 1.0 @0x17c482
+    if (tr.flFraction >= 1.0)                              // [OK] fcomp 1.0
         SET_ORIGIN(pB, vecEnd);
 }
 
-// ---- IsNull [OK] @0x179a70 / @0x179b40 ----
+// ---- IsNull (edict e CBaseEntity) [OK] ----
 // TRUE se a entidade nao serve: ponteiro nulo, fora da lista da engine, slot livre ou marcada FL_KILLME (0x40000000).
 char IsNull(edict_t *pEdict)
 {
@@ -119,7 +119,7 @@ char IsNull(CBaseEntity *pEntity)
     return bResult;
 }
 
-// ---- classificacao de ataques de ki pelo classname [OK] @0x17cb50..0x17d1d0 ----
+// ---- classificacao de ataques de ki pelo classname [OK] ..0x17d1d0 ----
 // copia o classname para um buffer de 80 bytes (como o original); FALSE se a entidade for invalida/sem classname
 static BOOL GetAttackClassName(edict_t *pEdict, char *pszOut)
 {
@@ -183,10 +183,10 @@ char IsAttack(edict_t *pEdict)
     return 0;
 }
 
-// ---- WrapAngles [OK] @0x179740 ----
+// ---- WrapAngles [OK] ----
 // Traz cada componente para perto de [-180,180]. ATENCAO: reproduz o original literalmente (trunca para zero e soma/subtrai (n+1)*360),
 // entao para valores muito grandes ou muito negativos o resultado pode continuar fora do intervalo.
-// UTIL_WrapAngle [OK] @0x001799c0 -- versao de um unico angulo (mesma conta de WrapAngles)
+// UTIL_WrapAngle [OK] -- versao de um unico angulo (mesma conta de WrapAngles)
 float UTIL_WrapAngle(float a)
 {
     int n;
@@ -213,7 +213,7 @@ Vector WrapAngles(Vector vecAngles)
     return angles;
 }
 
-// ---- UTIL_IsValidPlayer [OK] @0x179b90 ----
+// ---- UTIL_IsValidPlayer [OK] ----
 // pPlayer valido e humano/bot conectado. bAlive: exige vfunc +0x8c (IsAlive?) e campo +0x328 zerado. bBotOnly: com o BotManager ativo
 // (byte +0xd4a), so aceita jogadores que sejam bots (FL_FAKECLIENT).
 extern class CBotManager BotManager;
@@ -242,7 +242,7 @@ bool UTIL_IsValidPlayer(CBasePlayer *pPlayer, bool bAlive, bool bBotOnly)
     return false;
 }
 
-// ---- UTIL_EntDir [OK] @0x17c4c0 ----
+// ---- UTIL_EntDir [OK] ----
 // Direcao relativa do ponto vecTarget em relacao a entidade (usa os eixos de pev->angles). Retorna flags:
 //   direita 4 / esquerda 2,  abaixo 64 / acima 32,  frente 16 / tras 8
 // (compara a distancia do alvo a um ponto 100 unidades a cada lado do eixo)
@@ -282,7 +282,7 @@ int UTIL_EntDir(CBaseEntity *pEntity, Vector vecTarget)
     return iDir;
 }
 
-// ---- UTIL_GetHeadingPercentage [OK] @0x17ea20 ----
+// ---- UTIL_GetHeadingPercentage [OK] ----
 // Quanto o alvo (pTarget) esta vindo na direcao de pSelf: compara a distancia atual com a distancia prevista 0.01 s depois.
 // Retorna (dist_atual - dist_prevista) / (velocidade * 0.01) * 100 (truncado para short); 0 se parado ou se afastando.
 extern Vector PredictEntityPos(CBaseEntity *pEntity, float fTime, bool bFlag);
@@ -306,7 +306,7 @@ short UTIL_GetHeadingPercentage(CBaseEntity *pSelf, CBaseEntity *pTarget)
     return (short)(int)((fDistNow - fDistPredicted) / (fSpeed2 * 0.01f) * 100.0f);
 }
 
-// ---- PredictEntityPos [OK] @0x17c920 ----
+// ---- PredictEntityPos [OK] ----
 // Posicao prevista da entidade daqui a fTime segundos, seguindo a velocidade atual. Parada (< 10 u/s) => a propria origem.
 // Com bTrace, o trajeto e limitado por um TraceHull (hull 1) e retorna o ponto final do trace.
 Vector PredictEntityPos(CBaseEntity *pEntity, float fTime, bool bTrace)
@@ -328,7 +328,7 @@ Vector PredictEntityPos(CBaseEntity *pEntity, float fTime, bool bTrace)
     return vecEnd;
 }
 
-// ---- UTIL_DamagePlayer [OK] @0x17f1e0 ----
+// ---- UTIL_DamagePlayer [OK] ----
 // Causa dano em pTarget em nome de pPlayer usando uma entidade "info_target" estatica como inflictor (classname = pszClassName,
 // util para o aviso de morte). O calculo de posicao antes da copia da origem e morto no original, mas e reproduzido.
 float UTIL_DamagePlayer(CBasePlayer *pPlayer, CBasePlayer *pTarget, const char *pszClassName, float flDamage)
@@ -356,7 +356,7 @@ float UTIL_DamagePlayer(CBasePlayer *pPlayer, CBasePlayer *pTarget, const char *
     return flDamage;
 }
 
-// ---- UTIL_Printf [OK] @0x179c80 ----
+// ---- UTIL_Printf [OK] ----
 // Imprime msg para pEntity (destino iDest: 1 e 2 vao para o console do servidor). Sem entidade valida, usa o host do listen server
 // (BotManager+0xc, ou o mundo se vazio). Dedicado => ServerPrint.
 void UTIL_Printf(const char *pszMsg, int iDest, edict_t *pEntity)
@@ -393,7 +393,7 @@ void UTIL_Printf(const char *pszMsg, int iDest, edict_t *pEntity)
         (*g_engfuncs.pfnServerPrint)(pszMsg);
 }
 
-// ---- UTIL_DrawBeam [OK] @0x1794d0 ----
+// ---- UTIL_DrawBeam [OK] ----
 // Envia (so para pPlayer) um TE_BEAMPOINTS de vecStart a vecEnd: startframe 1, framerate 10.
 extern int m_iSpriteTexture;
 
