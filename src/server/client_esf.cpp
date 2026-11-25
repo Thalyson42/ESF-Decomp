@@ -383,3 +383,63 @@ void SetupVisibility(edict_t *pViewEntity, edict_t *pClient, unsigned char **pvs
         *pas = NULL;
     }
 }
+
+// ---- ClientKill ----
+// Comando "kill". ATENCAO: diferente do SDK, o binario chama Killed() SEMPRE; a verificacao (flag +0x310, FL 0x4000000, intervalo
+// de 1 s, campo +0x4c4) so decide se health vira 0 e se o intervalo e renovado.
+void ClientKill(edict_t *pEntity)
+{
+    entvars_t *pev = &pEntity->v;
+    CBasePlayer *pl = (CBasePlayer *)CBasePlayer::Instance(pev);
+
+    if (!(*((char *)pl + 0x310) & 32) &&                   // [?] nomes dos campos desconhecidos
+        !(pl->pev->flags & 0x4000000) &&
+        *(float *)((char *)pl + 0x314) <= gpGlobals->time &&   // [?] m_fNextSuicideTime
+        !*(int *)((char *)pl + 0x4c4))
+    {
+        *(float *)((char *)pl + 0x314) = gpGlobals->time + 1.0f;
+        pev->health = 0;
+    }
+
+    pl->Killed(pev, GIB_NEVER);
+}
+
+// ---- GetHullBounds ----
+// Hulls minusculos do ESF (jogadores voam): 0 = (-4,-4,-9)..(4,4,9); 1 = (-4,-4,-4)..(4,4,5); 2 = ponto. Outros: retorna 0.
+int GetHullBounds(int hullnumber, float *mins, float *maxs)
+{
+    switch (hullnumber)
+    {
+    case 0:
+        mins[0] = -4; mins[1] = -4; mins[2] = -9;
+        maxs[0] = 4;  maxs[1] = 4;  maxs[2] = 9;
+        return 1;
+    case 1:
+        mins[0] = -4; mins[1] = -4; mins[2] = -4;
+        maxs[0] = 4;  maxs[1] = 4;  maxs[2] = 5;
+        return 1;
+    case 2:
+        mins[0] = 0; mins[1] = 0; mins[2] = 0;
+        maxs[0] = 0; maxs[1] = 0; maxs[2] = 0;
+        return 1;
+    }
+    return 0;
+}
+
+// ---- StartFrame ----
+// SDK + BotManager.Think() no inicio, e gpGlobals->teamplay vem do cvar mp_gamemode (truncado para int).
+extern unsigned long g_ulFrameCount;
+
+void StartFrame(void)
+{
+    BotManager.Think();
+
+    if (g_pGameRules)
+        g_pGameRules->Think();
+
+    if (g_fGameOver)
+        return;
+
+    gpGlobals->teamplay = (float)(int)CVAR_GET_FLOAT("mp_gamemode");
+    g_ulFrameCount++;
+}

@@ -471,3 +471,35 @@ BOOL FEntIsVisible(entvars_t *pev, entvars_t *pevTarget)
         return TRUE;
     return FALSE;
 }
+
+// ---- BuildBotFileName ----
+// szOut = "esf/esf_bot/" + szDir + "/" + szFile (a barra e o nome so entram se ambos szDir e szFile forem nao vazios;
+// com so szDir, vira "esf/esf_bot/<szDir>"). Sem szDir, fica "esf/esf_bot/".
+void BuildBotFileName(char *szOut, const char *szDir, const char *szFile)
+{
+    strcpy(szOut, "esf/esf_bot/");
+    if (!szDir)
+        return;
+    if (*szDir && szFile && *szFile)
+    {
+        strcat(szOut, szDir);
+        strcat(szOut, "/");
+        strcat(szOut, szFile);
+        return;
+    }
+    if (!*szDir)
+        return;
+    strcat(szOut, szDir);
+}
+
+// ---- IsValidFile ---- true se o arquivo abre para leitura
+char IsValidFile(const char *szPath)
+{
+    FILE *fp = fopen(szPath, "r");
+    if (fp)
+    {
+        fclose(fp);
+        return 1;
+    }
+    return 0;
+}
