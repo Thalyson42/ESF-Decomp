@@ -11,6 +11,8 @@
 #include "weapons.h"
 
 extern cvar_t *g_psv_gravity;   // [OK] cvar "sv_gravity" (definida em GameDLLInit)
+void CopyToBodyQue(entvars_t *pev);   // [OK] @0x1a0a30 (client.cpp do ESF)
+int BuildChangeList(LEVELLIST *pLevelList, int maxList);
 #ifndef VectorCopy
 #define VectorCopy(a,b) {(b)[0]=(a)[0];(b)[1]=(a)[1];(b)[2]=(a)[2];}
 #endif
@@ -274,4 +276,48 @@ Vector VecCheckThrow ( entvars_t *pev, const Vector &vecSpot1, Vector vecSpot2, 
 	}
 
 	return vecGrenadeVel;
+}
+
+// [OK] igual ao SDK (client.cpp); conferido contra o decompilado
+void respawn(entvars_t* pev, BOOL fCopyCorpse)
+{
+	if (gpGlobals->coop || gpGlobals->deathmatch)
+	{
+		if ( fCopyCorpse )
+		{
+			// make a copy of the dead body for appearances sake
+			CopyToBodyQue(pev);
+		}
+
+		// respawn player
+		GetClassPtr( (CBasePlayer *)pev)->Spawn( );
+	}
+	else
+	{       // restart the entire server
+		SERVER_COMMAND("reload\n");
+	}
+}
+
+// [OK] igual ao SDK (client.cpp); conferido contra o decompilado
+void ParmsChangeLevel( void )
+{
+	// retrieve the pointer to the save data
+	SAVERESTOREDATA *pSaveData = (SAVERESTOREDATA *)gpGlobals->pSaveData;
+
+	if ( pSaveData )
+		pSaveData->connectionCount = BuildChangeList( pSaveData->levelList, MAX_LEVEL_CONNECTIONS );
+}
+
+// [OK] igual ao SDK (client.cpp); conferido contra o decompilado
+int	InconsistentFile( const edict_t *player, const char *filename, char *disconnect_message )
+{
+	// Server doesn't care?
+	if ( CVAR_GET_FLOAT( "mp_consistency" ) != 1 )
+		return 0;
+
+	// Default behavior is to kick the player
+	sprintf( disconnect_message, "Server is enforcing file consistency for %s\n", filename );
+
+	// Kick now with specified disconnect message.
+	return 1;
 }
