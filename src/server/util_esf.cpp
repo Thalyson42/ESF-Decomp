@@ -503,3 +503,60 @@ char IsValidFile(const char *szPath)
     }
     return 0;
 }
+
+// ---- UTIL_PlayerByIndex ---- igual ao SDK: indice 1..maxClients, edict nao livre -> instancia
+CBaseEntity *UTIL_PlayerByIndex(int playerIndex)
+{
+    if (playerIndex <= 0 || playerIndex > gpGlobals->maxClients)
+        return NULL;
+    edict_t *pEdict = INDEXENT(playerIndex);
+    if (!pEdict || pEdict->free)
+        return NULL;
+    return CBaseEntity::Instance(pEdict);
+}
+
+// ---- UTIL_DBsAreActive ---- [?] offsets +0x108/+0x10c/+0x110 do dragonball sem nome conhecido
+BOOL UTIL_DBsAreActive(void)
+{
+    CBaseEntity *pDB = UTIL_FindEntityByClassname(NULL, "dragonball");
+    if (IsNull(pDB))
+        return FALSE;
+    int *f = (int *)pDB;
+    if (f[0x10c / 4] && f[0x108 / 4] != 8)
+        return !f[0x110 / 4];
+    return FALSE;
+}
+
+// ---- UTIL_DBsAreGathered ---- [?] campo +0x15c == 19
+BOOL UTIL_DBsAreGathered(void)
+{
+    CBaseEntity *pDB = UTIL_FindEntityByClassname(NULL, "dragonball");
+    if (IsNull(pDB))
+        return FALSE;
+    return *(int *)((char *)pDB + 0x15c) == 19;
+}
+
+// ---- UTIL_GetAttackFromPlayerByName ---- primeiro ent de classname cujo dono (+0x198) e o do jogador (+0x208) [?]
+CBaseEntity *UTIL_GetAttackFromPlayerByName(CBasePlayer *pPlayer, const char *szClassname)
+{
+    CBaseEntity *pEnt = NULL;
+    while ((pEnt = UTIL_FindEntityByClassname(pEnt, szClassname)) != NULL)
+    {
+        if (*(int *)((char *)pEnt + 0x198) == *(int *)((char *)pPlayer + 0x208) && !IsNull(pEnt))
+            return pEnt;
+    }
+    return NULL;
+}
+
+// ---- UTIL_GetLastAttackFromPlayer ---- ultimo "magic_attack" (globalname) do jogador
+CBaseEntity *UTIL_GetLastAttackFromPlayer(CBasePlayer *pPlayer)
+{
+    CBaseEntity *pEnt = NULL, *pLast = NULL;
+    int owner = *(int *)((char *)pPlayer + 0x208);
+    while ((pEnt = UTIL_FindEntityByString(pEnt, "globalname", "magic_attack")) != NULL)
+    {
+        if (!IsNull(pEnt) && *(int *)((char *)pEnt + 0x198) == owner)
+            pLast = pEnt;
+    }
+    return pLast;
+}

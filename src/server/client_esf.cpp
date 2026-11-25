@@ -443,3 +443,13 @@ void StartFrame(void)
     gpGlobals->teamplay = (float)(int)CVAR_GET_FLOAT("mp_gamemode");
     g_ulFrameCount++;
 }
+
+// ---- ServerDeactivate ---- so age se o servidor estava ativo; libera os bots do mapa
+void ServerDeactivate(void)
+{
+    if (g_serveractive == 1)
+    {
+        g_serveractive = 0;
+        BotManager.MapFree();
+    }
+}
