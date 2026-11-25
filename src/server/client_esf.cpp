@@ -351,3 +351,35 @@ int CreateBaseline(int player, int eindex, struct entity_state_s *baseline, stru
     }
     return 0;
 }
+
+// ---- SetupVisibility ----
+// Como o SDK, mas: (1) se o jogador esta em modo observador (pev->iuser1 != 0) e tem alvo (EHANDLE em CBasePlayer+0x788),
+// a visao passa a ser a do alvo; (2) nao ha ajuste de agachamento; (3) clientes FL_PROXY (HLTV) ficam sem PVS/PAS.
+void SetupVisibility(edict_t *pViewEntity, edict_t *pClient, unsigned char **pvs, unsigned char **pas)
+{
+    edict_t *pView = pClient;
+    if (pViewEntity)
+        pView = pViewEntity;
+
+    edict_t *pClientEdict = pClient ? pClient : INDEXENT(0);
+    CBaseEntity *pPlayer = pClientEdict ? (CBaseEntity *)pClientEdict->pvPrivateData : NULL;
+
+    if (pPlayer->pev->iuser1)                              // [?] campo de observador (entvars+0x248)
+    {
+        EHANDLE *phTarget = (EHANDLE *)((char *)pPlayer + 0x788);   // [?] nome do campo (m_hObserverTarget)
+        if (*phTarget)
+            pView = ((CBaseEntity *)(*phTarget))->pev->pContainingEntity;
+    }
+
+    if (!(pClient->v.flags & FL_PROXY))
+    {
+        Vector org = pView->v.origin + pView->v.view_ofs;
+        *pvs = ENGINE_SET_PVS((float *)&org);
+        *pas = ENGINE_SET_PAS((float *)&org);
+    }
+    else
+    {
+        *pvs = NULL;
+        *pas = NULL;
+    }
+}

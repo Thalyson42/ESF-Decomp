@@ -644,3 +644,58 @@ void CmdEnd ( const edict_t *player )
 		UTIL_UnsetGroupTrace();
 	}
 }
+
+// [OK] igual ao SDK (animation.cpp); conferido contra o decompilado
+float SetController( void *pmodel, entvars_t *pev, int iController, float flValue )
+{
+	studiohdr_t *pstudiohdr;
+	int i;
+	
+	pstudiohdr = (studiohdr_t *)pmodel;
+	if (! pstudiohdr)
+		return flValue;
+
+	mstudiobonecontroller_t	*pbonecontroller = (mstudiobonecontroller_t *)((byte *)pstudiohdr + pstudiohdr->bonecontrollerindex);
+
+	// find first controller that matches the index
+	for ( i = 0; i < pstudiohdr->numbonecontrollers; i++, pbonecontroller++)
+	{
+		if (pbonecontroller->index == iController)
+			break;
+	}
+	if (i >= pstudiohdr->numbonecontrollers)
+		return flValue;
+
+	// wrap 0..360 if it's a rotational controller
+
+	if (pbonecontroller->type & (STUDIO_XR | STUDIO_YR | STUDIO_ZR))
+	{
+		// ugly hack, invert value if end < start
+		if (pbonecontroller->end < pbonecontroller->start)
+			flValue = -flValue;
+
+		// does the controller not wrap?
+		if (pbonecontroller->start + 359.0 >= pbonecontroller->end)
+		{
+			if (flValue > ((pbonecontroller->start + pbonecontroller->end) / 2.0) + 180)
+				flValue = flValue - 360;
+			if (flValue < ((pbonecontroller->start + pbonecontroller->end) / 2.0) - 180)
+				flValue = flValue + 360;
+		}
+		else
+		{
+			if (flValue > 360)
+				flValue = flValue - (int)(flValue / 360.0) * 360.0;
+			else if (flValue < 0)
+				flValue = flValue + (int)((flValue / -360.0) + 1) * 360.0;
+		}
+	}
+
+	int setting = 255 * (flValue - pbonecontroller->start) / (pbonecontroller->end - pbonecontroller->start);
+
+	if (setting < 0) setting = 0;
+	if (setting > 255) setting = 255;
+	pev->controller[iController] = setting;
+
+	return setting * (1.0 / 255.0) * (pbonecontroller->end - pbonecontroller->start) + pbonecontroller->start;
+}
