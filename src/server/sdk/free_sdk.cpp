@@ -613,3 +613,34 @@ void RegisterEncoders( void )
 	DELTA_ADDENCODER( "Custom_Encode", Custom_Encode );
 	DELTA_ADDENCODER( "Player_Encode", Player_Encode );
 }
+
+// [OK] igual ao SDK (client.cpp); conferido contra o decompilado
+void CmdStart( const edict_t *player, const struct usercmd_s *cmd, unsigned int random_seed )
+{
+	entvars_t *pev = (entvars_t *)&player->v;
+	CBasePlayer *pl = dynamic_cast< CBasePlayer *>( CBasePlayer::Instance( pev ) );
+
+	if( !pl )
+		return;
+
+	if ( pl->pev->groupinfo != 0 )
+	{
+		UTIL_SetGroupTrace( pl->pev->groupinfo, GROUP_OP_AND );
+	}
+
+	pl->random_seed = random_seed;
+}
+
+// [OK] igual ao SDK (client.cpp); conferido contra o decompilado
+void CmdEnd ( const edict_t *player )
+{
+	entvars_t *pev = (entvars_t *)&player->v;
+	CBasePlayer *pl = dynamic_cast< CBasePlayer *>( CBasePlayer::Instance( pev ) );
+
+	if( !pl )
+		return;
+	if ( pl->pev->groupinfo != 0 )
+	{
+		UTIL_UnsetGroupTrace();
+	}
+}
