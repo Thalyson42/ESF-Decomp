@@ -421,3 +421,53 @@ void UTIL_DrawBeam(edict_t *pPlayer, Vector vecStart, Vector vecEnd, int iWidth,
         WRITE_BYTE(iSpeed);
     MESSAGE_END();
 }
+
+// ---- UTIL_AngleMod ----
+// Versao do ESF (NAO e a do SDK, que usa mascara de 16 bits): trunca a/360 para zero e soma (n+1)*360 se negativo,
+// ou subtrai n*360 se >= 360. Valores em [0,360) passam sem mudanca.
+float UTIL_AngleMod(float a)
+{
+    if (a < 0.0f)
+    {
+        int n = (int)(a / 360.0);
+        return (float)(a + (double)((n + 1) * 360));
+    }
+    else if (a >= 360.0f)
+    {
+        int n = (int)(a / 360.0);
+        return (float)(a - (double)(n * 360));
+    }
+    return a;
+}
+
+// ---- UTIL_DrawBeamToAll ----
+// Desenha o mesmo feixe (vida 4) para todos os jogadores conectados, exceto bots (FL_FAKECLIENT).
+void UTIL_DrawBeamToAll(Vector vecStart, Vector vecEnd, int iWidth, int iNoise, int iRed, int iGreen, int iBlue,
+                        int iBrightness, int iSpeed)
+{
+    for (int i = 1; i <= gpGlobals->maxClients; i++)
+    {
+        edict_t *pPlayer = INDEXENT(i);
+        if (IsNull(pPlayer))
+            continue;
+        if (pPlayer->v.flags & FL_FAKECLIENT)
+            continue;
+        UTIL_DrawBeam(pPlayer, vecStart, vecEnd, iWidth, iNoise, iRed, iGreen, iBlue, iBrightness, iSpeed, 4);
+    }
+}
+
+// ---- FEntIsVisible ----
+// Linha de visao entre os "olhos" (origin + view_ofs) de pev e de pevTarget, ignorando monstros e o proprio pev.
+// ATENCAO: o binario testa (!fInOpen || !fInWater) && flFraction == 1.0 (confirmado no assembly), nao fAllSolid/fStartSolid.
+BOOL FEntIsVisible(entvars_t *pev, entvars_t *pevTarget)
+{
+    Vector vecLookerOrigin = pev->origin + pev->view_ofs;
+    Vector vecTargetOrigin = pevTarget->origin + pevTarget->view_ofs;
+
+    TraceResult tr;
+    UTIL_TraceLine(vecLookerOrigin, vecTargetOrigin, ignore_monsters, pev->pContainingEntity, &tr);
+
+    if ((!tr.fInOpen || !tr.fInWater) && tr.flFraction == 1.0f)
+        return TRUE;
+    return FALSE;
+}
