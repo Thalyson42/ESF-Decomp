@@ -69,3 +69,52 @@ void ServerActivate(edict_t *pEdictList, int edictCount, int clientMax)
     LinkUserMessages();
     BotManager.MapInit();
 }
+
+// ClientUserInfoChanged @0x4a0b90 -- igual ao SDK, exceto: a mensagem "changed name" e enviada SEMPRE (sem o teste maxClients > 1).
+extern int g_teamplay;
+
+void ClientUserInfoChanged(edict_t *pEntity, char *infobuffer)
+{
+    if (!pEntity->pvPrivateData)
+        return;
+
+    if (pEntity->v.netname && STRING(pEntity->v.netname)[0] != 0 &&
+        strcmp(STRING(pEntity->v.netname), g_engfuncs.pfnInfoKeyValue(infobuffer, "name")))
+    {
+        char sName[256];
+        char *pName = g_engfuncs.pfnInfoKeyValue(infobuffer, "name");
+        strncpy(sName, pName, sizeof(sName) - 1);
+        sName[sizeof(sName) - 1] = '\0';
+
+        // remove '%' do nome (troca por espaco)
+        for (char *pApersand = sName; pApersand != NULL && *pApersand != 0; pApersand++)
+        {
+            if (*pApersand == '%')
+                *pApersand = ' ';
+        }
+
+        g_engfuncs.pfnSetClientKeyValue(ENTINDEX(pEntity), infobuffer, "name", sName);
+
+        char text[256];
+        sprintf(text, "* %s changed name to %s\n", STRING(pEntity->v.netname), g_engfuncs.pfnInfoKeyValue(infobuffer, "name"));
+        MESSAGE_BEGIN(MSG_ALL, gmsgSayText, NULL);
+            WRITE_BYTE(ENTINDEX(pEntity));
+            WRITE_STRING(text);
+        MESSAGE_END();
+
+        if (g_teamplay)
+        {
+            UTIL_LogPrintf("\"%s<%i><%s><%s>\" changed name to \"%s\"\n",
+                STRING(pEntity->v.netname), GETPLAYERUSERID(pEntity), GETPLAYERAUTHID(pEntity),
+                g_engfuncs.pfnInfoKeyValue(infobuffer, "model"), g_engfuncs.pfnInfoKeyValue(infobuffer, "name"));
+        }
+        else
+        {
+            UTIL_LogPrintf("\"%s<%i><%s><%i>\" changed name to \"%s\"\n",
+                STRING(pEntity->v.netname), GETPLAYERUSERID(pEntity), GETPLAYERAUTHID(pEntity),
+                GETPLAYERUSERID(pEntity), g_engfuncs.pfnInfoKeyValue(infobuffer, "name"));
+        }
+    }
+
+    g_pGameRules->ClientUserInfoChanged(GetClassPtr((CBasePlayer *)&pEntity->v), infobuffer);   // vtable do gamerules +0x64
+}
