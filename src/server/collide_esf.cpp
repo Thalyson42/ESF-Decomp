@@ -72,3 +72,108 @@ char CheckForCollide(edict_t *pEdict, int iFlags, float fDist)
     }
     return 0;
 }
+
+// ---- GetNearestCollision / GetFurthestCollision [OK] ----
+// Varre 5 pitches x 5 yaws ao redor da entidade (angulos de pev->angles normalizados por WrapAngles). Para cada combinacao traca
+// um hull (ignore_monsters, hull 1) de fDist para frente e de fDist para tras a partir da origem; entre os dois pontos de impacto
+// fica com o mais perto (Nearest) ou o mais longe (Furthest) e, no fim, devolve o melhor de todos (ou g_vecZero se nada bateu).
+// Os deslocamentos vem de duas tabelas de salto: pitch {0,-40,40,-89,89} (x e SUBSTITUIDO, nao somado) e yaw {-90,-45,0,45,90} (somado a y).
+Vector WrapAngles(Vector vecAngles);
+
+static const float g_CollidePitch[5] = { 0.0f, -40.0f, 40.0f, -89.0f, 89.0f };
+static const float g_CollideYaw[5] = { -90.0f, -45.0f, 0.0f, 45.0f, 90.0f };
+
+// Executa os dois traces de uma combinacao; devolve distancias e pontos de impacto (frente: 1, tras: 2).
+static void CollideProbe(CBaseEntity *pEntity, float fDist, int iPitch, int iYaw,
+                         float &d1, Vector &p1, float &frac1, float &d2, Vector &p2, float &frac2)
+{
+    Vector vecAngles = WrapAngles(pEntity->pev->angles);
+    vecAngles.y = UTIL_WrapAngle(g_CollideYaw[iYaw] + vecAngles.y);
+    vecAngles.x = UTIL_WrapAngle(g_CollidePitch[iPitch]);
+    UTIL_MakeVectors(vecAngles);
+
+    Vector vecOffset = gpGlobals->v_forward * fDist;
+    Vector vecFront = pEntity->pev->origin + vecOffset;
+    Vector vecBack = pEntity->pev->origin - gpGlobals->v_forward * fDist;
+
+    TraceResult tr1, tr2;
+    UTIL_TraceHull(pEntity->pev->origin, vecFront, ignore_monsters, head_hull, pEntity->pev->pContainingEntity, &tr1);
+    UTIL_TraceHull(pEntity->pev->origin, vecBack, ignore_monsters, head_hull, pEntity->pev->pContainingEntity, &tr2);
+
+    p1 = tr1.vecEndPos;  frac1 = tr1.flFraction;  d1 = (tr1.vecEndPos - pEntity->pev->origin).Length();
+    p2 = tr2.vecEndPos;  frac2 = tr2.flFraction;  d2 = (tr2.vecEndPos - pEntity->pev->origin).Length();
+}
+
+Vector GetNearestCollision(CBaseEntity *pEntity, float fDist)
+{
+    Vector vecBest = g_vecZero;
+    float fBest = 9999.9f;
+
+    for (int iPitch = 0; iPitch < 5; iPitch++)
+    {
+        for (int iYaw = 0; iYaw < 5; iYaw++)
+        {
+            float d1, d2, frac1, frac2;
+            Vector p1, p2;
+            CollideProbe(pEntity, fDist, iPitch, iYaw, d1, p1, frac1, d2, p2, frac2);
+
+            float fCandDist;
+            Vector vecCand;
+            if (d2 > d1 && frac1 < 1.0f)                   // frente bateu e e mais perto
+            {
+                fCandDist = d1;
+                vecCand = p1;
+            }
+            else if (d2 < d1 && frac2 < 1.0f)              // tras bateu e e mais perto
+            {
+                fCandDist = d2;
+                vecCand = p2;
+            }
+            else
+                continue;                                  // empate ou sem impacto util
+
+            if (fCandDist < fBest)
+            {
+                fBest = fCandDist;
+                vecBest = vecCand;
+            }
+        }
+    }
+    return vecBest;
+}
+
+Vector GetFurthestCollision(CBaseEntity *pEntity, float fDist)
+{
+    Vector vecBest = g_vecZero;
+    float fBest = 0.0f;
+
+    for (int iPitch = 0; iPitch < 5; iPitch++)
+    {
+        for (int iYaw = 0; iYaw < 5; iYaw++)
+        {
+            float d1, d2, frac1, frac2;
+            Vector p1, p2;
+            CollideProbe(pEntity, fDist, iPitch, iYaw, d1, p1, frac1, d2, p2, frac2);
+
+            float fCandDist;
+            Vector vecCand;
+            if (d2 < d1 && frac1 < 1.0f)                   // [OK] (sem teste de frac2 neste ramo, como no binario)
+            {
+                fCandDist = d1;
+                vecCand = p1;
+            }
+            else
+            {
+                fCandDist = d2;
+                vecCand = p2;
+            }
+
+            if (fCandDist > fBest)
+            {
+                fBest = fCandDist;
+                vecBest = vecCand;
+            }
+        }
+    }
+    return vecBest;
+}
