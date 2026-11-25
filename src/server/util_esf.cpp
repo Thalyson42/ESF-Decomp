@@ -186,7 +186,8 @@ char IsAttack(edict_t *pEdict)
 // ---- WrapAngles [OK] @0x179740 ----
 // Traz cada componente para perto de [-180,180]. ATENCAO: reproduz o original literalmente (trunca para zero e soma/subtrai (n+1)*360),
 // entao para valores muito grandes ou muito negativos o resultado pode continuar fora do intervalo.
-static inline float WrapAngle1(float a)
+// UTIL_WrapAngle [OK] @0x001799c0 -- versao de um unico angulo (mesma conta de WrapAngles)
+float UTIL_WrapAngle(float a)
 {
     int n;
     if (a > 180.0f)
@@ -206,9 +207,9 @@ Vector WrapAngles(Vector vecAngles)
 {
     static Vector angles;                                  // [OK] o original usa um estatico local (guard tmp_0)
     angles = vecAngles;
-    angles.x = WrapAngle1(angles.x);
-    angles.y = WrapAngle1(angles.y);
-    angles.z = WrapAngle1(angles.z);
+    angles.x = UTIL_WrapAngle(angles.x);
+    angles.y = UTIL_WrapAngle(angles.y);
+    angles.z = UTIL_WrapAngle(angles.z);
     return angles;
 }
 
