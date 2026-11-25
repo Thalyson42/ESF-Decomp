@@ -487,3 +487,18 @@ int GetWeaponData(struct edict_s *player, struct weapon_data_s *info)
     memset(info, 0, 0xb00);
     return 1;
 }
+
+// ---- PlayerPreThink / PlayerPostThink ---- iguais ao SDK (virtuais do jogador, slots +0x1fc e +0x200)
+void PlayerPreThink(edict_t *pEntity)
+{
+    CBasePlayer *pPlayer = (CBasePlayer *)GET_PRIVATE(pEntity);
+    if (pPlayer)
+        pPlayer->PreThink();
+}
+
+void PlayerPostThink(edict_t *pEntity)
+{
+    CBasePlayer *pPlayer = (CBasePlayer *)GET_PRIVATE(pEntity);
+    if (pPlayer)
+        pPlayer->PostThink();
+}
