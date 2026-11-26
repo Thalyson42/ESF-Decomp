@@ -4,6 +4,7 @@
 #include "cbase.h"
 #include "player.h"
 #include "esf_classes.h"
+#include "aura.h"
 #include "swoop.h"
 
 #define OWNER_CLASS(pl) (*(CBaseClass **)((char *)(pl) + 0x764))   // [OK] CBasePlayer::m_pClass
@@ -123,7 +124,7 @@ void CSwoop::HandleSwoop(void)                 // 0x123ff0 [OK] x87 lido do asm
     float flBoost = GetSwoopBoostSpeed();
     float flResult = SwoopSlowdown() * (flRamp * flBoost + flSpeed);
     m_flSpeed = flResult;                              // +0x14
-    m_pPlayer->pev->maxspeed = flResult;               // pev+0x28c
+    *(float *)((char *)m_pPlayer->pev + 0x28c) = flResult;   // pev+0x28c [OK] (offset do entvars do ESF; no SDK 2.x seria 0x220)
 }
 
 #define PL_BUTTON (m_pPlayer->pev->button)
@@ -169,4 +170,79 @@ Vector CSwoop::GetCurrentDirection(void)       // 0x124390 [OK] (tabela lida do 
         }
     }
     return gpGlobals->v_forward;               // tipo 4 e padrao
+}
+
+// entvars do ESF difere do SDK em alguns campos: usar offsets lidos do asm
+#define PEV_I(off) (*(int *)((char *)m_pPlayer->pev + (off)))
+#define PEV_F(off) (*(float *)((char *)m_pPlayer->pev + (off)))
+#define PEV_EDICT  (*(edict_t **)((char *)m_pPlayer->pev + 0x208))   // pev->pContainingEntity
+
+void CSwoop::StartSwoop(int iDir)              // 0x1240b0 [OK] (asm conferido)
+{
+    if (PLI(0x320))                                   // voando
+        m_pPlayer->StopFly();
+    int iChained = f_04;                              // ja estava num swoop (encadeado)
+    f_04 = 1;
+    m_iType = iDir;
+    m_flSpeed = GetSwoopSpeed() + GetSwoopBoostSpeed();
+    m_flStartTime = gpGlobals->time;
+    PLI(0x37c) = 1;
+    PEV_F(0x11c) = 1e-7f;                             // pev->gravity ~ 0
+    PEV_I(0x108) = 11;                                // pev->movetype = MOVETYPE_FLY
+    ((CPlayerMelee *)((char *)m_pPlayer + 0x380))->RemoveAllAnims();   // m_Melee
+    PEV_F(0x288) = (float)iDir;
+    PEV_F(0x28c) = m_flSpeed;                         // maxspeed
+    if (iChained)
+        f_08 = 1;
+    if (!PLI(0x76c)) {
+        PLI(0x76c) = (int)(size_t)CAura::Create(m_pPlayer);
+        return;
+    }
+    EMIT_SOUND_DYN(PEV_EDICT, 3, iChained ? "weapons/chainswoop.wav" : "weapons/swoop.wav", 1.0f, 0.8f, 0, 100);
+}
+
+void CSwoop::StopSwoop(void)                   // 0x124200 [OK] (asm conferido)
+{
+    f_04 = 0;
+    f_08 = 0;
+    m_iType = -1;
+    m_flSpeed = 0;
+    m_flStartTime = 0;
+    PLI(0x37c) = 0;
+    PEV_F(0x288) = 0;                                 // zera pev+0x288..0x290
+    PEV_F(0x28c) = 0;
+    PEV_F(0x290) = 0;
+    ResetAllDT();
+    if (PLI(0x76c)) {
+        if (PLI(0x324)) {                             // powerup ligado: aura fica, so o som
+            EMIT_SOUND_DYN(PEV_EDICT, 3, "weapons/aura.wav", 1.0f, 0.8f, 0, 100);
+        } else {
+            ((CAura *)(size_t)PLI(0x76c))->Destroy();
+            PLI(0x76c) = 0;
+        }
+    }
+    PLI(0x320) = 0;
+    if (PEV_I(0x1a4) & FL_ONGROUND) {                 // pev->flags
+        PEV_F(0x11c) = 1.0f;                          // gravity normal
+        PEV_I(0x108) = MOVETYPE_WALK;
+    } else {
+        m_pPlayer->StartFly();
+    }
+    ((CPlayerMelee *)((char *)m_pPlayer + 0x380))->SetMovementFlags(m_iNullKeyset);
+    if (PL_BUTTON & 2) AddToNullKeyset(2);            // segura pulo/agachar: so vale depois de soltar
+    if (PL_BUTTON & 4) AddToNullKeyset(4);
+}
+
+int CSwoop::SetSwoopAnim(char *szAnim, int &iActivity)   // 0x124790 [OK] (tabela e strings lidas do binario)
+{
+    strcpy(szAnim, "swoop_");
+    switch ((unsigned)m_iType) {
+    case 0: strcat(szAnim, "up");       iActivity = 103; break;
+    case 1: strcat(szAnim, "down");     iActivity = 104; break;
+    case 2: strcat(szAnim, "left");     iActivity = 101; break;
+    case 3: strcat(szAnim, "right");    iActivity = 102; break;
+    case 5: strcat(szAnim, "backward"); iActivity = 100; break;
+    default: strcat(szAnim, "forward"); iActivity = 99; break;   // tipo 4 e invalido
+    }
+    return 0;
 }
