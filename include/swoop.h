@@ -9,6 +9,7 @@ public:
     void AddAllToNullKeyset(void);        // [?]
     void ResetAllDT(void);                // [OK] Reset__6CSwoop / ResetAllDT__6CSwoop
     void Reset(void);
+    int  SetSwoopAnim(char *szAnim, int &iActivity);   // [?] assinatura (corpo ainda não recuperado)
     float GetSwoopTime(void);             // [?]
     Vector GetCurrentDirection(void);     // [?] devolve por ponteiro oculto
     int  m_iType;                         // [OK] +0x504 do jogador: tipo de investida (0..5; 4 = contra distancia)
