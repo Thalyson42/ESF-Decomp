@@ -205,3 +205,54 @@ void CBasePlayer::Descend(int iFlag)
     }
     delete pOld;
 }
+
+// ---- Início da transformação (segurar o botão de transformar) ----
+// f_770 = subindo; f_774 = progresso (float, 0..10) e depois o instante final; f_580 = estágio do efeito (0..3);
+// f_768 = forma ascendida candidata. TransformFX(-1) = efeito final; TransformFX(x) = efeito em andamento.
+void CBasePlayer::StartAscend(void)
+{
+    if (pev->flags & FL_ESF_HIDDEN) return;
+    if (pev->health < 5.0f) return;
+    if (f_364 || f_334 || f_330 || m_fPoweredUp || m_fBlocking || f_340 || f_770 || f_37c || f_478 || f_6bc) return;
+    if (!CanFly()) return;
+    if (f_33c && !f_354) return;
+    if (f_34c) return;
+    if (pev->fuser4 < 100.0f) return;                              // [OK] custo de ki
+
+    float flCur = (float)m_pClass->GetTransFormPowerLevel();       // PL mínimo para começar
+    if ((float)m_iPowerLevel < flCur) return;
+    f_768 = (int)(size_t)m_pClass->GetAscendedClass();
+    CBaseClass *pNext = (CBaseClass *)(size_t)f_768;
+    if (!pNext) return;
+    float flNext = (float)pNext->GetTransFormPowerLevel();
+
+    if ((float)m_iPowerLevel >= flNext && pNext->CanDescend()) {   // [?] vfunc +0x20 da forma nova
+        Ascend();
+        TransformFX(-1.0f);
+        plrmelee_anim_s *pAnim = m_Melee.AddAnimation(false, gpGlobals->time, 1, "change_finish");
+        m_Melee.SetAnimPriority((ANIM_PRIORITY)1, pAnim);
+        return;
+    }
+
+    f_770 = 1;
+    if (!(pev->flags & FL_ONGROUND) && !m_fFlying) StartFly();
+    m_flSpeedMult = 0;
+    float p = ((float)m_iPowerLevel * -1.0f + flNext) * 10.0f / (flNext - flCur);   // 0..10
+    f_774 = p;
+    if (p >= 9.0f || !pNext->CanDescend() || !f_6cc) {
+        f_774 = 10.0f;
+        if (!f_6cc) f_6cc = 1;
+        f_580 = f_33c ? 2 : 3;
+    } else if (p > 0 && p <= 1.0f) {
+        f_774 = 1.0f; f_580 = 1;
+    } else if (p > 1.0f && p < 9.0f) {
+        f_580 = 2;
+    } else {
+        f_580 = 0;
+    }
+    TransformFX(f_774);
+    m_Melee.RemoveAllAnims();
+    Vector vecAng(0, pev->angles.y, pev->angles.z);
+    UTIL_Model_FixAngles(ENTINDEX(edict()), vecAng);
+    f_774 += gpGlobals->time;
+}

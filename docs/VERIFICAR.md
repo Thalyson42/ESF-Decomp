@@ -80,3 +80,4 @@ Onde o SDK compara com MOVETYPE_BOUNCEMISSILE (11), pm_shared do binario usa o l
 
 - CBasePlayer::Descend (player_state.cpp): o binário chama uma função virtual (vtable de g_pGameRules, offset +0xf0, sem argumentos) logo após `f_74c = GetStartSpeed()`. Omitida por não saber qual método é; identificar na vtable de CGameRules/CHalfLifeMultiplay.
 - CBasePlayer::Ascend/Descend: `f_3a4` é gravado com gpGlobals->time (float no binário; aqui int por causa da declaração em esf_extras.h).
+- CBasePlayer::StartAscend: `f_774` é float no binário (src/headers/CBasePlayer.h), mas esf_extras.h o declara como int; a checagem de sintaxe passa por conversão implícita. Corrigir a declaração em esf_extras.h para float antes de compilar de verdade.
