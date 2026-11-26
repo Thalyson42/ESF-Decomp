@@ -66,7 +66,7 @@ void CBasePlayer::StartPowerUp(void)
 
     int skin = m_pClass->GetAuraSkin();                           // [OK] vtable +56 de CBaseClass
     float *c = g_vecAuraColor[skin];
-    MESSAGE_BEGIN(MSG_PVS, gmsgPowerupFX, pev->origin);           // [OK] tipo 2
+    MESSAGE_BEGIN(MSG_ALL, gmsgPowerupFX, pev->origin);           // [OK] dest 2 = MSG_ALL (a origem é ignorada)
         WRITE_BYTE(ENTINDEX(edict()));
         WRITE_BYTE((int)c[0]);
         WRITE_BYTE((int)c[1]);
@@ -79,7 +79,7 @@ void CBasePlayer::StopPowerUp(void)
     if (!f_330) return;
     m_flSpeedMult = 1.0f;
     f_330 = 0;
-    MESSAGE_BEGIN(MSG_PVS, gmsgStopPowerupFX, pev->origin);
+    MESSAGE_BEGIN(MSG_ALL, gmsgStopPowerupFX, pev->origin);
         WRITE_BYTE(ENTINDEX(edict()));
     MESSAGE_END();
 }
@@ -112,7 +112,7 @@ void CBasePlayer::StopAscending(void)
     if (!f_770) return;                                           // [OK] +0x770 = subindo de forma
     f_770 = 0;
     if (!f_33c) m_flSpeedMult = 1.0f;
-    MESSAGE_BEGIN(MSG_PVS, gmsgStopTransformFX, pev->origin);
+    MESSAGE_BEGIN(MSG_ALL, gmsgStopTransformFX, pev->origin);
         WRITE_BYTE(ENTINDEX(edict()));
     MESSAGE_END();
     UTIL_Model_RemoveAll(ENTINDEX(edict()));
