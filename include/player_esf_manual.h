@@ -3,7 +3,7 @@
 #include "swoop.h"
 #define ESF_PLAYER_EXTRA \
     float f_370; int f_6cc; int f_768; int f_580; int f_6c4; float f_798; float f_3cc, f_3d0, f_3d4, f_3a0; \
-    void GetWallJumpAnim(char *szPrefix, Vector vecDir, char *szOut); void GetWallJumpAnim(char *szGrab, char *szOut); void ResetWallJumpVars(void); void ChangeClass(const char *szClass); void StopSpectator(void); void StopObserving(void); int GetUpperBodyAnimation(int &iFrame); int GetLowerBodyAnimation(void); int PlayFullBodyAnimation(void); void RemoveAnimationTriggers(void); BOOL CanPlayForwardWalk(void); int GetAuraDirection(void); void EnableWallJump(Vector vecWall); void DisableWallJump(void); /* [?] +0x370 mult de PL, +0x6cc estado, +0x768 proxima forma */ \
+    void GetWallJumpAnim(char *szPrefix, Vector vecDir, char *szOut); void GetWallJumpAnim(char *szGrab, char *szOut); void ResetWallJumpVars(void); void ChangeClass(const char *szClass); void StopSpectator(void); void StartSpectator(Vector vecPos, Vector vecAng); void Spectator_FindNextPlayer(bool bReverse); void StopObserving(void); int GetUpperBodyAnimation(int &iFrame); int GetLowerBodyAnimation(void); int PlayFullBodyAnimation(void); void RemoveAnimationTriggers(void); BOOL CanPlayForwardWalk(void); int GetAuraDirection(void); void EnableWallJump(Vector vecWall); void DisableWallJump(void); /* [?] +0x370 mult de PL, +0x6cc estado, +0x768 proxima forma */ \
     int f_76c;                                  /* [?] +0x76c (aura/carregando) */ \
     CSwoop m_Swoop;                             /* [OK] +0x504 */ \
     void  RemoveSpecialModes(void); void OnDeathAnim(void); void StopAniTrigger(int iTrigger); \
