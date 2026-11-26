@@ -125,3 +125,48 @@ void CSwoop::HandleSwoop(void)                 // 0x123ff0 [OK] x87 lido do asm
     m_flSpeed = flResult;                              // +0x14
     m_pPlayer->pev->maxspeed = flResult;               // pev+0x28c
 }
+
+#define PL_BUTTON (m_pPlayer->pev->button)
+
+int CSwoop::IsHolding(int iDir)                // 0x1245d0 [OK] (tabela de salto lida do binario)
+{
+    switch ((unsigned)iDir) {
+    case 0: if (m_iNullKeyset & 0x02) return 0; return PL_BUTTON & 0x02;
+    case 1: if (m_iNullKeyset & 0x04) return 0; return PL_BUTTON & 0x04;
+    case 2: if (m_iNullKeyset & 0x80) return 0; return (PL_BUTTON & 0x280) != 0;
+    case 3: if (m_iNullKeyset & 0x100) return 0; return (PL_BUTTON & 0x500) != 0;
+    case 4: if (m_iNullKeyset & 0x08) return 0; return PL_BUTTON & 0x08;
+    case 5: if (m_iNullKeyset & 0x10) return 0; return PL_BUTTON & 0x10;
+    }
+    return 0;
+}
+
+void CSwoop::ManageNullKeyset(void)            // 0x124490 [OK] solta da lista de teclas anuladas as que ja foram soltas
+{
+    for (int i = 0; i <= 5; i++) {
+        if (i == 2 || i == 3)                  // esquerda/direita tratadas abaixo (bits 0x80/0x100 <-> botoes 0x200/0x400)
+            continue;
+        int iFlags = DirectionsToFlags(i);
+        if ((iFlags & m_iNullKeyset) && !(iFlags & PL_BUTTON))
+            RemoveFromNullKeyset(DirectionsToFlags(i));
+    }
+    if ((m_iNullKeyset & 0x80) && !(PL_BUTTON & 0x200))
+        m_iNullKeyset &= ~0x80;
+    if ((m_iNullKeyset & 0x100) && !(PL_BUTTON & 0x400))
+        m_iNullKeyset &= ~0x100;
+}
+
+Vector CSwoop::GetCurrentDirection(void)       // 0x124390 [OK] (tabela lida do binario)
+{
+    UTIL_MakeVectors(m_pPlayer->pev->v_angle);
+    if (f_04 && (unsigned)m_iType <= 5) {
+        switch (m_iType) {
+        case 0: return gpGlobals->v_up;
+        case 1: return -gpGlobals->v_up;
+        case 2: return -gpGlobals->v_right;
+        case 3: return gpGlobals->v_right;
+        case 5: return -gpGlobals->v_forward;
+        }
+    }
+    return gpGlobals->v_forward;               // tipo 4 e padrao
+}
