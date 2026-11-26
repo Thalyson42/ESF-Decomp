@@ -502,3 +502,146 @@ void PlayerPostThink(edict_t *pEntity)
     if (pPlayer)
         pPlayer->PostThink();
 }
+
+// ---- AddToFullPack ----
+// Baseado no SDK; diferencas do ESF (conferidas no asm/decomp): NODRAW por igualdade (effects == 128), flag 0x4000000 em
+// ent->v.flags oculta a entidade de todos exceto dela mesma (no lugar de FL_SPECTATOR), entidades fora do PVS ainda sao
+// enviadas se forem jogador ou "dragonball" a menos de 2000 unidades do host; players: team, playerclass, fuser1, fuser4 e
+// vuser4 vao para o estado; state->spectator = flags & 0x4000000; sem usehull.
+extern int g_groupop;
+extern void UTIL_SetGroupTrace(int groupmask, int op);
+extern void UTIL_UnsetGroupTrace(void);
+
+int AddToFullPack(struct entity_state_s *state, int e, edict_t *ent, edict_t *host, int hostflags, int player, unsigned char *pSet)
+{
+    int i;
+
+    if (ent->v.effects == EF_NODRAW && ent != host)
+        return 0;
+
+    if (!ent->v.modelindex || !STRING(ent->v.model))
+        return 0;
+
+    if (ent->v.flags & 0x4000000)
+    {
+        if (ent != host)
+            return 0;
+    }
+    else if (ent != host && !ENGINE_CHECK_VISIBILITY((const struct edict_s *)ent, pSet))
+    {
+        // fora do PVS: so jogadores e dragon balls proximos
+        if (!player && strcmp(STRING(ent->v.classname), "dragonball") != 0)
+            return 0;
+        float dx = ent->v.origin.x - host->v.origin.x;
+        float dy = ent->v.origin.y - host->v.origin.y;
+        float dz = ent->v.origin.z - host->v.origin.z;
+        if ((float)sqrt((double)(dx * dx + dy * dy + dz * dz)) >= 2000.0f)
+            return 0;
+    }
+
+    if (ent->v.flags & FL_SKIPLOCALHOST)
+    {
+        if ((hostflags & 1) && ent->v.owner == host)
+            return 0;
+    }
+
+    if (host->v.groupinfo)
+    {
+        UTIL_SetGroupTrace(host->v.groupinfo, 0);
+        if (ent->v.groupinfo)
+        {
+            if (g_groupop == 0)
+            {
+                if (!(ent->v.groupinfo & host->v.groupinfo))
+                    return 0;
+            }
+            else if (g_groupop == 1)
+            {
+                if (ent->v.groupinfo & host->v.groupinfo)
+                    return 0;
+            }
+        }
+        UTIL_UnsetGroupTrace();
+    }
+
+    memset(state, 0, sizeof(*state));
+
+    state->number = e;
+    state->entityType = ENTITY_NORMAL;
+    if (ent->v.flags & FL_CUSTOMENTITY)
+        state->entityType = ENTITY_BEAM;
+
+    state->animtime = (int)(1000.0 * ent->v.animtime) / 1000.0;
+
+    memcpy(state->origin, ent->v.origin, 3 * sizeof(float));
+    memcpy(state->angles, ent->v.angles, 3 * sizeof(float));
+    memcpy(state->mins, ent->v.mins, 3 * sizeof(float));
+    memcpy(state->maxs, ent->v.maxs, 3 * sizeof(float));
+    memcpy(state->startpos, ent->v.startpos, 3 * sizeof(float));
+    memcpy(state->endpos, ent->v.endpos, 3 * sizeof(float));
+
+    state->impacttime = ent->v.impacttime;
+    state->starttime = ent->v.starttime;
+    state->modelindex = ent->v.modelindex;
+    state->frame = ent->v.frame;
+    state->skin = ent->v.skin;
+    state->effects = ent->v.effects;
+
+    if (!player && ent->v.animtime &&
+        ent->v.velocity[0] == 0 && ent->v.velocity[1] == 0 && ent->v.velocity[2] == 0)
+        state->eflags |= EFLAG_SLERP;
+
+    state->scale = ent->v.scale;
+    state->solid = ent->v.solid;
+    state->colormap = ent->v.colormap;
+    state->movetype = ent->v.movetype;
+    state->sequence = ent->v.sequence;
+    state->framerate = ent->v.framerate;
+    state->body = ent->v.body;
+
+    for (i = 0; i < 4; i++)
+        state->controller[i] = ent->v.controller[i];
+    for (i = 0; i < 2; i++)
+        state->blending[i] = ent->v.blending[i];
+
+    state->rendermode = ent->v.rendermode;
+    state->renderamt = ent->v.renderamt;
+    state->renderfx = ent->v.renderfx;
+    state->rendercolor.r = ent->v.rendercolor.x;
+    state->rendercolor.g = ent->v.rendercolor.y;
+    state->rendercolor.b = ent->v.rendercolor.z;
+
+    state->aiment = 0;
+    if (ent->v.aiment)
+        state->aiment = ENTINDEX(ent->v.aiment);
+
+    state->owner = 0;
+    if (ent->v.owner)
+    {
+        int owner = ENTINDEX(ent->v.owner);
+        if (owner >= 1 && owner <= gpGlobals->maxClients)
+            state->owner = owner;
+    }
+
+    if (!player)
+    {
+        state->playerclass = ent->v.playerclass;
+    }
+    else
+    {
+        memcpy(state->basevelocity, ent->v.basevelocity, 3 * sizeof(float));
+        state->weaponmodel = MODEL_INDEX(STRING(ent->v.weaponmodel));
+        state->gaitsequence = ent->v.gaitsequence;
+        state->spectator = ent->v.flags & 0x4000000;
+        state->friction = ent->v.friction;
+        state->gravity = ent->v.gravity;
+        state->team = ent->v.team;
+        state->playerclass = ent->v.playerclass;
+        state->health = ent->v.health;
+        state->vuser4 = ent->v.vuser4;
+        state->fuser1 = ent->v.fuser1;
+        state->fuser4 = ent->v.fuser4;
+    }
+
+    return 1;
+}
