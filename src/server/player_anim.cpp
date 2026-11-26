@@ -245,3 +245,70 @@ void CBasePlayer::PlayAnimation(void)
     }
     RemoveAnimationTriggers();
 }
+
+// Sequência da parte de cima do corpo (pev->sequence) quando não há animação de corpo inteiro.
+// Prefere "ref_aim_<arma>" (mira com a arma atual); sem ela, cai nas animações de movimento (voo, água, ar, chão).
+// iFrame recebe o quadro inicial (preserva o quadro quando a atividade não mudou).
+int CBasePlayer::GetUpperBodyAnimation(int &iFrame)
+{
+    float speed = sqrt(pev->velocity.x * pev->velocity.x + pev->velocity.y * pev->velocity.y);
+    char buf[64];
+    const char *pszSuffix = (char *)this + 0x9ac;      // [?] nome da arma/ataque atual (usado em ref_*_<nome>)
+    int iSeq;
+    int trig = P_ANIMTRIGGER;
+
+    if (trig == 5)       { P_IDEAL = 28; strcpy(buf, "ref_shoot_");  strcat(buf, pszSuffix); iSeq = LookupSequence(buf); }
+    else if (trig == 6)  { P_IDEAL = 29; strcpy(buf, "ref_shoot2_"); strcat(buf, pszSuffix); iSeq = LookupSequence(buf); }
+    else if (PFI(0x338)) { P_IDEAL = 80; strcpy(buf, "ref2_charge_"); strcat(buf, pszSuffix); iSeq = LookupSequence(buf); }
+    else if (f_334)      { P_IDEAL = 80; strcpy(buf, "ref_charge_");  strcat(buf, pszSuffix); iSeq = LookupSequence(buf); }
+    else if (trig == 7)  { PFI(0x784) = 1; P_IDEAL = 88; iSeq = LookupSequence("ref_left_swataway"); }
+    else if (trig == 8)  { PFI(0x784) = 1; P_IDEAL = 89; iSeq = LookupSequence("ref_right_swataway"); }
+    else if (trig == 9)  { PFI(0x784) = 1; P_IDEAL = 90; iSeq = LookupSequence("ref_forward_swataway"); }
+    else {
+        P_IDEAL = 3;
+        strcpy(buf, "ref_aim_"); strcat(buf, pszSuffix);
+        iSeq = LookupSequence(buf);
+        if (iSeq == -1) iSeq = 0;
+        if (!iSeq) {                                           // sem animação de mira: movimento
+            if (m_fFlying) {
+                if (pev->button & IN_FORWARD)    { iSeq = LookupSequence("fly_forward");  P_IDEAL = 93; }
+                else if (pev->button & IN_BACK)  { iSeq = LookupSequence("fly_backward"); P_IDEAL = 94; }
+                else                             { iSeq = LookupSequence("fly_idle");     P_IDEAL = 5; }
+            } else if (pev->waterlevel > 1) {
+                if ((float)GetMaxSpeed() / 1.6 >= speed) { P_IDEAL = 50; iSeq = LookupActivity(50); }
+                else {
+                    P_IDEAL = 6;
+                    iSeq = (pev->button & IN_BACK) ? LookupSequence("swim_backwards") : LookupActivity(6);
+                }
+            } else if (!(pev->flags & FL_ONGROUND)) {
+                if (pev->velocity.z < 0) { P_IDEAL = 9; iSeq = LookupSequence("fly_fall"); }
+                else if (P_ANIMTRIGGER != 1 && P_ANIMTRIGGER == 3) { P_IDEAL = 0x55; iSeq = LookupSequence("back_flip"); }
+                else if (P_ANIMTRIGGER != 1 && P_ANIMTRIGGER == 2) { P_IDEAL = 8; iSeq = LookupActivity(8); }
+                else { P_IDEAL = 7; iSeq = LookupActivity(7); }
+            } else if ((float)GetMaxSpeed() / 1.3 < speed || (m_fPoweredUp && speed > 0)) {
+                if (pev->button & IN_BACK) { iSeq = LookupSequence("run_backward"); P_IDEAL = 96; }
+                else {
+                    const char *psz;
+                    if (m_fPoweredUp && (pev->button & (IN_FORWARD | IN_MOVELEFT | IN_MOVERIGHT))) psz = "turbo_run";
+                    else psz = CanPlayForwardWalk() ? "run" : "run_backward";
+                    iSeq = LookupSequence(psz);
+                    P_IDEAL = 95;
+                }
+            } else if (speed > 0) {
+                if (pev->button & IN_BACK) iSeq = LookupSequence("walk_backward");
+                else iSeq = LookupSequence(CanPlayForwardWalk() ? "walk2handed" : "walk_backward");
+                P_IDEAL = 3;
+            } else {
+                if (pev->sequence != LookupSequence("idle") && pev->sequence != LookupSequence("deep_idle"))
+                    P_IDLETIME = gpGlobals->time;
+                iSeq = LookupSequence((gpGlobals->time - 5.0f > P_IDLETIME) ? "deep_idle" : "idle");
+            }
+        }
+    }
+    iFrame = 0;
+    if (P_ACTIVITY == P_IDEAL && P_FULLBODYTYPE != 1)
+        iFrame = (int)pev->frame;
+    P_ACTIVITY = P_IDEAL;
+    P_FULLBODYTYPE = 1;
+    return (iSeq == -1) ? 0 : iSeq;
+}
