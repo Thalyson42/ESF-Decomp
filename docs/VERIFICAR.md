@@ -77,3 +77,6 @@ Campos do jogador lidos por offset cru: +0x400 (modo), +0x380 (CPlayerMelee), +0
 
 ## movetype 16 em PM_Physics_Toss
 Onde o SDK compara com MOVETYPE_BOUNCEMISSILE (11), pm_shared do binario usa o literal 16, enquanto o codigo do dll (CBot etc.) compara com 11. Conferir o const.h do ESF (movetype extra?). Tambem: PM_WallJump testa movetype 14 e PM_UpdateStepSound movetype 15.
+
+- CBasePlayer::Descend (player_state.cpp): o binário chama uma função virtual (vtable de g_pGameRules, offset +0xf0, sem argumentos) logo após `f_74c = GetStartSpeed()`. Omitida por não saber qual método é; identificar na vtable de CGameRules/CHalfLifeMultiplay.
+- CBasePlayer::Ascend/Descend: `f_3a4` é gravado com gpGlobals->time (float no binário; aqui int por causa da declaração em esf_extras.h).

@@ -2,12 +2,13 @@
 #pragma once
 #include "swoop.h"
 #define ESF_PLAYER_EXTRA \
+    float f_370; int f_6cc; int f_768; /* [?] +0x370 mult de PL, +0x6cc estado, +0x768 proxima forma */ \
     int f_76c;                                  /* [?] +0x76c (aura/carregando) */ \
     CSwoop m_Swoop;                             /* [OK] +0x504 */ \
     void  RemoveSpecialModes(void); void OnDeathAnim(void); void StopAniTrigger(int iTrigger); \
     void Teleport(void);        /* [?] declaracao so para o bot (decomp_raw/CBasePlayer/Teleport) */ \
     void StartPowerUp(void);    /* [?] idem */ \
-    void StartBlock(void); void StopAscending(void); \
+    void StartBlock(void); void StopAscending(void); void TransformFX(float f); \
     void  StopPowerUp(void); void RemoveWallJump(void); BOOL CanMelee(CBasePlayer *pOther); \
     void  Spectator_SetMode(int iMode); void StartObserving(void); int GetPotentialPL(void); \
     BOOL CanFly(void); void Swoop(void); void CheckWallJump(void); void CheckSubModelStatus(void); void ReleaseCandy(void); \

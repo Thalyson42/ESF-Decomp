@@ -117,3 +117,91 @@ void CBasePlayer::StopAscending(void)
     MESSAGE_END();
     UTIL_Model_RemoveAll(ENTINDEX(edict()));
 }
+
+// ---- Transformação (Ascend / Descend) ----
+// vtable de CBaseClass (GCC 2.95: slot i em +8+4*i): +0xc speed, +0x10 health, +0x20 CanDescend, +0x24 GetDescendedClass,
+// +0x28/+0x40(Ascend) GetTransFormPowerLevel, +0x2c multiplicador de PL, +0x30 AddAllAttacks, +0x38 GetAuraSkin.
+// Efeito do cliente: mensagem gmsgTransform (MSG_ONE): byte 0, long = PL de transformação.
+extern int gmsgTransform;
+void UTIL_Model_FixAngles(...);
+
+void CBasePlayer::Ascend(void)
+{
+    StopAscending();
+    delete m_pClass;                                  // [OK] __builtin_delete da forma antiga
+    m_pClass = (CBaseClass *)(size_t)f_768;           // [OK] +0x768 = forma ascendida (escolhida em StartAscend)
+    pev->fuser4 -= 100.0f;                            // [OK] custo de ki
+    if (pev->fuser4 < 0) pev->fuser4 = 0;
+    if (f_33c) f_378 = 1;                             // [?] pede para refazer os ataques depois
+    else { RemoveAllWeapons(0); m_pClass->AddAllAttacks(); }
+
+    float mult = m_pClass->GetTransFromPLMultiplier();
+    f_370 *= mult;                                    // [?] +0x370 (float)
+    int iMax = (int)(mult * m_iMaxPowerLevel);
+    SetMaxPowerLevel(iMax);
+    SetPowerLevel(iMax);
+
+    float ratio = pev->health / (float)f_24c;
+    f_24c = m_pClass->GetStartHealth();
+    SetMaxHealth(f_24c);
+    int h = (int)((float)f_24c * ratio);
+    pev->health = (h <= 0) ? 1.0f : (float)h;
+    f_74c = m_pClass->GetStartSpeed();
+
+    MESSAGE_BEGIN(MSG_ONE, gmsgTransform, NULL, pev->pContainingEntity);
+        WRITE_BYTE(0);
+        WRITE_LONG(m_pClass->GetTransFormPowerLevel());
+    MESSAGE_END();
+    m_pClass->SetModel();
+    if (f_76c) ((CAura *)(size_t)f_76c)->SetColor();
+    if (f_6cc == 1) f_6cc = 2;                        // [?]
+    f_3a4 = (int)gpGlobals->time;                     // [?] +0x3a4 tipo float no binário
+}
+
+void CBasePlayer::Descend(int iFlag)
+{
+    if (f_770) {                                      // ainda subindo: só cancela
+        StopAscending();
+        if (f_6cc == 1) f_6cc = 0;
+        return;
+    }
+    CBaseClass *pNew = m_pClass->GetDescendedClass();
+    if (!pNew) return;
+    if (!m_pClass->CanDescend() && !f_770) return;
+    CBaseClass *pOld = m_pClass;
+    m_pClass = pNew;
+    if (iFlag) {
+        if (f_33c) f_378 = 1;
+        else { RemoveAllWeapons(0); m_pClass->AddAllAttacks(); SelectLastItem(); }
+    }
+    m_pClass->SetModel();
+    float mult = pOld->GetTransFromPLMultiplier();
+    int iMax = (int)((float)m_iMaxPowerLevel / mult);
+    SetMaxPowerLevel(iMax);
+    if (pev->health > 5.0f || m_iPowerLevel > iMax)           // [?] condição como no decompilado
+        SetPowerLevel(iMax);
+    f_370 /= pOld->GetTransFromPLMultiplier();
+
+    float ratio = pev->health / (float)f_24c;
+    f_24c = m_pClass->GetStartHealth();
+    SetMaxHealth(f_24c);
+    int h = (int)((float)f_24c * ratio);
+    pev->health = (h <= 0) ? 1.0f : (float)h;
+    f_74c = m_pClass->GetStartSpeed();
+    // [?] chamada virtual em g_pGameRules (vfunc +0xf0, sem argumentos) omitida: ver docs/VERIFICAR.md
+
+    MESSAGE_BEGIN(MSG_ONE, gmsgTransform, NULL, pev->pContainingEntity);
+        WRITE_BYTE(0);
+        WRITE_LONG(m_pClass->GetTransFormPowerLevel());
+    MESSAGE_END();
+    EMIT_SOUND_DYN(edict(), CHAN_WEAPON, "weapons/descend.wav", 1.0f, 0.8f, 0, 100);
+    if (f_76c) ((CAura *)(size_t)f_76c)->SetColor();
+    if (f_330) {                                      // powerup ligado: reenvia a cor da nova forma
+        float *c = g_vecAuraColor[m_pClass->GetAuraSkin()];
+        MESSAGE_BEGIN(MSG_PVS, gmsgPowerupFX, pev->origin);
+            WRITE_BYTE(ENTINDEX(edict()));
+            WRITE_BYTE((int)c[0]); WRITE_BYTE((int)c[1]); WRITE_BYTE((int)c[2]);
+        MESSAGE_END();
+    }
+    delete pOld;
+}
