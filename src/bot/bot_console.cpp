@@ -301,3 +301,101 @@ void HandleNormalBotCommands(void)
 
     BotManager.f_d45 = 0;       // comando desconhecido: o CBotManager tenta tratar como comando de jogo
 }
+
+// ---- ShowInGameBotHelpWindow ----
+// Chamada repetidamente enquanto PrintingInGameHelp for verdadeiro: carrega "esf_bot/ingame_help.txt" e envia ate 100 caracteres
+// por chamada (maximo 0x600 no total) pela mensagem MOTD ao host (servidor dedicado: escreve no console). No fim restaura o
+// nome do servidor.
+extern int gmsgMOTD, gmsgServerName;
+char PrintingInGameHelp = 0;
+
+static edict_t *GetHostEdict(void)
+{
+    edict_t *pHost = (edict_t *)BotManager.f_00c;                   // [?] guardado em ClientConnect ("loopback")
+    if (!pHost)
+        pHost = g_engfuncs.pfnPEntityOfEntOffset(0);
+    return pHost;
+}
+
+static void SendToHost(int msg, const char *str, int lastByte)
+{
+    MESSAGE_BEGIN(MSG_ONE, msg, NULL, ((CBasePlayer *)GetHostEdict()->pvPrivateData)->pev->pContainingEntity);
+    if (lastByte >= 0)
+        WRITE_BYTE(lastByte);
+    WRITE_STRING(str);
+    MESSAGE_END();
+}
+
+void ShowInGameBotHelpWindow(void)
+{
+    static char Started = 0;
+    static int length = 0;
+    static int char_count = 0;
+    static char *pFileList = NULL;
+    static char *aFileList = NULL;
+    static char OldServerName[128];
+    static char chunk[104];
+
+    BOOL bDedicated = g_engfuncs.pfnIsDedicatedServer() != 0;
+
+    if (!bDedicated)
+    {
+        edict_t *pHost = GetHostEdict();
+        if (!pHost || !pHost->pvPrivateData)
+            return;
+    }
+
+    if (!gmsgMOTD)
+        gmsgMOTD = REG_USER_MSG("MOTD", -1);
+    if (!gmsgServerName)
+        gmsgServerName = REG_USER_MSG("ServerName", -1);
+
+    if (!Started)
+    {
+        PrintingInGameHelp = 1;
+        char_count = 0;
+        length = 0;
+        pFileList = (char *)g_engfuncs.pfnLoadFileForMe("esf_bot/ingame_help.txt", &length);
+        aFileList = pFileList;
+        Started = 1;
+        strcpy(OldServerName, CVAR_GET_STRING("hostname"));
+        if (bDedicated)
+            std::cout << "In game bot help\n\n";
+        else
+            SendToHost(gmsgServerName, "In game bot help", -1);
+    }
+
+    if (pFileList)
+    {
+        if (*pFileList && char_count <= 0x5ff)
+        {
+            if (strlen(pFileList) <= 99)
+                strcpy(chunk, pFileList);
+            else
+            {
+                strncpy(chunk, pFileList, 100);
+                chunk[100] = 0;
+            }
+            char_count += (int)strlen(chunk);
+            if (char_count <= 0x5ff)
+                pFileList = aFileList + char_count;
+            else
+                *pFileList = 0;
+            if (bDedicated)
+                std::cout << chunk;
+            else
+                SendToHost(gmsgMOTD, chunk, !*pFileList);   // byte = 1 no ultimo pedaco
+        }
+        if (pFileList && *pFileList && char_count <= 0x600)
+            return;                                          // ainda ha texto: continua na proxima chamada
+    }
+
+    g_engfuncs.pfnFreeFile(aFileList);
+    if (!bDedicated)
+        SendToHost(gmsgServerName, OldServerName, -1);
+    length = 0;
+    char_count = 0;
+    PrintingInGameHelp = 0;
+    Started = 0;
+    chunk[0] = 0;
+}
