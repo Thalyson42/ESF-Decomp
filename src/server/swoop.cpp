@@ -246,3 +246,66 @@ int CSwoop::SetSwoopAnim(char *szAnim, int &iActivity)   // 0x124790 [OK] (tabel
     }
     return 0;
 }
+
+// 0x123a90 [OK] (fluxo reconstruido do asm; o decompilado tinha gotos confusos)
+// Cada direcao (0..5) tem um double_tap_s: f_00 = 1o toque, f_04 = soltou, f_08 = 2o toque, f_0c = soltou ao menos uma vez.
+// Duplo toque na direcao dentro de 0.35s (apos soltar) inicia o swoop; soltar a tecla do swoop em andamento o encerra.
+void CSwoop::ManageSwoop(void)
+{
+    if (!m_pPlayer || !m_pPlayer->CanFly())            // vfunc +0x8c
+        return;
+    ManageNullKeyset();
+    if (!CanUseDirections()) {
+        for (int i = 0; i <= 5; i++)
+            if (m_DT[i].f_00 != 0.0f)
+                ResetDT(&m_DT[i]);
+    } else {
+        for (int i = 0; i <= 5; i++) {
+            double_tap_s *d = &m_DT[i];
+            if (IsHolding(i)) {
+                if (d->f_0c) {
+                    if (d->f_08 == 0.0f) {
+                        if (gpGlobals->time - d->f_04 < 0.35) {
+                            d->f_08 = gpGlobals->time;             // segundo toque dentro da janela
+                        } else {
+                            AddToNullKeyset(DirectionsToFlags(i)); // demorou: ignora a tecla ate soltar
+                            ResetDT(d);
+                        }
+                    } else if (CanSwoop(d, i)) {
+                        if (m_pPlayer->UseKi(GetSwoopStartKi())) {
+                            if (f_04) {                            // encadeando a partir de outro swoop
+                                m_iNullKeyset = 0;
+                                AddToNullKeyset(DirectionsToFlags(m_iType));
+                            }
+                            ResetAllDTExcept(i);
+                            StartSwoop(i);
+                        }
+                    }
+                } else if (d->f_00 == 0.0f) {
+                    d->f_00 = gpGlobals->time;                     // primeiro toque
+                }
+            } else {
+                if (d->f_00 != 0.0f && d->f_04 == 0.0f && !IsHolding(i)) {
+                    if (!(gpGlobals->time - d->f_00 < 0.4)) {      // segurou demais o 1o toque
+                        AddToNullKeyset(DirectionsToFlags(i));
+                        ResetDT(d);
+                        continue;
+                    }
+                    d->f_04 = gpGlobals->time;
+                    d->f_0c = 1;
+                }
+                if (d->f_08 == 0.0f || IsHolding(i))
+                    continue;
+                if (gpGlobals->time - d->f_08 < 0.05) {
+                    ResetDT(d);
+                } else {
+                    ResetDT(d);
+                    if (i == m_iType)
+                        StopSwoop();                               // soltou a tecla do swoop em andamento
+                }
+            }
+        }
+    }
+    if (f_04)
+        HandleSwoop();
+}
