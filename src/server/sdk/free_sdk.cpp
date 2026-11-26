@@ -780,3 +780,31 @@ int GetAnimationEvent( void *pmodel, entvars_t *pev, MonsterEvent_t *pMonsterEve
 	}
 	return 0;
 }
+
+// ---- ParmsNewLevel / Sys_Error / ConnectionlessPacket / AllowLagCompensation (iguais ao SDK) ----
+void ParmsNewLevel(void)
+{
+}
+
+void Sys_Error(const char *error_string)
+{
+}
+
+int ConnectionlessPacket(const struct netadr_s *net_from, const char *args, char *response_buffer, int *response_buffer_size)
+{
+    // Parse stuff from args
+    int max_buffer_size = *response_buffer_size;
+
+    // Zero it out since we aren't going to respond.
+    // If we wanted to response, we'd write data into response_buffer
+    *response_buffer_size = 0;
+
+    // Since we don't listen for anything here, just respond that it's a bogus message
+    // If we didn't reject the message, we'd return 1 for success instead.
+    return 0;
+}
+
+int AllowLagCompensation(void)
+{
+    return 1;
+}
