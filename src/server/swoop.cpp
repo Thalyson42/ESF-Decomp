@@ -90,3 +90,38 @@ float CSwoop::GetSwoopTime(void)               // 0x124750 [OK]
 {
     return m_flStartTime == 0 ? 0 : gpGlobals->time - m_flStartTime;
 }
+
+#define PLI(off) (*(int *)((char *)m_pPlayer + (off)))   // campo sem nome do CBasePlayer, por offset
+
+int CSwoop::CanSwoop(double_tap_s *pDT, int iDir)   // 0x123e90 [OK] (x87 lido do asm)
+{
+    if ((!PLI(0x37c) || (f_04 && iDir != m_iType))
+        && pDT->f_0c != 0 && pDT->f_00 != 0.0f && pDT->f_04 != 0.0f
+        && !(gpGlobals->time - pDT->f_08 < 0.05))
+        return 1;
+    return 0;
+}
+
+int CSwoop::CanUseDirections(void)             // 0x123f20 [OK] campos do jogador conferidos no asm, nomes [?]
+{
+    if (!PLI(0x364) && !PLI(0x330) && !PLI(0x334) && !PLI(0x33c) && m_pPlayer->CanFly()   // CanFly = vfunc +0x8c
+        && !PLI(0x328) && !PLI(0x340) && !PLI(0x770) && !PLI(0x6bc) && !PLI(0x3a8) && !PLI(0x32c))
+        return 1;
+    return 0;
+}
+
+void CSwoop::HandleSwoop(void)                 // 0x123ff0 [OK] x87 lido do asm
+{
+    if (m_flStartTime + 2.85 < gpGlobals->time) {      // duracao maxima do swoop
+        StopSwoop();
+        return;
+    }
+    float flRamp = 0;
+    if (m_flStartTime + 0.75 > gpGlobals->time)        // fase inicial de impulso: 1 -> 0 em 0.75s
+        flRamp = 1.0 - (gpGlobals->time - m_flStartTime) / 0.75;
+    float flSpeed = GetSwoopSpeed();
+    float flBoost = GetSwoopBoostSpeed();
+    float flResult = SwoopSlowdown() * (flRamp * flBoost + flSpeed);
+    m_flSpeed = flResult;                              // +0x14
+    m_pPlayer->pev->maxspeed = flResult;               // pev+0x28c
+}

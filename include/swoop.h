@@ -4,7 +4,9 @@
 class CBasePlayer;
 
 struct double_tap_s {            // [OK] 16 bytes (ResetDT = memset 0, 16); campos internos [?]
-    int f_00, f_04, f_08, f_0c;
+    float f_00, f_04;            // [OK] CanSwoop: ambos != 0
+    float f_08;                  // [OK] tempo; CanSwoop exige time - f_08 >= 0.05
+    int f_0c;                    // [OK] != 0
 };
 
 class CSwoop {
@@ -37,7 +39,7 @@ public:
     int  f_08;                            // [?]
     int  m_iNullKeyset;                   // [OK] +0x0c flags de teclas anuladas
     float m_flStartTime;                  // [OK] +0x10 inicio do swoop (0 = parado)
-    int  f_14;                            // [?]
+    float m_flSpeed;                      // [OK] +0x14 velocidade atual do swoop
     double_tap_s m_DT[6];                 // [OK] +0x18 .. +0x78
     CBasePlayer *m_pPlayer;               // [OK] +0x78
 };
