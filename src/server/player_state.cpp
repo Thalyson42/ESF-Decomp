@@ -124,6 +124,8 @@ void CBasePlayer::StopAscending(void)
 // Efeito do cliente: mensagem gmsgTransform (MSG_ONE): byte 0, long = PL de transformação.
 extern int gmsgTransform;
 void UTIL_Model_FixAngles(...);
+// virtual no original (CGameRules vtable +0xf0); ligação direta ao símbolo, como IsValidClass em bot_simple.cpp
+extern void GameRules_UpdatePlayerStats(void *pRules) asm("UpdatePlayerStats__10CGameRules");
 
 void CBasePlayer::Ascend(void)
 {
@@ -188,7 +190,7 @@ void CBasePlayer::Descend(int iFlag)
     int h = (int)((float)f_24c * ratio);
     pev->health = (h <= 0) ? 1.0f : (float)h;
     f_74c = m_pClass->GetStartSpeed();
-    // [?] chamada virtual em g_pGameRules (vfunc +0xf0, sem argumentos) omitida: ver docs/VERIFICAR.md
+    GameRules_UpdatePlayerStats(g_pGameRules);        // [OK] vfunc +0xf0 = UpdatePlayerStats (virtual no original)
 
     MESSAGE_BEGIN(MSG_ONE, gmsgTransform, NULL, pev->pContainingEntity);
         WRITE_BYTE(0);
