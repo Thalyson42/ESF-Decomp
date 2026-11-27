@@ -24,7 +24,7 @@ class CBaseBotComboEntry
 public:
     int    m_iStatus;          // +0x00 [OK] 0 = ainda nao ativada, 2 = terminada
     CBot  *m_pBot;             // +0x04 [?]
-    int    f_08;               // +0x08 [?]
+    float  m_flActivateTime;   // +0x08 [OK] instante em que Activate() rodou (gpGlobals->time)
     float  m_flStartTime;      // +0x0c [OK] quando a entrada comecou a esperar (gpGlobals->time)
     virtual ~CBaseBotComboEntry() {}               // vtable +8 (chamado com flag 3 = delete)
     virtual void  Think(void) = 0;                 // +0xc
