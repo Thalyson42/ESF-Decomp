@@ -92,3 +92,137 @@ void CFallDownComboEntry::Think(void)                               // 0x15c3b0 
         return;
     m_iStatus = 2;
 }
+
+// ---------------------------------------------------------------- CStartSwoopComboEntry
+CStartSwoopComboEntry::CStartSwoopComboEntry(CBot *pBot, bool bChain, int iDir)   // [OK]
+{
+    m_iStatus = 0;
+    m_pBot = pBot;
+    m_bChain = bChain;
+    m_iDir = iDir;
+    BOTF(pBot, float, 0xbfc) = 1.0f;
+}
+float CStartSwoopComboEntry::GetDelay(void) { return 0.07f; }     // [OK]
+void CStartSwoopComboEntry::Activate(void)                          // [OK]
+{
+    m_flActivateTime = gpGlobals->time;
+    m_iStatus = 1;
+    m_flEndTime = gpGlobals->time + (m_bChain ? 0.6f : 0.07f);
+}
+void CStartSwoopComboEntry::Think(void)                             // 0x15c1e0 [OK] (compares lidos do asm)
+{
+    CBasePlayer *pEnemy = BOT_ENEMY(m_pBot);
+    CBasePlayer *pPlayer = (CBasePlayer *)m_pBot;
+    if (!pEnemy) { m_iStatus = 2; return; }
+    m_pBot->ResetMoveSpeed();
+    m_pBot->SetMoveDir(m_iDir);
+    if (BPEV->movetype == MOVETYPE_FLY) {
+        int iType;
+        switch (m_iDir) {
+        case 16: iType = 4; break;
+        case 8:  iType = 5; break;
+        case 32: iType = 0; break;
+        case 64: iType = 1; break;
+        case 2:  iType = 2; break;
+        case 4:  iType = 3; break;
+        default: iType = -1; break;
+        }
+        if (pPlayer->m_Swoop.m_iType == iType && pPlayer->m_Swoop.GetSwoopTime() > 0.2f) {
+            m_iStatus = 2;
+            return;
+        }
+    }
+    m_pBot->AimAtEnemy(pEnemy);
+    if (m_flEndTime > gpGlobals->time ||
+        (!(pPlayer->m_Swoop.GetSwoopTime() > 0.2f) && BPEV->movetype == MOVETYPE_FLY)) {
+        if (BOTF(m_pBot, short, 0xa18) > 159) {
+            if (BPEV->movetype == MOVETYPE_FLY)
+                return;
+        } else
+            return;
+    }
+    m_iStatus = 2;
+}
+
+// ---------------------------------------------------------------- CSwoopAWhileComboEntry
+CSwoopAWhileComboEntry::CSwoopAWhileComboEntry(CBot *pBot, float flDuration)      // [OK]
+{
+    m_iStatus = 0;
+    m_pBot = pBot;
+    m_flDuration = flDuration;
+}
+float CSwoopAWhileComboEntry::GetDelay(void) { return 0.0f; }
+void CSwoopAWhileComboEntry::Activate(void)
+{
+    m_flActivateTime = gpGlobals->time;
+    m_iStatus = 1;
+    m_flDuration = m_flDuration + gpGlobals->time;
+}
+void CSwoopAWhileComboEntry::Think(void)                            // [OK]
+{
+    if (BPEV->movetype == MOVETYPE_FLY) {
+        m_pBot->SetSwoopButton();
+        if (m_flDuration >= gpGlobals->time)
+            return;
+    }
+    m_iStatus = 2;
+}
+
+// ---------------------------------------------------------------- CSwoopCloseToEnemyComboEntry
+CSwoopCloseToEnemyComboEntry::CSwoopCloseToEnemyComboEntry(CBot *pBot)            // [OK]
+{
+    m_iStatus = 0;
+    m_pBot = pBot;
+}
+float CSwoopCloseToEnemyComboEntry::GetDelay(void) { return 0.0f; }
+void CSwoopCloseToEnemyComboEntry::Think(void)                      // 0x15c670 [OK] aproxima-se do inimigo em voo
+{
+    CBasePlayer *pEnemy = BOT_ENEMY(m_pBot);
+    if (pEnemy && BPEV->movetype == MOVETYPE_FLY) {
+        float flLimit = (pEnemy->pev->movetype == MOVETYPE_FLY) ? 600.0f : 450.0f;
+        Vector vDiff = pEnemy->pev->origin - BPEV->origin;
+        if (vDiff.Length() <= flLimit) {
+            m_iStatus = 2;
+            if (BPL(0x320)) {
+                ((CBasePlayer *)m_pBot)->StopFly();
+                BOTF(m_pBot, char, 0xa10) = 0;
+                BOTF(m_pBot, float, 0xa14) = gpGlobals->time + 0.5f;
+            }
+        } else {
+            m_pBot->AimAtEnemy(pEnemy);
+            if (pEnemy->pev->movetype == MOVETYPE_FLY) {
+                float flYaw = BOTF(m_pBot, float, 0xc14);
+                BOTF(m_pBot, float, 0xc14) = UTIL_WrapAngle(BPL(0xff0) ? flYaw - 30.0f : flYaw + 30.0f);
+            }
+            m_pBot->ResetMoveSpeed();
+            m_pBot->SetMoveDir(16);
+        }
+    } else
+        m_iStatus = 2;
+}
+
+// ---------------------------------------------------------------- CChargeGenBallComboEntry
+CChargeGenBallComboEntry::CChargeGenBallComboEntry(CBot *pBot)    // [OK]
+{
+    m_iStatus = 0;
+    m_pBot = pBot;
+}
+float CChargeGenBallComboEntry::GetDelay(void) { return 0.0f; }
+void CChargeGenBallComboEntry::Think(void)                          // [OK] carrega a bola generica (weapon_genericbeam)
+{
+    CBasePlayer *pEnemy = BOT_ENEMY(m_pBot);
+    if (!pEnemy) { m_iStatus = 2; return; }
+    if (BOTF(m_pBot, short, 0xa18) <= 99) {
+        char *pWeapon = BOTF(m_pBot, char *, 0x968);
+        if (pWeapon && *(int *)(pWeapon + 0x88) != 4)
+            ((CBasePlayer *)m_pBot)->SelectItem("weapon_genericbeam");
+        else if (BPL(0x6d0) > 59) {
+            m_iStatus = 2;
+            return;
+        }
+        m_pBot->AimAtEnemy(pEnemy);
+        BPEV->button |= IN_ATTACK2;
+        m_pBot->SetMoveDir(8);
+    } else
+        m_iStatus = 2;
+}
