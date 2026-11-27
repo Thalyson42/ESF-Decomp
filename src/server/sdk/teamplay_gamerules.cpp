@@ -344,3 +344,127 @@ void CHalfLifeTeamplay::RecountTeams( bool bResendInfo )
 		}
 	}
 }
+
+// ===================== ESF: funcoes novas do CHalfLifeTeamplay (nao existem no SDK) =====================
+#include "esf_classes.h"
+#include "CBotManager.h"
+extern cvar_t realteams;                // "mp_realteams" (game_esf.cpp)
+extern int gmsgVGUIMenu;
+extern CBotManager BotManager;
+
+// Time com menos jogadores (sem contar pExcluded); empate: o de menor pontuacao (frags - mortes); empate total: sorteio.  [OK] 0x128b00
+const char *CHalfLifeTeamplay :: WeakestTeam( CBasePlayer *pExcluded )
+{
+	int teamCount[ MAX_TEAMS ];
+	int teamScore[ MAX_TEAMS ];
+	memset( teamCount, 0, sizeof( teamCount ) );
+	memset( teamScore, 0, sizeof( teamScore ) );
+
+	for ( int i = 1; i <= gpGlobals->maxClients; i++ )
+	{
+		CBasePlayer *pl = (CBasePlayer *)UTIL_PlayerByIndex( i );
+		if ( !pl )
+			continue;
+		int team = GetTeamIndex( pl->TeamID() );        // vfunc +0xa8 / +0xcc
+		if ( team >= 0 && pl != pExcluded )
+		{
+			teamCount[ team ]++;
+			teamScore[ team ] = (int)( teamScore[ team ] + pl->pev->frags - *(int *)( (char *)pl + 0x984 ) );   // +0x984: mortes [?]
+		}
+	}
+
+	int iFewest = 100, iBest = 0;
+	const char *pBestName = NULL;
+	for ( int i = 0; i < num_teams; i++ )
+	{
+		if ( teamCount[ i ] < iFewest )
+		{
+			iFewest = teamCount[ i ];
+			pBestName = team_names[ i ];
+			iBest = i;
+			continue;
+		}
+		if ( teamCount[ i ] != iFewest )
+			continue;
+		if ( teamScore[ i ] >= teamScore[ iBest ] )
+		{
+			if ( teamScore[ i ] != teamScore[ iBest ] || !( RANDOM_FLOAT( 0, 1 ) > 0.5 ) )
+				continue;
+			iFewest = teamCount[ i ];
+		}
+		pBestName = team_names[ i ];
+		iBest = i;
+	}
+	return pBestName;
+}
+
+// Entra num time (Good/Evil): avisa, registra no log, troca o time e (em realteams) manda o jogador observar ate renascer.  [OK] 0x129070
+void CHalfLifeTeamplay :: JoinTeam( CBasePlayer *pPlayer, const char *pTeamName )
+{
+	if ( !strcmp( pPlayer->m_szTeamName, pTeamName ) )
+		return;                                       // ja esta nesse time
+
+	if ( BotManager.f_02c )                           // ha superbots em jogo: so bots entram no time Evil
+	{
+		BOOL bBot = FALSE;
+		if ( !pPlayer->IsNetClient() )                // vfunc +0xa4
+			bBot = ( pPlayer->pev->flags & FL_FAKECLIENT ) != 0;
+		if ( !bBot && !strcmp( pTeamName, "Evil" ) )
+		{
+			UTIL_SayText( "Cannot join team evil when there are superbots ingame\n", pPlayer );
+			return;
+		}
+	}
+
+	BOOL bObserver = ( pPlayer->m_afPhysicsFlags & PFLAG_OBSERVER ) != 0;
+	char szText[ 1024 ];
+
+	*(int *)( (char *)pPlayer + 0x34c ) = 0;          // [?] campos ESF
+	if ( *(int *)( (char *)pPlayer + 0x350 ) )
+	{
+		*(int *)( (char *)pPlayer + 0x350 ) = 0;
+		pPlayer->pev->rendermode = 0;
+		pPlayer->pev->renderfx = 0;
+		if ( !bObserver && realteams.value != 1.0f && !pPlayer->pev->iuser1 )
+			pPlayer->m_pClass->AddAllAttacks();       // vfunc +0x30
+	}
+
+	if ( !bObserver && realteams.value != 1.0f && !pPlayer->pev->iuser1 )
+	{
+		sprintf( szText, "* %s has joined %s\n", STRING( pPlayer->pev->netname ), pTeamName );
+		UTIL_SayText( szText, pPlayer );
+		UTIL_LogPrintf( "\"%s<%i>\" has joined %s\n", STRING( pPlayer->pev->netname ), GETPLAYERUSERID( pPlayer->edict() ), pTeamName );
+		ChangePlayerTeam( pPlayer, pTeamName, FALSE, FALSE );     // vfunc +0xd8
+		RecountTeams( false );
+		return;
+	}
+
+	sprintf( szText, "* %s has joined %s\n", STRING( pPlayer->pev->netname ), pTeamName );
+	UTIL_SayText( szText, pPlayer );
+	UTIL_LogPrintf( "\"%s<%i>\" has joined %s\n", STRING( pPlayer->pev->netname ), GETPLAYERUSERID( pPlayer->edict() ), pTeamName );
+
+	int iMenu;
+	if ( realteams.value == 1.0f )
+	{
+		if ( bObserver )
+		{
+			ChangePlayerTeam( pPlayer, pTeamName, FALSE, FALSE );
+		}
+		else
+		{
+			ChangePlayerTeam( pPlayer, pTeamName, TRUE, FALSE );  // mata o jogador
+			pPlayer->pev->playerclass = 0;
+			pPlayer->StartObserving();
+		}
+		iMenu = 33;
+	}
+	else
+	{
+		ChangePlayerTeam( pPlayer, pTeamName, FALSE, FALSE );
+		iMenu = 3;
+	}
+	MESSAGE_BEGIN( MSG_ONE, gmsgVGUIMenu, NULL, pPlayer->edict() );
+		WRITE_BYTE( iMenu );
+	MESSAGE_END();
+	RecountTeams( false );
+}

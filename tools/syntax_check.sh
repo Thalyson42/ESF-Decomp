@@ -61,7 +61,7 @@ PY
 import sys
 g=sys.argv[1]; t=open(g).read()
 k=t.index('public:',t.index('class CHalfLifeTeamplay'))+7
-t=t[:k]+'\n\tconst char *WeakestTeam(CBasePlayer *pPlayer);   // [?] ESF\n'+t[k:]
+t=t[:k]+'\n\tconst char *WeakestTeam(CBasePlayer *pPlayer);   // [?] ESF\n\tvoid JoinTeam(CBasePlayer *pPlayer, const char *pTeamName);   // [OK] ESF\n'+t[k:]
 open(g,'w').write(t)
 PY
 fi

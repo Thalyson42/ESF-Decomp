@@ -82,3 +82,28 @@ BOOL MP_IsValidClass(void *pThis, const char *pszClass, CBasePlayer *pPlayer)   
     }
     return iLeft > 0;
 }
+
+// ---- CHalfLifeTeamplay (ESF): virtuais fora do SDK, ligados ao simbolo ----
+const char *TP_GetGameDescription(void *) asm("GetGameDescription__17CHalfLifeTeamplay");
+const char *TP_GetGameDescription(void *) { return "ESF Teamplay"; }                  // [OK]
+
+extern cvar_t realteams;
+static const char *g_pGoodClasses[5] = { "goku", "gohan", "krillin", "piccolo", "trunks" };   // [OK] lidos do .data
+static const char *g_pEvilClasses[4] = { "buu", "frieza", "vegeta", "cell" };
+
+// Com mp_realteams 1 so vale o personagem do time do jogador (team 1 = Good, 2 = Evil); depois aplica o limite da base.  [OK] 0x127c80
+BOOL TP_IsValidClass(void *pThis, const char *pszClass, CBasePlayer *pPlayer) asm("IsValidClass__17CHalfLifeTeamplayPCcP11CBasePlayer");
+BOOL TP_IsValidClass(void *pThis, const char *pszClass, CBasePlayer *pPlayer)
+{
+    if (realteams.value != 1.0f)
+        return MP_IsValidClass(pThis, pszClass, pPlayer);       // CHalfLifeMultiplay::IsValidClass
+    const char **pList;
+    int iCount;
+    if (pPlayer->pev->team == 2) { pList = g_pEvilClasses; iCount = 4; }
+    else if (pPlayer->pev->team == 1) { pList = g_pGoodClasses; iCount = 5; }
+    else return FALSE;
+    for (int i = 0; i < iCount; i++)
+        if (!strcmp(pList[i], pszClass))
+            return MP_IsValidClass(pThis, pszClass, pPlayer);
+    return FALSE;
+}
