@@ -183,10 +183,21 @@ extern int gmsgSayText;
 extern int gmsgGameMode;
 
 // [SDK score 1.0] CHalfLifeMultiplay::UpdateGameMode
+extern cvar_t characterlimit;   // ESF: "mp_characterlimit" (game_esf.cpp)
+
+// ESF [OK] 0xdbed0: com pPlayer = NULL envia a todos; acrescenta o limite de personagens
 void CHalfLifeMultiplay :: UpdateGameMode( CBasePlayer *pPlayer )
 {
-	MESSAGE_BEGIN( MSG_ONE, gmsgGameMode, NULL, pPlayer->edict() );
+	if ( pPlayer )
+	{
+		MESSAGE_BEGIN( MSG_ONE, gmsgGameMode, NULL, pPlayer->edict() );
+	}
+	else
+	{
+		MESSAGE_BEGIN( MSG_ALL, gmsgGameMode );
+	}
 		WRITE_BYTE( 0 );  // game mode none
+		WRITE_BYTE( (int)characterlimit.value & 0xff );
 	MESSAGE_END();
 }
 
@@ -243,7 +254,7 @@ float CHalfLifeMultiplay :: FlPlayerSpawnTime( CBasePlayer *pPlayer )
 // [SDK score 1.0] CHalfLifeMultiplay::AllowAutoTargetCrosshair
 BOOL CHalfLifeMultiplay :: AllowAutoTargetCrosshair( void )
 {
-	return ( aimcrosshair.value != 0 );
+	return FALSE;   // ESF [OK] 0xdcbd0: sempre 0 (o SDK devolve aimcrosshair.value != 0)
 }
 
 // [SDK score 1.0] CHalfLifeMultiplay::IPointsForKill
@@ -1334,6 +1345,14 @@ void CHalfLifeMultiplay :: ChangeLevel( void )
 	if ( strlen( szCommands ) > 0 )
 	{
 		SERVER_COMMAND( szCommands );
+	}
+
+	// ESF [OK] 0xde5e0: marca todos os jogadores (campo +0x374 = 1) ao trocar de mapa
+	for ( int i = 1; i <= gpGlobals->maxClients; i++ )
+	{
+		CBaseEntity *pPlayer = UTIL_PlayerByIndex( i );
+		if ( pPlayer && pPlayer->IsPlayer() )
+			*(int *)( (char *)pPlayer + 0x374 ) = 1;
 	}
 }
 

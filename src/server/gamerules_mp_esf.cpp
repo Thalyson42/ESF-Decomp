@@ -1,4 +1,6 @@
-// gamerules_mp_esf.cpp -- CHalfLifeMultiplay: funcoes pequenas que o assemble_sdk nao reproduziu (score < 0.86) ou que o ESF mudou.
+// gamerules_mp_esf.cpp -- CHalfLifeMultiplay: virtuais que so existem no ESF (UpdatePlayerStats, IsValidClass) e as inline do SDK.
+// As demais (GoToIntermission, ChangeLevel, SendMOTDToClient, GetNextBestWeapon, respawn de armas, PlayerThink...) estao em
+// sdk/multiplay_gamerules.cpp (iguais ao SDK; as 3 que o ESF muda foram ajustadas la: UpdateGameMode, AllowAutoTargetCrosshair, ChangeLevel).
 // RECUPERADO de decomp_raw/CHalfLifeMultiplay. [OK] = conferido contra o decompilado.
 #include "extdll.h"
 #include "util.h"
@@ -14,18 +16,6 @@ extern int g_fGameOver;
 #define WEAPON_RESPAWN_TIME 20      // [OK] "+ 20.0" no asm
 #define ENTITY_INTOLERANCE 100      // [OK] "- 100" no asm
 
-BOOL CHalfLifeMultiplay::ClientConnected(edict_t *pEntity, const char *pszName, const char *pszAddress, char szRejectReason[128])
-{
-    g_VoiceGameMgr.ClientConnected(pEntity);                      // [OK] sem mais nada (o SDK so faz isso)
-    return TRUE;
-}
-
-BOOL CHalfLifeMultiplay::FPlayerCanRespawn(CBasePlayer *pPlayer) { return TRUE; }                 // [OK]
-float CHalfLifeMultiplay::FlPlayerSpawnTime(CBasePlayer *pPlayer) { return gpGlobals->time; }     // [OK] respawn imediato
-BOOL CHalfLifeMultiplay::AllowAutoTargetCrosshair(void) { return FALSE; }                         // [OK] (a base devolve 1)
-int  CHalfLifeMultiplay::IPointsForKill(CBasePlayer *pAttacker, CBasePlayer *pKilled) { return 1; }   // [OK]
-void CHalfLifeMultiplay::PlayerGotWeapon(CBasePlayer *pPlayer, CBasePlayerItem *pWeapon) {}      // [OK]
-BOOL CHalfLifeMultiplay::FAllowMonsters(void) { return allowmonsters.value != 0.0f; }             // [OK]
 // Inline na classe do SDK (gamerules.h), ligadas direto ao simbolo original: PlayTextureSounds -> 0, GetTeamID -> "",
 // EndMultiplayerGame -> GoToIntermission() (vfunc +0x110); GetGameDescription nao e declarada no SDK.
 BOOL MP_PlayTextureSounds(void *) asm("PlayTextureSounds__18CHalfLifeMultiplay");
@@ -40,70 +30,9 @@ void MP_EndMultiplayerGame(void *p)
     (*(void (***)(void *))((char *)p + 0x44))[0x110 / 4](p);   // [OK] vptr em +0x44, slot +0x110 = GoToIntermission (protegido no SDK)
 }
 
-Vector CHalfLifeMultiplay::VecWeaponRespawnSpot(CBasePlayerItem *pWeapon)
-{
-    return pWeapon->pev->origin;                                  // [OK]
-}
-
-int CHalfLifeMultiplay::WeaponShouldRespawn(CBasePlayerItem *pWeapon)
-{
-    if (pWeapon->pev->spawnflags & SF_NORESPAWN)                  // [OK] bit 0x40000000 (byte 0x1a3 & 0x40)
-        return GR_WEAPON_RESPAWN_NO;
-    return GR_WEAPON_RESPAWN_YES;
-}
-
-float CHalfLifeMultiplay::FlWeaponRespawnTime(CBasePlayerItem *pWeapon)
-{
-    if (weaponstay.value > 0 && !(pWeapon->iFlags() & ITEM_FLAG_LIMITINWORLD))
-        return gpGlobals->time + 0;                               // [OK] respawn quase instantaneo
-    return gpGlobals->time + WEAPON_RESPAWN_TIME;                 // 20s
-}
-
-float CHalfLifeMultiplay::FlWeaponTryRespawn(CBasePlayerItem *pWeapon)
-{
-    if (pWeapon && pWeapon->m_iId && (pWeapon->iFlags() & ITEM_FLAG_LIMITINWORLD)) {
-        if (NUMBER_OF_ENTITIES() < (gpGlobals->maxEntities - ENTITY_INTOLERANCE))
-            return 0;
-        return FlWeaponRespawnTime(pWeapon);                      // [OK] vfunc +0x80
-    }
-    return 0;
-}
-
-void CHalfLifeMultiplay::PlayerThink(CBasePlayer *pPlayer)
-{
-    if (g_fGameOver) {                                            // [OK] mascara 0x827 = DUCK|ATTACK|ATTACK2|USE|JUMP
-        if (pPlayer->m_afButtonPressed & (IN_DUCK | IN_ATTACK | IN_ATTACK2 | IN_USE | IN_JUMP))
-            m_iEndIntermissionButtonHit = TRUE;
-        pPlayer->m_afButtonPressed = 0;
-        pPlayer->pev->button = 0;
-        pPlayer->m_afButtonReleased = 0;
-    }
-}
-
-// ---- ESF: modo de jogo, passos, estatisticas e limite de personagens ----
+// ---- ESF: estatisticas e limite de personagens ----
 #include "esf_classes.h"
 extern cvar_t characterlimit;                  // "mp_characterlimit" (game_esf.cpp)
-extern cvar_t *g_footsteps;
-extern int gmsgGameMode;
-
-// Avisa o cliente (ou todos, se pPlayer == NULL) do modo de jogo: byte 0 + limite de personagens
-void CHalfLifeMultiplay::UpdateGameMode(CBasePlayer *pPlayer)        // [OK] 0xdbed0
-{
-    if (pPlayer) { MESSAGE_BEGIN(MSG_ONE, gmsgGameMode, NULL, pPlayer->pev); }
-    else         { MESSAGE_BEGIN(MSG_ALL, gmsgGameMode); }
-        WRITE_BYTE(0);
-        WRITE_BYTE((int)characterlimit.value & 0xff);
-    MESSAGE_END();
-}
-
-BOOL CHalfLifeMultiplay::PlayFootstepSounds(CBasePlayer *pl, float fvol)   // [OK] 0xddb10 (asm: velocidade > 220, nao >=)
-{
-    if (g_footsteps && g_footsteps->value == 0)
-        return FALSE;
-    if (!pl->IsOnLadder() && pl->pev->velocity.Length2D() <= 220.0f)
-        return FALSE;
-    return TRUE;
-}
 
 // Media de PL maximo (+0) e de PL potencial (+4) dos jogadores vivos com classe valida; guardada nos 2 primeiros ints do gamerules
 // (virtual ESF fora do gamerules.h do SDK: funcao livre ligada ao simbolo)
@@ -152,51 +81,4 @@ BOOL MP_IsValidClass(void *pThis, const char *pszClass, CBasePlayer *pPlayer)   
             iLeft--;
     }
     return iLeft > 0;
-}
-
-// ---- Troca de arma e intermissao ----
-#define GRI(off) (*(int *)((char *)this + (off)))      // campos do gamerules ESF por offset (vptr em +0x44)
-#define GRF(off) (*(float *)((char *)this + (off)))
-extern float g_flIntermissionStartTime;
-
-BOOL CHalfLifeMultiplay::GetNextBestWeapon(CBasePlayer *pPlayer, CBasePlayerItem *pCurrentWeapon)   // [OK] 0xdbd20 igual ao SDK
-{
-    CBasePlayerItem *pCheck, *pBest = NULL;
-    int iBestWeight = -1;
-    if (!pCurrentWeapon->CanHolster())                  // vfunc +0x100
-        return FALSE;
-    for (int i = 0; i < MAX_ITEM_TYPES; i++) {
-        pCheck = pPlayer->m_rgpPlayerItems[i];
-        while (pCheck) {
-            if (pCheck->iWeight() > -1 && pCheck->iWeight() == pCurrentWeapon->iWeight() && pCheck != pCurrentWeapon) {
-                if (pCheck->CanDeploy() && pPlayer->SwitchWeapon(pCheck))   // CanDeploy: vfunc +0xf8
-                    return TRUE;
-            } else if (pCheck->iWeight() > iBestWeight && pCheck != pCurrentWeapon && pCheck->CanDeploy()) {
-                iBestWeight = pCheck->iWeight();
-                pBest = pCheck;
-            }
-            pCheck = pCheck->m_pNext;
-        }
-    }
-    if (!pBest)
-        return FALSE;
-    pPlayer->SwitchWeapon(pBest);
-    return TRUE;
-}
-
-void CHalfLifeMultiplay::GoToIntermission(void)        // [OK] 0xddbf0 (SVC_INTERMISSION = 30)
-{
-    if (g_fGameOver)
-        return;
-    MESSAGE_BEGIN(MSG_ALL, SVC_INTERMISSION);
-    MESSAGE_END();
-    int iTime = (int)CVAR_GET_FLOAT("mp_chattime");
-    if (iTime < 1)
-        CVAR_SET_STRING("mp_chattime", "1");
-    else if (iTime > 120)                              // MAX_INTERMISSION_TIME
-        CVAR_SET_STRING("mp_chattime", UTIL_dtos1(120));
-    GRF(0x48) = gpGlobals->time + (int)mp_chattime.value;   // fim da intermissao
-    g_flIntermissionStartTime = gpGlobals->time;
-    g_fGameOver = TRUE;
-    GRI(0x4c) = FALSE;                                 // ninguem apertou botao ainda
 }
