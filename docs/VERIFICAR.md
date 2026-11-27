@@ -93,3 +93,5 @@ Onde o SDK compara com MOVETYPE_BOUNCEMISSILE (11), pm_shared do binario usa o l
 - CBasePlayer::ObjectCaps: no ESF retorna 0 (9 bytes); o SDK define inline em player.h (CBaseMonster::ObjectCaps() & ~FCAP_ACROSS_TRANSITION). Ao montar o header final, trocar por `return 0;`. player_misc4.cpp: +0x908 (m_fWeapon?) e +0x374 em ForceClientDllUpdate sem nome confirmado.
 
 - gamerules_base_esf.cpp: virtuais ESF do CGameRules (IsTeamplay, GetGameDescription, SetMeleeSettings, ...) estao como funcoes livres com asm label (o gamerules.h do SDK nao os declara). Ao linkar de verdade: declarar na classe e remover os labels. SetMeleeSettings escreve em +8..+0x44 (3 niveis x 5 floats); GetMeleeSkillValues indexa por am_skill 0..2. Tabela de modelos g_szModelList (18 de 20 usados) copiada do .rodata.
+
+- CGib no ESF deriva de CBaseAnimating (CBodySlice chama CBaseAnimating::ResetSequenceInfo/LookupSequence em this); o monsters.h do SDK deriva de CBaseEntity: ajustar na hora de linkar. Offsets m_vecForward/Side/Up de CBodySlice (+0x2b8/+0x2c4/+0x2d0) e m_bloodColor (+0x2a8) conferir com sizeof(CGib).

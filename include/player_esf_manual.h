@@ -37,7 +37,9 @@
 #define DRC_CMD_EVENT 3                 // [?]
 struct esf_botinfo_s { char pad[0x1a]; short m_iTauntChance; };   // [?]
 extern cvar_t simplemelee, forcerespawn;
-class CBodySlice { public: static void SpawnBodySlices(entvars_t *pev, int iFlag); };   // [?] assinatura
+#ifndef ESF_BODYSLICE_FULL
+class CBodySlice { public: static void SpawnBodySlices(entvars_t *pev, bool bFlyOff); };   // [OK] assinatura (bodyslice.h tem a classe completa)
+#endif
 #include "CChatClass.h"
 extern CChatClass ChatClass;                   // [OK] objeto global do chat dos bots
 #endif
