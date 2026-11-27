@@ -1281,7 +1281,6 @@ void CBot::BotCombatMovement(void)
 // ---------------------------------------------------------------------------
 // Lista de combos: +0xb8c -> { head, tail }, no = { dado, prox, ant }
 // ---------------------------------------------------------------------------
-struct combo_node_s { void *pData; combo_node_s *pNext; combo_node_s *pPrev; };
 struct combo_list_s { combo_node_s *pHead; combo_node_s *pTail; };
 
 void CBot::ClearMeleeComboList(void)

@@ -18,18 +18,38 @@ struct danger_info_s;
 enum EComboType { COMBO_0 = 0 };
 enum EComboUse { COMBO_USE_ALWAYS = 0, COMBO_USE_NEVER = 1, COMBO_USE_RANDOM = 2 };   // [?] nomes; 0 e 2 confirmados pelo switch de PrepareAttack   // [?] valores reais ainda nao mapeados
 
+// ---- combos dos bots: lista de entradas executadas em sequencia ----
+class CBaseBotComboEntry
+{
+public:
+    int    m_iStatus;          // +0x00 [OK] 0 = ainda nao ativada, 2 = terminada
+    CBot  *m_pBot;             // +0x04 [?]
+    int    f_08;               // +0x08 [?]
+    float  m_flStartTime;      // +0x0c [OK] quando a entrada comecou a esperar (gpGlobals->time)
+    virtual ~CBaseBotComboEntry() {}               // vtable +8 (chamado com flag 3 = delete)
+    virtual void  Think(void) = 0;                 // +0xc
+    virtual void  Activate(void) {}                // +0x10 [?] corpo vazio na base
+    virtual float GetDelay(void) { return 0; }     // +0x14 [?] espera antes de ativar (s)
+};
+
+struct combo_node_s { void *pData; combo_node_s *pNext; combo_node_s *pPrev; };   // [OK] no de lista duplamente encadeada (dado, prox, ant); tambem usado na lista de combos corpo a corpo (+0xb8c)
+
 class CBotCombo
 {
 public:
     CBotCombo(CBot *pBot, EComboType type);   // 24 bytes [OK]
-    int   f_00;
-    void *f_04;             // [?] provavelmente o CBot
-    void *f_08;             // [?] tipo do combo
-    int   f_0c;
-    int   m_iStatus;        // +0x10 [OK] 0 = nao ativado, 2 = terminou
-    int   m_iSavedMode;     // +0x14 [OK] copiado de volta para BOT_TASKMODE ao terminar
+    ~CBotCombo();                              // [OK] apaga as entradas restantes
+    combo_node_s *m_pHead;  // +0x00 [OK] proxima entrada a executar
+    combo_node_s *m_pTail;  // +0x04 [OK]
+    CBaseBotComboEntry *m_pCurrent;   // +0x08 [OK] entrada em execucao
+    CBot *m_pBot;           // +0x0c [OK]
+    int   m_iStatus;        // +0x10 [OK] 0 = nao ativado, 1 = ativado, 2 = terminou
+    int   m_iSavedMode;     // +0x14 [OK] copiado de volta para BOT_TASKMODE ao terminar (inicial 33)
     void  Activate(void);
     void  ExcuteCombo(void);   // (sic) nome original
+    CBaseBotComboEntry *PopFront(void);        // [OK] trecho repetido (inline no original)
+    void  Add(CBaseBotComboEntry *pEntry);     // [?] anexa no fim (usado pelo construtor)
+    void  MakeRandomTeleports(int iDir1, int iDir2, int iDir3, int iDir4);   // [?] assinatura (8ETeleDirN21: 4 ETeleDir)
 };
 
 extern int g_teamplay;   // [OK] flag global de teamplay
