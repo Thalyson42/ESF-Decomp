@@ -68,3 +68,34 @@ public:
     void  Think(void);
     float GetDelay(void);
 };
+
+class CAvoidAttackWhileSwoopComboEntry : public CBaseBotComboEntry
+{
+public:
+    CAvoidAttackWhileSwoopComboEntry(CBot *pBot);
+    void  Think(void);
+    float GetDelay(void);
+};
+
+class CCheckFOVForAimComboEntry : public CBaseBotComboEntry
+{
+public:
+    CCheckFOVForAimComboEntry(CBot *pBot);
+    void  Think(void);
+    void  Activate(void);
+    float GetDelay(void);
+    float m_flDuration;     // +0x14 [OK] 0.25s; apos Activate vira o instante limite
+};
+
+class CTeleportComboEntry : public CBaseBotComboEntry
+{
+public:
+    CTeleportComboEntry(CBot *pBot, float flDuration, int iDir, bool bAim, bool bNeedNoEnemy, bool bStopIfEnemyFlies);
+    void  Think(void);
+    void  Activate(void);
+    float m_flDuration;     // +0x14 [OK] vira o instante limite no Activate
+    int   m_iDir;           // +0x18 [OK] direcao passada a SetMoveDir
+    char  m_bAim;           // +0x1c [OK] mira no inimigo
+    char  m_bDoneIfNoEnemy; // +0x1d [OK] sem inimigo = termina  [?] nome
+    char  m_bStopIfEnemyFlies; // +0x1e [OK] termina se o inimigo estiver voando [?] nome
+};

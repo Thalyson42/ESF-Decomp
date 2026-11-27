@@ -226,3 +226,94 @@ void CChargeGenBallComboEntry::Think(void)                          // [OK] carr
     } else
         m_iStatus = 2;
 }
+
+extern BOOL  EntIsInFieldOfView(CBaseEntity *pViewer, CBaseEntity *pTarget);      // funcao livre do ESF
+extern short UTIL_GetHeadingPercentage(CBaseEntity *pSelf, CBaseEntity *pTarget); // util_esf.cpp
+
+// ---------------------------------------------------------------- CAvoidAttackWhileSwoopComboEntry
+CAvoidAttackWhileSwoopComboEntry::CAvoidAttackWhileSwoopComboEntry(CBot *pBot)    // 0x165f00 [OK]
+{
+    m_iStatus = 0;
+    m_pBot = pBot;
+}
+float CAvoidAttackWhileSwoopComboEntry::GetDelay(void) { return 0.0f; }
+void CAvoidAttackWhileSwoopComboEntry::Think(void)                  // 0x15c850 [OK] continua enquanto houver ataque hostil na frente
+{
+    if (BPEV->movetype == MOVETYPE_FLY) {
+        m_pBot->SetSwoopButton();
+        CBaseEntity *pAttack = m_pBot->GetNearestHostileAttack(50.0f, 750.0f);
+        if (pAttack && UTIL_GetHeadingPercentage((CBaseEntity *)m_pBot, pAttack) > 0x40)
+            return;
+    }
+    m_iStatus = 2;
+}
+
+// ---------------------------------------------------------------- CCheckFOVForAimComboEntry
+CCheckFOVForAimComboEntry::CCheckFOVForAimComboEntry(CBot *pBot)  // 0x165d00 [OK]
+{
+    m_iStatus = 0;
+    m_pBot = pBot;
+    m_flDuration = 0.25f;
+}
+float CCheckFOVForAimComboEntry::GetDelay(void) { return 0.0f; }
+void CCheckFOVForAimComboEntry::Activate(void)                      // 0x165d60 [OK]
+{
+    m_flActivateTime = gpGlobals->time;
+    m_iStatus = 1;
+    m_flDuration = m_flDuration + gpGlobals->time;
+}
+void CCheckFOVForAimComboEntry::Think(void)                         // 0x15c5c0 [OK] mira ate o inimigo entrar no campo de visao
+{
+    CBaseEntity *pEnemy = BOT_ENEMY(m_pBot);
+    if (pEnemy && BOTF(m_pBot, short, 0xa18) <= 99 && !(m_flDuration < gpGlobals->time)
+        && !EntIsInFieldOfView((CBaseEntity *)m_pBot, pEnemy)) {
+        if (EntIsInFieldOfView(pEnemy, (CBaseEntity *)m_pBot)) {
+            m_iStatus = 2;
+        } else {
+            m_pBot->ResetMoveSpeed();
+            m_pBot->AimAtEnemy((CBasePlayer *)pEnemy);
+        }
+        return;
+    }
+    m_iStatus = 2;
+}
+
+// ---------------------------------------------------------------- CTeleportComboEntry
+CTeleportComboEntry::CTeleportComboEntry(CBot *pBot, float flDuration, int iDir, bool bAim, bool bNeedNoEnemy, bool bStopIfEnemyFlies)  // 0x1659d0 [OK]
+{
+    m_iStatus = 0;
+    m_pBot = pBot;
+    m_flDuration = flDuration;
+    m_iDir = iDir;
+    m_bAim = bAim;
+    m_bDoneIfNoEnemy = bNeedNoEnemy;
+    m_bStopIfEnemyFlies = bStopIfEnemyFlies;
+}
+void CTeleportComboEntry::Activate(void)                            // 0x165a30 [OK]
+{
+    m_flActivateTime = gpGlobals->time;
+    m_iStatus = 1;
+    m_flDuration = m_flDuration + gpGlobals->time;
+}
+void CTeleportComboEntry::Think(void)                               // 0x15c0c0 [OK] (compares lidos do asm)
+{
+    CBasePlayer *pEnemy = BOT_ENEMY(m_pBot);
+    if (pEnemy || !m_bDoneIfNoEnemy) {
+        if (m_flDuration <= gpGlobals->time || BOTF(m_pBot, short, 0xa18) > 159) {
+            ((CBasePlayer *)m_pBot)->Teleport();
+            m_iStatus = 2;
+            return;
+        }
+        if (pEnemy) {
+            if (m_bAim)
+                m_pBot->AimAtEnemy(pEnemy);
+            if (m_bStopIfEnemyFlies && BOT_ENEMY(m_pBot)->pev->movetype == MOVETYPE_FLY) {
+                m_iStatus = 2;
+                return;
+            }
+        }
+        m_pBot->SetMoveDir(m_iDir);
+        return;
+    }
+    m_iStatus = 2;
+}
