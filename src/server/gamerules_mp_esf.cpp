@@ -79,3 +79,77 @@ void CHalfLifeMultiplay::PlayerThink(CBasePlayer *pPlayer)
         pPlayer->m_afButtonReleased = 0;
     }
 }
+
+// ---- ESF: modo de jogo, passos, estatisticas e limite de personagens ----
+#include "esf_classes.h"
+extern cvar_t characterlimit;                  // "mp_characterlimit" (game_esf.cpp)
+extern cvar_t *g_footsteps;
+extern int gmsgGameMode;
+
+// Avisa o cliente (ou todos, se pPlayer == NULL) do modo de jogo: byte 0 + limite de personagens
+void CHalfLifeMultiplay::UpdateGameMode(CBasePlayer *pPlayer)        // [OK] 0xdbed0
+{
+    if (pPlayer) { MESSAGE_BEGIN(MSG_ONE, gmsgGameMode, NULL, pPlayer->pev); }
+    else         { MESSAGE_BEGIN(MSG_ALL, gmsgGameMode); }
+        WRITE_BYTE(0);
+        WRITE_BYTE((int)characterlimit.value & 0xff);
+    MESSAGE_END();
+}
+
+BOOL CHalfLifeMultiplay::PlayFootstepSounds(CBasePlayer *pl, float fvol)   // [OK] 0xddb10 (asm: velocidade > 220, nao >=)
+{
+    if (g_footsteps && g_footsteps->value == 0)
+        return FALSE;
+    if (!pl->IsOnLadder() && pl->pev->velocity.Length2D() <= 220.0f)
+        return FALSE;
+    return TRUE;
+}
+
+// Media de PL maximo (+0) e de PL potencial (+4) dos jogadores vivos com classe valida; guardada nos 2 primeiros ints do gamerules
+// (virtual ESF fora do gamerules.h do SDK: funcao livre ligada ao simbolo)
+void MP_UpdatePlayerStats(void *pThis) asm("UpdatePlayerStats__18CHalfLifeMultiplay");
+void MP_UpdatePlayerStats(void *pThis)                                // [OK] 0xdeb30
+{
+    int iCount = 0, iSumMax = 0, iSumPot = 0;
+    for (int i = 1; i <= gpGlobals->maxClients; i++) {
+        CBasePlayer *pl = (CBasePlayer *)UTIL_PlayerByIndex(i);
+        if (!pl || !pl->IsPlayer())
+            continue;
+        if (pl->m_iMaxPowerLevel <= 0)
+            continue;
+        if (pl->m_pClass->Classify() >= 0) {
+            iCount++;
+            iSumMax += pl->m_iMaxPowerLevel;
+            iSumPot += pl->GetPotentialPL();
+        }
+    }
+    int *pStats = (int *)pThis;
+    if (iCount <= 0) { pStats[0] = 0; pStats[1] = 0; return; }
+    pStats[0] = iSumMax / iCount;
+    pStats[1] = iSumPot / iCount;
+}
+
+// mp_characterlimit: no maximo N jogadores com o mesmo personagem
+BOOL MP_IsValidClass(void *pThis, const char *pszClass, CBasePlayer *pPlayer) asm("IsValidClass__18CHalfLifeMultiplayPCcP11CBasePlayer");
+BOOL MP_IsValidClass(void *pThis, const char *pszClass, CBasePlayer *pPlayer)   // [OK] 0xdec20
+{
+    int iLeft = (int)characterlimit.value;
+    if (iLeft <= 0)
+        return TRUE;
+    for (int i = 1; i <= gpGlobals->maxClients; i++) {
+        CBasePlayer *pl = (CBasePlayer *)UTIL_PlayerByIndex(i);
+        if (!pl || !pl->IsPlayer() || pl == pPlayer)
+            continue;
+        if (pl->pev->iuser1)                                  // +0x244 [?] modo de observador
+            continue;
+        if (pl->m_afPhysicsFlags & PFLAG_OBSERVER)
+            continue;
+        if (!strcmp(STRING(pl->pev->netname), ""))
+            continue;
+        if (!pl->pev->solid)                                  // edict->v +0x10c
+            continue;
+        if (!strcmp(pszClass, CBaseClass::GetName(pl->m_pClass->Classify())))
+            iLeft--;
+    }
+    return iLeft > 0;
+}
