@@ -16,6 +16,8 @@ struct danger_info_s;
 #define BOT_COMBO(b)         BOTF(b, CBotCombo *, 0x1070)    // combo em andamento
 
 enum EComboType { COMBO_0 = 0 };
+// direcoes de teleporte: 1o arg 0/1 = esq/dir, 2o arg 2/3 = frente/tras, 3o arg 4/5 = cima/baixo, 6 = aleatorio [OK] (lido de MakeRandomTeleports)
+enum ETeleDir { TELE_LEFT = 0, TELE_RIGHT = 1, TELE_FRONT = 2, TELE_BACK = 3, TELE_UP = 4, TELE_DOWN = 5, TELE_RANDOM = 6 };
 enum EComboUse { COMBO_USE_ALWAYS = 0, COMBO_USE_NEVER = 1, COMBO_USE_RANDOM = 2 };   // [?] nomes; 0 e 2 confirmados pelo switch de PrepareAttack   // [?] valores reais ainda nao mapeados
 
 // ---- combos dos bots: lista de entradas executadas em sequencia ----
@@ -49,7 +51,7 @@ public:
     void  ExcuteCombo(void);   // (sic) nome original
     CBaseBotComboEntry *PopFront(void);        // [OK] trecho repetido (inline no original)
     void  Add(CBaseBotComboEntry *pEntry);     // [?] anexa no fim (usado pelo construtor)
-    void  MakeRandomTeleports(int iDir1, int iDir2, int iDir3, int iDir4);   // [?] assinatura (8ETeleDirN21: 4 ETeleDir)
+    bool  MakeRandomTeleports(ETeleDir eSide, ETeleDir eDepth, ETeleDir eHeight);   // 0x164fb0 [OK] 8ETeleDirN21 = 3 ETeleDir
 };
 
 extern int g_teamplay;   // [OK] flag global de teamplay
