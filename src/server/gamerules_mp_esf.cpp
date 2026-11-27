@@ -9,7 +9,7 @@
 #include "voice_gamemgr.h"
 
 extern CVoiceGameMgr g_VoiceGameMgr;
-extern cvar_t weaponstay, allowmonsters;
+extern cvar_t weaponstay, allowmonsters, mp_chattime;
 extern int g_fGameOver;
 #define WEAPON_RESPAWN_TIME 20      // [OK] "+ 20.0" no asm
 #define ENTITY_INTOLERANCE 100      // [OK] "- 100" no asm
@@ -152,4 +152,51 @@ BOOL MP_IsValidClass(void *pThis, const char *pszClass, CBasePlayer *pPlayer)   
             iLeft--;
     }
     return iLeft > 0;
+}
+
+// ---- Troca de arma e intermissao ----
+#define GRI(off) (*(int *)((char *)this + (off)))      // campos do gamerules ESF por offset (vptr em +0x44)
+#define GRF(off) (*(float *)((char *)this + (off)))
+extern float g_flIntermissionStartTime;
+
+BOOL CHalfLifeMultiplay::GetNextBestWeapon(CBasePlayer *pPlayer, CBasePlayerItem *pCurrentWeapon)   // [OK] 0xdbd20 igual ao SDK
+{
+    CBasePlayerItem *pCheck, *pBest = NULL;
+    int iBestWeight = -1;
+    if (!pCurrentWeapon->CanHolster())                  // vfunc +0x100
+        return FALSE;
+    for (int i = 0; i < MAX_ITEM_TYPES; i++) {
+        pCheck = pPlayer->m_rgpPlayerItems[i];
+        while (pCheck) {
+            if (pCheck->iWeight() > -1 && pCheck->iWeight() == pCurrentWeapon->iWeight() && pCheck != pCurrentWeapon) {
+                if (pCheck->CanDeploy() && pPlayer->SwitchWeapon(pCheck))   // CanDeploy: vfunc +0xf8
+                    return TRUE;
+            } else if (pCheck->iWeight() > iBestWeight && pCheck != pCurrentWeapon && pCheck->CanDeploy()) {
+                iBestWeight = pCheck->iWeight();
+                pBest = pCheck;
+            }
+            pCheck = pCheck->m_pNext;
+        }
+    }
+    if (!pBest)
+        return FALSE;
+    pPlayer->SwitchWeapon(pBest);
+    return TRUE;
+}
+
+void CHalfLifeMultiplay::GoToIntermission(void)        // [OK] 0xddbf0 (SVC_INTERMISSION = 30)
+{
+    if (g_fGameOver)
+        return;
+    MESSAGE_BEGIN(MSG_ALL, SVC_INTERMISSION);
+    MESSAGE_END();
+    int iTime = (int)CVAR_GET_FLOAT("mp_chattime");
+    if (iTime < 1)
+        CVAR_SET_STRING("mp_chattime", "1");
+    else if (iTime > 120)                              // MAX_INTERMISSION_TIME
+        CVAR_SET_STRING("mp_chattime", UTIL_dtos1(120));
+    GRF(0x48) = gpGlobals->time + (int)mp_chattime.value;   // fim da intermissao
+    g_flIntermissionStartTime = gpGlobals->time;
+    g_fGameOver = TRUE;
+    GRI(0x4c) = FALSE;                                 // ninguem apertou botao ainda
 }
