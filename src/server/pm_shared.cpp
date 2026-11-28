@@ -1437,7 +1437,7 @@ void PM_ReduceTimers( void )
 	}
 }
 
-void PM_Init( struct playermove_s *ppmove )
+extern "C" void PM_Init( struct playermove_s *ppmove )
 {
 	assert( !pm_shared_initialized );
 
@@ -1449,7 +1449,7 @@ void PM_Init( struct playermove_s *ppmove )
 	pm_shared_initialized = 1;
 }
 
-void PM_Move ( struct playermove_s *ppmove, int server )
+extern "C" void PM_Move ( struct playermove_s *ppmove, int server )
 {
 	assert( pm_shared_initialized );
 
@@ -2035,7 +2035,7 @@ void PM_SwapTextures( int i, int j )
 	grgchTextureType[ j ] = chTemp;
 }
 
-char PM_FindTextureType( char *name )
+extern "C" char PM_FindTextureType( char *name )
 {
 	int left, right, pivot;
 	int val;

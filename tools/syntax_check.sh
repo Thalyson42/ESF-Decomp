@@ -64,6 +64,8 @@ k=t.index('public:',t.index('class CHalfLifeTeamplay'))+7
 t=t[:k]+'\n\tconst char *WeakestTeam(CBasePlayer *pPlayer);   // [?] ESF\n\tvoid JoinTeam(CBasePlayer *pPlayer, const char *pTeamName);   // [OK] ESF\n'+t[k:]
 open(g,'w').write(t)
 PY
+  # PM_Init/PM_Move/PM_FindTextureType tem linkage C no original (simbolos sem mangling, ver symbols/free_fns.txt)
+  sed -i -E 's/^(void PM_Init|void PM_Move|char PM_FindTextureType)/extern "C" \1/' $B/pm_shared/pm_shared.h
 fi
 INC="-I include -I $B/dlls -I $B/engine -I $B/common -I $B/pm_shared -I $B/public -I $H/game_shared"
 for f in "$@"; do
