@@ -13,6 +13,20 @@ public:
     CBaseOutput &operator<<(float f);
     CBaseOutput &operator<<(double d);
 };
+// Saidas na tela (TE_TEXTMESSAGE para o host); objetos globais cout/lcout/rcout/mcout (static init 0x16d190) [OK]
+class CScreenOutput : public CBaseOutput
+{
+public:
+    CScreenOutput(short x, short y, short r, short g, short b, short ch) : m_sX(x), m_sY(y), m_sR(r), m_sG(g), m_sB(b), m_sChannel(ch) { m_szText[0] = 0; }
+    virtual void Display(void);                     // [OK] manda o texto ao host (ou ao console se dedicado) e limpa
+    virtual void AddToTextString(const char *sz);   // [OK] copia (corta em 0x1ff) e chama Display
+    short m_sX, m_sY;                               // +0x204, +0x206 [OK] posicao (formato do TE_TEXTMESSAGE)
+    short m_sR, m_sG, m_sB;                         // +0x208, +0x20a, +0x20c [OK] cor
+    short m_sChannel;                               // +0x20e [OK]
+};
+class CLeftOutput : public CScreenOutput   { public: CLeftOutput()   : CScreenOutput(-7500, -5000, 255, 0, 0, 2) {} };     // lcout [OK]
+class CRightOutput : public CScreenOutput  { public: CRightOutput()  : CScreenOutput(-450, -1, 0, 255, 0, 3) {} };        // rcout [OK]
+class CMiddleOutput : public CScreenOutput { public: CMiddleOutput() : CScreenOutput(-3500, 300, 70, 70, 255, 4) {} };    // mcout [OK]
 class CLog                                          // log em arquivo bot_log.txt (aberto no primeiro uso, modo "a")
 {
 public:
