@@ -92,3 +92,55 @@ BOOL CShootNonChargebleTask::ReactOnDanger(danger_info_s *pDanger)
     }
     return TRUE;                                     // [OK]
 }
+
+void CShootLaser1Task::ManageEnemies(void)
+{
+    CBasePlayer *pOld = BOT_ENEMY(m_pBot);                // [OK] edi = bot+0xb6c
+    CBasePlayer *pNew = m_pBot->GetBestEnemyFromList();   // [OK]
+    m_pEnemy = pNew;                                      // [OK] this+0x10
+    BOT_ENEMY(m_pBot) = pNew;
+    if (!BOT_ENEMY(m_pBot))
+    {
+        if (!UTIL_IsValidPlayer((CBaseEntity *)pOld, 0, 1))   // [?] assinatura (ptr, bool, bool) = (pOld, false, true)
+            return;
+        BOT_ENEMY_DELAY(m_pBot) = RANDOM_FLOAT(BOT_SKILL(m_pBot)[12], BOT_SKILL(m_pBot)[13]) + gpGlobals->time;   // [OK] +0x30/+0x34
+    }
+    else if (BOT_ENEMY(m_pBot) != pOld)
+    {
+        // [OK] trocou de inimigo: tira uma marca do inimigo antigo (byte +0x1a5 do entvars, bit 0x10 = bit 12 de flags em +0x1a4)
+        if (UTIL_IsValidPlayer((CBaseEntity *)pOld, 0, 0))    // [?] (pOld, false, false)
+            *((byte *)pOld->pev + 0x1a5) &= 0xef;
+    }
+}
+
+BOOL CAscendTask::ReactOnDanger(danger_info_s *pDanger)
+{
+    if (BOTF(m_pBot, int, 0xa1c) == 3)               // [OK] estado do bot em +0xa1c
+        return FALSE;
+    if (pDanger->m_iDanger <= 60)                    // [OK] 0x3c (aqui e 60, nao 59 como nas outras tarefas)
+        return FALSE;
+
+    // [OK] bot+0xa04 aponta para a estrutura de personalidade; +0x34 (int): 2 => x1.25, 0 => x0.75, outro => x1
+    char *pPers = BOTF(m_pBot, char *, 0xa04);
+    float flMult = 1.0f;
+    if (*(int *)(pPers + 0x34) == 2)
+        flMult = 1.25f;
+    else if (*(int *)(pPers + 0x34) == 0)
+        flMult = 0.75f;
+
+    if (BOTF(m_pBot, int, 0xa1c) == 4)
+    {
+        float flNeed = (float)BOTF(m_pBot, int, 0xabc) * 2 * flMult;   // [OK] fild [bot+0xabc]; dobra; multiplica
+        if (flNeed > m_pEdict->v.health)             // [OK] fcomp com edict+0x1e0 (health): precisa ter vida suficiente
+            return FALSE;
+    }
+
+    float flLimit = 2.0f * flMult;                   // [OK] 2.0 x (1.25 | 0.75 | 1)  (via double no x87, truncado para float)
+    if (BOTF(m_pBot, float, 0x774) - gpGlobals->time > flLimit)   // [OK] fcompp: (bot+0x774 - time) > limite
+    {
+        m_pBot->Descend(TRUE);                       // [OK] CBasePlayer::Descend(bool) com true
+        BOTF(m_pBot, float, 0xb18) = RANDOM_FLOAT(10, 25) + gpGlobals->time;   // [OK] RandomFloat(10,25) + time
+        return TRUE;
+    }
+    return FALSE;
+}

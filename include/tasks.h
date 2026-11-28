@@ -413,6 +413,7 @@ public:
     virtual void TaskThink(void);
     virtual int TaskIdentify(void);
     virtual BOOL ShouldManageEnemies(void);
+    virtual void ManageEnemies(void);   // [OK] unica tarefa que sobrescreve ManageEnemies (tasks_react.cpp)
     virtual BOOL ReactOnDanger(danger_info_s *pDanger);
 };
 
