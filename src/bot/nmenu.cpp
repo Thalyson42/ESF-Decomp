@@ -7,6 +7,7 @@
 #include "CBotManager.h"
 #include "NMenu.h"
 #include <iostream>
+#include "esf_util.h"
 
 extern CBotManager BotManager;
 extern int gmsgShowMenu;

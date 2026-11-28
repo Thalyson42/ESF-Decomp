@@ -8,6 +8,7 @@
 #include "esf_classes.h"
 #include "player_esf_manual.h"
 #include "combo.h"
+#include "esf_util.h"
 
 #define BPL(off)   BOTF(m_pBot, int, (off))      // campos do bot/jogador por offset
 #define BPEV       (((CBasePlayer *)m_pBot)->pev)
@@ -227,8 +228,6 @@ void CChargeGenBallComboEntry::Think(void)                          // [OK] carr
         m_iStatus = 2;
 }
 
-extern BOOL  EntIsInFieldOfView(CBaseEntity *pViewer, CBaseEntity *pTarget);      // funcao livre do ESF
-extern short UTIL_GetHeadingPercentage(CBaseEntity *pSelf, CBaseEntity *pTarget); // util_esf.cpp
 
 // ---------------------------------------------------------------- CAvoidAttackWhileSwoopComboEntry
 CAvoidAttackWhileSwoopComboEntry::CAvoidAttackWhileSwoopComboEntry(CBot *pBot)    // 0x165f00 [OK]

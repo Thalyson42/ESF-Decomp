@@ -8,6 +8,7 @@
 #include "weapons.h"
 #include "esf_classes.h"
 #include "tasks.h"
+#include "esf_util.h"
 
 #define TASK_DONE() (m_iState = 2)
 

@@ -13,6 +13,7 @@
 #include "decals.h"
 #include "esf_classes.h"
 #include "voice_gamemgr.h"
+#include "esf_util.h"
 #define MAX_INTERMISSION_TIME 120
 extern CVoiceGameMgr g_VoiceGameMgr;
 #include "func_break.h"
@@ -251,7 +252,6 @@ void CHalfLifeMultiplay::Think(void)
 
 extern int team_scores[]; extern int num_teams;
 extern char BotManager[];                                         // [?] objeto global; +44 = flag "bots ativos"
-extern bool UTIL_IsValidPlayer(CBaseEntity *, int, int);          // [?] assinatura
 #define ESF_TP_F(off) (*(float *)((char *)this + (off)))
 #define ESF_ENT_RAW_INT(e, off) (*(int *)((char *)(e) + (off)))
 

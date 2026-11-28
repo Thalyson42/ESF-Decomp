@@ -7,9 +7,8 @@
 #include "gamerules.h"
 #include "esf_classes.h"
 #include "bot.h"
+#include "esf_util.h"
 
-extern BOOL EntIsInFieldOfView(CBaseEntity *pViewer, CBaseEntity *pTarget);   // [?]
-extern int  UTIL_GetHeadingPercentage(CBasePlayer *pPlayer, CBasePlayer *pTarget);   // [?]
 extern void WrapAngles(Vector &vecAngles);                                    // [?]
 extern int  UTIL_EntDir(CBaseEntity *pEnt, Vector vecPos);                     // [?] direcao (codigo de SetMoveDir) para um ponto
 extern void StartTurboFor(CBasePlayer *p);
@@ -1082,7 +1081,6 @@ BOOL CBot::BotShouldMakeKameTorps(void)
     return FALSE;
 }
 
-extern Vector PredictEntityPos(CBaseEntity *pEnt, float flTime, short fFlag);   // [?] funcao livre; retorno por valor
 
 void CBot::AimAtEnemy(CBasePlayer *pEnemy)
 {
@@ -1342,7 +1340,6 @@ int CBot::SetComboChargeButton(MELEE_STRENGTH iStrength, int iButtons)
     return iButtons;
 }
 
-extern BOOL IsNull(edict_t *pEnt);                                            // [?] funcao livre do ESF
 
 // Ataque inimigo ("magic_attack") mais proximo dentro de [flMin, flMax], de frente, visivel e alcancavel
 CBaseEntity *CBot::GetNearestHostileAttack(float flMinDist, float flMaxDist)

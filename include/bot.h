@@ -161,7 +161,6 @@ public:
 
 extern float UTIL_WrapAngle(float flAngle);   // [?] funcao livre do ESF
 struct danger_info_s { float m_fl0, m_fl4, m_fl8, m_flC, m_fl10; char pad14[4]; short m_iDanger; char m_cFlags[3]; };   // [OK] SenseHit: +0x18 short (>59 = ataque), +0x1a..0x1c bytes zerados
-extern BOOL UTIL_IsValidPlayer(CBaseEntity *pEnt, short a, short b);   // [?] assinatura; recuperar de decomp_raw (funcao livre)
 
 class CBaseTask
 {

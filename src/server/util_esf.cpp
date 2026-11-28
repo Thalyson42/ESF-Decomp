@@ -6,6 +6,7 @@
 #include "cbase.h"
 #include "player.h"
 #include "gamerules.h"
+#include "esf_util.h"
 
 #define UE_INT(p, off)   (*(int *)((char *)(p) + (off)))
 #define UE_FLOAT(p, off) (*(float *)((char *)(p) + (off)))
@@ -285,7 +286,6 @@ int UTIL_EntDir(CBaseEntity *pEntity, Vector vecTarget)
 // ---- UTIL_GetHeadingPercentage [OK] ----
 // Quanto o alvo (pTarget) esta vindo na direcao de pSelf: compara a distancia atual com a distancia prevista 0.01 s depois.
 // Retorna (dist_atual - dist_prevista) / (velocidade * 0.01) * 100 (truncado para short); 0 se parado ou se afastando.
-extern Vector PredictEntityPos(CBaseEntity *pEntity, float fTime, bool bFlag);
 
 short UTIL_GetHeadingPercentage(CBaseEntity *pSelf, CBaseEntity *pTarget)
 {

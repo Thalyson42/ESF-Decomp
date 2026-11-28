@@ -9,6 +9,7 @@
 #include "bot.h"
 #include "CBotManager.h"
 #include <iostream>
+#include "esf_util.h"
 
 extern CBotManager BotManager;
 extern CChatClass ChatClass;

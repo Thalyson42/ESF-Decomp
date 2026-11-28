@@ -12,11 +12,11 @@
 #include <stdlib.h>
 #include <string.h>
 #include <strings.h>
+#include "esf_util.h"
 
 extern CBotManager BotManager;
 extern int g_teamplay;
 extern void ClientKill(edict_t *pEntity);
-extern BOOL UTIL_IsValidPlayer(CBasePlayer *pPlayer, int a, int b);
 extern CGameRules *g_pGameRules;
 extern void Player_ChangeClass(CBasePlayer *pPlayer, const char *szClass) asm("ChangeClass__11CBasePlayerPCc");
 

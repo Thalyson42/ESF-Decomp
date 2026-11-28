@@ -6,6 +6,7 @@
 #include "weapons.h"
 #include "esf_classes.h"
 #include "tasks.h"
+#include "esf_util.h"
 
 #define TASK_DONE() (m_iState = 2)
 
@@ -249,7 +250,6 @@ void CShootNonChargebleTask::TaskThink(void)
 }
 
 // ---- CKickEnemyTask ----
-extern BOOL EntIsInFieldOfView(CBaseEntity *pViewer, CBaseEntity *pTarget);   // [?] funcao livre; assinatura a confirmar
 
 void CKickEnemyTask::TaskThink(void)
 {
@@ -398,7 +398,6 @@ void CShootScatterShotsTask::TaskThink(void)
 
 // ---- CControlFriezaDiscTask ----
 extern CBaseEntity *UTIL_GetAttackFromPlayerByName(CBasePlayer *pPlayer, const char *szName);   // [?] funcao livre
-extern int UTIL_GetHeadingPercentage(CBasePlayer *pPlayer, CBasePlayer *pTarget);              // [?] funcao livre
 
 BOOL CControlFriezaDiscTask::ReactOnDanger(danger_info_s *pDanger)
 {
@@ -489,7 +488,6 @@ void CLookAroundTask::TaskThink(void)
 }
 
 // ---- CBlockTask ----
-extern BOOL IsNull(edict_t *pEnt);          // [?] funcoes livres do ESF
 extern BOOL IsAttack(edict_t *pEnt);
 extern void WrapAngles(Vector &vecAngles);
 
@@ -556,7 +554,6 @@ void CBlockTask::TaskThink(void)
 // task+0x18 fim do desvio, +0x1c direcao (bits de SetMoveDir), +0x20/+0x24 proximos instantes de desvio, +0x28 mirou,
 // +0x2c estado (0 carrega, 1 power up, 2 atira, 3 desvia, 4 foge), +0x30 prazo, +0x34 fim, +0x38 maximo de torpedos
 extern BOOL CheckForCollide(edict_t *pEdict, int iDir, float flDist);        // [?] funcao livre do ESF
-extern Vector GetFurthestCollision(CBasePlayer *pPlayer, float flMaxDist);   // [?] idem
 
 static BOOL KameTryAxis(CKameTorpTask *pTask, edict_t *pEdict, int r, int bitFirst, int bitSecond)
 {
@@ -826,7 +823,6 @@ void CShootCandyTask::TaskThink(void)
 
 // ---- CBeamJumpTask ----
 extern entvars_t *UTIL_GetLastAttackFromPlayer(CBasePlayer *pPlayer);   // [?] funcao livre: ultimo ataque lancado pelo jogador
-extern BOOL IsNull(entvars_t *pev);                                      // [?] sobrecarga
 
 #define BEAMJUMP_ACTIVE(task) (BOTF((task)->m_pBot, int, 0x33c) && *(int *)((char *)&(task)->m_pEdict->v + 0x108) == 15)   // [OK] edict+0x188
 
@@ -926,7 +922,6 @@ aim:
 
 // ---- CChargeAttackTask ----
 // task+0x18 ultimo instante com inimigo rapido (>550), +0x1c ultimo instante com inimigo lento
-extern BOOL EntityHeadsToPlayer(CBasePlayer *pBot, entvars_t *pAttack);   // [?] funcao livre
 #define BOT_ATTACK(b) BOTF(b, bot_attack_s *, 0xb80)                      // [OK] ataque escolhido
 #define BOT_CHARGE(b) BOTF(b, int, 0x6d0)                                 // [?] carga do ataque (100 = cheio)
 
@@ -1638,7 +1633,6 @@ void CNormalMovementTask::CheckFOV(void)
 extern Vector GatherDBPosForTeamGood, GatherDBPosForTeamEvil;   // [OK] pontos de reuniao das esferas por time
 extern BOOL UTIL_DBsAreGathered(void);                          // [?] funcoes livres
 extern BOOL UTIL_DBsAreActive(void);
-extern BOOL IsNull(CBaseEntity *pEnt);                          // [?] sobrecarga
 
 BOOL CDBTask::HeadToNextDBWP(void)
 {
@@ -1805,7 +1799,6 @@ void CDBTask::TaskThink(void)
 // task+0x18: instante limite do raio; +0x1c: flag "reagiu ao ataque inimigo". Bot: +0x33c carregando, +0xab4 atraso, +0xb14 flag, +0xa1c
 extern BOOL IsBeamAttack(edict_t *pEnt);                              // [?]
 extern BOOL IsNonBeamAttack(edict_t *pEnt);                           // [?]
-extern BOOL EntIsInFieldOfView(entvars_t *pViewer, entvars_t *pTarget);   // [?] sobrecarga
 
 #define CB_RELEASE() (m_pEdict->v.button |= 0x800)                    // [OK] solta o botao do raio (button+1 |= 8)
 #define CB_AIM(vec) do { Vector _a = m_pBot->GetAimAngles(vec); \

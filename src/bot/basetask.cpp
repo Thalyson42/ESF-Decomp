@@ -4,6 +4,7 @@
 #include "cbase.h"
 #include "player.h"
 #include "bot.h"
+#include "esf_util.h"
 
 CBaseTask::CBaseTask(CBot *pBot)
 {

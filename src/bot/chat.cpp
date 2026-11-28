@@ -12,9 +12,9 @@
 #include "CChatClass.h"
 #include <iostream>
 #include <ctype.h>
+#include "esf_util.h"
 
 extern CBotManager BotManager;
-extern BOOL UTIL_IsValidPlayer(CBaseEntity *pEnt, short a, short b);
 extern CBaseEntity *UTIL_PlayerByIndex(int iIndex);
 
 // ---------------------------------------------------------------- tipos aninhados
