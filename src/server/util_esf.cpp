@@ -572,3 +572,237 @@ BOOL EntityHeadsToPlayer(CBasePlayer *pPlayer, CBaseEntity *pEnt)
 {
     return UTIL_GetHeadingPercentage(pPlayer, pEnt) > 64;
 }
+
+// ---------------------------------------------------------------------------------------------------------
+// UTIL_PrintEntity @0x179db0 [OK] -- despeja todos os campos do entvars de uma entidade em "botN.txt" (ou no arquivo dado).
+// Funcao de debug. Reproduz (por fidelidade) o descuido do original: Length/Length2D de basevelocity, clbasevelocity e
+// avelocity sao calculados a partir da VELOCITY. O ESF nao imprime iuser4.
+static const char *PE_Name(int v, const char *const *names, int n)   // nome por indice, "???" fora da faixa
+{
+    return (v >= 0 && v < n && names[v]) ? names[v] : "???";
+}
+static void PE_Trim(char *sz)     // tira o " | " final
+{
+    int n = (int)strlen(sz);
+    if (n > 2)
+        sz[n - 3] = 0;
+}
+static void PE_Ent(char *out, edict_t *pEnt)        // "Entity #%d (\"%s\")" ou "NULL"
+{
+    if (pEnt)
+        sprintf(out, "Entity #%d (\"%s\")", ENTINDEX(pEnt), STRING(pEnt->v.classname));
+    else
+        sprintf(out, "NULL");
+}
+static void PE_Vec(FILE *f, const char *name, const float *v)
+{
+    fprintf(f, "pEntity->v.%s = Vector (%.1f, %.1f, %.1f)\n", name, v[0], v[1], v[2]);
+}
+static void PE_VecLen(FILE *f, const char *name, const float *v, const float *vel)
+{
+    float fl2D = sqrt(vel[0] * vel[0] + vel[1] * vel[1]);
+    float fl3D = sqrt(vel[0] * vel[0] + vel[1] * vel[1] + vel[2] * vel[2]);
+    fprintf(f, "pEntity->v.%s = Vector (%.1f, %.1f, %.1f) - Length %.3f - Length2D %.3f\n", name, v[0], v[1], v[2], fl3D, fl2D);
+}
+
+void UTIL_PrintEntity(edict_t *pEntity, const char *szFile)
+{
+    char szName[256], sz[256];
+    if (!szFile)
+        sprintf(szName, "bot%i.txt", ENTINDEX(pEntity));
+    else
+        strcpy(szName, szFile);
+    FILE *f = fopen(szName, "a");
+    entvars_t *v = &pEntity->v;
+    fprintf(f, "\n");
+    fprintf(f, "pEntity->v.classname = %d (\"%s\")\n", v->classname, STRING(v->classname));
+    fprintf(f, "pEntity->v.globalname = %d (\"%s\")\n", v->globalname, STRING(v->globalname));
+    PE_Vec(f, "origin", v->origin);
+    PE_Vec(f, "oldorigin", v->oldorigin);
+    PE_VecLen(f, "velocity", v->velocity, v->velocity);
+    PE_VecLen(f, "basevelocity", v->basevelocity, v->velocity);
+    PE_VecLen(f, "clbasevelocity", v->clbasevelocity, v->velocity);
+    PE_Vec(f, "movedir", v->movedir);
+    PE_Vec(f, "angles", v->angles);
+    PE_VecLen(f, "avelocity", v->avelocity, v->velocity);
+    PE_Vec(f, "punchangle", v->punchangle);
+    PE_Vec(f, "v_angle", v->v_angle);
+    PE_Vec(f, "endpos", v->endpos);
+    PE_Vec(f, "startpos", v->startpos);
+    fprintf(f, "pEntity->v.impacttime = %.3f\n", v->impacttime);
+    fprintf(f, "pEntity->v.starttime = %.3f\n", v->starttime);
+    {
+        static const char *const n[] = { "nothing", "force view angles", "add velocity" };
+        fprintf(f, "pEntity->v.fixangle = %d (%s)\n", v->fixangle, PE_Name(v->fixangle, n, 3));
+    }
+    fprintf(f, "pEntity->v.idealpitch = %.3f\n", v->idealpitch);
+    fprintf(f, "pEntity->v.pitch_speed = %.3f\n", v->pitch_speed);
+    fprintf(f, "pEntity->v.ideal_yaw = %.3f\n", v->ideal_yaw);
+    fprintf(f, "pEntity->v.yaw_speed = %.3f\n", v->yaw_speed);
+    fprintf(f, "pEntity->v.modelindex = %d\n", v->modelindex);
+    fprintf(f, "pEntity->v.model = %d (\"%s\")\n", v->model, STRING(v->model));
+    fprintf(f, "pEntity->v.viewmodel = %d (\"%s\")\n", v->viewmodel, STRING(v->viewmodel));
+    fprintf(f, "pEntity->v.weaponmodel = %d (\"%s\")\n", v->weaponmodel, STRING(v->weaponmodel));
+    PE_Vec(f, "absmin", v->absmin);
+    PE_Vec(f, "absmax", v->absmax);
+    PE_Vec(f, "mins", v->mins);
+    PE_Vec(f, "maxs", v->maxs);
+    PE_Vec(f, "size", v->size);
+    fprintf(f, "pEntity->v.ltime = %.3f (current time is %.3f)\n", v->ltime, gpGlobals->time);
+    fprintf(f, "pEntity->v.nextthink = %.3f (current time is %.3f)\n", v->nextthink, gpGlobals->time);
+    {
+        static const char *const n[] = { "MOVETYPE_NONE", NULL, NULL, "MOVETYPE_WALK", "MOVETYPE_STEP", "MOVETYPE_FLY", "MOVETYPE_TOSS",
+            "MOVETYPE_PUSH", "MOVETYPE_NOCLIP", "MOVETYPE_FLYMISSILE", "MOVETYPE_BOUNCE", NULL, "MOVETYPE_FOLLOW", "MOVETYPE_PUSHSTEP",
+            NULL, NULL, "MOVETYPE_BOUNCEMISSILE" };   // [OK] ESF: BOUNCEMISSILE vale 16; 11 e o modo de voo do ESF (sem nome aqui)
+        fprintf(f, "pEntity->v.movetype = %d (%s)\n", v->movetype, PE_Name(v->movetype, n, 17));
+    }
+    {
+        static const char *const n[] = { "SOLID_NOT", "SOLID_TRIGGER", "SOLID_BBOX", "SOLID_SLIDEBOX", "SOLID_BSP" };
+        fprintf(f, "pEntity->v.solid = %d (%s)\n", v->solid, PE_Name(v->solid, n, 5));
+    }
+    fprintf(f, "pEntity->v.skin = %d (\"%s\")\n", v->skin, STRING(v->skin));      // [OK] imprime como string, como o original
+    fprintf(f, "pEntity->v.body = %d (\"%s\")\n", v->body, STRING(v->body));
+    {
+        static const char *const n[8] = { "EF_BRIGHTFIELD | ", "EF_MUZZLEFLASH | ", "EF_BRIGHTLIGHT | ", "EF_DIMLIGHT | ", "EF_INVLIGHT | ",
+            "EF_NOINTERP | ", "EF_LIGHT | ", "EF_NODRAW | " };
+        sz[0] = 0;
+        for (int i = 0; i < 8; i++)
+            if (v->effects & (1 << i)) strcat(sz, n[i]);
+        PE_Trim(sz);
+        fprintf(f, "pEntity->v.effects = %d (%s)\n", v->effects, sz);
+    }
+    fprintf(f, "pEntity->v.gravity = %.3f (fraction /1 of normal)\n", v->gravity);
+    fprintf(f, "pEntity->v.friction = %.3f\n", v->friction);
+    fprintf(f, "pEntity->v.light_level = %d\n", v->light_level);
+    fprintf(f, "pEntity->v.sequence = %d (\"%s\")\n", v->sequence, STRING(v->sequence));
+    fprintf(f, "pEntity->v.gaitsequence = %d (\"%s\")\n", v->gaitsequence, STRING(v->gaitsequence));
+    fprintf(f, "pEntity->v.frame = %.3f (position /255 of total in sequence)\n", v->frame);
+    fprintf(f, "pEntity->v.animtime = %.3f (current time is %.3f)\n", v->animtime, gpGlobals->time);
+    fprintf(f, "pEntity->v.framerate = %.3f (times normal speed)\n", v->framerate);
+    fprintf(f, "pEntity->v.controller = {%d, %d, %d, %d}\n", v->controller[0], v->controller[1], v->controller[2], v->controller[3]);
+    fprintf(f, "pEntity->v.blending = {%d, %d}\n", v->blending[0], v->blending[1]);
+    fprintf(f, "pEntity->v.scale = %.3f\n", v->scale);
+    {
+        static const char *const n[] = { "kRenderNormal", "kRenderTransColor", "kRenderTransTexture", "kRenderGlow", "kRenderTransAlpha", "kRenderTransAdd" };
+        fprintf(f, "pEntity->v.rendermode = %d (%s)\n", v->rendermode, PE_Name(v->rendermode, n, 6));
+    }
+    fprintf(f, "pEntity->v.renderamt = %.3f\n", v->renderamt);
+    fprintf(f, "pEntity->v.rendercolor = Vector (%.1f, %.1f, %.1f) (RGB)\n", v->rendercolor[0], v->rendercolor[1], v->rendercolor[2]);
+    {
+        static const char *const n[] = { "kRenderFxNone", "kRenderFxPulseSlow", "kRenderFxPulseFast", "kRenderFxPulseSlowWide",
+            "kRenderFxPulseFastWide", "kRenderFxFadeSlow", "kRenderFxFadeFast", "kRenderFxSolidSlow", "kRenderFxSolidFast",
+            "kRenderFxStrobeSlow", "kRenderFxStrobeFast", "kRenderFxStrobeFaster", "kRenderFxFlickerSlow", "kRenderFxFlickerFast",
+            "kRenderFxNoDissipation", "kRenderFxDistort", "kRenderFxHologram", "kRenderFxDeadPlayer", "kRenderFxExplode",
+            "kRenderFxGlowShell", "kRenderFxClampMinScale" };
+        fprintf(f, "pEntity->v.renderfx = %d (%s)\n", v->renderfx, PE_Name(v->renderfx, n, 21));
+    }
+    fprintf(f, "pEntity->v.health = %.3f\n", v->health);
+    fprintf(f, "pEntity->v.frags = %.3f\n", v->frags);
+    {
+        strcpy(sz, "00000000000000000000000000000000");     // bit i da mascara = caractere i
+        for (int i = 0; i < 32; i++)
+            if ((v->weapons >> i) & 1) sz[i] = '1';
+        fprintf(f, "pEntity->v.weapons = %d (%s)\n", v->weapons, sz);
+    }
+    {
+        const char *s = (v->takedamage == 0.0f) ? "DAMAGE_NO" : (v->takedamage == 1.0f) ? "DAMAGE_YES" : (v->takedamage == 2.0f) ? "DAMAGE_AIM" : "???";
+        fprintf(f, "pEntity->v.takedamage = %.3f (%s)\n", v->takedamage, s);
+    }
+    {
+        static const char *const n[] = { "DEAD_NO", "DEAD_DYING", "DEAD_DEAD", "DEAD_RESPAWNABLE", "DEAD_DISCARDBODY" };
+        fprintf(f, "pEntity->v.deadflag = %d (%s)\n", v->deadflag, PE_Name(v->deadflag, n, 5));
+    }
+    PE_Vec(f, "view_ofs", v->view_ofs);
+    {
+        static const char *const n[16] = { "IN_ATTACK | ", "IN_JUMP | ", "IN_DUCK | ", "IN_FORWARD | ", "IN_BACK | ", "IN_USE | ", "IN_CANCEL | ",
+            "IN_LEFT | ", "IN_RIGHT | ", "IN_MOVELEFT | ", "IN_MOVERIGHT | ", "IN_ATTACK2 | ", "IN_RUN | ", "IN_RELOAD | ", "IN_ALT1 | ", "IN_SCORE | " };
+        sz[0] = 0;
+        for (int i = 0; i < 16; i++)
+            if (v->button & (1 << i)) strcat(sz, n[i]);
+        PE_Trim(sz);
+        fprintf(f, "pEntity->v.button = %d (%s)\n", v->button, sz);
+    }
+    fprintf(f, "pEntity->v.impulse = %d\n", v->impulse);
+    PE_Ent(sz, v->chain);          fprintf(f, "pEntity->v.chain = %s\n", sz);
+    PE_Ent(sz, v->dmg_inflictor);  fprintf(f, "pEntity->v.dmg_inflictor = %s\n", sz);
+    PE_Ent(sz, v->enemy);          fprintf(f, "pEntity->v.enemy = %s\n", sz);
+    PE_Ent(sz, v->aiment);         fprintf(f, "pEntity->v.aiment = %s\n", sz);
+    PE_Ent(sz, v->owner);          fprintf(f, "pEntity->v.owner = %s\n", sz);
+    PE_Ent(sz, v->groundentity);   fprintf(f, "pEntity->v.groundentity = %s\n", sz);
+    fprintf(f, "pEntity->v.spawnflags = %d\n", v->spawnflags);
+    {
+        // bits em ordem; 0 = sem nome (o original nao testa os bits 0x4000/0x8000..: ver lista)
+        static const struct { int bit; const char *name; } fl[] = {
+            { 0x1, "FL_FLY | " }, { 0x2, "FL_SWIM | " }, { 0x4, "FL_CONVEYOR | " }, { 0x8, "FL_CLIENT | " }, { 0x10, "FL_INWATER | " },
+            { 0x20, "FL_MONSTER | " }, { 0x40, "FL_GODMODE | " }, { 0x80, "FL_NOTARGET | " }, { 0x100, "FL_SKIPLOCALHOST | " },
+            { 0x200, "FL_ONGROUND | " }, { 0x400, "FL_PARTIALGROUND | " }, { 0x800, "FL_WATERJUMP | " }, { 0x1000, "FL_FROZEN | " },
+            { 0x2000, "FL_FAKECLIENT | " }, { 0x8000, "FL_FLOAT | " }, { 0x10000, "FL_GRAPHED | " }, { 0x20000, "FL_IMMUNE_WATER | " },
+            { 0x40000, "FL_IMMUNE_SLIME | " }, { 0x80000, "FL_IMMUNE_LAVA | " }, { 0x100000, "FL_PROXY | " }, { 0x200000, "FL_ALWAYSTHINK | " },
+            { 0x400000, "FL_BASEVELOCITY | " }, { 0x800000, "FL_MONSTERCLIP | " }, { 0x1000000, "FL_ONTRAIN | " }, { 0x2000000, "FL_WORLDBRUSH | " },
+            { 0x4000000, "FL_SPECTATOR | " }, { 0x20000000, "FL_CUSTOMENTITY | " }, { 0x40000000, "FL_KILLME | " }, { (int)0x80000000, "FL_DORMANT | " } };
+        sz[0] = 0;
+        for (unsigned i = 0; i < sizeof(fl) / sizeof(fl[0]); i++)
+            if (v->flags & fl[i].bit) strcat(sz, fl[i].name);
+        PE_Trim(sz);
+        fprintf(f, "pEntity->v.flags = %d (%s)\n", v->flags, sz);
+    }
+    fprintf(f, "pEntity->v.colormap = %d (0x%X)\n", v->colormap, v->colormap);
+    fprintf(f, "pEntity->v.team = %d\n", v->team);
+    fprintf(f, "pEntity->v.max_health = %.3f\n", v->max_health);
+    fprintf(f, "pEntity->v.teleport_time = %.3f\n", v->teleport_time);
+    fprintf(f, "pEntity->v.armortype = %.3f\n", v->armortype);
+    fprintf(f, "pEntity->v.armorvalue = %.3f\n", v->armorvalue);
+    {
+        const char *s = (v->waterlevel == 0) ? "not in water" : (v->waterlevel == 2) ? "walking in water" : (v->waterlevel == 3) ? "swimming in water" : "???";   // [?] ordem lida do decompilado
+        fprintf(f, "pEntity->v.waterlevel = %d (%s)\n", v->waterlevel, s);
+    }
+    fprintf(f, "pEntity->v.watertype = %d\n", v->watertype);
+    fprintf(f, "pEntity->v.target = %d (\"%s\")\n", v->target, STRING(v->target));
+    fprintf(f, "pEntity->v.targetname = %d (\"%s\")\n", v->targetname, STRING(v->targetname));
+    fprintf(f, "pEntity->v.netname = %d (\"%s\")\n", v->netname, STRING(v->netname));
+    fprintf(f, "pEntity->v.message = %d (\"%s\")\n", v->message, STRING(v->message));
+    fprintf(f, "pEntity->v.dmg_take = %.3f\n", v->dmg_take);
+    fprintf(f, "pEntity->v.dmg_save = %.3f\n", v->dmg_save);
+    fprintf(f, "pEntity->v.dmg = %.3f\n", v->dmg);
+    fprintf(f, "pEntity->v.dmgtime = %.3f (current time is %.3f)\n", v->dmgtime, gpGlobals->time);
+    fprintf(f, "pEntity->v.noise = %d (\"%s\")\n", v->noise, STRING(v->noise));
+    fprintf(f, "pEntity->v.noise1 = %d (\"%s\")\n", v->noise1, STRING(v->noise1));
+    fprintf(f, "pEntity->v.noise2 = %d (\"%s\")\n", v->noise2, STRING(v->noise2));
+    fprintf(f, "pEntity->v.noise3 = %d (\"%s\")\n", v->noise3, STRING(v->noise3));
+    fprintf(f, "pEntity->v.speed = %.3f\n", v->speed);
+    fprintf(f, "pEntity->v.air_finished = %.3f\n", v->air_finished);
+    fprintf(f, "pEntity->v.pain_finished = %.3f\n", v->pain_finished);
+    fprintf(f, "pEntity->v.radsuit_finished = %.3f\n", v->radsuit_finished);
+    PE_Ent(sz, v->pContainingEntity);    fprintf(f, "pEntity->v.pContainingEntity = %s\n", sz);
+    fprintf(f, "pEntity->v.playerclass = %d\n", v->playerclass);
+    fprintf(f, "pEntity->v.maxspeed = %.3f\n", v->maxspeed);
+    fprintf(f, "pEntity->v.fov = %.3f\n", v->fov);
+    fprintf(f, "pEntity->v.weaponanim = %d\n", v->weaponanim);
+    fprintf(f, "pEntity->v.pushmsec = %d\n", v->pushmsec);
+    fprintf(f, "pEntity->v.bInDuck = %d (%s)\n", v->bInDuck, v->bInDuck > 0 ? "TRUE" : "FALSE");
+    fprintf(f, "pEntity->v.flTimeStepSound = %d (current time is %.3f)\n", v->flTimeStepSound, gpGlobals->time);
+    fprintf(f, "pEntity->v.flSwimTime = %d (current time is %.3f)\n", v->flSwimTime, gpGlobals->time);
+    fprintf(f, "pEntity->v.flDuckTime = %d (current time is %.3f)\n", v->flDuckTime, gpGlobals->time);
+    fprintf(f, "pEntity->v.iStepLeft = %d\n", v->iStepLeft);
+    fprintf(f, "pEntity->v.flFallVelocity = %.3f\n", v->flFallVelocity);
+    fprintf(f, "pEntity->v.gamestate = %d\n", v->gamestate);
+    fprintf(f, "pEntity->v.oldbuttons = %d\n", v->oldbuttons);
+    fprintf(f, "pEntity->v.groupinfo = %d\n", v->groupinfo);
+    fprintf(f, "pEntity->v.iuser1 = %d\n", v->iuser1);
+    fprintf(f, "pEntity->v.iuser2 = %d\n", v->iuser2);
+    fprintf(f, "pEntity->v.iuser3 = %d\n", v->iuser3);
+    fprintf(f, "pEntity->v.fuser1 = %.3f\n", v->fuser1);
+    fprintf(f, "pEntity->v.fuser2 = %.3f\n", v->fuser2);
+    fprintf(f, "pEntity->v.fuser3 = %.3f\n", v->fuser3);
+    fprintf(f, "pEntity->v.fuser4 = %.3f\n", v->fuser4);
+    PE_Vec(f, "vuser1", v->vuser1);
+    PE_Vec(f, "vuser2", v->vuser2);
+    PE_Vec(f, "vuser3", v->vuser3);
+    PE_Vec(f, "vuser4", v->vuser4);
+    PE_Ent(sz, v->euser1);  fprintf(f, "pEntity->v.euser1 = %s\n", sz);
+    PE_Ent(sz, v->euser2);  fprintf(f, "pEntity->v.euser2 = %s\n", sz);
+    PE_Ent(sz, v->euser3);  fprintf(f, "pEntity->v.euser3 = %s\n", sz);
+    PE_Ent(sz, v->euser4);  fprintf(f, "pEntity->v.euser4 = %s\n", sz);
+    fprintf(f, "\n");
+    fclose(f);
+}

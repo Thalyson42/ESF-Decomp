@@ -98,3 +98,4 @@ Onde o SDK compara com MOVETYPE_BOUNCEMISSILE (11), pm_shared do binario usa o l
 - CBotCombo::MakeRandomTeleports: um destino por passo (flags v4..v10 do decompilado reduzidas a uma tentativa); RANDOM_FLOAT(300,500) como divisor confirmado no asm; conferir na comparacao de bytes.
 - CBotCombo::CBotCombo (combo_ctor.cpp): casos 20/25 nao testam inimigo nulo no original (20 ganhou guarda); casos 21/23/24 usam `while (n != 1)` como no asm (n==0 daria volta no short); casos 33-36 usam direcao 0 e SwoopAWhile(0.2). Conferir na comparacao de bytes.
 - bot_console.cpp usa std::cout; o binario usa o objeto global cout (CBaseOutput, definido em botlog.cpp) e lcout/rcout/mcout (CScreenOutput). Trocar ao compilar de verdade.
+- UTIL_PrintEntity (util_esf.cpp): ordem dos textos de waterlevel (2 = walking, 3 = swimming, 1 = ???) lida do decompilado; conferir no asm. Original calcula Length de basevelocity/clbasevelocity/avelocity a partir da velocity (reproduzido).
