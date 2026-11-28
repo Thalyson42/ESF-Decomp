@@ -2,6 +2,7 @@
 #include "extdll.h"
 #include "util.h"
 #include "cbase.h"
+#include "esf_util.h"
 
 float UTIL_WrapAngle(float a);
 
@@ -78,7 +79,6 @@ char CheckForCollide(edict_t *pEdict, int iFlags, float fDist)
 // um hull (ignore_monsters, hull 1) de fDist para frente e de fDist para tras a partir da origem; entre os dois pontos de impacto
 // fica com o mais perto (Nearest) ou o mais longe (Furthest) e, no fim, devolve o melhor de todos (ou g_vecZero se nada bateu).
 // Os deslocamentos vem de duas tabelas de salto: pitch {0,-40,40,-89,89} (x e SUBSTITUIDO, nao somado) e yaw {-90,-45,0,45,90} (somado a y).
-Vector WrapAngles(Vector vecAngles);
 
 static const float g_CollidePitch[5] = { 0.0f, -40.0f, 40.0f, -89.0f, 89.0f };
 static const float g_CollideYaw[5] = { -90.0f, -45.0f, 0.0f, 45.0f, 90.0f };

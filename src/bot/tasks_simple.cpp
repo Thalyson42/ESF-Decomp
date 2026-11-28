@@ -489,7 +489,6 @@ void CLookAroundTask::TaskThink(void)
 
 // ---- CBlockTask ----
 extern BOOL IsAttack(edict_t *pEnt);
-extern void WrapAngles(Vector &vecAngles);
 
 BOOL CBlockTask::ShouldManageEnemies(void)
 {
@@ -525,7 +524,7 @@ void CBlockTask::TaskThink(void)
             if (!IsNull(pOwner))
             {
                 Vector vecAng = UTIL_VecToAngles(pOwner->v.origin - m_pEdict->v.origin);
-                WrapAngles(vecAng);
+                vecAng = WrapAngles(vecAng);
                 float flYaw   = UTIL_WrapAngle(pAtk->v.angles.y + 180.0);   // [OK]
                 float flPitch = UTIL_WrapAngle(pAtk->v.angles.x + 180.0);
                 if (20.0 > fabs(flYaw - vecAng.y) && 20.0 > fabs(flPitch - vecAng.x))
@@ -1125,7 +1124,6 @@ void CAbsorbHealthTask::TaskThink(void)
 // task+0x18 proxima reavaliacao. Bot: +0x1034 jogador cacado, +0x1024 waypoint destino (-1 = nenhum), +0x1008 waypoint atual,
 // +0xff8 posicao do waypoint atual, +0x1004 instante, +0x1038 ultima posicao conhecida (x,y,z,tempo), +0x1048 anterior, +0x105c ultima distancia
 extern short WaypointFindReachable(edict_t *pEdict, float flRange, int iTeam);                      // [?] funcoes livres de waypoint
-extern short WaypointFindNearest(Vector *pvecPos, edict_t *pEdict, float flRange, int iTeam);
 
 void CHuntEnemyTask::TaskThink(void)
 {
@@ -1212,7 +1210,7 @@ void CHuntEnemyTask::TaskThink(void)
                 {
                     TASKF(float, 0x18) = gpGlobals->time + 1.5;
                     Vector vecPos = pHunted->pev->origin;
-                    short iNear = WaypointFindNearest(&vecPos, ENT(pHunted->pev), 750.0f, g_teamplay ? iTeam : -1);   // [OK]
+                    short iNear = WaypointFindNearest(vecPos, ENT(pHunted->pev), 750.0f, g_teamplay ? iTeam : -1);   // [OK]
                     if (iNear != -1 && WaypointRouteFromTo(BOTF(m_pBot, int, 0x1008), iNear, iTeam) != -1)
                         BOTF(m_pBot, int, 0x1024) = iNear;      // [OK] novo destino
                 }
@@ -1274,7 +1272,7 @@ void CFinishMeleeTask::CheckObstacleToThrowAt(void)
         for (int j = 0; j < 5; j++)
         {
             Vector vecAng = m_pEdict->v.v_angle;                   // [?] edict+0xf4: angulos de visao
-            WrapAngles(vecAng);
+            vecAng = WrapAngles(vecAng);
             vecAng.x = s_flPitch[i];
             vecAng.y = UTIL_WrapAngle(s_flYaw[j] + vecAng.y);
             UTIL_MakeVectors(vecAng);
@@ -1514,7 +1512,7 @@ void CNormalMovementTask::BotLook(void)
     for (float flOffset = -45.0f; flOffset <= 45.0f; flOffset += 5.0f, i++)
     {
         Vector vecAng = m_pEdict->v.v_angle;
-        WrapAngles(vecAng);
+        vecAng = WrapAngles(vecAng);
         vecAng.y = UTIL_WrapAngle(vecAng.y + flOffset);            // [?] o assembly embrulha (angulo + offset)
         UTIL_MakeVectors(vecAng);
         Vector vecEnd = m_pEdict->v.origin + gpGlobals->v_forward * 10000.0;
@@ -1544,7 +1542,7 @@ void CNormalMovementTask::CheckSkyBox(void)
     if (BOTF(m_pBot, float, 0xd88) > gpGlobals->time)
         return;
     Vector vecAng = m_pEdict->v.v_angle;
-    WrapAngles(vecAng);
+    vecAng = WrapAngles(vecAng);
     UTIL_MakeVectors(vecAng);
     Vector vecEye = m_pEdict->v.origin + *(Vector *)((char *)m_pEdict + 0x1f4);   // [?] edict[125..127] = deslocamento do olho (view_ofs)
     Vector vecEnd = vecEye + gpGlobals->v_forward * 400.0;
@@ -2348,7 +2346,7 @@ void CSwoopTask::TaskThink(void)
                                 fy += TASKF(short, 0x1c);
                             }
                             Vector vecSum = BOTF(m_pBot, Vector, 0xc10) + BOTF(m_pBot, Vector, 0xbe8);
-                            WrapAngles(vecSum);
+                            vecSum = WrapAngles(vecSum);
                             BOTF(m_pBot, Vector, 0xc10) = vecSum;
                         }
                     }

@@ -11,7 +11,6 @@
 
 extern CBotManager BotManager;
 extern int gmsgShowMenu;
-extern void UTIL_Printf(const char *szMsg, int iA, edict_t *pEdict);   // [?] funcao livre (UTIL_Printf__FPCciP7edict_s)
 #define BM_BOOL(off) (*(bool *)((char *)&BotManager + (off)))     // campos de configuracao do CBotManager por offset
 
 // ---- textos dos menus (.rodata 0x1af140..) ----

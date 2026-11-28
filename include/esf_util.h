@@ -16,6 +16,11 @@ Vector PredictEntityPos(CBaseEntity *pEnt, float flTime, bool bFlag);        // 
 Vector GetFurthestCollision(CBaseEntity *pEnt, float flMaxDist);             // __FP11CBaseEntityf
 BOOL   EntityHeadsToPlayer(CBasePlayer *pPlayer, CBaseEntity *pAttack);      // __FP11CBasePlayerP11CBaseEntity
 
+Vector WrapAngles(Vector vecAngles);                                         // __FG6Vector (por valor; RETORNA o resultado, nao altera o argumento)
+void   UTIL_Printf(const char *pszMsg, int iDest, edict_t *pEntity);        // __FPCciP7edict_s
+int    WaypointFindNearest(edict_t *pEntity, float flRange, int iTeam);      // __FP7edict_sfi
+int    WaypointFindNearest(Vector vecSrc, edict_t *pEntity, float flRange, int iTeam);   // __FG6VectorP7edict_sfi
+
 // Adaptadores (NAO existem no original; so convertem o argumento): o codigo recuperado as chama com entvars_t*.
 inline char IsNull(entvars_t *pev)                                    { return IsNull(CBaseEntity::Instance(pev)); }
 inline BOOL EntIsInFieldOfView(entvars_t *pevA, entvars_t *pevB)      { return EntIsInFieldOfView(CBaseEntity::Instance(pevA), CBaseEntity::Instance(pevB)); }

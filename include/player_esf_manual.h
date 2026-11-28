@@ -43,18 +43,19 @@ class CBodySlice { public: static void SpawnBodySlices(entvars_t *pev, bool bFly
 #include "CChatClass.h"
 extern CChatClass ChatClass;                   // [OK] objeto global do chat dos bots
 #endif
-// usados por playermelee.cpp (assinaturas [?], só para compilar a sintaxe)
+// usados por playermelee.cpp (UTIL_Model_*: assinaturas conferidas contra src/server/util_model.cpp)
 #ifndef ESF_MELEE_GLOBALS_H
 #define ESF_MELEE_GLOBALS_H
 void UTIL_Model_RemoveAll(int iPlayer);
-void UTIL_Model_Grab(...);
-void UTIL_Model_MeleeStruggle(...);
-void UTIL_Model_MotionBlur(...);
+void UTIL_Model_Grab(int iEnt1, int iEnt2);
+void UTIL_Model_MeleeStruggle(int iEnt1, int iEnt2);
+void UTIL_Model_MotionBlur(int iEnt1, int iEnt2);
 #define ANIM_LOW 3   // [?]
 void GetSequenceInfo(void *pmodel, entvars_t *pev, float *pflFrameRate, float *pflGroundSpeed);
-void UTIL_Model_Connect(...);
-void UTIL_Model_FixAngles(...);
-void UTIL_Model_MeleeStruggle_Anglefix(...);
+void UTIL_Model_Connect(int iEnt1, int iEnt2, int iType);
+void UTIL_Model_FixAngles(int iEnt);
+void UTIL_Model_FixAngles(int iEnt, Vector vecAngles);
+void UTIL_Model_MeleeStruggle_Anglefix(int iEnt, Vector vecAngles);
 extern unsigned short m_usMeleeSounds;
 
 #endif

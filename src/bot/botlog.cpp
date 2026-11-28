@@ -5,10 +5,10 @@
 #include "botlog.h"
 #include "player.h"
 #include "CBotManager.h"
+#include "esf_util.h"
 
 extern CBotManager BotManager;
 
-extern void UTIL_Printf(const char *szMsg, int iA, int iB);              // [?] funcao livre do ESF (args 1,0)
 extern void BuildBotFileName(char *szOut, const char *szDir, const char *szFile); // [?]
 
 // ----- CBaseOutput -----

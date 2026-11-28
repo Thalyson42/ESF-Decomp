@@ -9,7 +9,6 @@
 #include "bot.h"
 #include "esf_util.h"
 
-extern void WrapAngles(Vector &vecAngles);                                    // [?]
 extern int  UTIL_EntDir(CBaseEntity *pEnt, Vector vecPos);                     // [?] direcao (codigo de SetMoveDir) para um ponto
 extern void StartTurboFor(CBasePlayer *p);
 
@@ -70,7 +69,7 @@ void CBot::AimToVec(Vector vecTarget)
 Vector CBot::GetAimAngles(Vector vecTarget)
 {
     Vector vecAng = UTIL_VecToAngles(vecTarget - pev->origin);                // [OK]
-    WrapAngles(vecAng);
+    vecAng = WrapAngles(vecAng);
     return vecAng;
 }
 
@@ -552,12 +551,12 @@ void CBot::BotAim(void)
     if (BOTF(this, float, 0xc00) > gpGlobals->time)
         return;
     Vector vecIdeal = BOTF(this, Vector, 0xc10);
-    WrapAngles(vecIdeal);
+    vecIdeal = WrapAngles(vecIdeal);
     if (vecIdeal.y > 180.0f) vecIdeal.y -= 360.0f;
     if (vecIdeal.x > 180.0f) vecIdeal.x -= 360.0f;
     if (BOTF(this, short, 0xba4) > 1)
     {
-        WrapAngles(vecIdeal);                                        // modo rapido: mira instantanea
+        vecIdeal = WrapAngles(vecIdeal);                                        // modo rapido: mira instantanea
         pev->v_angle = vecIdeal;
     }
     else
@@ -1105,7 +1104,6 @@ void CBot::AimAtEnemy(CBasePlayer *pEnemy)
 // +0x1038 ultima posicao conhecida (x,y,z,tempo), +0x1048 anterior, +0x105c ultima distancia, +0x1058 recarga.
 // Jogador: historico de 5 posicoes {x,y,z,tempo} de 16 bytes em +0x6d4.
 // ---------------------------------------------------------------------------
-extern short WaypointFindNearest(Vector *pvecPos, edict_t *pEdict, float flRange, int iTeam);   // [?]
 
 BOOL CBot::CheckForHuntEnemy(void)
 {
@@ -1123,7 +1121,7 @@ BOOL CBot::CheckForHuntEnemy(void)
     if (num_waypoints)
     {
         Vector v = pev->origin;
-        wpMe = WaypointFindNearest(&v, pev->pContainingEntity, 1750.0f, g_teamplay ? pev->team : -1);   // [OK]
+        wpMe = WaypointFindNearest(v, pev->pContainingEntity, 1750.0f, g_teamplay ? pev->team : -1);   // [OK]
     }
 
     for (int i = 1; i <= gpGlobals->maxClients; i++)
@@ -1140,7 +1138,7 @@ BOOL CBot::CheckForHuntEnemy(void)
         if (wpMe != 0xffff)
         {
             Vector v = pPl->pev->origin;
-            unsigned short wpPl = WaypointFindNearest(&v, pPl->pev->pContainingEntity, 750.0f, pev->team);
+            unsigned short wpPl = WaypointFindNearest(v, pPl->pev->pContainingEntity, 750.0f, pev->team);
             if (wpPl != 0xffff && (unsigned short)WaypointRouteFromTo(wpMe, wpPl, pev->team) != 0xffff)
             {
                 wpTarget = wpPl;                                              // alvo alcancavel por waypoints
@@ -1489,7 +1487,7 @@ short CBot::SearchNearestWPForDBSpot(void)
     if (GatherDBPosForTeamEvil == g_vecZero)
         return -1;
     Vector vecPos = *GatherPosForTeam(this);
-    return WaypointFindNearest(&vecPos, pev->pContainingEntity, 1000.0f, pev->team);   // [OK]
+    return WaypointFindNearest(vecPos, pev->pContainingEntity, 1000.0f, pev->team);   // [OK]
 }
 
 BOOL CBot::SearchDBGatherSpot(void)
@@ -1506,7 +1504,7 @@ BOOL CBot::SearchDBGatherSpot(void)
     if (iWP != -1)
     {
         Vector vecPos = pev->origin;
-        short iMine = WaypointFindNearest(&vecPos, pev->pContainingEntity, 1750.0f, pev->team);
+        short iMine = WaypointFindNearest(vecPos, pev->pContainingEntity, 1750.0f, pev->team);
         if (iMine != -1 && (unsigned short)WaypointRouteFromTo(iMine, iWP, pev->team) != 0xffff)
         {
             BOTF(this, int, 0x1024) = iWP;
@@ -1533,12 +1531,12 @@ BOOL CBot::SearchGatheredSpot(void)
     if (num_waypoints)
     {
         Vector v = vecBall;
-        iBall = WaypointFindNearest(&v, pev->pContainingEntity, 1750.0f, pev->team);
+        iBall = WaypointFindNearest(v, pev->pContainingEntity, 1750.0f, pev->team);
     }
     if (iBall != -1)
     {
         Vector vecMe = pev->origin;
-        short iMine = WaypointFindNearest(&vecMe, pev->pContainingEntity, 1750.0f, pev->team);
+        short iMine = WaypointFindNearest(vecMe, pev->pContainingEntity, 1750.0f, pev->team);
         if (iMine != -1 && (unsigned short)WaypointRouteFromTo(iMine, iBall, pev->team) != 0xffff)
         {
             BOTF(this, int, 0x1024) = iBall;
@@ -1567,7 +1565,7 @@ BOOL CBot::SearchDragonBall(void)
     if (num_waypoints)
     {
         Vector v = pev->origin;
-        iMyWP = WaypointFindNearest(&v, pev->pContainingEntity, 1750.0f, pev->team);
+        iMyWP = WaypointFindNearest(v, pev->pContainingEntity, 1750.0f, pev->team);
     }
     for (;;)
     {
@@ -1586,7 +1584,7 @@ BOOL CBot::SearchDragonBall(void)
             if (iMyWP == -1)
                 continue;
             Vector v = pEnt->pev->origin;
-            iBallWP = WaypointFindNearest(&v, pEnt->pev->pContainingEntity, 750.0f, pev->team);
+            iBallWP = WaypointFindNearest(v, pEnt->pev->pContainingEntity, 750.0f, pev->team);
             if (iBallWP == -1 || (unsigned short)WaypointRouteFromTo(iMyWP, iBallWP, pev->team) == 0xffff)
                 continue;
         }
@@ -1774,7 +1772,7 @@ void CBot::Spawn(void)
     BOTF(this, int, 0xc00) = 0;
 
     Vector vecAng = pev->v_angle;
-    WrapAngles(vecAng);
+    vecAng = WrapAngles(vecAng);
     BOTF(this, Vector, 0xc10) = vecAng;
     BOTF(this, Vector, 0xc1c) = vecAng;
     BOTF(this, int, 0xc28) = 0;

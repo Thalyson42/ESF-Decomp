@@ -1034,7 +1034,6 @@ void CBotManager::ChangeBotSkill(short sSkill)
 extern int g_waypoint_on;
 extern int PrintingInGameHelp;
 extern void WaypointThink(edict_t *pEntity);
-extern void UTIL_Printf(const char *szMsg, int iA, int iB);               // [?] funcao livre do ESF (args 1,0)
 
 void CBotManager::Think(void)
 {

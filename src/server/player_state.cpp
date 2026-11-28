@@ -123,7 +123,6 @@ void CBasePlayer::StopAscending(void)
 // +0x28/+0x40(Ascend) GetTransFormPowerLevel, +0x2c multiplicador de PL, +0x30 AddAllAttacks, +0x38 GetAuraSkin.
 // Efeito do cliente: mensagem gmsgTransform (MSG_ONE): byte 0, long = PL de transformação.
 extern int gmsgTransform;
-void UTIL_Model_FixAngles(...);
 // virtual no original (CGameRules vtable +0xf0); ligação direta ao símbolo, como IsValidClass em bot_simple.cpp
 extern void GameRules_UpdatePlayerStats(void *pRules) asm("UpdatePlayerStats__10CGameRules");
 
