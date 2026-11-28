@@ -9,6 +9,7 @@
 #include "pm_defs.h"
 #include "pm_shared.h"
 #include "pm_movevars.h"
+extern void VectorMA(const vec3_t veca, float scale, const vec3_t vecb, vec3_t vecc);   // pm_math.cpp
 
 extern playermove_t *pmove;
 extern void PM_FlyMove(void);
@@ -288,4 +289,23 @@ void PM_FixModelHulls(void)
         if (m[0] == '*') FIXHULLS(m);
     }
     #undef FIXHULLS
+}
+
+// GetChaseOrigin @0x1919f0 [OK] posicao da camera de perseguicao: 112 u atras do alvo (physent `iIndex`), 28 u acima,
+// encurtada pelo trace de linha (usehull 2) e afastada 4 u da parede.
+void GetChaseOrigin(float *angles, int iIndex, float *origin, float *out)
+{
+    vec3_t forward;
+    AngleVectors(angles, forward, NULL, NULL);
+    physent_t *pe = &pmove->physents[iIndex];
+    vec3_t start, end, back;
+    start[0] = pe->origin[0];
+    start[1] = pe->origin[1];
+    start[2] = pe->origin[2] + 28.0f;
+    VectorMA(origin, 112.0f, forward, back);
+    end[0] = start[0] - back[0];
+    end[1] = start[1] - back[1];
+    end[2] = start[2] - back[2];
+    pmtrace_t *tr = pmove->PM_TraceLine(start, end, 0, 2, iIndex);
+    VectorMA(tr->endpos, 4.0f, tr->plane.normal, out);
 }
