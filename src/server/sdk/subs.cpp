@@ -552,24 +552,7 @@ FEntIsVisible
 returns TRUE if the passed entity is visible to caller, even if not infront ()
 =============
 */
-	BOOL
-FEntIsVisible(
-	entvars_t*		pev,
-	entvars_t*		pevTarget)
-	{
-	Vector vecSpot1 = pev->origin + pev->view_ofs;
-	Vector vecSpot2 = pevTarget->origin + pevTarget->view_ofs;
-	TraceResult tr;
+// [removido: versao escrita a partir do assembly em outro arquivo] FEntIsVisible
 
-	UTIL_TraceLine(vecSpot1, vecSpot2, ignore_monsters, ENT(pev), &tr);
-	
-	if (tr.fInOpen && tr.fInWater)
-		return FALSE;                   // sight line crossed contents
-
-	if (tr.flFraction == 1)
-		return TRUE;
-
-	return FALSE;
-	}
 
 

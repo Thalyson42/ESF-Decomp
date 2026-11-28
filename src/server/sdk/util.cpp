@@ -349,20 +349,8 @@ BOOL UTIL_GetNextBestWeapon( CBasePlayer *pPlayer, CBasePlayerItem *pCurrentWeap
 }
 
 // [SDK NÃO CONFERIDA: função livre] 
-// ripped this out of the engine
-float	UTIL_AngleMod(float a)
-{
-	if (a < 0)
-	{
-		a = a + 360 * ((int)(a / 360) + 1);
-	}
-	else if (a >= 360)
-	{
-		a = a - 360 * ((int)(a / 360));
-	}
-	// a = (360.0/65536) * ((int)(a*(65536/360.0)) & 65535);
-	return a;
-}
+// [removido: versao escrita a partir do assembly em outro arquivo] UTIL_AngleMod
+
 
 // [SDK NÃO CONFERIDA: função livre] 
 float UTIL_AngleDiff( float destAngle, float srcAngle )
@@ -584,22 +572,8 @@ CBaseEntity *UTIL_FindEntityGeneric( const char *szWhatever, Vector &vecSrc, flo
 // [SDK NÃO CONFERIDA: função livre] 
 // returns a CBaseEntity pointer to a player by index.  Only returns if the player is spawned and connected
 // otherwise returns NULL
-// Index is 1 based
-CBaseEntity	*UTIL_PlayerByIndex( int playerIndex )
-{
-	CBaseEntity *pPlayer = NULL;
+// [removido: versao escrita a partir do assembly em outro arquivo] UTIL_PlayerByIndex
 
-	if ( playerIndex > 0 && playerIndex <= gpGlobals->maxClients )
-	{
-		edict_t *pPlayerEdict = INDEXENT( playerIndex );
-		if ( pPlayerEdict && !pPlayerEdict->free )
-		{
-			pPlayer = CBaseEntity::Instance( pPlayerEdict );
-		}
-	}
-	
-	return pPlayer;
-}
 
 
 // [SDK NÃO CONFERIDA: função livre] 

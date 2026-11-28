@@ -345,54 +345,16 @@ int TrainSpeed(int iSpeed, int iMax)
 // override takehealth
 // bitsDamageType indicates type of damage healed. 
 
-int CBasePlayer :: TakeHealth( float flHealth, int bitsDamageType )
-{
-	return CBaseMonster :: TakeHealth (flHealth, bitsDamageType);
+// [removido: versao escrita a partir do assembly em outro arquivo] CBasePlayer::TakeHealth
 
-}
 
 // [fora desta etapa: diferente do SDK ou definida em outro arquivo] Vector CBasePlayer :: GetGunPosition( )
 
 // [SDK score 1.0] CBasePlayer::TraceAttack
 //=========================================================
 // TraceAttack
-//=========================================================
-void CBasePlayer :: TraceAttack( entvars_t *pevAttacker, float flDamage, Vector vecDir, TraceResult *ptr, int bitsDamageType)
-{
-	if ( pev->takedamage )
-	{
-		m_LastHitGroup = ptr->iHitgroup;
+// [removido: versao escrita a partir do assembly em outro arquivo] CBasePlayer::TraceAttack
 
-		switch ( ptr->iHitgroup )
-		{
-		case HITGROUP_GENERIC:
-			break;
-		case HITGROUP_HEAD:
-			flDamage *= gSkillData.plrHead;
-			break;
-		case HITGROUP_CHEST:
-			flDamage *= gSkillData.plrChest;
-			break;
-		case HITGROUP_STOMACH:
-			flDamage *= gSkillData.plrStomach;
-			break;
-		case HITGROUP_LEFTARM:
-		case HITGROUP_RIGHTARM:
-			flDamage *= gSkillData.plrArm;
-			break;
-		case HITGROUP_LEFTLEG:
-		case HITGROUP_RIGHTLEG:
-			flDamage *= gSkillData.plrLeg;
-			break;
-		default:
-			break;
-		}
-
-		SpawnBlood(ptr->vecEndPos, BloodColor(), flDamage);// a little surface blood.
-		TraceBleed( flDamage, vecDir, ptr, bitsDamageType );
-		AddMultiDamage( pevAttacker, this, flDamage, bitsDamageType );
-	}
-}
 
 /*
 	Take some damage.  
@@ -1558,121 +1520,8 @@ CheckPowerups(entvars_t *pev)
 //=========================================================
 // UpdatePlayerSound - updates the position of the player's
 // reserved sound slot in the sound list.
-//=========================================================
-void CBasePlayer :: UpdatePlayerSound ( void )
-{
-	int iBodyVolume;
-	int iVolume;
-	CSound *pSound;
+// [removido: versao escrita a partir do assembly em outro arquivo] CBasePlayer::UpdatePlayerSound
 
-	pSound = CSoundEnt::SoundPointerForIndex( CSoundEnt :: ClientSoundIndex( edict() ) );
-
-	if ( !pSound )
-	{
-		ALERT ( at_console, "Client lost reserved sound!\n" );
-		return;
-	}
-
-	pSound->m_iType = bits_SOUND_NONE;
-
-	// now calculate the best target volume for the sound. If the player's weapon
-	// is louder than his body/movement, use the weapon volume, else, use the body volume.
-	
-	if ( FBitSet ( pev->flags, FL_ONGROUND ) )
-	{	
-		iBodyVolume = pev->velocity.Length(); 
-
-		// clamp the noise that can be made by the body, in case a push trigger,
-		// weapon recoil, or anything shoves the player abnormally fast. 
-		if ( iBodyVolume > 512 )
-		{
-			iBodyVolume = 512;
-		}
-	}
-	else
-	{
-		iBodyVolume = 0;
-	}
-
-	if ( pev->button & IN_JUMP )
-	{
-		iBodyVolume += 100;
-	}
-
-// convert player move speed and actions into sound audible by monsters.
-	if ( m_iWeaponVolume > iBodyVolume )
-	{
-		m_iTargetVolume = m_iWeaponVolume;
-
-		// OR in the bits for COMBAT sound if the weapon is being louder than the player. 
-		pSound->m_iType |= bits_SOUND_COMBAT;
-	}
-	else
-	{
-		m_iTargetVolume = iBodyVolume;
-	}
-
-	// decay weapon volume over time so bits_SOUND_COMBAT stays set for a while
-	m_iWeaponVolume -= 250 * gpGlobals->frametime;
-	if ( m_iWeaponVolume < 0 )
-	{
-		iVolume = 0;
-	}
-
-
-	// if target volume is greater than the player sound's current volume, we paste the new volume in 
-	// immediately. If target is less than the current volume, current volume is not set immediately to the
-	// lower volume, rather works itself towards target volume over time. This gives monsters a much better chance
-	// to hear a sound, especially if they don't listen every frame.
-	iVolume = pSound->m_iVolume;
-
-	if ( m_iTargetVolume > iVolume )
-	{
-		iVolume = m_iTargetVolume;
-	}
-	else if ( iVolume > m_iTargetVolume )
-	{
-		iVolume -= 250 * gpGlobals->frametime;
-
-		if ( iVolume < m_iTargetVolume )
-		{
-			iVolume = 0;
-		}
-	}
-
-	if ( m_fNoPlayerSound )
-	{
-		// debugging flag, lets players move around and shoot without monsters hearing.
-		iVolume = 0;
-	}
-
-	if ( gpGlobals->time > m_flStopExtraSoundTime )
-	{
-		// since the extra sound that a weapon emits only lasts for one client frame, we keep that sound around for a server frame or two 
-		// after actual emission to make sure it gets heard.
-		m_iExtraSoundTypes = 0;
-	}
-
-	if ( pSound )
-	{
-		pSound->m_vecOrigin = pev->origin;
-		pSound->m_iType |= ( bits_SOUND_PLAYER | m_iExtraSoundTypes );
-		pSound->m_iVolume = iVolume;
-	}
-
-	// keep track of virtual muzzle flash
-	m_iWeaponFlash -= 256 * gpGlobals->frametime;
-	if (m_iWeaponFlash < 0)
-		m_iWeaponFlash = 0;
-
-	//UTIL_MakeVectors ( pev->angles );
-	//gpGlobals->v_forward.z = 0;
-
-	// Below are a couple of useful little bits that make it easier to determine just how much noise the 
-	// player is making. 
-	// UTIL_ParticleEffect ( pev->origin + gpGlobals->v_forward * iVolume, g_vecZero, 255, 25 );
-	//ALERT ( at_console, "%d/%d\n", iVolume, m_iTargetVolume );
-}
 
 
 // [fora desta etapa: diferente do SDK ou definida em outro arquivo] void CBasePlayer::PostThink()
@@ -1913,49 +1762,8 @@ void CBasePlayer::Spawn( void )
 }
 
 
-// [SDK score 1.0] CBasePlayer::Precache
-void CBasePlayer :: Precache( void )
-{
-	// in the event that the player JUST spawned, and the level node graph
-	// was loaded, fix all of the node graph pointers before the game starts.
-	
-	// !!!BUGBUG - now that we have multiplayer, this needs to be moved!
-	if ( WorldGraph.m_fGraphPresent && !WorldGraph.m_fGraphPointersSet )
-	{
-		if ( !WorldGraph.FSetGraphPointers() )
-		{
-			ALERT ( at_console, "**Graph pointers were not set!\n");
-		}
-		else
-		{
-			ALERT ( at_console, "**Graph Pointers Set!\n" );
-		} 
-	}
+// [removido: versao escrita a partir do assembly em outro arquivo] CBasePlayer::Precache
 
-	// SOUNDS / MODELS ARE PRECACHED in ClientPrecache() (game specific)
-	// because they need to precache before any clients have connected
-
-	// init geiger counter vars during spawn and each time
-	// we cross a level transition
-
-	m_flgeigerRange = 1000;
-	m_igeigerRangePrev = 1000;
-
-	m_bitsDamageType = 0;
-	m_bitsHUDDamage = -1;
-
-	m_iClientBattery = -1;
-
-	m_iTrain = TRAIN_NEW;
-
-	// Make sure any necessary user messages have been registered
-	LinkUserMessages();
-
-	m_iUpdateTime = 5;  // won't update for 1/2 a second
-
-	if ( gInitHUD )
-		m_fInitHUD = TRUE;
-}
 
 
 // [SDK score 1.0] CBasePlayer::Save
@@ -2364,19 +2172,8 @@ so that the client side .dll can behave correctly.
 Reset stuff so that the state is transmitted.
 ===============
 */
-void CBasePlayer :: ForceClientDllUpdate( void )
-{
-	m_iClientHealth  = -1;
-	m_iClientBattery = -1;
-	m_iTrain |= TRAIN_NEW;  // Force new train message.
-	m_fWeapon = FALSE;          // Force weapon send
-	m_fKnownItem = FALSE;    // Force weaponinit messages.
-	m_fInitHUD = TRUE;		// Force HUD gmsgResetHUD message
+// [removido: versao escrita a partir do assembly em outro arquivo] CBasePlayer::ForceClientDllUpdate
 
-	// Now force all the necessary messages
-	//  to be sent.
-	UpdateClientData();
-}
 
 // [fora desta etapa: diferente do SDK ou definida em outro arquivo] /* ============ ImpulseCommands ============ */ void CBasePlayer::ImpulseCommands( )
 
@@ -2757,60 +2554,35 @@ int CBasePlayer::GetAmmoIndex(const char *psz)
 //=========================================================
 // FBecomeProne - Overridden for the player to set the proper
 // physics flags when a barnacle grabs player.
-//=========================================================
-BOOL CBasePlayer :: FBecomeProne ( void )
-{
-	m_afPhysicsFlags |= PFLAG_ONBARNACLE;
-	return TRUE;
-}
+// [removido: versao escrita a partir do assembly em outro arquivo] CBasePlayer::FBecomeProne
+
 
 // [SDK score 1.0] CBasePlayer::BarnacleVictimBitten
 //=========================================================
 // BarnacleVictimBitten - bad name for a function that is called
 // by Barnacle victims when the barnacle pulls their head
 // into its mouth. For the player, just die.
-//=========================================================
-void CBasePlayer :: BarnacleVictimBitten ( entvars_t *pevBarnacle )
-{
-	TakeDamage ( pevBarnacle, pevBarnacle, pev->health + pev->armorvalue, DMG_SLASH | DMG_ALWAYSGIB );
-}
+// [removido: versao escrita a partir do assembly em outro arquivo] CBasePlayer::BarnacleVictimBitten
+
 
 // [SDK score 1.0] CBasePlayer::BarnacleVictimReleased
 //=========================================================
 // BarnacleVictimReleased - overridden for player who has
 // physics flags concerns. 
-//=========================================================
-void CBasePlayer :: BarnacleVictimReleased ( void )
-{
-	m_afPhysicsFlags &= ~PFLAG_ONBARNACLE;
-}
+// [removido: versao escrita a partir do assembly em outro arquivo] CBasePlayer::BarnacleVictimReleased
+
 
 
 // [SDK score 1.0] CBasePlayer::Illumination
 //=========================================================
 // Illumination 
 // return player light level plus virtual muzzle flash
-//=========================================================
-int CBasePlayer :: Illumination( void )
-{
-	int iIllum = CBaseEntity::Illumination( );
-
-	iIllum += m_iWeaponFlash;
-	if (iIllum > 255)
-		return 255;
-	return iIllum;
-}
+// [removido: versao escrita a partir do assembly em outro arquivo] CBasePlayer::Illumination
 
 
-// [SDK score 1.0] CBasePlayer::EnableControl
-void CBasePlayer :: EnableControl(BOOL fControl)
-{
-	if (!fControl)
-		pev->flags |= FL_FROZEN;
-	else
-		pev->flags &= ~FL_FROZEN;
 
-}
+// [removido: versao escrita a partir do assembly em outro arquivo] CBasePlayer::EnableControl
+
 
 
 #define DOT_1DEGREE   0.9998476951564
@@ -2844,14 +2616,8 @@ SetCustomDecalFrames
   Note:  -1 means no custom frames present.
 =============
 */
-void CBasePlayer :: SetCustomDecalFrames( int nFrames )
-{
-	if (nFrames > 0 &&
-		nFrames < 8)
-		m_nCustomSprayFrames = nFrames;
-	else
-		m_nCustomSprayFrames = -1;
-}
+// [removido: versao escrita a partir do assembly em outro arquivo] CBasePlayer::SetCustomDecalFrames
+
 
 // [SDK score 1.0] CBasePlayer::GetCustomDecalFrames
 /*
@@ -2861,10 +2627,8 @@ GetCustomDecalFrames
   Returns the # of custom frames this player's custom clan logo contains.
 =============
 */
-int CBasePlayer :: GetCustomDecalFrames( void )
-{
-	return m_nCustomSprayFrames;
-}
+// [removido: versao escrita a partir do assembly em outro arquivo] CBasePlayer::GetCustomDecalFrames
+
 
 
 // [SDK score 1.0] CBasePlayer::DropPlayerItem
@@ -3017,26 +2781,8 @@ BOOL CBasePlayer::HasNamedPlayerItem( const char *pszItemName )
 // [SDK score 1.0] CBasePlayer::SwitchWeapon
 //=========================================================
 // 
-//=========================================================
-BOOL CBasePlayer :: SwitchWeapon( CBasePlayerItem *pWeapon ) 
-{
-	if ( !pWeapon->CanDeploy() )
-	{
-		return FALSE;
-	}
-	
-	ResetAutoaim( );
-	
-	if (m_pActiveItem)
-	{
-		m_pActiveItem->Holster( );
-	}
+// [removido: versao escrita a partir do assembly em outro arquivo] CBasePlayer::SwitchWeapon
 
-	m_pActiveItem = pWeapon;
-	pWeapon->Deploy( );
-
-	return TRUE;
-}
 
 //=========================================================
 // Dead HEV suit prop

@@ -1,0 +1,18 @@
+# Funcoes que o assemble_sdk.py NAO deve emitir em src/server/sdk/: existe versao escrita a partir do assembly em outro arquivo
+# (duplicadas gerariam simbolo duplicado no link; ver docs/BUILD_REPORT.md). Formato: Classe::metodo ou nome_livre
+FEntIsVisible                   # util_esf.cpp
+UTIL_AngleMod                   # util_esf.cpp (versao do ESF difere da do SDK)
+UTIL_PlayerByIndex              # util_esf.cpp
+CBasePlayer::TakeHealth         # player_misc4.cpp
+CBasePlayer::TraceAttack        # player_misc3.cpp
+CBasePlayer::FBecomeProne       # player_misc4.cpp
+CBasePlayer::Illumination       # player_misc4.cpp
+CBasePlayer::SwitchWeapon       # player_misc3.cpp
+CBasePlayer::EnableControl      # player_misc4.cpp
+CBasePlayer::UpdatePlayerSound  # player_misc3.cpp
+CBasePlayer::BarnacleVictimBitten    # player_misc4.cpp
+CBasePlayer::BarnacleVictimReleased  # player_misc4.cpp
+CBasePlayer::ForceClientDllUpdate    # player_misc4.cpp
+CBasePlayer::GetCustomDecalFrames    # player_misc4.cpp
+CBasePlayer::SetCustomDecalFrames    # player_misc4.cpp
+CBasePlayer::Precache           # player_misc3.cpp

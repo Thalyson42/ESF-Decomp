@@ -128,9 +128,10 @@ def _lst(fn):
     return {l.split('#')[0].strip() for l in open(fn) if l.strip() and not l.startswith('#')} if os.path.exists(fn) else set()
 heur = _lst('docs/sdk_heuristic.txt')       # constantes/strings batem com o SDK (não lidas linha a linha)
 pend = _lst('docs/sdk_pending.txt')         # ainda a conferir: corpo do SDK usado como base provisória
-done = set()                                  # funções escritas à mão em outro arquivo (não gerar aqui)
+excluded = _lst('docs/sdk_excluded.txt')     # escritas à mão em outro arquivo (não gerar aqui: símbolo duplicado)
 rows = [r for r in csv.DictReader(open('docs/sdk_match.csv'))
-        if r['veredito'] == 'provavel-igual' or f"{r['classe']}::{r['metodo']}" in reviewed | heur | pend]
+        if (r['veredito'] == 'provavel-igual' or f"{r['classe']}::{r['metodo']}" in reviewed | heur | pend)
+        and f"{r['classe']}::{r['metodo']}" not in excluded]
 tag = lambda k, sc: (f'[SDK score {sc}]' if k not in heur and k not in pend else ('[SDK heurística]' if k in heur else '[SDK NÃO CONFERIDA]'))
 byfile = collections.defaultdict(list)
 for r in rows: byfile[r['arquivo_sdk']].append(r)
@@ -165,6 +166,8 @@ for fn, lst in sorted(byfile.items()):
         hit = [k for k in keep if a0 <= k < b0 or k == a0]
         if hit:
             out_parts.append(keep[hit[0]][1] + text[a0:b0])
+        elif (lambda h: (re.search(r'(\w+)\s*\(', h) or [None, ''])[1] in excluded and '::' not in h)(text[a0:b0].split('{')[0]):
+            out_parts.append('// [fora desta etapa: escrita à mão em outro arquivo] ' + ' '.join(text[a0:b0].split('{')[0].split())[:90])
         elif '::' not in text[a0:b0].split('{')[0]:     # função livre (fora das classes): mantida, não faz parte do sdk_match.csv
             out_parts.append('// [SDK NÃO CONFERIDA: função livre] \n' + text[a0:b0])
         else:

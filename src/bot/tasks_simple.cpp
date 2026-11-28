@@ -2203,10 +2203,7 @@ BOOL CSwoopTask::IsAvoidDangerSwoop(void)
     return m_pBot->m_Swoop.m_iType != 4;                            // [OK]
 }
 
-BOOL CSwoopTask::ReactOnDanger(danger_info_s *pDanger)
-{
-    return FALSE;                                                    // [OK]
-}
+// CSwoopTask::ReactOnDanger (return 0): em tasks_consts.cpp
 
 void CSwoopTask::SelectSwoopType(void)
 {

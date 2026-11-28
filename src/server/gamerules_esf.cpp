@@ -129,7 +129,7 @@ void CHalfLifeMultiplay::InitHUD(CBasePlayer *pl)
     {
         CFog *pF = (CFog *)CBaseEntity::Instance(pFog);       // [?] classe do env_fog do ESF
         WRITE_BYTE(pF->m_iR); WRITE_BYTE(pF->m_iG); WRITE_BYTE(pF->m_iB);
-        WRITE_SHORT((int)pF->m_flStart); WRITE_SHORT((int)pF->m_flEnd);
+        WRITE_SHORT((int)pF->m_flNear); WRITE_SHORT((int)pF->m_flFar);
     }
     else
     {
