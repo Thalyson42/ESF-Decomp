@@ -388,7 +388,7 @@ int WaypointFindNearestEnemyGoal(edict_t *pEntity, int src, int team, int iEnemy
 }
 
 // ---- Edicao de waypoints (comandos do dono do servidor) ----
-extern int g_waypoint_on;                     // [OK] modo de edicao ligado
+extern char g_waypoint_on;                     // [OK] modo de edicao ligado
 extern int g_path_waypoint_enable;            // [OK] criar caminhos automaticamente
 extern int m_iSpriteTexture;                  // [OK] sprite do feixe
 
@@ -812,7 +812,7 @@ void WaypointRouteInit(void)                  // [OK] carrega ou calcula (Floyd)
 }
 
 // ---- Think (chamada todo frame pelo dono do servidor / editor) ----
-extern int g_auto_waypoint, g_path_waypoint;
+extern char g_auto_waypoint, g_path_waypoint;
 extern CBotManager BotManager;
 
 static edict_t *WaypointBeamTarget(void)      // [OK] quem ve os feixes: host do listen server (BotManager+0xc) ou o mundo

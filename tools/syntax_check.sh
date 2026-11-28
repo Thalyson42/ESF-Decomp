@@ -73,7 +73,7 @@ for f in "$@"; do
   if [ -n "$OBJ_DIR" ]; then
     # modo compilacao: gera um .o 32-bit por arquivo (usado por tools/build_objects.sh)
     mkdir -p "$OBJ_DIR"
-    LC_ALL=C g++ ${CXX_M-"-m32"} -c -fpermissive -w -std=gnu++11 -Dstricmp=strcasecmp -Dstrnicmp=strncasecmp $INC -DLINUX -D_LINUX "$f" -o "$OBJ_DIR/$(echo "$f" | tr '/' '_').o" 2>&1 | grep -E "error" | cut -c1-170
+    LC_ALL=C g++ ${CXX_M-"-m32"} -fPIC -c -fpermissive -w -std=gnu++11 -Dstricmp=strcasecmp -Dstrnicmp=strncasecmp $INC -DLINUX -D_LINUX "$f" -o "$OBJ_DIR/$(echo "$f" | tr '/' '_').o" 2>&1 | grep -E "error" | cut -c1-170
   else
     LC_ALL=C g++ -fsyntax-only -fpermissive -w -std=gnu++11 -Dstricmp=strcasecmp -Dstrnicmp=strncasecmp $INC -DLINUX -D_LINUX "$f" 2>&1 | grep -E "error" | cut -c1-170
   fi

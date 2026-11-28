@@ -306,8 +306,8 @@ BOOL CBotManager::HandleBotCommands(edict_t *pEntity)
 // Pontos de reuniao das Dragon Balls: 10 por time, 16 bytes {x,y,z, char apagado}
 // ---------------------------------------------------------------------------
 struct gather_spot_s { Vector vecPos; char bDeleted; char pad[3]; };
-extern gather_spot_s GatherSpotsForTeamGood[10];
-extern gather_spot_s GatherSpotsForTeamEvil[10];
+gather_spot_s GatherSpotsForTeamGood[10];   // [OK] .bss 0xa0
+gather_spot_s GatherSpotsForTeamEvil[10];   // [OK] .bss 0xa0
 
 // jogador do host (servidor nao dedicado): f_00c (edict) ou o primeiro jogador
 // vfunc em vtable +0xe4 (this, Vector*) -> int
@@ -1031,7 +1031,7 @@ void CBotManager::ChangeBotSkill(short sSkill)
 // ---------------------------------------------------------------------------
 // Think por frame / abertura do bot.cfg
 // ---------------------------------------------------------------------------
-extern int g_waypoint_on;
+extern char g_waypoint_on;
 extern int PrintingInGameHelp;
 extern void WaypointThink(edict_t *pEntity);
 

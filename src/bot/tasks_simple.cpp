@@ -88,7 +88,8 @@ void CComboTask::TaskThink(void)
 }
 
 // ---- CIdleTask / CRecoverHPTask / CBlindedTask ----
-extern char *g_pBotManager;   // [?] &BotManager; byte +0xd4b (3403) = bots congelados/parados
+extern char BotManager[];   // [OK] objeto global CBotManager (0x10f8 bytes, ver globals_esf.cpp)
+#define g_pBotManager ((char *)BotManager)
 
 void CIdleTask::TaskThink(void)
 {
@@ -1419,7 +1420,8 @@ void CCounterMeleeTask::TaskThink(void)
 }
 
 // ---- CNormalMovementTask ----
-extern char *g_pBotManager;   // BotManager+0xd48 (3400): bots ativos
+extern char BotManager[];   // [OK] objeto global CBotManager (0x10f8 bytes, ver globals_esf.cpp)
+#define g_pBotManager ((char *)BotManager)
 
 void CNormalMovementTask::TaskThink(void)
 {

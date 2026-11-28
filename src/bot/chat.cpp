@@ -166,6 +166,8 @@ CChatClass::CChatNode *CChatClass::CChatNode::AddSentence(const char *szSentence
     return this;
 }
 
+CChatClass ChatClass;   // [OK] objeto global (0x394 bytes em .bss)
+
 // ---------------------------------------------------------------- construtor / destrutor
 CChatClass::CChatClass()
 {

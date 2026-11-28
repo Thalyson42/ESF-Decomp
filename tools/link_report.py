@@ -37,7 +37,7 @@ for o in objs:
         if len(p) == 2:
             undef[p[1]].add(os.path.basename(o))
 
-dups = {n: f for n, f in defined.items() if len(f) > 1}
+dups = {n: f for n, f in defined.items() if len(f) > 1 and not n.startswith('__x86')}
 und = {n: f for n, f in undef.items() if n not in defined and n not in weak}
 # ignora o que vem de libc/libstdc++/libm e do motor
 LIBPAT = re.compile(r'^(_ZSt|_ZNSt|_ZNKSt|_ZNSo|_ZdlPv|_Znwj|_Znaj|_ZdaPv|__cxa|__gxx|__stack_chk|_GLOBAL_OFFSET|__x86|__dso_handle|_Unwind|memcpy|memset|memmove|strlen|strcpy|strncpy|strcmp|strncmp|strcat|strchr|strrchr|strstr|sprintf|snprintf|vsnprintf|printf|fprintf|sscanf|fopen|fclose|fgets|fread|fwrite|fseek|ftell|fputs|fputc|fflush|atoi|atof|strtol|strtod|rand|srand|abs|fabs|sqrt|sin|cos|tan|atan|atan2|acos|asin|pow|floor|ceil|fmod|exp|log|malloc|free|calloc|realloc|toupper|tolower|isalpha|isdigit|isspace|isalnum|stat|time|exit|abort|qsort|getenv|__assert|__errno|_IO_|stdout|stderr|stdin|strcasecmp|strncasecmp|strdup|strtok|tmpnam|remove|rename|mkdir|opendir|readdir|closedir|memcmp|memchr|puts|putchar|getc|ungetc|setbuf|signal|longjmp|setjmp|_setjmp|_longjmp|clock|localtime|strftime|gettimeofday|usleep|sleep|ceilf|floorf|sqrtf|sinf|cosf|powf|fabsf|atan2f|roundf|truncf|fmodf|logf|expf|__isoc99|__fprintf_chk|__sprintf_chk|__snprintf_chk|__memcpy_chk|__strcpy_chk|__printf_chk)')

@@ -27,8 +27,8 @@
 #include	"game.h"
 
 static char team_names[MAX_TEAMS][MAX_TEAMNAME_LENGTH];
-static int team_scores[MAX_TEAMS];
-static int num_teams = 0;
+int team_scores[MAX_TEAMS];   // [ESF] sem static: gamerules_esf.cpp tambem usa
+int num_teams = 0;   // [ESF] sem static: gamerules_esf.cpp tambem usa
 
 extern DLL_GLOBAL BOOL		g_fGameOver;
 

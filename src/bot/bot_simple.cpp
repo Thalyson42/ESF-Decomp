@@ -203,7 +203,8 @@ void CBot::GoToAnPreviousLocation(void)
 }
 
 // ---- CBot::BotThink e CheckNecessarilyThings ----
-extern char *g_pBotManager;                                        // [?] &BotManager: +0xd38 msec, +0xd48 bots ativos, +0xd4b parados
+extern char BotManager[];   // [OK] objeto global CBotManager (0x10f8 bytes, ver globals_esf.cpp)
+#define g_pBotManager ((char *)BotManager)
 extern void ESF_MakeWish(void *pGameRules, CBasePlayer *pPlayer, const char *szWish);   // [?] g_pGameRules->+0x44 -> vfunc +0x60 (desejo do Shenron)
 #define BM_MSEC()   ((unsigned char)g_pBotManager[0xd38])          // [OK] (int)BotManager+3384 & 0xff
 
