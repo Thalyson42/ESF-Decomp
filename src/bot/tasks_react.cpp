@@ -42,3 +42,53 @@ BOOL CPowerUpTask::ReactOnDanger(danger_info_s *pDanger)
     TASK_DONE();                                     // [OK] this+4 = 2
     return TRUE;
 }
+
+BOOL CTeleportTask::ReactOnDanger(danger_info_s *pDanger)
+{
+    if (pDanger->m_iDanger > 159)                    // [OK] 0x9f: perigo muito forte
+    {
+        BOTF(m_pBot, float, 0xb08) = 0;              // [?] instante em que o bot pode reagir/teleportar de novo
+    }
+    else if (pDanger->m_iDanger > 99)                // [OK] 0x63
+    {
+        float flDiff = BOTF(m_pBot, float, 0xb08) - gpGlobals->time;
+        if (0.1 < flDiff)                            // [OK] constante double 0.1 (fcom)
+            BOTF(m_pBot, float, 0xb08) = gpGlobals->time + 0.1;   // [OK] limita a espera a 0.1s
+    }
+    return FALSE;                                    // [OK] sempre 0
+}
+
+BOOL CRecoverHPTask::ReactOnDanger(danger_info_s *pDanger)
+{
+    int iBase = 120;                                 // [OK] 0x78
+    if (pDanger->m_iDanger > 59)                     // [OK] 0x3b
+    {
+        iBase = 0;
+        if (pDanger->m_iDanger <= 99)                // [OK] 0x63
+            iBase = 30;
+    }
+    int iLimit = iBase + 100 * ((int)m_pBot->pev->fuser4 / 1000) - 100;   // [OK] ki/1000 (imul 0x10624dd3 = divisao por 1000)
+    return (float)iLimit <= m_pEdict->v.health;      // [OK] fcomp com edict+0x1e0 (health); resultado 1 se limite <= vida
+}
+
+BOOL CShootNonChargebleTask::ReactOnDanger(danger_info_s *pDanger)
+{
+    if (pDanger->m_iDanger <= 59)                    // [OK]
+        return FALSE;
+    // [OK] bot+0xa04 aponta para uma estrutura de personalidade; +0x26 (short) = chance (%) de teleportar
+    short sTeleChance = *(short *)(BOTF(m_pBot, char *, 0xa04) + 0x26);
+    if (RANDOM_LONG(1, 100) <= sTeleChance)          // [OK]
+    {
+        m_pBot->Teleport();
+        return FALSE;
+    }
+    if (pDanger->m_iDanger <= 99 && m_pBot->BotShouldFallDown())   // [OK]
+    {
+        if (BOTF(m_pBot, int, 0x320))                // [OK] m_fFlying
+            m_pBot->StopFly();
+        BOTF(m_pBot, char, 0xa10) = 0;               // [?]
+        BOTF(m_pBot, float, 0xa14) = RANDOM_FLOAT(0.8, 1.2) + gpGlobals->time;   // [OK] o decompilado trocou por 0.8: o asm soma o retorno de RandomFloat
+        return FALSE;
+    }
+    return TRUE;                                     // [OK]
+}
