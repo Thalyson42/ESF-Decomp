@@ -3,6 +3,9 @@
 #pragma once
 #include "bot.h"
 
+// [OK] no ESF o jogador em voo/investida usa movetype 11 (cmp [pev+0x108],0xb nos combos; swoop.cpp grava 11) -- em const.h seria BOUNCEMISSILE
+#define MOVETYPE_ESF_FLY 11
+
 class CAscendComboEntry : public CBaseBotComboEntry
 {
 public:

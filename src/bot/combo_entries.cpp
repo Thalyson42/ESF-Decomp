@@ -116,7 +116,7 @@ void CStartSwoopComboEntry::Think(void)                             // 0x15c1e0 
     if (!pEnemy) { m_iStatus = 2; return; }
     m_pBot->ResetMoveSpeed();
     m_pBot->SetMoveDir(m_iDir);
-    if (BPEV->movetype == MOVETYPE_FLY) {
+    if (BPEV->movetype == MOVETYPE_ESF_FLY) {
         int iType;
         switch (m_iDir) {
         case 16: iType = 4; break;
@@ -134,9 +134,9 @@ void CStartSwoopComboEntry::Think(void)                             // 0x15c1e0 
     }
     m_pBot->AimAtEnemy(pEnemy);
     if (m_flEndTime > gpGlobals->time ||
-        (!(pPlayer->m_Swoop.GetSwoopTime() > 0.2f) && BPEV->movetype == MOVETYPE_FLY)) {
+        (!(pPlayer->m_Swoop.GetSwoopTime() > 0.2f) && BPEV->movetype == MOVETYPE_ESF_FLY)) {
         if (BOTF(m_pBot, short, 0xa18) > 159) {
-            if (BPEV->movetype == MOVETYPE_FLY)
+            if (BPEV->movetype == MOVETYPE_ESF_FLY)
                 return;
         } else
             return;
@@ -160,7 +160,7 @@ void CSwoopAWhileComboEntry::Activate(void)
 }
 void CSwoopAWhileComboEntry::Think(void)                            // [OK]
 {
-    if (BPEV->movetype == MOVETYPE_FLY) {
+    if (BPEV->movetype == MOVETYPE_ESF_FLY) {
         m_pBot->SetSwoopButton();
         if (m_flDuration >= gpGlobals->time)
             return;
@@ -178,8 +178,8 @@ float CSwoopCloseToEnemyComboEntry::GetDelay(void) { return 0.0f; }
 void CSwoopCloseToEnemyComboEntry::Think(void)                      // 0x15c670 [OK] aproxima-se do inimigo em voo
 {
     CBasePlayer *pEnemy = BOT_ENEMY(m_pBot);
-    if (pEnemy && BPEV->movetype == MOVETYPE_FLY) {
-        float flLimit = (pEnemy->pev->movetype == MOVETYPE_FLY) ? 600.0f : 450.0f;
+    if (pEnemy && BPEV->movetype == MOVETYPE_ESF_FLY) {
+        float flLimit = (pEnemy->pev->movetype == MOVETYPE_ESF_FLY) ? 600.0f : 450.0f;
         Vector vDiff = pEnemy->pev->origin - BPEV->origin;
         if (vDiff.Length() <= flLimit) {
             m_iStatus = 2;
@@ -190,7 +190,7 @@ void CSwoopCloseToEnemyComboEntry::Think(void)                      // 0x15c670 
             }
         } else {
             m_pBot->AimAtEnemy(pEnemy);
-            if (pEnemy->pev->movetype == MOVETYPE_FLY) {
+            if (pEnemy->pev->movetype == MOVETYPE_ESF_FLY) {
                 float flYaw = BOTF(m_pBot, float, 0xc14);
                 BOTF(m_pBot, float, 0xc14) = UTIL_WrapAngle(BPL(0xff0) ? flYaw - 30.0f : flYaw + 30.0f);
             }
@@ -239,7 +239,7 @@ CAvoidAttackWhileSwoopComboEntry::CAvoidAttackWhileSwoopComboEntry(CBot *pBot)  
 float CAvoidAttackWhileSwoopComboEntry::GetDelay(void) { return 0.0f; }
 void CAvoidAttackWhileSwoopComboEntry::Think(void)                  // 0x15c850 [OK] continua enquanto houver ataque hostil na frente
 {
-    if (BPEV->movetype == MOVETYPE_FLY) {
+    if (BPEV->movetype == MOVETYPE_ESF_FLY) {
         m_pBot->SetSwoopButton();
         CBaseEntity *pAttack = m_pBot->GetNearestHostileAttack(50.0f, 750.0f);
         if (pAttack && UTIL_GetHeadingPercentage((CBaseEntity *)m_pBot, pAttack) > 0x40)
@@ -307,7 +307,7 @@ void CTeleportComboEntry::Think(void)                               // 0x15c0c0 
         if (pEnemy) {
             if (m_bAim)
                 m_pBot->AimAtEnemy(pEnemy);
-            if (m_bStopIfEnemyFlies && BOT_ENEMY(m_pBot)->pev->movetype == MOVETYPE_FLY) {
+            if (m_bStopIfEnemyFlies && BOT_ENEMY(m_pBot)->pev->movetype == MOVETYPE_ESF_FLY) {
                 m_iStatus = 2;
                 return;
             }
